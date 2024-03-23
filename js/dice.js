@@ -85,7 +85,7 @@
         player.d.autoRollTime = buyableEffect("d", 13)
         player.d.lowestRoll = buyableEffect("d", 14)
 
-        player.d.dicePointsEffect = player.d.dicePoints.log10().mul(0.1).add(1)
+        player.d.dicePointsEffect = player.d.dicePoints.plus(1).log10().mul(0.1).add(1)
 
         player.d.currentBoosterText = [
             "Currently boosting points.",

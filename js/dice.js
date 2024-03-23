@@ -136,15 +136,22 @@
             canClick() { return player.d.diceCooldown.lt(0) },
             unlocked() { return true },
             onClick() {
+                let max = new Decimal(0)
                 for (let i = 0; i < player.d.diceRolls.length; i++)
                 {
                     player.d.diceRolls[i] = Decimal.add(getRandomInt(player.d.diceSides.sub(player.d.lowestRoll)), player.d.lowestRoll)
                     player.d.gainedDicePoints = player.d.gainedDicePoints.mul(player.d.diceRolls[i])
+                    max = max.mul(player.d.diceSides)
                 }
-            player.d.gainedDicePoints = player.d.gainedDicePoints.mul(player.d.dicePointsMult)
-            player.d.gainedDicePointsDisplay = player.d.gainedDicePoints
+                if (player.d.gainedDicePoints.gt(max))
+                {
+                    player.d.gainedDicePoints = max
+                }
+                player.d.gainedDicePoints = player.d.gainedDicePoints.mul(player.d.dicePointsMult)
+                player.d.gainedDicePointsDisplay = player.d.gainedDicePoints
                 player.d.dicePoints = player.d.dicePoints.add(player.d.gainedDicePoints)
-                player.d.diceCooldown = new Decimal(1)
+    
+                player.d.autoRollCooldown = player.d.autoRollTime
                 layers.d.addDiceEffect()
             },
             style: { width: '100px', "min-height": '100px' },

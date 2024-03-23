@@ -441,9 +441,9 @@
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(25) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(2) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) },
+            canAfford() { return player.g.grass.gte(this.cost()) && player.g.buyables[13].lt(500)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Capacity"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Grass Capacity"
             },
             display() {
                 return "which are increasing grass capacity by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -601,9 +601,9 @@
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
             unlocked() { return hasUpgrade("g", 14) },
-            canAfford() { return player.g.goldGrass.gte(this.cost()) },
+            canAfford() { return player.g.goldGrass.gte(this.cost()) && player.g.buyables[12].lt(200)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Golden Grass Capacity"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Golden Grass Capacity"
             },
             display() {
                 return "which are increasing golden grass capacity by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\

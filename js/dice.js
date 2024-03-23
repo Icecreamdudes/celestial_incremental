@@ -20,6 +20,7 @@
         gainedDicePoints: new Decimal(1),
         gainedDicePointsDisplay: new Decimal(1),
         diceSides: new Decimal(6),
+        diceCost: new Decimal(100),
 
         autoRollCooldown: new Decimal(0),
         autoRollTime: new Decimal(0),
@@ -102,6 +103,10 @@
         ]
 
         player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
+
+        player.d.diceCost = Decimal.pow(player.d.dice.add(1), 15)
+        if (player.d.dice > 6) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 18)
+        if (player.d.dice > 12) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 22)
     },
     diceRoll()
     {
@@ -240,7 +245,7 @@
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
+            cost(x) { return player.d.diceCost },
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) && player.d.buyables[11].lt(100)},
             title() {
@@ -251,9 +256,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy() {
-                let base = new Decimal(100)
-                let growth = 100
-                let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                let buyonecost = player.d.diceCost
                 player.d.dice = player.d.dice.add(1)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 player.d.diceRolls.push(

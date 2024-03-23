@@ -77,10 +77,16 @@
 
         if (player.d.autoRollCooldown.lt(0))
         {
+            let max = new Decimal(0)
             for (let i = 0; i < player.d.diceRolls.length; i++)
             {
                 player.d.diceRolls[i] = Decimal.add(getRandomInt(player.d.diceSides.sub(player.d.lowestRoll)), player.d.lowestRoll)
                 player.d.gainedDicePoints = player.d.gainedDicePoints.mul(player.d.diceRolls[i])
+                max = max.mul(player.d.diceSides)
+            }
+            if (player.d.gainedDicePoints.gt(max))
+            {
+                player.d.gainedDicePoints = max
             }
             player.d.gainedDicePoints = player.d.gainedDicePoints.mul(player.d.dicePointsMult)
             player.d.gainedDicePointsDisplay = player.d.gainedDicePoints
@@ -251,7 +257,6 @@
             buy() {
                 let base = new Decimal(100)
                 let growth = 100
-                if (player.d.dice.gt(3)) growth = 10000
                 let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                 player.d.dice = player.d.dice.add(1)
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))

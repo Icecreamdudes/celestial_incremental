@@ -36,6 +36,7 @@
         player.m.modsToGet = player.m.modsToGet.mul(player.cb.commonPetEffects[2][1])
         if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone30Effect2)
         player.m.modsToGet = player.m.modsToGet.mul(player.d.diceEffects[8])
+        player.m.modsToGet = player.m.modsToGet.mul(player.cb.rarePetEffects[1][1])
 
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))

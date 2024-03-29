@@ -456,109 +456,106 @@ function adjustMusic() {
 	  audio.playbackRate = 1; // Restore to the original playback rate
 	});
   }
-    function addMistWithTextEffect(durationInSeconds, texts) {
-      const mistColor = "white";
-      const mistOpacity = 1; // Change this value to adjust the opacity of the mist
-      const textDuration = 4000; // Time in milliseconds to show each text
-      const textSize = "48px";
-      const textColor = "blue";
-      const textFont = "Lucida Console, Courier New, monospace";
+  function flashScreen(background, text, textColor, duration) {
+    let body = document.body;
+    let originalBackground = body.style.background;
+    let originalText = body.innerHTML;
+    
+    function showText() {
+        let overlay = document.createElement('div');
+        overlay.style.position = 'absolute';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.background = background;
+        body.appendChild(overlay);
 
-      // Create the mist overlay element
-      const mistOverlay = document.createElement("div");
-      mistOverlay.style.position = "fixed";
-      mistOverlay.style.top = "0";
-      mistOverlay.style.left = "0";
-      mistOverlay.style.width = "100%";
-      mistOverlay.style.height = "100%";
-      mistOverlay.style.backgroundColor = mistColor;
-      mistOverlay.style.opacity = "0";
-      document.body.appendChild(mistOverlay);
-
-      // Create the text container element
-      const textContainer = document.createElement("div");
-      textContainer.style.position = "fixed";
-      textContainer.style.top = "30%";
-      textContainer.style.left = "50%";
-      textContainer.style.transform = "translate(-50%, -50%)";
-      textContainer.style.zIndex = "10000";
-      textContainer.style.textAlign = "center";
-      textContainer.style.fontSize = textSize;
-      textContainer.style.color = textColor;
-      textContainer.style.fontFamily = textFont;
-      textContainer.style.display = "none";
-      document.body.appendChild(textContainer);
-
-      // Animate the mist overlay and text
-      let mistOpacityValue = 0;
-      let textIndex = 0;
-      let startTime = null;
-
-      function animateMistAndText(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-
-        // Calculate mist opacity
-        if (elapsed < durationInSeconds * 1000) {
-          mistOpacityValue = (elapsed / (durationInSeconds * 1000)) * mistOpacity;
+        let textContainer = document.createElement('div');
+        textContainer.style.position = 'absolute';
+        textContainer.style.top = '50%';
+        textContainer.style.left = '50%';
+        textContainer.style.transform = 'translate(-50%, -50%)';
+        textContainer.style.color = textColor;
+        textContainer.style.fontSize = "5em"; // Adjust text size as needed
+        textContainer.style.textAlign = "center"; // Center the text
+        body.appendChild(textContainer);
+        
+        if (Array.isArray(text)) {
+            let currentIndex = 0;
+            let interval = setInterval(() => {
+                textContainer.innerHTML = text[currentIndex];
+                currentIndex = (currentIndex + 1) % text.length;
+            }, duration);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                body.removeChild(overlay);
+                body.removeChild(textContainer);
+                body.style.background = originalBackground;
+                body.innerHTML = originalText;
+            }, duration * text.length);
         } else {
-          mistOpacityValue = mistOpacity;
+            textContainer.innerHTML = text;
+            setTimeout(() => {
+                body.removeChild(overlay);
+                body.removeChild(textContainer);
+                body.style.background = originalBackground;
+                body.innerHTML = originalText;
+            }, duration);
         }
-        mistOverlay.style.opacity = mistOpacityValue;
-
-        // Calculate text appearance
-        const textDurationIndex = Math.floor(elapsed / textDuration);
-        if (textDurationIndex < texts.length) {
-          textContainer.innerHTML = texts[textDurationIndex];
-          textContainer.style.display = "block";
-        } else {
-          textContainer.style.display = "none";
-        }
-
-        if (elapsed < durationInSeconds * 1000 + (texts.length - 1) * textDuration) {
-          requestAnimationFrame(animateMistAndText);
-        } else {
-          document.body.removeChild(mistOverlay);
-          textContainer.style.display = "none";
-        }
-      }
-	  adjustMusic();
-      requestAnimationFrame(animateMistAndText);
     }
+    
+    showText();
+}
 
-    // Usage example: Call the function with the desired duration in seconds and an array of texts
-    const textsToShow = [
-      'The "hero" is coming...',
-      "And it's some random junkie.",
-      "This is wrong! This can't be the hero!",
-      "I must put a stop to this!",
-      "I am the celestial of replicanti, and I want to do the right thing!",
-      "I will use extreme time dilation. Hopefully another hero will come in time.",
-      "When the next hero comes prepared, I will die in peace.",
-      "Next hero: If you are listening to this in the future,",
-      "My name is Cante. I am the celestial of replicanti.",
-      "I am telling you the truth about your predecessor.",
-      "Your predecessor is not worthy enough to fight me!",
-      "I will place them in extreme time dilation.",
-      "When you eventually return to the path of singularity,",
-      "You must free them from the dilation and continue your conquest!",
-      "Now I end my case here. You may return to consciousness.",
-      "WHATEVER YOU DO, DO NOT GO TO THE VOID",
-      // Add more texts here if needed
-    ];
-	const textsToShow2 = [
-		'The predecessor...',
-		'A very special kind of person.',
-		'So determined, despite being in the deepest state of failure.',
-		'Able to manipulate jacorbian energy well.',
-		'However, it could not even stand against a single celestial.',
-		'You have already defeated one. A pseudo-celestial.',
-		'And you have dealt with two more. The brothers.',
-		"You had access to so much more.",
-		"The power of the paths, meta-prestige, and crafting.",
-		"These things made you stronger along the way.",
-		"This won't happen again. You will be the one to do the deed.",
-		"",
-		// Add more texts here if needed
-	  ];
-	//addMistWithTextEffect(0.3, textsToShow2)
+function swarmParticles(particleColor, flashColor) {
+	// Create particles
+	const particleSize = 50; // Adjust particle size as needed
+	const particles = [];
+	const screenWidth = window.innerWidth;
+	const screenHeight = window.innerHeight;
+	const horizontalCount = Math.ceil(screenWidth / particleSize);
+	const verticalCount = Math.ceil(screenHeight / particleSize);
+  
+	for (let i = 0; i < horizontalCount; i++) {
+	  for (let j = 0; j < verticalCount; j++) {
+		const particle = document.createElement('div');
+		particle.className = 'particle';
+		particle.style.backgroundColor = particleColor;
+		particle.style.width = particleSize + 'px'; // Set width to particle size
+		particle.style.height = particleSize + 'px'; // Set height to particle size
+		particle.style.left = getRandomOffScreenPosition(screenWidth, particleSize) + 'px'; // Random horizontal position off-screen
+		particle.style.top = getRandomOffScreenPosition(screenHeight, particleSize) + 'px'; // Random vertical position off-screen
+		document.body.appendChild(particle);
+		particles.push(particle);
+  
+		// Animate particle to its designated position
+		setTimeout(() => {
+		  particle.style.transition = 'left 2s, top 2s'; // Transition animation duration
+		  particle.style.left = i * particleSize + 'px';
+		  particle.style.top = j * particleSize + 'px';
+		}, 10); // Delay animation to ensure particles start off-screen
+	  }
+	}
+  
+	// Remove particles after animation
+	setTimeout(() => {
+	  particles.forEach(particle => particle.remove()); // Remove particles
+	  // Call the flash function after removing particles
+	  flashBackground(flashColor);
+	}, 5000);
+  }
+  
+  // Function to flash background
+  function flashBackground(color) {
+	document.body.style.backgroundColor = color;
+	setTimeout(() => {
+	  document.body.style.backgroundColor = 'white'; // Reset background color
+	}, 1000);
+  }
+  
+  // Function to get random off-screen position
+  function getRandomOffScreenPosition(screenDimension, particleSize) {
+	return Math.random() > 0.5 ? -particleSize : screenDimension + particleSize;
+  }

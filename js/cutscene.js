@@ -11,6 +11,7 @@
         cutscene1: true,
         cutscene2: true,
         cutscene3: true,
+        cutscene4: true,
 
         //Cutscene Info
         cutsceneText: [            
@@ -34,6 +35,10 @@
         player.tab == "cb" || player.tab == "ps" ? "#021124" : 
         player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" : 
         player.c.cutscene3 && player.tab == "c" == true ? "linear-gradient(45deg, #8a00a9, #0061ff)" : 
+        player.c.cutscene4 && player.tab == "c" == true ? "linear-gradient(90deg, #d487fd, #4b79ff)" : 
+        player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
+        player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
+        player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
         "#161616");
 
         //Cutscene 1
@@ -91,6 +96,23 @@
             if (player.c.cutscene3 == true) player.c.cutsceneIndex = 0
             player.c.cutscene3 = false
         } 
+
+        //Cutscene 4
+        if (player.c.cutscene4 == true && player.startedGame == true && player.cb.level.gte(35))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene4();
+        } else if ((player.startedGame == true || player.c.cutscene4 == false) && player.tab == "c" && player.c.cutscene4 == false)
+        {
+            player.tab = "cb"
+            player.subtabs["cb"]['stuff'] = 'Evolution Shards'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene4 == true)
+        {
+            if (player.c.cutscene4 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene4 = false
+        } 
     },
     startCutscene1() {
         player.c.cutsceneText = [
@@ -122,6 +144,15 @@
         "1.79e308 - A finite number.",
         "However, no amount can surpass this value.",
         "So we have considered it infinity.",
+    ]
+},
+startCutscene4() {
+    player.c.cutsceneText = [
+        "The power of waiting. A very overlooked power.",
+        "Your talent has grown since you first started.",
+        "Now is a very special time. You will unlock something reserved for gods.",
+        "Evolution Shards- The crystalline form of celestial remnants.",
+        "It will be hard to get. It will be pain, but you will endure.",
     ]
 },
     clickables: {

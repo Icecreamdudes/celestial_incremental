@@ -75,6 +75,7 @@
 
         player.d.dicePointsMult = new Decimal(1)
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("d", 15))
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cb.rarePetEffects[1][0])
 
         if (player.d.autoRollCooldown.lt(0))
         {
@@ -104,9 +105,9 @@
 
         player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
 
-        player.d.diceCost = Decimal.pow(player.d.dice.add(1), 15)
+        player.d.diceCost = Decimal.pow(player.d.dice.add(1), 10)
         if (player.d.dice > 6) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 18)
-        if (player.d.dice > 12) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 22)
+        if (player.d.dice > 12) player.d.diceCost = Decimal.pow(30, player.d.dice.pow(2))
     },
     diceRoll()
     {
@@ -153,10 +154,19 @@
         12: {
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
+            tooltip() { return "<h3>5% chance for a pet???" },
             unlocked() { return true },
             onClick() {
                 player.d.currentBoosterRoll = getRandomInt(player.d.diceEffects.length)
                 player.d.boosterDiceCooldown = new Decimal(120)
+
+                let random = getRandomInt(20)
+
+                if (random == 1)
+                {
+                    player.cb.rarePetAmounts[1] = player.cb.rarePetAmounts[1].add(1);
+                    callAlert("You gained a Dice!", "resources/diceRarePet.png");
+                }
             },
             style: { width: '200px', "min-height": '100px' },
         },

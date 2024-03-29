@@ -881,3 +881,10 @@ button > * {
 	box-sizing: border-box; /* Include border in dimensions */
 	overflow: hidden; /* Ensure grass squares stay within spawn area */
 }
+
+.particle {
+	position: absolute;
+	width: 50px; /* Adjust size as needed */
+	height: 50px; /* Adjust size as needed */
+	border-radius: 0%;
+  }

@@ -112,7 +112,7 @@
         if (player.r.pent.lt(4)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28)
         if (player.r.pent.gte(4) && player.r.pent.lt(5)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28).tetrate(1.001)
         if (player.r.pent.gte(5)) player.r.pentReq = player.r.pent.add(1).pow(50).mul(1e32).tetrate(1.0015)
-        if (player.r.pent.gte(30)) player.r.pentReq = player.r.pent.add(1).pow(60).mul(1e32).tetrate(1.0025)
+        if (player.r.pent.gte(30)) player.r.pentReq = Decimal.pow(1e10, player.r.pent)
         player.r.pentReq = player.r.pentReq.div(buyableEffect("g", 19))
 
         if (player.r.pentPause.gt(0)) {

@@ -56,9 +56,10 @@ addLayer("i", {
         player.gain = player.gain.mul(player.gh.grasshopperEffects[0])
         if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.r.pentMilestone3Effect)
         player.gain = player.gain.mul(buyableEffect("m", 14))
-        player.gain = player.gain.mul(player.cb.levelEffect)
+        if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(player.cb.commonPetEffects[0][0])
         player.gain = player.gain.mul(player.d.diceEffects[0])
+        player.gain = player.gain.mul(player.rf.abilityEffects[0])
 
         player.points = player.points.add(player.gain.mul(delta))
 

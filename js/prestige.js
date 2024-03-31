@@ -44,6 +44,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.diceEffects[2])
 
         player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
+        if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))
     },
     prestigeReset()
     {

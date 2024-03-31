@@ -51,6 +51,7 @@
             buyUpgrade("g", 17)
             buyUpgrade("g", 18)
             buyUpgrade("g", 19)
+            buyUpgrade("g", 21)
         }   
     },
     nodeStyle() {
@@ -106,6 +107,7 @@
         player.g.grassEffect = player.g.grass.mul(0.3).pow(0.7).add(1)
 
         player.g.grass = player.g.grass.add(player.g.grassVal.mul(buyableEffect("gh", 11).mul(delta)))
+        if (hasUpgrade("rf", 12)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.2, delta)))
 
         player.g.grassVal = new Decimal(1)
         player.g.grassVal = player.g.grassVal.mul(buyableEffect("g", 11))
@@ -124,6 +126,7 @@
         player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 8))
         player.g.grassVal = player.g.grassVal.mul(player.cb.commonPetEffects[3][0])
         player.g.grassVal = player.g.grassVal.mul(player.d.diceEffects[5])
+        player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
 
         player.g.grassReq = new Decimal(4) 
         player.g.grassReq = player.g.grassReq.div(buyableEffect("g", 12))
@@ -144,6 +147,7 @@
         player.g.goldGrassReq = new Decimal(40) 
         if (hasUpgrade("g", 16)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.3)
         player.g.goldGrassReq = player.g.goldGrassReq.div(buyableEffect("gh", 12))
+        player.g.goldGrassReq = player.g.goldGrassReq.div(player.cb.rarePetEffects[2][1])
 
         player.g.goldGrassCap = new Decimal(15) 
         player.g.goldGrassCap = player.g.goldGrassCap.add(buyableEffect("g", 18))

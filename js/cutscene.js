@@ -12,6 +12,7 @@
         cutscene2: true,
         cutscene3: true,
         cutscene4: true,
+        evoCutscene: false,
 
         //Cutscene Info
         cutsceneText: [            
@@ -39,6 +40,7 @@
         player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
         player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
         player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
+        player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
         "#161616");
 
         //Cutscene 1
@@ -113,6 +115,18 @@
             if (player.c.cutscene4 == true) player.c.cutsceneIndex = 0
             player.c.cutscene4 = false
         } 
+
+        //Evo
+        if (player.c.evoCutscene == true)
+        {
+            player.tab = "c"
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length  && player.c.evoCutscene == true)
+        {
+            if (player.c.evoCutscene == true) player.c.cutsceneIndex = 0
+            player.c.evoCutscene = false
+            player.tab = 'cb'
+        }
     },
     startCutscene1() {
         player.c.cutsceneText = [
@@ -147,13 +161,30 @@
     ]
 },
 startCutscene4() {
-    player.c.cutsceneText = [
-        "The power of waiting. A very overlooked power.",
-        "Your talent has grown since you first started.",
-        "Now is a very special time. You will unlock something reserved for gods.",
-        "Evolution Shards- The crystalline form of celestial remnants.",
-        "It will be hard to get. It will be pain, but you will endure.",
-    ]
+    if (player.evoCutscene == false)
+    {
+        player.c.cutsceneText = [
+            "The power of waiting. A very overlooked power.",
+            "Your talent has grown since you first started.",
+            "Now is a very special time. You will unlock something reserved for gods.",
+            "Evolution Shards- The crystalline form of celestial remnants.",
+            "It will be hard to get. It will be pain, but you will endure.",
+        ]
+    }
+},
+evoCutscenes(pet) {
+    if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+    player.tab = "c"
+    player.c.evoCutscene = true
+    switch (pet)
+    {
+        case 0:
+            player.c.cutsceneText = ["Unsmith.", "Such an interesting specimen...", "Dumb, but happy.", "It looks like it lacks power,", "But it's full of life.", "I will grant you with the evolution.",]
+        break;
+        case 1:
+            player.c.cutsceneText = ["Selachimorpha. The scientific name for shark.", "These apex predators dominated the seas for millions of years.", "But we could do better.", "Sharks are only the base form for something greater...", "It could be EVOLVED.",]
+        break;
+    }
 },
     clickables: {
         11: {
@@ -192,7 +223,8 @@ startCutscene4() {
 
     tabFormat: [
         ["blank", "125px"],
-        ["raw-html", function () { return player.c.cutsceneText[player.c.cutsceneIndex] }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", function () { return !player.c.evoCutscene ? player.c.cutsceneText[player.c.cutsceneIndex] : ""}, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.c.evoCutscene ? player.c.cutsceneText[player.c.cutsceneIndex] : ""}, { "color": "white", "font-size": "32px", "font-family": "Verdana, sans-serif" }],
         ["blank", "25px"],
         ["row", [["clickable", 12], ["clickable", 11]]],
     ],

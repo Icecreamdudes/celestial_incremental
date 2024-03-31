@@ -33,6 +33,7 @@
         player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45).add(50000)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.uncommonPetEffects[0][1])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
     }
 
         if (player.gh.grasshopPause.gt(0)) {
@@ -51,7 +52,53 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.cb.uncommonPetEffects[0][2])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.cb.rarePetEffects[0][0])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.diceEffects[7])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
         player.gh.fertilizer = player.gh.fertilizer.add(player.gh.fertilizerPerSecond.mul(delta))
+
+        if (player.gh.buyables[11].gt(5))
+        {
+            player.gh.buyables[11] = new Decimal(5)
+        }
+        if (player.gh.buyables[12].gt(8))
+        {
+            player.gh.buyables[12] = new Decimal(8)
+        }
+        if (player.gh.buyables[13].gt(40))
+        {
+            player.gh.buyables[13] = new Decimal(40)
+        }
+        if (player.gh.buyables[14].gt(100))
+        {
+            player.gh.buyables[14] = new Decimal(100)
+        }
+        if (player.gh.buyables[15].gt(8))
+        {
+            player.gh.buyables[15] = new Decimal(8)
+        }
+        if (player.gh.buyables[16].gt(20))
+        {
+            player.gh.buyables[16] = new Decimal(20)
+        }
+        if (player.gh.buyables[17].gt(200))
+        {
+            player.gh.buyables[17] = new Decimal(200)
+        }
+        if (player.gh.buyables[18].gt(100))
+        {
+            player.gh.buyables[18] = new Decimal(100)
+        }
+        if (player.gh.buyables[19].gt(1000))
+        {
+            player.gh.buyables[19] = new Decimal(1000)
+        }
+        if (player.gh.buyables[21].gt(200))
+        {
+            player.gh.buyables[21] = new Decimal(200)
+        }
+        if (player.gh.buyables[22].gt(20))
+        {
+            player.gh.buyables[22] = new Decimal(20)
+        }
     },
     branches: ["g"],
     clickables: {

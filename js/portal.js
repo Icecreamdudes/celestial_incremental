@@ -1,4 +1,5 @@
-﻿addLayer("po", {
+﻿var tree = [["in"]]
+addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -19,6 +20,11 @@
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
+
+        if (player.points.gte(Number.MAX_VALUE))
+        {
+            player.in.reachedInfinity = true
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -35,9 +41,9 @@
         11: {
             title() { return "<h1>Dice" },
             display() {
-                return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off";
+                return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) },
+            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) },
             unlocked() { return true },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
@@ -54,9 +60,9 @@
         12: {
             title() { return "<h1>Rocket Fuel" },
             display() {
-                return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off";
+                return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) },
+            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170) },
             unlocked() { return true },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
@@ -96,7 +102,7 @@
     },
     bars: {
         infbar: {
-            unlocked() { return true },
+            unlocked() { return !player.in.unlockedInfinity },
             direction: UP,
             width: 476,
             height: 476,
@@ -136,13 +142,15 @@
                 ]
 
             },
-            "???": {
+            "Infinity": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
                 content:
                 [
                         ["blank", "25px"],
                         ["row", [["bar", "infbar"]]],
+                        ["blank", "25px"],
+                        ["tree", tree],
                 ]
 
             },

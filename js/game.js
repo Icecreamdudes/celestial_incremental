@@ -559,3 +559,71 @@ function swarmParticles(particleColor, flashColor) {
   function getRandomOffScreenPosition(screenDimension, particleSize) {
 	return Math.random() > 0.5 ? -particleSize : screenDimension + particleSize;
   }
+
+  function createWisps(color, amount, speed) {
+	for (let i = 0; i < amount; i++) {
+	  const wisp = document.createElement('div');
+	  wisp.className = 'wisp';
+	  wisp.style.backgroundColor = color;
+	  wisp.style.left = Math.random() * window.innerWidth + 'px';
+	  wisp.style.top = Math.random() * window.innerHeight + 'px';
+	  const velocityX = (Math.random() - 0.5) * speed;
+	  const velocityY = (Math.random() - 0.5) * speed;
+	  wisp.velocity = { x: velocityX, y: velocityY };
+	  document.body.appendChild(wisp);
+	}
+	
+	setInterval(moveWisps, 1000 / 60); // Update wisps position approximately every 60th of a second
+  }
+  
+  function moveWisps() {
+	const wisps = document.querySelectorAll('.wisp');
+	wisps.forEach(wisp => {
+	  wisp.style.left = parseFloat(wisp.style.left) + wisp.velocity.x + 'px';
+	  wisp.style.top = parseFloat(wisp.style.top) + wisp.velocity.y + 'px';
+	  
+	  // Wrap-around effect when wisps reach the screen boundaries
+	  if (parseFloat(wisp.style.left) < -20) {
+		wisp.style.left = window.innerWidth + 'px';
+	  } else if (parseFloat(wisp.style.left) > window.innerWidth) {
+		wisp.style.left = '-20px';
+	  }
+	  if (parseFloat(wisp.style.top) < -20) {
+		wisp.style.top = window.innerHeight + 'px';
+	  } else if (parseFloat(wisp.style.top) > window.innerHeight) {
+		wisp.style.top = '-20px';
+	  }
+	});
+  }
+  
+  function removeWisps() {
+	const wisps = document.querySelectorAll('.wisp');
+	wisps.forEach(wisp => wisp.remove());
+  }
+
+  let audio = new Audio();
+  let isAudioInitialized = false;
+  
+  function playAndLoopAudio(audioSrc, volume) {
+	  if (!isAudioInitialized) {
+		  audio.src = audioSrc;
+		  audio.loop = true;
+		  isAudioInitialized = true;
+		  audio.volume = volume; // Set initial volume
+		  
+		  // Add an event listener to initiate audio playback after user interaction
+		  document.addEventListener('click', function initAudioPlayback() {
+			  audio.play();
+			  document.removeEventListener('click', initAudioPlayback);
+		  });
+	  } else {
+		  audio.volume = volume; // Update volume
+		  audio.play();
+	  }
+  }
+  
+  function stopAudio() {
+	  audio.pause();
+	  audio.currentTime = 0;
+  }
+  

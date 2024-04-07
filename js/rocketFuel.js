@@ -286,7 +286,7 @@
         {
             case 0:
                 player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1)
-                player.rf.abilityTimers[0] = amount.pow(0.14).mul(120)
+                player.rf.abilityTimers[0] = amount.pow(0.14).mul(100)
                 break;
             case 1:
                 player.rf.abilityEffects[1] = amount.pow(1.1).mul(10).add(1)
@@ -319,13 +319,13 @@
         player.r.pentToGet = new Decimal(0)
         if (!hasUpgrade("rf", 11)) player.r.pent = new Decimal(0)
 
-        player.r.factorUnlocks = [true, true, true, false, false, false, false, false]
-        player.r.factorGain = new Decimal(1)
+        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
+        player.f.factorGain = new Decimal(1)
 
-        player.r.factorPower = new Decimal(0)
-        player.r.factorPowerEffect = new Decimal(1)
-        player.r.factorPowerPerSecond = new Decimal(0)
-        player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
+        player.f.factorPower = new Decimal(0)
+        player.f.factorPowerEffect = new Decimal(1)
+        player.f.factorPowerPerSecond = new Decimal(0)
+        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
         player.f.buyables[1] = new Decimal(0)
         player.f.buyables[2] = new Decimal(0)

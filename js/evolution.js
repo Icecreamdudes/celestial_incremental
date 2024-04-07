@@ -20,7 +20,7 @@
     nodeStyle() {
     },
     tooltip: "Evolution",
-    color: "white",
+    color: "#06366e",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -62,7 +62,7 @@
                 player.tab = "cb"
                 stopRain('#4b79ff');
             },
-            style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', },
+            style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%"},
         },
         11: {
             title() { return player.cb.commonPetImage[2] },
@@ -91,7 +91,7 @@
                 player.ev.evolutionsUnlocked[0] = true
                 player.cb.evolvedLevels[0] = new Decimal(1)
             },
-            style: { width: '200px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
         },
         13: {
             title() { return player.cb.uncommonPetImage[3] },
@@ -121,7 +121,7 @@
                 player.ev.evolutionsUnlocked[1] = true
                 player.cb.evolvedLevels[1] = new Decimal(1)
             },
-            style: { width: '200px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
         },
     },
     bars: {
@@ -204,7 +204,7 @@ addLayer("ev0", {
                 player.tab = "cb"
                 stopRain('#4b79ff');
             },
-            style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #e7c97c, #fad25a)', },
+            style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #e7c97c, #fad25a)', 'border-width': "10px" },
         },
     },
     bars: {
@@ -797,6 +797,68 @@ addLayer("ev1", {
             },
             style: { width: '200px', height: '65px', }
         },
+        25: {
+            cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(16) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.petPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>XP: x" + format(tmp[this.layer].buyables[this.id].effect)
+            },
+            display() {
+                return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pet Points"
+            },
+            buy() {
+                let base = new Decimal(10)
+                let growth = 1.22
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.petPoints = player.cb.petPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.cb.petPoints = player.cb.petPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '200px', height: '65px', }
+        },
+        26: {
+            cost(x) { return new Decimal(1.44).pow(x || getBuyableAmount(this.layer, this.id)).mul(16) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.petPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect)
+            },
+            display() {
+                return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pet Points"
+            },
+            buy() {
+                let base = new Decimal(10)
+                let growth = 1.44
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.petPoints = player.cb.petPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.cb.petPoints = player.cb.petPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '200px', height: '65px', }
+        },
     },
     milestones: {
 
@@ -823,10 +885,12 @@ addLayer("ev1", {
                     ["row", [["column", [["raw-html", function () { return "Button 4 Base: " + format(player.cb.buttonBaseXP[2]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 4 Cooldown: " + formatTime(player.cb.buttonTimersMax[2]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 17], ["buyable", 18]]],                    
                     ["row", [["column", [["raw-html", function () { return "Button 5 Base: " + format(player.cb.buttonBaseXP[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 5 Cooldown: " + formatTime(player.cb.buttonTimersMax[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 21], ["buyable", 22]]],                    
                     ["row", [["column", [["raw-html", function () { return "Button 6 Base: " + format(player.cb.buttonBaseXP[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 6 Cooldown: " + formatTime(player.cb.buttonTimersMax[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 23], ["buyable", 24]]],     
-                        ]]                                
+                    ["row", [["column", [["raw-html", function () { return "Button 7 Base: " + format(player.cb.buttonBaseXP[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 7 Cooldown: " + formatTime(player.cb.buttonTimersMax[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 25], ["buyable", 26]]],     
+                ]]                                
                 ]
 
             },
+            
         },
     }, 
 

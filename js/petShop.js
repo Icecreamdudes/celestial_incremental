@@ -19,6 +19,20 @@
 
         uncommonDisplay: [],
         uncommonDisplayIndex: new Decimal(0),
+
+        unlockedMisc: false,
+
+        miscIndex: new Decimal(0),
+        miscDisplay: [],
+
+        evoShardsBought: new Decimal(0),
+        evoShardsCost: new Decimal(100),
+
+        crate1Bought: new Decimal(0),
+        crate1Cost: new Decimal(6),
+
+        crate2Bought: new Decimal(0),
+        crate2Cost: new Decimal(20),
     }
     },
     automate() {
@@ -26,7 +40,7 @@
     nodeStyle() {
     },
     tooltip: "Pet Shop",
-    color: "white",
+    color: "#06366e",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -60,11 +74,31 @@
         {
             player.ps.uncommonPetPrices[i] = player.ps.uncommonPetPrices[i].add(player.ps.uncommonPetsBought.mul(3))
         }
+
+        if (player.cb.level.gte(65)) player.ps.unlockedMisc = true
+
+        player.ps.evoShardsCost = new Decimal(250)
+        player.ps.evoShardsCost = player.ps.evoShardsCost.add(player.ps.evoShardsBought.mul(50))
+
+        player.ps.crate1Cost = new Decimal(6)
+        player.ps.crate1Cost = player.ps.crate1Cost.add(player.ps.crate1Bought.mul(3))
+
+        player.ps.crate2Cost = new Decimal(20)
+        player.ps.crate2Cost = player.ps.crate2Cost.add(player.ps.crate2Bought.mul(5))
+
+        player.ps.miscDisplay = [
+            "Evo shard cost: " + format(player.ps.evoShardsCost),
+            "Crate 1 cost: " + format(player.ps.crate1Cost),
+            "Crate 2 cost: " + format(player.ps.crate2Cost),
+        ]
     },
     resetPrices()
     {
         player.ps.commonPetsBought = new Decimal(0)
         player.ps.uncommonPetsBought = new Decimal(0)
+        player.ps.evoShardsBought = new Decimal(0)
+        player.ps.crate1Bought = new Decimal(0)
+        player.ps.crate2Bought = new Decimal(0)
     },
     branches: ["branch"],
     clickables: {
@@ -86,6 +120,69 @@
                 player.ps.priceResetTimer = player.ps.priceResetTimerMax
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        21: {
+            title() { return "<img src='resources/evoShard.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
+            canClick() { return true },
+            unlocked() { return player.ps.unlockedMisc },
+            onClick() {
+                player.ps.miscIndex = new Decimal(0)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        22: {
+            title() { return "Buy Evo Shard" },
+            canClick() { return player.cb.petPoints.gte(player.ps.evoShardsCost) },
+            unlocked() { return player.ps.miscIndex == 0 },
+            onClick() {
+                player.ps.evoShardsBought = player.ps.evoShardsBought.add(1)
+                player.cb.petPoints = player.cb.petPoints.sub(player.ps.evoShardsCost)
+                player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                callAlert("You gained an Evolution Shard!", "resources/evoShard.png");
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
+        },
+        23: {
+            title() { return "Crate 1" },
+            canClick() { return true },
+            unlocked() { return player.ps.unlockedMisc },
+            onClick() {
+                player.ps.miscIndex = new Decimal(1)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        24: {
+            title() { return "Buy Crate 1" },
+            canClick() { return player.cb.petPoints.gte(player.ps.crate1Cost) },
+            unlocked() { return player.ps.miscIndex == 1 },
+            tooltip() { return "27% - Gwa<br>22% - Egg Guy<br>17% - Unsmith<br>16% - Gd Checkpoint<br>13% - Slax<br>5% - Teste"},
+            onClick() {
+                player.ps.crate1Bought = player.ps.crate1Bought.add(1)
+                player.cb.petPoints = player.cb.petPoints.sub(player.ps.crate1Cost)
+                layers.cb.petButton1();
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
+        },
+        25: {
+            title() { return "Crate 2" },
+            canClick() { return true },
+            unlocked() { return player.ps.unlockedMisc },
+            onClick() {
+                player.ps.miscIndex = new Decimal(2)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        26: {
+            title() { return "Buy Crate 2" },
+            canClick() { return player.cb.petPoints.gte(player.ps.crate2Cost) },
+            unlocked() { return player.ps.miscIndex == 2 },
+            tooltip() { return "7% - Gwa<br>7% - Egg Guy<br>7% - Unsmith<br>7% - Gd Checkpoint<br>7% - Slax<br>11% - Teste<br>12% - Star<br>12% - Normal Face<br>12% - Shark<br>12% - THE WATCHING EYE<br>7% - Nova"},
+            onClick() {
+                player.ps.crate2Bought = player.ps.crate2Bought.add(1)
+                player.cb.petPoints = player.cb.petPoints.sub(player.ps.crate2Cost)
+                layers.cb.petButton2();
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
         101: {
             title() { return player.cb.commonPetImage[0] },
@@ -313,6 +410,23 @@
     },
     microtabs: {
         stuff: {
+            "Miscellaneous": {
+                buttonStyle() { return { 'color': 'white', 'border-color': 'white'  } },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11]]],
+                    ["raw-html", function () { return !player.ps.unlockedMisc ? "Unlocks at check back level 65!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 22], ["clickable", 24], ["clickable", 26]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return player.ps.miscDisplay[player.ps.miscIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 21], ["clickable", 23], ["clickable", 25]]],
+                ]
+
+            },
             "Common": {
                 buttonStyle() { return { 'color': '#9bedff', 'border-color': '#9bedff'  } },
                 unlocked() { return true },

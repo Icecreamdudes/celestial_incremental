@@ -12,6 +12,9 @@
         cutscene2: true,
         cutscene3: true,
         cutscene4: true,
+        cutscene5: true,
+        cutscene6: true,
+        cutscene7: true,
         evoCutscene: false,
 
         //Cutscene Info
@@ -41,6 +44,8 @@
         player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
         player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
         player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
+        player.tab == "bigc" || player.c.cutscene5 && player.tab == "c"  ? "#b87c34" : 
+        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.c.cutscene6 && player.tab == "c" || player.c.cutscene7 && player.tab == "c" ? "#001f18" : 
         "#161616");
 
         //Cutscene 1
@@ -116,6 +121,66 @@
             player.c.cutscene4 = false
         } 
 
+        //Cutscene 5
+        if (player.c.cutscene5 == true && player.startedGame == true && player.in.unlockedInfinity)
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene5();
+        } else if ((player.startedGame == true || player.c.cutscene5 == false) && player.tab == "c" && player.c.cutscene5 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene5 == true)
+        {
+            if (player.c.cutscene5 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene5 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+            callAlert("Welcome to the antimatter world. Here, you will produce antimatter (wow very innovative)")
+            .then(() => callAlert("You won't have access to the previous features, but you can return back once you re-unlock the portal."))
+            .then(() => callAlert("The gameplay should feel familiar to a lot of you. Hope it doesn't turn you off."))
+        } 
+
+        //Cutscene 6
+        if (player.c.cutscene6 == true && player.startedGame == true && player.ad.dimBoostAmount.gt(0))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene6();
+        } else if ((player.startedGame == true || player.c.cutscene6 == false) && player.tab == "c" && player.c.cutscene6 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene6 == true)
+        {
+            if (player.c.cutscene6 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene6 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
+        //Cutscene 7
+        if (player.c.cutscene7 == true && player.startedGame == true && player.ad.galaxyAmount.gte(1))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene7();
+        } else if ((player.startedGame == true || player.c.cutscene7 == false) && player.tab == "c" && player.c.cutscene7 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene7 == true)
+        {
+            if (player.c.cutscene7 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene7 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
         //Evo
         if (player.c.evoCutscene == true)
         {
@@ -171,6 +236,38 @@ startCutscene4() {
             "It will be hard to get. It will be pain, but you will endure.",
         ]
     }
+},
+startCutscene5() {
+    player.c.cutsceneText = [
+        "???: So, who are you, thinking you can enter my domain?",
+        "You: What is this place? It feels very peculiar.",
+        "???: That is because you have entered through an infinity warp.",
+        "???: Once your soul has obtained a certain amount of power,",
+        "???: It couldn't be contained in a world. Now tell me.",
+        "???: Who are you?",
+        "You: I was born quite recently. Just a soul wandering without a physical form.",
+        "You: I have a duty. I must defeat CELESTIALS. I am confused though. What are they?",
+        "???: Well if you want to defeat them, it would surely be a great task.",
+        "???: Make yourself comfortable here. We don't get visitors often in the antimatter world.",
+    ]
+},
+startCutscene6() {
+    player.c.cutsceneText = [
+        "You: What is this world exactly?",
+        "???: That is the antimatter world. Everything is antimatter.",
+        "???: I don't know where you come from. Can you tell me?",
+        "You: I don't remember a lot, but there was a lot of grass, and trees.",
+        "???: Interesting. I can help you get back there. You must get an antimatter galaxy though.",
+        "You: Alright. That sounds great.",
+    ]
+},
+startCutscene7() {
+    player.c.cutsceneText = [
+        "???: You can reach the portal now, just buy the upgrade.",
+        "You: Thanks. I just got one more question for you.",
+        "You: Who are you?",
+        "???: Uhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+    ]
 },
 evoCutscenes(pet) {
     if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0

@@ -712,7 +712,7 @@
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                         ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                         ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return hasUpgrade("g", 13) ? "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["buyable", 17], ["buyable", 18], ["buyable", 19]]],
                 ]
             },

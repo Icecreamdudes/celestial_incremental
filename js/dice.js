@@ -81,7 +81,7 @@
         {
             layers.d.diceRoll()
         }
-        player.d.autoRollCooldown = player.d.autoRollCooldown.sub(onepersec.mul(delta))
+        if (player.po.dice) player.d.autoRollCooldown = player.d.autoRollCooldown.sub(onepersec.mul(delta))
 
         player.d.autoRollTime = buyableEffect("d", 13)
         player.d.lowestRoll = buyableEffect("d", 14)

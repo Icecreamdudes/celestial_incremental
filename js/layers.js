@@ -34,6 +34,33 @@ addLayer("i", {
         {
             player.gain = new Decimal(1)
         }
+
+        if (player.tab == "i")
+        {
+            player.universe = 1
+        }
+        if (player.tab == "in")
+        {
+            player.universe = 2
+        }
+        if (player.tab == "po")
+        {
+            player.universe = 0
+        }
+        if (player.tab == "c")
+        {
+            player.universe = -1
+        }
+
+        //music control
+        if (player.universe == 1 && player.startedGame && options.musicToggle)
+        {
+            playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
+        } else
+        {
+            stopAudio();
+        }
+
         
         //Celestial Point boosts
         player.gain = player.gain.mul(player.r.rankEffect)
@@ -60,12 +87,14 @@ addLayer("i", {
         player.gain = player.gain.mul(player.cb.commonPetEffects[0][0])
         player.gain = player.gain.mul(player.d.diceEffects[0])
         player.gain = player.gain.mul(player.rf.abilityEffects[0])
+        player.gain = player.gain.mul(player.ad.antimatterEffect)
 
         player.points = player.points.add(player.gain.mul(delta))
 
-        if (player.subtabs["i"]['stuff'] == 'Portal')
+        if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
         {
             player.tab = "po"
+            player.subtabs["i"]['stuff'] = 'Features'
         }
     },
     bars: {
@@ -195,7 +224,7 @@ addLayer("i", {
             },
             "Portal": {
                 buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("i", 21) },
+                unlocked() { return hasUpgrade("i", 21) || hasUpgrade('ad', 13)},
                 content:
                 [
                 ]
@@ -234,6 +263,9 @@ addLayer("i", {
                         ["raw-html", function () { return "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ]],
                         ["blank", "25px"],
+                        ["raw-html", function () { return "</td><td><div style=margin: 0 10px><input type=range id=volume name=Music Volume min=1 max=10 value=10 oninput=updateMusicVolume()><br>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "Volume: " + options.musicVolume}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Autosave: " + options.autosave}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Offline Production: " + options.offlineProd}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Music Toggle: " + options.musicToggle}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],

@@ -108,6 +108,7 @@
 
         player.g.grass = player.g.grass.add(player.g.grassVal.mul(buyableEffect("gh", 11).mul(delta)))
         if (hasUpgrade("rf", 12)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.2, delta)))
+        if (hasMilestone("ip", 13)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.05, delta)))
 
         player.g.grassVal = new Decimal(1)
         player.g.grassVal = player.g.grassVal.mul(buyableEffect("g", 11))
@@ -127,6 +128,7 @@
         player.g.grassVal = player.g.grassVal.mul(player.cb.commonPetEffects[3][0])
         player.g.grassVal = player.g.grassVal.mul(player.d.diceEffects[5])
         player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
+        if (hasUpgrade("ad", 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect("ad", 14))
 
         player.g.grassReq = new Decimal(4) 
         player.g.grassReq = player.g.grassReq.div(buyableEffect("g", 12))
@@ -141,6 +143,7 @@
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("t", 18))
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("m", 13))
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.commonPetEffects[3][1])
+        if (hasUpgrade("ip", 24)) player.g.goldGrassVal = player.g.goldGrassVal.add(upgradeEffect("ip", 24))
 
         player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect("gh", 18).mul(delta)))
 
@@ -605,7 +608,7 @@
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
             unlocked() { return hasUpgrade("g", 14) },
-            canAfford() { return player.g.goldGrass.gte(this.cost()) && player.g.buyables[12].lt(200)},
+            canAfford() { return player.g.goldGrass.gte(this.cost()) && player.g.buyables[18].lt(500)},
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Golden Grass Capacity"
             },

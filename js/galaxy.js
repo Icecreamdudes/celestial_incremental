@@ -67,5 +67,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ad", 13)}
+    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && false}
 })

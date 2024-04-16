@@ -8,10 +8,11 @@
 
         evolutionDisplayIndex: new Decimal(-1),
         evolutionDisplay: [],
-        evolutionsUnlocked: [false, false],
+        evolutionsUnlocked: [false, false, false],
         /*
         0 - Unsmith
         1 - Shark
+        2 - Normal Face
         */
     }
     },
@@ -50,6 +51,13 @@
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[4]) + "/3 THE WATCHING EYE" + 
             "<br>"  + formatWhole(player.cb.rarePetAmounts[2]) + "/2 Drippy Ufo" + 
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[3]) + "/4 Shark Level",
+
+            "Evolve Normal Face<br>" + formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
+            "<br>"  + formatWhole(player.ip.diceRuns) + "/2 Dice Runs" + 
+            "<br>"  + formatWhole(player.ip.rocketFuelRuns) + "/2 Rocket Fuel Runs" + 
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[0]) + "/3 Nova" + 
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[3]) + "/3 Goofy Ahh Thing" + 
+            "<br>"  + formatWhole(player.cb.uncommonPetLevels[2]) + "/6 Normal Face Level",
         ]
     },
     branches: ["branch"],
@@ -123,6 +131,32 @@
             },
             style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
         },
+        15: {
+            title() { return player.cb.uncommonPetImage[2] },
+            canClick() { return true},
+            unlocked() { return !player.ev.evolutionsUnlocked[2] && player.in.infinities.gt(0)},
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(2)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        16: {
+            title() { return "EVOLVE" },
+            canClick() { return player.cb.evolutionShards.gte(10) && player.ip.diceRuns.gte(2) && player.ip.rocketFuelRuns.gte(2) && player.cb.rarePetAmounts[0].gte(3) && player.cb.rarePetAmounts[3].gte(3) && player.cb.uncommonPetLevels[2].gte(6)},
+            unlocked() { return player.ev.evolutionDisplayIndex == 2 },
+            onClick() {
+                layers.c.evoCutscenes(2)
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(10)
+                player.cb.rarePetAmounts[0] = player.cb.rarePetAmounts[0].sub(3)
+                player.cb.rarePetAmounts[3] = player.cb.rarePetAmounts[3].sub(3)
+
+                player.ev.evolutionsUnlocked[2] = true
+                player.cb.evolvedLevels[2] = new Decimal(1)
+            },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
+        },
     },
     bars: {
     },
@@ -147,9 +181,9 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }], ["clickable", 12], ["clickable", 14]]],
+                    ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }], ["blank", "25px"], ["clickable", 12], ["clickable", 14], ["clickable", 16]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 13]]],
+                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15]]],
                 ]
 
             },
@@ -901,4 +935,179 @@ addLayer("ev1", {
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true }
+})
+addLayer("ev2", {
+    name: "Insane Face", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "E2", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+
+        day: new Decimal(1),
+        petDay: false,
+        xpDay: true,
+        cooldown: new Decimal(0),
+        cooldownMax: new Decimal(86400),
+        xpReward: new Decimal(500),
+    }
+    },
+    automate() {
+    },
+    nodeStyle() {
+    },
+    tooltip: "Evolution",
+    color: "#106ccc",
+    update(delta) {
+        let onepersec = new Decimal(1)
+
+        player.ev2.xpReward = new Decimal(500)
+        player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(50))
+
+        player.ev2.cooldown = player.ev2.cooldown.sub(onepersec.mul(delta))
+    },
+    branches: ["branch"],
+    clickables: {
+        1: {
+            title() { return "<h2>Return" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tab = "cb"
+                stopRain('#4b79ff');
+            },
+            style: { width: '100px', "min-height": '50px', 'background-image': '#106ccc' },
+        },
+        11: {
+            title() { return player.ev2.cooldown.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.cooldown) + "." : "<h3>Collect Daily Reward!"},
+            canClick() { return player.ev2.cooldown.lt(0) },
+            unlocked() { return player.ev2.cooldown },
+            tooltip() { return player.ev2.petDay ? "5% - Nova<br>5% - Goofy Ahh Thing<br>10% - Teste<br>10% - Star<br>10% - Normal Face<br>10% - Shark<br>10% - THE WATCHING EYE<br>8% - Gwa<br>8% - Egg Guy<br>8% - Unsmith<br>8% - Gd Checkpoint<br>8% - Slax" : "+" + format(player.ev2.xpReward) + "."},
+            onClick() {
+                layers.ev2.dailyReward();
+                player.ev2.cooldown = player.ev2.cooldownMax
+
+                if (player.ev2.xpDay)
+                {
+                    player.ev2.petDay = true
+                    player.ev2.xpDay = false
+                }
+                else
+                {
+                    player.ev2.xpDay = true
+                    player.ev2.petDay = false
+                }
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+    },
+    dailyReward()
+    {
+        if (player.ev2.xpDay)
+        {
+            player.cb.xp = player.cb.xp.add(player.ev2.xpReward)
+            callAlert("You gained " + format(player.ev2.xpReward) + " XP!");
+        } else if (player.ev2.petDay)
+        {
+            layers.ev2.dailyRewardPet();
+        }
+
+        player.ev2.day = player.ev2.day.add(1)
+    },
+    dailyRewardPet()
+    {
+        let rng = Math.random();
+
+        if (rng > 0.95) {
+            player.cb.rarePetAmounts[0] = player.cb.rarePetAmounts[0].add(1);
+            callAlert("You gained a Nova!", "resources/novaRarePet.png");
+        } else if (rng > 0.9)
+        {
+            player.cb.rarePetAmounts[3] = player.cb.rarePetAmounts[3].add(1);
+            callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");  
+        } else if (rng > 0.8)
+        {
+            player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(2);
+            callAlert("You gained 2 Testes!", "resources/testeUncommonPet.png");  
+        }else if (rng > 0.7)
+        {
+            player.cb.uncommonPetAmounts[1] = player.cb.uncommonPetAmounts[1].add(2);
+            callAlert("You gained 2 Stars!", "resources/starUncommonPet.png");  
+        }else if (rng > 0.6)
+        {
+            player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].add(2);
+            callAlert("You gained 2 Normal Faces!", "resources/normalFaceUncommonPet.png");  
+        }else if (rng > 0.5)
+        {
+            player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].add(2);
+            callAlert("You gained 2 Sharks!", "resources/sharkUncommonPet.png");  
+        }
+        else if (rng > 0.4)
+        {
+            player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].add(2);
+            callAlert("You gained 2 WATCHING EYES!", "resources/eyeUncommonPet.png");  
+        }
+        else if (rng > 0.32)
+        {
+            player.cb.commonPetAmounts[0] = player.cb.commonPetAmounts[0].add(5);
+            callAlert("You gained 5 Gwas!", "resources/gwaCommonPet.png");  
+        }
+        else if (rng > 0.24)
+        {
+            player.cb.commonPetAmounts[1] = player.cb.commonPetAmounts[1].add(5);
+            callAlert("You gained 5 Egg Guys!", "resources/eggCommonPet.png");  
+        }
+        else if (rng > 0.16)
+        {
+            player.cb.commonPetAmounts[2] = player.cb.commonPetAmounts[2].add(5);
+            callAlert("You gained 5 Unsmith!", "resources/unsmithCommonPet.png");  
+        }
+        else if (rng > 0.08)
+        {
+            player.cb.commonPetAmounts[3] = player.cb.commonPetAmounts[3].add(5);
+            callAlert("You gained 5 Gd Checkpoints!", "resources/checkpointCommonPet.png");  
+        } else
+        {
+            player.cb.commonPetAmounts[4] = player.cb.commonPetAmounts[4].add(5);
+            callAlert("You gained 5 Slaxes!", "resources/slaxCommonPet.png");  
+        }
+    },
+    bars: {
+    },
+    upgrades: {
+    },
+    buyables: {
+    },
+    milestones: {
+
+    },
+    challenges: {
+    },
+    infoboxes: {
+    },
+    microtabs: {
+        stuff: {
+            "Daily Reward": {
+                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': '#106ccc',} },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+        ["raw-html", function () { return !player.ev2.petDay ? "You will gain XP today!" : "You will gain a pet today!" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11]]],
+    ]
+
+            },
+        },
+    }, 
+
+    tabFormat: [
+        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "<h2>Day " + formatWhole(player.ev2.day) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["blank", "25px"],
+                    ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return player.startedGame == true  }
 })

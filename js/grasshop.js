@@ -26,11 +26,12 @@
         let onepersec = new Decimal(1)
 
         if (player.gh.grasshoppersToGet.lt(50000))  player.gh.grasshoppersToGet = player.g.grass.div(10000).pow(0.55)
-        if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45).add(10000)
+        if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45)
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.uncommonPetEffects[0][1])
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.rarePetEffects[3][0])
+    if (hasUpgrade("ad", 16)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
 
         if (player.gh.grasshopPause.gt(0)) {
             layers.gh.grasshopReset();
@@ -49,7 +50,8 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.cb.rarePetEffects[0][0])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.diceEffects[7])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
-        player.gh.fertilizer = player.gh.fertilizer.add(player.gh.fertilizerPerSecond.mul(delta))
+    if (hasUpgrade("ad", 16)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
+    player.gh.fertilizer = player.gh.fertilizer.add(player.gh.fertilizerPerSecond.mul(delta))
 
         if (player.gh.buyables[11].gt(5))
         {
@@ -155,13 +157,16 @@
         player.f.buyables[27] = new Decimal(0)
 
         player.p.prestigePoints = new Decimal(0)
+
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.p.upgrades.length; i++) {
             if (+player.p.upgrades[i] < 24) {
                 player.p.upgrades.splice(i, 1);
                 i--;
             }
         }
-
+    }
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
         player.t.buyables[13] = new Decimal(0)
@@ -185,13 +190,15 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 17) {
                 player.g.upgrades.splice(i, 1);
                 i--;
             }
         }
-
+    }
         player.g.grass = new Decimal(0)
         player.g.savedGrass = new Decimal(0)
         player.g.grassCount = new Decimal(0)
@@ -506,7 +513,7 @@
         21: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e16) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
-            unlocked() { return hasMilestone("r", 17) },
+            unlocked() { return hasMilestone("r", 18) },
             canAfford() { return player.gh.fertilizer.gte(this.cost()) && player.gh.buyables[21].lt(200) && player.gh.buyables[19].gte(1)},
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "/200<br/>Check Back Study I"
@@ -539,7 +546,7 @@
         22: {
             cost(x) { return new Decimal(1e6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e16) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
-            unlocked() { return hasMilestone("r", 17) },
+            unlocked() { return hasMilestone("r", 18) },
             canAfford() { return player.gh.fertilizer.gte(this.cost()) && player.gh.buyables[22].lt(20) && player.gh.buyables[19].gte(1)},
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "/20<br/>Check Back Study II"
@@ -618,7 +625,7 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.gh.grasshoppers) + "</h3> grasshoppers." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.g.grass.gt(10000) ? "You will gain <h3>" + format(player.gh.grasshoppersToGet) + "</h3> grasshoppers on reset." : ""}, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.gh.grasshoppersToGet.gt(1) ? "You will gain <h3>" + format(player.gh.grasshoppersToGet) + "</h3> grasshoppers on reset." : ""}, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

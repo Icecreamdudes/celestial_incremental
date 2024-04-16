@@ -56,7 +56,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.2)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
+        player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
 
         player.ad.dimensionText = [
             "1st dimension (" + format(player.ad.dimensionMult[0]) + "x): " + format(player.ad.dimensionAmounts[0]) + " (+" + format(player.ad.dimensionsPerSecond[0]) + "/s)",
@@ -75,6 +75,8 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ad", 1))
         if (hasUpgrade("ad", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 12))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ad.dimBoostEffect)
+        if (hasUpgrade("ip", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 12))
+        if (hasUpgrade("ad", 17)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 17))
         
         for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
         {
@@ -88,7 +90,9 @@
             //mults
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 1))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ad.dimBoostEffect)
-        }
+        if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
+    }
+        if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
 
         player.ad.dimensionCosts = [new Decimal(10),new Decimal(100),new Decimal(10000),new Decimal(1e6),new Decimal(1e9),new Decimal(1e13),new Decimal(1e18),new Decimal(1e24),]
 
@@ -282,6 +286,104 @@
             currencyLocation() { return player.ad },
             currencyDisplayName: "Antimatter",
             currencyInternalName: "antimatter",
+        },
+        14:
+        {
+            title: "AD Upgrade IV",
+            unlocked() { return player.in.infinities.gte(2) },
+            description: "Boosts grass based on antimatter.",
+            cost: new Decimal(1e34),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().pow(1.3).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        15:
+        {
+            title: "AD Upgrade V",
+            unlocked() { return player.in.infinities.gte(2) },
+            description: "Boosts trees and leaves based on antimatter.",
+            cost: new Decimal(1e40),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().pow(1.35).div(4).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        16:
+        {
+            title: "AD Upgrade VI",
+            unlocked() { return player.in.infinities.gte(2) },
+            description: "Boosts grasshoppers and fertilizer based on antimatter.",
+            cost: new Decimal(1e50),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().pow(1.25).div(8).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        17:
+        {
+            title: "AD Upgrade VII",
+            unlocked() { return player.in.infinities.gte(3) },
+            description: "Infinities boost antimatter dimensions.",
+            cost: new Decimal(1e64),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.in.infinities.pow(0.2).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        18:
+        {
+            title: "AD Upgrade VIII",
+            unlocked() { return player.in.infinities.gte(3) },
+            description: "Boosts mods and lines of code based on antimatter.",
+            cost: new Decimal(1e78),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().pow(1.15).div(12).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        19:
+        {
+            title: "AD Upgrade IX",
+            unlocked() { return player.in.infinities.gte(3) },
+            description: "Increase factor effect base based on antimatter.",
+            cost: new Decimal(1e92),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().div(2500)
+            },
+            effectDisplay() { return "+" + format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        21:
+        {
+            title: "AD Upgrade X",
+            unlocked() { return player.in.infinities.gte(3) },
+            description: "Boosts code experience based on antimatter.",
+            cost: new Decimal(1e110),
+            currencyLocation() { return player.ad },
+            currencyDisplayName: "Antimatter",
+            currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().pow(1.1).div(20).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
     },
     buyables: {
@@ -561,7 +663,8 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
                 ]
 
             },

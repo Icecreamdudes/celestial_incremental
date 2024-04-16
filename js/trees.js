@@ -52,6 +52,8 @@
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone30Effect)
         player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])
         player.t.treesToGet = player.t.treesToGet.mul(player.rf.abilityEffects[1])
+        if (hasUpgrade("ip", 22)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
+        if (hasUpgrade("ad", 15)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
@@ -60,6 +62,8 @@
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 17))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.cb.uncommonPetEffects[1][1])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.diceEffects[4])
+        if (hasUpgrade("ip", 22)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(upgradeEffect("ip", 22))
+        if (hasUpgrade("ad", 15)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(upgradeEffect("ad", 15))
         if (player.t.trees.gte(player.t.treeSoftcapStart))
         {
             player.t.treeSoftcap = Decimal.pow(player.t.trees.add(1).sub(player.t.treeSoftcapStart), 0.5)

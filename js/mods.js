@@ -37,17 +37,21 @@
         if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone30Effect2)
         player.m.modsToGet = player.m.modsToGet.mul(player.d.diceEffects[8])
         player.m.modsToGet = player.m.modsToGet.mul(player.cb.rarePetEffects[1][1])
+        if (hasUpgrade("ip", 23)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
+        if (hasUpgrade("ad", 18)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
 
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cb.uncommonPetEffects[1][0])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.diceEffects[9])
+        if (hasUpgrade("ip", 23)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
 
         if (player.m.mods.gte(player.m.modSoftcapStart))
         {
             player.m.modSoftcap = Decimal.pow(player.m.mods.add(1).sub(player.m.modSoftcapStart), 0.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.m.modSoftcap)
         }
+        if (hasUpgrade("ad", 18)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ad", 18))
 
         player.m.modEffect = player.m.mods.div(6).pow(1.2).add(1)
 
@@ -67,10 +71,11 @@
         }
         player.m.codeExperiencePause = player.m.codeExperiencePause.sub(1)
 
-        player.m.codeExperienceToGet = player.t.trees.div(1e8).pow(0.3)
+        player.m.codeExperienceToGet = player.t.trees.div(1e7).pow(0.3)
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("m", 11))
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cb.uncommonPetEffects[0][0])
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
+        if (hasUpgrade("ad", 21)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
     },
     branches: ["t"],
     clickables: {
@@ -102,8 +107,8 @@
             style: { width: '75px', "min-height": '75px', }
         },
         11: {
-            title() { return "<h3>Reset everything except grasshop and pent for code experience. <br>(Req: 100,000,000 trees and 1e70 celestial points)" },
-            canClick() { return player.m.codeExperienceToGet.gte(1) && player.points.gte(1e70) && player.t.trees.gte(100000000) },
+            title() { return "<h3>Reset everything except grasshop and pent for code experience. <br>(Req: 10,000,000 trees and 1e65 celestial points)" },
+            canClick() { return player.m.codeExperienceToGet.gte(1) && player.points.gte(1e65) && player.t.trees.gte(10000000) },
             unlocked() { return true },
             onClick() {
                 player.m.codeExperiencePause = new Decimal(3)
@@ -149,13 +154,16 @@
         player.f.buyables[27] = new Decimal(0)
 
         player.p.prestigePoints = new Decimal(0)
+
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.p.upgrades.length; i++) {
             if (+player.p.upgrades[i] < 24) {
                 player.p.upgrades.splice(i, 1);
                 i--;
             }
         }
-
+    }
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
         player.t.buyables[13] = new Decimal(0)
@@ -179,13 +187,15 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 17) {
                 player.g.upgrades.splice(i, 1);
                 i--;
             }
         }
-
+    }
         player.g.grass = new Decimal(0)
         player.g.savedGrass = new Decimal(0)
         player.g.grassCount = new Decimal(0)

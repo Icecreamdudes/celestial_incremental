@@ -361,12 +361,16 @@
         player.f.buyables[36] = new Decimal(0)
 
         player.p.prestigePoints = new Decimal(0)
+
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.p.upgrades.length; i++) {
             if (+player.p.upgrades[i] < 24) {
                 player.p.upgrades.splice(i, 1);
                 i--;
             }
         }
+     }
 
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
@@ -391,12 +395,15 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 22) {
                 player.g.upgrades.splice(i, 1);
                 i--;
             }
         }
+    }
         if (!hasUpgrade("rf", 11)) 
         {
             for (let i = 0; i < player.r.milestones.length; i++) {

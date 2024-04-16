@@ -15,6 +15,7 @@
         cutscene5: true,
         cutscene6: true,
         cutscene7: true,
+        cutscene8: true,
         evoCutscene: false,
 
         //Cutscene Info
@@ -28,9 +29,15 @@
         "Except for one being. THE INFINITY KEEPER.",
         ],
         cutsceneIndex: 0,
+
+        //background images
+        ev2bg: "<img src='resources/gdbg.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>"
     }
     },
     update(delta) {
+
+        player.c.ev2bg = "resources/gdbg.jpg"
+
         //Background
         document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2) && player.tab == "c" ? "linear-gradient(90deg, #180000, #300005, rgba(71,0,14,1))":
         player.tab == "t" ? "#02172f" : 
@@ -44,8 +51,9 @@
         player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
         player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
         player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
-        player.tab == "bigc" || player.c.cutscene5 && player.tab == "c"  ? "#b87c34" : 
+        player.tab == "bigc" || player.c.cutscene5 && player.tab == "c"  || player.c.cutscene8 && player.tab == "c"  ? "#b87c34" : 
         player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.c.cutscene6 && player.tab == "c" || player.c.cutscene7 && player.tab == "c" ? "#001f18" : 
+        player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
         "#161616");
 
         //Cutscene 1
@@ -181,6 +189,25 @@
             player.subtabs["in"]['stuff'] = 'Features'
         } 
 
+        //Cutscene 8
+        if (player.c.cutscene8 == true && player.startedGame == true && player.in.infinities.gte(2))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene8();
+        } else if ((player.startedGame == true || player.c.cutscene8 == false) && player.tab == "c" && player.c.cutscene8 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene8 == true)
+        {
+            if (player.c.cutscene8 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene8 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
         //Evo
         if (player.c.evoCutscene == true)
         {
@@ -269,6 +296,22 @@ startCutscene7() {
         "???: Uhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
     ]
 },
+startCutscene8() {
+    player.c.cutsceneText = [
+        "???: I must say the truth.",
+        "???: I am a celestial.",
+        "???: However, I have no intent to harm you.",
+        "You: I also don't want to hurt you, but I have an obligation to.",
+        "You: I don't know who I am, where I come from, or why I'm doing this.",
+        "You: Only recently have I gained the ability to communicate.",
+        "???: The thing is, I don't know much about the origin of celestials.",
+        "???: I was created by another celestial. My existence is pointless.",
+        "You: Don't worry. We can figure out each other's origins together.",
+        "You: I'll help you figure out where you come from, but I'll have to kill you.",
+        "???: I don't fear death. We will help each other out, even if I must die.",
+
+    ]
+},
 evoCutscenes(pet) {
     if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
     player.tab = "c"
@@ -280,6 +323,14 @@ evoCutscenes(pet) {
         break;
         case 1:
             player.c.cutsceneText = ["Selachimorpha. The scientific name for shark.", "These apex predators dominated the seas for millions of years.", "But we could do better.", "Sharks are only the base form for something greater...", "It could be EVOLVED.",]
+        break;
+        case 2:
+            player.c.cutsceneText = [
+                "This peculiar being has been so full of joy.", 
+                "Evolution shards would certainly turn that frown upside down.", 
+                "This questions the ethics of pet evolutions.", 
+                "Do they really enjoy being evolved?", 
+            ]
         break;
     }
 },

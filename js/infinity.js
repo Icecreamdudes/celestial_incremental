@@ -62,10 +62,15 @@ addLayer("in", {
         if (player.in.reachedInfinity)
         {
             player.tab = "bigc"
-            layers.in.bigCrunch();
         }
 
         player.in.infinityPointsToGet = new Decimal(1)
+        
+        player.in.infinityPause = player.in.infinityPause.sub(1)
+        if (player.in.infinityPause.gt(0))
+        {
+            layers.in.bigCrunch();
+        }
     },
     bigCrunch()
     {
@@ -121,12 +126,16 @@ addLayer("in", {
         player.f.buyables[36] = new Decimal(0)
 
         player.p.prestigePoints = new Decimal(0)
+
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.p.upgrades.length; i++) {
             if (+player.p.upgrades[i] < 24) {
                 player.p.upgrades.splice(i, 1);
                 i--;
             }
         }
+    }
 
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
@@ -151,19 +160,25 @@ addLayer("in", {
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
+        if (!hasMilestone("ip", 11))
+        {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 22) {
                 player.g.upgrades.splice(i, 1);
                 i--;
             }
         }
+        }
+
+        if (!hasMilestone("ip", 14))
+        {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
                     i--;
                 }
             }
-
+        }
 
         player.g.grass = new Decimal(0)
         player.g.savedGrass = new Decimal(0)
@@ -227,7 +242,7 @@ addLayer("in", {
         }
 
         for (let i = 0; i < player.rf.upgrades.length; i++) {
-            if (+player.rf.upgrades[i] < 15) {
+            if (+player.rf.upgrades[i] < 16) {
                 player.rf.upgrades.splice(i, 1);
                 i--;
             }
@@ -243,6 +258,29 @@ addLayer("in", {
         player.po.dice = false
         player.po.rocketFuel = false
         player.po.featureSlots = player.po.featureSlotsMax
+
+        //reset antimatter stuff
+
+        if (!hasMilestone("ip", 14))
+        {
+            player.ad.antimatter = new Decimal(10)
+
+            player.ad.buyables[1] = new Decimal(0)
+    
+            for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
+            {
+                player.ad.dimensionAmounts[i] = new Decimal(0)
+                player.ad.dimensionsPurchased[i] = new Decimal(0)
+            }
+    
+            player.ad.dimensionsUnlocked[4] = false
+            player.ad.dimensionsUnlocked[5] = false
+            player.ad.dimensionsUnlocked[6] = false
+            player.ad.dimensionsUnlocked[7] = false
+            
+            player.ad.dimBoostAmount = new Decimal(0)
+            player.ad.galaxyAmount = new Decimal(0)
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -263,7 +301,6 @@ addLayer("in", {
     buyables: {
     },
     milestones: {
-
     },
     challenges: {
     },
@@ -371,7 +408,15 @@ addLayer("bigc", {
                 player.tab = "in"
                 player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
                 player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
-
+                if (player.po.dice)
+                {
+                    player.ip.diceRuns = player.ip.diceRuns.add(1)
+                }
+                if (player.po.rocketFuel)
+                {
+                    player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
+                }
+                player.in.infinityPause = new Decimal(5)
                 player.in.reachedInfinity = false
             },
             style: { width: '300px', "min-height": '120px' },

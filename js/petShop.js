@@ -133,7 +133,7 @@
         22: {
             title() { return "Buy Evo Shard" },
             canClick() { return player.cb.petPoints.gte(player.ps.evoShardsCost) },
-            unlocked() { return player.ps.miscIndex == 0 },
+            unlocked() { return player.ps.miscIndex == 0 && player.ps.unlockedMisc },
             onClick() {
                 player.ps.evoShardsBought = player.ps.evoShardsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.evoShardsCost)
@@ -421,7 +421,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 22], ["clickable", 24], ["clickable", 26]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.ps.miscDisplay[player.ps.miscIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.ps.unlockedMisc ? player.ps.miscDisplay[player.ps.miscIndex] : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 21], ["clickable", 23], ["clickable", 25]]],
                 ]

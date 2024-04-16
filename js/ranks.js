@@ -49,7 +49,7 @@
 
         player.r.rankEffect = player.r.rank.mul(0.25).add(1).pow(1.05)
         player.r.rankReq = layers.r.getRankReq()
-        if (player.cb.uncommonPetLevels[3].gt(0)) player.r.rankReq = player.r.rankReq.div(player.cb.uncommonPetEffects[3][0])
+        if (player.cb.uncommonPetLevels[3].gt(0) && player.r.rank.gt(100)) player.r.rankReq = player.r.rankReq.div(player.cb.uncommonPetEffects[3][0])
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14))
         {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)
@@ -206,6 +206,8 @@
         player.f.buyables[26] = new Decimal(0)
         player.f.buyables[27] = new Decimal(0)
 
+        if (!hasMilestone("ip", 11))
+        {
         player.p.prestigePoints = new Decimal(0)
         for (let i = 0; i < player.p.upgrades.length; i++) {
             if (+player.p.upgrades[i] < 23) {
@@ -213,7 +215,7 @@
                 i--;
             }
         }
-
+        }
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
         player.t.buyables[13] = new Decimal(0)

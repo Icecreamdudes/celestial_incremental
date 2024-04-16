@@ -105,9 +105,9 @@
 
         player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
 
-        player.d.diceCost = Decimal.pow(player.d.dice.add(1), 10)
-        if (player.d.dice > 6) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 18)
-        if (player.d.dice > 12) player.d.diceCost = Decimal.pow(30, player.d.dice.pow(2))
+        player.d.diceCost = Decimal.pow(player.d.dice.add(1), 8)
+        if (player.d.dice > 6) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 18).div(10)
+        if (player.d.dice > 12) player.d.diceCost = Decimal.pow(30, player.d.dice.pow(2)).div(10)
     },
     diceRoll()
     {

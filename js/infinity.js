@@ -62,7 +62,7 @@ addLayer("in", {
         if (player.in.reachedInfinity && !inChallenge("ip", 11))
         {
             player.tab = "bigc"
-        } else if (inChallenge("ip", 11)) {
+        } else if (inChallenge("ip", 11) || inChallenge("ip", 12)) {
             player.tab = "ip"
         }
 
@@ -423,6 +423,15 @@ addLayer("bigc", {
                 }
                 player.in.infinityPause = new Decimal(5)
                 player.in.reachedInfinity = false
+
+                if (inChallenge("ip", 11))
+                {
+                    completeChallenge("ip", 11)
+                }
+                if (inChallenge("ip", 12))
+                {
+                    completeChallenge("ip", 12)
+                }
             },
             style: { width: '300px', "min-height": '120px' },
         },

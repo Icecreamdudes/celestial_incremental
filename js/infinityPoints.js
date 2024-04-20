@@ -196,8 +196,42 @@
             done() { return player.in.infinities.gte(6) },
             style: { width: '800px', "min-height": '75px' },
         },
+        16: {
+            requirementDescription: "<h3>8 Infinities",
+            effectDescription: "Unlock challenges.",
+            done() { return player.in.infinities.gte(8) },
+            style: { width: '800px', "min-height": '75px' },
+        },
     },
     challenges: {
+        11: {
+            name: "Challenge I",
+            challengeDescription() { return "<h4>You can't pick an otherworldy feature." },
+            goal() { return new Decimal("1.79e308") },
+            canComplete: function () { return player.points.gte(1.79e308) },
+            rewardDescription: "Unlock new grass studies.",
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            onExit() {
+            },
+            style: { width: '350px', height: '250px', }
+
+        },
+        12: {
+            name: "Challenge II",
+            challengeDescription() { return "<h4>Introduces pests, which do bad things to your grass :(" },
+            goal() { return new Decimal("1.79e308") },
+            canComplete: function () { return player.points.gte(1.79e308) },
+            rewardDescription: "Unlocks a new check back button at level 125.",
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            onExit() {
+            },
+            style: { width: '350px', height: '250px', }
+
+        },
     },
     infoboxes: {
     },
@@ -228,6 +262,17 @@
                         ["row", [["milestone", 13]]],
                         ["row", [["milestone", 14]]],
                         ["row", [["milestone", 15]]],
+                        ["row", [["milestone", 16]]],
+                ]
+
+            },
+            "Challenges": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasMilestone("ip", 16) },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["row", [["challenge", 11], ["challenge", 12]]],
                 ]
 
             },

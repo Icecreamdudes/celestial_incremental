@@ -59,9 +59,11 @@ addLayer("in", {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity)
+        if (player.in.reachedInfinity && !inChallenge("ip", 11))
         {
             player.tab = "bigc"
+        } else if (inChallenge("ip", 11)) {
+            player.tab = "ip"
         }
 
         player.in.infinityPointsToGet = new Decimal(1)
@@ -281,6 +283,9 @@ addLayer("in", {
             player.ad.dimBoostAmount = new Decimal(0)
             player.ad.galaxyAmount = new Decimal(0)
         }
+
+        //challenge stuff
+        player.pe.pests = new Decimal(0)
     },
     branches: ["branch"],
     clickables: {

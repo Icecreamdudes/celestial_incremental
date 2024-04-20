@@ -45,6 +45,7 @@
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cb.uncommonPetEffects[1][0])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.diceEffects[9])
         if (hasUpgrade("ip", 23)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
+        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.pe.pestEffect[5])
 
         if (player.m.mods.gte(player.m.modSoftcapStart))
         {

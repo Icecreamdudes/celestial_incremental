@@ -129,6 +129,8 @@
         player.g.grassVal = player.g.grassVal.mul(player.d.diceEffects[5])
         player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
         if (hasUpgrade("ad", 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect("ad", 14))
+        player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
+
 
         player.g.grassReq = new Decimal(4) 
         player.g.grassReq = player.g.grassReq.div(buyableEffect("g", 12))

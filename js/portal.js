@@ -44,7 +44,7 @@ addLayer("po", {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
             canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) },
-            unlocked() { return true },
+            unlocked() { return !inChallenge("ip", 11) },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.dice = true
@@ -63,7 +63,7 @@ addLayer("po", {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
             canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170) },
-            unlocked() { return true },
+            unlocked() { return !inChallenge("ip", 11) },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.rocketFuel = true
@@ -136,13 +136,13 @@ addLayer("po", {
                 content:
                 [
                         ["blank", "25px"],
-                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["row", [["clickable", 11], ["clickable", 12]]],
                 ]
 
             },
-            "Infinity": {
+            "Portals": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
                 content:

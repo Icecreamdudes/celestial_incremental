@@ -77,6 +77,8 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ad.dimBoostEffect)
         if (hasUpgrade("ip", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 12))
         if (hasUpgrade("ad", 17)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 17))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 23))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 24))
         
         for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
         {
@@ -90,6 +92,7 @@
             //mults
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 1))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ad.dimBoostEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 23))
         if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
     }
         if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))

@@ -69,6 +69,7 @@
             player.t.treeSoftcap = Decimal.pow(player.t.trees.add(1).sub(player.t.treeSoftcapStart), 0.5)
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.t.treeSoftcap)
         }
+        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.pe.pestEffect[3])
 
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
 

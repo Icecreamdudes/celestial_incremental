@@ -5,7 +5,7 @@
 	pointsName: "celestial points",
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js", 
 	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "petShop.js", "evolution.js", "rocketFuel.js", "infinity.js", 
-	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js"],
+	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js"],
 
 	discordName: "",
 	discordLink: "",

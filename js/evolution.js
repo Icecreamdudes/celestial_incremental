@@ -179,7 +179,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "36px", "font-family": "monospace" }],
                     ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15]]],
                     ["blank", "25px"],
                     ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "28px", "font-family": "monospace" }]]],

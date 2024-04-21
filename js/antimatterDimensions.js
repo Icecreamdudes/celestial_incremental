@@ -79,6 +79,7 @@
         if (hasUpgrade("ad", 17)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ad", 17))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 23))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 24))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cb.commonPetEffects[5][0])
         
         for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
         {
@@ -94,9 +95,18 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ad.dimBoostEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 23))
         if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
+        player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
     }
-        if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
+        player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
+        player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])
+        player.ad.dimensionsPerSecond[2] = player.ad.dimensionsPerSecond[2].mul(player.cb.uncommonPetEffects[5][1])
+        player.ad.dimensionsPerSecond[3] = player.ad.dimensionsPerSecond[3].mul(player.cb.uncommonPetEffects[6][1])
+        player.ad.dimensionsPerSecond[4] = player.ad.dimensionsPerSecond[4].mul(player.cb.uncommonPetEffects[5][2])
+        player.ad.dimensionsPerSecond[5] = player.ad.dimensionsPerSecond[5].mul(player.cb.uncommonPetEffects[6][2])
 
+        if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
+        player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(player.cb.commonPetEffects[5][1])
+        
         player.ad.dimensionCosts = [new Decimal(10),new Decimal(100),new Decimal(10000),new Decimal(1e6),new Decimal(1e9),new Decimal(1e13),new Decimal(1e18),new Decimal(1e24),]
 
         player.ad.dimensionCosts[0] = player.ad.dimensionCosts[0].mul(Decimal.pow(1e3, player.ad.dimensionsPurchased[0]))

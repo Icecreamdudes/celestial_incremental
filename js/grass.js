@@ -146,6 +146,7 @@
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("m", 13))
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.commonPetEffects[3][1])
         if (hasUpgrade("ip", 24)) player.g.goldGrassVal = player.g.goldGrassVal.add(upgradeEffect("ip", 24))
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.rarePetEffects[4][1])
 
         player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect("gh", 18).mul(delta)))
 

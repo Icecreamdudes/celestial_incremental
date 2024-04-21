@@ -35,7 +35,7 @@
 
     if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1))
     {
-        player.gh.grasshoppers = player.gh.grasshoppers.sub(player.gh.grasshoppers.mul(player.pe.pestEffect[7]))
+        player.gh.grasshoppers = player.gh.grasshoppers.sub(player.gh.grasshoppers.mul(player.pe.pestEffect[7] * delta))
     }
 
         if (player.gh.grasshopPause.gt(0)) {

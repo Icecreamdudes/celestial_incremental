@@ -181,9 +181,10 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }], ["blank", "25px"], ["clickable", 12], ["clickable", 14], ["clickable", 16]]],
-                    ["blank", "25px"],
                     ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15]]],
+                    ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }]]],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16]]],
                 ]
 
             },

@@ -62,8 +62,6 @@ addLayer("in", {
         if (player.in.reachedInfinity && !inChallenge("ip", 11))
         {
             player.tab = "bigc"
-        } else if (inChallenge("ip", 11) || inChallenge("ip", 12)) {
-            player.tab = "ip"
         }
 
         player.in.infinityPointsToGet = new Decimal(1)

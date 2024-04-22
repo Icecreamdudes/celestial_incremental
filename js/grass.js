@@ -130,6 +130,8 @@
         player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
         if (hasUpgrade("ad", 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect("ad", 14))
         player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
+        if (inChallenge("ip", 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
+        if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(buyableEffect("h", 14))
 
 
         player.g.grassReq = new Decimal(4) 

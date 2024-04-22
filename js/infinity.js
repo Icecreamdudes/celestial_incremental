@@ -170,7 +170,7 @@ addLayer("in", {
         }
         }
 
-        if (!hasMilestone("ip", 14))
+        if (!hasMilestone("ip", 15))
         {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
@@ -257,6 +257,7 @@ addLayer("in", {
 
         player.po.dice = false
         player.po.rocketFuel = false
+        player.po.hex = false
         player.po.featureSlots = player.po.featureSlotsMax
 
         //reset antimatter stuff
@@ -429,6 +430,10 @@ addLayer("bigc", {
                 if (inChallenge("ip", 12))
                 {
                     completeChallenge("ip", 12)
+                }
+                if (inChallenge("ip", 13))
+                {
+                    completeChallenge("ip", 13)
                 }
             },
             style: { width: '300px', "min-height": '120px' },

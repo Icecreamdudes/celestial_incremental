@@ -39,6 +39,7 @@
         player.m.modsToGet = player.m.modsToGet.mul(player.cb.rarePetEffects[1][1])
         if (hasUpgrade("ip", 23)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
+        if (inChallenge("ip", 13) || player.po.hex) player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("h", 18))
 
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))
@@ -53,6 +54,7 @@
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.m.modSoftcap)
         }
         if (hasUpgrade("ad", 18)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ad", 18))
+        if (inChallenge("ip", 13) || player.po.hex) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("h", 18))
 
         player.m.modEffect = player.m.mods.div(6).pow(1.2).add(1)
 
@@ -77,6 +79,7 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cb.uncommonPetEffects[0][0])
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
         if (hasUpgrade("ad", 21)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
+        if (inChallenge("ip", 13) || player.po.hex) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("h", 17))
     },
     branches: ["t"],
     clickables: {

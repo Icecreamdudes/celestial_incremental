@@ -232,6 +232,21 @@
             style: { width: '350px', height: '250px', }
 
         },
+        13: {
+            name: "Challenge III",
+            challengeDescription() { return "<h4>Hex... A feature seemingly coming from thin air. No check back effects either..." },
+            goalDescription() { return "Hex 4" },
+            goal() { return new Decimal("4") },
+            canComplete: function () { return player.h.hex.gte(4) },
+            rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            onExit() {
+            },
+            style: { width: '350px', height: '250px', }
+
+        },
     },
     infoboxes: {
     },
@@ -272,7 +287,7 @@
                 content:
                 [
                         ["blank", "25px"],
-                        ["row", [["challenge", 11], ["challenge", 12]]],
+                        ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13]]],
                 ]
 
             },

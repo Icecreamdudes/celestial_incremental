@@ -76,6 +76,7 @@
         player.d.dicePointsMult = new Decimal(1)
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("d", 15))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cb.rarePetEffects[1][0])
+        if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("ip", 34))
 
         if (player.d.autoRollCooldown.lt(0))
         {

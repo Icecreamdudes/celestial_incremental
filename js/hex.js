@@ -12,9 +12,9 @@
         hexToGet: new Decimal(1),
 
         hexResetIndex: new Decimal(0),
-        hexPoints: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        hexPointsEffect: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-        hexPointsToGet: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        hexPoints: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        hexPointsEffect: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        hexPointsToGet: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
 
         automationTier: new Decimal(0),
         automationTierReq: new Decimal(1000),
@@ -127,7 +127,13 @@
             unlocked() { return true },
             onClick() {
                 layers.h.automationTierReset()
+                player.h.hexPoints[player.h.hex] = new Decimal(0)
+                player.h.hexPointsToGet[player.h.hex] = new Decimal(0)
+                player.h.hexPointsEffect[player.h.hex] = new Decimal(1)
 
+                player.h.hexPoints.push(new Decimal(0))
+                player.h.hexPointsToGet.push(new Decimal(0))
+                player.h.hexPointsEffect.push(new Decimal(1))
                 player.h.automationTier = player.h.automationTier.add(1)
             },
             style: { width: '400px', "min-height": '100px' },
@@ -593,6 +599,70 @@
             },
             style: { width: '275px', height: '150px', }
         },
+        21: {
+            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.h.hexPoints[5].gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Point Blessing I"
+            },
+            display() {
+                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 6 Points"
+            },
+            buy() {
+                let base = new Decimal(1000)
+                let growth = 100
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.h.hexPoints[5] = player.h.hexPoints[5].sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.h.hexPoints[5], base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.h.hexPoints[5] = player.h.hexPoints[5].sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        22: {
+            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.h.hexPoints[11].gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Point Blessing II"
+            },
+            display() {
+                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 12 Points"
+            },
+            buy() {
+                let base = new Decimal(100)
+                let growth = 100
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.h.hexPoints[11] = player.h.hexPoints[11].sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.h.hexPoints[11], base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.h.hexPoints[11] = player.h.hexPoints[11].sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
 
@@ -648,6 +718,19 @@
                     ["row", [["clickable", 15]]],
          ["blank", "25px"],
          ["raw-html", function () { return "You are gaining <h3>" + formatWhole(player.h.automationTierEffect.mul(100)) + "%</h3> hex points per second up to hex " + formatWhole(player.h.automationTier.add(1)) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ],
+
+            },
+            "THE BLESSING": {
+                buttonStyle() { return { 'background-color': '#FFBF00', "color": "white" } },
+                unlocked() { return hasChallenge("ip", 13) },
+                content:
+                [
+         ["blank", "25px"],
+         ["row", [["buyable", 21], ["buyable", 22],]],
+         ["blank", "25px"],
+         ["raw-html", function () { return "These effects are always active."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+
         ],
 
             },

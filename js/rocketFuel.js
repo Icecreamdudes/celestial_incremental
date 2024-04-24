@@ -54,6 +54,7 @@
 
         player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.rarePetEffects[2][0])
+        if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
 
         player.rf.rocketFuelEffect = player.rf.rocketFuel.pow(0.85).add(1)
 

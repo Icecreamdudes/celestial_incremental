@@ -16,6 +16,9 @@
         cutscene6: true,
         cutscene7: true,
         cutscene8: true,
+        cutscene9: true,
+        cutscene10: true,
+        cutscene11: true,
         evoCutscene: false,
 
         //Cutscene Info
@@ -208,6 +211,63 @@
             player.subtabs["in"]['stuff'] = 'Features'
         } 
 
+        //Cutscene 9
+        if (player.c.cutscene9 == true && player.startedGame == true && player.in.infinities.gte(8))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene9();
+        } else if ((player.startedGame == true || player.c.cutscene9 == false) && player.tab == "c" && player.c.cutscene9 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene9 == true)
+        {
+            if (player.c.cutscene9 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene9 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
+        //Cutscene 10
+        if (player.c.cutscene10 == true && player.startedGame == true && hasChallenge("ip", 11))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene10();
+        } else if ((player.startedGame == true || player.c.cutscene10 == false) && player.tab == "c" && player.c.cutscene10 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene10 == true)
+        {
+            if (player.c.cutscene10 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene10 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
+        //Cutscene 11
+        if (player.c.cutscene11 == true && player.startedGame == true && hasChallenge("ip", 13))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene11();
+        } else if ((player.startedGame == true || player.c.cutscene11 == false) && player.tab == "c" && player.c.cutscene11 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene11 == true)
+        {
+            if (player.c.cutscene11 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene11 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
         //Evo
         if (player.c.evoCutscene == true)
         {
@@ -310,6 +370,32 @@ startCutscene8() {
         "You: I'll help you figure out where you come from, but I'll have to kill you.",
         "???: I don't fear death. We will help each other out, even if I must die.",
 
+    ]
+},
+startCutscene9() {
+    player.c.cutsceneText = [
+        "???: If you complete these 8 challenges, I will tell you everything I know.",
+        "???: I want to help you, but you must prove yourself worthy of being helped.",
+        "You: Alright. This should be light work. I've dealt with some pretty long waits before.",
+        "???: Trust me. These challenges will kick your butt.",
+        "You: Whatever you say.",
+    ]
+},
+startCutscene10() {
+    player.c.cutsceneText = [
+        "You: Yeah that was pretty easy.",
+        "???: Well that was just the first challenge.",
+        "You: You're a pretty funny guy. Actually give me a challenge.",
+        "???: Sure!",
+    ]
+},
+startCutscene11() {
+    player.c.cutsceneText = [
+        "You: Those 2 challenges were something.",
+        "???: Ha! Well you've unlocked HEX now. Use it wisely.",
+        "???: It is a lot of annoying micromanagement, but that is a skill you should learn.",
+        "???: It will pay off because you will get a great BLESSING.",
+        "You: Alright. Time to go neglect dice and rocket fuel.",
     ]
 },
 evoCutscenes(pet) {

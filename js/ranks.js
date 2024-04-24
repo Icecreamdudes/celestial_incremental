@@ -30,6 +30,8 @@
         pentMilestone3Effect: new Decimal(1),
         pentMilestone30Effect: new Decimal(1),
         pentMilestone30Effect2: new Decimal(1),
+
+        challengeIVEffect: new Decimal(1),
     }
     },
     automate() {
@@ -130,6 +132,8 @@
 
         player.r.pentMilestone30Effect = player.r.pent.pow(2).add(1)
         player.r.pentMilestone30Effect2 = player.r.pent.pow(1.2).add(1)
+
+        player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
     },
     getRankReq()
     {
@@ -362,7 +366,7 @@
                         ["blank", "25px"],
                         ["raw-html", function () { return player.r.rank.lte(20) ? "You are at rank <h3>" + formatWhole(player.r.rank) + ". (+" + formatWhole(player.r.ranksToGet) + ")"  : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return player.r.rank.gt(20) ? "You are at rank <h3>" + formatWhole(player.r.rank) +  ". (+" + formatWhole(player.r.ranksToGet) + "). \n<h6>(softcapped)"  : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Your rank boosts points by x" + format(player.r.rankEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Your rank boosts points by /" + format(player.r.rankEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["row", [["clickable", 11]]],
                         ["blank", "25px"],
                         ["raw-html", function () { return "You are at tier <h3>" + formatWhole(player.r.tier) + ". (+" + formatWhole(player.r.tiersToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -383,6 +387,7 @@
                         ["blank", "25px"],
                         ["raw-html", function () { return "You are at pent <h3>" + formatWhole(player.r.pent) + ". (+" + formatWhole(player.r.pentToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Your pent boosts prestige points by x" + format(player.r.pentEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return inChallenge("ip", 14) ? "Your pent divides points by x" + format(player.r.challengeIVEffect) + "." : ""}, { "color": "red", "font-size": "20px", "font-family": "monospace" }],
                         ["row", [["clickable", 14]]],
                         ["blank", "25px"],
                         ["raw-html", function () { return "<h3>Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

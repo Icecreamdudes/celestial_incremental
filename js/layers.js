@@ -10,6 +10,19 @@ addLayer("i", {
     }
     },
     automate() {
+        if (player.i.auto == true && hasMilestone("ip", 19))
+        {
+            buyUpgrade("i", 11)
+            buyUpgrade("i", 12)
+            buyUpgrade("i", 13)
+            buyUpgrade("i", 14)
+            buyUpgrade("i", 15)
+            buyUpgrade("i", 16)
+            buyUpgrade("i", 17)
+            buyUpgrade("i", 18)
+            buyUpgrade("i", 19)
+            buyUpgrade("i", 21)
+        }  
     },
     nodeStyle() {
         return {
@@ -91,7 +104,7 @@ addLayer("i", {
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
         if (inChallenge("ip", 13 || player.po.hex)) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
-
+        if (inChallenge("ip", 14)) player.gain = player.gain.div(player.r.challengeIVEffect)
         player.points = player.points.add(player.gain.mul(delta))
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")

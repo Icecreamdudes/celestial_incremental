@@ -61,10 +61,20 @@ addLayer("in", {
 
         if (player.in.reachedInfinity && !inChallenge("ip", 11))
         {
-            player.tab = "bigc"
+            if (!player.bigc.skip) 
+            {
+                player.tab = "bigc"
+            } else if (hasMilestone("ip", 21))
+            {
+                layers.bigc.crunch()
+
+            }
         }
 
         player.in.infinityPointsToGet = new Decimal(1)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 21))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 22))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -127,7 +137,7 @@ addLayer("in", {
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
         {
         for (let i = 0; i < player.p.upgrades.length; i++) {
             if (+player.p.upgrades[i] < 24) {
@@ -160,7 +170,7 @@ addLayer("in", {
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
         {
         for (let i = 0; i < player.g.upgrades.length; i++) {
             if (+player.g.upgrades[i] < 22) {
@@ -170,7 +180,7 @@ addLayer("in", {
         }
         }
 
-        if (!hasMilestone("ip", 15))
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
         {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
@@ -255,10 +265,13 @@ addLayer("in", {
             }
         }
 
-        player.po.dice = false
-        player.po.rocketFuel = false
-        player.po.hex = false
-        player.po.featureSlots = player.po.featureSlotsMax
+        if (!player.po.keepOTFS)
+        {
+            player.po.dice = false
+            player.po.rocketFuel = false
+            player.po.hex = false
+            player.po.featureSlots = player.po.featureSlotsMax
+        }
 
         //reset antimatter stuff
 
@@ -410,36 +423,40 @@ addLayer("bigc", {
             unlocked() { return true },
             onClick() {
                 player.tab = "in"
-                player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
-                player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
-                if (player.po.dice)
-                {
-                    player.ip.diceRuns = player.ip.diceRuns.add(1)
-                }
-                if (player.po.rocketFuel)
-                {
-                    player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
-                }
-                player.in.infinityPause = new Decimal(5)
-                player.in.reachedInfinity = false
 
-                if (inChallenge("ip", 11))
-                {
-                    completeChallenge("ip", 11)
-                }
-                if (inChallenge("ip", 12))
-                {
-                    completeChallenge("ip", 12)
-                }
-                if (inChallenge("ip", 13))
-                {
-                    completeChallenge("ip", 13)
-                }
+                layers.bigc.crunch()
             },
             style: { width: '300px', "min-height": '120px' },
         },
         
     },
+    crunch(){
+        player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
+        player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
+        if (player.po.dice)
+        {
+            player.ip.diceRuns = player.ip.diceRuns.add(1)
+        }
+        if (player.po.rocketFuel)
+        {
+            player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
+        }
+        player.in.infinityPause = new Decimal(5)
+        player.in.reachedInfinity = false
+
+        if (inChallenge("ip", 11))
+        {
+            completeChallenge("ip", 11)
+        }
+        if (inChallenge("ip", 12))
+        {
+            completeChallenge("ip", 12)
+        }
+        if (inChallenge("ip", 13))
+        {
+            completeChallenge("ip", 13)
+        }
+    }, 
     bars: {
     },
     upgrades: {

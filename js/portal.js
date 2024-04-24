@@ -12,6 +12,8 @@ addLayer("po", {
         dice: false,
         rocketFuel: false,
         hex: false,
+
+        keepOTFS: false,
     }
     },
     automate() {
@@ -40,13 +42,40 @@ addLayer("po", {
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Keep OTFs on reset." },
+            display() {
+                return "You only gain them back once you reach the req.";
+            },
+            canClick() { return true },
+            unlocked() { return hasMilestone("ip", 18) && !player.po.keepOTFS},
+            onClick() { 
+                player.po.keepOTFS = true
+            },
+            style: {
+                width: '200px',
+                "min-height": '75px',
+            },
+        },
+        3: {
+            title() { return "Don't keep OTFs on reset." },
+            canClick() { return true },
+            unlocked() { return hasMilestone("ip", 18) && player.po.keepOTFS},
+            onClick() { 
+                player.po.keepOTFS = false
+            },
+            style: {
+                width: '200px',
+                "min-height": '75px',
+            },
+        },
         11: {
             title() { return "<h1>Dice" },
             display() {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) },
-            unlocked() { return !inChallenge("ip", 11) || !inChallenge("ip", 13) },
+            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.dice = true
@@ -64,8 +93,8 @@ addLayer("po", {
             display() {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170) },
-            unlocked() { return !inChallenge("ip", 11) || !inChallenge("ip", 13)  },
+            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170)&& (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            unlocked() { return !inChallenge("ip", 11)  && !inChallenge("ip", 13)   },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.rocketFuel = true
@@ -106,8 +135,8 @@ addLayer("po", {
             display() {
                 return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off<br><h2>Req: Challenge III Completion";
             },
-            canClick() { return player.po.featureSlots.gt(0) },
-            unlocked() { return !inChallenge("ip", 11) && hasChallenge("ip", 13) || !inChallenge("ip", 13) && hasChallenge("ip", 13) },
+            canClick() { return player.po.featureSlots.gt(0) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
+            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.hex = true
@@ -158,6 +187,9 @@ addLayer("po", {
                 [
                         ["blank", "25px"],
                         ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return inChallenge("ip", 14) ? "You can pick an OTF once you are at pent 15." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["row", [["clickable", 2], ["clickable", 3]]],
                         ["blank", "25px"],
                         ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13]]],
                 ]

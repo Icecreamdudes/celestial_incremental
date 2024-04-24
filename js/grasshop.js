@@ -17,6 +17,22 @@
     }
     },
     automate() {
+        if (hasMilestone("ip", 17))
+        {
+            buyBuyable("gh", 11)
+            buyBuyable("gh", 12)
+            buyBuyable("gh", 13)
+            buyBuyable("gh", 14)
+            buyBuyable("gh", 15)
+            buyBuyable("gh", 16)
+            buyBuyable("gh", 17)
+            buyBuyable("gh", 18)
+            buyBuyable("gh", 19)
+            buyBuyable("gh", 21)
+            buyBuyable("gh", 22)
+            buyBuyable("gh", 23)
+            buyBuyable("gh", 24)
+        }
     },
     nodeStyle() {
     },
@@ -31,8 +47,9 @@
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.rarePetEffects[3][0])
-    if (hasUpgrade("ad", 16)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
+    if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
     if (inChallenge("ip", 13) || player.po.hex) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(buyableEffect("h", 15))
+    if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
 
     if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1))
     {
@@ -56,7 +73,7 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.cb.rarePetEffects[0][0])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.diceEffects[7])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
-    if (hasUpgrade("ad", 16)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
+    if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.pe.pestEffect[6])
         if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
 
@@ -249,17 +266,17 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 10
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17) /*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -282,17 +299,17 @@
             buy() {
                 let base = new Decimal(50)
                 let growth = 8
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -315,17 +332,17 @@
             buy() {
                 let base = new Decimal(100)
                 let growth = 5
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -348,17 +365,17 @@
             buy() {
                 let base = new Decimal(250)
                 let growth = 2
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -381,17 +398,17 @@
             buy() {
                 let base = new Decimal(300)
                 let growth = 1.8
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -414,17 +431,17 @@
             buy() {
                 let base = new Decimal(100000)
                 let growth = 3
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17) /*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17))  player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -447,17 +464,17 @@
             buy() {
                 let base = new Decimal(1e8)
                 let growth = 10
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -480,17 +497,17 @@
             buy() {
                 let base = new Decimal(2e8)
                 let growth = 4
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17))  player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -513,17 +530,17 @@
             buy() {
                 let base = new Decimal(5e8)
                 let growth = 1.4
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -546,17 +563,17 @@
             buy() {
                 let base = new Decimal(1e16)
                 let growth = 10
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -579,17 +596,17 @@
             buy() {
                 let base = new Decimal(1e16)
                 let growth = 1e6
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17))  player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -612,17 +629,17 @@
             buy() {
                 let base = new Decimal(1e30)
                 let growth = 1e10
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17))   player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -645,17 +662,17 @@
             buy() {
                 let base = new Decimal(1e40)
                 let growth = 1e15
-                if (player.buyMax == false /*automation*/)
+                if (player.buyMax == false && !hasMilestone("ip", 17) /*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
+                    if (!hasMilestone("ip", 17))    player.gh.fertilizer = player.gh.fertilizer.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.gh.fertilizer, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.gh.fertilizer = player.gh.fertilizer.sub(cost)
+                if (!hasMilestone("ip", 17)) player.gh.fertilizer = player.gh.fertilizer.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

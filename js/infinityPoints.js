@@ -162,8 +162,82 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
         },
+        32:
+        {
+            title: "Upgrade (3, 2)",
+            unlocked() { return hasUpgrade("ip", 21) },
+            description: "Boosts grasshoppers based on infinity points.",
+            cost: new Decimal(3),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.in.infinityPoints.mul(0.5).pow(0.7).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        33:
+        {
+            title: "Upgrade (3, 3)",
+            unlocked() { return hasUpgrade("ip", 31) },
+            description: "Boosts code experience based on infinity points.",
+            cost: new Decimal(25),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.in.infinityPoints.mul(0.65).pow(0.65).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        34:
+        {
+            title: "Upgrade (3, 4)",
+            unlocked() { return hasUpgrade("ip", 31) },
+            description: "Boosts dice points and rocket fuel based on infinity points.",
+            cost: new Decimal(69),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.in.infinityPoints.mul(0.3).pow(0.5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
     },
     buyables: {
+        11: {
+            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
+            effect(x) { return new Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return true },
+            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>IP Doubler"
+            },
+            display() {
+                return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
+            },
+            buy() {
+                let base = new Decimal(10)
+                let growth = 100
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
         11: {
@@ -202,6 +276,40 @@
             done() { return player.in.infinities.gte(8) },
             style: { width: '800px', "min-height": '75px' },
         },
+        17: {
+            requirementDescription: "<h3>25 Infinities",
+            effectDescription: "Autobuys grass studies and mod buyables.",
+            done() { return player.in.infinities.gte(25) && hasChallenge("ip", 14) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        18: {
+            requirementDescription: "<h3>50 Infinities",
+            effectDescription: "Gain an option to keep OTFs on infinity reset.",
+            done() { return player.in.infinities.gte(50) && hasChallenge("ip", 14) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        19: {
+            requirementDescription: "<h3>80 Infinities",
+            effectDescription() { return "Autobuy universe 1 upgrades." },
+            done() { return player.in.infinities.gte(80) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '90px' },
+            toggles: [
+                ["i", "auto"], // Each toggle is defined by a layer and the data toggled for that layer
+            ],
+        },
+        21: {
+            requirementDescription: "<h3>150 Infinities",
+            effectDescription() { return "You get an option to skip the big crunch animation." },
+            done() { return player.in.infinities.gte(150) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '90px' },
+            toggles: [
+                ["bigc", "skip"], // Each toggle is defined by a layer and the data toggled for that layer
+            ],
+        },
     },
     challenges: {
         11: {
@@ -215,7 +323,7 @@
             },
             onExit() {
             },
-            style: { width: '350px', height: '250px', }
+            style: { width: '350px', height: '275px', }
 
         },
         12: {
@@ -224,12 +332,13 @@
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "Unlocks a new check back button at level 125.",
+            unlocked() { return hasChallenge("ip", 11) },
             onEnter() {
                 player.in.infinityPause = new Decimal(6)
             },
             onExit() {
             },
-            style: { width: '350px', height: '250px', }
+            style: { width: '350px', height: '275px', }
 
         },
         13: {
@@ -239,14 +348,32 @@
             goal() { return new Decimal("4") },
             canComplete: function () { return player.h.hex.gte(4) },
             rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
+            unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
                 player.in.infinityPause = new Decimal(6)
             },
             onExit() {
             },
-            style: { width: '350px', height: '250px', }
+            style: { width: '350px', height: '275px', }
 
         },
+        14: {
+            name: "Challenge IV",
+            challengeDescription() { return "<h4>IP and AD upgrades are disabled, some IP milestones are disabled, and pent divides point gain, but is necessary to unlock OTFs." },
+            goalDescription() { return "Pent 30" },
+            goal() { return new Decimal("30") },
+            canComplete: function () { return player.r.pent.gte(30) },
+            rewardDescription: "Unlocks infinity point buyables and new milestones.",
+            unlocked() { return hasChallenge("ip", 13) },
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            onExit() {
+            },
+            style: { width: '350px', height: '275px', }
+
+        },
+
     },
     infoboxes: {
     },
@@ -260,7 +387,7 @@
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                         ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
-                        ["row", [["upgrade", 31]]],
+                        ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
                 ]
 
             },
@@ -278,6 +405,10 @@
                         ["row", [["milestone", 14]]],
                         ["row", [["milestone", 15]]],
                         ["row", [["milestone", 16]]],
+                        ["row", [["milestone", 17]]],
+                        ["row", [["milestone", 18]]],
+                        ["row", [["milestone", 19]]],
+                        ["row", [["milestone", 21]]],
                 ]
 
             },
@@ -287,7 +418,17 @@
                 content:
                 [
                         ["blank", "25px"],
-                        ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13]]],
+                        ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
+                ]
+
+            },
+            "Buyables": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasChallenge("ip", 14) },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["row", [["buyable", 11]]],
                 ]
 
             },

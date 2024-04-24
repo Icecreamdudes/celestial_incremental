@@ -23,6 +23,13 @@
     }
     },
     automate() {
+        if (hasMilestone("ip", 17))
+        {
+            buyBuyable("m", 11)
+            buyBuyable("m", 12)
+            buyBuyable("m", 13)
+            buyBuyable("m", 14)
+        }
     },
     nodeStyle() {
     },
@@ -37,15 +44,16 @@
         if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone30Effect2)
         player.m.modsToGet = player.m.modsToGet.mul(player.d.diceEffects[8])
         player.m.modsToGet = player.m.modsToGet.mul(player.cb.rarePetEffects[1][1])
-        if (hasUpgrade("ip", 23)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
-        if (hasUpgrade("ad", 18)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
+        if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
+        if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
         if (inChallenge("ip", 13) || player.po.hex) player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("h", 18))
+        if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
 
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cb.uncommonPetEffects[1][0])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.diceEffects[9])
-        if (hasUpgrade("ip", 23)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
+        if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.pe.pestEffect[5])
 
         if (player.m.mods.gte(player.m.modSoftcapStart))
@@ -53,7 +61,7 @@
             player.m.modSoftcap = Decimal.pow(player.m.mods.add(1).sub(player.m.modSoftcapStart), 0.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.m.modSoftcap)
         }
-        if (hasUpgrade("ad", 18)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ad", 18))
+        if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ad", 18))
         if (inChallenge("ip", 13) || player.po.hex) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("h", 18))
 
         player.m.modEffect = player.m.mods.div(6).pow(1.2).add(1)
@@ -78,7 +86,7 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("m", 11))
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cb.uncommonPetEffects[0][0])
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
-        if (hasUpgrade("ad", 21)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
+        if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
         if (inChallenge("ip", 13) || player.po.hex) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("h", 17))
     },
     branches: ["t"],
@@ -245,17 +253,17 @@
             buy() {
                 let base = new Decimal(4)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("ip", 17))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.m.mods = player.m.mods.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.m.mods = player.m.mods.sub(cost)
+                if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -277,17 +285,17 @@
             buy() {
                 let base = new Decimal(6)
                 let growth = 1.35
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("ip", 17))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.m.mods = player.m.mods.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.m.mods = player.m.mods.sub(cost)
+                if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -309,17 +317,17 @@
             buy() {
                 let base = new Decimal(9)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("ip", 17))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.m.mods = player.m.mods.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.m.mods = player.m.mods.sub(cost)
+                if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -341,17 +349,17 @@
             buy() {
                 let base = new Decimal(15)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("ip", 17))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.m.mods = player.m.mods.sub(buyonecost)
+                    if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.m.mods = player.m.mods.sub(cost)
+                if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

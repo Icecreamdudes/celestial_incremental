@@ -161,7 +161,7 @@
     },
     grasshopReset()
     {
-        player.points = new Decimal(0)
+        player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
         player.r.tetr = new Decimal(0)

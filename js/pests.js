@@ -34,13 +34,13 @@
         }
         
         player.pe.pestEffect = [
-            player.pe.pests.pow(1.25).add(1),
-            player.pe.pests.pow(1.05).add(1),
-            player.pe.pests.pow(1.05).add(1),
-            player.pe.pests.pow(0.75).add(1),
-            player.pe.pests.pow(1.35).add(1),
-            player.pe.pests.pow(0.55).add(1),
-            player.pe.pests.pow(0.45).add(1),
+            player.pe.pests.pow(1.25).div(10).add(1),
+            player.pe.pests.pow(1.05).div(10).add(1),
+            player.pe.pests.pow(1.05).div(10).add(1),
+            player.pe.pests.pow(0.75).div(10).add(1),
+            player.pe.pests.pow(1.35).div(10).add(1),
+            player.pe.pests.pow(0.55).div(10).add(1),
+            player.pe.pests.pow(0.45).div(10).add(1),
 
             Math.abs(Math.sin(Math.log10(player.pe.pests.add(1)))) * 0.1
         ]

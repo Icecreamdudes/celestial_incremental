@@ -105,6 +105,9 @@ addLayer("i", {
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
         if (inChallenge("ip", 13 || player.po.hex)) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
         if (inChallenge("ip", 14)) player.gain = player.gain.div(player.r.challengeIVEffect)
+        if (inChallenge("ip", 15)) player.gain = player.gain.pow(0.8)
+        if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
+
         player.points = player.points.add(player.gain.mul(delta))
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")

@@ -265,13 +265,14 @@ addLayer("in", {
             }
         }
 
-        if (!player.po.keepOTFS)
+        if (!player.po.keepOTFS || inChallenge("ip", 15))
         {
             player.po.dice = false
             player.po.rocketFuel = false
             player.po.hex = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
+        
 
         //reset antimatter stuff
 
@@ -298,6 +299,23 @@ addLayer("in", {
 
         //challenge stuff
         player.pe.pests = new Decimal(0)
+
+        if (!inChallenge("ip", 15))
+        {
+        
+        player.d.challengeDicePoints = new Decimal(0)
+        player.d.buyables[21] = new Decimal(0)
+        player.d.buyables[22] = new Decimal(0)
+        player.d.buyables[23] = new Decimal(0)
+        player.d.buyables[24] = new Decimal(0)
+
+        for (let i = 0; i < player.d.upgrades.length; i++) {
+            if (+player.d.upgrades[i] < 100) {
+                player.d.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -455,6 +473,26 @@ addLayer("bigc", {
         if (inChallenge("ip", 13))
         {
             completeChallenge("ip", 13)
+        }
+        if (inChallenge("ip", 14))
+        {
+            completeChallenge("ip", 14)
+        }
+        if (inChallenge("ip", 15))
+        {
+            completeChallenge("ip", 15)
+        }
+        if (inChallenge("ip", 16))
+        {
+            completeChallenge("ip", 16)
+        }
+        if (inChallenge("ip", 17))
+        {
+            completeChallenge("ip", 17)
+        }
+        if (inChallenge("ip", 18))
+        {
+            completeChallenge("ip", 18)
         }
     }, 
     bars: {

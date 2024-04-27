@@ -302,13 +302,20 @@
         },
         21: {
             requirementDescription: "<h3>150 Infinities",
-            effectDescription() { return "You get an option to skip the big crunch animation." },
+            effectDescription() { return "You get an option to skip the big crunch animation, and automatically reset." },
             done() { return player.in.infinities.gte(150) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
             toggles: [
                 ["bigc", "skip"], // Each toggle is defined by a layer and the data toggled for that layer
             ],
+        },
+        22: {
+            requirementDescription: "<h3>300 Infinities",
+            effectDescription() { return "Gain 10% of grasshoppers and code experience per second." },
+            done() { return player.in.infinities.gte(300) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '90px' },
         },
     },
     challenges: {
@@ -373,7 +380,35 @@
             style: { width: '350px', height: '275px', }
 
         },
+        15: {
+            name: "Challenge V",
+            challengeDescription() { return "<h4>You are stuck in dice, the booster dice automatically rolls but on every roll, it does a reset equivalent to a big crunch. There are also general debuffs." },
+            goalDescription() { return "1.79e308 celestial points" },
+            goal() { return new Decimal("1.79e308") },
+            canComplete: function () { return player.points.gte(1.79e308) },
+            rewardDescription: "Unlock new booster dice effects, and booster dice automation.",
+            unlocked() { return hasChallenge("ip", 14) },
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
 
+                player.d.challengeDicePoints = new Decimal(0)
+                player.d.buyables[21] = new Decimal(0)
+                player.d.buyables[22] = new Decimal(0)
+                player.d.buyables[23] = new Decimal(0)
+                player.d.buyables[24] = new Decimal(0)
+        
+                for (let i = 0; i < player.d.upgrades.length; i++) {
+                    if (+player.d.upgrades[i] < 100) {
+                        player.d.upgrades.splice(i, 1);
+                        i--;
+                    }
+                }
+            },
+            onExit() {
+            },
+            style: { width: '350px', height: '275px', }
+
+        },
     },
     infoboxes: {
     },
@@ -419,6 +454,7 @@
                 [
                         ["blank", "25px"],
                         ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
+                        ["row", [["challenge", 15]]],
                 ]
 
             },

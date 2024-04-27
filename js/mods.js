@@ -88,6 +88,8 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
         if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
         if (inChallenge("ip", 13) || player.po.hex) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("h", 17))
+        if (inChallenge('ip', 15)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.6)
+        if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
     },
     branches: ["t"],
     clickables: {

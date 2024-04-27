@@ -75,7 +75,7 @@ addLayer("po", {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
             canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
-            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) },
+            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.dice = true
@@ -94,7 +94,7 @@ addLayer("po", {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
             canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170)&& (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
-            unlocked() { return !inChallenge("ip", 11)  && !inChallenge("ip", 13)   },
+            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15)  },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.rocketFuel = true
@@ -136,7 +136,7 @@ addLayer("po", {
                 return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off<br><h2>Req: Challenge III Completion";
             },
             canClick() { return player.po.featureSlots.gt(0) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
-            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  },
+            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))   },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.hex = true

@@ -46,7 +46,7 @@
         */
         boosterDiceCooldown: new Decimal(0),
 
-        diceEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        diceEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
         addDiceEffect: new Decimal(0),
         dicePointsMult: new Decimal(1),
@@ -97,6 +97,8 @@
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("ip", 34))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.d.challengeDicePointsEffect)
         if (hasUpgrade("d", 12)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 12))
+        if (hasUpgrade("d", 15)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 15))
+        if (hasUpgrade("d", 16)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 16))
 
         if (player.d.autoRollCooldown.lt(0))
         {
@@ -122,7 +124,10 @@
             "Currently boosting mods.",
             "Currently boosting lines of code.",
             "Currently boosting code experience.",
+            "Currently boosting infinity points.",
             "Currently boosting check back xp.",
+            "Currently boosting rocket fuel.",
+            "Currently boosting hex 1 points.",
         ]
 
         player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
@@ -205,7 +210,8 @@
             tooltip() { return "<h3>5% chance for a pet???" },
             unlocked() { return true },
             onClick() {
-                player.d.currentBoosterRoll = getRandomInt(player.d.diceEffects.length)
+                if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
+                if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(14)
                 player.d.boosterDiceCooldown = new Decimal(120)
 
                 let random = getRandomInt(20)
@@ -241,18 +247,39 @@
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" + 
-                "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
-                "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
-                "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
-                "Leaves: x" + format(player.d.diceEffects[4]) + "\n" +
-                "Grass Value: x" + format(player.d.diceEffects[5]) + "\n" +
-                "Grasshoppers: x" + format(player.d.diceEffects[6]) + "\n" +
-                "Fertilizer: x" + format(player.d.diceEffects[7]) + "\n" +
-                "Mods: x" + format(player.d.diceEffects[8]) + "\n" +
-                "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
-                "Code Experience: x" + format(player.d.diceEffects[10]) + "\n"
-                )
+                if (!hasChallenge("ip", 15))
+                {
+                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" + 
+                    "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
+                    "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
+                    "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
+                    "Leaves: x" + format(player.d.diceEffects[4]) + "\n" +
+                    "Grass Value: x" + format(player.d.diceEffects[5]) + "\n" +
+                    "Grasshoppers: x" + format(player.d.diceEffects[6]) + "\n" +
+                    "Fertilizer: x" + format(player.d.diceEffects[7]) + "\n" +
+                    "Mods: x" + format(player.d.diceEffects[8]) + "\n" +
+                    "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
+                    "Code Experience: x" + format(player.d.diceEffects[10]) + "\n"
+                    )
+                } else 
+                {
+                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" + 
+                    "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
+                    "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
+                    "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
+                    "Leaves: x" + format(player.d.diceEffects[4]) + "\n" +
+                    "Grass Value: x" + format(player.d.diceEffects[5]) + "\n" +
+                    "Grasshoppers: x" + format(player.d.diceEffects[6]) + "\n" +
+                    "Fertilizer: x" + format(player.d.diceEffects[7]) + "\n" +
+                    "Mods: x" + format(player.d.diceEffects[8]) + "\n" +
+                    "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
+                    "Code Experience: x" + format(player.d.diceEffects[10]) + "\n" +
+                    "Infinity Points: x" + format(player.d.diceEffects[11]) + "\n" +
+                    "Check Back XP: x" + format(player.d.diceEffects[12]) + "\n" + 
+                    "Rocket Fuel: x" + format(player.d.diceEffects[13]) + "\n" +
+                    "Hex 1 Points: x" + format(player.d.diceEffects[14]) + "\n"
+                    )
+                }
             },
             style: { width: '100px', "min-height": '100px' },
         },
@@ -299,7 +326,18 @@
         } else if (player.d.currentBoosterRoll == 10) {
                 player.d.addDiceEffect = sum.mul(0.0006).pow(0.7)
                 player.d.diceEffects[10] = player.d.diceEffects[10].add(player.d.addDiceEffect)
-
+        } else if (player.d.currentBoosterRoll == 11) {
+            player.d.addDiceEffect = sum.pow(0.1).mul(0.0003)
+            player.d.diceEffects[11] = player.d.diceEffects[11].add(player.d.addDiceEffect)
+        } else if (player.d.currentBoosterRoll == 12) {
+            player.d.addDiceEffect = sum.pow(0.1).mul(0.0001)
+            player.d.diceEffects[12] = player.d.diceEffects[12].add(player.d.addDiceEffect)
+        } else if (player.d.currentBoosterRoll == 13) {
+            player.d.addDiceEffect = sum.mul(0.000005)
+            player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
+        } else if (player.d.currentBoosterRoll == 14) {
+            player.d.addDiceEffect = sum.mul(0.00005)
+            player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         }
     },
     bars: {
@@ -343,6 +381,64 @@
                 return player.d.dicePoints.pow(0.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        14:
+        {
+            title: "Grassy boost.",
+            unlocked() { return true },
+            description: "Dice points boost them grasshoppers.",
+            cost: new Decimal(1e12),
+            currencyLocation() { return player.d },
+            currencyDisplayName: "Challenge Dice Points",
+            currencyInternalName: "challengeDicePoints",
+            effect() {
+                return player.d.dicePoints.pow(0.085).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        15:
+        {
+            title: "Reversey Boost.",
+            unlocked() { return true },
+            description: "Ur check back level boosts dice points.",
+            cost: new Decimal(1e13),
+            currencyLocation() { return player.d },
+            currencyDisplayName: "Challenge Dice Points",
+            currencyInternalName: "challengeDicePoints",
+            effect() {
+                return player.cb.level.pow(1.87654321).mul(15).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
+        }, 
+        16:
+        {
+            title: "Self Synergize.",
+            unlocked() { return true },
+            description: "Ur dice points boost istelf.",
+            cost: new Decimal(1e14),
+            currencyLocation() { return player.d },
+            currencyDisplayName: "Challenge Dice Points",
+            currencyInternalName: "challengeDicePoints",
+            effect() {
+                return player.d.dicePoints.pow(0.125).div(100).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        17:
+        {
+            title: "Challengey Prestigey Pointy Boosty.",
+            unlocked() { return true },
+            description: "Challenge dice points boosts them prestige points and points.",
+            cost: new Decimal(1e16),
+            currencyLocation() { return player.d },
+            currencyDisplayName: "Challenge Dice Points",
+            currencyInternalName: "challengeDicePoints",
+            effect() {
+                return player.d.challengeDicePoints.pow(0.4).mul(1000).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
         }, 
     },
     buyables: {
@@ -664,6 +760,8 @@
                     ["row", [["clickable", 11]]],
                     ["raw-html", function () { return "Current rolls: " + player.d.rollText + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "+" + format(player.d.addDiceEffect) + 'x to the effect.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return hasChallenge("ip", 15) ? "Some effects are kept on infinity." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
 
             },
@@ -678,7 +776,7 @@
         ["blank", "25px"],
         ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
         ["blank", "25px"],
-        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
+        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
     ]
 
             },

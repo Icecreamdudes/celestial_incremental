@@ -317,6 +317,13 @@
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
+        23: {
+            requirementDescription: "<h3>1500 Infinities",
+            effectDescription() { return "Unlocks the point halter (in portal)." },
+            done() { return player.in.infinities.gte(1500) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '90px' },
+        },
     },
     challenges: {
         11: {
@@ -444,6 +451,8 @@
                         ["row", [["milestone", 18]]],
                         ["row", [["milestone", 19]]],
                         ["row", [["milestone", 21]]],
+                        ["row", [["milestone", 22]]],
+                        ["row", [["milestone", 23]]],
                 ]
 
             },

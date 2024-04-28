@@ -107,6 +107,8 @@ addLayer("i", {
         if (inChallenge("ip", 14)) player.gain = player.gain.div(player.r.challengeIVEffect)
         if (inChallenge("ip", 15)) player.gain = player.gain.pow(0.8)
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
+        if (hasUpgrade("d", 17)) player.gain = player.gain.mul(upgradeEffect("d", 17))
+        player.gain = player.gain.div(player.po.pointHalt)
 
         player.points = player.points.add(player.gain.mul(delta))
 

@@ -14,6 +14,9 @@ addLayer("po", {
         hex: false,
 
         keepOTFS: false,
+
+        pointHalt: new Decimal(1),
+        pointHaltInput: new Decimal(1),
     }
     },
     automate() {
@@ -29,6 +32,9 @@ addLayer("po", {
         {
             player.in.reachedInfinity = true
         }
+
+        if (player.po.pointHaltInput.gt(1)) player.po.pointHalt = player.po.pointHaltInput
+        if (player.po.pointHaltInput.lt(1)) player.po.pointHalt = new Decimal(1)
     },
     branches: ["branch"],
     clickables: {
@@ -204,6 +210,28 @@ addLayer("po", {
                         ["row", [["bar", "infbar"]]],
                         ["blank", "25px"],
                         ["tree", tree],
+                ]
+
+            },
+            "Halter": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasMilestone("ip", 23) },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "<h3>Currently divides point gain by /" + format(player.po.pointHalt) + "." }],
+                    ["text-input", "pointHaltInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
+                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixes." }],
                 ]
 
             },

@@ -99,7 +99,7 @@ addLayer("i", {
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(player.cb.commonPetEffects[0][0])
         player.gain = player.gain.mul(player.d.diceEffects[0])
-        player.gain = player.gain.mul(player.rf.abilityEffects[0])
+        if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
@@ -109,6 +109,9 @@ addLayer("i", {
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
         if (hasUpgrade("d", 17)) player.gain = player.gain.mul(upgradeEffect("d", 17))
         player.gain = player.gain.div(player.po.pointHalt)
+        if (inChallenge("ip", 16)) player.gain = player.gain.pow(0.02)
+        if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
+        if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
 
         player.points = player.points.add(player.gain.mul(delta))
 

@@ -336,6 +336,7 @@
                 player.in.infinityPause = new Decimal(6)
             },
             onExit() {
+                player.in.infinityPause = new Decimal(6)
             },
             style: { width: '350px', height: '275px', }
 
@@ -351,6 +352,7 @@
                 player.in.infinityPause = new Decimal(6)
             },
             onExit() {
+                player.in.infinityPause = new Decimal(6)
             },
             style: { width: '350px', height: '275px', }
 
@@ -367,6 +369,7 @@
                 player.in.infinityPause = new Decimal(6)
             },
             onExit() {
+                player.in.infinityPause = new Decimal(6)
             },
             style: { width: '350px', height: '275px', }
 
@@ -383,6 +386,7 @@
                 player.in.infinityPause = new Decimal(6)
             },
             onExit() {
+                player.in.infinityPause = new Decimal(6)
             },
             style: { width: '350px', height: '275px', }
 
@@ -412,6 +416,24 @@
                 }
             },
             onExit() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            style: { width: '350px', height: '275px', }
+
+        },
+        16: {
+            name: "Challenge VI",
+            challengeDescription() { return "<h4>You are stuck in rocket fuel, and point gain is raised to the ^0.02." },
+            goalDescription() { return "1.79e308 prestige points" },
+            goal() { return new Decimal("1.79e308") },
+            canComplete: function () { return player.p.prestigePoints.gte(1.79e308) },
+            rewardDescription: "Unlock new rocket fuel abilities, and ability automation, and gain 20% of rocket fuel per second.",
+            unlocked() { return hasChallenge("ip", 15) },
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            onExit() {
+                player.in.infinityPause = new Decimal(6)
             },
             style: { width: '350px', height: '275px', }
 
@@ -463,7 +485,7 @@
                 [
                         ["blank", "25px"],
                         ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
-                        ["row", [["challenge", 15]]],
+                        ["row", [["challenge", 15], ["challenge", 16]]],
                 ]
 
             },

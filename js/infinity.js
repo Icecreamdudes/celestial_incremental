@@ -59,7 +59,7 @@ addLayer("in", {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity && !inChallenge("ip", 11))
+        if (player.in.reachedInfinity && !inChallenge("ip", 11) && !player.in.unlockedBreak)
         {
             if (!player.bigc.skip) 
             {
@@ -75,6 +75,8 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 21))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 22))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -235,7 +237,7 @@ addLayer("in", {
         player.d.buyables[14] = new Decimal(0)
         player.d.buyables[15] = new Decimal(0)
 
-        for (let i = 0; i < player.d.diceEffects.length; i++)
+        for (let i = 0; i < 11; i++)
         {
             player.d.diceEffects[i] = new Decimal(1)
         }
@@ -246,13 +248,13 @@ addLayer("in", {
         {
             player.rf.abilitiesUnlocked[i] = false
         }
-        for (let i = 0; i < player.rf.abilityTimers.length; i++)
+        for (let i = 0; i < 4; i++)
         {
             player.rf.abilityTimers[i] = new Decimal(0)
         }
 
         for (let i = 0; i < player.rf.upgrades.length; i++) {
-            if (+player.rf.upgrades[i] < 16) {
+            if (+player.rf.upgrades[i] < 18) {
                 player.rf.upgrades.splice(i, 1);
                 i--;
             }
@@ -265,7 +267,7 @@ addLayer("in", {
             }
         }
 
-        if (!player.po.keepOTFS || inChallenge("ip", 15))
+        if (!player.po.keepOTFS || inChallenge("ip", 15) || inChallenge("ip", 16))
         {
             player.po.dice = false
             player.po.rocketFuel = false

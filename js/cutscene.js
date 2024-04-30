@@ -19,6 +19,7 @@
         cutscene9: true,
         cutscene10: true,
         cutscene11: true,
+        cutscene12: true,
         evoCutscene: false,
 
         //Cutscene Info
@@ -268,6 +269,26 @@
             player.subtabs["in"]['stuff'] = 'Features'
         } 
 
+        
+        //Cutscene 12
+        if (player.c.cutscene12 == true && player.startedGame == true && hasChallenge("ip", 16))
+        {
+            if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
+            player.tab = "c"
+            layers.c.startCutscene12();
+        } else if ((player.startedGame == true || player.c.cutscene12 == false) && player.tab == "c" && player.c.cutscene12 == false)
+        {
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.cutscene12 == true)
+        {
+            if (player.c.cutscene12 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene12 = false
+            player.tab = "in"
+            player.subtabs["in"]['stuff'] = 'Features'
+        } 
+
         //Evo
         if (player.c.evoCutscene == true)
         {
@@ -396,6 +417,15 @@ startCutscene11() {
         "???: It is a lot of annoying micromanagement, but that is a skill you should learn.",
         "???: It will pay off because you will get a great BLESSING.",
         "You: Alright. Time to go neglect dice and rocket fuel.",
+    ]
+},
+startCutscene12() {
+    player.c.cutsceneText = [
+        "???: Well now you see the potential of the other two otherworldy features.",
+        "You: Not really.",
+        "???: Trust me though. They will help you out a lot, even though I don't know much about what you're doing.",
+        "You: There's two more challenges, right?",
+        "???: Yup. Good luck.",
     ]
 },
 evoCutscenes(pet) {

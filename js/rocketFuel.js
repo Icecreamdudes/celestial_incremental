@@ -11,9 +11,9 @@
         rocketFuelPause: new Decimal(0),
 
         //abilities
-        abilitiesUnlocked: [false, false, false, false, false],
-        abilityTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        abilityEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+        abilitiesUnlocked: [false, false, false, false, false, false, false, false],
+        abilityTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        abilityEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         abilityIndex: -1,
         abilityDesc: [],
     }
@@ -55,6 +55,10 @@
         player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.rarePetEffects[2][0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.diceEffects[13])
+        if (hasUpgrade("rf", 15)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("rf", 15))
+
+        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && player.po.rocketFuel) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
 
         player.rf.rocketFuelEffect = player.rf.rocketFuel.pow(0.85).add(1)
 
@@ -70,6 +74,9 @@
             "RF Grass Boost: Gives a x" + format(player.rf.abilityEffects[2]) + " boost to grass. (" + formatTime(player.rf.abilityTimers[2]) + " left)", 
             "RF Fertilizer Boost: Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer. (" + formatTime(player.rf.abilityTimers[3]) + " left)", 
             "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)", 
+            "RF Infinity Point Boost: Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points. (" + formatTime(player.rf.abilityTimers[5]) + " left)", 
+            "RF Button Cooldown: Divides XP button cooldown by /1.5. (" + formatTime(player.rf.abilityTimers[6]) + " left)", 
+            "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)", 
         ]
 
         if (player.rf.rocketFuel.gt(0))
@@ -91,6 +98,12 @@
         if (hasUpgrade("rf", 14) && player.rf.abilitiesUnlocked[3])
         {
             player.rf.abilitiesUnlocked[4] = true
+        }
+        if (hasChallenge("ip", 16))
+        {
+            player.rf.abilitiesUnlocked[5] = true
+            player.rf.abilitiesUnlocked[6] = true
+            player.rf.abilitiesUnlocked[7] = true
         }
 
         for (let i = 0; i < player.rf.abilityTimers.length; i++)
@@ -280,6 +293,33 @@
             },
             style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
         },
+        21: {
+            title() { return "RF Infinity Points Boost" },
+            canClick() { return true },
+            unlocked() { return player.rf.abilitiesUnlocked[5] },
+            onClick() {
+                player.rf.abilityIndex = new Decimal(5)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        22: {
+            title() { return "RF Button Cooldown" },
+            canClick() { return true },
+            unlocked() { return player.rf.abilitiesUnlocked[6] },
+            onClick() {
+                player.rf.abilityIndex = new Decimal(6)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        23: {
+            title() { return "RF Hex Boost" },
+            canClick() { return true },
+            unlocked() { return player.rf.abilitiesUnlocked[7] },
+            onClick() {
+                player.rf.abilityIndex = new Decimal(7)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
     },
     rocketFuelAbility(type, amount = new Decimal(0))
     {
@@ -305,6 +345,17 @@
                 player.rf.abilityEffects[4] = amount.log10().plus(1).mul(2).add(1)
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.rf.abilityTimers[4] = amount.log10().add(1).mul(100)
+            break;
+            case 5:
+                player.rf.abilityEffects[5] = amount.log10().div(66).add(1)
+                player.rf.abilityTimers[5] = amount.log10().add(1).mul(20)
+            break;
+            case 6:
+                player.rf.abilityTimers[6] = amount.log10().add(1).mul(10)
+            break;
+            case 7:
+                player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1)
+                player.rf.abilityTimers[7] = amount.pow(0.05).mul(60)
             break;
         }
     },
@@ -405,7 +456,7 @@
             }
         }
     }
-        if (!hasUpgrade("rf", 11)) 
+        if (!hasUpgrade("rf", 11) || !hasMilestone("ip", 15)) 
         {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
@@ -493,6 +544,44 @@
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
         }, 
+        15:
+        {
+            title: "Rocket Fuel Upgrade V",
+            unlocked() { return hasUpgrade("rf", 14) && inChallenge("ip", 16)},
+            description: "Rocket Fuel boosts itself.",
+            cost: new Decimal(2222),
+            currencyLocation() { return player.rf },
+            currencyDisplayName: "Rocket Fuel",
+            currencyInternalName: "rocketFuel",
+            effect() {
+                return player.rf.rocketFuel.pow(0.3).mul(3).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        16:
+        {
+            title: "Rocket Fuel Upgrade VII",
+            unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
+            description: "Rocket Fuel boosts points.",
+            cost: new Decimal(1e10),
+            currencyLocation() { return player.rf },
+            currencyDisplayName: "Rocket Fuel",
+            currencyInternalName: "rocketFuel",
+            effect() {
+                return player.rf.rocketFuel.pow(0.5).mul(5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        17:
+        {
+            title: "Rocket Fuel Upgrade VIII",
+            unlocked() { return hasUpgrade("rf", 16) && inChallenge("ip", 16)},
+            description: "Gain 20% of rocket fuel per second.",
+            cost: new Decimal(1e12),
+            currencyLocation() { return player.rf },
+            currencyDisplayName: "Rocket Fuel",
+            currencyInternalName: "rocketFuel",
+        }, 
     },
     buyables: {
     },
@@ -516,12 +605,12 @@
                     ["raw-html", function () { return "<h2>Abilities" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["row", [["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19], ["clickable", 21], ["clickable", 22], ["clickable", 23]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Choose an amount to allocate into the ability." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["row", [["clickable", 12], ["clickable", 2], ["clickable", 13], ["clickable", 3],["clickable", 14]]],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
     ]
 
             },
@@ -535,5 +624,5 @@
          ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.po.rocketFuel }
+    layerShown() { return player.startedGame == true && (player.po.rocketFuel || inChallenge("ip", 16)) }
 })

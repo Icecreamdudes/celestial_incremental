@@ -58,6 +58,8 @@
         challengeDicePointsToGet: new Decimal(1),
 
         boosterDiceStatsPerSecond: new Decimal(0),
+
+        boosterDiceAutomation: false,
     }
     },
     automate() {
@@ -136,7 +138,7 @@
         if (player.d.dice > 6) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 18).div(20)
         if (player.d.dice > 12) player.d.diceCost = Decimal.pow(30, player.d.dice.pow(2)).div(10)
 
-        if (player.d.boosterDiceCooldown.lt(0) && inChallenge("ip", 15))
+        if (player.d.boosterDiceCooldown.lt(0) && (inChallenge("ip", 15) || player.d.boosterDiceAutomation))
         {
             if (inChallenge("ip", 15))
             {
@@ -161,6 +163,8 @@
 
         player.d.manualCooldown = new Decimal(1)
         player.d.manualCooldown = player.d.manualCooldown.div(buyableEffect("d", 23))
+
+        if (player.d.diceEffects[12].gt(100)) player.d.diceEffects[12] = new Decimal(100)
     },
     diceRoll()
     {
@@ -194,6 +198,32 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Turn booster dice automation on. (Currently off)" },
+            tooltip() { return "<h3>You won't gain any pets from automation." },
+            canClick() { return true },
+            unlocked() { return hasChallenge("ip", 15) && !player.d.boosterDiceAutomation},
+            onClick() { 
+                player.d.boosterDiceAutomation = true
+            },
+            style: {
+                width: '200px',
+                "min-height": '75px',
+            },
+        },
+        3: {
+            title() { return "Turn booster dice automation off. (Currently on)" },
+            canClick() { return true },
+            tooltip() { return "<h3>You won't gain any pets from automation." },
+            unlocked() { return hasChallenge("ip", 15) && player.d.boosterDiceAutomation},
+            onClick() { 
+                player.d.boosterDiceAutomation = false
+            },
+            style: {
+                width: '200px',
+                "min-height": '75px',
+            },
+        },
         11: {
             title() { return player.d.diceCooldown.gt(0) ? formatTime(player.d.diceCooldown) : "<h2>Roll!"},
             display() { return "Autoroll: " + formatTime(player.d.autoRollCooldown) },
@@ -211,7 +241,7 @@
             unlocked() { return true },
             onClick() {
                 if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
-                if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(14)
+                if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
                 player.d.boosterDiceCooldown = new Decimal(120)
 
                 let random = getRandomInt(20)
@@ -330,10 +360,10 @@
             player.d.addDiceEffect = sum.pow(0.1).mul(0.0003)
             player.d.diceEffects[11] = player.d.diceEffects[11].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 12) {
-            player.d.addDiceEffect = sum.pow(0.1).mul(0.0001)
+            player.d.addDiceEffect = sum.pow(0.1).mul(0.0001).div(player.d.diceEffects[12].pow(5))
             player.d.diceEffects[12] = player.d.diceEffects[12].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 13) {
-            player.d.addDiceEffect = sum.mul(0.000005)
+            player.d.addDiceEffect = sum.mul(0.00001)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
             player.d.addDiceEffect = sum.mul(0.00005)
@@ -753,7 +783,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.d.currentBoosterText[player.d.currentBoosterRoll] + " (Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.d.currentBoosterRoll != 12 ? player.d.currentBoosterText[player.d.currentBoosterRoll] + " (Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" : player.d.currentBoosterText[player.d.currentBoosterRoll] + " (Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ") (MAX IS x10)"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 12], ["clickable", 13]]],
                     ["blank", "25px"],
@@ -762,6 +792,8 @@
                     ["raw-html", function () { return "+" + format(player.d.addDiceEffect) + 'x to the effect.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return hasChallenge("ip", 15) ? "Some effects are kept on infinity." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
                 ]
 
             },

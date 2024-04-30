@@ -33,7 +33,7 @@ addLayer("po", {
             player.in.reachedInfinity = true
         }
 
-        if (player.po.pointHaltInput.gt(1)) player.po.pointHalt = player.po.pointHaltInput
+        if (player.po.pointHaltInput.gte(1)) player.po.pointHalt = player.po.pointHaltInput
         if (player.po.pointHaltInput.lt(1)) player.po.pointHalt = new Decimal(1)
     },
     branches: ["branch"],
@@ -49,7 +49,7 @@ addLayer("po", {
             style: { width: '100px', "min-height": '50px' },
         },
         2: {
-            title() { return "Keep OTFs on reset." },
+            title() { return "Keep OTFs on reset. (Currently off)" },
             display() {
                 return "You only gain them back once you reach the req.";
             },
@@ -64,7 +64,7 @@ addLayer("po", {
             },
         },
         3: {
-            title() { return "Don't keep OTFs on reset." },
+            title() { return "Don't keep OTFs on reset. (Currently on)" },
             canClick() { return true },
             unlocked() { return hasMilestone("ip", 18) && player.po.keepOTFS},
             onClick() { 
@@ -81,7 +81,7 @@ addLayer("po", {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
             canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
-            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) },
+            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.dice = true
@@ -100,7 +100,7 @@ addLayer("po", {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
             canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170)&& (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
-            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15)  },
+            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.rocketFuel = true
@@ -142,7 +142,7 @@ addLayer("po", {
                 return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off<br><h2>Req: Challenge III Completion";
             },
             canClick() { return player.po.featureSlots.gt(0) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
-            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))   },
+            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))  && (!inChallenge("ip", 16) && hasChallenge("ip", 13))     },
             onClick() { 
                 player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.hex = true
@@ -231,7 +231,7 @@ addLayer("po", {
                     }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
-                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixes." }],
+                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed." }],
                 ]
 
             },

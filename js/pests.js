@@ -27,9 +27,10 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (inChallenge("ip", 12))
+        if (inChallenge("ip", 12) || inChallenge("ip", 18))
         {
-            player.pe.pestsPerSecond = player.points.plus(1).log10().pow(1.4)
+            if (inChallenge("ip", 12)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(1.4)
+            if (inChallenge("ip", 18)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(2.6)
             player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
         }
         
@@ -103,5 +104,5 @@
          ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && inChallenge("ip", 12) }
+    layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) }
 })

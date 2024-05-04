@@ -1,4 +1,4 @@
-﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["m", "cb", "d"]]
+﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["de", "m", "cb", "d"]]
 
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -112,6 +112,12 @@ addLayer("i", {
         if (inChallenge("ip", 16)) player.gain = player.gain.pow(0.02)
         if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
+        if (inChallenge("ip", 18)) player.gain = player.gain.pow(0.4)
+
+        if (inChallenge("ip", 18) && player.points.gt(1))
+        {
+            player.points = player.points.sub(player.points.mul(0.9 * delta))
+        }
 
         player.points = player.points.add(player.gain.mul(delta))
 

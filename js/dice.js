@@ -101,6 +101,7 @@
         if (hasUpgrade("d", 12)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 12))
         if (hasUpgrade("d", 15)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 15))
         if (hasUpgrade("d", 16)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 16))
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("cb", 11))
 
         if (player.d.autoRollCooldown.lt(0))
         {

@@ -133,6 +133,10 @@
         if (inChallenge("ip", 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(buyableEffect("h", 14))
 
+        if (inChallenge("ip", 18) && player.g.grass.gt(1))
+        {
+            player.g.grass = player.g.grass.sub(player.g.grass.mul(0.4 * delta))
+        }
 
         player.g.grassReq = new Decimal(4) 
         player.g.grassReq = player.g.grassReq.div(buyableEffect("g", 12))

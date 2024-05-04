@@ -109,6 +109,7 @@
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.d.diceEffects[1])
         if (hasUpgrade("ip", 14) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 14))
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 21))
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.pe.pestEffect[1])
         if (inChallenge("ip", 13)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(0.7)
         if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("h", 11))
 
@@ -167,7 +168,7 @@
 
         player.f.factorBase = new Decimal(0.05)
         player.f.factorBase = player.f.factorBase.add(buyableEffect("gh", 16))
-        if (hasUpgrade("ad", 19) && !inChallenge("ip", 14)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
+        if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
     },
 
     clickables: {

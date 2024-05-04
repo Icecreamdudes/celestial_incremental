@@ -57,6 +57,7 @@
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.diceEffects[13])
         if (hasUpgrade("rf", 15)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("rf", 15))
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("cb", 11))
 
         if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && player.po.rocketFuel) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
 
@@ -361,6 +362,7 @@
     },
     rocketFuelReset()
     {
+        player.pe.pests = new Decimal(0)
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)

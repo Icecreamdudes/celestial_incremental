@@ -20,6 +20,7 @@
         cutscene10: true,
         cutscene11: true,
         cutscene12: true,
+        cutscene13: true,
         evoCutscene: false,
 
         //Cutscene Info
@@ -43,7 +44,7 @@
         player.c.ev2bg = "resources/gdbg.jpg"
 
         //Background
-        document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2) && player.tab == "c" ? "linear-gradient(90deg, #180000, #300005, rgba(71,0,14,1))":
+        document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2 || player.c.cutscene13) && player.tab == "c" ? "linear-gradient(90deg, #180000, #300005, rgba(71,0,14,1))":
         player.tab == "t" ? "#02172f" : 
         player.tab == "g" ? "#042347" : 
         player.tab == "gh" ? "#073b77" : 
@@ -287,7 +288,25 @@
             player.c.cutscene12 = false
             player.tab = "in"
             player.subtabs["in"]['stuff'] = 'Features'
-        } 
+        }
+        
+        //Cutscene 13
+        if (player.c.cutscene13 == true && player.startedGame == true && inChallenge("ip", 18))
+        {
+            player.tab = "c"
+            layers.c.startCutscene13();
+            startRain();
+        } else if ((player.startedGame == true || player.c.cutscene1 == false) && player.tab == "c")
+        {
+            player.tab = "i"
+            player.subtabs["i"]['stuff'] = 'Upgrades'
+            stopRain();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            if (player.c.cutscene13 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene13 = false
+        }
 
         //Evo
         if (player.c.evoCutscene == true)
@@ -426,6 +445,18 @@ startCutscene12() {
         "???: Trust me though. They will help you out a lot, even though I don't know much about what you're doing.",
         "You: There's two more challenges, right?",
         "???: Yup. Good luck.",
+    ]
+},
+startCutscene13() {
+    player.c.cutsceneText = [
+        "This celestial is definitely a peculiar one.",
+        "Since when were celestials supposed to be friendly?",
+        "It knows it's fate. It will die to your hands.",
+        "However, it openly accepts it's death.",
+        "Being a celestial must be hard...",
+        "There are so many things that you don't know.",
+        "This multiverse has had a history of neverending violence and hatred.",
+        "Just one more challenge completion. You will learn.",
     ]
 },
 evoCutscenes(pet) {

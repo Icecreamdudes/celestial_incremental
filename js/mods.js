@@ -72,6 +72,11 @@
             player.m.linesOfCode = new Decimal(0)
         }
 
+        if (inChallenge("ip", 18) && player.m.mods.gt(1))
+        {
+            player.m.mods = player.m.mods.sub(player.m.mods.mul(0.3 * delta))
+        }
+
         player.m.modSoftcapStart = new Decimal(10)
         player.m.modSoftcapStart = player.m.modSoftcapStart.add(buyableEffect("gh", 19))
         player.m.modsReq = player.m.mods.pow(1.45).add(100)
@@ -89,7 +94,14 @@
         if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
         if (inChallenge("ip", 13) || player.po.hex) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("h", 17))
         if (inChallenge('ip', 15)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.6)
-        if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
+    if (inChallenge("ip", 18)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.6)
+
+    if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
+
+    if (inChallenge("ip", 18) && player.m.codeExperience.gt(1))
+    {
+        player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.2 * delta))
+    }
     },
     branches: ["t"],
     clickables: {

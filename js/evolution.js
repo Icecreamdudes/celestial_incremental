@@ -833,9 +833,9 @@ addLayer("ev1", {
             style: { width: '200px', height: '65px', }
         },
         25: {
-            cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(16) },
+            cost(x) { return new Decimal(1.24).pow(x || getBuyableAmount(this.layer, this.id)).mul(16) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
-            unlocked() { return true },
+            unlocked() { return player.cb.buttonUnlocks[6] },
             canAfford() { return player.cb.petPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>XP: x" + format(tmp[this.layer].buyables[this.id].effect)
@@ -845,7 +845,7 @@ addLayer("ev1", {
             },
             buy() {
                 let base = new Decimal(10)
-                let growth = 1.22
+                let growth = 1.24
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -864,9 +864,9 @@ addLayer("ev1", {
             style: { width: '200px', height: '65px', }
         },
         26: {
-            cost(x) { return new Decimal(1.44).pow(x || getBuyableAmount(this.layer, this.id)).mul(16) },
+            cost(x) { return new Decimal(1.48).pow(x || getBuyableAmount(this.layer, this.id)).mul(16) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
-            unlocked() { return true },
+            unlocked() { return player.cb.buttonUnlocks[6] },
             canAfford() { return player.cb.petPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect)
@@ -876,7 +876,69 @@ addLayer("ev1", {
             },
             buy() {
                 let base = new Decimal(10)
-                let growth = 1.44
+                let growth = 1.48
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.petPoints = player.cb.petPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.cb.petPoints = player.cb.petPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '200px', height: '65px', }
+        },
+        27: {
+            cost(x) { return new Decimal(1.26).pow(x || getBuyableAmount(this.layer, this.id)).mul(30) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return player.cb.buttonUnlocks[7] },
+            canAfford() { return player.cb.petPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>XP: x" + format(tmp[this.layer].buyables[this.id].effect)
+            },
+            display() {
+                return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pet Points"
+            },
+            buy() {
+                let base = new Decimal(30)
+                let growth = 1.26
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.petPoints = player.cb.petPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.cb.petPoints = player.cb.petPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '200px', height: '65px', }
+        },
+        28: {
+            cost(x) { return new Decimal(1.52).pow(x || getBuyableAmount(this.layer, this.id)).mul(30) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return player.cb.buttonUnlocks[7] },
+            canAfford() { return player.cb.petPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Cooldown: /" + format(tmp[this.layer].buyables[this.id].effect)
+            },
+            display() {
+                return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pet Points"
+            },
+            buy() {
+                let base = new Decimal(30)
+                let growth = 1.52
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -921,6 +983,7 @@ addLayer("ev1", {
                     ["row", [["column", [["raw-html", function () { return "Button 5 Base: " + format(player.cb.buttonBaseXP[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 5 Cooldown: " + formatTime(player.cb.buttonTimersMax[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 21], ["buyable", 22]]],                    
                     ["row", [["column", [["raw-html", function () { return "Button 6 Base: " + format(player.cb.buttonBaseXP[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 6 Cooldown: " + formatTime(player.cb.buttonTimersMax[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 23], ["buyable", 24]]],     
                     ["row", [["column", [["raw-html", function () { return "Button 7 Base: " + format(player.cb.buttonBaseXP[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 7 Cooldown: " + formatTime(player.cb.buttonTimersMax[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 25], ["buyable", 26]]],     
+                    ["row", [["column", [["raw-html", function () { return "Button 8 Base: " + format(player.cb.buttonBaseXP[7]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 8 Cooldown: " + formatTime(player.cb.buttonTimersMax[7]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 27], ["buyable", 28]]],     
                 ]]                                
                 ]
 

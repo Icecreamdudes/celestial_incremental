@@ -438,6 +438,43 @@
             style: { width: '350px', height: '275px', }
 
         },
+        17: {
+            name: "Challenge VII",
+            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP." },
+            goalDescription() { return "Level 75" },
+            goal() { return new Decimal("75") },
+            canComplete: function () { return player.cb.level.gte(75) },
+            rewardDescription: "Check back buyables.",
+            unlocked() { return hasChallenge("ip", 16) },
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+
+                player.cb.level = new Decimal(1)
+                player.cb.xp = new Decimal(0)
+            },
+            onExit() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            style: { width: '350px', height: '275px', }
+
+        },
+        18: {
+            name: "Challenge VIII",
+            challengeDescription() { return "<h4>Debuff Hell. You'd hate it, but there will still be worse things to come." },
+            goalDescription() { return "1.79e308 celestial points" },
+            goal() { return new Decimal("1.79e308") },
+            canComplete: function () { return player.points.gte(1.79e308) },
+            rewardDescription: "....???",
+            unlocked() { return hasChallenge("ip", 17) },
+            onEnter() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            onExit() {
+                player.in.infinityPause = new Decimal(6)
+            },
+            style: { width: '350px', height: '275px', }
+
+        },
     },
     infoboxes: {
     },
@@ -485,7 +522,7 @@
                 [
                         ["blank", "25px"],
                         ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
-                        ["row", [["challenge", 15], ["challenge", 16]]],
+                        ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
                 ]
 
             },

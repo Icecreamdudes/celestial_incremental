@@ -12,10 +12,10 @@
         req: new Decimal(4),
         effectActivate: false,
 
-        buttonUnlocks: [true, false, false, false, false, false],
-        buttonTimersMax: [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),,new Decimal(14400),],
-        buttonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        buttonBaseXP: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.04),new Decimal(25),new Decimal(80),new Decimal(220),],
+        buttonUnlocks: [true, false, false, false, false, false, false],
+        buttonTimersMax: [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),new Decimal(86400),],
+        buttonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        buttonBaseXP: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.04),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),],
 
         petsUnlocked: false,
         
@@ -95,6 +95,9 @@
         XPBoostTimers: [new Decimal(0),],
         XPBoostTimersMax: [new Decimal(10800),],
         XPBoostReq: [new Decimal(100),],
+
+        //chal 7
+        lossRate: new Decimal(0),
     }
     },
     automate() {
@@ -170,8 +173,12 @@
         [
             player.cb.petButtonUnlocks[3] = true
         ]
+        if (player.cb.level.gte(150))
+        [
+            player.cb.buttonUnlocks[7] = true
+        ]
 
-        player.cb.buttonBaseXP = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.06),new Decimal(25),new Decimal(80),new Decimal(220),]
+        player.cb.buttonBaseXP = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.06),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),]
 
         player.cb.buttonBaseXP[3] = player.cb.buttonBaseXP[3].mul(buyableEffect("ev1", 11))
         player.cb.buttonBaseXP[0] = player.cb.buttonBaseXP[0].mul(buyableEffect("ev1", 13))
@@ -180,6 +187,7 @@
         player.cb.buttonBaseXP[4] = player.cb.buttonBaseXP[4].mul(buyableEffect("ev1", 21))
         player.cb.buttonBaseXP[5] = player.cb.buttonBaseXP[5].mul(buyableEffect("ev1", 23))
         player.cb.buttonBaseXP[6] = player.cb.buttonBaseXP[6].mul(buyableEffect("ev1", 25))
+        player.cb.buttonBaseXP[7] = player.cb.buttonBaseXP[7].mul(buyableEffect("ev1", 27))
 
         for (let i = 0; i < player.cb.buttonBaseXP.length; i++)
         {
@@ -193,7 +201,7 @@
         }
 
 
-        player.cb.buttonTimersMax = [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),]
+        player.cb.buttonTimersMax = [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),new Decimal(86400),]
 
         player.cb.buttonTimersMax[3] = player.cb.buttonTimersMax[3].div(buyableEffect("ev1", 12))
         player.cb.buttonTimersMax[0] = player.cb.buttonTimersMax[0].div(buyableEffect("ev1", 14))
@@ -202,6 +210,7 @@
         player.cb.buttonTimersMax[4] = player.cb.buttonTimersMax[4].div(buyableEffect("ev1", 22))
         player.cb.buttonTimersMax[5] = player.cb.buttonTimersMax[5].div(buyableEffect("ev1", 24))
         player.cb.buttonTimersMax[6] = player.cb.buttonTimersMax[6].div(buyableEffect("ev1", 26))
+        player.cb.buttonTimersMax[7] = player.cb.buttonTimersMax[7].div(buyableEffect("ev1", 28))
 
         for (let i = 0; i < player.cb.buttonTimersMax.length; i++)
         {
@@ -410,6 +419,7 @@
         for (let i = 0; i < player.cb.rarePetPointBase.length; i++)
         {
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.cb.evolvedEffects[1][1])
+            player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(buyableEffect("cb", 14))
         }
         player.cb.rarePetPointBase[0] = player.cb.rarePetPointBase[0].mul(player.cb.rarePetLevels[0].mul(0.5))
         player.cb.rarePetPointBase[1] = player.cb.rarePetPointBase[1].mul(player.cb.rarePetLevels[1].mul(0.5))
@@ -456,6 +466,7 @@
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.level.div(100).pow(0.6))
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.evolvedEffects[2][1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.commonPetEffects[6][0])
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
         }
 
         player.cb.XPBoostReq = [new Decimal(100)]
@@ -466,6 +477,19 @@
         for (let i = 0; i < player.cb.XPBoostTimers.length; i++)
         {
             player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(onepersec.mul(delta))
+        }
+
+        //chal 7
+        if (inChallenge("ip", 17) && player.cb.level.gt(1))
+        { 
+            player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
+            player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
+
+            if (player.cb.xp.lt(0))
+            {
+                player.cb.level = player.cb.level.sub(2)
+                player.cb.xp = player.cb.req.sub(1)
+            }
         }
     },
     levelup()
@@ -496,6 +520,24 @@
                 startRain('#4b79ff');
             },
             style: { width: '200px', "min-height": '100px', 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%"},
+        },
+        3: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '75px', }
+        },
+        4: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '75px', }
         },
         11: {
             title() { return player.cb.buttonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[0]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[0].mul(player.cb.xpMult)) + " XP."},
@@ -782,6 +824,30 @@
                 layers.cb.petButton4();
 
                 player.cb.XPBoost = player.cb.XPBoost.sub(0.04)
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        29: {
+            title() { return player.cb.buttonTimers[7].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[7]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[7].mul(player.cb.xpMult)) + " XP."},
+            canClick() { return player.cb.buttonTimers[7].lt(0) },
+            unlocked() { return player.cb.buttonUnlocks[7] },
+            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 98%" : ""},
+            onClick() {
+                player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[7].mul(player.cb.xpMult))
+                player.cb.buttonTimers[7] = player.cb.buttonTimersMax[7]
+
+                if (player.cb.level.gt(35))
+                {
+                    let random = getRandomInt(50)
+                    if (random != 1)
+                    {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        callAlert("You gained an Evolution Shard! (98%)", "resources/evoShard.png");
+                    } else
+                    {
+                        callAlert("Damn bro you didn't gain an evo shard. Take a screenshot, send to the discord, and ping the dev. I think ur still cool.");
+                    }
+                }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -1456,6 +1522,134 @@
     upgrades: {
     },
     buyables: {
+        11: {
+            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(20).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.level.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back OTF Boost."
+            },
+            display() {
+                return "which are multiplying hex 1 points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+            },
+            buy() {
+                let base = new Decimal(20)
+                let growth = 1.4
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.level = player.cb.level.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.cb.level = player.cb.level.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        12: {
+            cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.level.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back IP Boost."
+            },
+            display() {
+                return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+            },
+            buy() {
+                let base = new Decimal(30)
+                let growth = 1.45
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.level = player.cb.level.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.cb.level = player.cb.level.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        13: {
+            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(50).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.level.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back XP Boost Boost."
+            },
+            display() {
+                return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+            },
+            buy() {
+                let base = new Decimal(50)
+                let growth = 1.5
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.level = player.cb.level.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.cb.level = player.cb.level.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        14: {
+            cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.level.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back Pet Point Boost."
+            },
+            display() {
+                return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+            },
+            buy() {
+                let base = new Decimal(80)
+                let growth = 1.6
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.level = player.cb.level.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.cb.level = player.cb.level.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
 
@@ -1483,6 +1677,7 @@
                         ["raw-html", function () { return player.cb.level.lt(75) && player.cb.level.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return player.cb.level.lt(100) && player.cb.level.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["row", [["clickable", 14]]],
                         ["row", [["clickable", 11]]],
@@ -1491,6 +1686,7 @@
                         ["row", [["clickable", 16]]],
                         ["row", [["clickable", 21]]],
                         ["row", [["clickable", 23]]],
+                        ["row", [["clickable", 29]]],
                         ["blank", "25px"],
                         ["row", [["clickable", 15]]],
                         ["row", [["clickable", 17]]],
@@ -1532,6 +1728,18 @@
                     ["raw-html", function () { return "<h5>(Gained from check back buttons)" }, { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2]]],
+                ]
+
+            },
+            "Buyables": {
+                buttonStyle() { return {'color': '#06366e' } },
+                unlocked() { return hasChallenge("ip", 17) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 3], ["clickable", 4]]],
+                    ["blank", "25px"],
+                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
 
             },
@@ -1590,6 +1798,7 @@
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are level " + formatWhole(player.cb.level) + ", which boosts celestial point gain by x" + format(player.cb.levelEffect) + "."}, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
         ["raw-html", function () { return !player.cb.effectActivate ? "YOU MUST REACH 1e100 POINTS TO ACTIVATE CHECK BACK AND PET EFFECT" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "xpbar"]]],
                         ["blank", "25px"],
                         ["row", [["clickable", 1]]],

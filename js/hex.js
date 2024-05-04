@@ -56,6 +56,7 @@
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(player.d.diceEffects[14])
         player.h.hexPoints[0] = player.h.hexPoints[0].add(player.h.hexPointsToGet[0].mul(delta))
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(player.rf.abilityEffects[7])
+        player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(buyableEffect("cb", 11))
 
         player.h.hexPointsEffect[0] = player.h.hexPoints[0].mul(1000).pow(1.5).add(1)
 

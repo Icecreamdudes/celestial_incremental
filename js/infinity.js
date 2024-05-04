@@ -77,6 +77,7 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -487,10 +488,6 @@ addLayer("bigc", {
         if (inChallenge("ip", 16))
         {
             completeChallenge("ip", 16)
-        }
-        if (inChallenge("ip", 17))
-        {
-            completeChallenge("ip", 17)
         }
         if (inChallenge("ip", 18))
         {

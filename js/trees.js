@@ -82,6 +82,11 @@
             player.t.trees = player.t.trees.add(player.t.treesToGet) 
             player.t.leaves = new Decimal(0)
         }
+        
+        if (inChallenge("ip", 18) && player.t.trees.gt(1))
+        {
+            player.t.trees = player.t.trees.sub(player.t.trees.mul(0.3 * delta))
+        }
 
         player.t.treeSoftcapStart = new Decimal(15)
         player.t.treeSoftcapStart = player.t.treeSoftcapStart.mul(buyableEffect("t", 13))

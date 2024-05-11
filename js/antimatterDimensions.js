@@ -82,6 +82,7 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cb.commonPetEffects[5][0])
         
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
+        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 295)))
 
 
         for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
@@ -100,6 +101,7 @@
         if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
         player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
+        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
     }
         player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
         player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])
@@ -167,7 +169,7 @@
         player.ad.galaxyDimCost = new Decimal(7)
         player.ad.galaxyReq = player.ad.galaxyAmount.add(1).mul(4)
 
-        player.ad.galaxyBase = new Decimal(0.02)
+        player.ad.galaxyBase = new Decimal(0.01)
         player.ad.galaxyEffect = player.ad.galaxyBase.mul(player.ad.galaxyAmount)
 
         player.ad.galaxyText = "Req: " + player.ad.galaxyReq + " 8th dimensions."
@@ -179,7 +181,8 @@
         player.ad.galaxyPause = player.ad.galaxyPause.sub(1)
 
 
-        player.ad.extraDimsGalaxiesLocked = true
+        if (!hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = true
+        if (hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = false
     },
     branches: [""],
     clickables: {
@@ -706,6 +709,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "You are capped at 6 dimension boosts and 1 galaxy (for now)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "Progress gets halted at 1e300 antimatter." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !player.ad.extraDimsGalaxiesLocked ?  "Progress gets softcapped at 1e300 antimatter." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
     ]
 
             },

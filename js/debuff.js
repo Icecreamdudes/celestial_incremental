@@ -9,6 +9,11 @@
         antidebuffPause: new Decimal(0),
         antidebuffPoints: new Decimal(0),
         antidebuffPointsToGet: new Decimal(0),
+
+        antidebuffIndex: new Decimal(6),
+        antidebuffPointsEffect: new Decimal(1),
+        antidebuffEffect: new Decimal(1),
+        antidebuffText: "",
     }
     },
     automate() {
@@ -31,10 +36,89 @@
         }
         player.de.antidebuffPause = player.de.antidebuffPause.sub(1)
 
-        player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e14).pow(0.3)
+        if (player.de.antidebuffPointsToGet.lt(1e24)) player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e14).pow(0.45)
+        if (player.de.antidebuffPointsToGet.gte(1e24)) player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e12).pow(0.3)
+
+        player.de.antidebuffPointsEffect = player.de.antidebuffPoints.pow(0.54321).mul(10).add(1)
+
+        player.de.antidebuffEffect = layers.de.getAntidebuffEffect(player.de.antidebuffIndex)
+
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(0))
+        {
+            player.points = player.points.sub(player.points.mul(0.95 * delta))
+        }
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(1))
+        {
+            player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.95 * delta))
+        }
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(2))
+        {
+            player.g.grass = player.g.grass.sub(player.g.grass.mul(0.95 * delta))
+        }
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(3))
+        {
+            player.t.trees = player.t.trees.sub(player.t.trees.mul(0.95 * delta))
+        }
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(4))
+        {
+            player.m.mods = player.m.mods.sub(player.m.mods.mul(0.95 * delta))
+        }
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(5))
+        {
+            player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.95 * delta))
+        }
+
+        if (player.de.antidebuffIndex == 0)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting points by x" + format(player.de.antidebuffEffect) + "."
+        } else if (player.de.antidebuffIndex == 1)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting prestige points by x" + format(player.de.antidebuffEffect) + "."
+        } else if (player.de.antidebuffIndex == 2)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting grass by x" + format(player.de.antidebuffEffect) + "."
+        } else if (player.de.antidebuffIndex == 3)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting trees by x" + format(player.de.antidebuffEffect) + "."
+        } else if (player.de.antidebuffIndex == 4)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting mods by x" + format(player.de.antidebuffEffect) + "."
+        } else if (player.de.antidebuffIndex == 5)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting code experience by x" + format(player.de.antidebuffEffect) + "."
+        } else if (player.de.antidebuffIndex == 6)
+        {
+                player.de.antidebuffText = "Your chosen effect is boosting nothing."
+        }
+    },
+    getAntidebuffEffect(index)
+    {
+        if (index == 0)
+        {
+                return player.de.antidebuffPoints.mul(50).pow(4.6).add(1)
+        } else if (index == 1)
+        {
+                return player.de.antidebuffPoints.mul(30).pow(4).add(1)
+        } else if (index == 2)
+        {
+                return player.de.antidebuffPoints.mul(20).pow(3.5).add(1)
+        } else if (index == 3)
+        {
+                return player.de.antidebuffPoints.mul(14).pow(3.2).add(1)
+        } else if (index == 4)
+        {
+                return player.de.antidebuffPoints.mul(10).pow(2.8).add(1)
+        } else if (index == 5)
+        {
+                return player.de.antidebuffPoints.mul(7).pow(2.7).add(1)
+        } else if (index == 6)
+        {
+                return new Decimal(1)
+        }
     },
     antidebuffReset()
     {
+        player.pe.pests = new Decimal(0)
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
@@ -230,6 +314,69 @@
             },
             style: { width: '400px', "min-height": '80px' },
         },
+        12: {
+            title() { return "Points<br>x" + format(layers.de.getAntidebuffEffect(0)) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(0)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        13: {
+            title() { return "Prestige Points<br>x" + format(layers.de.getAntidebuffEffect(1)) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(1)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        14: {
+            title() { return "Grass<br>x" + format(layers.de.getAntidebuffEffect(2))},
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(2)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        15: {
+            title() { return "Trees<br>x" + format(layers.de.getAntidebuffEffect(3)) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(3)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        16: {
+            title() { return "Mods<br>x" + format(layers.de.getAntidebuffEffect(4)) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(4)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        17: {
+            title() { return "Code Experience<br>x" + format(layers.de.getAntidebuffEffect(5)) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(5)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
+        18: {
+            title() { return "None" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.de.antidebuffIndex = new Decimal(6)
+            },
+            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+        },
     },
     bars: {
     },
@@ -271,10 +418,15 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points." }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points, which divide pest gain by /" + format(player.de.antidebuffPointsEffect) + "." }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.de.antidebuffPointsToGet) + "</h3> antidebuff points on reset." }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return player.de.antidebuffText }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "When an effect is activated, all other resources are depleted by 95% per second." }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
         ]
 
             },

@@ -21,7 +21,11 @@
         cutscene11: true,
         cutscene12: true,
         cutscene13: true,
+        cutscene14: true,
         evoCutscene: false,
+
+        //celestial
+        tavCutscene: false,
 
         //Cutscene Info
         cutsceneText: [            
@@ -57,8 +61,9 @@
         player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
         player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
         player.tab == "bigc" || player.c.cutscene5 && player.tab == "c"  || player.c.cutscene8 && player.tab == "c"  ? "#b87c34" : 
-        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.c.cutscene6 && player.tab == "c" || player.c.cutscene7 && player.tab == "c" ? "#001f18" : 
+        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.c.cutscene6 && player.tab == "c" || player.c.cutscene7 && player.tab == "c" ? "#001f18" : 
         player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
+        player.tab == "revc" ? "#31aeb0" : 
         "#161616");
 
         //Cutscene 1
@@ -296,16 +301,37 @@
             player.tab = "c"
             layers.c.startCutscene13();
             startRain();
-        } else if ((player.startedGame == true || player.c.cutscene1 == false) && player.tab == "c")
+        } else if ((player.startedGame == true || player.c.cutscene13 == false) && player.tab == "c" && player.c.cutscene13 == false)
         {
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Upgrades'
             stopRain();
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length)
         {
             if (player.c.cutscene13 == true) player.c.cutsceneIndex = 0
             player.c.cutscene13 = false
+        }
+
+        //Cutscene 14
+        if (player.c.cutscene14 == true && player.startedGame == true && hasChallenge("ip", 18))
+        {
+            player.tab = "c"
+            layers.c.startCutscene14();
+
+            if (player.c.cutsceneIndex >= 4)
+            {
+                player.c.tavCutscene = true
+            }
+        } else if ((player.startedGame == true || player.c.cutscene14 == false) && player.tab == "c" && player.c.cutscene14 == false)
+        {
+            player.tab = "i"
+            player.subtabs["i"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            if (player.c.cutscene14 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene14 = false
+            player.c.tavCutscene = false
         }
 
         //Evo
@@ -459,6 +485,27 @@ startCutscene13() {
         "Just one more challenge completion. You will learn.",
     ]
 },
+startCutscene14() {
+    player.c.cutsceneText = [
+        "???: ...",
+        "???: You have completed all of my challenges.",
+        "???: Now it's time to awaken myself as a true celestial.",
+        "You: Oh boy...",
+        "Tav: I am Tav, the celestial of limits.",
+        "Tav: I control the limit, which is 1.79e308.",
+        "Tav: I am the reason why you can't get past that number.",
+        "You: It was you this whole time???",
+        "Tav: No, my creator designed me to be this way.",
+        "You: And who would that be?",
+        "Tav: I don't remember...",
+        "Tav: Please help me.",
+        "You: So this is the might of a celestial. Very underwhelming.",
+        "Tav: Well I haven't been ascending the ranks in celestialhood at all.",
+        "Tav: I am the lowest rank.",
+        "Tav: At the top is the king of all celestials. It's your job to defeat him.",
+        "You: Alright. But I must defeat you first.",
+    ]
+},
 evoCutscenes(pet) {
     if (player.c.cutsceneIndex == 0) player.c.cutsceneIndex = 0
     player.tab = "c"
@@ -522,6 +569,8 @@ evoCutscenes(pet) {
         ["raw-html", function () { return player.c.evoCutscene ? player.c.cutsceneText[player.c.cutsceneIndex] : ""}, { "color": "white", "font-size": "32px", "font-family": "Verdana, sans-serif" }],
         ["blank", "25px"],
         ["row", [["clickable", 12], ["clickable", 11]]],
+        ["blank", "25px"],
+        ["raw-html", function () { return player.c.tavCutscene ? "<div class=spinning-symbol>→</div>" : ""}, { "color": "white", "font-size": "400px", "font-family": "Verdana, sans-serif" }],
     ],
     layerShown() { return true }
 })

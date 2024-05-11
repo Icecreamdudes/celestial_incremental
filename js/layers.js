@@ -66,9 +66,12 @@ addLayer("i", {
         }
 
         //music control
-        if (player.universe == 1 && player.startedGame && options.musicToggle)
+        if (player.universe == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18)) )
         {
             playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
+        } else if (player.universe == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18)) && options.musicToggle)
+        {
+            playAndLoopAudio("music/challenge.mp3", options.musicVolume/10);
         } else
         {
             stopAudio();
@@ -113,6 +116,7 @@ addLayer("i", {
         if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
         if (inChallenge("ip", 18)) player.gain = player.gain.pow(0.4)
+        if (player.de.antidebuffIndex.eq(0)) player.gain = player.gain.mul(player.de.antidebuffEffect)
 
         if (inChallenge("ip", 18) && player.points.gt(1))
         {

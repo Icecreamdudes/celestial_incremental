@@ -146,7 +146,7 @@
         font-size: 350px;
         animation: spin 8s linear infinite;
         transition: transform 0.2s ease-in-out;
-        background: linear-gradient(45deg, red, orange);
+        background: linear-gradient(45deg, #008080, #b2d8d8);
         -webkit-background-clip: text;
         color: transparent;
       }

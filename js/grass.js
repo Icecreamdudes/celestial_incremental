@@ -132,6 +132,7 @@
         player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
         if (inChallenge("ip", 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(buyableEffect("h", 14))
+        if (player.de.antidebuffIndex.eq(2)) player.g.grassVal = player.g.grassVal.mul(player.de.antidebuffEffect)
 
         if (inChallenge("ip", 18) && player.g.grass.gt(1))
         {

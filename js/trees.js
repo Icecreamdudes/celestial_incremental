@@ -56,6 +56,7 @@
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("h", 13))
+        if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))

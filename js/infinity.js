@@ -1,4 +1,4 @@
-﻿var tree = [["ad", "ip"], ["ga"]]
+﻿var tree = [["ad", "ip"], ["ga", "ta"]]
 addLayer("in", {
     name: "Infinity Dimension", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -319,6 +319,9 @@ addLayer("in", {
             }
         }
         }
+
+        player.de.antidebuffPoints = new Decimal(0)
+        player.de.antidebuffIndex = new Decimal(6)
     },
     branches: ["branch"],
     clickables: {

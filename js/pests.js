@@ -31,7 +31,8 @@
         {
             if (inChallenge("ip", 12)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(1.4)
             if (inChallenge("ip", 18)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(2.6)
-            player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
+        player.pe.pestsPerSecond = player.pe.pestsPerSecond.div(player.de.antidebuffPointsEffect)
+        player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
         }
         
         player.pe.pestEffect = [

@@ -322,6 +322,12 @@ addLayer("in", {
 
         player.de.antidebuffPoints = new Decimal(0)
         player.de.antidebuffIndex = new Decimal(6)
+
+        //ninf
+        for (let i = 0; i < player.ta.dimensionPower.length; i++)
+        {
+            player.ta.dimensionPower[i] = new Decimal(0)
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -496,6 +502,7 @@ addLayer("bigc", {
         {
             completeChallenge("ip", 18)
         }
+
     }, 
     bars: {
     },

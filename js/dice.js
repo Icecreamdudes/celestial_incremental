@@ -157,7 +157,7 @@
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
 
         player.d.boosterDiceStatsPerSecond = buyableEffect("d", 21)
-        for (let i = 0; i < player.d.diceEffects.length; i++)
+        for (let i = 0; i < 11; i++)
         {
             player.d.diceEffects[i] = player.d.diceEffects[i].add(player.d.boosterDiceStatsPerSecond.mul(delta))
         }

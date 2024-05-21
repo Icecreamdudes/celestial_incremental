@@ -232,6 +232,9 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
                     ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed." }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ]
 
             },

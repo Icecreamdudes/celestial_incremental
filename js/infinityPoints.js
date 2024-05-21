@@ -238,6 +238,102 @@
             },
             style: { width: '275px', height: '150px', }
         },
+        12: {
+            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Negative Infinity Booster"
+            },
+            display() {
+                return "which are multiplying negative infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
+            },
+            buy() {
+                let base = new Decimal(1000)
+                let growth = 1.5
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        13: {
+            cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(1.1).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Booster"
+            },
+            display() {
+                return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
+            },
+            buy() {
+                let base = new Decimal(2500)
+                let growth = 1.75
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        14: {
+            cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(4000) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Booster"
+            },
+            display() {
+                return "which are multiplying all antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
+            },
+            buy() {
+                let base = new Decimal(4000)
+                let growth = 2
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
         11: {
@@ -321,6 +417,13 @@
             requirementDescription: "<h3>1500 Infinities",
             effectDescription() { return "Unlocks the point halter (in portal)." },
             done() { return player.in.infinities.gte(1500) },
+            unlocked() { return hasChallenge("ip", 14) },
+            style: { width: '800px', "min-height": '90px' },
+        },
+        24: {
+            requirementDescription: "<h3>10000 Infinities",
+            effectDescription() { return "Check back pet effects are always active." },
+            done() { return player.in.infinities.gte(10000) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
@@ -512,6 +615,7 @@
                         ["row", [["milestone", 21]]],
                         ["row", [["milestone", 22]]],
                         ["row", [["milestone", 23]]],
+                        ["row", [["milestone", 24]]],
                 ]
 
             },
@@ -532,7 +636,7 @@
                 content:
                 [
                         ["blank", "25px"],
-                        ["row", [["buyable", 11]]],
+                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
 
             },

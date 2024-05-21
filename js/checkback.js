@@ -227,7 +227,7 @@
             player.cb.petButtonUnlocks[0] = true 
         }
         
-        player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600)]
+        player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800)]
         for (let i = 0; i < player.cb.petButtonTimersMax.length; i++)
         {
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cb.commonPetEffects[4][0])
@@ -279,7 +279,7 @@
             player.cb.petButtonTimers[i] = player.cb.petButtonTimers[i].sub(onepersec.mul(delta))
         }
 
-        if (player.points.gte(1e100) && !inChallenge("ip", 13))
+        if ((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24) )
         {
         player.cb.commonPetEffects = [
             [player.cb.commonPetLevels[0].pow(3).add(1), player.cb.commonPetLevels[0].mul(0.02).add(1),],
@@ -334,7 +334,7 @@
             player.cb.uncommonPetLevels[6].mul(1.6).add(1).floor(),
         ]
 
-        if (player.points.gte(1e100) && !inChallenge("ip", 13))
+        if ((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24) )
         {
         player.cb.uncommonPetEffects = [
             [player.cb.uncommonPetLevels[0].pow(1.2).div(2).add(1), player.cb.uncommonPetLevels[0].pow(1.25).div(1.5).add(1), player.cb.uncommonPetLevels[0].pow(1.27).add(1),],
@@ -383,7 +383,7 @@
             player.cb.rarePetLevels[4].pow(1.25).add(1).floor(),
         ]
 
-        if (player.points.gte(1e100) && !inChallenge("ip", 13))
+        if ((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24))
         {
         player.cb.rarePetEffects = [
             [player.g.grass.pow(0.02).div(2).add(1).pow(player.cb.rarePetLevels[0].pow(0.4)), player.cb.level.mul(0.001).mul(player.cb.rarePetLevels[0]).add(1),], //Fertilizer based on Grass, XP based on Level

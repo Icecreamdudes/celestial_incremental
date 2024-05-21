@@ -145,7 +145,8 @@
             {
                 player.in.infinityPause = new Decimal(6)
             }
-            player.d.currentBoosterRoll = getRandomInt(player.d.diceEffects.length)
+            if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
+            if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
             player.d.boosterDiceCooldown = new Decimal(120)
 
 

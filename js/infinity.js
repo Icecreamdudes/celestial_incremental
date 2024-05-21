@@ -78,6 +78,7 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ta", 33))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -324,10 +325,6 @@ addLayer("in", {
         player.de.antidebuffIndex = new Decimal(6)
 
         //ninf
-        for (let i = 0; i < player.ta.dimensionPower.length; i++)
-        {
-            player.ta.dimensionPower[i] = new Decimal(0)
-        }
     },
     branches: ["branch"],
     clickables: {

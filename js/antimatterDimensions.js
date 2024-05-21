@@ -81,6 +81,8 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 24))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cb.commonPetEffects[5][0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ta.dimensionPowerEffects[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ip", 14))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 36))
         
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
         if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 295)))
@@ -103,7 +105,9 @@
         player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
         if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
-        player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i])
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i])
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
     }
         player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
         player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])

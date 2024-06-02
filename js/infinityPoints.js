@@ -204,6 +204,63 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
+
+        41:
+        {
+            title: "Upgrade (4, 1)",
+            unlocked() { return hasUpgrade("ta", 14) },
+            description: "Boosts negative infinity points baseed on infinity points.",
+            cost: new Decimal(20000),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.in.infinityPoints.log10().mul(0.65).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        42:
+        {
+            title: "Upgrade (4, 2)",
+            unlocked() { return hasUpgrade("ta", 14) },
+            description: "Boosts infinity points baseed on negative infinity points.",
+            cost: new Decimal(40000),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.ta.negativeInfinityPoints.log10().pow(1.2).mul(0.2).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        43:
+        {
+            title: "Upgrade (4, 3)",
+            unlocked() { return hasUpgrade("ta", 14) },
+            description: "Boosts antimatter dimensions based on negative infinity points.",
+            cost: new Decimal(80000),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.ta.negativeInfinityPoints.log10().pow(1.35).mul(2.5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
+        44:
+        {
+            title: "Upgrade (4, 3)",
+            unlocked() { return hasUpgrade("ta", 14) },
+            description: "Boosts dimension power based on infinity points.",
+            cost: new Decimal(160000),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.in.infinityPoints.log10().pow(1.25).mul(0.5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        }, 
     },
     buyables: {
         11: {
@@ -592,6 +649,7 @@
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                         ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
                         ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
+                        ["row", [["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]]],
                 ]
 
             },

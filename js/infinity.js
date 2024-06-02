@@ -79,6 +79,15 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ta", 33))
+        if (hasUpgrade("ip", 42)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("ip", 42))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 41))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 42))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 43))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 44))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 45))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 46))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 47))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 48))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -500,6 +509,21 @@ addLayer("bigc", {
             completeChallenge("ip", 18)
         }
 
+        if (hasUpgrade("ta", 17))
+        {
+            if (player.d.dicePoints.gt(player.ta.highestDicePoints))
+            {
+                player.ta.highestDicePoints = player.d.dicePoints
+            }
+            if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel))
+            {
+                player.ta.highestRocketFuel = player.rf.rocketFuel
+            }
+            if (player.h.hexPoints[0].gt(player.ta.highestHex1Points))
+            {
+                if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
+            }
+        }
     }, 
     bars: {
     },

@@ -50,7 +50,11 @@
         for (let i = 0; i < player.h.hex.sub(1); i++)
         {
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.h.hexPointsEffect[i+1])
-        }
+            if (hasUpgrade("ta", 18)) player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(upgradeEffect("ta", 18))
+        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 47))
+        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 48))
+        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 49))
+    }
 
         player.h.hexPointsToGet[0] = player.h.hex.pow(2).mul(player.h.hexPointsEffect[1])
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(player.d.diceEffects[14])

@@ -22,6 +22,9 @@
         cutscene12: true,
         cutscene13: true,
         cutscene14: true,
+        cutscene15: true,
+        cutscene16: true,
+        cutscene17: true,
         evoCutscene: false,
 
         //celestial
@@ -333,6 +336,63 @@
             player.c.cutscene14 = false
             player.c.tavCutscene = false
         }
+        
+        //Cutscene 15
+        if (player.c.cutscene15 == true && player.startedGame == true && player.ta.negativeInfinityPoints.gte(1))
+        {
+            player.tab = "c"
+            layers.c.startCutscene15();
+
+            player.c.tavCutscene = true
+        } else if ((player.startedGame == true || player.c.cutscene15 == false) && player.tab == "c" && player.c.cutscene15 == false)
+        {
+            player.tab = "i"
+            player.subtabs["i"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            if (player.c.cutscene15 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene15 = false
+            player.c.tavCutscene = false
+        }
+
+        //Cutscene 16
+        if (player.c.cutscene16 == true && player.startedGame == true && hasUpgrade("ip", 13))
+        {
+            player.tab = "c"
+            layers.c.startCutscene16();
+
+            player.c.tavCutscene = true
+        } else if ((player.startedGame == true || player.c.cutscene16 == false) && player.tab == "c" && player.c.cutscene16 == false)
+        {
+            player.tab = "i"
+            player.subtabs["i"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            if (player.c.cutscene16 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene16 = false
+            player.c.tavCutscene = false
+        }
+
+        //Cutscene 17
+        if (player.c.cutscene17 == true && player.startedGame == true && hasUpgrade("ta", 17))
+        {
+            player.tab = "c"
+            layers.c.startCutscene17();
+
+            player.c.tavCutscene = true
+        } else if ((player.startedGame == true || player.c.cutscene17 == false) && player.tab == "c" && player.c.cutscene17 == false)
+        {
+            player.tab = "i"
+            player.subtabs["i"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            if (player.c.cutscene17 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene17 = false
+            player.c.tavCutscene = false
+        }
 
         //Evo
         if (player.c.evoCutscene == true)
@@ -504,6 +564,41 @@ startCutscene14() {
         "Tav: I am the lowest rank.",
         "Tav: At the top is the king of all celestials. It's your job to defeat him.",
         "You: Alright. But I must defeat you first.",
+    ]
+},
+startCutscene15() {
+    player.c.cutsceneText = [
+        "You: So a negative infinity point, huh. Thats interesting.",
+        "Tav: This resource would help a lot... It is the only resource tied to me.",
+        "Tav: Since my power is so low, you could easily kill me if you got enough.",
+        "You: Can I know your origin?",
+        "Tav: I was created by another celestial. The celestial of gardens.",
+        "Tav: I was neglected. My only purpose was to serve as the barrier of infinity.",
+        "Tav: My job still stands today...",
+
+    ]
+},
+startCutscene16() {
+    player.c.cutsceneText = [
+        "Tav: The celestial of gardens. The one who cultivates grass, trees, and leaves.",
+        "Tav: You must be familiar with those resources.",
+        "You: Yes I am. I've been generating them.",
+        "Tav: There has been a recent pest infestation...",
+        "You: Oh. I remember them from the challenges.",
+        "Tav: That has been another celestials doing.",
+        "Tav: The celestials are at war right now.",
+        "Tav: The battles are endless. You must put a stop to it.",
+    ]
+},
+startCutscene17() {
+    player.c.cutsceneText = [
+        "Tav: The other celestials... Their power far exceeds mine.",
+        "You: How many celestials are there?",
+        "Tav: Well last time I checked, there were thousands. There could be a lot more now.",
+        "You: And I must defeat all of them... And I still don't know why!",
+        "Tav: Me neither, but I despise the celestials for what they have done.",
+        "Tav: Feels bad right. My existence is pointless.",
+        "You: Don't worry. I will free you.",
     ]
 },
 evoCutscenes(pet) {

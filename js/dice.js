@@ -102,6 +102,9 @@
         if (hasUpgrade("d", 15)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 15))
         if (hasUpgrade("d", 16)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 16))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("cb", 11))
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 41))
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
 
         if (player.d.autoRollCooldown.lt(0))
         {
@@ -822,9 +825,9 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "Challenge V Debuffs:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "^0.8 Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.8 Grasshopper Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.6 Code Experience Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.9 Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.85 Grasshopper Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.65 Code Experience Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "^0.65 Prestige Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
 

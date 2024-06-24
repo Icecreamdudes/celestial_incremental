@@ -64,9 +64,10 @@
         player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
         player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
         player.tab == "bigc" || player.c.cutscene5 && player.tab == "c"  || player.c.cutscene8 && player.tab == "c"  ? "#b87c34" : 
-        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.c.cutscene6 && player.tab == "c" || player.c.cutscene7 && player.tab == "c" ? "#001f18" : 
+        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.c.cutscene6 && player.tab == "c" || player.c.cutscene7 && player.tab == "c" || player.tab == "bi" ? "#001f18" : 
         player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
         player.tab == "revc" ? "#31aeb0" : 
+        player.tab == "tad" ? "#b2d8d8" : 
         "#161616");
 
         //Cutscene 1
@@ -391,6 +392,25 @@
         {
             if (player.c.cutscene17 == true) player.c.cutsceneIndex = 0
             player.c.cutscene17 = false
+            player.c.tavCutscene = false
+        }
+
+        //Cutscene 18
+        if (player.c.cutscene18 == true && player.startedGame == true && hasUpgrade("ta", 21))
+        {
+            player.tab = "c"
+            layers.c.startCutscene18();
+
+            player.c.tavCutscene = true
+        } else if ((player.startedGame == true || player.c.cutscene18 == false) && player.tab == "c" && player.c.cutscene18 == false)
+        {
+            player.tab = "i"
+            player.subtabs["i"]['stuff'] = 'Features'
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            if (player.c.cutscene18 == true) player.c.cutsceneIndex = 0
+            player.c.cutscene18 = false
             player.c.tavCutscene = false
         }
 

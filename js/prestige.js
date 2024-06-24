@@ -50,6 +50,7 @@
         if (inChallenge("ip", 15)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.65)
         if (inChallenge("ip", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.5)
         if (player.de.antidebuffIndex.eq(1)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.de.antidebuffEffect)
+        if (inChallenge("tad", 11)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.3)
 
         player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
         if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))

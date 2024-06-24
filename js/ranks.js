@@ -366,7 +366,7 @@
                         ["blank", "25px"],
                         ["raw-html", function () { return player.r.rank.lte(20) ? "You are at rank <h3>" + formatWhole(player.r.rank) + ". (+" + formatWhole(player.r.ranksToGet) + ")"  : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return player.r.rank.gt(20) ? "You are at rank <h3>" + formatWhole(player.r.rank) +  ". (+" + formatWhole(player.r.ranksToGet) + "). \n<h6>(softcapped)"  : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Your rank boosts points by /" + format(player.r.rankEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Your rank boosts points by x" + format(player.r.rankEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["row", [["clickable", 11]]],
                         ["blank", "25px"],
                         ["raw-html", function () { return "You are at tier <h3>" + formatWhole(player.r.tier) + ". (+" + formatWhole(player.r.tiersToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

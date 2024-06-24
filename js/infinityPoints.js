@@ -298,7 +298,7 @@
         12: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Negative Infinity Booster"
@@ -330,7 +330,7 @@
         13: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(1.1).add(1)},
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Booster"
@@ -362,7 +362,7 @@
         14: {
             cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(4000) },
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Booster"
@@ -583,7 +583,7 @@
         },
         16: {
             name: "Challenge VI",
-            challengeDescription() { return "<h4>You are stuck in rocket fuel, and point gain is raised to the ^0.02." },
+            challengeDescription() { return "<h4>You are stuck in rocket fuel, and point gain is raised to the ^0.03." },
             goalDescription() { return "1.79e308 prestige points" },
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.p.prestigePoints.gte(1.79e308) },

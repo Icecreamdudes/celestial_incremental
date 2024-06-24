@@ -153,7 +153,7 @@
             player.d.boosterDiceCooldown = new Decimal(120)
 
 
-            player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
+            if (inChallenge("ip", 15)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
         }
 
         player.d.challengeDicePointsToGet = player.d.dicePoints.pow(0.2).div(3)

@@ -279,7 +279,7 @@
             player.cb.petButtonTimers[i] = player.cb.petButtonTimers[i].sub(onepersec.mul(delta))
         }
 
-        if ((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24) )
+        if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) )
         {
         player.cb.commonPetEffects = [
             [player.cb.commonPetLevels[0].pow(3).add(1), player.cb.commonPetLevels[0].mul(0.02).add(1),],
@@ -334,7 +334,7 @@
             player.cb.uncommonPetLevels[6].mul(1.6).add(1).floor(),
         ]
 
-        if ((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24) )
+        if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
         {
         player.cb.uncommonPetEffects = [
             [player.cb.uncommonPetLevels[0].pow(1.2).div(2).add(1), player.cb.uncommonPetLevels[0].pow(1.25).div(1.5).add(1), player.cb.uncommonPetLevels[0].pow(1.27).add(1),],
@@ -383,7 +383,7 @@
             player.cb.rarePetLevels[4].pow(1.25).add(1).floor(),
         ]
 
-        if ((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24))
+        if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
         {
         player.cb.rarePetEffects = [
             [player.g.grass.pow(0.02).div(2).add(1).pow(player.cb.rarePetLevels[0].pow(0.4)), player.cb.level.mul(0.001).mul(player.cb.rarePetLevels[0]).add(1),], //Fertilizer based on Grass, XP based on Level
@@ -1609,7 +1609,7 @@
                 } else
                 {
     
-                let max = Decimal.affordGeometricSeries(cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.cb.level = player.cb.level.sub(cost)
 
@@ -1780,8 +1780,8 @@
                 unlocked() { return player.cb.level.gte(25) || player.cb.XPBoostUnlock },
                 content:
                 [
-        ["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.rarePetDisplay[player.cb.rarePetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.rarePetDisplay[player.cb.rarePetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27], ["clickable", 125]]],
                     ["blank", "25px"],
@@ -1804,5 +1804,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) }
 })

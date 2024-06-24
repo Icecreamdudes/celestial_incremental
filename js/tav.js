@@ -51,7 +51,7 @@
       },
     
     tooltip: "Tav, the Celestial of Limits",
-    color: "#333c81",
+    color: "#b2d8d8",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -249,6 +249,11 @@
         
         player.ad.dimBoostAmount = new Decimal(0)
         player.ad.galaxyAmount = new Decimal(0)
+
+        for (let i = 0; i < player.ta.dimensionPower.length; i++)
+        {
+            player.ta.dimensionPower[i] = new Decimal(0)
+        }
     },
     branches: ["ad", "ip"],
     clickables: {
@@ -324,7 +329,15 @@
             },
             style: { width: '100px', "min-height": '100px' },
         },
-
+        14: {
+            title() { return "<h2>ENTER" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tab = "tad"
+            },
+            style: { width: '200px', "min-height": '100px',},
+        },
     },
     bars: {
     },
@@ -423,6 +436,16 @@
             unlocked() { return hasUpgrade("ta", 18) },
             description: "Unlock 3 more OTF synergizer buyables.",
             cost: new Decimal(50000),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+        },
+        21:
+        {
+            title: "Negative Upgrade X",
+            unlocked() { return hasUpgrade("ta", 19) },
+            description: "Unlock TAV'S DOMAIN and broken infinities.",
+            cost: new Decimal(1000000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -1624,7 +1647,7 @@
                 [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 33], ["buyable", 34], ["buyable", 35]]],
                     ["row", [["buyable", 36], ["buyable", 37]]],
@@ -1649,6 +1672,17 @@
         ["row", [["buyable", 44], ["buyable", 45], ["buyable", 46], ["buyable", 52]]],
         ["row", [["buyable", 47], ["buyable", 48], ["buyable", 49], ["buyable", 53]]],
         ["blank", "25px"],
+    ]
+
+            },
+            "TAVS DOMAIN": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasUpgrade("ta", 21) },
+                content:
+                [
+        ["blank", "25px"],
+        ["row", [["clickable", 14]]],
+
     ]
 
             },
@@ -1768,11 +1802,6 @@ addLayer("revc", {
     reverseCrunch(){
         player.ta.reachedNegativeInfinity = false
         player.ta.negativeInfinityPause = new Decimal(5)
-
-        for (let i = 0; i < player.ta.dimensionPower.length; i++)
-        {
-            player.ta.dimensionPower[i] = new Decimal(0)
-        }
     }, 
     bars: {
     },

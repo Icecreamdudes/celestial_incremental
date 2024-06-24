@@ -57,6 +57,7 @@
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("h", 13))
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
+        if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
@@ -75,6 +76,7 @@
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.pe.pestEffect[3])
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("h", 13))
+        if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
 
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
 

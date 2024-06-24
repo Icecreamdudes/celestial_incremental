@@ -1,4 +1,4 @@
-﻿var tree = [["ad", "ip"], ["ga", "ta"]]
+﻿var tree = [["ad", "ip"], ["ga", "ta", "bi"]]
 addLayer("in", {
     name: "Infinity Dimension", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -94,6 +94,9 @@ addLayer("in", {
         {
             layers.in.bigCrunch();
         }
+
+        player.in.infinitiesToGet = new Decimal(1)
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("bi", 11))
     },
     bigCrunch()
     {

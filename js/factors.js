@@ -1238,7 +1238,7 @@
         },
         41: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(20) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[0] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1270,7 +1270,7 @@
         },
         42: {
             cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(30) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[1] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1302,7 +1302,7 @@
         },
         43: {
             cost(x) { return new Decimal(1.24).pow(x || getBuyableAmount(this.layer, this.id)).mul(45) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[2] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1334,7 +1334,7 @@
         },
         44: {
             cost(x) { return new Decimal(1.26).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[3] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1366,7 +1366,7 @@
         },
         45: {
             cost(x) { return new Decimal(1.28).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[4] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1398,7 +1398,7 @@
         },
         46: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(550) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[5] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1430,7 +1430,7 @@
         },
         47: {
             cost(x) { return new Decimal(1.32).pow(x || getBuyableAmount(this.layer, this.id)).mul(1200) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[6] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1462,7 +1462,7 @@
         },
         48: {
             cost(x) { return new Decimal(1.34).pow(x || getBuyableAmount(this.layer, this.id)).mul(2600) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return player.f.infinityFactorUnlocks[7] },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1494,7 +1494,7 @@
         },
         51: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1502,7 +1502,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(10000)
@@ -1526,7 +1526,7 @@
         },
         52: {
             cost(x) { return new Decimal(1.13).pow(x || getBuyableAmount(this.layer, this.id)).mul(18000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1534,7 +1534,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(18000)
@@ -1558,7 +1558,7 @@
         },
         53: {
             cost(x) { return new Decimal(1.16).pow(x || getBuyableAmount(this.layer, this.id)).mul(32000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1566,7 +1566,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(32000)
@@ -1590,7 +1590,7 @@
         },
         54: {
             cost(x) { return new Decimal(1.19).pow(x || getBuyableAmount(this.layer, this.id)).mul(60000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1598,7 +1598,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(60000)
@@ -1622,7 +1622,7 @@
         },
         55: {
             cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(110000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1630,7 +1630,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(110000)
@@ -1654,7 +1654,7 @@
         },
         56: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(270000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1662,7 +1662,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(270000)
@@ -1686,7 +1686,7 @@
         },
         57: {
             cost(x) { return new Decimal(1.28).pow(x || getBuyableAmount(this.layer, this.id)).mul(500000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1694,7 +1694,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(500000)
@@ -1718,7 +1718,7 @@
         },
         58: {
             cost(x) { return new Decimal(1.31).pow(x || getBuyableAmount(this.layer, this.id)).mul(1200000) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -1726,7 +1726,7 @@
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy() {
                 let base = new Decimal(1200000)

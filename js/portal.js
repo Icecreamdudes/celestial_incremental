@@ -35,6 +35,23 @@ addLayer("po", {
 
         if (player.po.pointHaltInput.gte(1)) player.po.pointHalt = player.po.pointHaltInput
         if (player.po.pointHaltInput.lt(1)) player.po.pointHalt = new Decimal(1)
+
+        player.po.featureSlotsMax = new Decimal(1)
+        if (inChallenge("tad", 11) && hasUpgrade("de", 14)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+
+        player.po.featureSlots = player.po.featureSlotsMax
+        if (player.po.dice)
+        {
+            player.po.featureSlots = player.po.featureSlots.sub(1)
+        }
+        if (player.po.rocketFuel)
+        {
+            player.po.featureSlots = player.po.featureSlots.sub(1)
+        }
+        if (player.po.hex)
+        {
+            player.po.featureSlots = player.po.featureSlots.sub(1)
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -80,10 +97,9 @@ addLayer("po", {
             display() {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gt(0) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
             onClick() { 
-                player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.dice = true
             },
             style: {
@@ -99,10 +115,9 @@ addLayer("po", {
             display() {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) && player.points.gte(1e170)&& (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gt(0) && (player.points.gte(1e170) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
             onClick() { 
-                player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.rocketFuel = true
             },
             style() {
@@ -144,7 +159,6 @@ addLayer("po", {
             canClick() { return player.po.featureSlots.gt(0) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
             unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))  && (!inChallenge("ip", 16) && hasChallenge("ip", 13))     },
             onClick() { 
-                player.po.featureSlots = player.po.featureSlots.sub(1)
                 player.po.hex = true
             },
             style: {

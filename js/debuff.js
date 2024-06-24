@@ -14,6 +14,13 @@
         antidebuffPointsEffect: new Decimal(1),
         antidebuffEffect: new Decimal(1),
         antidebuffText: "",
+
+        tavPoints: new Decimal(0),
+        tavPointsEffect: new Decimal(0),
+        tavPointsToGet: new Decimal(0),
+
+        tavEssence: new Decimal(0),
+        tavEssencePerSecond: new Decimal(0),
     }
     },
     automate() {
@@ -42,6 +49,8 @@
         player.de.antidebuffPointsEffect = player.de.antidebuffPoints.pow(0.54321).mul(10).add(1)
 
         player.de.antidebuffEffect = layers.de.getAntidebuffEffect(player.de.antidebuffIndex)
+
+        if (hasUpgrade("de", 17)) player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet.mul(delta))
 
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(0))
         {
@@ -90,6 +99,17 @@
         {
                 player.de.antidebuffText = "Your chosen effect is boosting nothing."
         }
+
+        player.de.tavPointsToGet = player.points.pow(0.075).add(1)
+        player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("de", 14))
+
+        player.de.tavEssencePerSecond = player.de.tavPoints.pow(1.5).add(1)
+        player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("de", 13))
+        if (hasUpgrade("de", 12)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 12))
+
+        player.de.tavEssence = player.de.tavEssence.add(player.de.tavEssencePerSecond.mul(delta))
+
+        player.de.tavPointsEffect = player.de.tavPoints.pow(2).add(1)
     },
     getAntidebuffEffect(index)
     {
@@ -377,12 +397,361 @@
             },
             style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
         },
+        19: {
+            title() { return "<h3>Reset for Tav Points, but do an equivalent Tav Domain reset. <br>(Req: 1e9 celestial points)" },
+            canClick() { return player.de.tavPointsToGet.gte(1) && player.points.gte(1e9) },
+            unlocked() { return true },
+            onClick() {
+                player.tad.domainResetPause = new Decimal(5)
+                player.in.infinityPause = new Decimal(16)
+                player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet)
+            },
+            style: { width: '400px', "min-height": '100px' },
+        },
     },
     bars: {
     },
     upgrades: {
+        11:
+        {
+            title: "Tav Essence Upgrade I",
+            unlocked() { return true },
+            description() { return "Tav essence boosts grasshoppers." },
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+            effect() {
+                return player.de.tavEssence.pow(0.15).div(3).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        12:
+        {
+            title: "Tav Essence Upgrade II",
+            unlocked() { return true },
+            description() { return "Points boost tav essence." },
+            cost: new Decimal(1e11),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+            effect() {
+                return player.points.plus(1).log10().pow(1.1).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        13:
+        {
+            title: "Tav Essence Upgrade III",
+            unlocked() { return true },
+            description() { return "Re-unlock check back early, cuz yeah." },
+            cost: new Decimal(1e12),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+        },
+        14:
+        {
+            title: "Tav Essence Upgrade IV",
+            unlocked() { return true },
+            description() { return "Gain an OTF slot, but only while in Tav's domain." },
+            cost: new Decimal(1e14),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+        },
+        15:
+        {
+            title: "Tav Essence Upgrade V",
+            unlocked() { return true },
+            description() { return "Check back boosts point gain." },
+            cost: new Decimal(1e15),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+            effect() {
+                return player.cb.levelEffect.pow(0.35).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        16:
+        {
+            title: "Tav Essence Upgrade VI",
+            unlocked() { return true },
+            description() { return "Re-unlock antidebuff points." },
+            cost: new Decimal(1e17),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+        },
+        17:
+        {
+            title: "Tav Essence Upgrade VII",
+            unlocked() { return true },
+            description() { return "Gain 100% of antidebuff points per second." },
+            cost: new Decimal(1e24),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+        },
     },
     buyables: {
+        11: {
+            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.02).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Point Limit Breaker"
+            },
+            display() {
+                return "which are boosting point gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(50)
+                let growth = 1.5
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        12: {
+            cost(x) { return new Decimal(1.675).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(2.5).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Antimatter Dimension Limit Breaker"
+            },
+            display() {
+                return "which are boosting all antimatter dimension gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(200)
+                let growth = 1.675
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        13: {
+            cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(500) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.5).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tav Essence Limit Breaker"
+            },
+            display() {
+                return "which are boosting tav essence gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(500)
+                let growth = 1.75
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        14: {
+            cost(x) { return new Decimal(1.875).pow(x || getBuyableAmount(this.layer, this.id)).mul(900) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.7).mul(0.35).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tav Point Limit Breaker"
+            },
+            display() {
+                return "which are boosting tav point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(900)
+                let growth = 1.875
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        15: {
+            cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e6) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.0175).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Limit Breaker"
+            },
+            display() {
+                return "which are boosting grass gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(1e6)
+                let growth = 1.6
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        16: {
+            cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e7) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.4).mul(0.015).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grasshop Limit Breaker"
+            },
+            display() {
+                return "which are boosting grasshop gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(1e7)
+                let growth = 1.7
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        17: {
+            cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e8) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.0136).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Code Experience Limit Breaker"
+            },
+            display() {
+                return "which are boosting code experience gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(1e8)
+                let growth = 1.8
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        18: {
+            cost(x) { return new Decimal(1.9).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e14) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.3).mul(0.035).add(1)},
+            unlocked() { return true },
+            canAfford() { return player.de.tavEssence.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Antimatter Effect Limit Breaker"
+            },
+            display() {
+                return "which are boosting antimatter effect and gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Tav Essence"
+            },
+            buy() {
+                let base = new Decimal(1e14)
+                let growth = 1.9
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.de.tavEssence = player.de.tavEssence.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
 
@@ -409,25 +778,79 @@
                     ["raw-html", function () { return "-40% of grass per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "-30% of trees and mods per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "-20% of code experience per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-    ]
+             ]
+
+            },
+            "Debuffs": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return inChallenge("tad", 11) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "^0.3 to prestige point gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.35 to grasshopper gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.4 to code experience gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.4 to grass gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.45 to celestial point gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.5 to tree gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.5 to leaf gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "^0.55 to all antimatter dimensions." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+             ]
+
+            },
+            "Upgrades": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return inChallenge("tad", 11) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+             ]
 
             },
             "Antidebuff": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return inChallenge("ip", 18) },
+                unlocked() { return inChallenge("ip", 18) || hasUpgrade("de", 16)},
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points, which divide pest gain by /" + format(player.de.antidebuffPointsEffect) + "." }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !inChallenge("tad", 11) ? "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points, which divide pest gain by /" + format(player.de.antidebuffPointsEffect) + "." : "" }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return inChallenge("tad", 11) ? "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points, <s>which divide pest gain by /" + format(player.de.antidebuffPointsEffect) + "." : "" }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.de.antidebuffPointsToGet) + "</h3> antidebuff points on reset." }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.de.antidebuffText }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "When an effect is activated, all other resources are depleted by 95% per second." }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !inChallenge("tad", 11) ? "When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return inChallenge("tad", 11) ? "<s>When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
         ]
+
+            },
+            "Tav's Compensation": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return inChallenge("tad", 11) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavPoints) + "</h3> tav points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "which boost point gain by x<h3>" + format(player.de.tavPointsEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + format(player.de.tavPointsToGet) + "</h3> tav points on reset (based on points)." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 19]]],
+                    ["raw-html", function () { return "(These effects are only active while in Tav's Domain)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+    ]
 
             },
         },
@@ -439,5 +862,5 @@
          ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && (inChallenge("ip", 18)) }
+    layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) }
 })

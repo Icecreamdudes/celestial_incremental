@@ -57,6 +57,7 @@
         let onepersec = new Decimal(1)
 
         player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
+        if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.mul(buyableEffect("de", 18))
 
         player.ad.dimensionText = [
             "1st dimension (" + format(player.ad.dimensionMult[0]) + "x): " + format(player.ad.dimensionAmounts[0]) + " (+" + format(player.ad.dimensionsPerSecond[0]) + "/s)",
@@ -83,7 +84,11 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ta.dimensionPowerEffects[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ip", 14))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 36))
-        
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("bi", 13))
+        if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.55)
+        if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("de", 12))
+        if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("de", 18))
+
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
         if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 295)))
 
@@ -111,6 +116,9 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("bi", 13))
+            if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.55)
+            if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("de", 12))
         }
         player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
         player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])

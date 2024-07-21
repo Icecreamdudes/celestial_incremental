@@ -135,6 +135,7 @@
         if (player.de.antidebuffIndex.eq(2)) player.g.grassVal = player.g.grassVal.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(0.4)
         if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect("de", 15))
+        player.g.grassVal = player.g.grassVal.mul(buyableEffect("gh", 33))
 
         if (inChallenge("ip", 18) && player.g.grass.gt(1))
         {

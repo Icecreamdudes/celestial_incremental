@@ -63,7 +63,7 @@
     }
     },
     automate() {
-        if (hasUpgrade("d", 11))
+        if (hasUpgrade("d", 11) || hasUpgrade("tad", 12))
         {
             buyBuyable("d", 11)
             buyBuyable("d", 12)
@@ -513,7 +513,7 @@
             buy() {
                 let base = new Decimal(250)
                 let growth = 2
-                if (player.buyMax == false && !hasUpgrade("d", 11))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -545,17 +545,17 @@
             buy() {
                 let base = new Decimal(500)
                 let growth = 4
-                if (player.buyMax == false && !hasUpgrade("d", 11))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(cost)
+                if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -577,17 +577,17 @@
             buy() {
                 let base = new Decimal(1000)
                 let growth = 2.5
-                if (player.buyMax == false && !hasUpgrade("d", 11))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(cost)
+                if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -609,17 +609,17 @@
             buy() {
                 let base = new Decimal(6000)
                 let growth = 2
-                if (player.buyMax == false && !hasUpgrade("d", 11))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(cost)
+                if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

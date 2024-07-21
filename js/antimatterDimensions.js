@@ -88,6 +88,12 @@
         if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.55)
         if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("de", 12))
         if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("de", 18))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("tad", 13))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.om.hexMasteryPointsEffect)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("om", 15))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 37))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.id.infinityPowerEffect)
 
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
         if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 295)))
@@ -108,10 +114,10 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 1))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ad.dimBoostEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 23))
-        if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
-        player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
-        if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
-        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
+            if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
+            if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
+            if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i])
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
@@ -119,6 +125,10 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("bi", 13))
             if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.55)
             if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("de", 12))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("tad", 13))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.om.hexMasteryPointsEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 37))
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)
         }
         player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
         player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])
@@ -249,6 +259,34 @@
                 player.ad.galaxyPause = new Decimal(6)
             },
             style: { width: '300px', "min-height": '75px' },
+        },
+        13: {
+            title() { return "<h1>REVERSE BREAK INFINITY" },
+            canClick() { return true },
+            unlocked() { return !player.ta.unlockedReverseBreak },
+            onClick() {
+                player.ta.unlockedReverseBreak = true
+            },
+            style: { width: '400px', "min-height": '160px' },
+        },
+        14: {
+            title() { return "<h1>REVERSE FIX INFINITY" },
+            canClick() { return true },
+            unlocked() { return player.ta.unlockedReverseBreak },
+            onClick() {
+                player.ta.unlockedReverseBreak = false
+            },
+            style: { width: '400px', "min-height": '160px' },
+        },
+        15: {
+            title() { return "<h2>REVERSE CRUNCH" },
+            canClick() { return player.ad.antimatter.gte('1e308') },
+            unlocked() { return true },
+            onClick() {
+                layers.revc.reverseCrunch()
+                player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
+            },
+            style: { width: '300px', "min-height": '120px' },
         },
     },
     dimBoostReset()
@@ -438,14 +476,14 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -465,7 +503,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[0]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[0] = player.ad.dimensionsPurchased[0].add(1)
                     player.ad.dimensionAmounts[0] = player.ad.dimensionAmounts[0].add(1)
                 } else
@@ -473,7 +511,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[0])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[0])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[0] = player.ad.dimensionsPurchased[0].add(max)
                 player.ad.dimensionAmounts[0] = player.ad.dimensionAmounts[0].add(max)
@@ -494,7 +532,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[1]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[1] = player.ad.dimensionsPurchased[1].add(1)
                     player.ad.dimensionAmounts[1] = player.ad.dimensionAmounts[1].add(1)
                 } else
@@ -502,7 +540,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[1])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[1])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[1] = player.ad.dimensionsPurchased[1].add(max)
                 player.ad.dimensionAmounts[1] = player.ad.dimensionAmounts[1].add(max)
@@ -523,7 +561,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[2]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[2] = player.ad.dimensionsPurchased[2].add(1)
                     player.ad.dimensionAmounts[2] = player.ad.dimensionAmounts[2].add(1)
                 } else
@@ -531,7 +569,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[2])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[2])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[2] = player.ad.dimensionsPurchased[2].add(max)
                 player.ad.dimensionAmounts[2] = player.ad.dimensionAmounts[2].add(max)
@@ -552,7 +590,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[3]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105))  player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[3] = player.ad.dimensionsPurchased[3].add(1)
                     player.ad.dimensionAmounts[3] = player.ad.dimensionAmounts[3].add(1)
                 } else
@@ -560,7 +598,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[3])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[3])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[3] = player.ad.dimensionsPurchased[3].add(max)
                 player.ad.dimensionAmounts[3] = player.ad.dimensionAmounts[3].add(max)
@@ -581,7 +619,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[4]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[4] = player.ad.dimensionsPurchased[4].add(1)
                     player.ad.dimensionAmounts[4] = player.ad.dimensionAmounts[4].add(1)
                 } else
@@ -589,7 +627,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[4])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[4])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[4] = player.ad.dimensionsPurchased[4].add(max)
                 player.ad.dimensionAmounts[4] = player.ad.dimensionAmounts[4].add(max)
@@ -610,7 +648,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[5]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[5] = player.ad.dimensionsPurchased[5].add(1)
                     player.ad.dimensionAmounts[5] = player.ad.dimensionAmounts[5].add(1)
                 } else
@@ -618,7 +656,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[5])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[5])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[5] = player.ad.dimensionsPurchased[5].add(max)
                 player.ad.dimensionAmounts[5] = player.ad.dimensionAmounts[5].add(max)
@@ -639,7 +677,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[6]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[6] = player.ad.dimensionsPurchased[6].add(1)
                     player.ad.dimensionAmounts[6] = player.ad.dimensionAmounts[6].add(1)
                 } else
@@ -647,7 +685,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[6])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[6])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[6] = player.ad.dimensionsPurchased[6].add(max)
                 player.ad.dimensionAmounts[6] = player.ad.dimensionAmounts[6].add(max)
@@ -668,7 +706,7 @@
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[7]).mul(base)
-                    player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
+                    if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
                     player.ad.dimensionsPurchased[7] = player.ad.dimensionsPurchased[7].add(1)
                     player.ad.dimensionAmounts[7] = player.ad.dimensionAmounts[7].add(1)
                 } else
@@ -676,7 +714,7 @@
     
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[7])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[7])
-                player.ad.antimatter = player.ad.antimatter.sub(cost)
+                if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
 
                 player.ad.dimensionsPurchased[7] = player.ad.dimensionsPurchased[7].add(max)
                 player.ad.dimensionAmounts[7] = player.ad.dimensionAmounts[7].add(max)
@@ -728,6 +766,19 @@
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "Progress gets halted at 1e300 antimatter." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return !player.ad.extraDimsGalaxiesLocked ?  "Progress gets softcapped at 1e300 antimatter." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
     ]
+
+            },
+            "Reverse Break": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return player.cb.evolvedLevels[3].gte(1) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 13], ["clickable", 14]]],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 15]]],
+         ["raw-html", function () { return "(+" + format(player.ta.negativeInfinityPointsToGet) + " NIP)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ]
 
             },
         },

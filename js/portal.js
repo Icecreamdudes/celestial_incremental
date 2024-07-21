@@ -12,6 +12,7 @@ addLayer("po", {
         dice: false,
         rocketFuel: false,
         hex: false,
+        breakInfinity: false,
 
         keepOTFS: false,
 
@@ -50,6 +51,28 @@ addLayer("po", {
         }
         if (player.po.hex)
         {
+            player.po.featureSlots = player.po.featureSlots.sub(1)
+        }
+        if (player.po.breakInfinity)
+        {
+            player.in.breakInfinity = true
+            player.po.featureSlots = player.po.featureSlots.sub(1)
+        } else
+        {
+            player.in.breakInfinity = false
+        }
+
+        //IF ADDING NEW OTFS - REMEMBER TO EXIT THEM AFTER LEAVING TAVS DOMAIN
+
+        if (player.subtabs["po"]['stuff'] == 'LORE' && player.tab != "lo")
+        {
+            player.tab = "lo"
+            player.subtabs["po"]['stuff'] = 'Portals'
+        }
+
+        if (inChallenge("tad", 11) && player.po.breakInfinity)
+        {
+            player.po.breakInfinity = false
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
     },
@@ -169,6 +192,25 @@ addLayer("po", {
                 "color": "white",
             },
         },
+        14: {
+            title() { return "<h1>BREAK INFINITY" },
+            display() {
+                return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated<br>Can't activate in Tav's domain";
+            },
+            canClick() { return player.po.featureSlots.gt(0) && player.in.unlockedBreak && !inChallenge("tad", 11)},
+            unlocked() { return player.in.unlockedBreak },
+            onClick() { 
+                player.po.breakInfinity = true
+            },
+            style: {
+                width: '200px',
+                "min-height": '200px',
+                "border-color": "white",
+                "background-color": "#7c5423",
+                "background-origin": "border-box",
+                "color": "white",
+            },
+        },
     },
     bars: {
         infbar: {
@@ -211,7 +253,7 @@ addLayer("po", {
                         ["blank", "25px"],
                         ["row", [["clickable", 2], ["clickable", 3]]],
                         ["blank", "25px"],
-                        ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13]]],
+                        ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]]],
                 ]
 
             },
@@ -249,6 +291,15 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                ]
+
+            },
+            "LORE": {
+                buttonStyle() { return { 'color': 'black', "background-color": "white", } },
+                unlocked() { return hasMilestone("ip", 23) },
+                content:
+                [
+                        ["blank", "25px"],
                 ]
 
             },

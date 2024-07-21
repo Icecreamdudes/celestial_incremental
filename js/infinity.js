@@ -1,4 +1,4 @@
-﻿var tree = [["ad", "ip"], ["ga", "ta", "bi"]]
+﻿var tree = [["ad", "ip", "id"], ["ga", "ta", "bi", "om"]]
 addLayer("in", {
     name: "Infinity Dimension", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -9,6 +9,7 @@ addLayer("in", {
         unlockedInfinity: false,
         reachedInfinity: false,
         unlockedBreak: false,
+        breakInfinity: false,
 
         infinityPoints: new Decimal(0),
         infinityPointsToGet: new Decimal(0),
@@ -59,19 +60,46 @@ addLayer("in", {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity && !inChallenge("ip", 11) && !player.in.unlockedBreak)
+        if (player.in.reachedInfinity && !inChallenge("ip", 11))
         {
-            if (!player.bigc.skip) 
+            if (!player.in.breakInfinity)
             {
-                player.tab = "bigc"
-            } else if (hasMilestone("ip", 21))
-            {
-                layers.bigc.crunch()
-
+                if (inChallenge("tad", 11))
+                {
+                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
+                    {
+                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
+                    {
+                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
+                    {
+                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                    }
+                }
+                if (hasUpgrade("bi", 14))
+                {
+                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
+                if (!player.bigc.skip) 
+                {
+                    player.tab = "bigc"
+                } else if (hasMilestone("ip", 21))
+                {
+                    layers.bigc.crunch()
+                }
             }
         }
 
-        player.in.infinityPointsToGet = new Decimal(1)
+        if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
+        if (player.in.breakInfinity) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 21))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 22))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
@@ -88,6 +116,10 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 46))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 47))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 48))
+        if (hasUpgrade("bi", 101)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 101))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.om.diceMasteryPointsEffect)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("tad", 21))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("gh", 38))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -97,6 +129,9 @@ addLayer("in", {
 
         player.in.infinitiesToGet = new Decimal(1)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("bi", 11))
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("tad", 11))
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
     },
     bigCrunch()
     {
@@ -286,6 +321,7 @@ addLayer("in", {
             player.po.dice = false
             player.po.rocketFuel = false
             player.po.hex = false
+            player.po.breakInfinity = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
         
@@ -335,8 +371,6 @@ addLayer("in", {
 
         player.de.antidebuffPoints = new Decimal(0)
         player.de.antidebuffIndex = new Decimal(6)
-
-        //ninf
     },
     branches: ["branch"],
     clickables: {
@@ -446,8 +480,7 @@ addLayer("bigc", {
         let onepersec = new Decimal(1)
 
         if (player.tab == "bigc" && !player.bigc.spawnedWisps)
-        {
-            createWisps('black', 50, 3);
+        {     
             player.bigc.spawnedWisps = true
         } else if (player.tab != "bigc")
         {
@@ -479,6 +512,10 @@ addLayer("bigc", {
         if (player.po.rocketFuel)
         {
             player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
+        }
+        if (player.po.hex)
+        {
+            player.ip.hexRuns = player.ip.hexRuns.add(1)
         }
         player.in.infinityPause = new Decimal(5)
         player.in.reachedInfinity = false

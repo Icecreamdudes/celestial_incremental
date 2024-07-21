@@ -12,9 +12,9 @@
         hexToGet: new Decimal(1),
 
         hexResetIndex: new Decimal(0),
-        hexPoints: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        hexPointsEffect: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-        hexPointsToGet: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        hexPoints: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        hexPointsEffect: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        hexPointsToGet: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
 
         automationTier: new Decimal(0),
         automationTierReq: new Decimal(1000),
@@ -22,6 +22,17 @@
     }
     },
     automate() {
+        if (hasUpgrade("tad", 11))
+        {
+            buyBuyable("h", 11)
+            buyBuyable("h", 12)
+            buyBuyable("h", 13)
+            buyBuyable("h", 14)
+            buyBuyable("h", 15)
+            buyBuyable("h", 16)
+            buyBuyable("h", 17)
+            buyBuyable("h", 18)
+        }
     },
     nodeStyle() {
         return {
@@ -39,13 +50,15 @@
         }
         player.h.hexPause = player.h.hexPause.sub(1)
 
-        player.h.hexReq = Decimal.mul(1e70, Decimal.pow(1e20, player.h.hex))
+        if (player.h.hex.lt(20)) player.h.hexReq = Decimal.mul(1e70, Decimal.pow(1e20, player.h.hex))
+        if (player.h.hex.gte(20)) player.h.hexReq = Decimal.mul(Decimal.mul(1e70, Decimal.pow(1e20, player.h.hex)), Decimal.pow(1e10, player.h.hex.pow(2)))
         player.h.hexToGet = new Decimal(1)
 
         for (let i = 0; i < player.h.hex; i++)
         {
             if (i > 0) player.h.hexPointsEffect[i] = player.h.hexPoints[i].pow(0.6).add(1)
             if (i > 0) player.h.hexPointsToGet[i] = player.h.hexPoints[i-1].pow(0.3)
+            if (hasUpgrade("bi", 12)) player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(upgradeEffect("bi", 12))
         }
         for (let i = 0; i < player.h.hex.sub(1); i++)
         {
@@ -61,8 +74,10 @@
         player.h.hexPoints[0] = player.h.hexPoints[0].add(player.h.hexPointsToGet[0].mul(delta))
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(player.rf.abilityEffects[7])
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(buyableEffect("cb", 11))
+        if (hasUpgrade("bi", 12)) player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(upgradeEffect("bi", 12))
 
-        player.h.hexPointsEffect[0] = player.h.hexPoints[0].mul(1000).pow(1.5).add(1)
+        if (!inChallenge("ip", 13)) player.h.hexPointsEffect[0] = player.h.hexPoints[0].mul(100).pow(1.3).add(1)
+        if (inChallenge("ip", 13)) player.h.hexPointsEffect[0] = player.h.hexPoints[0].mul(1000).pow(1.5).add(1)
 
         player.h.automationTierReq = Decimal.mul(Decimal.pow(player.h.automationTier.add(1), 0.6), 100)
         player.h.automationTierEffect = player.h.automationTier.mul(0.1)
@@ -354,7 +369,7 @@
         11: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(1.2).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("tad", 11) },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Factor Power Multiplier"
@@ -366,17 +381,17 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -398,17 +413,17 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.33
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -430,17 +445,17 @@
             buy() {
                 let base = new Decimal(25)
                 let growth = 1.36
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -462,17 +477,17 @@
             buy() {
                 let base = new Decimal(65)
                 let growth = 1.39
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -494,17 +509,17 @@
             buy() {
                 let base = new Decimal(200)
                 let growth = 1.42
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -526,17 +541,17 @@
             buy() {
                 let base = new Decimal(500)
                 let growth = 1.46
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -558,17 +573,17 @@
             buy() {
                 let base = new Decimal(1500)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -589,17 +604,17 @@
             buy() {
                 let base = new Decimal(2500)
                 let growth = 1.55
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("tad", 11))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

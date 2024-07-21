@@ -45,6 +45,7 @@
 
         if (player.de.antidebuffPointsToGet.lt(1e24)) player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e14).pow(0.45)
         if (player.de.antidebuffPointsToGet.gte(1e24)) player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e12).pow(0.3)
+        player.de.antidebuffPointsToGet = player.de.antidebuffPointsToGet.mul(buyableEffect("tad", 16))
 
         player.de.antidebuffPointsEffect = player.de.antidebuffPoints.pow(0.54321).mul(10).add(1)
 
@@ -102,10 +103,16 @@
 
         player.de.tavPointsToGet = player.points.pow(0.075).add(1)
         player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("de", 14))
+        if (hasUpgrade("de", 19)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(upgradeEffect("de", 19))
+        if (hasUpgrade("tad", 14)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("tad", 14))
+
+        if (hasUpgrade("de", 18)) player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet.mul(0.1).mul(delta))
 
         player.de.tavEssencePerSecond = player.de.tavPoints.pow(1.5).add(1)
         player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("de", 13))
         if (hasUpgrade("de", 12)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 12))
+        if (hasUpgrade("de", 19)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 19))
+     player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("tad", 15))
 
         player.de.tavEssence = player.de.tavEssence.add(player.de.tavEssencePerSecond.mul(delta))
 
@@ -494,6 +501,31 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
         },
+        18:
+        {
+            title: "Tav Essence Upgrade VIII",
+            unlocked() { return true },
+            description() { return "Gain 10% of tav points per second." },
+            cost: new Decimal(1e40),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+        },
+        19:
+        {
+            title: "Tav Essence Upgrade IX",
+            unlocked() { return true },
+            description() { return "Boost tav points and essence based on broken infinities." },
+            cost: new Decimal(1e48),
+            currencyLocation() { return player.de },
+            currencyDisplayName: "Tav Essence",
+            currencyInternalName: "tavEssence",
+            effect() {
+                return player.bi.brokenInfinities.mul(100).pow(1.6).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
+        },
     },
     buyables: {
         11: {
@@ -808,7 +840,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
              ]
 
             },

@@ -14,6 +14,11 @@
         fertilizer: new Decimal(0),
         fertilizerEffect: new Decimal(0),
         fertilizerPerSecond: new Decimal(0),
+
+        steel: new Decimal(0),
+        steelEffect: new Decimal(0),
+        steelToGet: new Decimal(0),
+        steelPause: new Decimal(0),
     }
     },
     automate() {
@@ -56,6 +61,7 @@
     if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.35)
     if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
     if (hasUpgrade("de", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
+    player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
 
     if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1))
     {
@@ -84,6 +90,7 @@
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.pe.pestEffect[6])
         if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
 
         player.gh.fertilizer = player.gh.fertilizer.add(player.gh.fertilizerPerSecond.mul(delta))
 
@@ -139,6 +146,19 @@
         {
             player.gh.buyables[24] = new Decimal(100)
         }
+
+        //steel
+        player.gh.steelToGet = player.m.codeExperience.pow(0.08)
+        if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
+        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
+        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
+
+        player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
+
+        if (player.gh.steelPause.gt(0)) {
+            layers.gh.steelieReset();
+        }
+        player.gh.steelPause = player.gh.steelPause.sub(1)
     },
     branches: ["g"],
     clickables: {
@@ -160,6 +180,16 @@
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
 
                 player.pe.pests = player.pe.pests.mul(0.9)
+            },
+            style: { width: '400px', "min-height": '100px' },
+        },
+        12: {
+            title() { return "<h3>Steelie, but reset everything before unlocking OTFs. (based on code experience)" },
+            canClick() { return player.gh.steelToGet.gte(1) },
+            unlocked() { return true },
+            onClick() {
+                player.gh.steelPause = new Decimal(5)
+                player.gh.steel = player.gh.steel.add(player.gh.steelToGet)
             },
             style: { width: '400px', "min-height": '100px' },
         },
@@ -253,6 +283,149 @@
         player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
+    },
+    steelieReset()
+    {
+        player.pe.pests = new Decimal(0)
+        player.points = new Decimal(10)
+        player.r.rank = new Decimal(0)
+        player.r.tier = new Decimal(0)
+        player.r.tetr = new Decimal(0)
+        player.r.ranksToGet = new Decimal(0)
+        player.r.tiersToGet = new Decimal(0)
+        player.r.tetrsToGet = new Decimal(0)
+        player.r.pentToGet = new Decimal(0)
+        player.r.pent = new Decimal(0)
+
+        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
+        player.f.factorGain = new Decimal(1)
+
+        player.f.factorPower = new Decimal(0)
+        player.f.factorPowerEffect = new Decimal(1)
+        player.f.factorPowerPerSecond = new Decimal(0)
+        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
+
+        player.f.buyables[1] = new Decimal(0)
+        player.f.buyables[2] = new Decimal(0)
+        player.f.buyables[3] = new Decimal(0)
+        player.f.buyables[4] = new Decimal(0)
+        player.f.buyables[5] = new Decimal(0)
+        player.f.buyables[6] = new Decimal(0)
+        player.f.buyables[7] = new Decimal(0)
+        player.f.buyables[8] = new Decimal(0)
+        player.f.buyables[11] = new Decimal(0)
+        player.f.buyables[12] = new Decimal(0)
+        player.f.buyables[13] = new Decimal(0)
+        player.f.buyables[14] = new Decimal(0)
+        player.f.buyables[15] = new Decimal(0)
+        player.f.buyables[16] = new Decimal(0)
+        player.f.buyables[17] = new Decimal(0)
+        player.f.buyables[18] = new Decimal(0)
+        player.f.buyables[19] = new Decimal(0)
+        player.f.buyables[21] = new Decimal(0)
+        player.f.buyables[22] = new Decimal(0)
+        player.f.buyables[23] = new Decimal(0)
+        player.f.buyables[24] = new Decimal(0)
+        player.f.buyables[25] = new Decimal(0)
+        player.f.buyables[26] = new Decimal(0)
+        player.f.buyables[27] = new Decimal(0)
+        player.f.buyables[28] = new Decimal(0)
+        player.f.buyables[29] = new Decimal(0)
+        player.f.buyables[31] = new Decimal(0)
+        player.f.buyables[32] = new Decimal(0)
+        player.f.buyables[33] = new Decimal(0)
+        player.f.buyables[34] = new Decimal(0)
+        player.f.buyables[35] = new Decimal(0)
+        player.f.buyables[36] = new Decimal(0)
+
+        player.p.prestigePoints = new Decimal(0)
+
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
+        {
+        for (let i = 0; i < player.p.upgrades.length; i++) {
+            if (+player.p.upgrades[i] < 24) {
+                player.p.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+        player.t.buyables[11] = new Decimal(0)
+        player.t.buyables[12] = new Decimal(0)
+        player.t.buyables[13] = new Decimal(0)
+        player.t.buyables[14] = new Decimal(0)
+        player.t.buyables[15] = new Decimal(0)
+        player.t.buyables[16] = new Decimal(0)
+        player.t.buyables[17] = new Decimal(0)
+        player.t.buyables[18] = new Decimal(0)
+
+        player.f.factorPower = new Decimal(0)
+
+        player.t.leaves = new Decimal(0)
+        player.t.trees = new Decimal(0)
+
+        player.g.buyables[11] = new Decimal(0)
+        player.g.buyables[12] = new Decimal(0)
+        player.g.buyables[13] = new Decimal(0)
+        player.g.buyables[14] = new Decimal(0)
+        player.g.buyables[15] = new Decimal(0)
+        player.g.buyables[16] = new Decimal(0)
+        player.g.buyables[17] = new Decimal(0)
+        player.g.buyables[18] = new Decimal(0)
+
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
+        {
+        for (let i = 0; i < player.g.upgrades.length; i++) {
+            if (+player.g.upgrades[i] < 22) {
+                player.g.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+        }
+
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
+        {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if (+player.r.milestones[i] < 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        player.g.grass = new Decimal(0)
+        player.g.savedGrass = new Decimal(0)
+        player.g.grassCount = new Decimal(0)
+        player.g.grassTimer = new Decimal(0)
+
+        player.g.goldGrass = new Decimal(0)
+        player.g.savedGoldGrass = new Decimal(0)
+        player.g.goldGrassCount = new Decimal(0)
+        player.g.goldGrassTimer = new Decimal(0)
+
+        player.gh.grasshoppers = new Decimal(0)
+        player.gh.fertilizer = new Decimal(0)
+
+        player.gh.buyables[11] = new Decimal(0)
+        player.gh.buyables[12] = new Decimal(0)
+        player.gh.buyables[13] = new Decimal(0)
+        player.gh.buyables[14] = new Decimal(0)
+        player.gh.buyables[15] = new Decimal(0)
+        player.gh.buyables[16] = new Decimal(0)
+        player.gh.buyables[17] = new Decimal(0)
+        player.gh.buyables[18] = new Decimal(0)
+        player.gh.buyables[19] = new Decimal(0)
+        player.gh.buyables[21] = new Decimal(0)
+        player.gh.buyables[22] = new Decimal(0)
+
+        player.m.codeExperience = new Decimal(0)
+        player.m.linesOfCode = new Decimal(0)
+        player.m.mods = new Decimal(0)
+
+        player.m.buyables[11] = new Decimal(0)
+        player.m.buyables[12] = new Decimal(0)
+        player.m.buyables[13] = new Decimal(0)
+        player.m.buyables[14] = new Decimal(0)
     },
     bars: {
     },
@@ -687,6 +860,266 @@
             },
             style: { width: '150px', height: '150px', }
         },
+
+        //Steel
+        31: {
+            cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(7).pow(1.3).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Point Reinforcer"
+            },
+            display() {
+                return "which are multiplying point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(50)
+                let growth = 1.1
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        32: {
+            cost(x) { return new Decimal(1.125).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(1.6).pow(1.2).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Leaf and Tree Reinforcer"
+            },
+            display() {
+                return "which are multiplying leaf and tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(100)
+                let growth = 1.125
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        33: {
+            cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(1.15).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Reinforcer"
+            },
+            display() {
+                return "which are multiplying grass gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(200)
+                let growth = 1.15
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        34: {
+            cost(x) { return new Decimal(1.175).pow(x || getBuyableAmount(this.layer, this.id)).mul(350) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fertilizer Reinforcer"
+            },
+            display() {
+                return "which are multiplying fertilizer gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(350)
+                let growth = 1.175
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+
+
+        35: {
+            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(8).pow(1.3).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Animatter Reinforcer"
+            },
+            display() {
+                return "which are multiplying antimatter gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(1000)
+                let growth = 1.2
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        36: {
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1500) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.26).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Reinforcer"
+            },
+            display() {
+                return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(1500)
+                let growth = 1.25
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        37: {
+            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.6).pow(1.05).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Antimatter Dimension Reinforcer"
+            },
+            display() {
+                return "which are multiplying all antimatter dimension production by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(2500)
+                let growth = 1.3
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        38: {
+            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(4000) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).pow(0.8).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gh.steel.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Point Reinforcer"
+            },
+            display() {
+                return "which are multiplying infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
+            },
+            buy() {
+                let base = new Decimal(4000)
+                let growth = 1.35
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.gh.steel = player.gh.steel.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
 
@@ -727,6 +1160,23 @@
                     ["row", [["buyable", 13], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 16], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 18]["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 18], ["raw-html", function () { return hasMilestone("r", 17) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 22], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 24],]],
                     ["blank", "25px"],
                     ["row", [["buyable", 17], ["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 14], ["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 19], ["raw-html", function () { return hasMilestone("r", 17) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 21],]],
+                ]
+
+            },
+            "Steelie": {
+                buttonStyle() { return { 'color': 'white', 'border-color': "black", 'background': 'grey', } },
+                unlocked() { return hasUpgrade("i", 22) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.gh.steel) + "</h3> steel." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + format(player.gh.steelToGet) + "</h3> steel on reset."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Steel boosts grasshoper gain by <h3>" + format(player.gh.steelEffect) + "</h3>x."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 12]]],
+                    ["blank", "25px"],
+                    ["row", [["buyable", 31], ["buyable", 32], ["buyable", 33], ["buyable", 34]]],
+                    ["row", [["buyable", 35], ["buyable", 36], ["buyable", 37], ["buyable", 38]]],
                 ]
 
             },

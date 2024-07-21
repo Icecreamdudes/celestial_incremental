@@ -52,7 +52,9 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
+        if (player.rf.rocketFuel.lte(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
+        if (player.rf.rocketFuel.gt(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.1).div(500)
+
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.rarePetEffects[2][0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.diceEffects[13])
@@ -61,6 +63,8 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 44))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 45))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 46))
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.evolvedEffects[4][1])
+
 
         if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && player.po.rocketFuel) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
 
@@ -122,6 +126,14 @@
                 player.rf.abilityTimers[i] = new Decimal(0)
             }
         }    
+
+        if (hasUpgrade("tad", 12))
+        {
+            layers.rf.rocketFuelAbility(0, player.rf.rocketFuel)
+            layers.rf.rocketFuelAbility(1, player.rf.rocketFuel)
+            layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
+            layers.rf.rocketFuelAbility(3, player.rf.rocketFuel)
+        }
     },
     branches() {
         return player.po.dice ? ["gh", "p", "d"] : ["gh", "p", "cb"]
@@ -625,7 +637,8 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel, which boost grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, { "color": "#949494", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.rf.rocketFuelToGet.gte(1) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset." : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return player.rf.rocketFuel.lt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset." : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return player.rf.rocketFuel.gt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset. (softcapped)" : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
          ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

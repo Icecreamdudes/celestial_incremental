@@ -106,7 +106,7 @@ addLayer("i", {
         player.gain = player.gain.mul(player.ad.antimatterEffect)
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
-        if (inChallenge("ip", 13 || player.po.hex)) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
         if (inChallenge("ip", 14)) player.gain = player.gain.div(player.r.challengeIVEffect)
         if (inChallenge("ip", 15)) player.gain = player.gain.pow(0.9)
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
@@ -121,6 +121,9 @@ addLayer("i", {
         if (inChallenge("tad", 11)) player.gain = player.gain.pow(buyableEffect("de", 11))
         if (inChallenge("tad", 11)) player.gain = player.gain.mul(player.de.tavPointsEffect)
         if (hasUpgrade("de", 15)) player.gain = player.gain.mul(upgradeEffect("de", 15))
+        if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
+        player.gain = player.gain.mul(buyableEffect("gh", 31))
+        player.gain = player.gain.mul(player.id.infinityPowerEffect2)
         
 
         if (inChallenge("ip", 18) && player.points.gt(1))
@@ -239,6 +242,26 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
+        22:
+        {
+            title: "Steel",
+            unlocked() { return hasUpgrade("i", 21) && hasUpgrade("bi", 106)},
+            description: "Unlocks Steelie reset layer (in grasshop).",
+            cost: new Decimal("1e575"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        23:
+        {
+            title: "Crystallize",
+            unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
+            description: "Unlocks Crysstallize reset layer (in grasshop).",
+            cost: new Decimal("1e700"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
     },
     buyables: {
     },
@@ -256,9 +279,9 @@ addLayer("i", {
                 unlocked() { return hasUpgrade("i", 11) },
                 content:
                 [
-                        ["blank", "25px"],
-                        ["tree", tree],
-                    ]
+                    ["blank", "25px"],
+                    ["tree", tree],
+                ]
 
             },
             "Portal": {
@@ -276,7 +299,7 @@ addLayer("i", {
                 [
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                        ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
+                        ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                 ]
 
             },

@@ -8,6 +8,7 @@
 
         diceRuns: new Decimal(0),
         rocketFuelRuns: new Decimal(0),
+        hexRuns: new Decimal(0),
     }
     },
     automate() {
@@ -35,6 +36,45 @@
                 player.tab = "in"
             },
             style: { width: '100px', "min-height": '50px' },
+        },
+        11: {
+            title() { return "<h2>BIG CRUNCH" },
+            canClick() { return player.points.gte('1e308') },
+            unlocked() { return true },
+            onClick() {
+                if (inChallenge("tad", 11))
+                {
+                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
+                    {
+                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
+                    {
+                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
+                    {
+                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                    }
+                }
+                if (hasUpgrade("bi", 14))
+                {
+                  //  player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                 //   player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                 //   player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
+                if (!player.bigc.skip) 
+                {
+                    player.tab = "bigc"
+                } else if (hasMilestone("ip", 21))
+                {
+                    layers.bigc.crunch()
+                }
+            },
+            style: { width: '300px', "min-height": '120px' },
         },
     },
     bars: {
@@ -204,7 +244,6 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
-
         41:
         {
             title: "Upgrade (4, 1)",
@@ -215,7 +254,7 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinityPoints.log10().mul(0.65).add(1)
+                return player.in.infinityPoints.plus(1).log10().mul(0.65).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
@@ -249,7 +288,7 @@
         }, 
         44:
         {
-            title: "Upgrade (4, 3)",
+            title: "Upgrade (4, 4)",
             unlocked() { return hasUpgrade("ta", 14) },
             description: "Boosts dimension power based on infinity points.",
             cost: new Decimal(160000),
@@ -484,6 +523,20 @@
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
+        25: {
+            requirementDescription: "<h3>30000 Infinities",
+            effectDescription() { return "Tav's domain don't reset infinity milestones." },
+            done() { return player.in.infinities.gte(30000) },
+            unlocked() { return player.in.unlockedBreak },
+            style: { width: '800px', "min-height": '90px' },
+        },
+        26: {
+            requirementDescription: "<h3>70000 Infinities",
+            effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
+            done() { return player.in.infinities.gte(70000) },
+            unlocked() { return player.in.unlockedBreak && player.ev.evolutionsUnlocked[3]},
+            style: { width: '800px', "min-height": '90px' },
+        },
     },
     challenges: {
         11: {
@@ -600,7 +653,7 @@
         },
         17: {
             name: "Challenge VII",
-            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP." },
+            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECCOMENDED LEVEL 100)" },
             goalDescription() { return "Level 75" },
             goal() { return new Decimal("75") },
             canComplete: function () { return player.cb.level.gte(75) },
@@ -674,6 +727,8 @@
                         ["row", [["milestone", 22]]],
                         ["row", [["milestone", 23]]],
                         ["row", [["milestone", 24]]],
+                        ["row", [["milestone", 25]]],
+                        ["row", [["milestone", 26]]],
                 ]
 
             },
@@ -695,6 +750,16 @@
                 [
                         ["blank", "25px"],
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                ]
+
+            },
+            "Reset": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return player.in.breakInfinity },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["row", [["clickable", 11]]],
                 ]
 
             },

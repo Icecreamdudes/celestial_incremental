@@ -44,7 +44,7 @@
          [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),]],
 
         uncommonPetDisplay: ["","","","","","","",],
-        uncommonPetDisplayIndex: new Decimal(-1),
+        uncommonPetDisplayIndex: new Decimal(0),
 
         uncommonPetUnlocks: [false, false, false, false, false, false, false],
         uncommonPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
@@ -56,7 +56,7 @@
         [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]],
 
         rarePetDisplay: ["","","","","",],
-        rarePetDisplayIndex: new Decimal(-1),
+        rarePetDisplayIndex: new Decimal(0),
 
         rarePetUnlocks: [false, false, false, false, false],
         rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],

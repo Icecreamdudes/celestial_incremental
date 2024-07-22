@@ -27,7 +27,7 @@
         //pets
         lockedImg: "<img src='resources/secret.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         petDisplay: ["","","","","","",""],
-        petDisplayIndex: new Decimal(-1),
+        petDisplayIndex: new Decimal(0),
 
         commonPetUnlocks: [false, false, false, false, false, false, false],
         commonPetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],

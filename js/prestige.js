@@ -57,6 +57,7 @@
         if (player.de.antidebuffIndex.eq(1)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.3)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("p", 11))
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("id", 22))
 
         player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
         if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))
@@ -74,6 +75,7 @@
 
         player.p.crystalEffect = player.p.crystals.plus(1).log10().pow(0.8).mul(0.05).add(1)
         player.p.crystalsToGet = player.r.tier.pow(0.01)
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
     },
     prestigeReset()
     {

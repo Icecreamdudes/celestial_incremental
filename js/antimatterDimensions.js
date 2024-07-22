@@ -57,7 +57,8 @@
         let onepersec = new Decimal(1)
 
         player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
-        if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.mul(buyableEffect("de", 18))
+        if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
+        if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
 
         player.ad.dimensionText = [
             "1st dimension (" + format(player.ad.dimensionMult[0]) + "x): " + format(player.ad.dimensionAmounts[0]) + " (+" + format(player.ad.dimensionsPerSecond[0]) + "/s)",

@@ -353,12 +353,22 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', height: '100px', },
             effect() {
                 return player.ta.highestRocketFuel.pow(0.1).mul(0.015).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
+        },
+        108:
+        {
+            title: "BI NIP Upgrade VIII",
+            unlocked() { return true },
+            description: "Raise antimatter effect to the ^1.6.",
+            cost: new Decimal(2e11),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
         },
     },
     buyables: {
@@ -492,7 +502,7 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
-                    ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107]]],
+                    ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check check back." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

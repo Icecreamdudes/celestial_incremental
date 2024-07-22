@@ -13,7 +13,7 @@
         dimensionsUnlocked: [false, false, false, false, false, false, false, false],
         dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        dimensionCosts: [new Decimal(1e11),new Decimal(1e14),new Decimal(1e18),new Decimal(1e23),new Decimal(1e29),new Decimal(1e36),new Decimal(1e44),new Decimal(1e53),],
+        dimensionCosts: [new Decimal(1e11),new Decimal(1e12),new Decimal(1e14),new Decimal(1e17),new Decimal(1e21),new Decimal(1e26),new Decimal(1e32),new Decimal(1e39),],
         dimensionsPurchased: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         dimensionMult: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
         dimensionText: ["", "", "", "", "", "", "", ""],
@@ -38,7 +38,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.id.infinityPowerEffect = player.id.infinityPower.pow(0.24).add(1)
+        player.id.infinityPowerEffect = player.id.infinityPower.pow(0.75).add(1)
         player.id.infinityPowerEffect2 = player.id.infinityPower.mul(3).pow(1.6).add(1)
 
         player.id.dimensionText = [
@@ -68,16 +68,16 @@
             //mults
         }
         
-        player.id.dimensionCosts = [new Decimal(1e11),new Decimal(1e14),new Decimal(1e18),new Decimal(1e23),new Decimal(1e29),new Decimal(1e36),new Decimal(1e44),new Decimal(1e53),]
+        player.id.dimensionCosts = [new Decimal(1e11),new Decimal(1e12),new Decimal(1e14),new Decimal(1e17),new Decimal(1e21),new Decimal(1e26),new Decimal(1e32),new Decimal(1e39),]
 
-        player.id.dimensionCosts[0] = player.id.dimensionCosts[0].mul(Decimal.pow(1e3, player.id.dimensionsPurchased[0]))
-        player.id.dimensionCosts[1] = player.id.dimensionCosts[1].mul(Decimal.pow(1e4, player.id.dimensionsPurchased[1]))
-        player.id.dimensionCosts[2] = player.id.dimensionCosts[2].mul(Decimal.pow(1e5, player.id.dimensionsPurchased[2]))
-        player.id.dimensionCosts[3] = player.id.dimensionCosts[3].mul(Decimal.pow(1e6, player.id.dimensionsPurchased[3]))
-        player.id.dimensionCosts[4] = player.id.dimensionCosts[4].mul(Decimal.pow(1e8, player.id.dimensionsPurchased[4]))
-        player.id.dimensionCosts[5] = player.id.dimensionCosts[5].mul(Decimal.pow(1e10, player.id.dimensionsPurchased[5]))
-        player.id.dimensionCosts[6] = player.id.dimensionCosts[6].mul(Decimal.pow(1e12, player.id.dimensionsPurchased[6]))
-        player.id.dimensionCosts[7] = player.id.dimensionCosts[7].mul(Decimal.pow(1e15, player.id.dimensionsPurchased[7]))
+        player.id.dimensionCosts[0] = player.id.dimensionCosts[0].mul(Decimal.pow(1e2, player.id.dimensionsPurchased[0]))
+        player.id.dimensionCosts[1] = player.id.dimensionCosts[1].mul(Decimal.pow(1e3, player.id.dimensionsPurchased[1]))
+        player.id.dimensionCosts[2] = player.id.dimensionCosts[2].mul(Decimal.pow(1e4, player.id.dimensionsPurchased[2]))
+        player.id.dimensionCosts[3] = player.id.dimensionCosts[3].mul(Decimal.pow(1e5, player.id.dimensionsPurchased[3]))
+        player.id.dimensionCosts[4] = player.id.dimensionCosts[4].mul(Decimal.pow(1e6, player.id.dimensionsPurchased[4]))
+        player.id.dimensionCosts[5] = player.id.dimensionCosts[5].mul(Decimal.pow(1e7, player.id.dimensionsPurchased[5]))
+        player.id.dimensionCosts[6] = player.id.dimensionCosts[6].mul(Decimal.pow(1e8, player.id.dimensionsPurchased[6]))
+        player.id.dimensionCosts[7] = player.id.dimensionCosts[7].mul(Decimal.pow(1e9, player.id.dimensionsPurchased[7]))
 
         player.id.dimensionUnlockCost = player.id.dimensionUnlockCosts[player.id.dimensionUnlockAmount]
 
@@ -176,7 +176,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e14)
+                let base = new Decimal(1e12)
                 let growth = 1e3
                 if (player.buyMax == false)
                 {
@@ -205,7 +205,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e18)
+                let base = new Decimal(1e14)
                 let growth = 1e4
                 if (player.buyMax == false)
                 {
@@ -234,7 +234,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e23)
+                let base = new Decimal(1e17)
                 let growth = 1e5
                 if (player.buyMax == false)
                 {
@@ -263,7 +263,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e29)
+                let base = new Decimal(1e21)
                 let growth = 1e5
                 if (player.buyMax == false)
                 {
@@ -292,7 +292,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e36)
+                let base = new Decimal(1e26)
                 let growth = 1e6
                 if (player.buyMax == false)
                 {
@@ -321,7 +321,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e44)
+                let base = new Decimal(1e32)
                 let growth = 1e7
                 if (player.buyMax == false)
                 {
@@ -350,7 +350,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                let base = new Decimal(1e53)
+                let base = new Decimal(1e39)
                 let growth = 1e8
                 if (player.buyMax == false)
                 {

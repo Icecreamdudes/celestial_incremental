@@ -50,6 +50,7 @@
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
         if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
+        if (hasUpgrade("i", 24) && player.points.gte("1e400")) player.m.modsToGet = player.m.modsToGet.mul(1e18)
 
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))

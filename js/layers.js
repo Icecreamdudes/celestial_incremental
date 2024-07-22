@@ -262,6 +262,16 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
+        24:
+        {
+            title: "Random Mod Boost",
+            unlocked() { return hasUpgrade("i", 23) && hasUpgrade("bi", 106)},
+            description: "If points are above 1e400, boost mod gain by 1e18.",
+            cost: new Decimal("1e800"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
     },
     buyables: {
     },
@@ -300,6 +310,7 @@ addLayer("i", {
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                         ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+                        ["row", [["upgrade", 24]]],
                 ]
 
             },

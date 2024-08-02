@@ -1,7 +1,7 @@
-﻿var tree = [["ad", "ip", "id"], ["ga", "ta", "bi", "om"]]
+﻿var tree = [["ad", "ip", "id"], ["ga", "ta", "bi", "om"], ["ca"]]
 addLayer("in", {
-    name: "Infinity Dimension", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Universe 2", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "2", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -23,29 +23,15 @@ addLayer("in", {
     },
     nodeStyle() {
         return {
-          width: '200px',
-          height: '200px',  
-          backgroundColor: 'black',
-          border: '6px solid #4BDF34',
-          borderRadius: '50%',
-          position: 'relative',
-          overflow: 'hidden',
-          animation: 'portalAnimation 2s infinite alternate',
-          
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '2rem',
-          color: 'white',
-        
-          ':before': {
-            content: '∞' 
-          }
-        };
+            background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
+            "background-origin": "border-box",
+            "border-color": "#119B35",
+        }
       },
     
-    tooltip: "Infinity Dimension",
+    tooltip: "Universe 2 - Antimatter World",
     color: "white",
+    branches: ["i"],
     update(delta) {
 
         let onepersec = new Decimal(1)
@@ -82,12 +68,6 @@ addLayer("in", {
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if (hasUpgrade("bi", 14))
-                {
-                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-                }
                 if (!player.bigc.skip) 
                 {
                     player.tab = "bigc"
@@ -95,11 +75,19 @@ addLayer("in", {
                 {
                     layers.bigc.crunch()
                 }
+                if (hasUpgrade("bi", 14))
+                {
+                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
             }
         }
 
         if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
-        if (player.in.breakInfinity) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
+        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
+        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
+        if (player.in.breakInfinity && hasUpgrade("i", 31)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 21))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 22))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
@@ -120,6 +108,10 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.om.diceMasteryPointsEffect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("tad", 21))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("gh", 38))
+        if (hasUpgrade("bi", 23)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 23))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 23))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -322,6 +314,7 @@ addLayer("in", {
             player.po.rocketFuel = false
             player.po.hex = false
             player.po.breakInfinity = false
+            player.po.realmMods = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
         

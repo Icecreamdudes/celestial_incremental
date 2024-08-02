@@ -59,6 +59,7 @@
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32)) 
+        player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
@@ -88,7 +89,7 @@
             player.t.leaves = new Decimal(0)
         }
         
-        if (inChallenge("ip", 18) && player.t.trees.gt(1))
+        if (inChallenge("ip", 18) && player.t.trees.gt(player.t.trees.mul(0.3 * delta)))
         {
             player.t.trees = player.t.trees.sub(player.t.trees.mul(0.3 * delta))
         }

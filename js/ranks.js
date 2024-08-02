@@ -32,6 +32,15 @@
         pentMilestone30Effect2: new Decimal(1),
 
         challengeIVEffect: new Decimal(1),
+
+        //Time rev
+        timeReversed: false,
+
+        timeCubes: new Decimal(0),
+        timeCubesEffect: new Decimal(1),
+        timeCubesPerSecond: new Decimal(0),
+
+        timeCubeEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
     }
     },
     automate() {
@@ -138,6 +147,37 @@
         player.r.pentMilestone30Effect2 = player.r.pent.pow(1.2).add(1)
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
+
+        if (hasUpgrade("i", 26) && player.points.gte(player.r.pentReq))
+        {
+            player.r.pent = player.r.pent.add(1)
+        }
+
+        //Time reversal
+
+        if (!player.r.timeReversed)
+        {
+            player.r.timeCubesPerSecond = new Decimal(0) 
+        } else
+        {
+            player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("id", 23))
+        }
+
+        player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
+
+        if (player.points.gte("1e1000"))
+        {
+            player.r.timeCubesEffect = player.r.timeCubes.pow(1.15)
+        } else
+        {
+            player.r.timeCubesEffect = new Decimal(0)
+        }
+
+        player.r.timeCubeEffects[0] = player.r.timeCubesEffect.pow(1.15).mul(100).add(1)
+        player.r.timeCubeEffects[1] = player.r.timeCubesEffect.pow(1.1).mul(10).add(1)
+        player.r.timeCubeEffects[2] = player.r.timeCubesEffect.pow(0.9).mul(6).add(1)
+        player.r.timeCubeEffects[3] = player.r.timeCubesEffect.pow(0.7).mul(3).add(1)
     },
     getRankReq()
     {
@@ -286,12 +326,158 @@
             },
             style: { width: '400px', "min-height": '100px' },
         },
+        15: {
+            title() { return "<h2>Time Reversal: On" },
+            canClick() { return true },
+            unlocked() { return player.r.timeReversed },
+            onClick() {
+                player.r.timeReversed = false
+            },
+            style: { width: '300px', "min-height": '50px' },
+        },
+        16: {
+            title() { return "<h2>Time Reversal: Off" },
+            canClick() { return true },
+            unlocked() { return !player.r.timeReversed },
+            onClick() {
+                player.r.timeReversed = true
+            },
+            style: { width: '300px', "min-height": '50px' },
+        },
     },
     bars: {
     },
     upgrades: {
     },
     buyables: {
+        11: {
+            cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.2).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.r.timeCubes.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Golden Grass Reverser"
+            },
+            display() {
+                return "which are multiplying golden grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Cubes"
+            },
+            buy() {
+                let base = new Decimal(100)
+                let growth = 1.1
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.r.timeCubes = player.r.timeCubes.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.r.timeCubes, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.r.timeCubes = player.r.timeCubes.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        12: {
+            cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(300) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(0.8).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.r.timeCubes.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Crystal Reverser"
+            },
+            display() {
+                return "which are multiplying crystal gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Cubes"
+            },
+            buy() {
+                let base = new Decimal(300)
+                let growth = 1.15
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.r.timeCubes = player.r.timeCubes.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.r.timeCubes, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.r.timeCubes = player.r.timeCubes.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        13: {
+            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(700) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).pow(0.75).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.r.timeCubes.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Negative Infinity Reverser"
+            },
+            display() {
+                return "which are multiplying negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Cubes"
+            },
+            buy() {
+                let base = new Decimal(700)
+                let growth = 1.2
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.r.timeCubes = player.r.timeCubes.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.r.timeCubes, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.r.timeCubes = player.r.timeCubes.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        14: {
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1500) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.6).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.r.timeCubes.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Infinity Dimension Reverser"
+            },
+            display() {
+                return "which are multiplying negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Cubes"
+            },
+            buy() {
+                let base = new Decimal(1500)
+                let growth = 1.25
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.r.timeCubes = player.r.timeCubes.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.r.timeCubes, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.r.timeCubes = player.r.timeCubes.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
         11: {
@@ -404,6 +590,23 @@
                         ["row", [["milestone", 17]]],
                         ["row", [["milestone", 18]]],
                         ["row", [["milestone", 19]]],
+                ]
+            },
+            "Time Reversal": {
+                buttonStyle() { return {'color': 'white', 'border-color': "grey", 'background': '#d82cd4',} },
+                unlocked() { return hasUpgrade("i", 25) },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "When time is reversed, stop all pre-OTF resource production stops, and points are drained." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["row", [["clickable", 15], ["clickable", 16]]],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "You have <h3>" + format(player.r.timeCubes) + "</h3> time cubes, which is equivalent to " + format(player.r.timeCubesEffect) + " rocket fuel of effects." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "You are gaining <h3>" + format(player.r.timeCubesPerSecond) + "</h3> time cubes per second. (based on points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "(Only the first 4 effects, and stacks with existing rocket fuel effect. Only active at >1e1000 points.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],    
                 ]
             },
         },

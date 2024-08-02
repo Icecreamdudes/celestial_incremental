@@ -136,8 +136,9 @@
         if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(0.4)
         if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect("de", 15))
         player.g.grassVal = player.g.grassVal.mul(buyableEffect("gh", 33))
+        player.g.grassVal = player.g.grassVal.mul(player.r.timeCubeEffects[2])
 
-        if (inChallenge("ip", 18) && player.g.grass.gt(1))
+        if (inChallenge("ip", 18) && player.g.grass.gt(player.g.grass.mul(0.4 * delta)))
         {
             player.g.grass = player.g.grass.sub(player.g.grass.mul(0.4 * delta))
         }
@@ -157,6 +158,7 @@
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.commonPetEffects[3][1])
         if (hasUpgrade("ip", 24) && !inChallenge("ip", 14)) player.g.goldGrassVal = player.g.goldGrassVal.add(upgradeEffect("ip", 24))
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.rarePetEffects[4][1])
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("r", 11))
 
         player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect("gh", 18).mul(delta)))
 

@@ -76,7 +76,7 @@
             player.m.linesOfCode = new Decimal(0)
         }
 
-        if (inChallenge("ip", 18) && player.m.mods.gt(1))
+        if (inChallenge("ip", 18) && player.m.mods.gt(player.m.mods.mul(0.3 * delta)))
         {
             player.m.mods = player.m.mods.sub(player.m.mods.mul(0.3 * delta))
         }
@@ -107,7 +107,7 @@
 
         if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
 
-        if (inChallenge("ip", 18) && player.m.codeExperience.gt(1))
+        if (inChallenge("ip", 18) && player.m.codeExperience.gt(player.m.codeExperience.mul(0.2 * delta)))
         {
             player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.2 * delta))
         }

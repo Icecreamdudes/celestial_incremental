@@ -19,6 +19,12 @@
     }
     },
     automate() {
+        if (hasUpgrade("bi", 109))
+        {
+            buyBuyable("bi", 11)
+            buyBuyable("bi", 12)
+            buyBuyable("bi", 13)
+        }
     },
     nodeStyle() {
         return {
@@ -33,11 +39,14 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+
         player.bi.brokenInfinitiesToGet = player.in.infinities
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("bi", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("tad", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("om", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("p", 16))
+
+        if (hasUpgrade("bi", 25)) player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet.mul(Decimal.mul(0.04, delta)))
 
         if (player.bi.autocrunchInput.gte(1)) player.bi.autocrunchAmount = player.bi.autocrunchInput
         if (player.bi.autocrunchInput.lt(1)) player.bi.autocrunchAmount = new Decimal(1)
@@ -45,7 +54,7 @@
         if (player.bi.autoreverseCrunchInput.gte(1)) player.bi.autoreverseCrunchAmount = player.bi.autoreverseCrunchInput
         if (player.bi.autoreverseCrunchInput.lt(1)) player.bi.autoreverseCrunchAmount = new Decimal(1)
 
-        if (player.in.infinityPointsToGet.gte(player.bi.autocrunchAmount) && player.bi.autocrunchToggle)
+        if (player.in.infinityPointsToGet.gte(player.bi.autocrunchAmount) && player.bi.autocrunchToggle && player.points.gte(1e308))
         {
             if (inChallenge("tad", 11))
             {
@@ -67,9 +76,9 @@
             }
             if (hasUpgrade("bi", 14))
             {
-              //  player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-             //   player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-             //   player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
             }
             if (!player.bigc.skip) 
             {
@@ -80,7 +89,7 @@
             }
         }
         
-        if (player.ta.negativeInfinityPointsToGet.gte(player.bi.autoreverseCrunchAmount) && player.bi.autoreverseCrunchToggle)
+        if (player.ta.negativeInfinityPointsToGet.gte(player.bi.autoreverseCrunchAmount) && player.bi.autoreverseCrunchToggle && player.ad.antimatter.gte(1e308))
         {
             layers.revc.reverseCrunch()
             player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
@@ -193,7 +202,7 @@
                 return player.ta.highestDicePoints.pow(0.2).mul(0.05).add(1).mul(player.ta.highestRocketFuel.pow(0.3).mul(0.065).add(1)).pow(0.2)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '125px', height: '100px', }
+            style: { width: '150px', height: '100px', }
         },
         13:
         {
@@ -270,7 +279,90 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
         },
-
+        21:
+        {
+            title: "BI IP Upgrade X",
+            unlocked() { return true },
+            description: "Slightly weaken the post-1e300 AM softcap.",
+            cost: new Decimal(6e13),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
+        22:
+        {
+            title: "BI IP Upgrade XI",
+            unlocked() { return true },
+            description: "Points boost the antimatter effect even more.",
+            cost: new Decimal(3e14),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
+        23:
+        {
+            title: "BI IP Upgrade XII",
+            unlocked() { return true },
+            description: "Infinity points boost itself.",
+            cost: new Decimal(3e16),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.in.infinityPoints.pow(0.2).mul(0.002).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        24:
+        {
+            title: "BI IP Upgrade XII",
+            unlocked() { return true },
+            description: "...",
+            cost: new Decimal(1e18),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
+        25:
+        {
+            title: "BI IP Upgrade XIII",
+            unlocked() { return true },
+            description: "Gain 4% of broken infinities per second.",
+            cost: new Decimal(1e21),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
+        25:
+        {
+            title: "BI IP Upgrade XIII",
+            unlocked() { return true },
+            description: "Raise check back effect to the ^5. (only ^2 in dice)",
+            cost: new Decimal(1e25),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
+        26:
+        {
+            title: "BI IP Upgrade XIV",
+            unlocked() { return true },
+            description: "Unlock galaxy dust.",
+            cost: new Decimal(1e27),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
+        27:
+        {
+            title: "BI IP Upgrade XV",
+            unlocked() { return true },
+            description: "Unlock a new OTF, realm mods.",
+            cost: new Decimal(1e30),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
         //Negative Infinity Points
         101:
         {
@@ -370,6 +462,50 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '125px', height: '100px', }
         },
+        109:
+        {
+            title: "BI NIP Upgrade IX",
+            unlocked() { return true },
+            description: "Autobuy mastery, break infinity and infinity point buyables.",
+            cost: new Decimal(5e12),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '150px', height: '100px', }
+        },
+        111:
+        {
+            title: "BI NIP Upgrade X",
+            unlocked() { return true },
+            description: "Improve the infinity point formula.",
+            cost: new Decimal(3e13),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
+        },
+        112:
+        {
+            title: "BI NIP Upgrade XI",
+            unlocked() { return true },
+            description: "Dimension boosts and antimatter galaxies don't reset antimatter dimensions.",
+            cost: new Decimal(2e14),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '150px', height: '100px', }
+        },
+        113:
+        {
+            title: "BI NIP Upgrade XII",
+            unlocked() { return true },
+            description: "Raise the antimatter effect to the ^3.",
+            cost: new Decimal(1e16),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
+        },
     },
     buyables: {
         11: {
@@ -387,17 +523,17 @@
             buy() {
                 let base = new Decimal(100)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -419,17 +555,17 @@
             buy() {
                 let base = new Decimal(300)
                 let growth = 1.6
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -438,7 +574,7 @@
         },
         13: {
             cost(x) { return new Decimal(1.65).pow(x || getBuyableAmount(this.layer, this.id)).mul(700) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.25).add(1) },
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
@@ -451,17 +587,17 @@
             buy() {
                 let base = new Decimal(700)
                 let growth = 1.65
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -501,8 +637,11 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                    ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27]]],
+                    ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
+                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check check back." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

@@ -52,8 +52,8 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.rf.rocketFuel.lte(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
-        if (player.rf.rocketFuel.gt(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.1).div(500)
+        if (player.rf.rocketFuelToGet.lte(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
+        if (player.rf.rocketFuelToGet.gt(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.01).div(50000)
 
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.rarePetEffects[2][0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))

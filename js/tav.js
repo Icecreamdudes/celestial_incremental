@@ -139,6 +139,7 @@
         if (hasUpgrade('bi', 102)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(upgradeEffect("bi", 102))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.om.rocketFuelMasteryPointsEffect)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
 
 
         player.ta.negativeInfinityPause = player.ta.negativeInfinityPause.sub(1)
@@ -231,7 +232,7 @@
                     if (player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.dimBoostDimCost].gte(player.ad.dimBoostReq) && (player.ad.dimBoostAmount.lt(6)) : player.ad.dimensionAmounts[player.ad.dimBoostDimCost].gte(player.ad.dimBoostReq))
                     {
                         player.ad.dimBoostAmount = player.ad.dimBoostAmount.add(1)
-                        player.ad.dimBoostPause = new Decimal(6)
+                        if (!hasUpgrade("bi", 25)) player.ad.dimBoostPause = new Decimal(6)
                     player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
                     }
                     }
@@ -243,7 +244,7 @@
                     if (player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq) && (player.ad.galaxyAmount.lt(1)) : player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq))
                     {
                         player.ad.galaxyAmount = player.ad.galaxyAmount.add(1)
-                        player.ad.galaxyPause = new Decimal(6)
+                        if (!hasUpgrade("bi", 25))player.ad.galaxyPause = new Decimal(6)
                     player.ta.dimensionAutobuyTimer[i] = new Decimal(0)
                     }
                     }
@@ -442,6 +443,7 @@
                 return player.ta.negativeInfinityPoints.pow(0.75).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', "min-height": '120px' },
         },
         13:
         {
@@ -506,6 +508,7 @@
                 return player.ta.negativeInfinityPoints.pow(0.55).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', "min-height": '120px' },
         },
         19:
         {
@@ -1912,7 +1915,7 @@ addLayer("revc", {
                     ["blank", "150px"],
                     ["row", [["clickable", 11]]],
     ],
-    layerShown() { return player.startedGame == true }
+    layerShown() { return player.startedGame == true && hasChallenge("ip", 18)}
 })
 window.addEventListener('load', function() {
     player.bigc.spawnedWisps = false

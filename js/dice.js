@@ -153,12 +153,14 @@
             player.d.boosterDiceCooldown = new Decimal(120)
 
 
-            if (inChallenge("ip", 15)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
+            if (inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
         }
 
         player.d.challengeDicePointsToGet = player.d.dicePoints.pow(0.2).div(3)
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
+
+        player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
 
         player.d.boosterDiceStatsPerSecond = buyableEffect("d", 21)
         for (let i = 0; i < 11; i++)
@@ -804,7 +806,7 @@
             },
             "Challenge Dice": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return inChallenge("ip", 15) },
+                unlocked() { return inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]},
                 content:
                 [
         ["blank", "25px"],

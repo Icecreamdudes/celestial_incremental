@@ -56,9 +56,12 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
+        if (!hasUpgrade("bi", 22)) player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
+        if (hasUpgrade("bi", 22)) player.ad.antimatterEffect = player.points.pow(player.points.plus(1).log10().pow(2)).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
+
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
+        if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
 
         player.ad.dimensionText = [
             "1st dimension (" + format(player.ad.dimensionMult[0]) + "x): " + format(player.ad.dimensionAmounts[0]) + " (+" + format(player.ad.dimensionsPerSecond[0]) + "/s)",
@@ -95,9 +98,11 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 37))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.id.infinityPowerEffect)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.h.ragePowerEffect)
 
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 295)))
+        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 295)))
+        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 355)))
 
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
@@ -118,7 +123,8 @@
             if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
             if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
-            if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
+            if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
+            if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.975)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i])
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
@@ -130,6 +136,7 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.om.hexMasteryPointsEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 37))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.h.ragePowerEffect)
         }
         player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
         player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])
@@ -160,6 +167,7 @@
         //tickspeed
         player.ad.tickspeedMult = new Decimal(1.125)
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(player.ad.galaxyEffect)
+        player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
         //dimboost
 
         if (player.ad.dimBoostAmount.gt(4)) 
@@ -178,6 +186,7 @@
         }
 
         player.ad.dimBoostMult = new Decimal(2)
+        player.ad.dimBoostMult = player.ad.dimBoostMult.mul(buyableEffect("ca", 21))
         player.ad.dimBoostEffect = Decimal.pow(player.ad.dimBoostMult, player.ad.dimBoostAmount)
 
         if (player.ad.dimBoostDimCost.eq(3)) player.ad.dimBoostText = "Req: " + player.ad.dimBoostReq + " 4th dimensions."
@@ -198,7 +207,8 @@
         player.ad.galaxyReq = player.ad.galaxyAmount.add(1).mul(4)
 
         player.ad.galaxyBase = new Decimal(0.01)
-        player.ad.galaxyEffect = player.ad.galaxyBase.mul(player.ad.galaxyAmount)
+        player.ad.galaxyBase = player.ad.galaxyBase.mul(player.ca.galaxyDustEffect)
+        player.ad.galaxyEffect = player.ad.galaxyBase.mul(player.ad.galaxyAmount.add(player.ca.replicantiGalaxies))
 
         player.ad.galaxyText = "Req: " + player.ad.galaxyReq + " 8th dimensions."
 
@@ -247,7 +257,7 @@
             unlocked() { return true },
             onClick() {
                 player.ad.dimBoostAmount = player.ad.dimBoostAmount.add(1)
-                player.ad.dimBoostPause = new Decimal(6)
+                if (!hasUpgrade("bi", 25)) player.ad.dimBoostPause = new Decimal(6)
             },
             style: { width: '300px', "min-height": '75px' },
         },
@@ -257,7 +267,7 @@
             unlocked() { return true },
             onClick() {
                 player.ad.galaxyAmount = player.ad.galaxyAmount.add(1)
-                player.ad.galaxyPause = new Decimal(6)
+                if (!hasUpgrade("bi", 25)) player.ad.galaxyPause = new Decimal(6)
             },
             style: { width: '300px', "min-height": '75px' },
         },
@@ -474,7 +484,7 @@
             buy() {
                 let base = new Decimal(1000)
                 let growth = 10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -501,7 +511,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1e3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[0]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -530,7 +540,7 @@
             buy() {
                 let base = new Decimal(100)
                 let growth = 1e4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[1]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -559,7 +569,7 @@
             buy() {
                 let base = new Decimal(1e4)
                 let growth = 1e5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[2]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -588,7 +598,7 @@
             buy() {
                 let base = new Decimal(1e6)
                 let growth = 1e6
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[3]).mul(base)
                     if (!hasUpgrade("bi", 105))  player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -617,7 +627,7 @@
             buy() {
                 let base = new Decimal(1e9)
                 let growth = 1e8
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[4]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -646,7 +656,7 @@
             buy() {
                 let base = new Decimal(1e13)
                 let growth = 1e10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[5]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -675,7 +685,7 @@
             buy() {
                 let base = new Decimal(1e18)
                 let growth = 1e12
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[6]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)
@@ -704,7 +714,7 @@
             buy() {
                 let base = new Decimal(1e24)
                 let growth = 1e15
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 105))
                 {
                     let buyonecost = new Decimal(growth).pow(player.ad.dimensionsPurchased[7]).mul(base)
                     if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(buyonecost)

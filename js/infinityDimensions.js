@@ -20,7 +20,7 @@
 
         dimensionUnlockAmount: new Decimal(0),
         dimensionUnlockCost: new Decimal("1e600"),
-        dimensionUnlockCosts: [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e4400"),new Decimal("1e7000"),new Decimal("1e10000"),new Decimal("1e15000"),],
+        dimensionUnlockCosts: [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e3300"),new Decimal("1e4400"),new Decimal("1e6000"),new Decimal("1e9000"),],
     }
     },
     automate() {
@@ -38,7 +38,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.id.infinityPowerEffect = player.id.infinityPower.pow(0.75).add(1)
+        player.id.infinityPowerEffect = player.id.infinityPower.pow(0.9).add(1)
         player.id.infinityPowerEffect2 = player.id.infinityPower.mul(3).pow(1.6).add(1)
 
         player.id.dimensionText = [
@@ -55,6 +55,8 @@
         player.id.infinityPower = player.id.infinityPower.add(player.id.infinityPowerPerSecond.mul(delta))
 
         player.id.infinityPowerPerSecond = player.id.dimensionAmounts[0].mul(player.id.dimensionMult[0])
+        player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(buyableEffect("r", 14))
+        player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.ca.replicantiEffect2)
 
         for (let i = 0; i < player.id.dimensionAmounts.length; i++)
         {
@@ -64,6 +66,8 @@
         for (let i = 0; i < player.id.dimensionAmounts.length-1; i++)
         {
             player.id.dimensionsPerSecond[i] = player.id.dimensionAmounts[i+1].mul(player.id.dimensionMult[i+1].div(10))
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("r", 14))
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.ca.replicantiEffect2)
 
             //mults
         }
@@ -81,7 +85,7 @@
 
         player.id.dimensionUnlockCost = player.id.dimensionUnlockCosts[player.id.dimensionUnlockAmount]
 
-        player.id.dimensionUnlockCosts = [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e4400"),new Decimal("1e7000"),new Decimal("1e10000"),new Decimal("1e15000"),]
+        player.id.dimensionUnlockCosts = [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e3300"),new Decimal("1e4400"),new Decimal("1e6000"),new Decimal("1e9000"),]
 
         for (let i = 0; i < player.id.dimensionAmounts.length; i++)
         {
@@ -404,7 +408,7 @@
             style: { width: '275px', height: '150px', }
         },
         22: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(250) },
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.75).add(1) },
             unlocked() { return hasUpgrade("i", 23) },
             canAfford() { return player.id.infinityPower.gte(this.cost()) },
@@ -416,8 +420,72 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
             },
             buy() {
-                let base = new Decimal(250)
+                let base = new Decimal(1000)
                 let growth = 1.25
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.id.infinityPower = player.id.infinityPower.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.id.infinityPower, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.id.infinityPower = player.id.infinityPower.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        23: {
+            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.75).add(1) },
+            unlocked() { return hasUpgrade("i", 25) },
+            canAfford() { return player.id.infinityPower.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Time Cube Empowerment"
+            },
+            display() {
+                return "which are multiplying time cube gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
+            },
+            buy() {
+                let base = new Decimal(100000)
+                let growth = 1.3
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.id.infinityPower = player.id.infinityPower.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.id.infinityPower, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.id.infinityPower = player.id.infinityPower.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        24: {
+            cost(x) { return new Decimal(3).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e10) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.75).pow(0.85).add(1) },
+            unlocked() { return hasUpgrade("i", 25) },
+            canAfford() { return player.id.infinityPower.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Infinity Point Empowerment"
+            },
+            display() {
+                return "which are multiplying infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
+            },
+            buy() {
+                let base = new Decimal(1e10)
+                let growth = 3
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -474,7 +542,7 @@
                 content:
                 [
         ["blank", "25px"],
-        ["row", [["buyable", 21], ["buyable", 22]]],
+        ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
 
                 ]
 

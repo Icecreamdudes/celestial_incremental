@@ -63,7 +63,7 @@
         if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))
         if (hasMilestone("ip", 12) && !inChallenge("ip", 14)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.05, delta)))
 
-        if (inChallenge("ip", 18) && player.p.prestigePoints.gt(1))
+        if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta)))
         {
             player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.6 * delta))
         } 
@@ -76,6 +76,7 @@
         player.p.crystalEffect = player.p.crystals.plus(1).log10().pow(0.8).mul(0.05).add(1)
         player.p.crystalsToGet = player.r.tier.pow(0.01)
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
     },
     prestigeReset()
     {

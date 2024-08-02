@@ -19,6 +19,18 @@
         automationTier: new Decimal(0),
         automationTierReq: new Decimal(1000),
         automationTierEffect: new Decimal(0),
+
+        ragePower: new Decimal(0),
+        ragePowerEffect: new Decimal(1),
+        ragePowerToGet: new Decimal(0),
+        ragePowerPause: new Decimal(0),
+
+        ragePowerCycleEffect: new Decimal(1),
+        currentRagePowerEffect: new Decimal(0),
+        ragePowerCycleTimer: new Decimal(0),
+        ragePowerCycleTimerToggle: true,
+        ragePowerCycleTimerReq: new Decimal(20),
+        ragePowerCycleTimerReqInput: new Decimal(20),
     }
     },
     automate() {
@@ -51,7 +63,7 @@
         player.h.hexPause = player.h.hexPause.sub(1)
 
         if (player.h.hex.lt(20)) player.h.hexReq = Decimal.mul(1e70, Decimal.pow(1e20, player.h.hex))
-        if (player.h.hex.gte(20)) player.h.hexReq = Decimal.mul(Decimal.mul(1e70, Decimal.pow(1e20, player.h.hex)), Decimal.pow(1e10, player.h.hex.pow(2)))
+        if (player.h.hex.gte(20)) player.h.hexReq = Decimal.mul(Decimal.mul(1e80, Decimal.pow(1e30, player.h.hex)), Decimal.pow(1e10, player.h.hex.pow(2)))
         player.h.hexToGet = new Decimal(1)
 
         for (let i = 0; i < player.h.hex; i++)
@@ -68,6 +80,7 @@
         player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 48))
         player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 49))
     }
+        player.h.hexPointsToGet[player.h.currentRagePowerEffect] = player.h.hexPointsToGet[player.h.currentRagePowerEffect].mul(player.h.ragePowerCycleEffect)
 
         player.h.hexPointsToGet[0] = player.h.hex.pow(2).mul(player.h.hexPointsEffect[1])
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(player.d.diceEffects[14])
@@ -86,6 +99,30 @@
         {
             player.h.hexPoints[i+1] = player.h.hexPoints[i+1].add(player.h.hexPointsToGet[i+1].mul(player.h.automationTierEffect.mul(delta)))
         }
+
+        player.h.ragePowerToGet = player.h.hexPoints[0].plus(1).log10().pow(2).div(1000)
+
+        if (player.h.ragePowerPause.gt(0)) {
+            layers.h.ragePowerReset();
+        }
+        player.h.ragePowerPause = player.h.ragePowerPause.sub(1)
+
+        player.h.ragePowerEffect = player.h.ragePower.pow(0.65).mul(333).add(1)
+        player.h.ragePowerCycleEffect = player.h.ragePower.pow(0.75).mul(33).add(1)
+
+        player.h.ragePowerCycleTimer = player.h.ragePowerCycleTimer.add(onepersec.mul(delta))
+        if (player.h.ragePowerCycleTimer.gte(player.h.ragePowerCycleTimerReq))
+        {
+            player.h.currentRagePowerEffect = player.h.currentRagePowerEffect.add(1)
+            player.h.ragePowerCycleTimer = new Decimal(0)
+        }
+        if (player.h.currentRagePowerEffect.gte(player.h.hex))
+        {
+            player.h.currentRagePowerEffect = new Decimal(0)
+        }
+
+        if (player.h.ragePowerCycleTimerReqInput.gte(1)) player.h.ragePowerCycleTimerReq = player.h.ragePowerCycleTimerReqInput
+        if (player.h.ragePowerCycleTimerReqInput.lt(1)) player.h.ragePowerCycleTimerReq = new Decimal(1)
     },
     branches: ["t", "r"],
     clickables: {
@@ -159,6 +196,16 @@
                 player.h.automationTier = player.h.automationTier.add(1)
             },
             style: { width: '400px', "min-height": '100px' },
+        },
+        16: {
+            title() { return "<h3>Do the equivalent of a big crunch, and automation tier reset, but reset for rage power.<br>Req: 1e100 Hex 1 Points" },
+            canClick() { return player.h.hexPoints[0].gte(1e100) },
+            unlocked() { return true },
+            onClick() {
+                player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet)
+                player.h.ragePowerPause = new Decimal(6)
+            },
+            style: { width: '400px', "min-height": '100px', background: "#ff5555", },
         },
     },
     hexPointReset(layer)
@@ -357,6 +404,195 @@
                 player.i.upgrades.splice(i, 1);
                 i--;
             }
+        }
+    },
+    ragePowerReset()
+    {
+        player.points = new Decimal(10)
+        player.r.rank = new Decimal(0)
+        player.r.tier = new Decimal(0)
+        player.r.tetr = new Decimal(0)
+        player.r.ranksToGet = new Decimal(0)
+        player.r.tiersToGet = new Decimal(0)
+        player.r.tetrsToGet = new Decimal(0)
+        player.r.pentToGet = new Decimal(0)
+        player.r.pent = new Decimal(0)
+
+        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
+        player.f.factorGain = new Decimal(1)
+
+        player.f.factorPower = new Decimal(0)
+        player.f.factorPowerEffect = new Decimal(1)
+        player.f.factorPowerPerSecond = new Decimal(0)
+        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
+
+        player.f.buyables[1] = new Decimal(0)
+        player.f.buyables[2] = new Decimal(0)
+        player.f.buyables[3] = new Decimal(0)
+        player.f.buyables[4] = new Decimal(0)
+        player.f.buyables[5] = new Decimal(0)
+        player.f.buyables[6] = new Decimal(0)
+        player.f.buyables[7] = new Decimal(0)
+        player.f.buyables[8] = new Decimal(0)
+        player.f.buyables[11] = new Decimal(0)
+        player.f.buyables[12] = new Decimal(0)
+        player.f.buyables[13] = new Decimal(0)
+        player.f.buyables[14] = new Decimal(0)
+        player.f.buyables[15] = new Decimal(0)
+        player.f.buyables[16] = new Decimal(0)
+        player.f.buyables[17] = new Decimal(0)
+        player.f.buyables[18] = new Decimal(0)
+        player.f.buyables[19] = new Decimal(0)
+        player.f.buyables[21] = new Decimal(0)
+        player.f.buyables[22] = new Decimal(0)
+        player.f.buyables[23] = new Decimal(0)
+        player.f.buyables[24] = new Decimal(0)
+        player.f.buyables[25] = new Decimal(0)
+        player.f.buyables[26] = new Decimal(0)
+        player.f.buyables[27] = new Decimal(0)
+        player.f.buyables[28] = new Decimal(0)
+        player.f.buyables[29] = new Decimal(0)
+        player.f.buyables[31] = new Decimal(0)
+        player.f.buyables[32] = new Decimal(0)
+        player.f.buyables[33] = new Decimal(0)
+        player.f.buyables[34] = new Decimal(0)
+        player.f.buyables[35] = new Decimal(0)
+        player.f.buyables[36] = new Decimal(0)
+
+        player.p.prestigePoints = new Decimal(0)
+
+        if (!hasMilestone("ip", 11))
+        {
+        for (let i = 0; i < player.p.upgrades.length; i++) {
+            if (+player.p.upgrades[i] < 24) {
+                player.p.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+    }
+
+        player.t.buyables[11] = new Decimal(0)
+        player.t.buyables[12] = new Decimal(0)
+        player.t.buyables[13] = new Decimal(0)
+        player.t.buyables[14] = new Decimal(0)
+        player.t.buyables[15] = new Decimal(0)
+        player.t.buyables[16] = new Decimal(0)
+        player.t.buyables[17] = new Decimal(0)
+        player.t.buyables[18] = new Decimal(0)
+
+        player.f.factorPower = new Decimal(0)
+
+        player.t.leaves = new Decimal(0)
+        player.t.trees = new Decimal(0)
+
+        player.g.buyables[11] = new Decimal(0)
+        player.g.buyables[12] = new Decimal(0)
+        player.g.buyables[13] = new Decimal(0)
+        player.g.buyables[14] = new Decimal(0)
+        player.g.buyables[15] = new Decimal(0)
+        player.g.buyables[16] = new Decimal(0)
+        player.g.buyables[17] = new Decimal(0)
+        player.g.buyables[18] = new Decimal(0)
+
+        if (!hasMilestone("ip", 11))
+        {
+        for (let i = 0; i < player.g.upgrades.length; i++) {
+            if (+player.g.upgrades[i] < 22) {
+                player.g.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+        }
+
+        if (!hasMilestone("ip", 14))
+        {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if (+player.r.milestones[i] < 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        player.g.grass = new Decimal(0)
+        player.g.savedGrass = new Decimal(0)
+        player.g.grassCount = new Decimal(0)
+        player.g.grassTimer = new Decimal(0)
+
+        player.g.goldGrass = new Decimal(0)
+        player.g.savedGoldGrass = new Decimal(0)
+        player.g.goldGrassCount = new Decimal(0)
+        player.g.goldGrassTimer = new Decimal(0)
+
+        player.gh.grasshoppers = new Decimal(0)
+        player.gh.fertilizer = new Decimal(0)
+
+        player.gh.buyables[11] = new Decimal(0)
+        player.gh.buyables[12] = new Decimal(0)
+        player.gh.buyables[13] = new Decimal(0)
+        player.gh.buyables[14] = new Decimal(0)
+        player.gh.buyables[15] = new Decimal(0)
+        player.gh.buyables[16] = new Decimal(0)
+        player.gh.buyables[17] = new Decimal(0)
+        player.gh.buyables[18] = new Decimal(0)
+        player.gh.buyables[19] = new Decimal(0)
+        player.gh.buyables[21] = new Decimal(0)
+        player.gh.buyables[22] = new Decimal(0)
+
+        player.m.codeExperience = new Decimal(0)
+        player.m.linesOfCode = new Decimal(0)
+        player.m.mods = new Decimal(0)
+
+        player.m.buyables[11] = new Decimal(0)
+        player.m.buyables[12] = new Decimal(0)
+        player.m.buyables[13] = new Decimal(0)
+        player.m.buyables[14] = new Decimal(0)
+
+        //dice
+        player.d.dicePoints = new Decimal(0)
+        player.d.diceRolls = [new Decimal(1)] 
+        player.d.dice = new Decimal(1)
+
+        player.d.buyables[11] = new Decimal(0)
+        player.d.buyables[12] = new Decimal(0)
+        player.d.buyables[13] = new Decimal(0)
+        player.d.buyables[14] = new Decimal(0)
+        player.d.buyables[15] = new Decimal(0)
+
+        for (let i = 0; i < player.d.diceEffects.length; i++)
+        {
+            player.d.diceEffects[i] = new Decimal(1)
+        }
+
+        //rf
+        player.rf.rocketFuel = new Decimal(0)
+        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++)
+        {
+            player.rf.abilitiesUnlocked[i] = false
+        }
+        for (let i = 0; i < player.rf.abilityTimers.length; i++)
+        {
+            player.rf.abilityTimers[i] = new Decimal(0)
+        }
+
+        for (let i = 0; i < player.rf.upgrades.length; i++) {
+            if (+player.rf.upgrades[i] < 16) {
+                player.rf.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+
+        for (let i = 0; i < player.i.upgrades.length; i++) {
+            if (+player.i.upgrades[i] < 22) {
+                player.i.upgrades.splice(i, 1);
+                i--;
+            }
+        }
+
+        //hex
+        for (let i = 0; i<player.h.hex; i++)
+        {
+            player.h.hexPoints[i] = new Decimal(0)
         }
     },
     bars: {
@@ -685,6 +921,40 @@
             },
             style: { width: '275px', height: '150px', }
         },
+        23: {
+            cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e6) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.06).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.h.hexPoints[19].gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Point Blessing III"
+            },
+            display() {
+                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 20 Points"
+            },
+            buy() {
+                let base = new Decimal(1e6)
+                let growth = 1000
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.h.hexPoints[19] = player.h.hexPoints[19].sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.h.hexPoints[19], base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.h.hexPoints[19] = player.h.hexPoints[19].sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+
+        //RAGE POWER
     },
     milestones: {
 
@@ -749,27 +1019,37 @@
                 content:
                 [
          ["blank", "25px"],
-         ["row", [["buyable", 21], ["buyable", 22],]],
+         ["row", [["buyable", 21], ["buyable", 22],["buyable", 23],]],
          ["blank", "25px"],
          ["raw-html", function () { return "These effects are always active."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
 
         ],
 
             },
-            "Challenge Debuffs": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return inChallenge("ip", 13) },
+            "RAGE POWER": {
+                buttonStyle() { return { 'border-color': '#5e0000', 'background-color': '#ff5555', "color": "red" } },
+                unlocked() { return hasUpgrade("i", 28) },
                 content:
                 [
          ["blank", "25px"],
-         ["raw-html", function () { return "Challenge III Debuffs:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+         ["raw-html", function () { return "You have <h3>" + format(player.h.ragePower) + "</h3> rage power, which boost antimatter dimensions by x" + format(player.h.ragePowerEffect) + "."}, { "color": "#ff5555", "font-size": "24px", "font-family": "monospace" }],
+         ["raw-html", function () { return "You will gain <h3>" + format(player.h.ragePowerToGet) + "</h3> rage power on reset." }, { "color": "#ff5555", "font-size": "20px", "font-family": "monospace" }],
+         ["raw-html", function () { return "(Based on hex 1 points)" }, { "color": "#ff5555", "font-size": "16px", "font-family": "monospace" }],
          ["blank", "25px"],
-         ["raw-html", function () { return "^0.75 Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "^0.7 Factor Power Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "^0.7 Prestige Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Disabled Check Back Effects." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "^0.75 Leaf and Tree Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "^0.75 Grass Value." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+         ["row", [["clickable", 16]]],
+         ["blank", "25px"],
+         ["raw-html", function () { return "Rage power also boosts hex " + formatWhole(player.h.currentRagePowerEffect.add(1)) + " points by x" + format(player.h.ragePowerCycleEffect) + "." }, { "color": "#ff5555", "font-size": "20px", "font-family": "monospace" }],
+         ["raw-html", function () { return "Time to increase hex layer: " + formatTime(player.h.ragePowerCycleTimer) + "/" + formatTime(player.h.ragePowerCycleTimerReq) + "." }, { "color": "#ff5555", "font-size": "20px", "font-family": "monospace" }],
+         ["blank", "25px"],
+         ["text-input", "ragePowerCycleTimerReqInput", {
+            color: "var(--color)",
+            width: "400px",
+            "font-family": "Calibri",
+            "text-align": "left",
+            "font-size": "32px",
+            border: "2px solid #ffffff17",
+            background: "var(--background)",
+        }],
         ]
 
             },

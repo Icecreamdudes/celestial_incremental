@@ -1,4 +1,4 @@
-﻿var tree = [["in"]]
+﻿var tree = [["i", "in"]]
 addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -13,6 +13,7 @@ addLayer("po", {
         rocketFuel: false,
         hex: false,
         breakInfinity: false,
+        realmMods: false,
 
         keepOTFS: false,
 
@@ -38,7 +39,7 @@ addLayer("po", {
         if (player.po.pointHaltInput.lt(1)) player.po.pointHalt = new Decimal(1)
 
         player.po.featureSlotsMax = new Decimal(1)
-        if (inChallenge("tad", 11) && hasUpgrade("de", 14)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+        if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 27)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice)
@@ -60,6 +61,10 @@ addLayer("po", {
         } else
         {
             player.in.breakInfinity = false
+        }
+        if (player.po.realmMods)
+        {
+            player.po.featureSlots = player.po.featureSlots.sub(2)
         }
 
         //IF ADDING NEW OTFS - REMEMBER TO EXIT THEM AFTER LEAVING TAVS DOMAIN
@@ -120,7 +125,7 @@ addLayer("po", {
             display() {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
             onClick() { 
                 player.po.dice = true
@@ -138,7 +143,7 @@ addLayer("po", {
             display() {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
-            canClick() { return player.po.featureSlots.gt(0) && (player.points.gte(1e170) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e170) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
             onClick() { 
                 player.po.rocketFuel = true
@@ -179,7 +184,7 @@ addLayer("po", {
             display() {
                 return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off<br><h2>Req: Challenge III Completion";
             },
-            canClick() { return player.po.featureSlots.gt(0) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
+            canClick() { return player.po.featureSlots.gte(1) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
             unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))  && (!inChallenge("ip", 16) && hasChallenge("ip", 13))     },
             onClick() { 
                 player.po.hex = true
@@ -197,7 +202,7 @@ addLayer("po", {
             display() {
                 return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated<br>Can't activate in Tav's domain";
             },
-            canClick() { return player.po.featureSlots.gt(0) && player.in.unlockedBreak && !inChallenge("tad", 11)},
+            canClick() { return player.po.featureSlots.gte(1) && player.in.unlockedBreak && !inChallenge("tad", 11)},
             unlocked() { return player.in.unlockedBreak },
             onClick() { 
                 player.po.breakInfinity = true
@@ -207,6 +212,25 @@ addLayer("po", {
                 "min-height": '200px',
                 "border-color": "white",
                 "background-color": "#7c5423",
+                "background-origin": "border-box",
+                "color": "white",
+            },
+        },
+        15: {
+            title() { return "<h1>Realm Mods" },
+            display() {
+                return player.po.realmMods ? "<h2>The possibilities are endless.<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti<br>Takes up 2 OTF slots";
+            },
+            canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308)},
+            unlocked() { return player.in.unlockedBreak },
+            onClick() { 
+                player.po.breakInfinity = true
+            },
+            style: {
+                width: '200px',
+                "min-height": '200px',
+                "border-color": "white",
+                "background-image": "linear-gradient(0deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
                 "background-origin": "border-box",
                 "color": "white",
             },
@@ -253,7 +277,7 @@ addLayer("po", {
                         ["blank", "25px"],
                         ["row", [["clickable", 2], ["clickable", 3]]],
                         ["blank", "25px"],
-                        ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]]],
+                        ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
                 ]
 
             },

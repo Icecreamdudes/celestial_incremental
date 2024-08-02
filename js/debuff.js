@@ -794,7 +794,7 @@
     },
     microtabs: {
         stuff: {
-            "Debuffs": {
+            "C8 Debuffs": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return inChallenge("ip", 18) },
                 content:
@@ -813,7 +813,7 @@
              ]
 
             },
-            "Debuffs": {
+            "Tav's Domain Debuffs": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return inChallenge("tad", 11) },
                 content:

@@ -2,7 +2,7 @@
 
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "START THE GAME", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -26,14 +26,13 @@ addLayer("i", {
     },
     nodeStyle() {
         return {
-            "width": 400,
-            "height": 400,
-            'min-height': '200px',
-            'min-width': '400px',
-            'border-radius': '0%',
-        }
+            background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
+            "background-origin": "border-box",
+            "border-color": "#151515",
+        };
     },
-    tooltip: "",
+    tooltip: "Universe 1 - Overworld",
+    branches: ["in"],
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -120,17 +119,31 @@ addLayer("i", {
         if (inChallenge("tad", 11)) player.gain = player.gain.pow(0.45)
         if (inChallenge("tad", 11)) player.gain = player.gain.pow(buyableEffect("de", 11))
         if (inChallenge("tad", 11)) player.gain = player.gain.mul(player.de.tavPointsEffect)
-        if (hasUpgrade("de", 15)) player.gain = player.gain.mul(upgradeEffect("de", 15))
+        if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.mul(buyableEffect("gh", 31))
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
-        
-
-        if (inChallenge("ip", 18) && player.points.gt(1))
+        player.gain = player.gain.mul(player.r.timeCubeEffects[0])
+        player.gain = player.gain.mul(player.ca.replicantiEffect3)
+        if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta)))
         {
             player.points = player.points.sub(player.points.mul(0.9 * delta))
         }
 
+        if (player.r.timeReversed)
+        {
+            player.gain = player.gain.mul(0)
+            player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(0)
+            player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(0)
+            player.t.leavesPerSecond = player.t.leavesPerSecond.mul(0)
+            player.g.grassVal = player.g.grassVal.mul(0)
+            player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(0)
+            player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
+            player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(0)
+            player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(0)
+
+            player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
+        }
         player.points = player.points.add(player.gain.mul(delta))
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
@@ -272,6 +285,66 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
+        25:
+        {
+            title: "Time Reversal",
+            unlocked() { return hasUpgrade("i", 24) && hasUpgrade("bi", 106)},
+            description: "Unlocks Time Reversal (in ranks layer).",
+            cost: new Decimal("1e1400"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        26:
+        {
+            title: "Pentomation",
+            unlocked() { return hasUpgrade("i", 25) && hasUpgrade("bi", 106)},
+            description: "Automatically gain pent without resetting.",
+            cost: new Decimal("1e1600"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        27:
+        {
+            title: "2nd OTF slot...",
+            unlocked() { return hasUpgrade("i", 26) && hasUpgrade("bi", 106)},
+            description: "Gain a 2nd OTF slot. (does'nt stack with tav's domain)",
+            cost: new Decimal("1e1850"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        28:
+        {
+            title: "Rage Power",
+            unlocked() { return (hasUpgrade("i", 27) && hasUpgrade("bi", 106) && player.po.hex && player.ca.unlockedCante) || hasUpgrade("i", 28)},
+            description: "Unlock Rage Power (requires hex, in hex).",
+            cost: new Decimal("1e3333"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        29:
+        {
+            title: "Auto CDPs",
+            unlocked() { return (hasUpgrade("i", 27) && hasUpgrade("bi", 106) && player.po.dice && player.ca.unlockedCante && player.ev.evolutionsUnlocked[5]) || hasUpgrade("i", 29)},
+            description: "Gain 5% challenge dice points per second.",
+            cost: new Decimal("1e4600"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        31:
+        {
+            title: "IP Formula Boost Again",
+            unlocked() { return hasUpgrade("i", 27) && hasUpgrade("bi", 111)},
+            description: "Improve the IP formula again.",
+            cost: new Decimal("1e5666"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
     },
     buyables: {
     },
@@ -310,7 +383,8 @@ addLayer("i", {
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                         ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-                        ["row", [["upgrade", 24]]],
+                        ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
+                        ["row", [["upgrade", 31]]],
                 ]
 
             },

@@ -12,6 +12,13 @@
     }
     },
     automate() {
+        if (hasUpgrade("bi", 109))
+        {
+            buyBuyable("ip", 11)
+            buyBuyable("ip", 12)
+            buyBuyable("ip", 13)
+            buyBuyable("ip", 14)
+        }
     },
     nodeStyle() {
         return {
@@ -132,8 +139,6 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
-
-
         21:
         {
             title: "Upgrade (2, 1)",
@@ -190,8 +195,6 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
-
-
         31:
         {
             title: "Upgrade (3, 1)",
@@ -317,17 +320,17 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 100
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -349,17 +352,17 @@
             buy() {
                 let base = new Decimal(1000)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -381,17 +384,17 @@
             buy() {
                 let base = new Decimal(2500)
                 let growth = 1.75
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -413,17 +416,17 @@
             buy() {
                 let base = new Decimal(4000)
                 let growth = 2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

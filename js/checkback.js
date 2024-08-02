@@ -111,7 +111,7 @@
         buttonAutomationAllocation: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         buttonAutomationTimersMax: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         buttonAutomationTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        buttonIndex: new Decimal(0)
+        buttonIndex: new Decimal(0),
 
         // petAutomationAllocation: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         // petAutomationAllocationTimersMax: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
@@ -119,6 +119,12 @@
         // XPBoostAutomationAllocation: [new Decimal(0)],
         // XPBoostAutomationAllocationTimersMax: [new Decimal(0)],
         // XPBoostAutomationAllocationTimers: [new Decimal(0)],
+
+        //cante?
+        canteEnergyXPButtonBase: [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ],
+        canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9),],
+        canteEnergyXPBoostButtonBase: [new Decimal(10)],
+        canteEnergyPetPointButtonBase: [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),],
     }
     },
     automate() {
@@ -153,6 +159,8 @@
         }
 
         player.cb.levelEffect = player.cb.level.pow(3).pow(player.d.dicePointsEffect)
+        if (hasUpgrade("bi", 25) && !player.po.dice) player.cb.levelEffect = player.cb.levelEffect.pow(5)
+        if (hasUpgrade("bi", 25) && player.po.dice) player.cb.levelEffect = player.cb.levelEffect.pow(2)
 
         if (player.cb.level.gte(3))
         [
@@ -423,7 +431,7 @@
                     player.cb.rarePetEffects[i][j] = new Decimal(1)
                 }
             } 
- 0       }   
+        }   
 
         player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180)]
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
@@ -475,8 +483,8 @@
         }
         if (player.cb.viewingEvolved[5]) 
         {
-            player.cb.rarePetImage[5] = "<img src='resources/d20EvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
-            player.cb.rarePetDisplay[5] = "d20: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[5]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[5]) + ")"
+            player.cb.rarePetImage[1] = "<img src='resources/d20EvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
+            player.cb.rarePetDisplay[1] = "d20: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[5]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[5]) + ")"
         }
 
         //EVOS
@@ -546,7 +554,8 @@
             if (player.cb.buttonAutomationTimers[i].lt(0))
             {
                 player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimersMax[i]
-               player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[i].mul(player.cb.xpMult))
+                player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[i].mul(player.cb.xpMult))
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[i].mul(player.ca.canteEnergyMult))
             }
         }
         
@@ -665,6 +674,7 @@
                         callAlert("You gained an Evolution Shard! (0.5%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[0].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -686,6 +696,7 @@
                         callAlert("You gained an Evolution Shard! (1%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[1].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -707,6 +718,7 @@
                         callAlert("You gained an Evolution Shard! (2%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[2].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -728,6 +740,7 @@
                         callAlert("You gained an Evolution Shard! (0.2%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[3].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -739,6 +752,7 @@
             onClick() {
                 player.cb.petButtonTimers[0] = player.cb.petButtonTimersMax[0]
                 layers.cb.petButton1();
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[0].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -760,6 +774,7 @@
                         callAlert("You gained an Evolution Shard! (5%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[4].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -771,6 +786,7 @@
             onClick() {
                 player.cb.petButtonTimers[1] = player.cb.petButtonTimersMax[1]
                 layers.cb.petButton2();
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[1].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -781,6 +797,7 @@
             onClick() {
                 player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[0])
                 player.cb.rarePetButtonTimers[0] = player.cb.rarePetButtonTimersMax[0]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[0].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -805,6 +822,7 @@
                 player.cb.petPoints = player.cb.petPoints.add(player.cb.dicePetPointsGain)
 
                 player.cb.rarePetButtonTimers[1] = player.cb.rarePetButtonTimersMax[1]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[1].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -826,6 +844,7 @@
                         callAlert("You gained an Evolution Shard! (20%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[5].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -838,6 +857,7 @@
                 player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[2])
                 player.ps.priceResetTimer = player.ps.priceResetTimer.sub(300)
                 player.cb.rarePetButtonTimers[2] = player.cb.rarePetButtonTimersMax[2]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[2].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -859,6 +879,7 @@
                         callAlert("You gained an Evolution Shard! (50%)", "resources/evoShard.png");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[6].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -877,6 +898,7 @@
                     player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                     callAlert("You gained an Evolution Shard! (25%)", "resources/evoShard.png");
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[3].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -888,6 +910,7 @@
             onClick() {
                 player.cb.petButtonTimers[2] = player.cb.petButtonTimersMax[2]
                 layers.cb.petButton3();
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[2].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -913,7 +936,8 @@
                     }
                     player.cb.level = new Decimal(1)
                     player.cb.xp = new Decimal(0)
-                } else
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[0].mul(player.ca.canteEnergyMult))
+            } else
                 {
                     callAlert("You must be level " + formatWhole(player.cb.XPBoostReq[0]) + " to reset for this button.");
                 }
@@ -928,6 +952,7 @@
             onClick() {
                 player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[4])
                 player.cb.rarePetButtonTimers[4] = player.cb.rarePetButtonTimersMax[4]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[4].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -941,6 +966,7 @@
                 layers.cb.petButton4();
 
                 player.cb.XPBoost = player.cb.XPBoost.sub(0.04)
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[3].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -965,6 +991,7 @@
                         callAlert("Damn bro you didn't gain an evo shard. Take a screenshot, send to the discord, and ping the dev. I think ur still cool.");
                     }
                 }
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[7].mul(player.ca.canteEnergyMult))
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -1577,9 +1604,11 @@
         226: {
             title() { return "Special Feature"},
             canClick() { return true },
+            tooltip() { return "The current OTF has to be dice."},
             unlocked() { return player.cb.rarePetDisplayIndex == 1 && player.ev.evolutionsUnlocked[5] == true && player.cb.viewingEvolved[5] == true},
             onClick() {
-                //player.tab = "ev2"
+                player.tab = "d"
+                player.subtabs["d"]['stuff'] = 'Challenge Dice'
             },
             style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
         },

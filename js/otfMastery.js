@@ -21,6 +21,15 @@
     }
     },
     automate() {
+        if (hasUpgrade("bi", 109))
+        {
+            buyBuyable("om", 11)
+            buyBuyable("om", 12)
+            buyBuyable("om", 13)
+            buyBuyable("om", 14)
+            buyBuyable("om", 15)
+            buyBuyable("om", 16)
+        }
     },
     nodeStyle() {
         return {
@@ -89,17 +98,17 @@
             buy() {
                 let base = new Decimal(10000)
                 let growth = 1.2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.om.diceMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -121,17 +130,17 @@
             buy() {
                 let base = new Decimal(10000)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.om.rocketFuelMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -153,17 +162,17 @@
             buy() {
                 let base = new Decimal(10000)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.om.hexMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -185,17 +194,17 @@
             buy() {
                 let base = new Decimal(50000)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.om.diceMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -217,17 +226,17 @@
             buy() {
                 let base = new Decimal(50000)
                 let growth = 1.35
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.om.rocketFuelMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -249,17 +258,17 @@
             buy() {
                 let base = new Decimal(50000)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(buyonecost)
+                    if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
     
                 let max = Decimal.affordGeometricSeries(player.om.hexMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(cost)
+                if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

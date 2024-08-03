@@ -161,7 +161,9 @@
         }
         player.gh.steelPause = player.gh.steelPause.sub(1)
     },
-    branches: ["g"],
+    branches() {
+        return player.po.realmMods ? ["cb", "g", "p"] : ["g"]
+    },
     clickables: {
         1: {
             title() { return "<h2>Return" },

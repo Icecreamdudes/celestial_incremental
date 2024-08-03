@@ -1,4 +1,4 @@
-﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["de", "m", "cb", "d"]]
+﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["de", "m", "cb", "d"], ["rm"]]
 
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -144,6 +144,7 @@ addLayer("i", {
 
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
+        if (player.po.realmMods) player.gain = player.gain.pow(0.1)
         player.points = player.points.add(player.gain.mul(delta))
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")

@@ -6,7 +6,7 @@
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js", 
 	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "petShop.js", "evolution.js", "rocketFuel.js", "infinity.js", 
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
-	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js"],
+	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js"],
 
 	discordName: "",
 	discordLink: "",

@@ -219,12 +219,12 @@ addLayer("po", {
         15: {
             title() { return "<h1>Realm Mods" },
             display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless.<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti<br>Takes up 2 OTF slots";
+                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.1)<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti<br>Takes up 2 OTF slots";
             },
             canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308)},
             unlocked() { return player.in.unlockedBreak },
             onClick() { 
-                player.po.breakInfinity = true
+                player.po.realmMods = true
             },
             style: {
                 width: '200px',

@@ -90,11 +90,11 @@
         XPBoostUnlock: false,
 
         XPBoost: new Decimal(1),
-        XPBoostUnlocks: [true],
-        XPBoostBase: [new Decimal(0.2),],
-        XPBoostTimers: [new Decimal(0),],
-        XPBoostTimersMax: [new Decimal(10800),],
-        XPBoostReq: [new Decimal(100),],
+        XPBoostUnlocks: [true, false],
+        XPBoostBase: [new Decimal(0.2), new Decimal(1)],
+        XPBoostTimers: [new Decimal(0), new Decimal(0),],
+        XPBoostTimersMax: [new Decimal(10800), new Decimal(129600)],
+        XPBoostReq: [new Decimal(100),new Decimal(500),],
 
         //chal 7
         lossRate: new Decimal(0),
@@ -123,7 +123,7 @@
         //cante?
         canteEnergyXPButtonBase: [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ],
         canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9),],
-        canteEnergyXPBoostButtonBase: [new Decimal(10)],
+        canteEnergyXPBoostButtonBase: [new Decimal(10), new Decimal(30)],
         canteEnergyPetPointButtonBase: [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),],
     }
     },
@@ -131,6 +131,7 @@
     },
     nodeStyle() {
     },
+
     tooltip: "Check Back",
     color: "#06366e",
     update(delta) {
@@ -205,6 +206,10 @@
         if (player.cb.level.gte(150))
         [
             player.cb.buttonUnlocks[7] = true
+        ]
+        if (player.cb.level.gte(666))
+        [
+            player.cb.XPBoostUnlocks[1] = true
         ]
 
         player.cb.buttonBaseXP = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.06),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),]
@@ -510,17 +515,18 @@
 
         //xpboost
 
-        player.cb.XPBoostBase = [new Decimal(0.2),]
+        player.cb.XPBoostBase = [new Decimal(0.2),new Decimal(1),]
         for (let i = 0; i < player.cb.XPBoostBase.length; i++)
         {
-            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.level.div(100).pow(0.6))
+            player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(100).pow(0.6))
+            player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(80).pow(0.55))
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.evolvedEffects[2][1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.commonPetEffects[6][0])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
         }
 
-        player.cb.XPBoostReq = [new Decimal(100)]
-        player.cb.XPBoostTimersMax = [new Decimal(10800)]
+        player.cb.XPBoostReq = [new Decimal(100), new Decimal(500)]
+        player.cb.XPBoostTimersMax = [new Decimal(10800), new Decimal(129600)]
         for (let i = 0; i < player.cb.XPBoostTimersMax.length; i++)
         {
         }
@@ -569,6 +575,12 @@
         } 
 
         player.cb.totalAutomationShards = player.cb.automationShards.add(usedAutomationShards)
+
+        //cante
+        player.cb.canteEnergyXPButtonBase = [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ]
+        player.cb.canteEnergyPetButtonBase = [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9),]
+        player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
+        player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),]
     },
     levelup()
     {
@@ -992,6 +1004,36 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[7].mul(player.ca.canteEnergyMult))
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        31: {
+            title() { return player.cb.XPBoostTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[1]) + "." : "<h3>+" + format(player.cb.XPBoostBase[1]) + " XP Boost."},
+            canClick() { return player.cb.XPBoostTimers[1].lt(0) },
+            unlocked() { return player.cb.XPBoostUnlocks[1] },
+            tooltip() { return player.cb.level.gte(250) ? "Paragon Shard Rarity: 20%" : ""},
+            onClick() {
+                if (player.cb.level.gte(player.cb.XPBoostReq[1]))
+                {
+                    player.cb.XPBoost = player.cb.XPBoost.add(player.cb.XPBoostBase[1])
+                    player.cb.XPBoostTimers[1] = player.cb.XPBoostTimersMax[1]
+    
+                    if (player.cb.level.gt(250))
+                    {
+                        let random = getRandomInt(5)
+                        if (random == 1)
+                        {
+                            player.cb.paragonShards = player.cb.paragonShards.add(1);
+                            callAlert("You gained a PARAGON SHARD! (20%)", "resources/paragonShard.png");
+                        }
+                    }
+                    player.cb.level = new Decimal(1)
+                    player.cb.xp = new Decimal(0)
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[1].mul(player.ca.canteEnergyMult))
+            } else
+                {
+                    callAlert("You must be level " + formatWhole(player.cb.XPBoostReq[1]) + " to reset for this button.");
+                }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -2141,7 +2183,7 @@
                     ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.level.lt(250) && player.cb.level.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(400) && player.cb.level.gte(250) ?  "You will unlock something at level 400!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.level.lt(666) && player.cb.level.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[4] ? "Auto: " + format(player.cb.buttonAutomationTimers[0]) + "/" +  format(player.cb.buttonAutomationTimersMax[0]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["row", [["clickable", 12], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[4] ? "Auto: " + format(player.cb.buttonAutomationTimers[1]) + "/" +  format(player.cb.buttonAutomationTimersMax[1]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
@@ -2172,7 +2214,7 @@
                     ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.level.lt(250) && player.cb.level.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(400) && player.cb.level.gte(250) ?  "You will unlock something at level 400!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.level.lt(666) && player.cb.level.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["row", [["clickable", 17]]],
@@ -2199,11 +2241,12 @@
                     ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.level.lt(250) && player.cb.level.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(400) && player.cb.level.gte(250) ?  "You will unlock something at level 400!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.level.lt(666) && player.cb.level.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.cb.XPBoost) + "</h3> XPBoost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 26]]],
+                    ["row", [["clickable", 31]]],
                 ]
 
             },

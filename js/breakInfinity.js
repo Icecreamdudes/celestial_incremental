@@ -691,5 +691,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasChallenge("ip", 18)}
+    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ta", 21)}
 })

@@ -222,7 +222,7 @@ addLayer("po", {
                 return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.1)<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti<br>Takes up 2 OTF slots";
             },
             canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308)},
-            unlocked() { return player.in.unlockedBreak },
+            unlocked() { return hasUpgrade("bi", 27) },
             onClick() { 
                 player.po.realmMods = true
             },

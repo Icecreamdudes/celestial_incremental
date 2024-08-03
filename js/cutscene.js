@@ -72,6 +72,7 @@
         player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" : 
         player.tab == "ca" ? "#2a3e66" : 
         player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
+        player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
         "#161616");
 
         //Cutscene 1

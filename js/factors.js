@@ -194,7 +194,7 @@
         player.f.factorBase = new Decimal(0.05)
         player.f.factorBase = player.f.factorBase.add(buyableEffect("gh", 16))
         if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
-
+        player.f.factorBase = player.f.factorBase.mul(buyableEffect("rm", 22))
         //INF
 
 

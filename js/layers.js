@@ -144,7 +144,7 @@ addLayer("i", {
 
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        if (player.po.realmMods) player.gain = player.gain.pow(0.1)
+        if (player.po.realmMods) player.gain = player.gain.pow(0.15)
         player.points = player.points.add(player.gain.mul(delta))
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")

@@ -271,7 +271,7 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.ta.negativeInfinityPoints.log10().pow(1.2).mul(0.2).add(1)
+                return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
@@ -285,7 +285,7 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.ta.negativeInfinityPoints.log10().pow(1.35).mul(2.5).add(1)
+                return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.35).mul(2.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 
@@ -299,7 +299,7 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinityPoints.log10().pow(1.25).mul(0.5).add(1)
+                return player.in.infinityPoints.plus(1).log10().pow(1.25).mul(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         }, 

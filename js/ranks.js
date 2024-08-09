@@ -60,6 +60,7 @@
 
         player.r.rankEffect = player.r.rank.mul(0.25).add(1).pow(1.05)
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
+        player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("rm", 21))
         player.r.rankReq = layers.r.getRankReq()
         if (player.cb.uncommonPetLevels[3].gt(0) && player.r.rank.gt(100)) player.r.rankReq = player.r.rankReq.div(player.cb.uncommonPetEffects[3][0])
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14))
@@ -88,6 +89,7 @@
 
         player.r.tierEffect = player.r.tier.mul(0.5).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
+        player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("rm", 21))
         player.r.tierReq = layers.r.getTierReq().div(player.cb.uncommonPetEffects[3][1])
         if (player.r.rank.gte(player.r.tierReq) && hasUpgrade("p", 14))
         {
@@ -107,6 +109,7 @@
 
         player.r.tetrEffect = player.r.tetr.mul(0.75).add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
+        player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("rm", 21))
         player.r.tetrReq = layers.r.getTetrReq().div(player.cb.uncommonPetEffects[3][2])
         if (player.r.tier.gte(player.r.tetr.add(player.r.tetrsToGet).add(1).mul(2).pow(1.08).floor().add(1)) && hasUpgrade("p", 14))
         {
@@ -124,6 +127,7 @@
         
         player.r.pentEffect = player.r.pent.add(1).pow(3)
         player.r.pentEffect = player.r.pentEffect.pow(player.p.crystalEffect)
+        player.r.pentEffect = player.r.pentEffect.pow(buyableEffect("rm", 21))
         if (player.r.pent.lt(4)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28)
         if (player.r.pent.gte(4) && player.r.pent.lt(5)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28).tetrate(1.001)
         if (player.r.pent.gte(5)) player.r.pentReq = player.r.pent.add(1).pow(50).mul(1e32).tetrate(1.0015)
@@ -455,7 +459,7 @@
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Infinity Dimension Reverser"
             },
             display() {
-                return "which are multiplying negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are boosting infinity dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Time Cubes"
             },
             buy() {

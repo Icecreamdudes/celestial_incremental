@@ -137,6 +137,7 @@
         if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect("de", 15))
         player.g.grassVal = player.g.grassVal.mul(buyableEffect("gh", 33))
         player.g.grassVal = player.g.grassVal.mul(player.r.timeCubeEffects[2])
+        player.g.grassVal = player.g.grassVal.pow(buyableEffect("rm", 25)) 
 
         if (inChallenge("ip", 18) && player.g.grass.gt(player.g.grass.mul(0.4 * delta)))
         {
@@ -159,6 +160,7 @@
         if (hasUpgrade("ip", 24) && !inChallenge("ip", 14)) player.g.goldGrassVal = player.g.goldGrassVal.add(upgradeEffect("ip", 24))
         player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.rarePetEffects[4][1])
         player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("r", 11))
+        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("rm", 26)) 
 
         player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect("gh", 18).mul(delta)))
 
@@ -217,6 +219,7 @@
         }
 
         player.g.goldGrassEffect = player.g.goldGrass.pow(0.7).mul(0.15).add(1)
+        if (hasUpgrade("g", 22)) player.g.goldGrassEffect = player.g.goldGrassEffect.pow(6)
 
         if (player.g.buyables[12].gt(200))
         {
@@ -392,6 +395,16 @@
                 return player.cb.level.pow(0.8).add(1)
             },
             effectDisplay() { return "x"+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+        },
+        22:
+        {
+            title: "Grass Upgrade X",
+            unlocked() { return player.po.realmMods },
+            description() { return "Raise golden grass effect by ^6." },
+            cost: new Decimal("1e550"),
+            currencyLocation() { return player.g },
+            currencyDisplayName: "Grass",
+            currencyInternalName: "grass",
         },
     },
     buyables: {
@@ -741,7 +754,7 @@
                 [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22]]],
                 ]
             },
         },

@@ -20,7 +20,7 @@
 
         dimensionUnlockAmount: new Decimal(0),
         dimensionUnlockCost: new Decimal("1e600"),
-        dimensionUnlockCosts: [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e3300"),new Decimal("1e4400"),new Decimal("1e6000"),new Decimal("1e9000"),],
+        dimensionUnlockCosts: [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e3300"),new Decimal("1e4400"),new Decimal("1e6000"),new Decimal("1e9000"),new Decimal("1e18000"),],
     }
     },
     automate() {
@@ -57,6 +57,7 @@
         player.id.infinityPowerPerSecond = player.id.dimensionAmounts[0].mul(player.id.dimensionMult[0])
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(buyableEffect("r", 14))
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.ca.replicantiEffect2)
+        player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.rm.realmModsEffect[3])
 
         for (let i = 0; i < player.id.dimensionAmounts.length; i++)
         {
@@ -68,6 +69,7 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionAmounts[i+1].mul(player.id.dimensionMult[i+1].div(10))
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("r", 14))
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.ca.replicantiEffect2)
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.rm.realmModsEffect[3])
 
             //mults
         }
@@ -85,9 +87,9 @@
 
         player.id.dimensionUnlockCost = player.id.dimensionUnlockCosts[player.id.dimensionUnlockAmount]
 
-        player.id.dimensionUnlockCosts = [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e3300"),new Decimal("1e4400"),new Decimal("1e6000"),new Decimal("1e9000"),]
+        player.id.dimensionUnlockCosts = [new Decimal("1e600"),new Decimal("1e900"),new Decimal("1e1500"),new Decimal("1e2500"),new Decimal("1e3300"),new Decimal("1e4400"),new Decimal("1e6000"),new Decimal("1e9000"),new Decimal("1e18000"),]
 
-        for (let i = 0; i < player.id.dimensionAmounts.length; i++)
+        for (let i = 0; i < player.id.dimensionAmounts.length+1; i++)
         {
             if (player.id.dimensionUnlockAmount.gte(i))
             {

@@ -35,8 +35,18 @@ addLayer("po", {
             player.in.reachedInfinity = true
         }
 
-        if (player.po.pointHaltInput.gte(1)) player.po.pointHalt = player.po.pointHaltInput
+        if (player.po.pointHaltInput.gte(1)) 
+        {
+            if (player.po.pointHaltInput.neq(player.po.pointHalt))
+            {
+                player.rm.halterBoostCheck = false
+            }
+            player.po.pointHalt = player.po.pointHaltInput
+        }
         if (player.po.pointHaltInput.lt(1)) player.po.pointHalt = new Decimal(1)
+
+        let oldVal = player.po.pointHaltInput
+        
 
         player.po.featureSlotsMax = new Decimal(1)
         if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 27)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
@@ -219,12 +229,15 @@ addLayer("po", {
         15: {
             title() { return "<h1>Realm Mods" },
             display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.1)<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti<br>Takes up 2 OTF slots";
+                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.15)<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
             },
-            canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308)},
+            canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308) && player.ca.canteCores.gte(1)},
             unlocked() { return hasUpgrade("bi", 27) },
             onClick() { 
+                player.in.infinityPause = new Decimal(8)
+                player.po.keepOTFS = true
                 player.po.realmMods = true
+                player.ca.canteCores = player.ca.canteCores.sub(1)
             },
             style: {
                 width: '200px',

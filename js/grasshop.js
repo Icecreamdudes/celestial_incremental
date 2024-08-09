@@ -62,6 +62,7 @@
     if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
     if (hasUpgrade("de", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
+    player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27)) 
 
     if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1))
     {
@@ -153,6 +154,7 @@
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
+        player.gh.steelToGet = player.gh.steelToGet.mul(player.rm.realmModsEffect[1])
 
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
 

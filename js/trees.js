@@ -60,6 +60,7 @@
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32)) 
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
+        player.t.treesToGet = player.t.treesToGet.pow(buyableEffect("rm", 24)) 
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))

@@ -51,6 +51,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 12))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 15))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 18))
+        player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
@@ -164,7 +165,7 @@
         },
         13: {
             title() { return "<h3>Reset replicanti, but gain a replicanti galaxy. (Req: 1.79e308 replicanti)" },
-            canClick() { return player.ca.replicanti.gte(1.79e308) },
+            canClick() { return player.ca.replicanti.gte(1.79e308) && player.ca.replicantiGalaxies.lt(player.ca.replicantiGalaxiesCap) },
             unlocked() { return true },
             onClick() {
                 player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.add(1)
@@ -577,6 +578,38 @@
             },
             style: { width: '275px', height: '150px',}
         },
+        24: {
+            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).mul(player.ca.galaxyDust.pow(0.3)).add(1) },
+            unlocked() { return hasUpgrade('bi', 27) },
+            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>INFINITY POINTS"
+            },
+            display() {
+                return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (also based on galaxy dust)\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
+            },
+            buy() {
+                let base = new Decimal(150)
+                let growth = 1.4
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px',}
+        },
     },
     milestones: {
     },
@@ -636,7 +669,7 @@
         ["blank", "25px"],
         ["row", [["clickable", 12]]],
         ["blank", "25px"],
-        ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23]]],
+        ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
         ["blank", "25px"],
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, { "color": "#979EE8", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "(They just act like regular antimatter galaxies)" }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
@@ -656,6 +689,8 @@
         ["blank", "25px"],
         ["raw-html", function () { return "Energy multiplier: <h3>" + formatWhole(player.ca.canteEnergyMult) + "</h3>x" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Cante energy is gained by clicking on check back buttons." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["raw-html", function () { return "Cante cores will have many uses in the future." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
     ]
             },

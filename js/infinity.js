@@ -112,6 +112,8 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 23))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
         
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
@@ -557,6 +559,13 @@ addLayer("bigc", {
                 if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
             }
         }
+
+        if (player.rm.halterBoostCheck && player.po.realmMods)
+        {
+            player.rm.halterBoost = player.po.pointHalt
+        }
+
+        player.rm.halterBoostCheck = true
     }, 
     bars: {
     },

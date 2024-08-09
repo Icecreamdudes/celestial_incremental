@@ -91,7 +91,7 @@
 
         XPBoost: new Decimal(1),
         XPBoostUnlocks: [true, false],
-        XPBoostBase: [new Decimal(0.2), new Decimal(1)],
+        XPBoostBase: [new Decimal(0.2), new Decimal(0.5)],
         XPBoostTimers: [new Decimal(0), new Decimal(0),],
         XPBoostTimersMax: [new Decimal(10800), new Decimal(129600)],
         XPBoostReq: [new Decimal(100),new Decimal(500),],
@@ -232,6 +232,7 @@
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.ev0.coinDustEffect)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cb.XPBoost)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.d.diceEffects[12])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.rm.realmModsEffect[0])
         }
 
 
@@ -515,7 +516,7 @@
 
         //xpboost
 
-        player.cb.XPBoostBase = [new Decimal(0.2),new Decimal(1),]
+        player.cb.XPBoostBase = [new Decimal(0.2),new Decimal(0.5),]
         for (let i = 0; i < player.cb.XPBoostBase.length; i++)
         {
             player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(100).pow(0.6))
@@ -1645,7 +1646,7 @@
         },
         226: {
             title() { return "Special Feature"},
-            canClick() { return true },
+            canClick() { return player.po.dice },
             tooltip() { return "The current OTF has to be dice."},
             unlocked() { return player.cb.rarePetDisplayIndex == 1 && player.ev.evolutionsUnlocked[5] == true && player.cb.viewingEvolved[5] == true},
             onClick() {
@@ -1724,7 +1725,7 @@
         },
         402: {
             title() { return "<h3>Increase" },
-            canClick() { return player.cb.buttonIndex.lt(player.cb.buttonAutomationTimers.length) },
+            canClick() { return player.cb.buttonIndex.lt(player.cb.buttonAutomationTimers.length-1) },
             unlocked() { return true },
             onClick() {
                 player.cb.buttonIndex = player.cb.buttonIndex.add(1)

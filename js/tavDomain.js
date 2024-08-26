@@ -147,6 +147,37 @@
             currencyDisplayName: "Corrupted Infinities",
             currencyInternalName: "corruptedInfinities",
         },
+        14:
+        {
+            title: "Shattering",
+            unlocked() { return player.cap.reqSelect.eq(2) },
+            description: ".",
+            cost: new Decimal(4e7),
+            currencyLocation() { return player.tad },
+            currencyDisplayName: "Shattered Infinities",
+            currencyInternalName: "shatteredInfinities",
+        },
+        15:
+        {
+            title: "Disfiguration",
+            unlocked() { return player.cap.reqSelect.eq(2) },
+            description: ".",
+            cost: new Decimal(4e7),
+            currencyLocation() { return player.tad },
+            currencyDisplayName: "Disfigured Infinities",
+            currencyInternalName: "disfiguredInfinities",
+            style: { width: '125px', height: '100px', }
+        },
+        16:
+        {
+            title: "Corruption",
+            unlocked() { return player.cap.reqSelect.eq(2) },
+            description: ".",
+            cost: new Decimal(4e7),
+            currencyLocation() { return player.tad },
+            currencyDisplayName: "Corrupted Infinities",
+            currencyInternalName: "corruptedInfinities",
+        },
     },
     buyables: {
         11: {
@@ -568,7 +599,7 @@
         player.ta.negativeInfinityPause = new Decimal(5)
         player.in.infinities = new Decimal(0)
         player.bi.brokenInfinities = new Decimal(0)
-        if (!hasMilestone("ip", 25))
+        if (!hasMilestone("ip", 25) && player.in.unlockedBreak)
         {
             for (let i = 0; i < player.ip.milestones.length; i++) {
                 if (+player.ip.milestones[i] < 25) {
@@ -615,7 +646,7 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.disfiguredInfinities) + "</h3> disfigured infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.corruptedInfinities) + "</h3> corrupted infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                     ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],

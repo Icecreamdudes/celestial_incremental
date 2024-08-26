@@ -364,6 +364,16 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
         },
+        28:
+        {
+            title: "BI IP Upgrade XVI",
+            unlocked() { return player.ca.unlockedCante },
+            description: "Unlock the ??? (Check Cante).",
+            cost: new Decimal(1e38),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+        },
         //Negative Infinity Points
         101:
         {
@@ -639,7 +649,7 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
-                    ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27]]],
+                    ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
                     ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113]]],

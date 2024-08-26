@@ -173,6 +173,15 @@
             },
             style: { width: '400px', "min-height": '100px' },
         },
+        14: {
+            title() { return "<h2>CONTEMPLATE INFINITY" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("bi", 28) },
+            onClick() {
+                player.tab = "cap"
+            },
+            style: { width: '400px', "min-height": '100px' },
+        },
     },
     bars: {
         bar: {
@@ -692,6 +701,8 @@
         ["blank", "25px"],
         ["raw-html", function () { return "Cante cores will have many uses in the future." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
+        ["row", [["clickable", 14]]],
+
     ]
             },
         },

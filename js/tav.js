@@ -175,7 +175,6 @@
             if (i >= 4) player.ta.dimensionPowerTexts[i] = "You have " + format(player.ta.dimensionPower[i]) + " " +  formatWhole(player.ta.dimensionPowerIndex.add(1)) + "th dimension power, which boosts " + formatWhole(player.ta.dimensionPowerIndex) + "th dimensions by x" + format(player.ta.dimensionPowerEffects[i]) + ".\nYou are producing " + format(player.ta.dimensionPowerPerSecond[i]) + " " + formatWhole(player.ta.dimensionPowerIndex) + "th dimenion power per second."
         }
 
-
         for (let i = 0; i < player.ta.dimensionAutobuyTexts.length; i++)
         {
             if (player.ta.dimensionAutobuyToggles[i]) player.ta.dimensionAutobuyTimer[i] = player.ta.dimensionAutobuyTimer[i].add(onepersec.mul(delta))

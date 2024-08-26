@@ -55,6 +55,10 @@ addLayer("i", {
         {
             player.universe = 2
         }
+        if (player.tab == "cp")
+        {
+            player.universe = 1.5
+        }
         if (player.tab == "po")
         {
             player.universe = 0
@@ -338,10 +342,50 @@ addLayer("i", {
         },
         31:
         {
-            title: "IP Formula Boost Again",
-            unlocked() { return hasUpgrade("i", 27) && hasUpgrade("bi", 111)},
-            description: "Improve the IP formula again.",
-            cost: new Decimal("1e5666"),
+            title: "Challenge I.",
+            unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0)},
+            description: ".",
+            cost: new Decimal("1e38500"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        32:
+        {
+            title: "Challenge II.",
+            unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0)},
+            description: ".",
+            cost: new Decimal("1e38000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        33:
+        {
+            title: "Challenge III.",
+            unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0)},
+            description: ".",
+            cost: new Decimal("1e7750"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        34:
+        {
+            title: "Challenge IV.",
+            unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0)},
+            description: ".",
+            cost: new Decimal("1e1700"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        35:
+        {
+            title: "Challenge VIII.",
+            unlocked() { return inChallenge("ip", 18) && player.cap.reqSelect.eq(0)},
+            description: ".",
+            cost: new Decimal("1e2550"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -385,7 +429,7 @@ addLayer("i", {
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                         ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                         ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
-                        ["row", [["upgrade", 31]]],
+                        ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34], ["upgrade", 35]]],
                 ]
 
             },

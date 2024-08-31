@@ -233,13 +233,6 @@ addLayer("cp", {
                 ]
 
             },
-            "Portal": {
-                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return player.cp.unlockedPortal },
-                content:
-                [
-                ]
-            },
             "Settings": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },

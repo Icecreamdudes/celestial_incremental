@@ -1,4 +1,4 @@
-﻿var tree = [["ar", "pr", "an"]]
+﻿var tree = [["ar", "pr", "an"], ["rt", "rg"]]
 addLayer("cp", {
     name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Ξ", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -15,7 +15,10 @@ addLayer("cp", {
         replicantiPointCap: new Decimal(1.79e308),
 
         replicantiSoftcapEffect: new Decimal(1),
-        replicantiSoftcapStart: new Decimal(1e6),
+        replicantiSoftcapStart: new Decimal(1000),
+
+        replicantiSoftcap2Effect: new Decimal(1),
+        replicantiSoftcap2Start: new Decimal(1e10),
     }
     },
     automate() {
@@ -37,18 +40,37 @@ addLayer("cp", {
         multAdd = new Decimal(0.01)
         multAdd = multAdd.add(player.ar.rankPointsEffect)
         multAdd = multAdd.mul(buyableEffect("pr", 11))
+        if (hasUpgrade("an", 11)) multAdd = multAdd.mul(1.5)
+        if (hasUpgrade("an", 12)) multAdd = multAdd.mul(upgradeEffect("an", 12))
+        multAdd = multAdd.mul(buyableEffect("rt", 15))
+        multAdd = multAdd.mul(player.rg.repliGrassEffect)
 
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
 
         player.cp.replicantiSoftcapStart = new Decimal(1000)
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("pr", 15))
+        if (hasUpgrade("an", 14)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(1000)
+        if (hasUpgrade("an", 19)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(upgradeEffect("an", 19))
 
         player.cp.replicantiSoftcapEffect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcapStart).pow(0.375)
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("pr", 16))
         if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcapStart))
         {
             multAdd = multAdd.div(player.cp.replicantiSoftcapEffect)
+        }
+
+        player.cp.replicantiSoftcap2Start = new Decimal(1e9)
+        if (hasUpgrade("an", 14)) player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(1000)
+        player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("rt", 17))
+        if (hasUpgrade("an", 19)) player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(upgradeEffect("an", 19))
+
+        player.cp.replicantiSoftcap2Effect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcap2Start).pow(0.25).div(4)
+        player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("pr", 16))
+        if (hasUpgrade("an", 22)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(upgradeEffect("an", 22))
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start))
+        {
+            multAdd = multAdd.div(player.cp.replicantiSoftcap2Effect)
         }
 
         player.cp.replicantiPointsMult = multAdd.add(1)
@@ -89,6 +111,21 @@ addLayer("cp", {
         },
     },
     bars: {
+        replicantiBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 400,
+            height: 25,
+            progress() {
+                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+            },
+            fillStyle: {
+                "background-color": "#193ceb",
+            },
+            display() {
+                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+            },
+        }, 
     },
     upgrades: {
         11:
@@ -131,6 +168,26 @@ addLayer("cp", {
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
         }, 
+        15:
+        {
+            title: "Feature V",
+            unlocked() { return true },
+            description: "Unlocks Repli-Trees.",
+            cost: new Decimal(1e20),
+            currencyLocation() { return player.cp },
+            currencyDisplayName: "Replicanti Points",
+            currencyInternalName: "replicantiPoints",
+        }, 
+        16:
+        {
+            title: "Feature VI",
+            unlocked() { return true },
+            description: "Unlocks Repli-Grass.",
+            cost: new Decimal(1e30),
+            currencyLocation() { return player.cp },
+            currencyDisplayName: "Replicanti Points",
+            currencyInternalName: "replicantiPoints",
+        }, 
     },
     buyables: {
     },
@@ -158,7 +215,7 @@ addLayer("cp", {
                 content:
                 [
                         ["blank", "25px"],
-                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
+                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                  ]
 
             },
@@ -170,12 +227,15 @@ addLayer("cp", {
                         ["blank", "25px"],
                         ["raw-html", function () { return "Softcap starts at <h3>" + format(player.cp.replicantiSoftcapStart) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
                 ]
 
             },
             "Portal": {
                 buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return player.can.unlockedPortal },
+                unlocked() { return player.cp.unlockedPortal },
                 content:
                 [
                 ]
@@ -221,9 +281,9 @@ addLayer("cp", {
     tabFormat: [
 
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti point Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["row", [["bar", "replicantiBar"]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true}
 })

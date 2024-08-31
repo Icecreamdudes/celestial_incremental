@@ -34,13 +34,21 @@
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(buyableEffect("pr", 13))
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(player.ar.tetrPointsEffect)
 
+        if (hasUpgrade("an", 13)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, 0.05)))
+        if (hasUpgrade("an", 15)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, 0.25)))
+        if (hasUpgrade("an", 18)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(delta))
+
         player.ar.tierPointsToGet = player.ar.rankPoints.mul(0.1).pow(0.4)
         player.ar.tierPointsEffect = player.ar.tierPoints.pow(0.65).add(1)
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(buyableEffect("pr", 14))
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(player.ar.tetrPointsEffect)
 
+        if (hasUpgrade("an", 15)) player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, 0.05)))
+        if (hasUpgrade("an", 18)) player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, 0.25)))
+
         player.ar.tetrPointsToGet = player.ar.tierPoints.mul(0.1).pow(0.4)
         player.ar.tetrPointsEffect = player.ar.tetrPoints.pow(0.5).add(1)
+        if (hasUpgrade("an", 18)) player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, 0.05)))
     },
     clickables: {
         1: {
@@ -87,6 +95,21 @@
         },
     },
     bars: {
+        replicantiBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 400,
+            height: 25,
+            progress() {
+                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+            },
+            fillStyle: {
+                "background-color": "#193ceb",
+            },
+            display() {
+                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+            },
+        }, 
     },
     upgrades: {
 
@@ -131,8 +154,8 @@
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti points Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

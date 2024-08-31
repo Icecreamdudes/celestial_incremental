@@ -882,6 +882,20 @@ button > * {
 	overflow: hidden; /* Ensure grass squares stay within spawn area */
 }
 
+#repli-spawn-area {
+	width: 80%; /* Adjust as needed */
+	height: 50%; /* Adjust as needed */
+	background-color: #67cc3b;
+	opacity: 90%;
+	position: absolute;
+	bottom: 10%;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 2px solid black;
+	box-sizing: border-box; /* Include border in dimensions */
+	overflow: hidden; /* Ensure grass squares stay within spawn area */
+}
+
 .particle {
 	position: absolute;
 	width: 50px; /* Adjust size as needed */

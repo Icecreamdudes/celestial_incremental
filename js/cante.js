@@ -199,6 +199,21 @@
                 return "<h5>" + format(player.ca.canteEnergy) + "/" + formatWhole(player.ca.canteEnergyReq) + "<h5> Cante energy to gain a cante core.</h5>";
             },
         },
+        replicantiBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 476,
+            height: 50,
+            progress() {
+                return player.ca.replicantiTimer.div(player.ca.replicantiTimerReq)
+            },
+            fillStyle: {
+                "background-color": "#193ceb",
+            },
+            display() {
+                return "Time: " + formatTime(player.ca.replicantiTimer) + "/" + formatTime(player.ca.replicantiTimerReq);
+            },
+        },
     },
     upgrades: {
     },
@@ -656,7 +671,7 @@
         ["raw-html", function () { return "which boosts infinity points by <h3>" + format(player.ca.replicantiEffect) + "</h3>x, infinity dimensions by <h3>" + format(player.ca.replicantiEffect2) + "</h3>x, and points by <h3>" + format(player.ca.replicantiEffect3) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "(Caps out at 1.79e308 replicanti)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
-        ["raw-html", function () { return "Time: " + formatTime(player.ca.replicantiTimer) + "/" + formatTime(player.ca.replicantiTimerReq) }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+        ["row", [["bar", "replicantiBar"]]],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.ca.replicantiMult) + "x" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicate Chance: " + format(player.ca.replicateChance.mul(100)) + "%" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
         ["blank", "25px"],

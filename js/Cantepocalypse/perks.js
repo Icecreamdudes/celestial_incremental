@@ -23,6 +23,8 @@
 
         player.pr.perkPointsToGet = new Decimal(1)
         player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(buyableEffect("pr", 17))
+        if (hasUpgrade("an", 16)) player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(upgradeEffect("an", 16))
+        player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(buyableEffect("rt", 16))
 
         player.pr.perkPointsChance = new Decimal(0.03)
         player.pr.perkPointsChance = player.pr.perkPointsChance.add(buyableEffect("pr", 18))
@@ -37,8 +39,41 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '75px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '75px', }
+        },
     },
     bars: {
+        replicantiBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 400,
+            height: 25,
+            progress() {
+                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+            },
+            fillStyle: {
+                "background-color": "#193ceb",
+            },
+            display() {
+                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+            },
+        }, 
     },
     upgrades: {
 
@@ -316,6 +351,8 @@
                 content:
                 [
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.pr.perkPoints) + "</h3> perk points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.pr.perkPointsToGet) + "</h3> perk points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Chance to gain perk points: <h3>" + format(player.pr.perkPointsChance.mul(100)) + "</h3>%" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -330,8 +367,8 @@
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

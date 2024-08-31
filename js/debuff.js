@@ -101,14 +101,14 @@
                 player.de.antidebuffText = "Your chosen effect is boosting nothing."
         }
 
-        player.de.tavPointsToGet = player.points.pow(0.075).add(1)
+        player.de.tavPointsToGet = player.points.pow(0.08).add(1)
         player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("de", 14))
         if (hasUpgrade("de", 19)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(upgradeEffect("de", 19))
         if (hasUpgrade("tad", 14)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("tad", 14))
 
         if (hasUpgrade("de", 18)) player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet.mul(0.1).mul(delta))
 
-        player.de.tavEssencePerSecond = player.de.tavPoints.pow(1.5).add(1)
+        player.de.tavEssencePerSecond = player.de.tavPoints.pow(1.55).add(1)
         player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("de", 13))
         if (hasUpgrade("de", 12)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 12))
         if (hasUpgrade("de", 19)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 19))

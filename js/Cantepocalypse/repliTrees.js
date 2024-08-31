@@ -32,7 +32,7 @@
 
         multAdd = new Decimal(0)
         multAdd = buyableEffect("rt", 11)
-        multAdd = multAdd.mul(player.ar.repliGrassEffect2)
+        multAdd = multAdd.mul(player.rg.repliGrassEffect2)
 
         player.rt.repliLeavesTimerReq = new Decimal(6)
         if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
@@ -40,6 +40,7 @@
 
         player.rt.repliTreesSoftcapStart = new Decimal(10)
         player.rt.repliTreesSoftcapStart = player.rt.repliTreesSoftcapStart.mul(buyableEffect("rt", 18))
+        player.rt.repliTreesSoftcapStart = player.rt.repliTreesSoftcapStart.mul(buyableEffect("rg", 18))
 
         player.rt.repliTreeSoftcapEffect = player.rt.repliTrees.sub(player.rt.repliTreeSoftcapStart).pow(1.25).div(10).add(1)
         if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart))

@@ -44,6 +44,7 @@ addLayer("cp", {
         if (hasUpgrade("an", 12)) multAdd = multAdd.mul(upgradeEffect("an", 12))
         multAdd = multAdd.mul(buyableEffect("rt", 15))
         multAdd = multAdd.mul(player.rg.repliGrassEffect)
+        multAdd = multAdd.mul(buyableEffect("rg", 15))
 
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
@@ -52,6 +53,7 @@ addLayer("cp", {
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("pr", 15))
         if (hasUpgrade("an", 14)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(1000)
         if (hasUpgrade("an", 19)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(upgradeEffect("an", 19))
+        player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("rg", 18))
 
         player.cp.replicantiSoftcapEffect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcapStart).pow(0.375)
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("pr", 16))
@@ -64,6 +66,7 @@ addLayer("cp", {
         if (hasUpgrade("an", 14)) player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(1000)
         player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("rt", 17))
         if (hasUpgrade("an", 19)) player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(upgradeEffect("an", 19))
+        player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("rg", 18))
 
         player.cp.replicantiSoftcap2Effect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcap2Start).pow(0.25).div(4)
         player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("pr", 16))

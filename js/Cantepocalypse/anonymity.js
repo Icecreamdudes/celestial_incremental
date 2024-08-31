@@ -23,6 +23,7 @@
         player.an.anonymityToGet = player.cp.replicantiPoints.div(250000).pow(0.25)
         if (hasUpgrade("an", 17)) player.an.anonymityToGet = player.an.anonymityToGet.mul(upgradeEffect("an", 17))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.rt.repliTreesEffect)
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("rg", 17))
     },
     clickables: {
         1: {

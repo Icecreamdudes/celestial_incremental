@@ -76,7 +76,7 @@
         player.rg.repliGrassSoftcapStart = new Decimal(1000)
         player.rg.repliGrassSoftcapStart = player.rg.repliGrassSoftcapStart.mul(buyableEffect("rg", 14))
 
-        let multAdd = new Decimal(0.01)
+        let multAdd = new Decimal(0.02)
         multAdd = multAdd.add(buyableEffect("rg", 11))
 
         player.rg.repliGrassMult = multAdd.add(1)
@@ -143,7 +143,7 @@
     buyables: {
         11: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1)},
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.001) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.0025) },
             unlocked() { return true },
             canAfford() { return player.rg.repliGrass.gte(this.cost()) },
             title() {
@@ -266,6 +266,130 @@
             },
             style: { width: '275px', height: '150px', }
         },
+        15: {
+            cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(3)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.8).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.rg.repliGrass.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Replicanti Point Multiplier."
+            },
+            display() {
+                return "which are multiplying the replicanti point multiplier by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Grass."
+            },
+            buy() {
+                let base = new Decimal(3)
+                let growth = 1.45
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+                let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        16: {
+            cost(x) { return new Decimal(1.55).pow(x || getBuyableAmount(this.layer, this.id)).mul(7)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.rg.repliGrass.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tetr Point Multiplier."
+            },
+            display() {
+                return "which are multiplying tetr points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Grass."
+            },
+            buy() {
+                let base = new Decimal(7)
+                let growth = 1.55
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+                let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        17: {
+            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(16)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).pow(0.8).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.rg.repliGrass.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Anonymity Multiplier."
+            },
+            display() {
+                return "which are multiplying anonymity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Grass."
+            },
+            buy() {
+                let base = new Decimal(16)
+                let growth = 1.5
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+                let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        18: {
+            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.rg.repliGrass.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Extender."
+            },
+            display() {
+                return "which are extending the first, second, and repli-tree softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Grass."
+            },
+            buy() {
+                let base = new Decimal(30)
+                let growth = 1.35
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+                let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
    
@@ -298,6 +422,7 @@
                 [
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
             },
         },

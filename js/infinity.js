@@ -365,7 +365,6 @@ addLayer("in", {
         }
 
         player.de.antidebuffPoints = new Decimal(0)
-        player.de.antidebuffIndex = new Decimal(6)
     },
     branches: ["branch"],
     clickables: {

@@ -79,13 +79,13 @@
         let multAdd = new Decimal(0.02)
         multAdd = multAdd.add(buyableEffect("rg", 11))
 
-        player.rg.repliGrassMult = multAdd.add(1)
-
-        player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.4)
+        player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
         if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart))
         {
             multAdd = multAdd.div(player.rg.repliGrassSoftcapEffect)
         }
+
+        player.rg.repliGrassMult = multAdd.add(1)
 
         if (player.rg.repliGrass.lte(1)) player.rg.repliGrassEffect = new Decimal(1)
         if (player.rg.repliGrass.gt(1)) player.rg.repliGrassEffect = player.rg.repliGrass.pow(0.15)
@@ -433,7 +433,7 @@
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 15) }
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 16) }
 })
 
 function createRepliGrass(quantity) {

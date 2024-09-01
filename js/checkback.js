@@ -1164,7 +1164,7 @@
             title() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? player.cb.uncommonPetImage[1] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4]|| player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4] ? "<h3>x" + format(player.cb.uncommonPetEffects[1][0]) + " to lines of code.<br>x" + format(player.cb.uncommonPetEffects[1][1]) + " to leaves.<br>/" + format(player.cb.uncommonPetEffects[1][2]) + " to all check back button cooldowns.": "^" + format(player.cb.evolvedEffects[4][0]) + " to star effect.<br>x" + format(player.cb.evolvedEffects[4][1]) + " to rocket fuel."},
+            tooltip() { return player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4]|| player.cb.uncommonPetAmounts[1].gt(0) && !player.cb.viewingEvolved[4] ? "<h3>x" + format(player.cb.uncommonPetEffects[1][0]) + " to lines of code.<br>x" + format(player.cb.uncommonPetEffects[1][1]) + " to leaves.<br>/" + format(player.cb.uncommonPetEffects[1][2]) + " to all check back button cooldowns." : player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? "^" + format(player.cb.evolvedEffects[4][0]) + " to star effect.<br>x" + format(player.cb.evolvedEffects[4][1]) + " to rocket fuel." :"" },
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(1)
             },
@@ -1174,7 +1174,7 @@
             title() { return player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) ? player.cb.uncommonPetImage[2] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.uncommonPetAmounts[2].gt(0)  && !player.cb.viewingEvolved[1]|| player.cb.uncommonPetLevels[2].gt(0)  && !player.cb.viewingEvolved[1]? "<h3>/" + format(player.cb.uncommonPetEffects[2][0]) + " to tree requirement.<br>/" + format(player.cb.uncommonPetEffects[2][1]) + " to mod requirement.<br>/" + format(player.cb.uncommonPetEffects[2][2]) + " to check back requirement.": "/" + format(player.cb.evolvedEffects[2][0]) + " to rare pet cooldown.<br>x" + format(player.cb.evolvedEffects[2][1]) + " to XPBoost." },
+            tooltip() { return player.cb.uncommonPetAmounts[2].gt(0)  && !player.cb.viewingEvolved[1]|| player.cb.uncommonPetLevels[2].gt(0) && !player.cb.viewingEvolved[1]? "<h3>/" + format(player.cb.uncommonPetEffects[2][0]) + " to tree requirement.<br>/" + format(player.cb.uncommonPetEffects[2][1]) + " to mod requirement.<br>/" + format(player.cb.uncommonPetEffects[2][2]) + " to check back requirement.":  player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) ? "/" + format(player.cb.evolvedEffects[2][0]) + " to rare pet cooldown.<br>x" + format(player.cb.evolvedEffects[2][1]) + " to XPBoost." :""},
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(2)
             },
@@ -1184,7 +1184,7 @@
             title() { return player.cb.uncommonPetAmounts[3].gt(0) || player.cb.uncommonPetLevels[3].gt(0) ? player.cb.uncommonPetImage[3] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[3].gt(0) || player.cb.uncommonPetLevels[3].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.uncommonPetAmounts[3].gt(0)  && !player.cb.viewingEvolved[1] || player.cb.uncommonPetLevels[3].gt(0)  && !player.cb.viewingEvolved[1] ? "<h3>/" + format(player.cb.uncommonPetEffects[3][0]) + " to rank requirement.<br>/" + format(player.cb.uncommonPetEffects[3][1]) + " to tier requirement.<br>/" + format(player.cb.uncommonPetEffects[3][2]) + " to tetr requirement.": "^" + format(player.cb.evolvedEffects[1][0]) + " to shark effect.<br>x" + format(player.cb.evolvedEffects[1][1]) + " to pet points." },
+            tooltip() { return player.cb.uncommonPetAmounts[3].gt(0)  && !player.cb.viewingEvolved[1] || player.cb.uncommonPetLevels[3].gt(0) && !player.cb.viewingEvolved[1] ? "<h3>/" + format(player.cb.uncommonPetEffects[3][0]) + " to rank requirement.<br>/" + format(player.cb.uncommonPetEffects[3][1]) + " to tier requirement.<br>/" + format(player.cb.uncommonPetEffects[3][2]) + " to tetr requirement.":  player.cb.uncommonPetAmounts[3].gt(0) || player.cb.uncommonPetLevels[3].gt(0) ? "^" + format(player.cb.evolvedEffects[1][0]) + " to shark effect.<br>x" + format(player.cb.evolvedEffects[1][1]) + " to pet points." :""},
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(3)
             },

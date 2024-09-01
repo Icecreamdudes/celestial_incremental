@@ -1,4 +1,4 @@
-﻿var tree = [["ar", "pr", "an"], ["rt", "rg"]]
+﻿var tree = [["ar", "pr", "an"], ["rt", "rg", "gs"]]
 addLayer("cp", {
     name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Ξ", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -191,6 +191,16 @@ addLayer("cp", {
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
         }, 
+        17:
+        {
+            title: "Feature VII",
+            unlocked() { return true },
+            description: "Unlocks Grass-Skip.",
+            cost: new Decimal(1e40),
+            currencyLocation() { return player.cp },
+            currencyDisplayName: "Replicanti Points",
+            currencyInternalName: "replicantiPoints",
+        }, 
     },
     buyables: {
     },
@@ -219,6 +229,7 @@ addLayer("cp", {
                 [
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                        ["row", [["upgrade", 17]]],
                  ]
 
             },
@@ -281,5 +292,5 @@ addLayer("cp", {
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true}
+    layerShown() { return player.startedGame == true && hasUpgrade("cp", 16)}
 })

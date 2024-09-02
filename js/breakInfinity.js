@@ -654,7 +654,7 @@
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
                     ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check check back." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                 ]
 

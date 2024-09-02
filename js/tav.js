@@ -401,7 +401,7 @@
         16: {
             title() { return "<h2>REVERSE BREAK INFINITY" },
             canClick() { return true },
-            unlocked() { return !player.ta.unlockedReverseBreak },
+            unlocked() { return !player.ta.unlockedReverseBreak && player.cb.evolvedLevels[3].gte(1)},
             onClick() {
                 player.ta.unlockedReverseBreak = true
             },
@@ -410,7 +410,7 @@
         17: {
             title() { return "<h2>REVERSE FIX INFINITY" },
             canClick() { return true },
-            unlocked() { return player.ta.unlockedReverseBreak },
+            unlocked() { return player.ta.unlockedReverseBreak && player.cb.evolvedLevels[3].gte(1) },
             onClick() {
                 player.ta.unlockedReverseBreak = false
             },

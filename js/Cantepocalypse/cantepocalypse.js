@@ -45,7 +45,8 @@ addLayer("cp", {
         multAdd = multAdd.mul(buyableEffect("rt", 15))
         multAdd = multAdd.mul(player.rg.repliGrassEffect)
         multAdd = multAdd.mul(buyableEffect("rg", 15))
-
+        multAdd = multAdd.mul(player.gs.grassSkipEffect)
+        
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
 

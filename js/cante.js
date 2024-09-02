@@ -145,7 +145,7 @@
         },
         11: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.cb.level.gte(500) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(250000) && player.h.hexPoints[19].gte(1e20) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(1000) },
+            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoints[19].gte(1e40) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
             unlocked() { return true},
             onClick() {
                 player.ca.unlockedCante = true
@@ -651,12 +651,12 @@
         ["blank", "25px"],
         ["raw-html", function () { return "Unlock Replicanti:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
         ["blank", "25px"],
-        ["raw-html", function () { return formatWhole(player.cb.level) + "/500 Check Back Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return formatWhole(player.cb.level) + "/250 Check Back Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return format(player.ad.antimatter) + "/1e600 Antimatter" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return formatWhole(player.in.infinities) + "/250,000 Infinities" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return format(player.h.hexPoints[19]) + "/1e20 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return formatWhole(player.in.infinities) + "/100,000 Infinities" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return format(player.h.hexPoints[19]) + "/1e40 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return format(player.ta.highestDicePoints) + "/1e50 Highest Dice Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return format(player.cb.petPoints) + "/1,000 Pet Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return format(player.cb.petPoints) + "/500 Pet Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["row", [["clickable", 11]]],
     ]

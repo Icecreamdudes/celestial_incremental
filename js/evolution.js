@@ -68,7 +68,7 @@
             "<br>"  + formatWhole(player.ip.hexRuns) + "/2,000 Hex Runs" + 
             "<br>"  + formatWhole(player.points) + "/1e550 Celestial Points" + 
             "<br>"  + formatWhole(player.bi.brokenInfinities) + "/1,000,000 Broken Infinities" + 
-            "<br>"  + formatWhole(player.cb.rarePetAmounts[4]) + "/5 Antimatter" + 
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[4]) + "/5 Antimatter Pets" + 
             "<br>"  + formatWhole(player.cb.petPoints) + "/500 Pet Points" + 
             "<br>"  + formatWhole(player.cb.commonPetLevels[0]) + "/12 Gwa Level",
 
@@ -195,7 +195,7 @@
         17: {
             title() { return player.cb.commonPetImage[0] },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[3] && player.cb.level.gt(250)},
+            unlocked() { return !player.ev.evolutionsUnlocked[3] && player.in.unlockedBreak},
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(3)
             },

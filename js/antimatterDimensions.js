@@ -199,7 +199,7 @@
 
         if (player.ad.dimBoostPause.gt(0))
         {
-            layers.ad.dimBoostReset()
+            if (!hasUpgrade("bi", 112)) layers.ad.dimBoostReset()
         }
         player.ad.dimBoostPause = player.ad.dimBoostPause.sub(1)
 
@@ -216,7 +216,7 @@
 
         if (player.ad.galaxyPause.gt(0))
         {
-            layers.ad.galaxyReset()
+            if (!hasUpgrade("bi", 112)) layers.ad.galaxyReset()
         }
         player.ad.galaxyPause = player.ad.galaxyPause.sub(1)
 

@@ -78,6 +78,7 @@
 
         let multAdd = new Decimal(0.02)
         multAdd = multAdd.add(buyableEffect("rg", 11))
+        multAdd = multAdd.mul(buyableEffect("gs", 18))
 
         player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
         if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart))

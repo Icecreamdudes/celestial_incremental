@@ -11,6 +11,11 @@
         grassSkipReq: new Decimal(1e40),
         grassSkipEffect: new Decimal(1),
         grassSkipPause: new Decimal(0),
+
+        //grassSkippers
+        grassSkippers: new Decimal(0),
+        grassSkippersEffect: new Decimal(1),
+        grassSkippersPerSecond: new Decimal(0),
     }
     },
     automate() {
@@ -35,6 +40,16 @@
         {
             player.gs.grassSkipToGet = new Decimal(1)
         }
+
+        player.gs.grassSkippers = player.gs.grassSkippers.add(player.gs.grassSkippersPerSecond.mul(delta))
+
+        player.gs.grassSkippersPerSecond = player.gs.grassSkip.pow(1.4)
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 11))
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 12))
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 13))
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 14))
+
+        player.gs.grassSkippersEffect = player.gs.grassSkippers.pow(0.275).add(1)
     },
     grassSkipReset()
     {
@@ -125,14 +140,289 @@
         },
     },
     bars: {
+        replicantiBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 400,
+            height: 25,
+            progress() {
+                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+            },
+            fillStyle: {
+                "background-color": "#193ceb",
+            },
+            display() {
+                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+            },
+        }, 
     },
     upgrades: {
     },
     buyables: {
+        11: {
+            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass-Skipper Factor I."
+            },
+            display() {
+                return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(10)
+                let growth = 1.2
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        12: {
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(25)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass-Skipper Factor II."
+            },
+            display() {
+                return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(25)
+                let growth = 1.25
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        13: {
+            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(40)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass-Skipper Factor III."
+            },
+            display() {
+                return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(40)
+                let growth = 1.3
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        14: {
+            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(100)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass-Skipper Factor IV."
+            },
+            display() {
+                return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(100)
+                let growth = 1.35
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        15: {
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Perk Point Skip Booster."
+            },
+            display() {
+                return "which are boosting perk points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(2500)
+                let growth = 1.25
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        16: {
+            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6000)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Anonymity Skip Booster."
+            },
+            display() {
+                return "which are boosting anonymity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(6000)
+                let growth = 1.3
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        17: {
+            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(15000)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Tree Skip Booster."
+            },
+            display() {
+                return "which are boosting repli-trees by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(15000)
+                let growth = 1.35
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        18: {
+            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40000)},
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Grass Skip Booster."
+            },
+            display() {
+                return "which are boosting the repli-grass mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+            },
+            buy() {
+                let base = new Decimal(40000)
+                let growth = 1.4
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+    
+                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
+                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
-   
+        11: {
+            requirementDescription: "<h3>Grass-Skip 1",
+            effectDescription: "Unlock Grass-Skippers",
+            done() { return player.gs.grassSkip.gte(1) },
+            style: { width: '800px', "min-height": '75px' },
+        },
     },
     challenges: {
     },
@@ -147,25 +437,34 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + ". (+" + formatWhole(player.gs.grassSkipToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Your grass-skip boosts replicanti point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Your grass-skip boosts multiplies the point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Milestones"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-    ]
+                    ["row", [["milestone", 11]]],
+                ]
             },
             "Grass-Skippers": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
+                unlocked() { return hasMilestone("gs", 11) },
                 content:
                 [
-                    ["blank", "25px"],
+        ["blank", "25px"],
+        ["raw-html", function () { return "You have <h3>" + format(player.gs.grassSkippers) + "</h3> grass-skippers." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.gs.grassSkippersPerSecond) + "</h3> grass-skippers per second." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Your grass-skippers are boosting rank, tier, and tetr points by x<h3>" + format(player.gs.grassSkippersEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+        ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
     ]
             },
         },
     }, 
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> repli-grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Replicanti point Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

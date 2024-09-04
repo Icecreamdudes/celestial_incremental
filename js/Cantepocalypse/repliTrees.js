@@ -59,6 +59,7 @@
 
         player.rt.repliTreesToGet = new Decimal(1)
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("rt", 14))
+        player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("gs", 17))
 
         if (player.rt.repliLeavesTimer.gte(player.rt.repliLeavesTimerReq))
         {

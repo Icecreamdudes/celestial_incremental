@@ -50,9 +50,9 @@
 
         player.ar.tetrPointsToGet = player.ar.tierPoints.mul(0.1).pow(0.4)
         player.ar.tetrPointsEffect = player.ar.tetrPoints.pow(0.5).add(1)
-        if (hasUpgrade("an", 18)) player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, 0.05)))
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(buyableEffect("rg", 16))
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(player.gs.grassSkippersEffect)
+        if (hasUpgrade("an", 18)) player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, 0.05)))
     },
     clickables: {
         1: {

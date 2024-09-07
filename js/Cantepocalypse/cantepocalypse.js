@@ -1,4 +1,4 @@
-﻿var tree = [["ar", "pr", "an"], ["rt", "rg", "gs"]]
+﻿var tree = [["ar", "pr", "an"], ["rt", "rg", "gs"], ["oi",]]
 addLayer("cp", {
     name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Ξ", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -37,6 +37,12 @@ addLayer("cp", {
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.subtabs["cp"]['stuff'] == 'Portal')
+        {
+            player.tab = "po"
+            player.subtabs["cp"]['stuff'] = 'Features'
+        }
+
         multAdd = new Decimal(0.01)
         multAdd = multAdd.add(player.ar.rankPointsEffect)
         multAdd = multAdd.mul(buyableEffect("pr", 11))
@@ -46,6 +52,8 @@ addLayer("cp", {
         multAdd = multAdd.mul(player.rg.repliGrassEffect)
         multAdd = multAdd.mul(buyableEffect("rg", 15))
         multAdd = multAdd.mul(player.gs.grassSkipEffect)
+        if (hasUpgrade("an", 23)) multAdd = multAdd.mul(upgradeEffect("an", 23))
+        if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
@@ -202,6 +210,16 @@ addLayer("cp", {
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
         }, 
+        18:
+        {
+            title: "Feature VIII",
+            unlocked() { return true },
+            description: "Unlocks THE PORTAL.",
+            cost: new Decimal(1e90),
+            currencyLocation() { return player.cp },
+            currencyDisplayName: "Replicanti Points",
+            currencyInternalName: "replicantiPoints",
+        }, 
     },
     buyables: {
     },
@@ -230,7 +248,7 @@ addLayer("cp", {
                 [
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                        ["row", [["upgrade", 17]]],
+                        ["row", [["upgrade", 17], ["upgrade", 18]]],
                  ]
 
             },
@@ -247,6 +265,13 @@ addLayer("cp", {
 ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
                 ]
 
+            },
+            "Portal": {
+                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
+                unlocked() { return hasUpgrade("cp", 18) },
+                content:
+                [
+                ]
             },
             "Settings": {
                 buttonStyle() { return { 'color': 'white' } },

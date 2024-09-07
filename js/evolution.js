@@ -68,7 +68,7 @@
             "<br>"  + formatWhole(player.ip.hexRuns) + "/2,000 Hex Runs" + 
             "<br>"  + formatWhole(player.points) + "/1e550 Celestial Points" + 
             "<br>"  + formatWhole(player.bi.brokenInfinities) + "/1,000,000 Broken Infinities" + 
-            "<br>"  + formatWhole(player.cb.rarePetAmounts[4]) + "/5 Antimatter Pets" + 
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[4]) + "/2 Antimatter Pets" + 
             "<br>"  + formatWhole(player.cb.petPoints) + "/500 Pet Points" + 
             "<br>"  + formatWhole(player.cb.commonPetLevels[0]) + "/12 Gwa Level",
 
@@ -203,7 +203,7 @@
         },
         18: {
             title() { return "EVOLVE" },
-            canClick() { return player.cb.evolutionShards.gte(8) && player.ip.diceRuns.gte(2000) && player.ip.rocketFuelRuns.gte(2000) && player.ip.hexRuns.gte(2000) && player.points.gte("1e550") && player.bi.brokenInfinities.gte(1000000) && player.cb.rarePetAmounts[4].gte(5) && player.cb.petPoints.gte(500) && player.cb.commonPetLevels[0].gte(12) },
+            canClick() { return player.cb.evolutionShards.gte(8) && player.ip.diceRuns.gte(2000) && player.ip.rocketFuelRuns.gte(2000) && player.ip.hexRuns.gte(2000) && player.points.gte("1e550") && player.bi.brokenInfinities.gte(1000000) && player.cb.rarePetAmounts[4].gte(2) && player.cb.petPoints.gte(500) && player.cb.commonPetLevels[0].gte(12) },
             unlocked() { return player.ev.evolutionDisplayIndex == 3 },
             onClick() {
                 layers.c.evoCutscenes(3)

@@ -143,7 +143,7 @@
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1)},
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1.5)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.0025) },
             unlocked() { return true },
             canAfford() { return player.rg.repliGrass.gte(this.cost()) },
@@ -155,7 +155,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Grass."
             },
             buy() {
-                let base = new Decimal(1)
+                let base = new Decimal(1.5)
                 let growth = 1.25
                 if (player.buyMax == false)
                 {

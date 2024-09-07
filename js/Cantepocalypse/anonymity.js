@@ -25,6 +25,8 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.rt.repliTreesEffect)
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("rg", 17))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("gs", 16))
+
+        if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },
     clickables: {
         1: {
@@ -206,7 +208,22 @@
                 return player.cp.replicantiSoftcap2Start.plus(1).log10().pow(0.65).mul(5).add(1)
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-        }, 
+        },
+        23:
+        {
+            title: "Anonymity Upgrade XII", 
+            unlocked() { return true },
+            description: "Multiplies replicanti mult more based on anonymity.",
+            cost: new Decimal(2e10),
+            currencyLocation() { return player.an },
+            currencyDisplayName: "Anonymity",
+            currencyInternalName: "anonymity",
+            effect() {
+                return player.an.anonymity.plus(1).log10().pow(0.8).mul(1.7).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', hesight: '100px', },
+        },  
     },
     buyables: {
 
@@ -232,7 +249,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                 ]
 
             },

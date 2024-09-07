@@ -16,6 +16,9 @@
         grassSkippers: new Decimal(0),
         grassSkippersEffect: new Decimal(1),
         grassSkippersPerSecond: new Decimal(0),
+
+        //milestone
+        milestone2Effect: new Decimal(1),
     }
     },
     automate() {
@@ -33,8 +36,9 @@
         }
         player.gs.grassSkipPause = player.gs.grassSkipPause.sub(1)
 
-        player.gs.grassSkipReq = player.gs.grassSkip.pow(1.5).mul(1e4).add(1).mul(1e40)
-        player.gs.grassSkipEffect = player.gs.grassSkip.pow(1.6).mul(0.4).add(1)
+        if (player.gs.grassSkip.lt(15)) player.gs.grassSkipReq = player.gs.grassSkip.mul(Decimal.pow(1e2, player.gs.grassSkip)).pow(1.5).add(1).mul(1e40)
+        if (player.gs.grassSkip.gte(15)) player.gs.grassSkipReq = player.gs.grassSkip.mul(Decimal.pow(1e3, player.gs.grassSkip)).pow(1.5).add(1).mul(1e35)
+        player.gs.grassSkipEffect = player.gs.grassSkip.pow(2.4).add(1)
 
         if (player.cp.replicantiPoints.gte(1e40))
         {
@@ -43,13 +47,15 @@
 
         player.gs.grassSkippers = player.gs.grassSkippers.add(player.gs.grassSkippersPerSecond.mul(delta))
 
-        player.gs.grassSkippersPerSecond = player.gs.grassSkip.pow(1.4)
+        player.gs.grassSkippersPerSecond = player.gs.grassSkip.pow(5)
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 11))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 12))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 13))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 14))
 
         player.gs.grassSkippersEffect = player.gs.grassSkippers.pow(0.275).add(1)
+
+        player.gs.milestone2Effect = player.cp.replicantiPoints.plus(1).log10().pow(1.35).add(1)
     },
     grassSkipReset()
     {
@@ -82,16 +88,19 @@
         player.rt.buyables[17] = new Decimal(0)
         player.rt.buyables[18] = new Decimal(0)
 
-        player.rg.repliGrass = new Decimal(1)
+        if (!hasMilestone("gs", 14))
+        {
+            player.rg.repliGrass = new Decimal(1)
 
-        player.rg.buyables[11] = new Decimal(0)
-        player.rg.buyables[12] = new Decimal(0)
-        player.rg.buyables[13] = new Decimal(0)
-        player.rg.buyables[14] = new Decimal(0)
-        player.rg.buyables[15] = new Decimal(0)
-        player.rg.buyables[16] = new Decimal(0)
-        player.rg.buyables[17] = new Decimal(0)
-        player.rg.buyables[18] = new Decimal(0)
+            player.rg.buyables[11] = new Decimal(0)
+            player.rg.buyables[12] = new Decimal(0)
+            player.rg.buyables[13] = new Decimal(0)
+            player.rg.buyables[14] = new Decimal(0)
+            player.rg.buyables[15] = new Decimal(0)
+            player.rg.buyables[16] = new Decimal(0)
+            player.rg.buyables[17] = new Decimal(0)
+            player.rg.buyables[18] = new Decimal(0)
+        }
 
         for (let i = 0; i < player.an.upgrades.length; i++) {
             if (+player.an.upgrades[i] < 23) {
@@ -419,10 +428,47 @@
     milestones: {
         11: {
             requirementDescription: "<h3>Grass-Skip 1",
-            effectDescription: "Unlock Grass-Skippers",
+            effectDescription: "Unlock Grass-Skippers", 
             done() { return player.gs.grassSkip.gte(1) },
             style: { width: '800px', "min-height": '75px' },
         },
+        12: {
+            requirementDescription: "<h3>Grass-Skip 2",
+            effectDescription() { return "Replicanti Points boosts itself at a reduced rate. Currently: " + format(player.gs.milestone2Effect)+"x" },
+            done() { return player.gs.grassSkip.gte(2) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        13: {
+            requirementDescription: "<h3>Grass-Skip 3",
+            effectDescription() { return "Autobuy perk buyables." },
+            done() { return player.gs.grassSkip.gte(3) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        14: {
+            requirementDescription: "<h3>Grass-Skip 4",
+            effectDescription() { return "Keep repli-grass content on reset." },
+            done() { return player.gs.grassSkip.gte(4) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        15: {
+            requirementDescription: "<h3>Grass-Skip 7",
+            effectDescription() { return "Gain 10% of anonymity per second." },
+            done() { return player.gs.grassSkip.gte(7) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        16: {
+            requirementDescription: "<h3>Grass-Skip 11",
+            effectDescription() { return "Autobuy repli-tree buyables." },
+            done() { return player.gs.grassSkip.gte(11) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        17: {
+            requirementDescription: "<h3>Grass-Skip 15",
+            effectDescription() { return "Unlocks oil." },
+            done() { return player.gs.grassSkip.gte(15) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        
     },
     challenges: {
     },
@@ -437,11 +483,16 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + ". (+" + formatWhole(player.gs.grassSkipToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Your grass-skip boosts multiplies the point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Your grass-skip boosts multiplies the replicanti point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Milestones"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["milestone", 11]]],
+                    ["row", [["milestone", 12]]],
+                    ["row", [["milestone", 13]]],
+                    ["row", [["milestone", 14]]],
+                    ["row", [["milestone", 15]]],
+                    ["row", [["milestone", 16]]],
                 ]
             },
             "Grass-Skippers": {

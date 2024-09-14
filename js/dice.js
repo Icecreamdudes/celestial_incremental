@@ -160,7 +160,7 @@
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
 
-        player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
+        if (inChallenge("i", 29)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
 
         player.d.boosterDiceStatsPerSecond = buyableEffect("d", 21)
         for (let i = 0; i < 11; i++)

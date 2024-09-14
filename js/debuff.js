@@ -51,7 +51,7 @@
 
         player.de.antidebuffEffect = layers.de.getAntidebuffEffect(player.de.antidebuffIndex)
 
-        if (hasUpgrade("de", 17)) player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet.mul(delta))
+        if (hasUpgrade("de", 17) && inChallenge("tad", 11)) player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet.mul(delta))
 
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(0))
         {

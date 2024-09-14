@@ -49,7 +49,7 @@
             player.om.diceMasteryPointsToGet = player.d.dicePoints.plus(1).log10().pow(2.4).mul(10)
         } else
         {
-            player.om.rocketFuelMasteryPointsToGet = new Decimal(0)
+            player.om.diceMasteryPointsToGet = new Decimal(0)
         } 
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("om", 16))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 19))

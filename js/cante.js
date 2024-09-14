@@ -63,15 +63,15 @@
         player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 14))
         player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 17))
 
-        player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
+        if (player.ca.unlockedCante) player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
 
         if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq))
         {
             layers.ca.replicantiMultiply();
         }
 
-        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.plus(1).log10().pow(1.2).pow(0.7).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
-        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.plus(1).log10().pow(2.4).pow(0.4).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
+        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.plus(1).log10().pow(1.4).pow(0.75).mul(10).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
+        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.plus(1).log10().pow(2.6).pow(0.45).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
         player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
         
         //CANTE
@@ -252,7 +252,7 @@
         },
         12: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e19) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.025) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -348,7 +348,7 @@
         },
         15: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e14) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.025) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05) },
             unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {

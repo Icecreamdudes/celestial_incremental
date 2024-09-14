@@ -265,7 +265,7 @@ addLayer("i", {
             title: "Steel",
             unlocked() { return hasUpgrade("i", 21) && hasUpgrade("bi", 106)},
             description: "Unlocks Steelie reset layer (in grasshop).",
-            cost: new Decimal("1e575"),
+            cost: new Decimal("1e850"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -275,7 +275,7 @@ addLayer("i", {
             title: "Crystallize",
             unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
             description: "Unlocks Crysstallize reset layer (in grasshop).",
-            cost: new Decimal("1e700"),
+            cost: new Decimal("1e1000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -285,7 +285,7 @@ addLayer("i", {
             title: "Random Mod Boost",
             unlocked() { return hasUpgrade("i", 23) && hasUpgrade("bi", 106)},
             description: "If points are above 1e400, boost mod gain by 1e18.",
-            cost: new Decimal("1e800"),
+            cost: new Decimal("1e1200"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -314,8 +314,8 @@ addLayer("i", {
         {
             title: "2nd OTF slot...",
             unlocked() { return hasUpgrade("i", 26) && hasUpgrade("bi", 106)},
-            description: "Gain a 2nd OTF slot. (does'nt stack with tav's domain)",
-            cost: new Decimal("1e1850"),
+            description: "Gain a 2nd OTF slot. (doesn't stack with tav's domain)",
+            cost: new Decimal("1e1800"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -541,3 +541,15 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
+1
+document.addEventListener('keydown', function(event) {
+    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13)) {
+        player.tab = "i" 
+    }
+    if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13)) {
+        player.tab = "cp"
+    }
+    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13)) {
+        player.tab = "in" 
+    }
+});

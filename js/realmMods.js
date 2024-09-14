@@ -759,7 +759,7 @@
         //creator realm
         21: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.006).pow(0.7).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.006).pow(0.4).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(0) },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
@@ -823,7 +823,7 @@
         },
         23: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).pow(0.55).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(1) },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
@@ -855,7 +855,7 @@
         },
         24: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(275) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.0075).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.0075).pow(0.5).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(1) },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
@@ -887,7 +887,7 @@
         },
         25: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).pow(0.45).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(2) },
             canAfford() { return player.rm.realmEnergy[2].gte(this.cost()) },
             title() {
@@ -951,7 +951,7 @@
         },
         27: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005).pow(0.35).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(3) },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
@@ -983,7 +983,7 @@
         },
         28: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005).pow(0.4).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(3) },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {

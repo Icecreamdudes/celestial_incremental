@@ -10,6 +10,13 @@
         oilEffect: new Decimal(1), //boosts trees
         oilToGet: new Decimal(0),
         oilPause: new Decimal(0),
+
+        stationPower: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        stationPowerPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        stationPowerEffect: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        stationPowerText: "",
+        stationPowerTextEffect: "",
+        stationPowerChoice: new Decimal(-1),
     }
     },
     automate() {
@@ -132,6 +139,16 @@
                     ["raw-html", function () { return "You will gain <h3>" + format(player.oi.oilToGet) + "</h3> oil on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],,
                     ["blank", "25px"],
         ["row", [["clickable", 11]]],
+    ]
+
+            },
+            "Stations": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> oil." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
     ]
 
             },

@@ -1,7 +1,7 @@
 ﻿var tree = [["ar", "pr", "an"], ["rt", "rg", "gs"], ["oi",]]
 addLayer("cp", {
     name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "Ξ", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "A1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -110,7 +110,6 @@ addLayer("cp", {
                 player.cp.replicantiPointsTimer = new Decimal(0)
             }
     },
-    branches: ["branch"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -318,5 +317,5 @@ addLayer("cp", {
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 16)}
+    layerShown() { return player.startedGame == true && player.cap.cantepocalypseUnlock}
 })

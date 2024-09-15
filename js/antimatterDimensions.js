@@ -806,3 +806,4 @@
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)}
 })
 
+// my friend ice LOVES copying and stealing game ideas to put in his own games

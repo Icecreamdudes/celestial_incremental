@@ -731,3 +731,5 @@
         ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)}
 })
+
+// i came up with this guy's name

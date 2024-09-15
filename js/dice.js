@@ -848,3 +848,5 @@
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+// call me a gambler the way i roll dice

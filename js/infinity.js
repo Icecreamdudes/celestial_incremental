@@ -591,3 +591,4 @@ window.addEventListener('load', function() {
     player.bigc.spawnedWisps = false
 
 });
+

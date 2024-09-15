@@ -805,3 +805,4 @@
         ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)}
 })
+

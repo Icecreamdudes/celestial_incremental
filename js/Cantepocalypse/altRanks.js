@@ -165,3 +165,5 @@
         ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 11) }
 })
+
+// hai icecreamdude-senpai :3

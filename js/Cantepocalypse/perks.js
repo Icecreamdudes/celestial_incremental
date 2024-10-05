@@ -37,6 +37,7 @@
         if (hasUpgrade("an", 16)) player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(upgradeEffect("an", 16))
         player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(buyableEffect("rt", 16))
         player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(buyableEffect("gs", 15))
+        player.pr.perkPointsToGet = player.pr.perkPointsToGet.mul(player.oi.linkingPowerEffect[1])
 
         player.pr.perkPointsChance = new Decimal(0.03)
         player.pr.perkPointsChance = player.pr.perkPointsChance.add(buyableEffect("pr", 18))

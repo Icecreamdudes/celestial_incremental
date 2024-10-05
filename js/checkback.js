@@ -1957,7 +1957,7 @@
         },
         12: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30).floor() },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.5).add(1) },
             unlocked() { return true },
             canAfford() { return player.cb.level.gte(this.cost()) },
             title() {

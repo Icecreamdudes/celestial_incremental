@@ -1,4 +1,4 @@
-﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["de", "m", "cb", "d"], ["rm"]]
+﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["de", "m", "cb", "d"], ["rm", "oi"]]
 
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -69,19 +69,49 @@ addLayer("i", {
         }
 
         //music control
-        if (player.universe == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18)) )
+        if (player.universe == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) )
         {
             playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
-        } else if (player.universe == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18)) && options.musicToggle)
+        } else if (player.universe == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle)
         {
-            playAndLoopAudio("music/challenge.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/tav.mp3", options.musicVolume/10);
+        } else if (player.universe == 0 && options.musicToggle)
+        {
+            playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
+        } else if (player.universe == 2 && options.musicToggle)
+        {
+            playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
+        } 
+        else if (player.universe == -1 && options.musicToggle)
+        {
+            if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12)
+            {
+               playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13)
+            {
+                playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+            }
+        } 
+        else if (player.universe == 1.5 && options.musicToggle)
+        {
+            playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
         } else
         {
             stopAudio();
         }
 
+        if (player.universe == 1.5)
+        {
+            startRain("#1486ff");
+        }
+         else
+        {
+            stopRain();
+        }
+
         
         //Celestial Point boosts
+        player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
         player.gain = player.gain.mul(player.r.tierEffect)
         player.gain = player.gain.mul(buyableEffect("f", 11))
@@ -148,7 +178,7 @@ addLayer("i", {
 
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        if (player.po.realmMods) player.gain = player.gain.pow(0.15)
+        if (player.po.realmMods) player.gain = player.gain.pow(0.2)
         player.points = player.points.add(player.gain.mul(delta))
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
@@ -345,7 +375,7 @@ addLayer("i", {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0)},
             description: ".",
-            cost: new Decimal("1e38500"),
+            cost: new Decimal("1e28750"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -355,7 +385,7 @@ addLayer("i", {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0)},
             description: ".",
-            cost: new Decimal("1e38000"),
+            cost: new Decimal("1e28400"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -365,7 +395,7 @@ addLayer("i", {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0)},
             description: ".",
-            cost: new Decimal("1e7750"),
+            cost: new Decimal("1e6150"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -375,7 +405,7 @@ addLayer("i", {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0)},
             description: ".",
-            cost: new Decimal("1e1700"),
+            cost: new Decimal("1e1380"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -385,7 +415,7 @@ addLayer("i", {
             title: "Challenge VIII.",
             unlocked() { return inChallenge("ip", 18) && player.cap.reqSelect.eq(0)},
             description: ".",
-            cost: new Decimal("1e2550"),
+            cost: new Decimal("1e10750"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -466,6 +496,10 @@ addLayer("i", {
                         ["raw-html", function () { return "Playtime: " + formatTime(player.timePlayed)}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["raw-html", function () { return "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>"}, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return credits }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return changelog }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ]
             },
         },

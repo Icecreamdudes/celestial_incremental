@@ -8,7 +8,7 @@
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
-	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js",],
+	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js",],
 
 	discordName: "",
 	discordLink: "",
@@ -22,12 +22,34 @@ let VERSION = {
 	name: "Literally nothing",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+let credits = `<h1>Credits:</h1><br>
+		-Game by Icecreamdude.<br>
+		-Music by !Sweet.<br>
+		-Ideas and Balancing by Nova.<br>
+		-Art by Jtoh_Sc.<br>
+		-Testing by Nova and Piterpicher.<br>
+		`
 
-let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
+let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.0</h3><br>
+		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+		<br>
+		<br>
+		<br>
+		- Added Universe 1, Universe 2, and Alternate Universe 1.<br>
+		- Added Ranks, Tiers, Tetrs, Pents, Factors, Prestige, Trees, Grass, Grasshop, and Code Experience.<br>
+		- Added Check Back.<br>
+		- Added Pets.<br>
+		- Added Dice, Rocket Fuel, Hex and Realm Mods.<br>
+		- Added Infinity Points, Antimatter Dimensions, Break Infinity, and OTF Mastery.<br>
+		- Added Steel, Crystals, Time Reversal, and Rage Power.<br>
+		- Added Alternate Ranks, Perks, Anonymity, Repli-Trees, Repli-Grass, Grass-Skip, and Oil.<br>
+		- Added 2 Celestials: Tav and Cante.<br>
+		- Added cutscenes.<br>
+		- Removed Herobrine.
+		`
+
+let winText = `Congratulations! You have completed the entirety of Celestial Incremental for now...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -37,7 +59,8 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "petButton4", "hexReset", "hexPointReset", "automationTierReset", "startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12", "startCutscene13", "antidebuffReset", "startCutscene14", 
 "negativeInfinityReset", "reverseCrunch", "startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities", "domainReset", "gainAutomationShard",
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
-"gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset" ]
+"gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
+"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene" ]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
@@ -95,3 +118,5 @@ function maxTickLength() {
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
 }
+
+// you know i actually did some work. yea it was copy / pasting dialogue and basically typing words, but now i can say that i worked on celesital incremental as a developer.

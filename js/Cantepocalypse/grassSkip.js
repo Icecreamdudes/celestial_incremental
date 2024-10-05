@@ -52,10 +52,18 @@
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 12))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 13))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 14))
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(player.oi.linkingPowerEffect[5])
 
         player.gs.grassSkippersEffect = player.gs.grassSkippers.pow(0.275).add(1)
 
         player.gs.milestone2Effect = player.cp.replicantiPoints.plus(1).log10().pow(1.35).add(1)
+
+        if (player.subtabs["oi"]['stuff'] == 'REMEMBERANCE CORES')
+        {
+            player.tab = 'ca'
+            player.subtabs["ca"]['stuff'] = 'REMEMBERANCE CORES'
+            player.subtabs["oi"]['stuff'] = 'Main'
+        }
     },
     grassSkipReset()
     {
@@ -493,6 +501,7 @@
                     ["row", [["milestone", 14]]],
                     ["row", [["milestone", 15]]],
                     ["row", [["milestone", 16]]],
+                    ["row", [["milestone", 17]]],
                 ]
             },
             "Grass-Skippers": {

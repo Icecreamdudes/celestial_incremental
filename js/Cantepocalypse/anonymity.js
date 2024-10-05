@@ -25,6 +25,7 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.rt.repliTreesEffect)
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("rg", 17))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("gs", 16))
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.oi.linkingPowerEffect[2])
 
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },

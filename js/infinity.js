@@ -325,7 +325,7 @@ addLayer("in", {
 
         if (!hasMilestone("ip", 14))
         {
-            player.ad.antimatter = new Decimal(10)
+            if (player.in.infinities.eq(0)) player.ad.antimatter = new Decimal(10)
 
             player.ad.buyables[1] = new Decimal(0)
     

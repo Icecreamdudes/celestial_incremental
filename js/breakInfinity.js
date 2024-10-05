@@ -328,28 +328,19 @@
         {
             title: "BI IP Upgrade XIII",
             unlocked() { return true },
-            description: "Gain 4% of broken infinities per second.",
-            cost: new Decimal(1e21),
+            description: "Raise check back effect to the ^5. (only ^2 in dice), and gain 4% of B.I per second.",
+            cost: new Decimal(1e24),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
-        },
-        25:
-        {
-            title: "BI IP Upgrade XIII",
-            unlocked() { return true },
-            description: "Raise check back effect to the ^5. (only ^2 in dice)",
-            cost: new Decimal(1e25),
-            currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
-            currencyInternalName: "infinityPoints",
+            style: { width: '150px', height: '100px', }
         },
         26:
         {
             title: "BI IP Upgrade XIV",
             unlocked() { return true },
             description: "Unlock galaxy dust.",
-            cost: new Decimal(1e27),
+            cost: new Decimal(1e26),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
@@ -359,7 +350,7 @@
             title: "BI IP Upgrade XV",
             unlocked() { return true },
             description: "Unlock a new OTF, realm mods.",
-            cost: new Decimal(1e30),
+            cost: new Decimal(1e29),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",

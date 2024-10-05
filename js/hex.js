@@ -103,6 +103,7 @@
         }
 
         player.h.ragePowerToGet = player.h.hexPoints[0].plus(1).log10().pow(2).div(1000)
+        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(buyableEffect("oi", 24))
 
         if (player.h.ragePowerPause.gt(0)) {
             layers.h.ragePowerReset();

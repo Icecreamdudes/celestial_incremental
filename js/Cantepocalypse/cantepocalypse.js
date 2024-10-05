@@ -54,6 +54,7 @@ addLayer("cp", {
         multAdd = multAdd.mul(player.gs.grassSkipEffect)
         if (hasUpgrade("an", 23)) multAdd = multAdd.mul(upgradeEffect("an", 23))
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
+        multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
         
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
@@ -144,7 +145,7 @@ addLayer("cp", {
             title: "Feature I",
             unlocked() { return true },
             description: "Unlocks Alt-Ranks.",
-            cost: new Decimal(10),
+            cost: new Decimal(2),
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
@@ -305,6 +306,8 @@ addLayer("cp", {
                         ["raw-html", function () { return "Playtime: " + formatTime(player.timePlayed)}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["raw-html", function () { return "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>"}, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return changelog }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ]
             },
         },

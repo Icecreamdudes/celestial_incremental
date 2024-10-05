@@ -1,4 +1,4 @@
-﻿var tree = [["i", "in"], ["cp"]]
+﻿var tree = [["i", "in", "s"], ["cp"]]
 addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -229,7 +229,7 @@ addLayer("po", {
         15: {
             title() { return "<h1>Realm Mods" },
             display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.15)<br>On" : "<h2>Get past limits.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
+                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.2)<br>On" : "<h2>Feel the realms.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
             },
             canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308) && player.ca.canteCores.gte(1)},
             unlocked() { return hasUpgrade("bi", 27) },
@@ -328,15 +328,6 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                ]
-
-            },
-            "LORE": {
-                buttonStyle() { return { 'color': 'black', "background-color": "white", } },
-                unlocked() { return hasMilestone("ip", 23) },
-                content:
-                [
-                        ["blank", "25px"],
                 ]
 
             },

@@ -475,7 +475,7 @@
         },
         24: {
             cost(x) { return new Decimal(3).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e10) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.75).pow(0.85).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.75).pow(1.4).add(1) },
             unlocked() { return hasUpgrade("i", 25) },
             canAfford() { return player.id.infinityPower.gte(this.cost()) },
             title() {

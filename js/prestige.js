@@ -74,13 +74,14 @@
         }
         player.p.crystalPause = player.p.crystalPause.sub(1)
 
-        player.p.crystalEffect = player.p.crystals.plus(1).log10().pow(0.265).mul(0.06).add(1)
+        player.p.crystalEffect = player.p.crystals.plus(1).log10().pow(0.265).mul(0.045).add(1)
 
-        player.p.crystalsToGet = player.r.tier.pow(0.01)
+        player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
 
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.rm.realmModsEffect[1])
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
     },
     prestigeReset()
     {

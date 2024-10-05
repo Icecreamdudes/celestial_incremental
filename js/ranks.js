@@ -57,6 +57,7 @@
         let ranksGainPreS = player.points.div(10).pow(Decimal.div(20, 33)).floor()
         let ranksGainPostS = player.points.div(10).pow(0.25).floor()
         let ranksGainPostS2 = player.points.div(10).pow(Decimal.div(1, 10)).floor()
+        let ranksGainPostS3 = player.points.div(10).pow(Decimal.div(1, 50)).floor()
 
         player.r.rankEffect = player.r.rank.mul(0.25).add(1).pow(1.05)
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
@@ -74,6 +75,10 @@
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt(100) && hasUpgrade("p", 14))
         {
             player.r.ranksToGet = ranksGainPostS2.sub(player.r.rank).add(98)
+        }
+        if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt("1e4000") && hasUpgrade("p", 14))
+        {
+            player.r.ranksToGet = ranksGainPostS3.sub(player.r.rank).add("1e4000")
         }
         if (!hasUpgrade("p", 14)) player.r.ranksToGet = new Decimal(1)
         if (player.points.lt(player.r.rankReq) || player.r.ranksToGet.lt(0))

@@ -73,6 +73,7 @@
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("rt", 14))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("gs", 17))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.oilEffect)
+        player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.linkingPowerEffect[3])
 
         if (player.rt.repliLeavesTimer.gte(player.rt.repliLeavesTimerReq))
         {

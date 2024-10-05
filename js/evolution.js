@@ -121,7 +121,6 @@
             canClick() { return player.cb.evolutionShards.gte(4) && player.cb.commonPetAmounts[0].gte(6) && player.cb.commonPetAmounts[1].gte(6) && player.cb.commonPetAmounts[2].gte(6) && player.cb.commonPetAmounts[3].gte(6) && player.cb.commonPetAmounts[4].gte(6) && player.cb.commonPetLevels[2].gte(7) && player.cb.highestDicePetCombo.gte(2)},
             unlocked() { return player.ev.evolutionDisplayIndex == 0 },
             onClick() {
-                layers.c.evoCutscenes(0)
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(4)
@@ -150,7 +149,6 @@
             canClick() { return player.cb.evolutionShards.gte(6) && player.cb.uncommonPetAmounts[0].gte(3) && player.cb.uncommonPetAmounts[1].gte(3) && player.cb.uncommonPetAmounts[2].gte(3) && player.cb.uncommonPetAmounts[3].gte(3) && player.cb.uncommonPetAmounts[4].gte(3) && player.cb.uncommonPetLevels[3].gte(4) && player.cb.rarePetAmounts[2].gte(2)},
             unlocked() { return player.ev.evolutionDisplayIndex == 1 },
             onClick() {
-                layers.c.evoCutscenes(1)
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(6)
@@ -180,7 +178,6 @@
             canClick() { return player.cb.evolutionShards.gte(10) && player.ip.diceRuns.gte(2) && player.ip.rocketFuelRuns.gte(2) && player.cb.rarePetAmounts[0].gte(3) && player.cb.rarePetAmounts[3].gte(3) && player.cb.uncommonPetLevels[2].gte(6)},
             unlocked() { return player.ev.evolutionDisplayIndex == 2 },
             onClick() {
-                layers.c.evoCutscenes(2)
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(10)
@@ -206,7 +203,6 @@
             canClick() { return player.cb.evolutionShards.gte(8) && player.ip.diceRuns.gte(2000) && player.ip.rocketFuelRuns.gte(2000) && player.ip.hexRuns.gte(2000) && player.points.gte("1e550") && player.bi.brokenInfinities.gte(50000) && player.cb.rarePetAmounts[4].gte(2) && player.cb.petPoints.gte(500) && player.cb.commonPetLevels[0].gte(12) },
             unlocked() { return player.ev.evolutionDisplayIndex == 3 },
             onClick() {
-                layers.c.evoCutscenes(3)
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(8)
@@ -233,7 +229,6 @@
             canClick() { return player.cb.evolutionShards.gte(20) && player.cb.paragonShards.gte(1) && player.in.infinityPoints.gte(1e11) && player.cb.uncommonPetAmounts[0].gte(10) && player.cb.uncommonPetAmounts[1].gte(10) && player.cb.uncommonPetAmounts[2].gte(10) && player.cb.uncommonPetAmounts[3].gte(10) && player.cb.uncommonPetAmounts[4].gte(10) && player.cb.uncommonPetAmounts[5].gte(10) && player.cb.uncommonPetAmounts[6].gte(10) && player.cb.petPoints.gte(1000) && player.cb.uncommonPetLevels[1].gte(9)},
             unlocked() { return player.ev.evolutionDisplayIndex == 4 },
             onClick() {
-                layers.c.evoCutscenes(4)
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(20)
@@ -267,7 +262,6 @@
             canClick() { return player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(1) && player.d.dicePoints.gte(1e45) && player.cb.evolvedLevels[0].gte(6) && player.cb.evolvedLevels[1].gte(6) && player.cb.evolvedLevels[2].gte(5) && player.cb.XPBoost.gte(7) && player.cb.rarePetLevels[1].gte(5) },
             unlocked() { return player.ev.evolutionDisplayIndex == 5 },
             onClick() {
-                layers.c.evoCutscenes(5)
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(25)

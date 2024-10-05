@@ -30,6 +30,12 @@
 
         replicantiGalaxies: new Decimal(0),
         replicantiGalaxiesCap: new Decimal(0),
+
+        rememberanceCores: new Decimal(0),
+        rememberanceCoresEffect: new Decimal(0),
+        rememberanceCoreCost: new Decimal(1000),
+
+        defeatedCante: false,
     }
     },
     automate() {
@@ -76,6 +82,7 @@
         
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
+        player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(player.ca.rememberanceCoresEffect)
 
         if (player.ca.canteEnergy.gte(player.ca.canteEnergyReq))
         {
@@ -89,6 +96,10 @@
         
         //rep galax
         player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
+
+        //rememberance
+        player.ca.rememberanceCoreCost = player.ca.rememberanceCores.add(1).pow(1.5).mul(1000)
+        player.ca.rememberanceCoresEffect = player.ca.rememberanceCores.mul(0.05).add(1)
     },
     gainCanteCore()
     {
@@ -97,6 +108,12 @@
         player.ca.canteCores = player.ca.canteCores.add(1)
         player.ca.canteEnergy = new Decimal(0)
         player.ca.canteEnergy = player.ca.canteEnergy.add(leftover)
+    },
+    convertRememberanceCore()
+    {
+        player.ca.canteCores = player.ca.canteCores.sub(1)
+        player.oi.protoMemories = player.oi.protoMemories.sub(player.ca.rememberanceCoreCost)
+        player.ca.rememberanceCores = player.ca.rememberanceCores.add(1)
     },
     replicantiMultiply()
     {
@@ -181,6 +198,26 @@
                 player.tab = "cap"
             },
             style: { width: '400px', "min-height": '100px' },
+        },
+        15: {
+            title() { return "<h3>CONVERT A CANTE CORE INTO A REMEMBERANCE CORE" },
+            canClick() { return player.ca.canteCores.gte(1) && player.oi.protoMemories.gte(player.ca.rememberanceCoreCost) },
+            unlocked() { return true },
+            onClick() {
+                layers.ca.convertRememberanceCore();
+            },
+            style: { width: '400px', "min-height": '100px' },
+        },
+        16: {
+            title() { return "<h3>REMEMBER THE PROTO OVERWORLD. DESTROY CANTE. END THE SUFFERING. (REQ: 10 Rememberance Cores)" },
+            canClick() { return player.ca.rememberanceCores.gte(10) },
+            unlocked() { return true },
+            onClick() {
+                player.ca.defeatedCante = true
+                player.tab = 'po'
+                player.subtabs["po"]['stuff'] = 'Portals'
+            },
+            style: { width: '500px', "min-height": '200px',},
         },
     },
     bars: {
@@ -711,7 +748,7 @@
         ["blank", "25px"],
         ["row", [["bar", "bar"]]],
         ["blank", "25px"],
-        ["raw-html", function () { return "Energy multiplier: <h3>" + formatWhole(player.ca.canteEnergyMult) + "</h3>x" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Energy multiplier: <h3>" + format(player.ca.canteEnergyMult) + "</h3>x" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Cante energy is gained by clicking on check back buttons." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["raw-html", function () { return "Cante cores will have many uses in the future." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -719,6 +756,33 @@
         ["row", [["clickable", 14]]],
 
     ]
+            },
+            "REMEMBERANCE CORES": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasUpgrade("cp", 18) },
+                content:
+                [
+        ["blank", "25px"],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> rememberance cores." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Your rememberance cores boost cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> cante cores." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["row", [["clickable", 15]]],
+        ["raw-html", function () { return "Cost: <h3>" + format(player.ca.rememberanceCoreCost) + "</h3> proto memories." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+
+    ]
+            },
+            "THE BARRIER": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasUpgrade("cp", 18) && !player.ca.defeatedCante },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 16]]],
+                ]
+
             },
         },
     }, 

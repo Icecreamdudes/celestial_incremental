@@ -88,11 +88,11 @@
         }
         if (player.rm.currentDisplay.eq(4)) 
         {
-            player.rm.realmModTitleText = "You are converting for THE BACKROOMS"
-            player.rm.realmModCountText = "You have " + format(player.rm.realmMods[player.rm.currentDisplay]) + " backrooms mods (+" + format(player.rm.realmModsToGet[player.rm.currentDisplay]) + ")"
+            player.rm.realmModTitleText = "You are converting for THE DREAM REALM"
+            player.rm.realmModCountText = "You have " + format(player.rm.realmMods[player.rm.currentDisplay]) + " dream realm mods (+" + format(player.rm.realmModsToGet[player.rm.currentDisplay]) + ")"
             player.rm.realmModResetText = "Converting will reset negative infinity and mastery progress."
             player.rm.realmModBoostText = "Negative infinity points boost conversions by x" + format(player.rm.realmModsMulti[player.rm.currentDisplay]) + "."
-            player.rm.realmModEffectText = "Backrooms mods boosts the first 3 mastery point gain by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
+            player.rm.realmModEffectText = "Dream realm mods boosts the first 3 mastery point gain by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
         }
         if (player.rm.currentDisplay.eq(5))
         {
@@ -100,7 +100,7 @@
             player.rm.realmModCountText = "You have " + format(player.rm.realmMods[player.rm.currentDisplay]) + " void mods (+" + format(player.rm.realmModsToGet[player.rm.currentDisplay]) + ")"
             player.rm.realmModResetText = "Converting will reset broken infinity and infinity point buyables and amounts."
             player.rm.realmModBoostText = "Infinities boost conversions by x" + format(player.rm.realmModsMulti[player.rm.currentDisplay]) + "."
-            player.rm.realmModEffectText = "Backrooms mods boosts infinity point gain by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
+            player.rm.realmModEffectText = "Void mods boosts infinity point gain by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
         }
 
         player.rm.realmModsMulti[0] = player.cb.level.pow(0.4).div(10).add(1)
@@ -490,7 +490,7 @@
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
         },  
         25: {
-            title() { return "<h3>Convert Backrooms Mods (Req: 1e18 negative infinity points)" },
+            title() { return "<h3>Convert Dream Realm Mods (Req: 1e18 negative infinity points)" },
             canClick() { return player.ta.negativeInfinityPoints.gte(1e18)},
             unlocked() { return player.rm.currentDisplay.eq(4) },
             onClick() {
@@ -697,10 +697,10 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>BACKROOM BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>DREAM REALM BOOST"
             },
             display() {
-                return "which are multiplying backrooms mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying dream realm mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
             buy() {
@@ -759,7 +759,7 @@
         //creator realm
         21: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.006).pow(0.4).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.0005).pow(0.4).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(0) },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
@@ -791,7 +791,7 @@
         },
         22: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(0) },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
@@ -823,7 +823,7 @@
         },
         23: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).pow(0.55).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.007).pow(0.55).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(1) },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
@@ -855,7 +855,7 @@
         },
         24: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(275) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.0075).pow(0.5).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.05).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(1) },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
@@ -887,7 +887,7 @@
         },
         25: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).pow(0.45).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.45).mul(0.045).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(2) },
             canAfford() { return player.rm.realmEnergy[2].gte(this.cost()) },
             title() {
@@ -951,7 +951,7 @@
         },
         27: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005).pow(0.35).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.03).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(3) },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
@@ -983,7 +983,7 @@
         },
         28: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005).pow(0.4).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.4).mul(0.025).add(1) },
             unlocked() { return player.rm.currentDisplay.eq(3) },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
@@ -1023,7 +1023,7 @@
             },
             display() {
                 return "which boosts antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Backrooms Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dream Realm Energy"
             },
             buy() {
                 let base = new Decimal(40)
@@ -1055,7 +1055,7 @@
             },
             display() {
                 return "which boosts negative infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Backrooms Energy"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dream Realm Energy"
             },
             buy() {
                 let base = new Decimal(50)

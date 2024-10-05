@@ -116,7 +116,7 @@ addLayer("s", {
     }, 
 
     tabFormat: [
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+                        ["microtabs", "stuff", { 'border-width': '0px' }], 
         ],
     layerShown() { return player.startedGame == true && player.ca.defeatedCante}
 })

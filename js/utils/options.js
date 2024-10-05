@@ -15,7 +15,7 @@ function getStartOptions() {
 		oldStyle: false,
 		tooltipForcing: true,
 		musicToggle: true,
-		musicVolume: 10,
+		musicVolume: 3,
 		toggleHotkey: true,
 		toggleParticle: true,
 	}

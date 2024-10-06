@@ -304,6 +304,7 @@
                 return player.p.prestigePoints.pow(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
         }, 
         13:
         {
@@ -334,6 +335,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            tooltip() { return "Autobuyers don't spend resources. This applies to most autobuyers in the game." },
         }, 
         16:
         {

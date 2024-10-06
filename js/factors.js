@@ -1796,6 +1796,8 @@
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(buyableEffect("f", 11), buyableEffect("f", 12), buyableEffect("f", 13), buyableEffect("f", 14), buyableEffect("f", 15), buyableEffect("f", 16), buyableEffect("f", 17), buyableEffect("f", 18))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Power": {
@@ -1817,6 +1819,8 @@
                     ["raw-html", function () { return player.f.powerFactorUnlocks[6] == true && player.f.powerFactorUnlocks[7] == false ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["buyable", 19], ["buyable", 21], ["buyable", 22], ["buyable", 23]]],
                     ["row", [["buyable", 24], ["buyable", 25], ["buyable", 26], ["buyable", 27]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(buyableEffect("f", 19), buyableEffect("f", 21), buyableEffect("f", 22), buyableEffect("f", 23), buyableEffect("f", 24), buyableEffect("f", 25), buyableEffect("f", 26), buyableEffect("f", 27))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Tree": {
@@ -1834,6 +1838,8 @@
                     ["raw-html", function () { return player.f.treeFactorUnlocks[6] == true && player.f.treeFactorUnlocks[7] == false?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["buyable", 28], ["buyable", 29], ["buyable", 31], ["buyable", 32]]],
                     ["row", [["buyable", 33], ["buyable", 34], ["buyable", 35], ["buyable", 36]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(buyableEffect("f", 28), buyableEffect("f", 29), buyableEffect("f", 31), buyableEffect("f", 32), buyableEffect("f", 33), buyableEffect("f", 34), buyableEffect("f", 35), buyableEffect("f", 36))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             }, 
             "Grass": {
@@ -1847,6 +1853,8 @@
                     ["raw-html", function () { return "Factors unlock with Grass Study III."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]]],
                     ["row", [["buyable", 5], ["buyable", 6], ["buyable", 7], ["buyable", 8]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(buyableEffect("f", 1), buyableEffect("f", 2), buyableEffect("f", 3), buyableEffect("f", 4), buyableEffect("f", 5), buyableEffect("f", 6), buyableEffect("f", 7), buyableEffect("f", 8))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             }, 
             "Infinity": {
@@ -1860,6 +1868,8 @@
                     ["blank", "25px"],
                     ["row", [["buyable", 41], ["buyable", 42], ["buyable", 43], ["buyable", 44]]],
                     ["row", [["buyable", 45], ["buyable", 46], ["buyable", 47], ["buyable", 48]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(buyableEffect("f", 41), buyableEffect("f", 42), buyableEffect("f", 43), buyableEffect("f", 44), buyableEffect("f", 45), buyableEffect("f", 46), buyableEffect("f", 47), buyableEffect("f", 48))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             }, 
             "Negative Infinity": {
@@ -1873,6 +1883,8 @@
                     ["blank", "25px"],
                     ["row", [["buyable", 51], ["buyable", 52], ["buyable", 53], ["buyable", 54]]],
                     ["row", [["buyable", 55], ["buyable", 56], ["buyable", 57], ["buyable", 58]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(buyableEffect("f", 51), buyableEffect("f", 52), buyableEffect("f", 53), buyableEffect("f", 54), buyableEffect("f", 55), buyableEffect("f", 56), buyableEffect("f", 57), buyableEffect("f", 58))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             }, 
         },

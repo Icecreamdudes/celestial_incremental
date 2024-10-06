@@ -444,6 +444,12 @@ function createRepliGrass(quantity) {
 
     if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
 
+    // Function to calculate the distance between two points
+    function getDistance(x1, y1, x2, y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+    // Create repli circles based on quantity
     for (let i = 0; i < quantity; i++) {
         let randomX, randomY;
         do {
@@ -452,7 +458,7 @@ function createRepliGrass(quantity) {
         } while (isCollision(randomX, randomY));
 
         const repliCircle = document.createElement('div');
-        repliCircle.style.borderRadius = "100%";
+        repliCircle.style.borderRadius = '100%';
         repliCircle.style.width = '22.5px';
         repliCircle.style.height = '22.5px';
         repliCircle.style.backgroundColor = '#18e34e';
@@ -464,20 +470,39 @@ function createRepliGrass(quantity) {
 
         spawnArea.appendChild(repliCircle); // Append to spawnArea instead of document.body
 
-        // Add event listener to remove grass circle on hover
-        repliCircle.addEventListener('mouseover', () => {
-            removeRepliGrass(repliCircle);
-            player.rg.repliGrassCount--; // Decrease grass count
-            player.rg.savedRepliGrass--; // Decrease grass count
-            player.rg.repliGrass = player.rg.repliGrass.mul(player.rg.repliGrassMult)
-        });
-        
-        player.rg.repliGrassCount++; // Increase grass count
+        // Function to check if cursor is within 100px radius of the repliCircle
+        function checkCursorDistance(event) {
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+
+            const repliCircleRect = repliCircle.getBoundingClientRect();
+            const circleCenterX = repliCircleRect.left + repliCircleRect.width / 2;
+            const circleCenterY = repliCircleRect.top + repliCircleRect.height / 2;
+
+            const distance = getDistance(cursorX, cursorY, circleCenterX, circleCenterY);
+
+            // If the cursor is within 100 pixels, remove the repliCircle
+            if (distance <= 100) {
+                removeRepliGrass(repliCircle);
+                player.rg.repliGrassCount--; // Decrease grass count
+                player.rg.savedRepliGrass--; // Decrease saved repli grass count
+                player.rg.repliGrass = player.rg.repliGrass.mul(player.rg.repliGrassMult);
+
+                // Remove the mousemove listener once the repliCircle is collected
+                document.removeEventListener('mousemove', checkCursorDistance);
+            }
+        }
+
+        // Add the mousemove event listener to check the distance from the cursor
+        document.addEventListener('mousemove', checkCursorDistance);
+
+        player.rg.repliGrassCount++; // Increase repli grass count
 
         // Start moving the repliCircle
         moveRepliCircle(repliCircle, spawnAreaRect);
     }
 }
+
 
 function isCollision(x, y) {
     const existingRepliCircles = document.querySelectorAll('.repli-circle');

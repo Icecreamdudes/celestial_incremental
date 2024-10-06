@@ -497,6 +497,8 @@ addLayer("i", {
                         ["blank", "25px"],
                         ["raw-html", function () { return "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>"}, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
                         ["blank", "25px"],
+                        ["raw-html", function () { return hotkey }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                        ["blank", "25px"],
                         ["raw-html", function () { return credits }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["raw-html", function () { return changelog }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
@@ -577,13 +579,13 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
 }
 1
 document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13)) {
+    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
         player.tab = "i" 
     }
-    if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13)) {
+    if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13) && options.toggleHotkey) {
         player.tab = "cp"
     }
-    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13)) {
+    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
         player.tab = "in" 
     }
 });

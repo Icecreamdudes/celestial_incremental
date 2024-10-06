@@ -442,6 +442,12 @@ addLayer("in", {
                         ["raw-html", function () { return "Playtime: " + formatTime(player.timePlayed)}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["raw-html", function () { return "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>"}, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return hotkey }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return credits }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return changelog }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ]
             },
         },
@@ -591,4 +597,3 @@ window.addEventListener('load', function() {
     player.bigc.spawnedWisps = false
 
 });
-

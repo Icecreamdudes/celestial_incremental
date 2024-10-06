@@ -171,6 +171,7 @@
         {
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("id", 23))
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("oi", 23))
         }
 
         player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
@@ -575,6 +576,9 @@
                         ["raw-html", function () { return hasUpgrade("i", 13) ? "You are at tetr <h3>" + formatWhole(player.r.tetr) + ". (+" + formatWhole(player.r.tetrsToGet) + ")" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return hasUpgrade("i", 13) ? "Your tetr boosts points by x" + format(player.r.tetrEffect) + "." : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["row", [["clickable", 13]]],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(player.r.rankEffect, player.r.tierEffect, player.r.tetrEffect)) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+
                 ]
 
             },

@@ -775,11 +775,17 @@ function createGrass(quantity) {
 
     if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
 
+    // Function to calculate the distance between two points
+    function getDistance(x1, y1, x2, y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+    // Create grass squares based on quantity
     for (let i = 0; i < quantity; i++) {
         let randomX, randomY;
         do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjusted to ensure squares spawn within the horizontal range
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjusted to ensure squares spawn within the vertical range
+            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
+            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
         } while (isCollision(randomX, randomY));
 
         const greenSquare = document.createElement('div');
@@ -792,16 +798,34 @@ function createGrass(quantity) {
         greenSquare.style.border = '2px solid black'; // Add a black border
         greenSquare.classList.add('green-square');
 
-        spawnArea.appendChild(greenSquare); // Append to spawnArea instead of document.bodys
+        spawnArea.appendChild(greenSquare); // Append to spawnArea instead of document.body
         
-        // Add event listener to remove grass square on hover
-        greenSquare.addEventListener('mouseover', () => {
-            removeGrass(greenSquare);
-            player.g.grassCount--; // Decrease grass count
-            player.g.savedGrass--; // Decrease grass count
-            player.g.grass = player.g.grass.add(player.g.grassVal)
-        });
-        
+        // Function to check if cursor is within 150px radius of the greenSquare
+        function checkCursorDistance(event) {
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+
+            const greenSquareRect = greenSquare.getBoundingClientRect();
+            const squareCenterX = greenSquareRect.left + greenSquareRect.width / 2;
+            const squareCenterY = greenSquareRect.top + greenSquareRect.height / 2;
+
+            const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
+
+            // If the cursor is within 150 pixels, remove the grass square
+            if (distance <= 100) {
+                removeGrass(greenSquare);
+                player.g.grassCount--; // Decrease grass count
+                player.g.savedGrass--; // Decrease saved grass count
+                player.g.grass = player.g.grass.add(player.g.grassVal);
+
+                // Remove the mousemove listener once grass is collected
+                document.removeEventListener('mousemove', checkCursorDistance);
+            }
+        }
+
+        // Add the mousemove event listener to check the distance from the cursor
+        document.addEventListener('mousemove', checkCursorDistance);
+
         player.g.grassCount++; // Increase grass count
     }
 }
@@ -843,11 +867,17 @@ function createGoldenGrass(quantity) {
 
     if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
 
+    // Function to calculate the distance between two points
+    function getDistance(x1, y1, x2, y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+    // Create golden grass squares based on quantity
     for (let i = 0; i < quantity; i++) {
         let randomX, randomY;
         do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjusted to ensure squares spawn within the horizontal range
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjusted to ensure squares spawn within the vertical range
+            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
+            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
         } while (isCollision(randomX, randomY));
 
         const goldSquare = document.createElement('div');
@@ -860,16 +890,34 @@ function createGoldenGrass(quantity) {
         goldSquare.style.border = '2px solid black'; // Add a black border
         goldSquare.classList.add('gold-square');
 
-        spawnArea.appendChild(goldSquare); // Append to spawnArea instead of document.bodys
-        
-        // Add event listener to remove grass square on hover
-        goldSquare.addEventListener('mouseover', () => {
-            removeGrass(goldSquare);
-            player.g.goldGrassCount--; // Decrease grass count
-            player.g.savedGoldGrass--; // Decrease grass count
-            player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal)
-        });
-        
-        player.g.goldGrassCount++; // Increase grass count
+        spawnArea.appendChild(goldSquare); // Append to spawnArea instead of document.body
+
+        // Function to check if cursor is within 100px radius of the goldenSquare
+        function checkCursorDistance(event) {
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+
+            const goldSquareRect = goldSquare.getBoundingClientRect();
+            const squareCenterX = goldSquareRect.left + goldSquareRect.width / 2;
+            const squareCenterY = goldSquareRect.top + goldSquareRect.height / 2;
+
+            const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
+
+            // If the cursor is within 100 pixels, remove the golden grass square
+            if (distance <= 100) {
+                removeGrass(goldSquare);
+                player.g.goldGrassCount--; // Decrease grass count
+                player.g.savedGoldGrass--; // Decrease saved grass count
+                player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal);
+
+                // Remove the mousemove listener once the golden grass is collected
+                document.removeEventListener('mousemove', checkCursorDistance);
+            }
+        }
+
+        // Add the mousemove event listener to check the distance from the cursor
+        document.addEventListener('mousemove', checkCursorDistance);
+
+        player.g.goldGrassCount++; // Increase golden grass count
     }
 }

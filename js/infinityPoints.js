@@ -497,13 +497,10 @@
         },
         21: {
             requirementDescription: "<h3>150 Infinities",
-            effectDescription() { return "You get an option to skip the big crunch animation, and automatically reset." },
+            effectDescription() { return "Skip the big crunch screen, and automatically reset." },
             done() { return player.in.infinities.gte(150) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
-            toggles: [
-                ["bigc", "skip"], // Each toggle is defined by a layer and the data toggled for that layer
-            ],
         },
         22: {
             requirementDescription: "<h3>300 Infinities",

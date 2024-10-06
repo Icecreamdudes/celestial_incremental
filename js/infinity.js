@@ -68,7 +68,7 @@ addLayer("in", {
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if (!player.bigc.skip) 
+                if (!hasMilestone("ip", 21)) 
                 {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21))

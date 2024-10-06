@@ -1043,7 +1043,7 @@
             title() { return player.cb.commonPetAmounts[0].gt(0) || player.cb.commonPetLevels[0].gt(0) ? player.cb.commonPetImage[0] : player.cb.lockedImg},
             canClick() { return player.cb.commonPetAmounts[0].gt(0) || player.cb.commonPetLevels[0].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.commonPetAmounts[0].gt(0)  && !player.cb.viewingEvolved[3]|| player.cb.commonPetAmounts[0].gt(0)  && !player.cb.viewingEvolved[3]? "<h3>x" + format(player.cb.commonPetEffects[0][0]) + " to points.<br>x" + format(player.cb.commonPetEffects[0][1]) + " to check back xp.": "x" + format(player.cb.evolvedEffects[3][0]) + " to infinities.<br>x" + format(player.cb.evolvedEffects[3][1]) + " to broken infinities."},
+            tooltip() { return player.cb.commonPetAmounts[0].gt(0) && !player.cb.viewingEvolved[3] || player.cb.commonPetLevels[0].gt(0)  && !player.cb.viewingEvolved[3]? "<h3>x" + format(player.cb.commonPetEffects[0][0]) + " to points.<br>x" + format(player.cb.commonPetEffects[0][1]) + " to check back xp." :  player.cb.viewingEvolved[3] ? "x" + format(player.cb.evolvedEffects[3][0]) + " to infinities.<br>x" + format(player.cb.evolvedEffects[3][1]) + " to broken infinities." : ""},
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(0)
             },

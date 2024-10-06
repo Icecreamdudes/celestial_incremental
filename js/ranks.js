@@ -577,7 +577,7 @@
                         ["raw-html", function () { return hasUpgrade("i", 13) ? "Your tetr boosts points by x" + format(player.r.tetrEffect) + "." : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["row", [["clickable", 13]]],
                         ["blank", "25px"],
-                        ["raw-html", function () { return "Total Mult: x" + format(Decimal.mul(player.r.rankEffect, player.r.tierEffect, player.r.tetrEffect)) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Total Mult: x" + format(player.r.rankEffect.mul(player.r.tierEffect.mul(player.r.tetrEffect))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
 
                 ]
 

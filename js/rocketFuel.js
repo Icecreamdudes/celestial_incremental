@@ -65,7 +65,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.evolvedEffects[4][1])
 
 
-        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && player.po.rocketFuel) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
+        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
 
         player.rf.rocketFuelEffect = player.rf.rocketFuel.pow(0.85).add(1)
 

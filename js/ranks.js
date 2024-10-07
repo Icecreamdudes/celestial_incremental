@@ -54,12 +54,12 @@
 
         //Rank and Tier effects/costs
 
-        let ranksGainPreS = player.points.div(10).pow(Decimal.div(20, 33)).floor()
+        let ranksGainPreS = player.points.div(10).pow(Decimal.div(20, 29)).floor()
         let ranksGainPostS = player.points.div(10).pow(0.25).floor()
         let ranksGainPostS2 = player.points.div(10).pow(Decimal.div(1, 10)).floor()
         let ranksGainPostS3 = player.points.div(10).pow(Decimal.div(1, 50)).floor()
 
-        player.r.rankEffect = player.r.rank.mul(0.25).add(1).pow(1.05)
+        player.r.rankEffect = player.r.rank.mul(0.4).add(1).pow(1.055)
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
         player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("rm", 21))
         player.r.rankReq = layers.r.getRankReq()
@@ -92,7 +92,7 @@
 
         let tiersGain = player.r.rank.div(3).pow(Decimal.div(10, 11)).floor()
 
-        player.r.tierEffect = player.r.tier.mul(0.5).add(1).pow(1.1)
+        player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
         player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("rm", 21))
         player.r.tierReq = layers.r.getTierReq().div(player.cb.uncommonPetEffects[3][1])
@@ -112,7 +112,7 @@
 
         let tetrGain = player.r.tier.div(2).pow(Decimal.div(25, 27)).floor()
 
-        player.r.tetrEffect = player.r.tetr.mul(0.75).add(1).pow(1.2)
+        player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
         player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("rm", 21))
         player.r.tetrReq = layers.r.getTetrReq().div(player.cb.uncommonPetEffects[3][2])
@@ -193,7 +193,7 @@
     {
         if (player.r.rank.lte(20))
         {
-            return player.r.rank.add(1).pow(1.65).mul(10)
+            return player.r.rank.add(1).pow(1.45).mul(10)
         } else if (player.r.rank.gt(20) && player.r.rank.lt(100))
         {
             return (player.r.rank.sub(17)).pow(4).mul(10)

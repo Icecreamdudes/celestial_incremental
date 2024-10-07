@@ -39,7 +39,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.p.prestigePointsToGet = player.points.div(250000).pow(0.5)
+        player.p.prestigePointsToGet = player.points.div(100000).pow(0.5)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.t.treeEffect)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("g", 16))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.r.pentEffect)
@@ -258,8 +258,8 @@
             style: { width: '100px', "min-height": '50px' },
         },
         11: {
-            title() { return "<h3>Prestige, but reset all ranks and factors. <br>(Req: 250,000 Celestial Points)" },
-            canClick() { return player.p.prestigePointsToGet.gte(1) && player.points.gte(250000)},
+            title() { return "<h3>Prestige, but reset all ranks and factors. <br>(Req: 100,000 Celestial Points)" },
+            canClick() { return player.p.prestigePointsToGet.gte(1) && player.points.gte(100000)},
             unlocked() { return true },
             onClick() {
                 layers.p.prestigeReset()

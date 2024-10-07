@@ -493,7 +493,7 @@
             style: { width: '275px', height: '150px', }
         },
         11: {
-            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
+            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[0] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -506,7 +506,7 @@
             },
             buy() {
                 let base = new Decimal(10)
-                let growth = 1.4
+                let growth = 1.25
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -525,7 +525,7 @@
             style: { width: '275px', height: '150px', }
         },
         12: {
-            cost(x) { return new Decimal(1.44).pow(x || getBuyableAmount(this.layer, this.id)).mul(25) },
+            cost(x) { return new Decimal(1.28).pow(x || getBuyableAmount(this.layer, this.id)).mul(25) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[1] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -538,7 +538,7 @@
             },
             buy() {
                 let base = new Decimal(25)
-                let growth = 1.44
+                let growth = 1.28
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -557,7 +557,7 @@
             style: { width: '275px', height: '150px', }
         },
         13: {
-            cost(x) { return new Decimal(1.48).pow(x || getBuyableAmount(this.layer, this.id)).mul(60) },
+            cost(x) { return new Decimal(1.31).pow(x || getBuyableAmount(this.layer, this.id)).mul(60) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[2] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -570,7 +570,7 @@
             },
             buy() {
                 let base = new Decimal(60)
-                let growth = 1.48
+                let growth = 1.31
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -589,7 +589,7 @@
             style: { width: '275px', height: '150px', }
         },
         14: {
-            cost(x) { return new Decimal(1.52).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
+            cost(x) { return new Decimal(1.34).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[3] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -602,7 +602,7 @@
             },
             buy() {
                 let base = new Decimal(200)
-                let growth = 1.52
+                let growth = 1.34
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -621,7 +621,7 @@
             style: { width: '275px', height: '150px', }
         },
         15: {
-            cost(x) { return new Decimal(1.56).pow(x || getBuyableAmount(this.layer, this.id)).mul(800) },
+            cost(x) { return new Decimal(1.37).pow(x || getBuyableAmount(this.layer, this.id)).mul(800) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[4] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -634,7 +634,7 @@
             },
             buy() {
                 let base = new Decimal(800)
-                let growth = 1.56
+                let growth = 1.37
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -653,7 +653,7 @@
             style: { width: '275px', height: '150px', }
         },        
         16: {
-            cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(3000) },
+            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(3000) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[5] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -666,7 +666,7 @@
             },
             buy() {
                 let base = new Decimal(3000)
-                let growth = 1.6
+                let growth = 1.4
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -685,7 +685,7 @@
             style: { width: '275px', height: '150px', }
         },
         17: {
-            cost(x) { return new Decimal(1.64).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000) },
+            cost(x) { return new Decimal(1.43).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[6] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -698,7 +698,7 @@
             },
             buy() {
                 let base = new Decimal(10000)
-                let growth = 1.64
+                let growth = 1.43
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -717,7 +717,7 @@
             style: { width: '275px', height: '150px', }
         },
         18: {
-            cost(x) { return new Decimal(1.68).pow(x || getBuyableAmount(this.layer, this.id)).mul(50000) },
+            cost(x) { return new Decimal(1.46).pow(x || getBuyableAmount(this.layer, this.id)).mul(50000) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1) },
             unlocked() { return player.f.factorUnlocks[7] },
             canAfford() { return player.points.gte(this.cost()) },
@@ -730,7 +730,7 @@
             },
             buy() {
                 let base = new Decimal(50000)
-                let growth = 1.68
+                let growth = 1.46
                 if (player.buyMax == false && !hasUpgrade("p", 15))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)

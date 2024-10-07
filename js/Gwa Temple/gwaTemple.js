@@ -58,5 +58,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 1)}
 })

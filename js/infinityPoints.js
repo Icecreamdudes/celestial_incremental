@@ -636,7 +636,7 @@
         },
         16: {
             name: "Challenge VI",
-            challengeDescription() { return "<h4>You are stuck in rocket fuel, and point gain is raised to the ^0.03." },
+            challengeDescription() { return "<h4>You are stuck in rocket fuel, and point gain is raised to the ^0.05." },
             goalDescription() { return "1.79e308 prestige points" },
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.p.prestigePoints.gte(1.79e308) },

@@ -146,7 +146,7 @@ addLayer("i", {
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
         if (hasUpgrade("d", 17)) player.gain = player.gain.mul(upgradeEffect("d", 17))
         player.gain = player.gain.div(player.po.pointHalt)
-        if (inChallenge("ip", 16)) player.gain = player.gain.pow(0.03)
+        if (inChallenge("ip", 16)) player.gain = player.gain.pow(0.05)
         if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
         if (inChallenge("ip", 18)) player.gain = player.gain.pow(0.4)

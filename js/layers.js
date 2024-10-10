@@ -476,47 +476,7 @@ addLayer("i", {
                     ]
 
             },
-            "Settings": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                    [
-                        ["blank", "25px"],
-                        ["row", [
-                        ["raw-html", function () { return "<button class=opt onclick=save()>Save</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<button class=opt onclick=toggleOpt('autosave')>Autosave</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<button class=opt onclick=hardReset()>HARD RESET</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ]],
-                    ["row", [
-                        ["raw-html", function () { return "<button class=opt onclick=exportSave()>Export to clipboard</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<button class=opt onclick=importSave()>Import</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<button class=opt onclick=toggleOpt('offlineProd')>Offline Prod</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ]],
-                    ["row", [
-                        ["raw-html", function () { return "<button class=opt onclick=switchTheme()>Change Theme</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<button class=opt onclick=toggleOpt('musicToggle'); needsCanvasUpdate = true>Toggle Music</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys</button>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "</td><td><div style=margin: 0 10px><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>"}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "Volume: " + options.musicVolume}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Autosave: " + options.autosave}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Offline Production: " + options.offlineProd}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Music Toggle: " + options.musicToggle}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Hotkey Toggle: " + options.toggleHotkey}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "Playtime: " + formatTime(player.timePlayed)}, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>"}, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return hotkey }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return credits }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return changelog }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ]
-            },
+            "Settings": settingsMicrotab,
         },
     }, 
 

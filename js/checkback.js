@@ -1273,7 +1273,7 @@
             title() { return player.cb.rarePetAmounts[1].gt(0) || player.cb.rarePetLevels[1].gt(0) ? player.cb.rarePetImage[1] : player.cb.lockedImg},
             canClick() { return player.cb.rarePetAmounts[1].gt(0) || player.cb.rarePetLevels[1].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.rarePetAmounts[1].gt(0)  && !player.cb.viewingEvolved[5]|| player.cb.rarePetAmounts[1].gt(0)  && !player.cb.viewingEvolved[5] ? "<h3>x" + format(player.cb.rarePetEffects[1][0]) + " to dice points (based on highest combo).<br>x" + format(player.cb.rarePetEffects[1][1]) + " to mods (based on dice points).": "^" + format(player.cb.evolvedEffects[5][0]) + " to dice effect.<br>x" + format(player.cb.evolvedEffects[5][1]) + " to challenge dice points."},
+            tooltip() { return player.cb.rarePetAmounts[1].gt(0)  && !player.cb.viewingEvolved[5]|| player.cb.rarePetAmounts[1].gt(0)  && !player.cb.viewingEvolved[5] ? "<h3>x" + format(player.cb.rarePetEffects[1][0]) + " to dice points (based on highest combo).<br>x" + format(player.cb.rarePetEffects[1][1]) + " to mods (based on dice points).": player.cb.viewingEvolved[5] ? "^" + format(player.cb.evolvedEffects[5][0]) + " to dice effect.<br>x" + format(player.cb.evolvedEffects[5][1]) + " to challenge dice points." : ""},
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(1)
             },

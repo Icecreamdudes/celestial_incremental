@@ -35,6 +35,7 @@ let credits = `<h1>Credits:</h1><br>
 		-Ideas and Balancing by Nova.<br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
+		-Bug Fixes by Tsanth.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>

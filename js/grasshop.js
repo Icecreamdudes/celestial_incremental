@@ -47,7 +47,7 @@
         let onepersec = new Decimal(1)
 
         if (player.gh.grasshoppersToGet.lt(50000))  player.gh.grasshoppersToGet = player.g.grass.div(10000).pow(0.55)
-        if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45)
+        if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45).add(10000)
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.uncommonPetEffects[0][1])
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
     if (player.po.rocketFuel) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)

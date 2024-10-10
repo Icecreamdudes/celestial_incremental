@@ -57,25 +57,49 @@
         {
             player.points = player.points.sub(player.points.mul(0.95 * delta))
         }
+        if (player.points.lte(0))
+        {
+            player.points = new Decimal(0)
+        }
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(1))
         {
             player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.95 * delta))
+        }
+        if (player.p.prestigePoints.lte(0))
+        {
+            player.p.prestigePoints = new Decimal(0)
         }
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(2))
         {
             player.g.grass = player.g.grass.sub(player.g.grass.mul(0.95 * delta))
         }
+        if (player.g.grass.lte(0))
+        {
+            player.g.grass = new Decimal(0)
+        }
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(3))
         {
             player.t.trees = player.t.trees.sub(player.t.trees.mul(0.95 * delta))
+        }
+        if (player.t.trees.lte(0))
+        {
+            player.t.trees = new Decimal(0)
         }
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(4))
         {
             player.m.mods = player.m.mods.sub(player.m.mods.mul(0.95 * delta))
         }
+        if (player.m.mods.lte(0))
+        {
+            player.m.mods = new Decimal(0)
+        }
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(5))
         {
             player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.95 * delta))
+        }
+        if (player.m.codeExperience.lte(0))
+        {
+            player.m.codeExperience = new Decimal(0)
         }
 
         if (player.de.antidebuffIndex == 0)

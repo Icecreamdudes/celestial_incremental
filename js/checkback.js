@@ -2301,12 +2301,12 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are level " + formatWhole(player.cb.level) + ", which boosts celestial point gain by x" + format(player.cb.levelEffect) + "."}, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["raw-html", function () { return !player.cb.effectActivate && !hasMilestone("ip", 24) ? "YOU MUST REACH 1e100 POINTS TO ACTIVATE CHECK BACK AND PET EFFECT" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return !hasMilestone("ip", 24) ? "YOU MUST REACH 1e100 POINTS TO ACTIVATE CHECK BACK AND PET EFFECT" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "xpbar"]]],
                         ["blank", "25px"],
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) }
 })

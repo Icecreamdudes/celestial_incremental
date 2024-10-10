@@ -75,12 +75,12 @@
             player.oi.linkingPower[i] = player.oi.linkingPower[i].add(player.oi.linkingPowerPerSecond[i].mul(delta))
         }
         
-        player.oi.linkingPowerPerSecond[0] = player.points.plus(1).log10().pow(0.21).mul(buyableEffect('oi', 11))
-        player.oi.linkingPowerPerSecond[1] = player.f.factorPower.plus(1).log10().pow(0.25).mul(buyableEffect('oi', 12))
-        player.oi.linkingPowerPerSecond[2] = player.p.prestigePoints.plus(1).log10().pow(0.215).mul(buyableEffect('oi', 13))
-        player.oi.linkingPowerPerSecond[3] = player.t.trees.plus(1).log10().pow(0.285).mul(buyableEffect('oi', 14))
-        player.oi.linkingPowerPerSecond[4] = player.g.grass.plus(1).log10().pow(0.255).mul(buyableEffect('oi', 15))
-        player.oi.linkingPowerPerSecond[5] = player.gh.grasshoppers.plus(1).log10().pow(0.27).mul(buyableEffect('oi', 16))
+       // player.oi.linkingPowerPerSecond[0] = player.points.plus(1).log10().pow(0.21).mul(buyableEffect('oi', 11))
+       // player.oi.linkingPowerPerSecond[1] = player.f.factorPower.plus(1).log10().pow(0.25).mul(buyableEffect('oi', 12))
+       // player.oi.linkingPowerPerSecond[2] = player.p.prestigePoints.plus(1).log10().pow(0.215).mul(buyableEffect('oi', 13))
+       // player.oi.linkingPowerPerSecond[3] = player.t.trees.plus(1).log10().pow(0.285).mul(buyableEffect('oi', 14))
+       // player.oi.linkingPowerPerSecond[4] = player.g.grass.plus(1).log10().pow(0.255).mul(buyableEffect('oi', 15))
+      //  player.oi.linkingPowerPerSecond[5] = player.gh.grasshoppers.plus(1).log10().pow(0.27).mul(buyableEffect('oi', 16))
         
         player.oi.linkingPowerEffect[0] = player.oi.linkingPower[0].pow(0.4).add(1)
         player.oi.linkingPowerEffect[1] = player.oi.linkingPower[1].pow(0.175).add(1)

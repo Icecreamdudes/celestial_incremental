@@ -172,6 +172,11 @@
         player.d.manualCooldown = player.d.manualCooldown.div(buyableEffect("d", 23))
 
         if (player.d.diceEffects[12].gt(100)) player.d.diceEffects[12] = new Decimal(100)
+
+        if (player.d.buyables[14].gt(player.d.diceSides.sub(player.d.buyables[22].mul(2))))
+        {
+            player.d.buyables[14] = player.d.diceSides.sub(player.d.buyables[22].mul(2))
+        }
     },
     diceRoll()
     {

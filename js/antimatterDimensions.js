@@ -101,8 +101,8 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.h.ragePowerEffect)
 
         if (player.ad.antimatter.gt(1e300) && player.ad.extraDimsGalaxiesLocked) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 310)))
-        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.log10(), 355)))
+        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 310)))
+        if (player.ad.antimatter.gt(1e300) && !player.ad.extraDimsGalaxiesLocked && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 355)))
 
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))

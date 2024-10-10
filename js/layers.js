@@ -489,6 +489,11 @@ addLayer("i", {
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {
+        // Check if a modal already exists on the page
+        if (document.querySelector('.modal-container')) {
+            return; // If a modal is already present, exit the function
+        }
+
         // Create modal container
         const modalContainer = document.createElement('div');
         modalContainer.classList.add('modal-container');
@@ -550,7 +555,6 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
-1
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
         player.tab = "i" 

@@ -233,6 +233,13 @@
     },
     loadGrass()
     {
+        // savedGrass should never be negative!
+        if (player.g.savedGrass < 0) {
+            player.g.savedGrass = player.g.grassCount > 0
+                ? player.g.grassCount
+                : 0
+        }
+
         removeAllGrass();
         createGrass(player.g.savedGrass);
         player.g.grassCount = player.g.savedGrass
@@ -770,6 +777,16 @@
 })
 
 function createGrass(quantity) {
+    // This _shouldn't_ happen, but there existed cases where e.g.
+    // player.g.savedGrass somehow got a massively-negative number and
+    // as a result, the loop down below never finished.
+    // We now dump some info to console if this happens.
+    if (quantity < 0) {
+        console.log('%cCalled .../js/grass.js:createGrass with negative quantity!', 'color:red; font-size: 150%; font-weight: bold')
+      console.log(`%cInfo for the devs: fx: .../js/grass.js:createGrass; quantity: ${quantity}; player.g.grassCount ${player.g.grassCount}; player.g.savedGrass: ${player.g.savedGrass}`, 'color: yellow; font-size: 125%')
+        return
+    }
+
     const spawnArea = document.getElementById('spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 

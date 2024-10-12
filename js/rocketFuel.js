@@ -190,7 +190,7 @@
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
         },
         11: {
-            title() { return "<h3>Gain rocket fuel, but reset everything before unlocking check back. (Based on grasshoppers) (~1e15 grasshoppers)" },
+            title() { return "<h3>Gain rocket fuel, but reset everything before unlocking check back. (except pent milestones) (Based on grasshoppers) (~1e15 grasshoppers)" },
             canClick() { return player.rf.rocketFuelToGet.gte(1)},
             unlocked() { return true },
             onClick() {
@@ -472,15 +472,6 @@
             }
         }
     }
-        if (!hasUpgrade("rf", 11) || !hasMilestone("ip", 15)) 
-        {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
 
 
         player.g.grass = new Decimal(0)

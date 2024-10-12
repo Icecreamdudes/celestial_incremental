@@ -315,7 +315,7 @@ addLayer("i", {
         {
             title: "Crystallize",
             unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
-            description: "Unlocks Crysstallize reset layer (in grasshop).",
+            description: "Unlocks Crystallize reset layer (in grasshop).",
             cost: new Decimal("1e1000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",

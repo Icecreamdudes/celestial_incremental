@@ -457,7 +457,7 @@
         {
             title: "Self Synergize.",
             unlocked() { return true },
-            description: "Ur dice points boost istelf.",
+            description: "Ur dice points boost itself.",
             cost: new Decimal(1e14),
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",

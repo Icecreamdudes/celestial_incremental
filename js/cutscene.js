@@ -514,7 +514,7 @@ startCutscene7() {
     "There is a floating blue orb of pure energy. It gives off a similar energy to Negative Infinity Points.",
     "This must be the core. You gather all the corrupted, disfigured, and shattered infinities you have collected and form it into a ball of pure energy.",
     "A thousand of each should be enough. But before you can finish your job, you hear Tav's voice echoing throughout the room.",
-    '"So… You finally made it to my core. I had a feeling you weren\'t on my side."',
+    '"So… You finally made it to my core. I had a feeling you were not on my side."',
     '"Throughout history, only a select few individuals have ever killed a celestial."',
     "A beam of light shines out of the core, displaying a hologram of seven beings.",
     '"These seven celestials are known as the original seven. Their names are Teresa, Effarig, The Nameless Ones, V, Ra, Lai\'tela, and Pelle."',

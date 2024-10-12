@@ -297,13 +297,13 @@
         {
             title: "Grass Upgrade IX",
             unlocked() { return hasMilestone("r", 14) },
-            description() { return "Increases grass capacity based on pent." },
+            description() { return "Increases grass capacity based on pent. (Max: 1000)" },
             cost: new Decimal(1e9),
             currencyLocation() { return player.g },
             currencyDisplayName: "Grass",
             currencyInternalName: "grass",
             effect() {
-                return player.r.pent.mul(10)
+                return player.r.pent.lte(100) ? player.r.pent.mul(10) : new Decimal(1000)
             },
             effectDisplay() { return "+"+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
@@ -335,7 +335,7 @@
     buyables: {
         11: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) },
             title() {
@@ -974,7 +974,7 @@ const updateGoldGrass = (delta) => {
     // Effect logic
 
     player.g.goldGrassEffect = player.g.goldGrass
-        .pow(0.7)
+        .pow(1.05)
         .mul(0.15)
         .add(1)
 

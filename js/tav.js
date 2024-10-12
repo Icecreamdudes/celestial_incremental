@@ -228,6 +228,7 @@
                 if (i == 9 && player.ta.buyables[31].gte(1))
                 {
                     if (hasUpgrade("ta", 14) && player.ad.dimBoostAmount.lt(player.ta.dimboostLimit) || !hasUpgrade("ta", 14))
+                    if ((hasUpgrade("ta", 14) && player.ad.dimBoostAmount.lt(player.ta.dimboostLimit))  || !hasUpgrade("ta", 14))
                     {
                     if (player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.dimBoostDimCost].gte(player.ad.dimBoostReq) && (player.ad.dimBoostAmount.lt(6)) : player.ad.dimensionAmounts[player.ad.dimBoostDimCost].gte(player.ad.dimBoostReq))
                     {
@@ -240,6 +241,7 @@
                 if (i == 10 && player.ta.buyables[32].gte(1))
                 {
                     if (hasUpgrade("ta", 14) && player.ad.galaxyAmount.lt(player.ta.galaxyLimit) || !hasUpgrade("ta", 14))
+                    if ((hasUpgrade("ta", 14) && player.ad.galaxyAmount.lt(player.ta.galaxyLimit)) || !hasUpgrade("ta", 14))
                     {
                     if (player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq) && (player.ad.galaxyAmount.lt(1)) : player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq))
                     {

@@ -6,6 +6,15 @@
     startData() { return {
         unlocked: true,
 
+        isLayerLoaded: false,
+
+        // The characters are state and player.g.isLayerLoaded, respectively:
+        // nn: !s !p
+        // ny: !s p
+        // yn: s !p
+        // yy: s p
+        lastLayerState: 'nn',
+
         isGrassLoaded: false,
         grass: new Decimal(0),
         savedGrass: new Decimal(0),
@@ -77,20 +86,51 @@
             onGoldGrassMicrotab: player.subtabs.g.stuff === 'Golden Grass',
         }
 
+        const thisLayerState = (state.inGrassLayer ? 'y' : 'n')
+            + (player.g.isLayerLoaded ? 'y' : 'n')
+
+        // Track whether we had the layer loaded previously; the way
+        // this is set up, player.g.isLayerLoaded follows the state
+        // of state.inGrassLayer, with a single tick delay, e.g.
+        // let s be state.inGrassLayer, let p be player.g.isLayerLoaded:
+        //    State 1: on Grass layer (yields s && p)
+        //    State 2: switch to another layer (yields !s && p)
+        //    State 3: on another layer (yields !s && !p)
+        //    State 4: switch to Grass layer (yields s && !p)
+        //    State 5: on Grass layer (yields s && p)
+        player.g.isLayerLoaded = state.inGrassLayer
+
+        player.g.lastLayerState = (state.inGrassLayer ? 'y' : 'n')
+            + (player.g.isLayerLoaded ? 'y' : 'n')
+
         // DEBUGGING OUTPUT
         //logOnce('updateEnter', `.../js/grass.js:update() ${JSON.stringify(state)}`)
+        //console.log(`Layer state: ${thisLayerState} (was ${player.g.lastLayerState})`)
+
+        // Handle layer switching
+        if (player.g.lastLayerState == 'yy' && thisLayerState == 'yn') {
+            if (state.onGrassMicrotab) {
+                layers.g.loadGrass()
+                player.g.isGrassLoaded = true
+            } else if (state.onGoldGrassMicrotab) {
+                layers.g.loadGoldGrass()
+                player.g.isGoldGrassLoaded = true
+            }
+        }
 
         // Grass isn't loaded if we leave its microtab
         if (player.g.isGrassLoaded && !state.onGrassMicrotab) {
+            layers.g.unloadGrass()
             player.g.isGrassLoaded = false
         }
 
         // Golden grass isn't loaded if we leave its microtab
         if (player.g.isGoldGrassLoaded && !state.onGoldGrassMicrotab) {
+            layers.g.unloadGoldGrass()
             player.g.isGoldGrassLoaded = false
         }
 
-        // We only ever want to load grasses if we're _in_ the grass layer
+        // Handle microtab switching
         if (state.inGrassLayer) {
             if (!player.g.isGrassLoaded && state.onGrassMicrotab) {
                 layers.g.loadGrass()

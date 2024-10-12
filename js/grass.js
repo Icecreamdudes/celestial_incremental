@@ -6,24 +6,24 @@
     startData() { return {
         unlocked: true,
 
-        inGrassTab: false,
+        isGrassLoaded: false,
         grass: new Decimal(0),
         savedGrass: new Decimal(0),
         grassEffect: new Decimal(1),
         grassCap: new Decimal(100),
         grassCount: new Decimal(0),
         grassVal: new Decimal(1),
-        grassReq: new Decimal(4),
+        grassReq: new Decimal(4), // Seconds per spawn
         grassTimer: new Decimal(0),
 
-        inGoldGrassTab: false,
+        isGoldGrassLoaded: false,
         goldGrass: new Decimal(0),
         savedGoldGrass: new Decimal(0),
         goldGrassEffect: new Decimal(1),
         goldGrassCap: new Decimal(15),
         goldGrassCount: new Decimal(0),
         goldGrassVal: new Decimal(1),
-        goldGrassReq: new Decimal(40),
+        goldGrassReq: new Decimal(40), // Seconds per spawn
         goldGrassTimer: new Decimal(0),
     }
     },
@@ -52,207 +52,85 @@
             buyUpgrade("g", 18)
             buyUpgrade("g", 19)
             buyUpgrade("g", 21)
-        }   
+        }
     },
     nodeStyle() {
     },
     tooltip: "Grass",
     color: "#119B35",
     update(delta) {
-        let onepersec = new Decimal(1)
+        // Grass/gold grass-specific logic relies on knowing whether or
+        // not we're actively on their specific microtab, so we handle the
+        // loading/unloading logic here, before splitting off into specific
+        // sub-handlers.
 
-        if (player.subtabs["g"]['stuff'] == 'Grass' && player.tab == "g" && player.g.inGrassTab == false)
-        {
-           layers.g.loadGrass();
-        }
-        if (player.subtabs["g"]['stuff'] == 'Grass' && player.tab == "g" && player.g.inGoldGrassTab == true)
-        {
-           layers.g.loadGrass();
-        }
-        if (!(player.subtabs["g"]['stuff'] == 'Grass') && !(player.tab == "g") && player.g.inGrassTab == true)
-        {
-           layers.g.unloadGrass();
-        }
-        if (player.subtabs["g"]['stuff'] == 'Grass' && player.tab == "g")
-        {
-            player.g.inGrassTab = true
-            if (player.g.grassCount < player.g.grassCap) player.g.grassTimer = player.g.grassTimer.add(onepersec.mul(delta))
-            if (player.g.grassTimer.gt(player.g.grassReq) && player.g.grassCount < player.g.grassCap)
-            {
-                createGrass(1);
-                player.g.savedGrass++;
-                player.g.grassTimer = new Decimal(0)
-            }
-        } else if (!(player.subtabs["g"]['stuff'] == 'Golden Grass' && player.tab == "g"))
-        {
-            player.g.inGrassTab = false
-            if (player.g.grassCount < player.g.grassCap) player.g.grassTimer = player.g.grassTimer.add(onepersec.mul(delta))
-            if (player.g.grassTimer.gt(player.g.grassReq) && player.g.savedGrass < player.g.grassCap)
-            {
-                player.g.savedGrass++;
-                player.g.grassTimer = new Decimal(0)
-            } else if (player.g.savedGrass > player.g.grassCap) {
-                player.g.savedGrass = player.g.grassCap
-            }
-        } else
-        {
-            player.g.inGrassTab = false
-            if (player.g.grassCount < player.g.grassCap) player.g.grassTimer = player.g.grassTimer.add(onepersec.mul(delta))
-        }
-        if (player.g.grassCount < 0)
-        {
-            player.g.grassCount = new Decimal(0)
+        const state = {
+            // I.e. we currently have the Grass layer loaded
+            inGrassLayer: player.tab === 'g',
+
+            // I.e. our currently-selected microtab in the Grass layer
+            // is the "Grass" microtab
+            onGrassMicrotab: player.subtabs.g.stuff === 'Grass',
+
+            // I.e. our currently-selected microtab in the Grass layer
+            // is the "Golden Grass" microtab
+            onGoldGrassMicrotab: player.subtabs.g.stuff === 'Golden Grass',
         }
 
-        player.g.grassEffect = player.g.grass.mul(0.3).pow(0.7).add(1)
+        // DEBUGGING OUTPUT
+        //logOnce('updateEnter', `.../js/grass.js:update() ${JSON.stringify(state)}`)
 
-        player.g.grass = player.g.grass.add(player.g.grassVal.mul(buyableEffect("gh", 11).mul(delta)))
-        if (hasUpgrade("rf", 12)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.2, delta)))
-        if (hasMilestone("ip", 13) && !inChallenge("ip", 14)) player.g.grass = player.g.grass.add(player.g.grassVal.mul(Decimal.mul(0.05, delta)))
-
-        player.g.grassVal = new Decimal(1)
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("g", 11))
-        if (hasUpgrade("g", 11)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect("g", 11))
-        player.g.grassVal = player.g.grassVal.mul(player.g.goldGrassEffect)
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("t", 17))
-        player.g.grassVal = player.g.grassVal.mul(player.gh.grasshopperEffects[4])
-        player.g.grassVal = player.g.grassVal.mul(player.gh.fertilizerEffect)
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 1))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 2))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 3))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 4))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 5))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 6))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 7))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("f", 8))
-        player.g.grassVal = player.g.grassVal.mul(player.cb.commonPetEffects[3][0])
-        player.g.grassVal = player.g.grassVal.mul(player.d.diceEffects[5])
-        player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
-        if (hasUpgrade("ad", 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect("ad", 14))
-        player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
-        if (inChallenge("ip", 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(buyableEffect("h", 14))
-        if (player.de.antidebuffIndex.eq(2)) player.g.grassVal = player.g.grassVal.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(0.4)
-        if (inChallenge("tad", 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect("de", 15))
-        player.g.grassVal = player.g.grassVal.mul(buyableEffect("gh", 33))
-        player.g.grassVal = player.g.grassVal.mul(player.r.timeCubeEffects[2])
-        player.g.grassVal = player.g.grassVal.pow(buyableEffect("rm", 25)) 
-
-        if (inChallenge("ip", 18) && player.g.grass.gt(player.g.grass.mul(0.4 * delta)))
-        {
-            player.g.grass = player.g.grass.sub(player.g.grass.mul(0.4 * delta))
+        // Grass isn't loaded if we leave its microtab
+        if (player.g.isGrassLoaded && !state.onGrassMicrotab) {
+            player.g.isGrassLoaded = false
         }
 
-        player.g.grassReq = new Decimal(4) 
-        player.g.grassReq = player.g.grassReq.div(buyableEffect("g", 12))
+        // Golden grass isn't loaded if we leave its microtab
+        if (player.g.isGoldGrassLoaded && !state.onGoldGrassMicrotab) {
+            player.g.isGoldGrassLoaded = false
+        }
 
-        player.g.grassCap = new Decimal(100) 
-        player.g.grassCap = player.g.grassCap.add(buyableEffect("g", 13))
-        if (hasUpgrade("g", 18)) player.g.grassCap = player.g.grassCap.add(150)
-        if (hasUpgrade("g", 19)) player.g.grassCap = player.g.grassCap.add(upgradeEffect("g", 19))
-
-        player.g.goldGrassVal = new Decimal(1)
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("g", 17))
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("t", 18))
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("m", 13))
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.commonPetEffects[3][1])
-        if (hasUpgrade("ip", 24) && !inChallenge("ip", 14)) player.g.goldGrassVal = player.g.goldGrassVal.add(upgradeEffect("ip", 24))
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cb.rarePetEffects[4][1])
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("r", 11))
-        player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect("rm", 26)) 
-
-        player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect("gh", 18).mul(delta)))
-
-        player.g.goldGrassReq = new Decimal(40) 
-        if (hasUpgrade("g", 16)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.3)
-        player.g.goldGrassReq = player.g.goldGrassReq.div(buyableEffect("gh", 12))
-        player.g.goldGrassReq = player.g.goldGrassReq.div(player.cb.rarePetEffects[2][1])
-
-        player.g.goldGrassCap = new Decimal(15) 
-        player.g.goldGrassCap = player.g.goldGrassCap.add(buyableEffect("g", 18))
-        if (hasUpgrade("g", 18)) player.g.goldGrassCap = player.g.goldGrassCap.add(6)
-
-        if (hasUpgrade("g", 13))
-        {
-            if (player.subtabs["g"]['stuff'] == 'Golden Grass' && player.tab == "g" && player.g.inGoldGrassTab == false)
-            {
-                layers.g.loadGoldGrass();
-            }
-            if (player.subtabs["g"]['stuff'] == 'Grass' && player.tab == "g" && player.g.inGrassTab == true)
-            {
-                layers.g.loadGoldGrass();
-            }
-            if (!(player.subtabs["g"]['stuff'] == 'Golden Grass') && !(player.tab == "g") && player.g.inGoldGrassTab == true)
-            {
-                layers.g.unloadGoldGrass();
-            }
-            if (player.subtabs["g"]['stuff'] == 'Golden Grass' && player.tab == "g")
-            {
-                player.g.inGoldGrassTab = true
-                if (player.g.goldGrassCount < player.g.goldGrassCap) player.g.goldGrassTimer = player.g.goldGrassTimer.add(onepersec.mul(delta))
-                if (player.g.goldGrassTimer.gt(player.g.goldGrassReq) && player.g.goldGrassCount < player.g.goldGrassCap)
-                {
-                    createGoldenGrass(1);
-                    player.g.savedGoldGrass++;
-                    player.g.goldGrassTimer = new Decimal(0)
-                }
-            } else if (!(player.subtabs["g"]['stuff'] == 'Grass' && player.tab == "g"))
-            {
-                player.g.inGoldGrassTab = false
-                removeAllGoldGrass();
-                if (player.g.goldGrassCount < player.g.goldGrassCap) player.g.goldGrassTimer = player.g.goldGrassTimer.add(onepersec.mul(delta))
-                if (player.g.goldGrassTimer.gt(player.g.goldGrassReq) && player.g.savedGoldGrass < player.g.goldGrassCap)
-                {
-                    player.g.savedGoldGrass++;
-                    player.g.goldGrassTimer = new Decimal(0)
-                }
-            } else
-            {
-                player.g.inGoldGrassTab = false
-                if (player.g.goldGrassCount < player.g.goldGrassCap) player.g.goldGrassTimer = player.g.goldGrassTimer.add(onepersec.mul(delta))
-            }
-            if (player.g.goldGrassCount < 0)
-            {
-                player.g.goldGrassCount = new Decimal(0)
+        // We only ever want to load grasses if we're _in_ the grass layer
+        if (state.inGrassLayer) {
+            if (!player.g.isGrassLoaded && state.onGrassMicrotab) {
+                layers.g.loadGrass()
+                player.g.isGrassLoaded = true
+            } else if (!player.g.isGoldGrassLoaded && state.onGoldGrassMicrotab) {
+                layers.g.loadGoldGrass()
+                player.g.isGoldGrassLoaded = true
             }
         }
 
-        player.g.goldGrassEffect = player.g.goldGrass.pow(0.7).mul(0.15).add(1)
-        if (hasUpgrade("g", 22)) player.g.goldGrassEffect = player.g.goldGrassEffect.pow(6)
+        // =================================================================
 
-        if (player.g.buyables[12].gt(200))
-        {
-            player.g.buyables[12] = new Decimal(200)
-        }
+        updateGrass(delta)
+        updateGoldGrass(delta)
     },
-    unloadGrass()
-    {
-        player.g.grassTimer = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
+    unloadGrass() {
+        // N.B. this space intentionally left blank
     },
     loadGrass()
     {
-        // savedGrass should never be negative!
-        if (player.g.savedGrass < 0) {
-            player.g.savedGrass = player.g.grassCount > 0
-                ? player.g.grassCount
-                : 0
+        // grassCount should never be negative!
+        if (player.g.grassCount < 0) {
+            player.g.grassCount = new Decimal(0)
         }
 
-        removeAllGrass();
-        createGrass(player.g.savedGrass);
-        player.g.grassCount = player.g.savedGrass
+        removeAllGrass()
+        createGrass(player.g.grassCount)
     },
-    unloadGoldGrass()
-    {
-        player.g.goldGrassTimer = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
+    unloadGoldGrass() {
+        // N.B. this space intentionally left blank
     },
     loadGoldGrass()
     {
-        createGoldenGrass(player.g.savedGoldGrass);
-        player.g.goldGrassCount = player.g.savedGoldGrass
+        // goldGrassCount should never be negative!
+        if (player.g.goldGrassCount < 0) {
+            player.g.goldGrassCount = new Decimal(0)
+        }
+
+        removeAllGoldGrass()
+        createGoldGrass(player.g.goldGrassCount)
     },
     branches: ["t"],
     clickables: {
@@ -300,7 +178,7 @@
                 return player.p.prestigePoints.pow(0.05).div(9).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         12:
         {
             title: "Grass Upgrade II",
@@ -314,7 +192,7 @@
                 return player.g.grass.pow(0.3).div(7).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         13:
         {
             title: "Grass Upgrade III",
@@ -324,7 +202,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: "Grass",
             currencyInternalName: "grass",
-        }, 
+        },
         14:
         {
             title: "Grass Upgrade IV",
@@ -334,7 +212,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: "Grass",
             currencyInternalName: "grass",
-        }, 
+        },
         15:
         {
             title: "Grass Upgrade V",
@@ -344,7 +222,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: "Grass",
             currencyInternalName: "grass",
-        }, 
+        },
         16:
         {
             title: "Grass Upgrade VI",
@@ -437,7 +315,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
@@ -469,7 +347,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
@@ -501,7 +379,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
@@ -533,7 +411,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
@@ -565,7 +443,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
@@ -597,7 +475,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
@@ -629,7 +507,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
@@ -661,7 +539,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
@@ -693,7 +571,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
@@ -765,7 +643,7 @@
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -776,14 +654,367 @@
     layerShown() { return player.startedGame == true && hasUpgrade("i", 17) }
 })
 
+const updateGrass = (delta) => {
+    // Sanity check: grass should never go negative!
+    if (player.g.grassCount.lt(0)) {
+        player.g.grassCount = new Decimal(0)
+    }
+
+    // Pre-calculate how much grass we're adding this tick
+    const seconds = new Decimal(1).mul(delta)
+
+    // Cap grass grow rate at 200
+    // XXX: in what cases does this get pushed over 200, and why?
+    if (player.g.buyables[12].gt(200)) {
+        player.g.buyables[12] = new Decimal(200)
+    }
+
+    // =================================================================
+    // Timer logic
+
+    // DEBUGGING OUTPUT
+    //logOnce('grassTimer1', `grassCount:${player.g.grassCount}; grassCap: ${player.g.grassCap}; grassTimer:${player.g.grassTimer}`)
+
+    // Timer is always running if we're below grass cap
+    const belowGrassCap = player.g.grassCount.lt(player.g.grassCap)
+    if (belowGrassCap) {
+        player.g.grassTimer = player.g.grassTimer.add(seconds)
+    }
+
+    const passedGrassSpawnTime = player.g.grassTimer.gte(player.g.grassReq)
+    if (passedGrassSpawnTime && belowGrassCap) {
+        const grassToAdd = player.g.grassTimer
+            .div(player.g.grassReq)
+            .floor()
+
+        // Add grass
+        if (belowGrassCap) {
+            player.g.grassCount = player.g.grassCount.add(grassToAdd)
+        }
+
+        // Sanity check: respect the cap
+        const aboveGrassCap = player.g.grassCount.gt(player.g.grassCap)
+        if (aboveGrassCap) {
+            player.g.grassCount = player.g.grassCap
+        }
+
+        // Only create when we're loaded
+        if (player.g.isGrassLoaded) {
+            createGrass(grassToAdd)
+        }
+
+        // Reset the timer
+        player.g.grassTimer = new Decimal(0)
+    } else if (passedGrassSpawnTime && !belowGrassCap) {
+        // Reset the timer
+        player.g.grassTimer = new Decimal(0)
+    }
+
+    // =================================================================
+    // Effect logic
+
+    // XXX: is the intent to update the effect before or after adding grass?
+    player.g.grassEffect = player.g.grass
+        .mul(0.3)
+        .pow(0.7)
+        .add(1)
+
+    // =================================================================
+    // Currency logic
+
+    // Add currency
+    // Modified by Grasshop, buyable, Grass Study 1
+    player.g.grass = player.g.grass
+        .add(player.g.grassVal
+            .mul(buyableEffect('gh', 11)
+                .mul(delta)
+            )
+        )
+
+    // Rocket Fuel, upgrade: Rocket Fuel Upgrade 2
+    // Straight 20% bonus
+    if (hasUpgrade('rf', 12)) {
+        player.g.grass = player.g.grass
+            .add(player.g.grassVal
+                .mul(Decimal
+                    .mul(0.2, delta)
+                )
+            )
+    }
+
+    // Infinity Points, milestone: 4 Infinities
+    // Straight 5% bonus
+    if (hasMilestone('ip', 13) && !inChallenge('ip', 14)) {
+        player.g.grass = player.g.grass
+            .add(player.g.grassVal
+                .mul(Decimal
+                    .mul(0.05, delta)
+                )
+            )
+    }
+
+    // =================================================================
+    // Value logic
+
+    player.g.grassVal = new Decimal(1)
+        .mul(buyableEffect('g', 11))
+        .mul(player.g.goldGrassEffect)
+        .mul(buyableEffect('t', 17))
+        .mul(player.gh.grasshopperEffects[4])
+        .mul(player.gh.fertilizerEffect)
+        .mul(buyableEffect('f', 1))
+        .mul(buyableEffect('f', 2))
+        .mul(buyableEffect('f', 3))
+        .mul(buyableEffect('f', 4))
+        .mul(buyableEffect('f', 5))
+        .mul(buyableEffect('f', 6))
+        .mul(buyableEffect('f', 7))
+        .mul(buyableEffect('f', 8))
+        .mul(player.cb.commonPetEffects[3][0])
+        .mul(player.d.diceEffects[5])
+        .mul(player.rf.abilityEffects[2])
+        .div(player.pe.pestEffect[4])
+
+    // Grass upgrade: Grass Upgrade 1
+    if (hasUpgrade('g', 11)) {
+        player.g.grassVal = player.g.grassVal
+            .mul(upgradeEffect('g', 11))
+    }
+
+    // AD upgrade: AD Upgrade 4
+    if (hasUpgrade('ad', 14)) {
+        player.g.grassVal = player.g.grassVal
+            .mul(upgradeEffect('ad', 14))
+    }
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    // IP challenge: Challenge 3
+    if (inChallenge('ip', 13)) {
+        player.g.grassVal = player.g.grassVal
+            .pow(0.75)
+    }
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    // IP challenge: Challenge 3
+    if (inChallenge('ip', 13) || player.po.hex) {
+        player.g.grassVal = player.g.grassVal
+            .mul(buyableEffect('h', 14))
+    }
+
+    // Antidebuff: Grass
+    if (player.de.antidebuffIndex.eq(2)) {
+        player.g.grassVal = player.g.grassVal
+            .mul(player.de.antidebuffEffect)
+    }
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    // Tav's Domain challenge: Tav's Domain
+    if (inChallenge('tad', 11)) {
+        player.g.grassVal = player.g.grassVal
+            .pow(0.4)
+            .pow(buyableEffect('de', 15))
+    }
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    player.g.grassVal = player.g.grassVal
+        .mul(buyableEffect('gh', 33))
+        .mul(player.r.timeCubeEffects[2])
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    player.g.grassVal = player.g.grassVal
+        .pow(buyableEffect('rm', 25))
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    const grassAtC18Threshold = player.g.grass.gt(player.g.grass
+        .mul(0.4 * delta))
+
+    // IP challenge: Challenge 8
+    if (inChallenge('ip', 18) && grassAtC18Threshold) {
+        player.g.grass = player.g.grass
+            .sub(player.g.grass
+                .mul(0.4 * delta)
+            )
+    }
+
+    // =================================================================
+    // Spawn-time logic
+
+    player.g.grassReq = new Decimal(4)
+        .div(buyableEffect('g', 12))
+
+    // =================================================================
+    // Cap logic
+
+    player.g.grassCap = new Decimal(100)
+        .add(buyableEffect('g', 13))
+
+    if (hasUpgrade('g', 18)) {
+        player.g.grassCap = player.g.grassCap
+            .add(150)
+    }
+    if (hasUpgrade('g', 19)) {
+        player.g.grassCap = player.g.grassCap
+            .add(upgradeEffect('g', 19))
+    }
+}
+
+const updateGoldGrass = (delta) => {
+    // Sanity check: gold grass should never go negative!
+    if (player.g.goldGrassCount.lt(0)) {
+        player.g.goldGrassCount = new Decimal(0)
+    }
+
+    // Kick out early if we don't have access
+    if (!hasUpgrade('g', 13)) {
+        return
+    }
+
+    // Pre-calculate how much grass we're adding this tick
+    const seconds = new Decimal(1).mul(delta)
+
+    // =================================================================
+    // Timer logic
+
+    // Timer is always running if we're below grass cap
+    const belowGoldGrassCap = player.g.goldGrassCount.lt(player.g.goldGrassCap)
+    if (belowGoldGrassCap) {
+        player.g.goldGrassTimer = player.g.goldGrassTimer.add(seconds)
+    }
+
+    const passedGoldGrassSpawnTime =
+        player.g.goldGrassTimer.gte(player.g.goldGrassReq)
+    if (passedGoldGrassSpawnTime && belowGoldGrassCap) {
+        const goldGrassToAdd = player.g.goldGrassTimer
+            .div(player.g.goldGrassReq)
+            .floor()
+
+        // Add grass
+        if (belowGoldGrassCap) {
+            player.g.goldGrassCount = player.g.goldGrassCount
+                .add(goldGrassToAdd)
+        }
+
+        // Sanity check: respect the cap
+        const aboveGoldGrassCap =
+            player.g.goldGrassCount.gt(player.g.goldGrassCap)
+        if (aboveGoldGrassCap) {
+            player.g.goldGrassCount = player.g.goldGrassCap
+        }
+
+        // Only create when we're loaded
+        if (player.g.isGoldGrassLoaded) {
+            createGoldGrass(goldGrassToAdd)
+        }
+
+        // Reset the timer
+        player.g.goldGrassTimer = new Decimal(0)
+    } else if (passedGoldGrassSpawnTime && !belowGoldGrassCap) {
+        // Reset the timer
+        player.g.goldGrassTimer = new Decimal(0)
+    }
+    // =================================================================
+    // Effect logic
+
+    player.g.goldGrassEffect = player.g.goldGrass
+        .pow(0.7)
+        .mul(0.15)
+        .add(1)
+
+    if (hasUpgrade("g", 22)) {
+        player.g.goldGrassEffect = player.g.goldGrassEffect
+            .pow(6)
+    }
+
+    // =================================================================
+    // Currency logic
+
+    player.g.goldGrass = player.g.goldGrass
+        .add(player.g.goldGrassVal
+            .mul(buyableEffect("gh", 18)
+                .mul(delta)
+            )
+        )
+
+    // =================================================================
+    // Value logic
+
+    player.g.goldGrassVal = new Decimal(1)
+        .mul(buyableEffect('g', 17))
+        .mul(buyableEffect('t', 18))
+        .mul(buyableEffect('m', 13))
+        .mul(player.cb.commonPetEffects[3][1])
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    // Infinity Points upgrade: Upgrade (2, 4)
+    // Infinity Points challenge: Challenge 14
+    if (hasUpgrade('ip', 24) && !inChallenge('ip', 14)) {
+        player.g.goldGrassVal = player.g.goldGrassVal
+            .add(upgradeEffect("ip", 24))
+    }
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    player.g.goldGrassVal = player.g.goldGrassVal
+        .mul(player.cb.rarePetEffects[4][1])
+        .mul(buyableEffect('r', 11))
+        .mul(buyableEffect('rm', 26))
+
+    // =================================================================
+    // Spawn-time logic
+
+    player.g.goldGrassReq = new Decimal(40)
+    if (hasUpgrade("g", 16)) {
+        player.g.goldGrassReq = player.g.goldGrassReq
+            .div(1.3)
+    }
+
+    player.g.goldGrassReq = player.g.goldGrassReq
+        .div(buyableEffect("gh", 12))
+        .div(player.cb.rarePetEffects[2][1])
+
+    // =================================================================
+    // Cap logic
+
+    player.g.goldGrassCap = new Decimal(15)
+        .add(buyableEffect("g", 18))
+
+    if (hasUpgrade("g", 18)) {
+        player.g.goldGrassCap = player.g.goldGrassCap
+            .add(6)
+    }
+}
+
 function createGrass(quantity) {
     // This _shouldn't_ happen, but there existed cases where e.g.
-    // player.g.savedGrass somehow got a massively-negative number and
-    // as a result, the loop down below never finished.
-    // We now dump some info to console if this happens.
+    // player.g.savedGrass (when it used to exist) somehow got a
+    // massively-negative number and as a result, the loop down below
+    // never finished. We now dump some info to console if this happens.
     if (quantity < 0) {
         console.log('%cCalled .../js/grass.js:createGrass with negative quantity!', 'color:red; font-size: 150%; font-weight: bold')
-      console.log(`%cInfo for the devs: fx: .../js/grass.js:createGrass; quantity: ${quantity}; player.g.grassCount ${player.g.grassCount}; player.g.savedGrass: ${player.g.savedGrass}`, 'color: yellow; font-size: 125%')
+      console.log(`%cInfo for the devs: fx: .../js/grass.js:createGrass; quantity: ${quantity}; player.g.grassCount ${player.g.grassCount}`, 'color: yellow; font-size: 125%')
         return
     }
 
@@ -816,7 +1047,7 @@ function createGrass(quantity) {
         greenSquare.classList.add('green-square');
 
         spawnArea.appendChild(greenSquare); // Append to spawnArea instead of document.body
-        
+
         // Function to check if cursor is within 150px radius of the greenSquare
         function checkCursorDistance(event) {
             const cursorX = event.clientX;
@@ -828,12 +1059,12 @@ function createGrass(quantity) {
 
             const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
 
-            // If the cursor is within 150 pixels, remove the grass square
+            // If the cursor is within a certain pixel range, remove the grass square
             if (distance <= 100) {
                 removeGrass(greenSquare);
-                player.g.grassCount--; // Decrease grass count
-                player.g.savedGrass--; // Decrease saved grass count
-                player.g.grass = player.g.grass.add(player.g.grassVal);
+                player.g.grassCount = player.g.grassCount.sub(1);
+                player.g.grass = player.g.grass
+                    .add(player.g.grassVal);
 
                 // Remove the mousemove listener once grass is collected
                 document.removeEventListener('mousemove', checkCursorDistance);
@@ -842,8 +1073,6 @@ function createGrass(quantity) {
 
         // Add the mousemove event listener to check the distance from the cursor
         document.addEventListener('mousemove', checkCursorDistance);
-
-        player.g.grassCount++; // Increase grass count
     }
 }
 
@@ -878,7 +1107,7 @@ window.addEventListener('load', function() {
 });
 
 
-function createGoldenGrass(quantity) {
+function createGoldGrass(quantity) {
     const spawnArea = document.getElementById('gold-spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 
@@ -923,9 +1152,9 @@ function createGoldenGrass(quantity) {
             // If the cursor is within 100 pixels, remove the golden grass square
             if (distance <= 100) {
                 removeGrass(goldSquare);
-                player.g.goldGrassCount--; // Decrease grass count
-                player.g.savedGoldGrass--; // Decrease saved grass count
-                player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal);
+                player.g.goldGrassCount = player.g.goldGrassCount.sub(1)
+                player.g.goldGrass = player.g.goldGrass
+                    .add(player.g.goldGrassVal);
 
                 // Remove the mousemove listener once the golden grass is collected
                 document.removeEventListener('mousemove', checkCursorDistance);
@@ -934,7 +1163,15 @@ function createGoldenGrass(quantity) {
 
         // Add the mousemove event listener to check the distance from the cursor
         document.addEventListener('mousemove', checkCursorDistance);
-
-        player.g.goldGrassCount++; // Increase golden grass count
     }
+}
+
+const logged = {}
+const logOnce = (id, str) => {
+  if (logged[id]) {
+    return
+  }
+
+  logged[id] = true
+  console.log(str)
 }

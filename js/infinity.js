@@ -36,7 +36,6 @@
             player.in.reachedInfinity = true
         }
 
-        let onepersec = new Decimal(1)
         if (player.subtabs["in"]['stuff'] == 'Portal')
         {
             player.tab = "po"
@@ -443,8 +442,6 @@ addLayer("bigc", {
     tooltip: "Ranks",
     color: "white",
     update(delta) {
-        let onepersec = new Decimal(1)
-
         if (player.tab == "bigc" && !player.bigc.spawnedWisps)
         {     
             player.bigc.spawnedWisps = true

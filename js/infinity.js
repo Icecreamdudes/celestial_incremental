@@ -214,9 +214,12 @@
             layers.in.bigCrunch();
         }
     },
-    bigCrunch()
-    {
+    bigCrunch() {
         player.points = new Decimal(10)
+
+        // =================================================================
+        // Rank
+
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
         player.r.tetr = new Decimal(0)
@@ -226,99 +229,70 @@
         player.r.pentToGet = new Decimal(0)
         player.r.pent = new Decimal(0)
 
-        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
+        // InfinityPoints milestone, 6 Infinities
+        // InfinityPoints challenge, Challenge 4
+        if (!hasMilestone('ip', 15) && !inChallenge('ip', 14)) {
+            player.r.milestones = player.r.milestones
+                .filter((o) => (+o) >= 20)
+        }
+
+        // =================================================================
+        // Factor
+
+        player.f.factorUnlocks = [
+            true, true, true, false,
+            false, false, false, false
+        ]
         player.f.factorGain = new Decimal(1)
 
         player.f.factorPower = new Decimal(0)
         player.f.factorPowerEffect = new Decimal(1)
         player.f.factorPowerPerSecond = new Decimal(0)
-        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
+        player.f.powerFactorUnlocks = [
+            true, true, true, false,
+            false, false, false, false
+        ]
 
-        player.f.buyables[1] = new Decimal(0)
-        player.f.buyables[2] = new Decimal(0)
-        player.f.buyables[3] = new Decimal(0)
-        player.f.buyables[4] = new Decimal(0)
-        player.f.buyables[5] = new Decimal(0)
-        player.f.buyables[6] = new Decimal(0)
-        player.f.buyables[7] = new Decimal(0)
-        player.f.buyables[8] = new Decimal(0)
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
-        player.f.buyables[28] = new Decimal(0)
-        player.f.buyables[29] = new Decimal(0)
-        player.f.buyables[31] = new Decimal(0)
-        player.f.buyables[32] = new Decimal(0)
-        player.f.buyables[33] = new Decimal(0)
-        player.f.buyables[34] = new Decimal(0)
-        player.f.buyables[35] = new Decimal(0)
-        player.f.buyables[36] = new Decimal(0)
+        for (let i = 1; i <= 36; ++i) {
+            player.f.buyables[i] = new Decimal(0)
+        }
+
+        // =================================================================
+        // Prestige
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 24) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
+        // InfinityPoints milestone, 2 Infinities
+        // InfinityPoints challenga, Challenge 4
+        if (!hasMilestone('ip', 11) && !inChallenge('ip', 14)) {
+            player.p.upgrades = player.p.upgrades
+                .filter((o) => (+o) >= 24)
         }
 
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
+        // =================================================================
+        // Trees
+
+        for (let i = 11; i <= 18; ++i) {
+            player.t.buyables[i] = new Decimal(0)
+        }
 
         player.f.factorPower = new Decimal(0)
 
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
+        // =================================================================
+        // Grass
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 22) {
-                player.g.upgrades.splice(i, 1);
-                i--;
-            }
-        }
+        for (let i = 11; i <= 18; ++i) {
+            player.g.buyables[i] = new Decimal(0)
         }
 
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
-        {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
+        // InfinityPoints milestone, 2 Infinities
+        // InfinityPoints challenge, Challenge 4
+        if (!hasMilestone('ip', 11) && !inChallenge('ip', 14)) {
+            player.g.upgrades = player.g.upgrades
+                .filter((o) => (+o) >= 22)
         }
 
         player.g.grass = new Decimal(0)
@@ -331,73 +305,94 @@
         player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
+        // =================================================================
+        // Grasshop
+
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        player.gh.buyables[11] = new Decimal(0)
-        player.gh.buyables[12] = new Decimal(0)
-        player.gh.buyables[13] = new Decimal(0)
-        player.gh.buyables[14] = new Decimal(0)
-        player.gh.buyables[15] = new Decimal(0)
-        player.gh.buyables[16] = new Decimal(0)
-        player.gh.buyables[17] = new Decimal(0)
-        player.gh.buyables[18] = new Decimal(0)
-        player.gh.buyables[19] = new Decimal(0)
-        player.gh.buyables[21] = new Decimal(0)
-        player.gh.buyables[22] = new Decimal(0)
+        for (let i = 11; i <= 22; ++i) {
+            // There is no 20
+            if (i === 20) {
+                continue
+            }
+
+            player.gh.buyables[i] = new Decimal(0)
+        }
+
+        // =================================================================
+        // Mods
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        player.m.buyables[11] = new Decimal(0)
-        player.m.buyables[12] = new Decimal(0)
-        player.m.buyables[13] = new Decimal(0)
-        player.m.buyables[14] = new Decimal(0)
+        for (let i = 11; i <= 14; ++i) {
+            player.m.buyables[i] = new Decimal(0)
+        }
 
-        //dice
+        // =================================================================
+        // Dice
+
         player.d.dicePoints = new Decimal(0)
         player.d.diceRolls = [new Decimal(1)] 
         player.d.dice = new Decimal(1)
 
-        player.d.buyables[11] = new Decimal(0)
-        player.d.buyables[12] = new Decimal(0)
-        player.d.buyables[13] = new Decimal(0)
-        player.d.buyables[14] = new Decimal(0)
-        player.d.buyables[15] = new Decimal(0)
+        for (let i = 11; i <= 15; ++i) {
+            player.d.buyables[i] = new Decimal(0)
+        }
 
-        for (let i = 0; i < 11; i++)
-        {
+        for (let i = 0; i < 11; i++) {
             player.d.diceEffects[i] = new Decimal(1)
         }
 
-        //rf
+        if (!inChallenge("ip", 15)) {
+          player.d.challengeDicePoints = new Decimal(0)
+          for (let i = 21; i <= 24; ++i) {
+              player.d.buyables[i] = new Decimal(0)
+          }
+
+          for (let i = 0; i < player.d.upgrades.length; i++) {
+              player.d.upgrades = player.d.upgrades
+                  .filter((o) => (+o) >= 100)
+          }
+        }
+
+        // =================================================================
+        // Rocket fuel
+
         player.rf.rocketFuel = new Decimal(0)
-        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++)
-        {
+        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
             player.rf.abilitiesUnlocked[i] = false
         }
-        for (let i = 0; i < 4; i++)
-        {
+        for (let i = 0; i < 4; i++) {
             player.rf.abilityTimers[i] = new Decimal(0)
         }
 
         for (let i = 0; i < player.rf.upgrades.length; i++) {
-            if (+player.rf.upgrades[i] < 18) {
-                player.rf.upgrades.splice(i, 1);
-                i--;
-            }
+            player.rf.upgrades = player.rf.upgrades
+                .filter((o) => (+o) >= 18)
         }
+
+        // =================================================================
+        // Infinity
 
         for (let i = 0; i < player.i.upgrades.length; i++) {
-            if (+player.i.upgrades[i] < 22) {
-                player.i.upgrades.splice(i, 1);
-                i--;
-            }
+            player.i.upgrades = player.i.upgrades
+                .filter((o) => (+o) >= 22)
         }
 
-        if (!player.po.keepOTFS || inChallenge("ip", 15) || inChallenge("ip", 16))
-        {
+        // =================================================================
+        // Portal
+
+        // Portal, keep OTFs on reset
+        // InfinityPoints challenge, Challenge 5
+        // InfinityPoints challenge, Challenge 6
+        if (
+            !player.po.keepOTFS
+            || inChallenge('ip', 15)
+            || inChallenge('ip', 16)
+        ) {
             player.po.dice = false
             player.po.rocketFuel = false
             player.po.hex = false
@@ -406,49 +401,36 @@
             player.po.featureSlots = player.po.featureSlotsMax
         }
         
+        // =================================================================
+        // Antimatter Dimensions
 
-        //reset antimatter stuff
-
-        if (!hasMilestone("ip", 14))
-        {
-            if (player.in.infinities.eq(0)) player.ad.antimatter = new Decimal(10)
+        if (!hasMilestone('ip', 14)) {
+            if (player.in.infinities.lt(1)) {
+                player.ad.antimatter = new Decimal(10)
+            }
 
             player.ad.buyables[1] = new Decimal(0)
     
-            for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-            {
+            for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
                 player.ad.dimensionAmounts[i] = new Decimal(0)
                 player.ad.dimensionsPurchased[i] = new Decimal(0)
             }
     
-            player.ad.dimensionsUnlocked[4] = false
-            player.ad.dimensionsUnlocked[5] = false
-            player.ad.dimensionsUnlocked[6] = false
-            player.ad.dimensionsUnlocked[7] = false
+            for (let i = 4; i <= 7; ++i) {
+                player.ad.dimensionsUnlocked[i] = false
+            }
             
             player.ad.dimBoostAmount = new Decimal(0)
             player.ad.galaxyAmount = new Decimal(0)
         }
 
-        //challenge stuff
+        // =================================================================
+        // Pests
+
         player.pe.pests = new Decimal(0)
 
-        if (!inChallenge("ip", 15))
-        {
-        
-        player.d.challengeDicePoints = new Decimal(0)
-        player.d.buyables[21] = new Decimal(0)
-        player.d.buyables[22] = new Decimal(0)
-        player.d.buyables[23] = new Decimal(0)
-        player.d.buyables[24] = new Decimal(0)
-
-        for (let i = 0; i < player.d.upgrades.length; i++) {
-            if (+player.d.upgrades[i] < 100) {
-                player.d.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-        }
+        // =================================================================
+        // Debuff
 
         player.de.antidebuffPoints = new Decimal(0)
     },

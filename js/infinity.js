@@ -12,7 +12,7 @@
 
         infinityPoints: new Decimal(0),
         infinityPointsToGet: new Decimal(0),
-        infinityPause: new Decimal(0),
+        infinityPause: false,
 
         infinities: new Decimal(0),
         infinitiesToGet: new Decimal(1),
@@ -204,14 +204,12 @@
         // =================================================================
         // Multi-reset logic
 
-        //console.log(`[update] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
+        if (player.in.infinityPause) {
+            // DEBUGGING OUTPUT
+            //console.log(`[update] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
 
-        // player.in.infinityPause gets set to 5 in crunch()
-        // XXX: reset 5 times in a row, or it doesn't reset "properly"
-        // TODO: recreate an improper reset to see what that looks like
-        player.in.infinityPause = player.in.infinityPause.sub(1)
-        if (player.in.infinityPause.gt(0)) {
             layers.in.bigCrunch();
+            player.in.infinityPause = false
         }
     },
     bigCrunch() {
@@ -534,8 +532,17 @@ addLayer("bigc", {
         
     },
     crunch(){
-        player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
-        player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
+        // DEBUGGING OUTPUT
+        //console.log(`[crunch] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
+
+        player.in.infinityPoints = player.in.infinityPoints
+            .add(player.in.infinityPointsToGet)
+        player.in.infinityPointsToGet = new Decimal(0)
+
+        player.in.infinities = player.in.infinities
+            .add(player.in.infinitiesToGet)
+        player.in.infinitiesToGet = new Decimal(0)
+
         if (player.po.dice)
         {
             player.ip.diceRuns = player.ip.diceRuns.add(1)
@@ -548,7 +555,7 @@ addLayer("bigc", {
         {
             player.ip.hexRuns = player.ip.hexRuns.add(1)
         }
-        player.in.infinityPause = new Decimal(5)
+        player.in.infinityPause = true
         player.in.reachedInfinity = false
 
         if (inChallenge("ip", 11))

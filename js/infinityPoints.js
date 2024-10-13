@@ -517,9 +517,9 @@
             style: { width: '800px', "min-height": '90px' },
         },
         24: {
-            requirementDescription: "<h3>10000 Infinities",
+            requirementDescription: "<h3>4000 Infinities",
             effectDescription() { return "Check back pet effects are always active." },
-            done() { return player.in.infinities.gte(10000) },
+            done() { return player.in.infinities.gte(4000) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },

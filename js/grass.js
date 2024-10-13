@@ -1205,13 +1205,3 @@ function createGoldGrass(quantity) {
         document.addEventListener('mousemove', checkCursorDistance);
     }
 }
-
-const logged = {}
-const logOnce = (id, str) => {
-  if (logged[id]) {
-    return
-  }
-
-  logged[id] = true
-  console.log(str)
-}

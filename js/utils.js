@@ -410,3 +410,16 @@ function gridRun(layer, func, data, id) {
 	else
 		return layers[layer].grid[func];
 }
+
+// ============================================================
+// Debugging
+
+const logged = {}
+const logOnce = (id, str) => {
+  if (logged[id]) {
+    return
+  }
+
+  logged[id] = true
+  console.log(str)
+}

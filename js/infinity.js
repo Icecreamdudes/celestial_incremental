@@ -1,5 +1,4 @@
-﻿var tree = [["ad", "ip", "id"], ["ga", "ta", "bi", "om"], ["ca"]]
-addLayer("in", {
+﻿addLayer("in", {
     name: "Universe 2", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "2", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -401,7 +400,11 @@ addLayer("in", {
                 content:
                 [
                         ["blank", "25px"],
-                        ["tree", tree],
+                        ["tree", [
+                            ["ad", "ip", "id"],
+                            ["ga", "ta", "bi", "om"],
+                            ["ca"]
+                        ]]
                 ]
 
             },

@@ -183,15 +183,14 @@
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
-        for (let i = 0; i < player.p.upgrades.length; i++) {
-            if (+player.p.upgrades[i] < 24) {
-                player.p.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
+            for (let i = 0; i < player.p.upgrades.length; i++) {
+                if (+player.p.upgrades[i] < 24) {
+                    player.p.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
 
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
@@ -423,8 +422,9 @@
          ["raw-html", function () { return "You are gaining <h3>" + format(player.ad.antimatterPerSecond) + "</h3> antimatter per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity}
+    layerShown: () => player.startedGame && player.in.unlockedInfinity
 })
+
 addLayer("bigc", {
     name: "Big Crunch", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BC", // This appears on the layer's node. Default is the id with the first letter capitalized

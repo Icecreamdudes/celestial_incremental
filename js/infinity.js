@@ -33,6 +33,9 @@ addLayer("in", {
     color: "white",
     branches: ["i"],
     update(delta) {
+        if (player.points.gte(Number.MAX_VALUE)) {
+            player.in.reachedInfinity = true
+        }
 
         let onepersec = new Decimal(1)
         if (player.subtabs["in"]['stuff'] == 'Portal')

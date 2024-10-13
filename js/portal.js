@@ -30,11 +30,6 @@ addLayer("po", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.points.gte(Number.MAX_VALUE))
-        {
-            player.in.reachedInfinity = true
-        }
-
         if (player.po.pointHaltInput.gte(1)) 
         {
             if (player.po.pointHaltInput.neq(player.po.pointHalt))

@@ -36,97 +36,183 @@
             player.in.reachedInfinity = true
         }
 
-        if (player.subtabs["in"]['stuff'] == 'Portal')
-        {
-            player.tab = "po"
-            player.subtabs["in"]['stuff'] = 'Features'
+        if (player.subtabs['in']['stuff'] == 'Portal') {
+            player.tab = 'po'
+            player.subtabs['in']['stuff'] = 'Features'
         }
 
-        if (player.in.infinityPoints.gt(0))
-        {
+        if (player.in.infinityPoints.gt(0)) {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity && !inChallenge("ip", 11))
-        {
-            if (!player.in.breakInfinity)
-            {
-                if (inChallenge("tad", 11))
-                {
-                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
-                    {
-                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
-                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
-                    }
-                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
-                    {
-                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
-                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
-                    }
-                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
-                    {
-                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
-                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
-                    }
+        if (player.in.reachedInfinity
+                && !inChallenge('ip', 11)
+                && !player.in.breakInfinity
+        ) {
+            // TavDomain challenge: Tav's Domain
+            if (inChallenge('tad', 11)) {
+                const broInfGtShaInf = player.bi.brokenInfinities.gt(
+                    player.tad.shatteredInfinitiesToGet)
+                if (broInfGtShaInf
+                    && player.po.hex
+                    && !player.po.dice
+                    && !player.po.rocketFuel
+                    && player.tad.currentConversion.eq(0)
+                ) {
+                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
                 }
-                if (!hasMilestone("ip", 21)) 
-                {
-                    player.tab = "bigc"
-                } else if (hasMilestone("ip", 21))
-                {
-                    layers.bigc.crunch()
+
+                const broInfGtDisInf = player.bi.brokenInfinities.gt(
+                    player.tad.disfiguredInfinitiesToGet)
+                if (broInfGtDisInf
+                    && !player.po.hex
+                    && !player.po.dice
+                    && player.po.rocketFuel
+                    && player.tad.currentConversion.eq(1)
+                ) {
+                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
                 }
-                if (hasUpgrade("bi", 14))
-                {
-                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+
+                const broInfGtCorInf = player.bi.brokenInfinities.gt(
+                    player.tad.corruptedInfinitiesToGet)
+                if (broInfGtCorInf
+                    && !player.po.hex
+                    && player.po.dice
+                    && !player.po.rocketFuel
+                    && player.tad.currentConversion.eq(2)
+                ) {
+                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                }
+            }
+
+            const skipBigCrunch = hasMilestone('ip', 21)
+            if (skipBigCrunch) {
+                layers.bigc.crunch()
+            } else {
+                player.tab = 'bigc'
+            }
+
+            // BreakInfinity upgrade: BI IP Upgrade 4
+            if (hasUpgrade('bi', 14)) {
+                if (player.po.dice) {
+                    player.om.diceMasteryPoints = player.om.diceMasteryPoints
+                        .add(player.om.diceMasteryPointsToGet)
+                }
+
+                if (player.po.rocketFuel) {
+                    player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints
+                        .add(player.om.rocketFuelMasteryPointsToGet)
+                }
+
+                if (player.po.hex) {
+                    player.om.hexMasteryPoints = player.om.hexMasteryPoints
+                        .add(player.om.hexMasteryPointsToGet)
                 }
             }
         }
 
-        if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
-        if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
-        if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
-        if (player.in.breakInfinity && hasUpgrade("i", 31)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 21))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 22))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ta", 33))
-        if (hasUpgrade("ip", 42)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("ip", 42))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 41))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 42))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 43))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 44))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 45))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 46))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 47))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 48))
-        if (hasUpgrade("bi", 101)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 101))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.om.diceMasteryPointsEffect)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("tad", 21))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("gh", 38))
-        if (hasUpgrade("bi", 23)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 23))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 23))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
-        
-        player.in.infinityPause = player.in.infinityPause.sub(1)
-        if (player.in.infinityPause.gt(0))
-        {
-            layers.in.bigCrunch();
+        // =================================================================
+        // InfinityPointsToGet logic
+
+        player.in.infinityPointsToGet = new Decimal(1)
+
+        if (player.in.breakInfinity) {
+            // BreakInfinity upgrade: BI IP Upgrade 1
+            if (hasUpgrade('bi', 111)) {
+                player.in.infinityPointsToGet = player.points
+                    .div(1e308)
+                    .plus(1)
+                    .log10()
+                    .div(2)
+                    .pow(1.25)
+            } else {
+                player.in.infinityPointsToGet = player.points
+                    .div(1e308)
+                    .plus(1)
+                    .log10()
+                    .div(10)
+            }
+
+            // Incremental (layers.js) upgrade: Challenge 1. (sic)
+            if (hasUpgrade('i', 31)) {
+                player.in.infinityPointsToGet = player.points
+                    .div(1e308)
+                    .plus(1)
+                    .log10()
+                    .pow(1.5)
+            }
         }
 
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet
+            .mul(buyableEffect('h', 21))
+            .mul(buyableEffect('h', 22))
+            .mul(buyableEffect('ip', 11))
+            .mul(player.d.diceEffects[11])
+            .mul(player.rf.abilityEffects[5])
+            .mul(buyableEffect('cb', 12))
+            .mul(buyableEffect('ta', 33))
+            .mul(buyableEffect('f', 41))
+            .mul(buyableEffect('f', 42))
+            .mul(buyableEffect('f', 43))
+            .mul(buyableEffect('f', 44))
+            .mul(buyableEffect('f', 45))
+            .mul(buyableEffect('f', 46))
+            .mul(buyableEffect('f', 47))
+            .mul(buyableEffect('f', 48))
+            .mul(player.om.diceMasteryPointsEffect)
+            .mul(buyableEffect('tad', 21))
+            .mul(buyableEffect('gh', 38))
+            .mul(player.ca.replicantiEffect)
+            .mul(buyableEffect('id', 24))
+            .mul(buyableEffect('h', 23))
+            .mul(player.rm.realmModsEffect[5])
+            .mul(buyableEffect('ca', 24))
+
+        // InfinityPoints upgrade: Upgrade (4, 2)
+        if (hasUpgrade('ip', 42)) {
+            player.in.infinityPointsToGet = player.in.infinityPointsToGet
+                .mul(upgradeEffect('ip', 42))
+        }
+
+        // BreakInfinity upgrade: BI UP Upgrade 7
+        if (hasUpgrade('bi', 23)) {
+            player.in.infinityPointsToGet = player.in.infinityPointsToGet
+                .mul(upgradeEffect('bi', 23))
+        }
+        
+        // BreakInfinity upgrade: BI NIP Upgrade 1
+        if (hasUpgrade('bi', 101)) {
+            player.in.infinityPointsToGet = player.in.infinityPointsToGet
+                .mul(upgradeEffect('bi', 101))
+        }
+
+        // DEBUGGING OUTPUT
+        //logOnce('iptg', `infinityPointsToGet:${player.in.infinityPointsToGet}`)
+
+        // =================================================================
+        // InfinitiesToGet logic
+
         player.in.infinitiesToGet = new Decimal(1)
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("bi", 11))
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("tad", 11))
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
-        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
+            .mul(buyableEffect('bi', 11))
+            .mul(buyableEffect('tad', 11))
+            .mul(buyableEffect('om', 11))
+            .mul(buyableEffect('p', 15))
+
+        // =================================================================
+        // Multi-reset logic
+
+        //console.log(`[update] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
+
+        // player.in.infinityPause gets set to 5 in crunch()
+        // XXX: reset 5 times in a row, or it doesn't reset "properly"
+        // TODO: recreate an improper reset to see what that looks like
+        player.in.infinityPause = player.in.infinityPause.sub(1)
+        if (player.in.infinityPause.gt(0)) {
+            layers.in.bigCrunch();
+        }
     },
     bigCrunch()
     {

@@ -32,9 +32,11 @@
     color: "white",
     branches: ["i"],
     update(delta) {
-        if (player.points.gte(Number.MAX_VALUE)) {
-            player.in.reachedInfinity = true
-        }
+        // DEBUGGING OUTPUT
+        //logOnce('infUpdateTop', `[infUpdateTop] player.points:${player.points}`)
+
+        // =================================================================
+        // Miscellaneous logic
 
         if (player.subtabs['in']['stuff'] == 'Portal') {
             player.tab = 'po'
@@ -192,6 +194,18 @@
         // DEBUGGING OUTPUT
         //logOnce('iptg', `infinityPointsToGet:${player.in.infinityPointsToGet}`)
 
+        // bigCrunch ASAP, since we don't need player.points after this point
+        if (player.points.gte(Number.MAX_VALUE)) {
+            player.in.reachedInfinity = true
+
+            // N.B. try doing bigCrunch as soon as we can
+            layers.in.bigCrunch();
+
+            // DEBUGGING OUTPUT
+            //console.log(`player.points:${player.points}`)
+        }
+
+
         // =================================================================
         // InfinitiesToGet logic
 
@@ -206,15 +220,14 @@
 
         if (player.in.infinityPause) {
             // DEBUGGING OUTPUT
+            //console.log(`[update] bi:${buyableEffect('bi', 11)}, tad:${buyableEffect('tad', 11)}, om:${buyableEffect('om', 11)}, p:${buyableEffect('p', 15)}`)
             //console.log(`[update] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
 
-            layers.in.bigCrunch();
+            //layers.in.bigCrunch();
             player.in.infinityPause = false
         }
     },
     bigCrunch() {
-        player.points = new Decimal(10)
-
         // =================================================================
         // Rank
 
@@ -431,6 +444,11 @@
         // Debuff
 
         player.de.antidebuffPoints = new Decimal(0)
+
+        // =================================================================
+        // Core
+
+        player.points = new Decimal(10)
     },
     branches: ["branch"],
     clickables: {
@@ -525,6 +543,8 @@ addLayer("bigc", {
             onClick() {
                 player.tab = "in"
 
+                // DEBUGGING OUTPUT
+                //console.log('clicked BigCrunch')
                 layers.bigc.crunch()
             },
             style: { width: '300px', "min-height": '120px' },
@@ -542,6 +562,9 @@ addLayer("bigc", {
         player.in.infinities = player.in.infinities
             .add(player.in.infinitiesToGet)
         player.in.infinitiesToGet = new Decimal(0)
+
+        // DEBUGGING OUTPUT
+        //console.log(`[crunch2] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
 
         if (player.po.dice)
         {

@@ -579,11 +579,11 @@
             unlocked() { return true },
             onEnter() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = new Decimal(16)
+                player.in.infinityPause = true
             },
             onExit() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = new Decimal(16)
+                player.in.infinityPause = true
 
                 player.po.hex = false
                 player.po.dice = false

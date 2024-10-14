@@ -86,7 +86,7 @@
             onGoldGrassMicrotab: player.subtabs.g.stuff === 'Golden Grass',
         }
 
-        const thisLayerState = (state.inGrassLayer ? 'y' : 'n')
+        const lastLayerState = (state.inGrassLayer ? 'y' : 'n')
             + (player.g.isLayerLoaded ? 'y' : 'n')
 
         // Track whether we had the layer loaded previously; the way
@@ -100,7 +100,7 @@
         //    State 5: on Grass layer (yields s && p)
         player.g.isLayerLoaded = state.inGrassLayer
 
-        player.g.lastLayerState = (state.inGrassLayer ? 'y' : 'n')
+        player.g.thisLayerState = (state.inGrassLayer ? 'y' : 'n')
             + (player.g.isLayerLoaded ? 'y' : 'n')
 
         // DEBUGGING OUTPUT
@@ -108,7 +108,7 @@
         //console.log(`Layer state: ${thisLayerState} (was ${player.g.lastLayerState})`)
 
         // Handle layer switching
-        if (player.g.lastLayerState == 'yy' && thisLayerState == 'yn') {
+        if (player.g.thisLayerState == 'yy' && lastLayerState == 'yn') {
             if (state.onGrassMicrotab) {
                 layers.g.loadGrass()
                 player.g.isGrassLoaded = true
@@ -1204,14 +1204,4 @@ function createGoldGrass(quantity) {
         // Add the mousemove event listener to check the distance from the cursor
         document.addEventListener('mousemove', checkCursorDistance);
     }
-}
-
-const logged = {}
-const logOnce = (id, str) => {
-  if (logged[id]) {
-    return
-  }
-
-  logged[id] = true
-  console.log(str)
 }

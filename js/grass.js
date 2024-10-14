@@ -72,6 +72,10 @@
         // not we're actively on their specific microtab, so we handle the
         // loading/unloading logic here, before splitting off into specific
         // sub-handlers.
+        if (player.g.buyables[13].gte(13))
+        {
+            player.g.buyables[13] = new Decimal(500)
+        }
 
         const state = {
             // I.e. we currently have the Grass layer loaded

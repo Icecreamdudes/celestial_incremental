@@ -30,6 +30,11 @@ addLayer("po", {
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.points.gte(Number.MAX_VALUE))
+        {
+            player.in.reachedInfinity = true
+        }
+
         if (player.po.pointHaltInput.gte(1)) 
         {
             if (player.po.pointHaltInput.neq(player.po.pointHalt))
@@ -229,7 +234,7 @@ addLayer("po", {
             canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308) && player.ca.canteCores.gte(1)},
             unlocked() { return hasUpgrade("bi", 27) },
             onClick() { 
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(8)
                 player.po.keepOTFS = true
                 player.po.realmMods = true
                 player.ca.canteCores = player.ca.canteCores.sub(1)
@@ -303,7 +308,7 @@ addLayer("po", {
             },
             "Halter": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 23) && !player.ev.evolutionsUnlocked[6] },
+                unlocked() { return hasMilestone("ip", 23) && !player.ev.evolutionsUnlocked[6]},
                 content:
                 [
                         ["blank", "25px"],
@@ -328,7 +333,7 @@ addLayer("po", {
             },
             "ADVANCED HALTER": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 23) && player.ev.evolutionsUnlocked[6] },
+                unlocked() { return hasMilestone("ip", 23) && player.ev.evolutionsUnlocked[6]},
                 content:
                 [
                         ["blank", "25px"],

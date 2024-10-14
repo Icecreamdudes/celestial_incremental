@@ -56,6 +56,11 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.ad.antimatter.lt(0))
+        {
+            player.ad.antimatter = new Decimal(0)
+        }
+
         if (!hasUpgrade("bi", 22)) player.ad.antimatterEffect = player.points.pow(3).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
         if (hasUpgrade("bi", 22)) player.ad.antimatterEffect = player.points.pow(player.points.plus(1).log10().pow(2)).plus(1).log10().pow(player.ad.antimatter.plus(1).log10().pow(0.24)).mul(player.ad.antimatter.div(player.ad.antimatter.mul(2).add(1))).add(1)
 
@@ -361,7 +366,7 @@
             currencyDisplayName: "Antimatter",
             currencyInternalName: "antimatter",
             effect() {
-                return player.ad.antimatter.plus(1).log10().add(1)
+                return player.ad.antimatter.abs().plus(1).log10().add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },

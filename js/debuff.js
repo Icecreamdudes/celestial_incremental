@@ -434,7 +434,7 @@
             unlocked() { return true },
             onClick() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
                 player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet)
             },
             style: { width: '400px', "min-height": '100px' },

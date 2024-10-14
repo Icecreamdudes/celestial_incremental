@@ -146,7 +146,7 @@
         {
             if (inChallenge("ip", 15))
             {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             }
             if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
             if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
@@ -266,7 +266,7 @@
 
                 if (inChallenge("ip", 15))
                 {
-                    player.in.infinityPause = true
+                    player.in.infinityPause = new Decimal(5)
                 }
             },
             style: { width: '200px', "min-height": '100px' },

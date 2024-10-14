@@ -156,6 +156,7 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.rm.realmModsEffect[1])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
+        player.gh.steelToGet = player.gh.steelToGet.mul(player.cb.evolvedEffects[6][0])
 
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
 

@@ -303,7 +303,32 @@ addLayer("po", {
             },
             "Halter": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 23) },
+                unlocked() { return hasMilestone("ip", 23) && !player.ev.evolutionsUnlocked[6] },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "<h3>Currently divides point gain by /" + format(player.po.pointHalt) + "." }],
+                    ["text-input", "pointHaltInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
+                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed." }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                ]
+
+            },
+            "ADVANCED HALTER": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return hasMilestone("ip", 23) && player.ev.evolutionsUnlocked[6] },
                 content:
                 [
                         ["blank", "25px"],

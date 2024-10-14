@@ -81,10 +81,10 @@
         dicePetPointsGain: new Decimal(0),
 
         evolutionShards: new Decimal(0),
-        viewingEvolved: [false, false, false, false, false, false,],
-        evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),],
-        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]],
+        viewingEvolved: [false, false, false, false, false, false, false,],
+        evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0), new Decimal(0),],
+        evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),new Decimal(3),],
+        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]],
 
         //xpboost
         XPBoostUnlock: false,
@@ -492,6 +492,11 @@
             player.cb.rarePetImage[1] = "<img src='resources/d20EvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.rarePetDisplay[1] = "d20: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[5]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[5]) + ")"
         }
+        if (player.cb.viewingEvolved[6]) 
+        {
+            player.cb.commonPetImage[5] = "<img src='resources/mutantSpiderEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
+            player.cb.petDisplay[5] = "Mutant Spider: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[6]) + " evolution shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[6]) + ")"
+        }
 
         //EVOS
 
@@ -503,6 +508,7 @@
             player.cb.evolvedLevels[3].pow(0.75).add(6).floor(),
             player.cb.evolvedLevels[4].pow(0.4).add(1).floor(),
             player.cb.evolvedLevels[5].pow(0.4).add(1).floor(),
+            player.cb.evolvedLevels[6].pow(0.65).add(1).floor(),
         ]
 
         player.cb.evolvedEffects = [
@@ -512,6 +518,7 @@
             [player.cb.evolvedLevels[3].mul(0.1).add(1), player.cb.evolvedLevels[3].mul(0.1).add(1),], //inf and broken inf
             [player.cb.evolvedLevels[4].mul(0.05).add(1), player.cb.evolvedLevels[4].mul(2).pow(1.4).add(1),], //star effect and rocket fuel
             [player.cb.evolvedLevels[5].mul(0.05).add(1), player.cb.evolvedLevels[5].mul(2).pow(1.2).add(1),], //dice effect and challenge dice points
+            [player.cb.evolvedLevels[6].mul(3).pow(1.1).add(1), player.cb.evolvedLevels[6].mul(2).pow(1.05).add(1),], //steel and crystal
         ]
 
         //xpboost
@@ -1332,7 +1339,7 @@
         133: {
             title() { return player.cb.commonPetAmounts[5].gt(0) || player.cb.commonPetLevels[5].gt(0)? player.cb.commonPetImage[5] : player.cb.lockedImg},
             canClick() { return player.cb.commonPetAmounts[5].gt(0) || player.cb.commonPetLevels[5].gt(0)},
-            tooltip() { return player.cb.commonPetAmounts[5].gt(0) || player.cb.commonPetLevels[5].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[5][0]) + " to antimatter.<br>x" + format(player.cb.commonPetEffects[5][1]) + " to 7th dimensions.": ""},
+            tooltip() { return player.cb.commonPetAmounts[5].gt(0)&& !player.cb.viewingEvolved[6] || player.cb.commonPetLevels[5].gt(0)&& !player.cb.viewingEvolved[6] ? "<h3>x" + format(player.cb.commonPetEffects[5][0]) + " to antimatter.<br>x" + format(player.cb.commonPetEffects[5][1]) + " to 7th dimensions." : player.cb.viewingEvolved[6] ? "<h3>x" + format(player.cb.evolvedEffects[6][0]) + " to steel.<br>x" + format(player.cb.evolvedEffects[6][1]) + " to crystals." : ""},
             unlocked() { return true },
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(5)
@@ -1342,7 +1349,7 @@
         134: {
             title() { return player.cb.commonPetAmounts[6].gt(0) || player.cb.commonPetLevels[6].gt(0)? player.cb.commonPetImage[6] : player.cb.lockedImg },
             canClick() { return player.cb.commonPetAmounts[6].gt(0) || player.cb.commonPetLevels[6].gt(0)},
-            tooltip() { return player.cb.commonPetAmounts[6].gt(0) || player.cb.commonPetLevels[6].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[6][0]) + " to XPBoost." : ""},
+            tooltip() { return player.cb.commonPetAmounts[6].gt(0)|| player.cb.commonPetLevels[6].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[6][0]) + " to XPBoost." : ""},
             unlocked() { return true },
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(6)
@@ -1352,7 +1359,7 @@
         135: {
             title() { return "Level Up"},
             canClick() { return player.cb.commonPetAmounts[5].gte(player.cb.commonPetReq[5]) },
-            unlocked() { return player.cb.petDisplayIndex == 5},
+            unlocked() { return player.cb.petDisplayIndex == 5 && player.cb.viewingEvolved[6] == false},
             onClick() {
                 player.cb.commonPetAmounts[5] = player.cb.commonPetAmounts[5].sub(player.cb.commonPetReq[5])
                 player.cb.commonPetLevels[5] = player.cb.commonPetLevels[5].add(1)
@@ -1362,7 +1369,7 @@
         136: {
             title() { return "Level Up"},
             canClick() { return player.cb.commonPetAmounts[6].gte(player.cb.commonPetReq[6]) },
-            unlocked() { return player.cb.petDisplayIndex == 6},
+            unlocked() { return player.cb.petDisplayIndex == 6 },
             onClick() {
                 player.cb.commonPetAmounts[6] = player.cb.commonPetAmounts[6].sub(player.cb.commonPetReq[6])
                 player.cb.commonPetLevels[6] = player.cb.commonPetLevels[6].add(1)
@@ -1372,7 +1379,7 @@
         137: {
             title() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)? player.cb.uncommonPetImage[5] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)},
-            tooltip() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0) ? "<h3>x" + format(player.cb.uncommonPetEffects[5][0]) + " to 1st dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][1]) + " to 3rd dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][2]) + " to 5th dimensions.": ""},
+            tooltip() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)? "<h3>x" + format(player.cb.uncommonPetEffects[5][0]) + " to 1st dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][1]) + " to 3rd dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][2]) + " to 5th dimensions." : ""},
             unlocked() { return true },
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(5)
@@ -1652,6 +1659,44 @@
             onClick() {
                 player.tab = "d"
                 player.subtabs["d"]['stuff'] = 'Challenge Dice'
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        227: {
+            title() { return "View Evolved"},
+            canClick() { return true },
+            unlocked() { return player.cb.petDisplayIndex == 5 && player.ev.evolutionsUnlocked[6] == true && player.cb.viewingEvolved[6] == false},
+            onClick() {
+                player.cb.viewingEvolved[6] = true
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        228: {
+            title() { return "View Normal"},
+            canClick() { return true },
+            unlocked() { return player.cb.petDisplayIndex == 5 && player.ev.evolutionsUnlocked[6] == true && player.cb.viewingEvolved[6] == true},
+            onClick() {
+                player.cb.viewingEvolved[6] = false
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        229: {
+            title() { return "Level Up"},
+            canClick() { return player.cb.evolutionShards.gte(player.cb.evolvedReq[6]) },
+            unlocked() { return player.cb.petDisplayIndex == 5 && player.cb.viewingEvolved[6] == true},
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.cb.evolvedReq[6])
+                player.cb.evolvedLevels[6] = player.cb.evolvedLevels[6].add(1)
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        231: {
+            title() { return "Special Feature"},
+            canClick() { return true },
+            unlocked() { return player.cb.petDisplayIndex == 5 && player.ev.evolutionsUnlocked[6] == true && player.cb.viewingEvolved[6] == true},
+            onClick() {
+                 player.tab = "po"
+                player.subtabs["po"]['stuff'] = 'ADVANCED HALTER'
             },
             style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -2125,7 +2170,7 @@
                 [
                         ["raw-html", function () { return player.cb.petDisplay[player.cb.petDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 111], ["clickable", 135], ["clickable", 136],  ["clickable", 201],  ["clickable", 203], ["clickable", 202], ["clickable", 204], ["clickable", 216], ["clickable", 215], ["clickable", 214], ["clickable", 217], ["clickable", 301], ["clickable", 302], ]],
+                        ["row", [["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 111], ["clickable", 135], ["clickable", 136],  ["clickable", 201],  ["clickable", 203], ["clickable", 202], ["clickable", 204], ["clickable", 216], ["clickable", 215], ["clickable", 214], ["clickable", 217], ["clickable", 227], ["clickable", 229], ["clickable", 228], ["clickable", 231], ["clickable", 301], ["clickable", 302], ]],
                         ["blank", "25px"],
                         ["raw-html", function () { return "Common Pets" }, { "color": "#9bedff", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],

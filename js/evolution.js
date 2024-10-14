@@ -8,7 +8,7 @@
 
         evolutionDisplayIndex: new Decimal(-1),
         evolutionDisplay: [],
-        evolutionsUnlocked: [false, false, false, false, false, false],
+        evolutionsUnlocked: [false, false, false, false, false, false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -16,6 +16,7 @@
         3 - Gwa
         4 - Star
         5 - Dice
+        6 - Spider
         */
     }
     },
@@ -93,6 +94,10 @@
             "<br>"  + formatWhole(player.cb.evolvedLevels[2]) + "/5 Insane Face Level" + 
             "<br>"  + format(player.cb.XPBoost) + "/7.00 XPBoost" + 
             "<br>"  + formatWhole(player.cb.rarePetLevels[1]) + "/5 Dice Level",
+
+            "Evolve Spider<br>" + formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" + 
+            "<br>"  + formatWhole(player.cb.XPBoost) + "/25 XPBoost",
         ]
     },
     branches: ["branch"],
@@ -272,6 +277,31 @@
             },
             style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
         },
+        24: {
+            title() { return player.cb.commonPetImage[5] },
+            canClick() { return true},
+            unlocked() { return !player.ev.evolutionsUnlocked[6] && hasUpgrade("bi", 24)},
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(6)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        25: {
+            title() { return "EVOLVE" },
+            canClick() { return player.cb.evolutionShards.gte(10) && player.cb.paragonShards.gte(2) && player.cb.XPBoost.gte(25)},
+            unlocked() { return player.ev.evolutionDisplayIndex == 6 },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(10)
+                player.cb.paragonShards = player.cb.paragonShards.sub(2)
+                player.cb.XPBoost = player.cb.XPBoost.sub(25)
+
+                player.ev.evolutionsUnlocked[6] = true
+                player.cb.evolvedLevels[6] = new Decimal(1)
+            },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
+        },
     },
     bars: {
     },
@@ -295,11 +325,11 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "36px", "font-family": "monospace" }],
-                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15], ["clickable", 17], ["clickable", 19], ["clickable", 22]]],
+                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15], ["clickable", 17], ["clickable", 19], ["clickable", 22], ["clickable", 24]]],
                     ["blank", "25px"],
                     ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "28px", "font-family": "monospace" }]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16], ["clickable", 18], ["clickable", 21], ["clickable", 23]]],
+                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16], ["clickable", 18], ["clickable", 21], ["clickable", 23], ["clickable", 25]]],
                 ]
 
             },

@@ -189,7 +189,7 @@
         }
 
         // bigCrunch ASAP, since we don't need player.points after this point
-        if (player.points.gte(Number.MAX_VALUE)) {
+        if (player.points.gte(Number.MAX_VALUE) && !player.in.breakInfinity) {
             player.in.reachedInfinity = true
 
             // N.B. try doing bigCrunch as soon as we can

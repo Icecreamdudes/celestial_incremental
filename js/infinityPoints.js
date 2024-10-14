@@ -640,7 +640,7 @@
             goalDescription() { return "1.79e308 prestige points" },
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.p.prestigePoints.gte(1.79e308) },
-            rewardDescription: "Unlock new rocket fuel abilities, and ability automation, and gain 20% of rocket fuel per second.",
+            rewardDescription: "Unlock new rocket fuel abilities, and gain 20% of rocket fuel per second.",
             unlocked() { return hasChallenge("ip", 15) },
             onEnter() {
                 player.in.infinityPause = true

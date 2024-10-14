@@ -546,10 +546,10 @@
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "Unlock new grass studies.",
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -562,10 +562,10 @@
             rewardDescription: "Unlocks a new check back button at level 125.",
             unlocked() { return hasChallenge("ip", 11) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -579,10 +579,10 @@
             rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -596,10 +596,10 @@
             rewardDescription: "Unlocks infinity point buyables and new milestones.",
             unlocked() { return hasChallenge("ip", 13) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -613,7 +613,7 @@
             rewardDescription: "Unlock new booster dice effects, and booster dice automation.",
             unlocked() { return hasChallenge("ip", 14) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
 
                 player.d.challengeDicePoints = new Decimal(0)
                 player.d.buyables[21] = new Decimal(0)
@@ -629,7 +629,7 @@
                 }
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -643,10 +643,10 @@
             rewardDescription: "Unlock new rocket fuel abilities, and gain 20% of rocket fuel per second.",
             unlocked() { return hasChallenge("ip", 15) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -660,13 +660,13 @@
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
 
                 player.cb.level = new Decimal(1)
                 player.cb.xp = new Decimal(0)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 
@@ -680,10 +680,10 @@
             rewardDescription: "....???",
             unlocked() { return hasChallenge("ip", 17) },
             onEnter() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             onExit() {
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(5)
             },
             style: { width: '350px', height: '275px', }
 

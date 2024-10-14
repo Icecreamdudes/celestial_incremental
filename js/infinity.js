@@ -32,9 +32,6 @@
     color: "white",
     branches: ["i"],
     update(delta) {
-        // DEBUGGING OUTPUT
-        //logOnce('infUpdateTop', `[infUpdateTop] player.points:${player.points}`)
-
         // =================================================================
         // Miscellaneous logic
 
@@ -191,18 +188,12 @@
                 .mul(upgradeEffect('bi', 101))
         }
 
-        // DEBUGGING OUTPUT
-        //logOnce('iptg', `infinityPointsToGet:${player.in.infinityPointsToGet}`)
-
         // bigCrunch ASAP, since we don't need player.points after this point
         if (player.points.gte(Number.MAX_VALUE)) {
             player.in.reachedInfinity = true
 
             // N.B. try doing bigCrunch as soon as we can
             layers.in.bigCrunch();
-
-            // DEBUGGING OUTPUT
-            //console.log(`player.points:${player.points}`)
         }
 
 
@@ -219,10 +210,7 @@
         // Multi-reset logic
 
         if (player.in.infinityPause) {
-            // DEBUGGING OUTPUT
-            //console.log(`[update] bi:${buyableEffect('bi', 11)}, tad:${buyableEffect('tad', 11)}, om:${buyableEffect('om', 11)}, p:${buyableEffect('p', 15)}`)
-            //console.log(`[update] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
-
+            // XXX: this may not be needed anymore; further testing required!
             //layers.in.bigCrunch();
             player.in.infinityPause = false
         }
@@ -543,8 +531,6 @@ addLayer("bigc", {
             onClick() {
                 player.tab = "in"
 
-                // DEBUGGING OUTPUT
-                //console.log('clicked BigCrunch')
                 layers.bigc.crunch()
             },
             style: { width: '300px', "min-height": '120px' },
@@ -552,9 +538,6 @@ addLayer("bigc", {
         
     },
     crunch(){
-        // DEBUGGING OUTPUT
-        //console.log(`[crunch] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
-
         player.in.infinityPoints = player.in.infinityPoints
             .add(player.in.infinityPointsToGet)
         player.in.infinityPointsToGet = new Decimal(0)
@@ -562,9 +545,6 @@ addLayer("bigc", {
         player.in.infinities = player.in.infinities
             .add(player.in.infinitiesToGet)
         player.in.infinitiesToGet = new Decimal(0)
-
-        // DEBUGGING OUTPUT
-        //console.log(`[crunch2] iptg:${player.in.infinityPointsToGet}, itg:${player.in.infinitiesToGet}`)
 
         if (player.po.dice)
         {

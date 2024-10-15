@@ -67,7 +67,7 @@
 
         if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
 
-        player.rf.rocketFuelEffect = player.rf.rocketFuel.pow(0.85).add(1)
+        player.rf.rocketFuelEffect = player.rf.rocketFuel.mul(30).pow(0.85).add(1)
 
         if (player.rf.rocketFuelPause.gt(0))
         {

@@ -1181,7 +1181,7 @@
             title() { return player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) ? player.cb.uncommonPetImage[2] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.uncommonPetAmounts[2].gt(0)  && !player.cb.viewingEvolved[2]|| player.cb.uncommonPetLevels[2].gt(0) && !player.cb.viewingEvolved[2]? "<h3>/" + format(player.cb.uncommonPetEffects[2][0]) + " to tree requirement.<br>/" + format(player.cb.uncommonPetEffects[2][1]) + " to mod requirement.<br>/" + format(player.cb.uncommonPetEffects[2][2]) + " to check back requirement.":  player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) ? "/" + format(player.cb.evolvedEffects[2][0]) + " to rare pet cooldown.<br>x" + format(player.cb.evolvedEffects[2][1]) + " to XPBoost." :""},
+            tooltip() { return player.cb.uncommonPetAmounts[2].gt(0)  && !player.cb.viewingEvolved[2]|| player.cb.uncommonPetLevels[2].gt(0) && !player.cb.viewingEvolved[2]? "<h3>/" + format(player.cb.uncommonPetEffects[2][0]) + " to tree requirement.<br>/" + format(player.cb.uncommonPetEffects[2][1]) + " to mod requirement.<br>/" + format(player.cb.uncommonPetEffects[2][2]) + " to check back xp requirement.":  player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) ? "/" + format(player.cb.evolvedEffects[2][0]) + " to rare pet cooldown.<br>x" + format(player.cb.evolvedEffects[2][1]) + " to XPBoost." :""},
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(2)
             },
@@ -1320,7 +1320,7 @@
             title() { return player.cb.rarePetAmounts[3].gt(0) || player.cb.rarePetLevels[3].gt(0) ? player.cb.rarePetImage[3] : player.cb.lockedImg},
             canClick() { return player.cb.rarePetAmounts[3].gt(0) || player.cb.rarePetLevels[3].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.rarePetAmounts[3].gt(0) || player.cb.rarePetLevels[3].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[3][0]) + " to grasshoppers (based on evo shards).<br>/" + format(player.cb.rarePetEffects[3][1]) + " to check back requirement.": ""},
+            tooltip() { return player.cb.rarePetAmounts[3].gt(0) || player.cb.rarePetLevels[3].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[3][0]) + " to grasshoppers (based on evo shards).<br>/" + format(player.cb.rarePetEffects[3][1]) + " to check back xp requirement.": ""},
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(3)
             },

@@ -854,47 +854,51 @@ button > * {
 	font-size: 30px;
   }
 
-  #spawn-area {
-	width: 80%; /* Adjust as needed */
-	height: 60%; /* Adjust as needed */
-	background-color: #074317;
-	opacity: 90%;
-	position: absolute;
-	bottom: 10%;
-	left: 50%;
-	transform: translateX(-50%);
-	border: 2px solid black;
-	box-sizing: border-box; /* Include border in dimensions */
-	overflow: hidden; /* Ensure grass squares stay within spawn area */
+/* General styles for all spawn areas */
+.spawn-area {
+    width: 80vw; /* Set width relative to viewport width */
+    height: 50vh; /* Set height relative to viewport height */
+    opacity: 90%;
+    position: absolute;
+    bottom: 10vh; /* Distance from the bottom of the viewport */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure it's centered */
+    border: 2px solid black;
+    box-sizing: border-box;
+    overflow: hidden; /* Ensure content stays within bounds */
+}
+
+/* Specific styles for each spawn area */
+#spawn-area {
+    background-color: #074317;
 }
 
 #gold-spawn-area {
-	width: 80%; /* Adjust as needed */
-	height: 50%; /* Adjust as needed */
-	background-color: #b9b9b9;
-	opacity: 90%;
-	position: absolute;
-	bottom: 10%;
-	left: 50%;
-	transform: translateX(-50%);
-	border: 2px solid black;
-	box-sizing: border-box; /* Include border in dimensions */
-	overflow: hidden; /* Ensure grass squares stay within spawn area */
+    background-color: #b9b9b9;
 }
 
 #repli-spawn-area {
-	width: 80%; /* Adjust as needed */
-	height: 50%; /* Adjust as needed */
-	background-color: #67cc3b;
-	opacity: 90%;
-	position: absolute;
-	bottom: 10%;
-	left: 50%;
-	transform: translateX(-50%);
-	border: 2px solid black;
-	box-sizing: border-box; /* Include border in dimensions */
-	overflow: hidden; /* Ensure grass squares stay within spawn area */
+    background-color: #67cc3b;
 }
+
+/* Media query for smaller screens (tablets) */
+@media (max-width: 768px) {
+    .spawn-area {
+        width: 90vw; /* Make it slightly wider for small screens */
+        height: 40vh; /* Reduce height on smaller screens */
+        bottom: 8vh;  /* Adjust position to keep elements on screen */
+    }
+}
+
+/* Media query for very small screens (phones) */
+@media (max-width: 480px) {
+    .spawn-area {
+        width: 95vw; /* Almost full width on phones */
+        height: 35vh; /* Shorter height for small screens */
+        bottom: 5vh;  /* Bring the element closer to the bottom */
+    }
+}
+
 
 .particle {
 	position: absolute;

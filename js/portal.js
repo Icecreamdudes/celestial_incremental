@@ -19,6 +19,25 @@ addLayer("po", {
 
         pointHalt: new Decimal(1),
         pointHaltInput: new Decimal(1),
+
+        halterInput: new Decimal(1),
+        halterEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        /*
+            0 - Points
+            1 - Factor Power
+            2 - Prestige Points
+            3 - Leaves
+            4 - Trees
+            5 - Grass
+            6 - Grasshoppers
+            7 - Fertilizer
+            8 - Code Experience
+            9 - Lines of Code
+            10 - Mods
+        */
+       halterIndex: new Decimal(0),
+       halterText: ["", "", "", "", "", "", "", "", "", "", ""],
+
     }
     },
     automate() {

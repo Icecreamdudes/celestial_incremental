@@ -643,7 +643,7 @@
                         ["blank", "15px"],
                         ["raw-html", function () { return "<h3>" + formatWhole(player.g.grassCount) + "/" + formatWhole(player.g.grassCap) + " Grass (Hover over the grass)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "<h3>" + format(player.g.grassTimer) + "/" + format(player.g.grassReq) + " Seconds to spawn grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<div id=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<div id=spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "600px"],
             ]
             },
@@ -658,7 +658,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>" + formatWhole(player.g.goldGrassCount) + "/" + formatWhole(player.g.goldGrassCap) + " Golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>" + format(player.g.goldGrassTimer) + "/" + format(player.g.goldGrassReq) + " Seconds to spawn golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=gold-spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<div id=gold-spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Buyables": {

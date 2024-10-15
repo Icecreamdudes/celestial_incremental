@@ -579,11 +579,11 @@
             unlocked() { return true },
             onEnter() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(16)
             },
             onExit() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = true
+                player.in.infinityPause = new Decimal(16)
 
                 player.po.hex = false
                 player.po.dice = false
@@ -638,7 +638,7 @@
             },
             "Buyables and Upgrades": {
                 buttonStyle() { return { 'color': 'black' } },
-                unlocked() { return true },
+                unlocked() { return true }, 
                 content:
                 [
                     ["blank", "25px"],

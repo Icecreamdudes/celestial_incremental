@@ -1171,7 +1171,7 @@
             title() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? player.cb.uncommonPetImage[1] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4]|| player.cb.uncommonPetAmounts[1].gt(0) && !player.cb.viewingEvolved[4] ? "<h3>x" + format(player.cb.uncommonPetEffects[1][0]) + " to lines of code.<br>x" + format(player.cb.uncommonPetEffects[1][1]) + " to leaves.<br>/" + format(player.cb.uncommonPetEffects[1][2]) + " to all check back button cooldowns." : player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? "^" + format(player.cb.evolvedEffects[4][0]) + " to star effect.<br>x" + format(player.cb.evolvedEffects[4][1]) + " to rocket fuel." :"" },
+            tooltip() { return player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4]|| player.cb.uncommonPetLevels[1].gt(0) && !player.cb.viewingEvolved[4] ? "<h3>x" + format(player.cb.uncommonPetEffects[1][0]) + " to lines of code.<br>x" + format(player.cb.uncommonPetEffects[1][1]) + " to leaves.<br>/" + format(player.cb.uncommonPetEffects[1][2]) + " to all check back button cooldowns." : player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? "^" + format(player.cb.evolvedEffects[4][0]) + " to star effect.<br>x" + format(player.cb.evolvedEffects[4][1]) + " to rocket fuel." :"" },
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(1)
             },

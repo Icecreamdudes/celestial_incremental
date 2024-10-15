@@ -109,6 +109,44 @@ addLayer("po", {
             player.po.breakInfinity = false
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
+
+        player.po.halterText =
+        [
+            "Currently divides point gain by /" + format(player.po.halterEffects[0]),
+            "Currently divides factor power gain by /" + format(player.po.halterEffects[1]),
+            "Currently divides prestige points gain by /" + format(player.po.halterEffects[2]),
+            "Currently divides leaf gain by /" + format(player.po.halterEffects[3]),
+            "Currently divides trees gain by /" + format(player.po.halterEffects[4]),
+            "Currently divides grass gain by /" + format(player.po.halterEffects[5]),
+            "Currently divides grasshoppers gain by /" + format(player.po.halterEffects[6]),
+            "Currently divides fertilizer gain by /" + format(player.po.halterEffects[7]),
+            "Currently divides code experience gain by /" + format(player.po.halterEffects[8]),
+            "Currently divides lines of code gain by /" + format(player.po.halterEffects[9]),
+            "Currently divides mod gain by /" + format(player.po.halterEffects[10]),
+        ]
+        /*
+            0 - Points
+            1 - Factor Power
+            2 - Prestige Points
+            3 - Leaves
+            4 - Trees
+            5 - Grass
+            6 - Grasshoppers
+            7 - Fertilizer
+            8 - Code Experience
+            9 - Lines of Code
+            10 - Mods
+        */
+
+        if (player.po.halterInput.gte(1)) 
+        {
+            if (player.po.halterInput.neq(player.po.halterEffects[player.po.halterIndex]))
+            {
+                player.rm.halterBoostCheck = false
+            }
+        }
+        if (player.po.halterInput.lt(1)) player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
+        
     },
     branches: ["branch"],
     clickables: {
@@ -148,6 +186,66 @@ addLayer("po", {
                 width: '200px',
                 "min-height": '75px',
             },
+        },
+        4: {
+            title() { return "<h3>Lower" },
+            canClick() { return player.po.halterIndex.gt(0) },
+            unlocked() { return true },
+            onClick() {
+                player.po.halterIndex = player.po.halterIndex.sub(1)
+            },
+            style: { width: '100px', "min-height": '100px' },
+        },
+        5: {
+            title() { return "<h3>Increase" },
+            canClick() { return player.po.halterIndex.lt(10) },
+            unlocked() { return true },
+            onClick() {
+                player.po.halterIndex = player.po.halterIndex.add(1)
+            },
+            style: { width: '100px', "min-height": '100px' },
+        },
+        6: {
+            title() { return "<h3>Apply Halt" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.po.halterEffects[player.po.halterIndex] = player.po.halterInput
+            },
+            style: { width: '100px', "min-height": '100px' },
+        },
+        7: {
+            title() { return "<h3>Reset Halts" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                for (let i = 0; i < player.po.halterEffects.length; i++)
+                {
+                    player.po.halterEffects[i] = new Decimal(1)
+                }
+            },
+            style: { width: '100px', "min-height": '100px' },
+        },
+        8: {
+            title() { return "<h3>View Halts" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                callAlert(
+                    "Currently divides point gain by /" + format(player.po.halterEffects[0]) + "\n" +
+                    "Currently divides factor power gain by /" + format(player.po.halterEffects[1]) + "\n" +
+                    "Currently divides prestige points gain by /" + format(player.po.halterEffects[2]) + "\n" +
+                    "Currently divides leaf gain by /" + format(player.po.halterEffects[3]) + "\n" +
+                    "Currently divides trees gain by /" + format(player.po.halterEffects[4]) + "\n" +
+                    "Currently divides grass gain by /" + format(player.po.halterEffects[5]) + "\n" +
+                    "Currently divides grasshoppers gain by /" + format(player.po.halterEffects[6]) + "\n" +
+                    "Currently divides fertilizer gain by /" + format(player.po.halterEffects[7]) + "\n" +
+                    "Currently divides code experience gain by /" + format(player.po.halterEffects[8]) + "\n" +
+                    "Currently divides lines of code gain by /" + format(player.po.halterEffects[9]) + "\n" +
+                    "Currently divides mod gain by /" + format(player.po.halterEffects[10]) + "\n" 
+                )
+            },
+            style: { width: '100px', "min-height": '100px' },
         },
         11: {
             title() { return "<h1>Dice" },
@@ -327,7 +425,7 @@ addLayer("po", {
             },
             "Halter": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 23) && !player.ev.evolutionsUnlocked[6]},
+                unlocked() { return hasMilestone("ip", 23) && player.ev.evolutionsUnlocked[6]},
                 content:
                 [
                         ["blank", "25px"],
@@ -356,8 +454,8 @@ addLayer("po", {
                 content:
                 [
                         ["blank", "25px"],
-                        ["raw-html", function () { return "<h3>Currently divides point gain by /" + format(player.po.pointHalt) + "." }],
-                    ["text-input", "pointHaltInput", {
+                        ["raw-html", function () { return "<h3>" + player.po.halterText[player.po.halterIndex]}],
+                    ["text-input", "halterInput", {
                         color: "var(--color)",
                         width: "400px",
                         "font-family": "Calibri",
@@ -367,11 +465,10 @@ addLayer("po", {
                         background: "var(--background)",
                     }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
-                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed." }],
+                        ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
+                        ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
+                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ]
 
             },

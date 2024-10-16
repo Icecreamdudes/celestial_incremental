@@ -63,6 +63,7 @@
     if (hasUpgrade("de", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
     player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27)) 
+    player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
 
     if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1))
     {
@@ -93,7 +94,8 @@
         if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
-
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
+        
         player.gh.fertilizer = player.gh.fertilizer.add(player.gh.fertilizerPerSecond.mul(delta))
 
         if (player.gh.buyables[11].gt(5))

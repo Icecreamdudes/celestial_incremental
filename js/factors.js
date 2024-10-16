@@ -139,6 +139,7 @@
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.pe.pestEffect[1])
         if (inChallenge("ip", 13)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(0.7)
         if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("h", 11))
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halterEffects[1])
 
         player.f.factorPower = player.f.factorPower.add(player.f.factorPowerPerSecond.mul(delta))
         player.f.factorPowerEffect = player.f.factorPower.pow(0.5).div(3).add(1)

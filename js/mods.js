@@ -51,6 +51,8 @@
         if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
         if (hasUpgrade("i", 24) && player.points.gte("1e400")) player.m.modsToGet = player.m.modsToGet.mul(1e18)
+        player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("rm", 28))
+        player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
 
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))
@@ -59,6 +61,7 @@
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.pe.pestEffect[5])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("p", 12))
+        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.po.halterEffects[9])
 
         if (player.m.mods.gte(player.m.modSoftcapStart))
         {
@@ -104,6 +107,7 @@
         if (inChallenge("tad", 11)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(buyableEffect("de", 17))
         if (hasUpgrade("bi", 17)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("bi", 17))
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("p", 13))
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halterEffects[8])
 
         if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
 

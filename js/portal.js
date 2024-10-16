@@ -425,7 +425,7 @@ addLayer("po", {
             },
             "Halter": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 23) && player.ev.evolutionsUnlocked[6]},
+                unlocked() { return hasMilestone("ip", 23)},
                 content:
                 [
                         ["blank", "25px"],

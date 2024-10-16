@@ -109,7 +109,6 @@ addLayer("i", {
         {
             stopRain();
         }
-
         
         //Celestial Point boosts
         player.gain = new Decimal(1)
@@ -179,8 +178,17 @@ addLayer("i", {
 
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
+        
         if (player.po.realmMods) player.gain = player.gain.pow(0.2)
         player.points = player.points.add(player.gain.mul(delta))
+        
+        player.gain = player.gain.div(player.po.halterEffects[0])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
+        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
+        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
+        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.po.halterEffects[9])
+        player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
         {

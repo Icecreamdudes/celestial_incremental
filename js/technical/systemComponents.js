@@ -101,8 +101,6 @@ var systemComponents = {
 
 	'overlay-head': {
 		template: `			
-		<div class="big-title-text">Celestial Incremental</p>
-		<div class="big-title-text2">By Icecreamdude</p><br>
 	`
 	},
 

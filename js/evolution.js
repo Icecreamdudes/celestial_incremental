@@ -8,7 +8,7 @@
 
         evolutionDisplayIndex: new Decimal(-1),
         evolutionDisplay: [],
-        evolutionsUnlocked: [false, false, false, false, false, false, false],
+        evolutionsUnlocked: [false, false, false, false, false, false, false, false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -17,6 +17,8 @@
         4 - Star
         5 - Dice
         6 - Spider
+        7 - Ufo
+        8 - Clock
         */
     }
     },
@@ -69,7 +71,6 @@
             "<br>"  + formatWhole(player.ip.hexRuns) + "/2,000 Hex Runs" + 
             "<br>"  + formatWhole(player.points) + "/1e550 Celestial Points" + 
             "<br>"  + formatWhole(player.bi.brokenInfinities) + "/50,000 Broken Infinities" + 
-            "<br>"  + formatWhole(player.cb.rarePetAmounts[4]) + "/2 Antimatter Pets" + 
             "<br>"  + formatWhole(player.cb.petPoints) + "/500 Pet Points" + 
             "<br>"  + formatWhole(player.cb.commonPetLevels[0]) + "/12 Gwa Level",
 
@@ -98,6 +99,19 @@
             "Evolve Spider<br>" + formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
             "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" + 
             "<br>"  + formatWhole(player.cb.XPBoost) + "/25 XPBoost",
+
+            "Evolve Drippy Ufo<br>" + formatWhole(player.cb.evolutionShards) + "/25 Evolution Shards" +
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" + 
+            "<br>"  + format(player.ev4.offerings) + "/200 Pet Sacrifice Offerings" +
+            "<br>"  + formatWhole(player.g.goldGrass) + "/1e12 Golden Grass" +
+            "<br>"  + formatWhole(player.rf.rocketFuel) + "/1e80 Rocket Fuel",
+
+            "Evolve Clock<br>" + formatWhole(player.cb.evolutionShards) + "/40 Evolution Shards" +
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" + 
+            "<br>"  + formatWhole(player.cb.level) + "/1,500 Check Back Levels" +
+            "<br>"  + formatWhole(player.cb.uncommonPetLevels[5]) + "/8 Clock Level" +
+            "<br>"  + formatWhole(player.cb.uncommonPetLevels[6]) + "/8 Trollface Level" +
+            "<br>"  + formatWhole(player.ca.rememberanceCores) + "/5 Rememberance Cores",
         ]
     },
     branches: ["branch"],
@@ -205,13 +219,12 @@
         },
         18: {
             title() { return "EVOLVE" },
-            canClick() { return player.cb.evolutionShards.gte(8) && player.ip.diceRuns.gte(2000) && player.ip.rocketFuelRuns.gte(2000) && player.ip.hexRuns.gte(2000) && player.points.gte("1e550") && player.bi.brokenInfinities.gte(50000) && player.cb.rarePetAmounts[4].gte(2) && player.cb.petPoints.gte(500) && player.cb.commonPetLevels[0].gte(12) },
+            canClick() { return player.cb.evolutionShards.gte(8) && player.ip.diceRuns.gte(2000) && player.ip.rocketFuelRuns.gte(2000) && player.ip.hexRuns.gte(2000) && player.points.gte("1e550") && player.bi.brokenInfinities.gte(50000) && player.cb.petPoints.gte(500) && player.cb.commonPetLevels[0].gte(12) },
             unlocked() { return player.ev.evolutionDisplayIndex == 3 },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(8)
-                player.cb.rarePetAmounts[4] = player.cb.rarePetAmounts[4].sub(2)
                 player.cb.petPoints = player.cb.petPoints.sub(500)
                 player.bi.brokenInfinities = player.bi.brokenInfinities.sub(50000)
 
@@ -302,6 +315,59 @@
             },
             style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
         },
+        26: {
+            title() { return player.cb.rarePetImage[2] },
+            canClick() { return true},
+            unlocked() { return !player.ev.evolutionsUnlocked[7] && hasUpgrade("bi", 24)},
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(7)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        27: {
+            title() { return "EVOLVE" },
+            canClick() { return player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(2) && player.ev4.offerings.gte(200) && player.g.goldGrass.gte(1e12) && player.rf.rocketFuel.gte(1e80)},
+            unlocked() { return player.ev.evolutionDisplayIndex == 7 },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(25)
+                player.cb.paragonShards = player.cb.paragonShards.sub(2)
+                player.ev4.offerings = player.ev4.offerings.sub(200)
+                player.g.goldGrass = player.g.goldGrass.sub(1e12)
+                player.rf.rocketFuel = player.rf.rocketFuel.sub(1e80)
+
+                player.ev.evolutionsUnlocked[7] = true
+                player.cb.evolvedLevels[7] = new Decimal(1)
+            },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
+        },
+        28: {
+            title() { return player.cb.uncommonPetImage[5] },
+            canClick() { return true},
+            unlocked() { return !player.ev.evolutionsUnlocked[8] && hasUpgrade("bi", 24)},
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(8)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        29: {
+            title() { return "EVOLVE" },
+            canClick() { return player.cb.evolutionShards.gte(40) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500) && player.cb.uncommonPetLevels[5].gte(8) && player.cb.uncommonPetLevels[5].gte(8) && player.ca.rememberanceCores.gte(5)},
+            unlocked() { return player.ev.evolutionDisplayIndex == 8 },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(40)
+                player.cb.paragonShards = player.cb.paragonShards.sub(1)
+                player.cb.level = player.cb.level.sub(1500)
+                player.ca.rememberanceCores = player.ca.rememberanceCores.sub(5)
+
+                player.ev.evolutionsUnlocked[8] = true
+                player.cb.evolvedLevels[8] = new Decimal(1)
+            },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
+        },
     },
     bars: {
     },
@@ -325,11 +391,11 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "36px", "font-family": "monospace" }],
-                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15], ["clickable", 17], ["clickable", 19], ["clickable", 22], ["clickable", 24]]],
+                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15], ["clickable", 17], ["clickable", 19], ["clickable", 22], ["clickable", 24], ["clickable", 26], ["clickable", 28]]],
                     ["blank", "25px"],
                     ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "28px", "font-family": "monospace" }]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16], ["clickable", 18], ["clickable", 21], ["clickable", 23], ["clickable", 25]]],
+                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16], ["clickable", 18], ["clickable", 21], ["clickable", 23], ["clickable", 25], ["clickable", 27], ["clickable", 29]]],
                 ]
 
             },
@@ -1489,6 +1555,135 @@ addLayer("ev4", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.automationShards) + "</h3> automation shards. (" + formatWhole(player.cb.totalAutomationShards) + " total)"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return player.startedGame == true  }
+})
+addLayer("ev8", {
+    name: "Marcel", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "E8", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+
+        evoButtonUnlocks: [true,],
+        evoButtonTimersMax: [new Decimal(18000),],
+        evoButtonTimers: [new Decimal(0),],
+        evoButtonBase: [new Decimal(1),],
+
+        paragonButtonUnlocks: [true,],
+        paragonButtonTimersMax: [new Decimal(180000),],
+        paragonButtonTimers: [new Decimal(0),],
+        paragonButtonBase: [new Decimal(1),],
+    }
+    },
+    automate() {
+    },
+    nodeStyle() {
+    },
+    tooltip: "Evolution",
+    color: "grey",
+    update(delta) {
+        let onepersec = new Decimal(1)
+
+        player.ev8.evoButtonTimersMax = [new Decimal(18000),]
+        player.ev8.evoButtonBase = [new Decimal(1),]
+        for (let i = 0; i < player.ev8.evoButtonTimersMax.length; i++)
+        {
+        }
+        for (let i = 0; i < player.ev8.evoButtonTimers.length; i++)
+        {
+            player.ev8.evoButtonTimers[i] = player.ev8.evoButtonTimers[i].sub(onepersec.mul(delta))
+        }
+
+        player.ev8.paragonButtonTimersMax = [new Decimal(180000),]
+        player.ev8.paragonButtonBase = [new Decimal(1),]
+        for (let i = 0; i < player.ev8.paragonButtonTimersMax.length; i++)
+        {
+        }
+        for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++)
+        {
+            player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(onepersec.mul(delta))
+        }
+    },
+    branches: ["branch"],
+    clickables: {
+        1: {
+            title() { return "<h2>Return" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.tab = "cb"
+            },
+            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+
+        //evo
+        11: {
+            title() { return player.ev8.evoButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[0]) + " Evo Shards."},
+            canClick() { return player.ev8.evoButtonTimers[0].lt(0) },
+            unlocked() { return player.ev8.evoButtonUnlocks[0] },
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[0])
+                player.ev8.evoButtonTimers[0] = player.ev8.evoButtonTimersMax[0]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+
+
+        //paragon
+        101: {
+            title() { return player.ev8.paragonButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[0]) + " Paragon Shards."},
+            canClick() { return player.ev8.paragonButtonTimers[0].lt(0) },
+            unlocked() { return player.ev8.paragonButtonUnlocks[0] },
+            onClick() {
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[0])
+                player.ev8.paragonButtonTimers[0] = player.ev8.paragonButtonTimersMax[0]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+    },
+    bars: {
+    },
+    upgrades: {
+    },
+    buyables: {
+    },
+    milestones: {
+
+    },
+    challenges: {
+    },
+    infoboxes: {
+    },
+    microtabs: {
+        stuff: {
+            "Evo": {
+                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': 'grey',} },
+                unlocked() { return true },
+                content:
+                [
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["row", [["clickable", 11]]],
+    ]
+            },
+            "Paragon": {
+                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': 'grey',} },
+                unlocked() { return true },
+                content:
+                [
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+        ["blank", "25px"],
+        ["row", [["clickable", 101]]],
+    ]
+            },
+        },
+    }, 
+
+    tabFormat: [
+        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }

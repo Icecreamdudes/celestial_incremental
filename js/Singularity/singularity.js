@@ -25,6 +25,7 @@ addLayer("s", {
         let onepersec = new Decimal(1)
         if (player.subtabs["s"]['stuff'] == 'Portal')
         {
+            player.po.lastUniverse = 's'
             player.tab = "po"
             player.subtabs["s"]['stuff'] = 'Features'
         }

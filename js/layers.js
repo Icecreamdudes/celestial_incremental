@@ -187,11 +187,10 @@ addLayer("i", {
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
         player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
         player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.po.halterEffects[9])
-        player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
         {
+            player.po.lastUniverse = 'i'
             player.tab = "po"
             player.subtabs["i"]['stuff'] = 'Features'
         }
@@ -323,7 +322,7 @@ addLayer("i", {
         {
             title: "Crystallize",
             unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
-            description: "Unlocks Crystallize reset layer (in grasshop).",
+            description: "Unlocks Crystallize reset layer (in prestige).",
             cost: new Decimal("1e1000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",

@@ -73,7 +73,7 @@
                  //   player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
                  //   player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
                 }
-                if (!player.bigc.skip) 
+                if (!hasMiestone("ip", 21)) 
                 {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21))
@@ -100,7 +100,7 @@
         12:
         {
             title: "Upgrade (1, 2)",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts antimatter based on completed dice runs.",
             cost: new Decimal(2),
             currencyLocation() { return player.in },
@@ -114,7 +114,7 @@
         13:
         {
             title: "Upgrade (1, 3)",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts 7th dimensions based on completed rocket fuel runs.",
             cost: new Decimal(2),
             currencyLocation() { return player.in },
@@ -128,7 +128,7 @@
         14:
         {
             title: "Upgrade (1, 4)",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts factor power based on antimatter.",
             cost: new Decimal(6),
             currencyLocation() { return player.in },
@@ -654,8 +654,8 @@
         17: {
             name: "Challenge VII",
             challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECCOMENDED LEVEL 100)" },
-            goalDescription() { return "Level 75" },
-            goal() { return new Decimal("75") },
+            goalDescription() { return "Level 60" },
+            goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(75) },
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) },

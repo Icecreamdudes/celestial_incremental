@@ -40,6 +40,7 @@
             "background-image": "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
             "background-origin": "border-box",
             "color": "white",
+            "border-color": "#0061ff",
         }
     },
     tooltip: "Mods",
@@ -481,7 +482,7 @@
                 player.rm.realmMods[3] = player.rm.realmMods[3].add(player.rm.realmModsToGet[3])
 
                 player.id.infintityPower = new Decimal(0)
-                player.ca.replicanti = new Decimal(0)
+                player.ca.replicanti = new Decimal(1)
                 for (let i = 0; i<player.id.dimensionsUnlocked; i++)
                 {
                     if (player.id.dimensionsUnlocked[i]) player.id.dimensionAmounts[i] = new Decimal(1)

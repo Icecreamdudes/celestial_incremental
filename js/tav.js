@@ -427,7 +427,7 @@
             title: "Negative Upgrade I",
             unlocked() { return true },
             description: "Unlocks Buyables.",
-            cost: new Decimal(3),
+            cost: new Decimal(1),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -437,7 +437,7 @@
             title: "Negative Upgrade II",
             unlocked() { return true },
             description: "NIP boosts Dimension Power gain.",
-            cost: new Decimal(8),
+            cost: new Decimal(3),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -452,7 +452,7 @@
             title: "Negative Upgrade III",
             unlocked() { return hasUpgrade("ta", 12) },
             description: "Skip the reverse crunch button.",
-            cost: new Decimal(20),
+            cost: new Decimal(8),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -462,7 +462,7 @@
             title: "Negative Upgrade IV",
             unlocked() { return hasUpgrade("ta", 13) },
             description: "Unlock limiters for Dimboost and Galaxy autobuyers.",
-            cost: new Decimal(50),
+            cost: new Decimal(20),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -472,7 +472,7 @@
             title: "Negative Upgrade V",
             unlocked() { return hasUpgrade("ta", 14) },
             description: "Unlock infinity point factors (in factors).",
-            cost: new Decimal(333),
+            cost: new Decimal(88),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -482,7 +482,7 @@
             title: "Negative Upgrade VI",
             unlocked() { return hasUpgrade("ta", 15) },
             description: "Unlock negative infinity point factors.",
-            cost: new Decimal(2345),
+            cost: new Decimal(444),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -492,7 +492,7 @@
             title: "Negative Upgrade VII",
             unlocked() { return hasUpgrade("ta", 16) },
             description: "Unlock the OTF synergizer.",
-            cost: new Decimal(10000),
+            cost: new Decimal(2000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -502,7 +502,7 @@
             title: "Negative Upgrade VIII",
             unlocked() { return hasUpgrade("ta", 17) },
             description: "Boost hex points based on NIP.",
-            cost: new Decimal(25000),
+            cost: new Decimal(15000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -517,7 +517,7 @@
             title: "Negative Upgrade IX",
             unlocked() { return hasUpgrade("ta", 18) },
             description: "Unlock 3 more OTF synergizer buyables.",
-            cost: new Decimal(50000),
+            cost: new Decimal(30000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -1144,7 +1144,7 @@
         },
         33: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(2) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1176,7 +1176,7 @@
         },
         34: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1596,7 +1596,7 @@
         51: {
             cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e30) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dice-NIP Synergy"
@@ -1628,7 +1628,7 @@
         52: {
             cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rocket Fuel-NIP Synergy"
@@ -1660,7 +1660,7 @@
         53: {
             cost(x) { return new Decimal(1e5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hex-NIP Synergy"

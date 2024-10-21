@@ -58,14 +58,10 @@
         player.tab == "cap" ? "#1f1e33" : 
         player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" ? "#204387" : 
         player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
+        player.tab == "ev8" ? "#242525" : 
         player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
         player.tab == "s" ? "#2D0000" : 
         "#161616");
-
-        if (player.tab != "c" && player.tab != "bigc")
-        {
-            player.c.cutsceneIndex = 0
-        }
 
         //1
         if (player.c.cutscenes[0] && player.startedGame)
@@ -404,6 +400,11 @@
             player.tab = "i"
             player.subtabs["i"]['stuff'] = 'Upgrades'
         }
+
+        if (player.tab != "c" && player.tab != "bigc" && player.c.cutsceneIndex == player.c.cutsceneText.length)
+        {
+            player.c.cutsceneIndex = 0
+        }
     },
     startCutscene1() {
         player.c.cutsceneText = [
@@ -514,7 +515,7 @@ startCutscene7() {
     "There is a floating blue orb of pure energy. It gives off a similar energy to Negative Infinity Points.",
     "This must be the core. You gather all the corrupted, disfigured, and shattered infinities you have collected and form it into a ball of pure energy.",
     "A thousand of each should be enough. But before you can finish your job, you hear Tav's voice echoing throughout the room.",
-    '"So… You finally made it to my core. I had a feeling you were not on my side."',
+    '"So... You finally made it to my core. I had a feeling you were not on my side."',
     '"Throughout history, only a select few individuals have ever killed a celestial."',
     "A beam of light shines out of the core, displaying a hologram of seven beings.",
     '"These seven celestials are known as the original seven. Their names are Teresa, Effarig, The Nameless Ones, V, Ra, Lai\'tela, and Pelle."',
@@ -531,7 +532,7 @@ startCutscene7() {
     '"You may kill me now.  My job here is complete," Tav responds."',
     "You thank him for his help. You gather the infinities, condense the power into a giant beam of energy, and destroy the core.",
     "As the core shatters, the SPVs and energy fills your entire field of vision. After a few seconds, everything goes blank.",
-    "When you open your eyes… you see one giant button in front of you. ",
+    "When you open your eyes... you see one giant button in front of you. ",
     '"Break Infinity"',
 ]
 },
@@ -539,9 +540,9 @@ startCutscene8() {
     player.c.cutsceneText = [
     "The atmosphere grows thick.",
     "Streaks of blue light shoot down from above, shattering the ground with immense force. You hear a faint voice in the distance.",
-    '"Why… Why… Why…"',
+    '"Why... Why... Why..."',
     "The voice gets louder.",
-    '"WHY… WHY…. WHYY…"',
+    '"WHY... WHY.... WHYY..."',
     "Your body tenses up as you realize who this is. A disfigured humanoid creature appears front of you. It speaks.",
     '"..I am Cante.."',
     "The creature falls flat on the floor and falls unconscious."
@@ -550,12 +551,12 @@ startCutscene8() {
 startCutscene9() {
     player.c.cutsceneText = [
         "As you reach the maximum amount of replicanti, you notice Cante grow in size. His form changes into a lanky, deep blue figure.",
-        '"Tav is dead… But why did you free me? WHY???"',
+        '"Tav is dead... But why did you free me? WHY???"',
         "The volume of Cante's voice shakes your insides. You tell him that you must kill him.",
         '"You want to open the rift huh? I am not letting that happen."',
         "The atmosphere thickens; it becomes harder to breathe.",
-        '"I cant believe this… I should have stayed locked up! I cant believe they are all dead!"',
-        '"Damn you for killing all of them! Even if they hated me, they were still great celestials. I need to make it back to the kingdom… I need…" Cante gasps for air, as the atmospheric pressure makes it hard to even stand."',
+        '"I cant believe this... I should have stayed locked up! I cant believe they are all dead!"',
+        '"Damn you for killing all of them! Even if they hated me, they were still great celestials. I need to make it back to the kingdom... I need..." Cante gasps for air, as the atmospheric pressure makes it hard to even stand."',
         "Cante shrivels up into a disfigured being again.",
         '"Tav was right. Cante is one weak celestial." you thought. You continue to study the effects of Replicanti."'
 
@@ -597,9 +598,9 @@ startCutscene12() {
 startCutscene13() {
     player.c.cutsceneText = [
         "As you obtain the last of your remembrance cores, Cante's shriveled up body manifests itself next to you.",
-        '"Bring me to the kingdom…" he whispers. You ignore him.',
-        '"I\'m a person too you know…" he whispers again. You ignore him."',
-        '"Please don\'t kill me… I have a life to li-"',
+        '"Bring me to the kingdom..." he whispers. You ignore him.',
+        '"I\'m a person too you know..." he whispers again. You ignore him."',
+        '"Please don\'t kill me... I have a life to li-"',
         "You suddenly stomp on his body, and he writhes in pain.",
         "You extract the superphysical energy from the remembrance cores and destroy the core.",
         "Replicanti flies out in every direction. You can see the rift starting to form.",

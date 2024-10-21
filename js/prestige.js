@@ -694,7 +694,7 @@
             },
             "Crystallize": {
                 buttonStyle() { return { 'color': 'white', 'border-color': "#31aeb0", 'background': '#98245c',} },
-                unlocked() { return hasUpgrade("i", 22) },
+                unlocked() { return hasUpgrade("i", 23) },
                 content:
                 [
                     ["blank", "25px"],

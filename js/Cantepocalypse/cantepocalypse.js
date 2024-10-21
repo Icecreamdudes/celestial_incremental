@@ -39,6 +39,7 @@ addLayer("cp", {
 
         if (player.subtabs["cp"]['stuff'] == 'Portal')
         {
+            player.po.lastUniverse = 'cp'
             player.tab = "po"
             player.subtabs["cp"]['stuff'] = 'Features'
         }

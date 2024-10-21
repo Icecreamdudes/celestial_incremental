@@ -516,23 +516,19 @@ function isCollision(x, y) {
 }
 
 function moveRepliCircle(circle, spawnAreaRect) {
-    const moveInterval = 500; // Interval in milliseconds
-    const moveStep = 10; // Number of pixels to move each step
-    const gridSize = 150; // Size of each grid cell
+    const moveInterval = 16; // Interval in milliseconds (approx. 60 FPS)
+    const moveSpeed = 5; // Movement speed in pixels per frame
+    const gridSize = 250; // Size of each grid cell
 
     function getRandomPositionInGrid() {
-        const numCols = Math.floor(spawnAreaRect.width / gridSize);
-        const numRows = Math.floor(spawnAreaRect.height / gridSize);
-        const col = Math.floor(Math.random() * numCols);
-        const row = Math.floor(Math.random() * numRows);
-        const x = col * gridSize + Math.random() * (gridSize - 22.5);
-        const y = row * gridSize + Math.random() * (gridSize - 22.5);
+        const x = Math.random() * (spawnAreaRect.width - 22.5); // Random x in the entire area
+        const y = Math.random() * (spawnAreaRect.height - 22.5); // Random y in the entire area
         return { x, y };
     }
 
     let { x: targetX, y: targetY } = getRandomPositionInGrid();
 
-    setInterval(() => {
+    function move() {
         let currentX = parseFloat(circle.style.left);
         let currentY = parseFloat(circle.style.top);
 
@@ -540,12 +536,9 @@ function moveRepliCircle(circle, spawnAreaRect) {
         let dy = targetY - currentY;
 
         let distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance > moveStep) {
-            dx = (dx / distance) * moveStep;
-            dy = (dy / distance) * moveStep;
-        } else {
-            dx = dx;
-            dy = dy;
+        if (distance > moveSpeed) {
+            dx = (dx / distance) * moveSpeed;
+            dy = (dy / distance) * moveSpeed;
         }
 
         currentX += dx;
@@ -556,10 +549,14 @@ function moveRepliCircle(circle, spawnAreaRect) {
         circle.style.top = `${Math.max(0, Math.min(spawnAreaRect.height - 22.5, currentY))}px`;
 
         // Set a new target position after reaching the current target
-        if (Math.abs(targetX - currentX) < moveStep && Math.abs(targetY - currentY) < moveStep) {
+        if (Math.abs(targetX - currentX) < moveSpeed && Math.abs(targetY - currentY) < moveSpeed) {
             ({ x: targetX, y: targetY } = getRandomPositionInGrid());
         }
-    }, moveInterval);
+
+        requestAnimationFrame(move);
+    }
+
+    requestAnimationFrame(move);
 }
 
 

@@ -63,7 +63,7 @@
     }
     },
     automate() {
-        if (hasUpgrade("d", 11) || hasUpgrade("tad", 12))
+        if (hasUpgrade("d", 11) || hasUpgrade("tad", 13))
         {
             buyBuyable("d", 11)
             buyBuyable("d", 12)
@@ -158,6 +158,7 @@
 
         player.d.challengeDicePointsToGet = player.d.dicePoints.pow(0.2).div(3)
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
+        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
 
         if (hasUpgrade("i", 29)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
@@ -520,7 +521,7 @@
             buy() {
                 let base = new Decimal(250)
                 let growth = 2
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -552,7 +553,7 @@
             buy() {
                 let base = new Decimal(500)
                 let growth = 4
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -584,7 +585,7 @@
             buy() {
                 let base = new Decimal(1000)
                 let growth = 2.5
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -616,7 +617,7 @@
             buy() {
                 let base = new Decimal(6000)
                 let growth = 2
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 12))
+                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)

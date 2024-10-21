@@ -50,6 +50,7 @@
         return {
             "color": "white",
             "background-color": "black",
+            "border-color": "#0061ff",
         }
     },
     tooltip: "Hex",
@@ -89,6 +90,7 @@
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(player.rf.abilityEffects[7])
         player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(buyableEffect("cb", 11))
         if (hasUpgrade("bi", 12)) player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(upgradeEffect("bi", 12))
+        player.h.hexPointsToGet[0] = player.h.hexPointsToGet[0].mul(buyableEffect("g", 27))
         player.h.hexPoints[0] = player.h.hexPoints[0].add(player.h.hexPointsToGet[0].mul(delta))
 
         if (!inChallenge("ip", 13)) player.h.hexPointsEffect[0] = player.h.hexPoints[0].mul(100).pow(1.3).add(1)

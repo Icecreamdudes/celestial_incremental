@@ -866,6 +866,7 @@ button > * {
     border: 2px solid black;
     box-sizing: border-box;
     overflow: hidden; /* Ensure content stays within bounds */
+    z-index: 1; /* Spawn area stays below other elements */
 }
 
 /* Specific styles for each spawn area */
@@ -879,6 +880,10 @@ button > * {
 
 #repli-spawn-area {
     background-color: #67cc3b;
+}
+
+#moonstone-spawn-area {
+    background-color: #64beff;
 }
 
 /* Media query for smaller screens (tablets) */
@@ -926,3 +931,38 @@ button > * {
 	/* You can customize further styles like box-shadow, animation, etc. */
   }
   
+
+/* Styling for the large green circle */
+#mainCircle {
+    width: 80px;
+    height: 80px;
+    background-color: green;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* Ensure the circle appears above the spawn area */
+	border: 2px solid black; /* Add a black border */
+}
+
+/* Styling for the smaller circles (the projectiles) */
+.smallCircle {
+  width: 20px;
+  height: 20px;
+  background-color: green;
+  border-radius: 50%;
+  
+  position: absolute;
+  animation: moveInLine 2s linear infinite;
+}
+
+/* Animation for moving in a straight line */
+@keyframes moveInLine {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(100vw, 100vh); /* Move outside the viewport */
+  }
+}

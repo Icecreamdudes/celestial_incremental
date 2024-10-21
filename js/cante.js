@@ -58,6 +58,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 15))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 18))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
@@ -162,7 +163,7 @@
         },
         11: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoints[19].gte(1e40) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
+            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoints[19].gte(1e22) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
             unlocked() { return true},
             onClick() {
                 player.ca.unlockedCante = true
@@ -289,7 +290,7 @@
         },
         12: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e19) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -321,7 +322,7 @@
         },
         13: {
             cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075).add(1) },
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -385,7 +386,7 @@
         },
         15: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e14) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075) },
             unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -417,7 +418,7 @@
         },
         16: {
             cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e15) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075).add(1) },
             unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -481,7 +482,7 @@
         },
         18: {
             cost(x) { return new Decimal(3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05) },
             unlocked() { return hasUpgrade("bi", 26) },
             canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
             title() {
@@ -691,7 +692,7 @@
         ["raw-html", function () { return formatWhole(player.cb.level) + "/250 Check Back Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return format(player.ad.antimatter) + "/1e600 Antimatter" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return formatWhole(player.in.infinities) + "/100,000 Infinities" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return format(player.h.hexPoints[19]) + "/1e40 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return format(player.h.hexPoints[19]) + "/1e22 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return format(player.ta.highestDicePoints) + "/1e50 Highest Dice Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return format(player.cb.petPoints) + "/500 Pet Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["blank", "25px"],

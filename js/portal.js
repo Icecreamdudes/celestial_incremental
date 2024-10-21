@@ -6,6 +6,8 @@ addLayer("po", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        lastUniverse: '',
+
         featureSlots: new Decimal(1),
         featureSlotsMax: new Decimal(1),
         nextResetSlots: new Decimal(1),
@@ -155,8 +157,7 @@ addLayer("po", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "i"
-                player.subtabs["i"]['stuff'] = 'Features'
+                player.tab = player.po.lastUniverse
             },
             style: { width: '100px', "min-height": '50px' },
         },

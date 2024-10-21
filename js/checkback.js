@@ -81,10 +81,11 @@
         dicePetPointsGain: new Decimal(0),
 
         evolutionShards: new Decimal(0),
-        viewingEvolved: [false, false, false, false, false, false, false,],
-        evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0), new Decimal(0),],
-        evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),new Decimal(3),],
-        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]],
+        viewingEvolved: [false, false, false, false, false, false, false, false, false,],
+        evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
+        evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),new Decimal(3), new Decimal(1),new Decimal(5),],
+        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], 
+        [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]],
 
         //xpboost
         XPBoostUnlock: false,
@@ -233,6 +234,7 @@
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cb.XPBoost)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.d.diceEffects[12])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.rm.realmModsEffect[0])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("g", 25))
         }
 
 
@@ -497,6 +499,16 @@
             player.cb.commonPetImage[5] = "<img src='resources/mutantSpiderEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[5] = "Mutant Spider: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[6]) + " evolution shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[6]) + ")"
         }
+        if (player.cb.viewingEvolved[7]) 
+        {
+            player.cb.rarePetImage[2] = "<img src='resources/moonEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
+            player.cb.rarePetDisplay[2] = "Moon: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[7]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[7]) + ")"
+        }
+        if (player.cb.viewingEvolved[8]) 
+        {
+            player.cb.uncommonPetImage[5] = "<img src='resources/marcelAcoplaoEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
+            player.cb.uncommonPetDisplay[5] = "Marcel Acoplao: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[8]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[8]) + ")"
+        }
 
         //EVOS
 
@@ -508,7 +520,9 @@
             player.cb.evolvedLevels[3].pow(0.75).add(6).floor(),
             player.cb.evolvedLevels[4].pow(0.4).add(1).floor(),
             player.cb.evolvedLevels[5].pow(0.4).add(1).floor(),
-            player.cb.evolvedLevels[6].pow(0.65).add(1).floor(),
+            player.cb.evolvedLevels[6].pow(0.65).add(3).floor(),
+            player.cb.evolvedLevels[7].pow(0.35).floor(),
+            player.cb.evolvedLevels[8].pow(1.1).add(5).floor(),
         ]
 
         player.cb.evolvedEffects = [
@@ -518,7 +532,9 @@
             [player.cb.evolvedLevels[3].mul(0.1).add(1), player.cb.evolvedLevels[3].mul(0.1).add(1),], //inf and broken inf
             [player.cb.evolvedLevels[4].mul(0.05).add(1), player.cb.evolvedLevels[4].mul(2).pow(1.4).add(1),], //star effect and rocket fuel
             [player.cb.evolvedLevels[5].mul(0.05).add(1), player.cb.evolvedLevels[5].mul(2).pow(1.2).add(1),], //dice effect and challenge dice points
-            [player.cb.evolvedLevels[6].mul(3).pow(1.1).add(1), player.cb.evolvedLevels[6].mul(2).pow(1.05).add(1),], //steel and crystal
+            [player.cb.evolvedLevels[6].mul(3).pow(1.8).add(1), player.cb.evolvedLevels[6].mul(2).pow(1.7).add(1),], //steel and crystal
+            [player.cb.evolvedLevels[7].add(5), player.cb.evolvedLevels[7].mul(5).pow(1.75).add(1),], //max moonstone and grass
+            [player.cb.evolvedLevels[8].mul(10).pow(2).add(1), player.cb.evolvedLevels[8].mul(2).pow(1.4).add(1),], //anonymity and oil
         ]
 
         //xpboost
@@ -1054,7 +1070,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124"},
         },
         102: {
             title() { return player.cb.commonPetAmounts[1].gt(0) || player.cb.commonPetLevels[1].gt(0) ? player.cb.commonPetImage[1] : player.cb.lockedImg},
@@ -1064,7 +1080,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(1)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         103: {
             title() { return player.cb.commonPetAmounts[2].gt(0) || player.cb.commonPetLevels[2].gt(0) ? player.cb.commonPetImage[2] : player.cb.lockedImg},
@@ -1074,7 +1090,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(2)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         104: {
             title() { return player.cb.commonPetAmounts[3].gt(0) || player.cb.commonPetLevels[3].gt(0)? player.cb.commonPetImage[3] : player.cb.lockedImg},
@@ -1084,7 +1100,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(3)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         105: {
             title() { return player.cb.commonPetAmounts[4].gt(0) || player.cb.commonPetLevels[4].gt(0)? player.cb.commonPetImage[4] : player.cb.lockedImg },
@@ -1094,7 +1110,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(4)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         106: {
             title() { return "Level Up"},
@@ -1155,7 +1171,7 @@
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         113: {
             title() { return "Level Up"},
@@ -1165,7 +1181,7 @@
                 player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].sub(player.cb.uncommonPetReq[0])
                 player.cb.uncommonPetLevels[0] = player.cb.uncommonPetLevels[0].add(1)
             },
-            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%", },
         },
         114: {
             title() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? player.cb.uncommonPetImage[1] : player.cb.lockedImg},
@@ -1175,7 +1191,7 @@
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(1)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         115: {
             title() { return player.cb.uncommonPetAmounts[2].gt(0) || player.cb.uncommonPetLevels[2].gt(0) ? player.cb.uncommonPetImage[2] : player.cb.lockedImg},
@@ -1185,7 +1201,7 @@
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(2)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         116: {
             title() { return player.cb.uncommonPetAmounts[3].gt(0) || player.cb.uncommonPetLevels[3].gt(0) ? player.cb.uncommonPetImage[3] : player.cb.lockedImg},
@@ -1195,7 +1211,7 @@
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(3)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         117: {
             title() { return player.cb.uncommonPetAmounts[4].gt(0) || player.cb.uncommonPetLevels[4].gt(0) ? player.cb.uncommonPetImage[4] : player.cb.lockedImg},
@@ -1205,7 +1221,7 @@
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(4)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         118: {
             title() { return "Level Up"},
@@ -1255,7 +1271,7 @@
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         124: {
             title() { return "Level Up"},
@@ -1284,7 +1300,7 @@
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(1)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         127: {
             title() { return "Level Up"},
@@ -1300,16 +1316,16 @@
             title() { return player.cb.rarePetAmounts[2].gt(0) || player.cb.rarePetLevels[2].gt(0) ? player.cb.rarePetImage[2] : player.cb.lockedImg},
             canClick() { return player.cb.rarePetAmounts[2].gt(0) || player.cb.rarePetLevels[2].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.rarePetAmounts[2].gt(0) || player.cb.rarePetLevels[2].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[2][0]) + " to rocket fuel (based on pet points).<br>/" + format(player.cb.rarePetEffects[2][1]) + " to golden grass spawn time.": ""},
+            tooltip() { return player.cb.rarePetAmounts[2].gt(0) && !player.cb.viewingEvolved[7] || player.cb.rarePetLevels[2].gt(0) && !player.cb.viewingEvolved[7]  ? "<h3>x" + format(player.cb.rarePetEffects[2][0]) + " to rocket fuel (based on pet points).<br>/" + format(player.cb.rarePetEffects[2][1]) + " to golden grass spawn time." : player.cb.viewingEvolved[7] ? "<h3>+" + format(player.cb.evolvedEffects[7][0]) + " max moontstone.<br>x" + format(player.cb.evolvedEffects[7][0]) + " to golden grass." : ""},
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(2)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         129: {
             title() { return "Level Up"},
             canClick() { return player.cb.rarePetAmounts[2].gte(player.cb.rarePetReq[2]) },
-            unlocked() { return player.cb.rarePetDisplayIndex == 2 },
+            unlocked() { return player.cb.rarePetDisplayIndex == 2 && player.cb.viewingEvolved[7] == false},
             onClick() {
                 player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].sub(player.cb.rarePetReq[2])
                 player.cb.rarePetLevels[2] = player.cb.rarePetLevels[2].add(1)
@@ -1324,7 +1340,7 @@
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(3)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         132: {
             title() { return "Level Up"},
@@ -1344,7 +1360,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(5)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         134: {
             title() { return player.cb.commonPetAmounts[6].gt(0) || player.cb.commonPetLevels[6].gt(0)? player.cb.commonPetImage[6] : player.cb.lockedImg },
@@ -1354,7 +1370,7 @@
             onClick() {
                 player.cb.petDisplayIndex = new Decimal(6)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         135: {
             title() { return "Level Up"},
@@ -1379,12 +1395,12 @@
         137: {
             title() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)? player.cb.uncommonPetImage[5] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)},
-            tooltip() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)? "<h3>x" + format(player.cb.uncommonPetEffects[5][0]) + " to 1st dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][1]) + " to 3rd dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][2]) + " to 5th dimensions." : ""},
+            tooltip() { return player.cb.uncommonPetAmounts[5].gt(0) && !player.cb.viewingEvolved[8] || player.cb.uncommonPetLevels[5].gt(0) && !player.cb.viewingEvolved[8] ? "<h3>x" + format(player.cb.uncommonPetEffects[5][0]) + " to 1st dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][1]) + " to 3rd dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][2]) + " to 5th dimensions." : player.cb.viewingEvolved[6] ? "<h3>x" + format(player.cb.evolvedEffects[8][0]) + " to anonymity.<br>x" + format(player.cb.evolvedEffects[8][1]) + " to oil."  : ""} ,
             unlocked() { return true },
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(5)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         138: {
             title() { return player.cb.uncommonPetAmounts[6].gt(0) || player.cb.uncommonPetLevels[6].gt(0)? player.cb.uncommonPetImage[6] : player.cb.lockedImg},
@@ -1394,7 +1410,7 @@
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(6)
             },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
         },
         139: {
             title() { return "Level Up"},
@@ -1424,7 +1440,7 @@
         onClick() {
             player.cb.rarePetDisplayIndex = new Decimal(4)
         },
-        style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
     },
     143: {
         title() { return "Level Up"},
@@ -1695,12 +1711,88 @@
             canClick() { return true },
             unlocked() { return player.cb.petDisplayIndex == 5 && player.ev.evolutionsUnlocked[6] == true && player.cb.viewingEvolved[6] == true},
             onClick() {
+                player.po.lastUniverse = "cb"
                  player.tab = "po"
                 player.subtabs["po"]['stuff'] = 'ADVANCED HALTER'
             },
             style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
         },
+        232: {
+            title() { return "View Evolved"},
+            canClick() { return true },
+            unlocked() { return player.cb.rarePetDisplayIndex == 2 && player.ev.evolutionsUnlocked[7] == true && player.cb.viewingEvolved[7] == false},
+            onClick() {
+                player.cb.viewingEvolved[7] = true
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        233: {
+            title() { return "View Normal"},
+            canClick() { return true },
+            unlocked() { return player.cb.rarePetDisplayIndex == 2 && player.ev.evolutionsUnlocked[7] == true && player.cb.viewingEvolved[7] == true},
+            onClick() {
+                player.cb.viewingEvolved[7] = false
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        234: {
+            title() { return "Level Up"},
+            canClick() { return player.cb.paragonShards.gte(player.cb.evolvedReq[7]) },
+            unlocked() { return player.cb.rarePetDisplayIndex == 2 && player.cb.viewingEvolved[7] == true},
+            onClick() {
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.cb.evolvedReq[7])
+                player.cb.evolvedLevels[7] = player.cb.evolvedLevels[7].add(1)
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        235: {
+            title() { return "Special Feature"},
+            canClick() { return true },
+            unlocked() { return player.cb.rarePetDisplayIndex == 2 && player.ev.evolutionsUnlocked[7] == true && player.cb.viewingEvolved[7] == true},
+            onClick() {
+                player.tab = "g"
+                player.subtabs["g"]['stuff'] = 'Moonstone'
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
 
+        236: {
+            title() { return "View Evolved"},
+            canClick() { return true },
+            unlocked() { return player.cb.uncommonPetDisplayIndex == 5 && player.ev.evolutionsUnlocked[8] == true && player.cb.viewingEvolved[8] == false},
+            onClick() {
+                player.cb.viewingEvolved[8] = true
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        237: {
+            title() { return "View Normal"},
+            canClick() { return true },
+            unlocked() { return player.cb.uncommonPetDisplayIndex == 5 && player.ev.evolutionsUnlocked[8] == true && player.cb.viewingEvolved[8] == true},
+            onClick() {
+                player.cb.viewingEvolved[8] = false
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        238: {
+            title() { return "Level Up"},
+            canClick() { return player.cb.evolutionShards.gte(player.cb.evolvedReq[8]) },
+            unlocked() { return player.cb.uncommonPetDisplayIndex == 5 && player.cb.viewingEvolved[8] == true},
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.cb.evolvedReq[8])
+                player.cb.evolvedLevels[8] = player.cb.evolvedLevels[8].add(1)
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        239: {
+            title() { return "Special Feature"},
+            canClick() { return true },
+            unlocked() { return player.cb.uncommonPetDisplayIndex == 5 && player.ev.evolutionsUnlocked[8] == true && player.cb.viewingEvolved[8] == true},
+            onClick() {
+                player.tab = "ev8"
+            },
+            style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+        },
         //sacrifice
         301: {
             title() { return "Sacrifice one"},
@@ -2104,6 +2196,12 @@
     },
 
     infoboxes: {
+        gwa: {
+            title: "Gwa",
+            body() { return "Has a childlike innocence and is very kind. Seems to have immense power but is also very reluctant to use the power." },
+            unlocked() { return player.cb.petDisplayIndex == 0 },
+            
+        },
     },
     microtabs: {
         stuff: {
@@ -2185,7 +2283,9 @@
                 [
                     ["raw-html", function () { return player.cb.uncommonPetDisplay[player.cb.uncommonPetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141],["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],  ["clickable", 221], ["clickable", 219], ["clickable", 218], ["clickable", 222],["clickable", 303], ["clickable", 304],  ]],
+                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141],
+                    ["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],  
+                    ["clickable", 221], ["clickable", 219], ["clickable", 218], ["clickable", 222], ["clickable", 238], ["clickable", 237], ["clickable", 236], ["clickable", 239], ["clickable", 303], ["clickable", 304],  ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Uncommon Pets" }, { "color": "#88e688", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -2201,7 +2301,7 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.rarePetDisplay[player.cb.rarePetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27], ["clickable", 125], ["clickable", 225], ["clickable", 224], ["clickable", 223], ["clickable", 226], ["clickable", 305], ["clickable", 306], ]],
+                    ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27], ["clickable", 125], ["clickable", 225], ["clickable", 224], ["clickable", 223], ["clickable", 226], ["clickable", 232], ["clickable", 234], ["clickable", 233], ["clickable", 235], ["clickable", 305], ["clickable", 306], ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Rare Pets" }, { "color": "#4e7cff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

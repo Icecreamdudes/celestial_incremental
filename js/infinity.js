@@ -37,6 +37,7 @@ addLayer("in", {
         let onepersec = new Decimal(1)
         if (player.subtabs["in"]['stuff'] == 'Portal')
         {
+            player.po.lastUniverse = 'in'
             player.tab = "po"
             player.subtabs["in"]['stuff'] = 'Features'
         }
@@ -365,6 +366,35 @@ addLayer("in", {
         }
 
         player.de.antidebuffPoints = new Decimal(0)
+
+        if (inChallenge("ip", 11))
+        {
+            completeChallenge("ip", 11)
+        }
+        if (inChallenge("ip", 12))
+        {
+            completeChallenge("ip", 12)
+        }
+        if (inChallenge("ip", 13))
+        {
+            completeChallenge("ip", 13)
+        }
+        if (inChallenge("ip", 14))
+        {
+            completeChallenge("ip", 14)
+        }
+        if (inChallenge("ip", 15))
+        {
+            completeChallenge("ip", 15)
+        }
+        if (inChallenge("ip", 16))
+        {
+            completeChallenge("ip", 16)
+        }
+        if (inChallenge("ip", 18))
+        {
+            completeChallenge("ip", 18)
+        }
     },
     branches: ["branch"],
     clickables: {

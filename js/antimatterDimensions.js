@@ -228,6 +228,11 @@
 
         if (!hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = true
         if (hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = false
+        
+        if (!hasUpgrade("ad", 11))
+        {
+            player.ad.antimatter = new Decimal(0)
+        }
     },
     branches: [""],
     clickables: {

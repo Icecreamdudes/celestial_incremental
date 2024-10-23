@@ -656,7 +656,7 @@
             challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECCOMENDED LEVEL 100)" },
             goalDescription() { return "Level 60" },
             goal() { return new Decimal("60") },
-            canComplete: function () { return player.cb.level.gte(75) },
+            canComplete: function () { return player.cb.level.gte(60) },
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) },
             onEnter() {

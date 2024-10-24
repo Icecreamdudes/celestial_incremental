@@ -82,8 +82,8 @@
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[2]) + "/10 Normal Face" + 
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[3]) + "/10 Shark" + 
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[4]) + "/10 THE WATCHING EYE" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[5]) + "/10 Clock" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[6]) + "/10 Trollface" + 
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[5]) + "/2 Clock" + 
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[6]) + "/2 Trollface" + 
             "<br>"  + formatWhole(player.cb.petPoints) + "/1,000 Pet Points" + 
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[1]) + "/9 Star Level",
 
@@ -244,7 +244,7 @@
         },
         21: {
             title() { return "EVOLVE" },
-            canClick() { return player.cb.evolutionShards.gte(20) && player.cb.paragonShards.gte(1) && player.in.infinityPoints.gte(1e11) && player.cb.uncommonPetAmounts[0].gte(10) && player.cb.uncommonPetAmounts[1].gte(10) && player.cb.uncommonPetAmounts[2].gte(10) && player.cb.uncommonPetAmounts[3].gte(10) && player.cb.uncommonPetAmounts[4].gte(10) && player.cb.uncommonPetAmounts[5].gte(10) && player.cb.uncommonPetAmounts[6].gte(10) && player.cb.petPoints.gte(1000) && player.cb.uncommonPetLevels[1].gte(9)},
+            canClick() { return player.cb.evolutionShards.gte(20) && player.cb.paragonShards.gte(1) && player.in.infinityPoints.gte(1e11) && player.cb.uncommonPetAmounts[0].gte(10) && player.cb.uncommonPetAmounts[1].gte(10) && player.cb.uncommonPetAmounts[2].gte(10) && player.cb.uncommonPetAmounts[3].gte(10) && player.cb.uncommonPetAmounts[4].gte(10) && player.cb.uncommonPetAmounts[5].gte(2) && player.cb.uncommonPetAmounts[6].gte(2) && player.cb.petPoints.gte(1000) && player.cb.uncommonPetLevels[1].gte(9)},
             unlocked() { return player.ev.evolutionDisplayIndex == 4 },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -257,8 +257,8 @@
                 player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].sub(10)
                 player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].sub(10)
                 player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].sub(10)
-                player.cb.uncommonPetAmounts[5] = player.cb.uncommonPetAmounts[5].sub(10)
-                player.cb.uncommonPetAmounts[6] = player.cb.uncommonPetAmounts[6].sub(10)
+                player.cb.uncommonPetAmounts[5] = player.cb.uncommonPetAmounts[5].sub(2)
+                player.cb.uncommonPetAmounts[6] = player.cb.uncommonPetAmounts[6].sub(2)
                 player.cb.petPoints = player.cb.petPoints.sub(1000)
 
                 player.ev.evolutionsUnlocked[4] = true

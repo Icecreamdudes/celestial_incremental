@@ -22,14 +22,14 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)",
+            background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
             "background-origin": "border-box",
-            "border-color": "#31aeb0",
-            "color": "#008080",
+            "border-color": "#b2d8d8",
+            "color": "#b2d8d8",
         };
       },
     
-    tooltip: "Tav, the Celestial of Limits",
+    tooltip: "Tav's Domain",
     color: "#333c81",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -54,14 +54,14 @@
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("p", 18))
     },
-    branches: ["ad", "ip"],
+    branches: ["ta",],
     clickables: {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "ta"
+                player.tab = "in"
             },
             style: { width: '100px', "min-height": '50px' },
         },
@@ -736,5 +736,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return false}
+    layerShown() { return hasUpgrade("ta", 21)}
 })

@@ -129,6 +129,7 @@
         player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("de", 14))
         if (hasUpgrade("de", 19)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(upgradeEffect("de", 19))
         if (hasUpgrade("tad", 14)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("tad", 14))
+        if (player.de.tavPointsToGet.gte(1e100)) player.de.tavPointsToGet = new Decimal(1e100)
 
         if (hasUpgrade("de", 18)) player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet.mul(0.1).mul(delta))
 

@@ -263,6 +263,24 @@
             },
             style: { width: '75px', "min-height": '50px', }
         },
+        4: {
+            title() { return "Max All" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+                buyBuyable("ad", 1)
+                buyBuyable("ad", 11)
+                buyBuyable("ad", 12)
+                buyBuyable("ad", 13)
+                buyBuyable("ad", 14)
+                buyBuyable("ad", 15)
+                buyBuyable("ad", 16)
+                buyBuyable("ad", 17)
+                buyBuyable("ad", 18)
+            },
+            style: { width: '125px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h3>" + formatWhole(player.ad.dimBoostAmount) + " Dimension Boosts<br><h3>" + player.ad.dimBoostText + " <br>x" + format(player.ad.dimBoostEffect) + " to dimensions." },
             canClick() { return player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.dimBoostDimCost].gte(player.ad.dimBoostReq) && (player.ad.dimBoostAmount.lt(6)) : player.ad.dimensionAmounts[player.ad.dimBoostDimCost].gte(player.ad.dimBoostReq)},
@@ -772,7 +790,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["buyable", 1], ["clickable", 2], ["clickable", 3]]],
+                    ["row", [["buyable", 1], ["clickable", 2], ["clickable", 3], ["clickable", 4]]],
                     ["blank", "25px"],
                     ["row", [["raw-html", function () { return player.ad.dimensionsUnlocked[0] ? player.ad.dimensionText[0] + "&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 11]]],
                     ["row", [["raw-html", function () { return player.ad.dimensionsUnlocked[1] ? player.ad.dimensionText[1] + "&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 12]]],

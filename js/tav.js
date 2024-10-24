@@ -1143,7 +1143,7 @@
             style: { width: '275px', height: '150px', }
         },
         33: {
-            cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(2) },
+            cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
@@ -1155,7 +1155,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy() {
-                let base = new Decimal(2)
+                let base = new Decimal(1)
                 let growth = 1.1
                 if (player.buyMax == false && !hasUpgrade("bi", 104))
                 {
@@ -1756,16 +1756,7 @@
         ["blank", "25px"],
     ]
 
-            },
-            "TAVS DOMAIN": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasUpgrade("ta", 21) },
-                content:
-                [
-        ["blank", "25px"],
-        ["row", [["clickable", 14]]],
-
-    ]
+            
 
             },
             "RESET": {

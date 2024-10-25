@@ -91,7 +91,7 @@ addLayer("cap", {
             player.points.plus(1).log10().div(player.cb.petPoints.add(0.01)),
             player.ca.canteEnergy.div(player.ca.canteEnergyReq).mul(player.ca.canteCores),
             player.ta.negativeInfinityPoints.plus(1).log10().add(player.ca.canteCores.pow(4)),
-            player.cb.petPoints.sub(player.cb.level.add(player.in.infinities.plus(1).log10())),
+            player.cb.petPoints.sub(player.cb.level.mul(player.in.infinities.plus(1).log10())),
             player.bi.brokenInfinities.plus(1).log10().add(player.in.infinitiesToGet.add(player.cb.evolutionShards.mul(player.cb.paragonShards))),
             player.points.plus(1).log(1000).add(player.points.plus(1).log(100).add(player.gh.steel.plus(1).log10())),
             new Decimal(0)

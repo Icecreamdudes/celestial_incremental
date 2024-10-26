@@ -1413,6 +1413,7 @@ addLayer("ev4", {
         player.ev4.offeringsBase = new Decimal(1)
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ev4", 11))
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ev4", 12))
+        if (hasUpgrade("ev8", 14)) player.ev4.offeringsBase = player.ev4.offeringsBase.mul(1.2)
 
         if (player.ev4.offerings.gte(player.ev4.offeringReq))
         {
@@ -1591,6 +1592,7 @@ addLayer("ev8", {
         player.ev8.evoButtonBase = [new Decimal(1),]
         for (let i = 0; i < player.ev8.evoButtonTimersMax.length; i++)
         {
+            if (hasUpgrade("ev8", 11)) player.ev8.evoButtonTimersMax[i] = player.ev8.evoButtonTimersMax[i].div(1.1)
         }
         for (let i = 0; i < player.ev8.evoButtonTimers.length; i++)
         {
@@ -1601,6 +1603,7 @@ addLayer("ev8", {
         player.ev8.paragonButtonBase = [new Decimal(1),]
         for (let i = 0; i < player.ev8.paragonButtonTimersMax.length; i++)
         {
+            if (hasUpgrade("ev8", 11)) player.ev8.paragonButtonTimersMax[i] = player.ev8.paragonButtonTimersMax[i].div(1.1)
         }
         for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++)
         {
@@ -1647,6 +1650,86 @@ addLayer("ev8", {
     bars: {
     },
     upgrades: {
+        11:
+        {
+            title: "Shard Research I",
+            unlocked() { return true },
+            description: "Divides shard button cooldown by /1.1.",
+            cost: new Decimal(6),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+        },
+        12:
+        {
+            title: "Shard Research II",
+            unlocked() { return true },
+            description: "Divides pet button cooldown by /1.1.",
+            cost: new Decimal(10),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+        },
+        13:
+        {
+            title: "Shard Research III",
+            unlocked() { return true },
+            description: "Multiplies pet point gain by x1.2.",
+            cost: new Decimal(1),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+        },
+        14:
+        {
+            title: "Shard Research IV",
+            unlocked() { return true },
+            description: "Multiplies offering gain by x1.2.",
+            cost: new Decimal(1),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+        },
+        15:
+        {
+            title: "Shard Research VI",
+            unlocked() { return true },
+            description: "Divides XP button cooldown by /1.15.",
+            cost: new Decimal(25),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+        },
+        16:
+        {
+            title: "Shard Research VII",
+            unlocked() { return true },
+            description: "Multiplies XPBoost gain by x1.2.",
+            cost: new Decimal(35),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+        },
+        17:
+        {
+            title: "Shard Research VIII",
+            unlocked() { return player.ev.evolutionsUnlocked[7] },
+            description: "Multiplies moonstone value by x2.",
+            cost: new Decimal(3),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+        },
+        18:
+        {
+            title: "Shard Research IX",
+            unlocked() { return player.ev.evolutionsUnlocked[7] },
+            description: "Multiplies moonstone damage by x2.",
+            cost: new Decimal(3),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+        },
     },
     buyables: {
     },
@@ -1660,7 +1743,7 @@ addLayer("ev8", {
     microtabs: {
         stuff: {
             "Evo": {
-                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': 'grey',} },
+                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': '#d487fd',} },
                 unlocked() { return true },
                 content:
                 [
@@ -1670,7 +1753,7 @@ addLayer("ev8", {
     ]
             },
             "Paragon": {
-                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': 'grey',} },
+                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': '#4b79ff',} },
                 unlocked() { return true },
                 content:
                 [
@@ -1678,6 +1761,20 @@ addLayer("ev8", {
         ["blank", "25px"],
         ["row", [["clickable", 101]]],
     ]
+            },
+            "Research": {
+                buttonStyle() { return { 'color': '#1500bf', 'border-color': "#1500bf", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)',} },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+        ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
+                    ["row", [["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                ]
+
             },
         },
     }, 

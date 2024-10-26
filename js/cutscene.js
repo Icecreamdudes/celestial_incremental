@@ -736,7 +736,7 @@ function createRaindrop(rainColor) {
   raindrop.classList.add('raindrop');
   raindrop.style.left = Math.random() * window.innerWidth + 'px';
   raindrop.style.top = '0';
-  raindrop.style.backgroundColor = rainColor; // Set color dynamically
+  raindrop.style.backgroundColor = rainColor;
   raindrop.style.width = '2px';
   raindrop.style.height = '15px';
   document.body.appendChild(raindrop);
@@ -748,5 +748,17 @@ function createRaindrop(rainColor) {
     raindrop.remove();
   });
 }
+
+// Handle tab visibility change
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    startRain('#00f'); // Set default rain color
+  } else {
+    stopRain();
+  }
+});
+
+// Start the rain when the page loads
+startRain('#00f');
 
 // i wrote basically all of the cutscenes. and if i didnt, ice wrote them and god is he awful at writing. i cleaned up and polished all of the things he wrote. im writing this at 1:27 am, 10/4/24. the game is set to release today, either in the morning or in the afternoon.

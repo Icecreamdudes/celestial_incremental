@@ -194,6 +194,7 @@
 
         player.g.moonstoneDamage = new Decimal(20)
         player.g.moonstoneDamage = player.g.moonstoneDamage.mul(buyableEffect("g", 22))
+        if (hasUpgrade("ev8", 18)) player.g.moonstoneDamage = player.g.moonstoneDamage.mul(2)
 
         player.g.reloadTime = new Decimal(400)
         player.g.reloadTime = player.g.reloadTime.div(buyableEffect("g", 23))
@@ -1540,6 +1541,7 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneVal = new Decimal(1)
     player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("g", 21))
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.g.moonstoneLevelEffects[2])
+    if (hasUpgrade("ev8", 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
     // =================================================================
     // Spawn-time logic
 

@@ -256,6 +256,7 @@
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cb.uncommonPetEffects[1][2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("ev0", 12))
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.5)
+            if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
         }
 
         //Pet
@@ -270,6 +271,7 @@
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cb.commonPetEffects[4][0])
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cb.uncommonPetEffects[1][2])
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(buyableEffect("ev0", 13))
+            if (hasUpgrade("ev8", 12)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(1.1)
         }
 
         player.cb.petDisplay = 
@@ -457,6 +459,7 @@
         {
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.cb.evolvedEffects[1][1])
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(buyableEffect("cb", 14))
+            if (hasUpgrade("ev8", 13)) player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(1.2)
         }
         player.cb.rarePetPointBase[0] = player.cb.rarePetPointBase[0].mul(player.cb.rarePetLevels[0].mul(0.5))
         player.cb.rarePetPointBase[1] = player.cb.rarePetPointBase[1].mul(player.cb.rarePetLevels[1].mul(0.5))
@@ -547,6 +550,7 @@
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.evolvedEffects[2][1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.commonPetEffects[6][0])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
+            if (hasUpgrade("ev8", 16)) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.2)
         }
 
         player.cb.XPBoostReq = [new Decimal(100), new Decimal(500)]

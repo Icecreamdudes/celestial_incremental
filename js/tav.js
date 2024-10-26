@@ -1714,8 +1714,6 @@
                     ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[6]) + " 7th dimension power, which boost 6th dimensions by x" + format(player.ta.dimensionPowerEffects[6]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[7]) + " 8th dimension power, which boost 7th dimensions by x" + format(player.ta.dimensionPowerEffects[7]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]

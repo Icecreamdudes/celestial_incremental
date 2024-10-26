@@ -5,6 +5,7 @@
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        highestLevel: new Decimal(1),
         level: new Decimal(1),
         levelEffect: new Decimal(1),
         xp: new Decimal(0),
@@ -138,6 +139,11 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.cb.level.gte(player.cb.highestLevel))
+        {
+            player.cb.highestLevel = player.cb.level
+        }
+
         if (player.points.gt(1e100) && !inChallenge("ip", 13))
         {
             player.cb.effectActivate = true
@@ -164,11 +170,11 @@
         if (hasUpgrade("bi", 25) && !player.po.dice) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         if (hasUpgrade("bi", 25) && player.po.dice) player.cb.levelEffect = player.cb.levelEffect.pow(2)
 
-        if (player.cb.level.gte(3))
+        if (player.cb.highestLevel.gte(3))
         [
             player.cb.buttonUnlocks[1] = true
         ]
-        if (player.cb.level.gte(6))
+        if (player.cb.highestLevel.gte(6))
         [
             player.cb.buttonUnlocks[2] = true
         ]
@@ -176,39 +182,39 @@
         [
             player.cb.buttonUnlocks[3] = true
         ]
-        if (player.cb.level.gte(15))
+        if (player.cb.highestLevel.gte(15))
         [
             player.cb.buttonUnlocks[4] = true
         ]
-        if (player.cb.level.gte(25))
+        if (player.cb.highestLevel.gte(25))
         [
             player.cb.petButtonUnlocks[1] = true
         ]
-        if (player.cb.level.gte(50))
+        if (player.cb.highestLevel.gte(50))
         [
             player.cb.buttonUnlocks[5] = true
         ]
-        if (player.cb.level.gte(65))
+        if (player.cb.highestLevel.gte(65))
         [
             player.cb.buttonUnlocks[6] = true
         ]
-        if (player.cb.level.gte(75))
+        if (player.cb.highestLevel.gte(75))
         [
             player.cb.petButtonUnlocks[2] = true
         ]
-        if (player.cb.level.gte(100) && hasUpgrade("ip", 31))
+        if (player.cb.highestLevel.gte(100) && hasUpgrade("ip", 31))
         [
             player.cb.XPBoostUnlock = true
         ]
-        if (player.cb.level.gte(125))
+        if (player.cb.highestLevel.gte(125))
         [
             player.cb.petButtonUnlocks[3] = true
         ]
-        if (player.cb.level.gte(150))
+        if (player.cb.highestLevel.gte(150))
         [
             player.cb.buttonUnlocks[7] = true
         ]
-        if (player.cb.level.gte(666))
+        if (player.cb.highestLevel.gte(666))
         [
             player.cb.XPBoostUnlocks[1] = true
         ]
@@ -260,7 +266,7 @@
         }
 
         //Pet
-        if (player.cb.level.gte(10))
+        if (player.cb.highestLevel.gte(10))
         {
             player.cb.petButtonUnlocks[0] = true 
         }
@@ -700,12 +706,12 @@
             title() { return player.cb.buttonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[0]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[0].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[0].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[0] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 0.5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.5%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[0].mul(player.cb.xpMult))
                 player.cb.buttonTimers[0] = player.cb.buttonTimersMax[0]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(200)
                     if (random == 1)
@@ -722,12 +728,12 @@
             title() { return player.cb.buttonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[1]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[1].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[1].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[1] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 1%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 1%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[1].mul(player.cb.xpMult))
                 player.cb.buttonTimers[1] = player.cb.buttonTimersMax[1]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(100)
                     if (random == 1)
@@ -744,12 +750,12 @@
             title() { return player.cb.buttonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[2]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[2].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[2].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[2] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 2%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 2%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[2].mul(player.cb.xpMult))
                 player.cb.buttonTimers[2] = player.cb.buttonTimersMax[2]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(50)
                     if (random == 1)
@@ -766,12 +772,12 @@
             title() { return player.cb.buttonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[3]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[3].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[3].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[3] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 0.2%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.2%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[3].mul(player.cb.xpMult))
                 player.cb.buttonTimers[3] = player.cb.buttonTimersMax[3]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(500)
                     if (random == 1)
@@ -800,12 +806,12 @@
             title() { return player.cb.buttonTimers[4].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[4]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[4].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[4].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[4] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 5%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[4].mul(player.cb.xpMult))
                 player.cb.buttonTimers[4] = player.cb.buttonTimersMax[4]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(20)
                     if (random == 1)
@@ -870,12 +876,12 @@
             title() { return player.cb.buttonTimers[5].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[5]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[5].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[5].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[5] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 20%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 20%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[5].mul(player.cb.xpMult))
                 player.cb.buttonTimers[5] = player.cb.buttonTimersMax[5]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(5)
                     if (random == 1)
@@ -905,12 +911,12 @@
             title() { return player.cb.buttonTimers[6].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[6]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[6].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[6].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[6] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 50%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 50%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[6].mul(player.cb.xpMult))
                 player.cb.buttonTimers[6] = player.cb.buttonTimersMax[6]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(2)
                     if (random == 1)
@@ -958,14 +964,14 @@
             title() { return player.cb.XPBoostTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[0]) + "." : "<h3>+" + format(player.cb.XPBoostBase[0]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[0].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[0] },
-            tooltip() { return player.cb.level.gte(250) ? "Paragon Shard Rarity: 5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 5%" : ""},
             onClick() {
-                if (player.cb.level.gte(player.cb.XPBoostReq[0]))
+                if (player.cb.highestLevel.gte(player.cb.XPBoostReq[0]))
                 {
                     player.cb.XPBoost = player.cb.XPBoost.add(player.cb.XPBoostBase[0])
                     player.cb.XPBoostTimers[0] = player.cb.XPBoostTimersMax[0]
     
-                    if (player.cb.level.gt(250))
+                    if (player.cb.highestLevel.gt(250))
                     {
                         let random = getRandomInt(20)
                         if (random == 1)
@@ -1014,12 +1020,12 @@
             title() { return player.cb.buttonTimers[7].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[7]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[7].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[7].lt(0) },
             unlocked() { return player.cb.buttonUnlocks[7] },
-            tooltip() { return player.cb.level.gte(35) ? "Evo Shard Rarity: 98%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 98%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[7].mul(player.cb.xpMult))
                 player.cb.buttonTimers[7] = player.cb.buttonTimersMax[7]
 
-                if (player.cb.level.gt(35))
+                if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(50)
                     if (random != 1)
@@ -1039,14 +1045,14 @@
             title() { return player.cb.XPBoostTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[1]) + "." : "<h3>+" + format(player.cb.XPBoostBase[1]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[1].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[1] },
-            tooltip() { return player.cb.level.gte(250) ? "Paragon Shard Rarity: 20%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 20%" : ""},
             onClick() {
-                if (player.cb.level.gte(player.cb.XPBoostReq[1]))
+                if (player.cb.highestLevel.gte(player.cb.XPBoostReq[1]))
                 {
                     player.cb.XPBoost = player.cb.XPBoost.add(player.cb.XPBoostBase[1])
                     player.cb.XPBoostTimers[1] = player.cb.XPBoostTimersMax[1]
     
-                    if (player.cb.level.gt(250))
+                    if (player.cb.highestLevel.gt(250))
                     {
                         let random = getRandomInt(5)
                         if (random == 1)
@@ -2239,7 +2245,7 @@
         blob: {
             title: "Blob",
             body() { return "Blob." },
-            unlocked() { return player.cb.petDisplayIndex == 5 },
+            unlocked() { return player.cb.petDisplayIndex == 6 },
             
         },
     },
@@ -2255,7 +2261,7 @@
             },
             "Pets": {
                 buttonStyle() { return { 'color': '#06366e' } },
-                unlocked() { return player.cb.level.gte(10) || player.cb.XPBoostUnlock },
+                unlocked() { return player.cb.highestLevel.gte(10) || player.cb.XPBoostUnlock },
                 content:
                 [
                     ["microtabs", "pets", { 'border-width': '0px' }],
@@ -2263,7 +2269,7 @@
             },
             "Evolution": {
                 buttonStyle() { return { 'color': '#1500bf', 'border-color': "#1500bf", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)',} },
-                unlocked() { return player.cb.level.gte(35)|| player.cb.XPBoostUnlock  },
+                unlocked() { return player.cb.highestLevel.gte(35)|| player.cb.XPBoostUnlock  },
                 content:
                 [
                     ["blank", "25px"],
@@ -2272,8 +2278,8 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards." }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h5>(Gained from check back buttons)" }, { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.cb.level.gte(250) ? "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards." : ""}, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.gte(250) ? "<h5>(Gained from XPBoost buttons)" : "" }, { "color": "#2842eb", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.gte(250) ? "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards." : ""}, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.gte(250) ? "<h5>(Gained from XPBoost buttons)" : "" }, { "color": "#2842eb", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                 ]
             },
@@ -2335,7 +2341,7 @@
             },
             "Rare": {
                 buttonStyle() { return { 'color': '#4e7cff', 'border-color': '#4e7cff' } },
-                unlocked() { return player.cb.level.gte(25) || player.cb.XPBoostUnlock },
+                unlocked() { return player.cb.highestLevel.gte(25) || player.cb.XPBoostUnlock },
                 content:
                 [
                     ["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -2358,18 +2364,18 @@
                 [
                     ["raw-html", function () { return player.cb.buttonUnlocks[1] == false ?  "You will unlock something at level 3!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.buttonUnlocks[2] == false && player.cb.buttonUnlocks[1] == true ?  "You will unlock something at level 6!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(10) && player.cb.buttonUnlocks[2] == true ?  "You will unlock something at level 10!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(15) && player.cb.level.gte(10) ?  "You will unlock something at level 15!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(25) && player.cb.level.gte(15) ?  "You will unlock something at level 25!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(35) && player.cb.level.gte(25) ?  "You will unlock something at level 35!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(50) && player.cb.level.gte(35) ?  "You will unlock something at level 50!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(65) && player.cb.level.gte(50) ?  "You will unlock something at level 65! (Pet shop)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(75) && player.cb.level.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(100) && player.cb.level.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(250) && player.cb.level.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(666) && player.cb.level.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(10) && player.cb.buttonUnlocks[2] == true ?  "You will unlock something at level 10!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! (Pet shop)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[4] ? "Auto: " + format(player.cb.buttonAutomationTimers[0]) + "/" +  format(player.cb.buttonAutomationTimersMax[0]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["row", [["clickable", 12], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[4] ? "Auto: " + format(player.cb.buttonAutomationTimers[1]) + "/" +  format(player.cb.buttonAutomationTimersMax[1]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
@@ -2389,18 +2395,18 @@
                 [
                     ["raw-html", function () { return player.cb.buttonUnlocks[1] == false ?  "You will unlock something at level 3!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.buttonUnlocks[2] == false && player.cb.buttonUnlocks[1] == true ?  "You will unlock something at level 6!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(10) && player.cb.buttonUnlocks[2] == true ?  "You will unlock something at level 10!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(15) && player.cb.level.gte(10) ?  "You will unlock something at level 15!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(25) && player.cb.level.gte(15) ?  "You will unlock something at level 25!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(35) && player.cb.level.gte(25) ?  "You will unlock something at level 35!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(50) && player.cb.level.gte(35) ?  "You will unlock something at level 50!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(65) && player.cb.level.gte(50) ?  "You will unlock something at level 65! (Pet shop)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(75) && player.cb.level.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(100) && player.cb.level.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(250) && player.cb.level.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(666) && player.cb.level.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(10) && player.cb.buttonUnlocks[2] == true ?  "You will unlock something at level 10!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! (Pet shop)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["row", [["clickable", 17]]],
@@ -2416,18 +2422,19 @@
                 [
                     ["raw-html", function () { return player.cb.buttonUnlocks[1] == false ?  "You will unlock something at level 3!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.buttonUnlocks[2] == false && player.cb.buttonUnlocks[1] == true ?  "You will unlock something at level 6!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(10) && player.cb.buttonUnlocks[2] == true ?  "You will unlock something at level 10!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(15) && player.cb.level.gte(10) ?  "You will unlock something at level 15!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(25) && player.cb.level.gte(15) ?  "You will unlock something at level 25!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(35) && player.cb.level.gte(25) ?  "You will unlock something at level 35!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(50) && player.cb.level.gte(35) ?  "You will unlock something at level 50!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(65) && player.cb.level.gte(50) ?  "You will unlock something at level 65! (Pet shop)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(75) && player.cb.level.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(100) && player.cb.level.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(125) && player.cb.level.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(150) && player.cb.level.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(250) && player.cb.level.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.cb.level.lt(666) && player.cb.level.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(10) && player.cb.buttonUnlocks[2] == true ?  "You will unlock something at level 10!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(15) && player.cb.highestLevel.gte(10) ?  "You will unlock something at level 15!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(25) && player.cb.highestLevel.gte(15) ?  "You will unlock something at level 25!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(35) && player.cb.highestLevel.gte(25) ?  "You will unlock something at level 35!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! (Pet shop)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1500!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.cb.XPBoost) + "</h3> XPBoost." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -2486,6 +2493,7 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are level " + formatWhole(player.cb.level) + ", which boosts celestial point gain by x" + format(player.cb.levelEffect) + "."}, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", function () { return "(Highest Level: " + formatWhole(player.cb.highestLevel) + ")"}, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return !hasMilestone("ip", 24) ? "YOU MUST REACH 1e100 POINTS TO ACTIVATE CHECK BACK AND PET EFFECT" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "xpbar"]]],

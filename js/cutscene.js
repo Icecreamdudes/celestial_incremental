@@ -758,7 +758,5 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Start the rain when the page loads
-startRain('#00f');
 
 // i wrote basically all of the cutscenes. and if i didnt, ice wrote them and god is he awful at writing. i cleaned up and polished all of the things he wrote. im writing this at 1:27 am, 10/4/24. the game is set to release today, either in the morning or in the afternoon.

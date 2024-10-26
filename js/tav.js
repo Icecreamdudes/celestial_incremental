@@ -537,7 +537,7 @@
         11: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(0) },
+            unlocked() { return true},
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>1st Dimension Power"
@@ -569,7 +569,7 @@
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(1) },
+            unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>2nd Dimension Power"
@@ -601,7 +601,7 @@
         13: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(2) },
+            unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>3rd Dimension Power"
@@ -633,7 +633,7 @@
         14: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(3) },
+            unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>4th Dimension Power"
@@ -665,7 +665,7 @@
         15: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(4) },
+            unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>5th Dimension Power"
@@ -697,7 +697,7 @@
         16: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(5) },
+            unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>6th Dimension Power"
@@ -729,7 +729,7 @@
         17: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(6) },
+            unlocked() { return true },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>7th Dimension Power"
@@ -761,7 +761,7 @@
         18: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2) },
-            unlocked() { return player.ta.dimensionPowerIndex.eq(7) },
+            unlocked() { return true},
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>8th Dimension Power"
@@ -1705,11 +1705,19 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.ta.dimensionPowerTexts[player.ta.dimensionPowerIndex] }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[0]) + " 1st dimension power, which boost antimatter by x" + format(player.ta.dimensionPowerEffects[0]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[1]) + " 2nd dimension power, which boost 1st dimensions by x" + format(player.ta.dimensionPowerEffects[1]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[2]) + " 3rd dimension power, which boost 2nd dimensions by x" + format(player.ta.dimensionPowerEffects[2]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[3]) + " 4th dimension power, which boost 3rd dimensions by x" + format(player.ta.dimensionPowerEffects[3]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[4]) + " 5th dimension power, which boost 4th dimensions by x" + format(player.ta.dimensionPowerEffects[4]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[5]) + " 6th dimension power, which boost 5th dimensions by x" + format(player.ta.dimensionPowerEffects[5]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[6]) + " 7th dimension power, which boost 6th dimensions by x" + format(player.ta.dimensionPowerEffects[6]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[7]) + " 8th dimension power, which boost 7th dimensions by x" + format(player.ta.dimensionPowerEffects[7]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14], ["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
 
             },

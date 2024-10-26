@@ -39,11 +39,34 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.0</h3><br>
+	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
 		<br>
 		<br>
 		<br>
+		Content:<br>
+		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
+		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
+		Bugfixes:<br>
+		- Fixed volume slider not working properly.<br>
+		- Multiple NaN bugs.<br>
+		- Fixed grass spawning incorrectly on tab switches.<br>
+		- Fixed many negative number issues.<br>
+		- Fixed bug where pop-ups would stack over each other.<br>
+		- Fixed big crunch screen bug.<br>
+		- Fixed latin1 character range export bug.<br><br>
+		QoL:<br>
+		- Fixed typos.<br>
+		- Added factor and rank total mult text.<br>
+		- Improved pet visuals.<br>
+		- Added a "max all" button for antimatter dimensions.<br>
+		- Made Tav's Domain a separate layer.<br>
+		Balancing:<br>
+		- Rocket Fuel no longer resets pent milestones.<br>
+		- Buffed grass, rocket fuel, and ranks.<br>
+		- Changed some pet evolution requirements.<br>
+		- Made some challenges easier.<br><br>
+		<h3>v1.0</h3><br>
 		- Added Universe 1, Universe 2, and Alternate Universe 1.<br>
 		- Added Ranks, Tiers, Tetrs, Pents, Factors, Prestige, Trees, Grass, Grasshop, and Code Experience.<br>
 		- Added Check Back.<br>

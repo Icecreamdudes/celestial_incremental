@@ -26,6 +26,7 @@
             "background-origin": "border-box",
             "border-color": "#b2d8d8",
             "color": "#b2d8d8",
+            "transform": "scale(0.7)",
         };
       },
     

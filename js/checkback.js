@@ -2206,6 +2206,42 @@
             unlocked() { return player.cb.petDisplayIndex == 0 },
             
         },
+        eggGuy: {
+            title: "Egg Guy",
+            body() { return "This fellow came out of a very powerful chicken... However he would meet his fate when the chicken inside hatches..." },
+            unlocked() { return player.cb.petDisplayIndex == 1 },
+            
+        },
+        unsmith: {
+            title: "Unsmith",
+            body() { return "A creature that was synergized out of the purest form of SPV, which we don't know what it is yet... We will figure it out one day." },
+            unlocked() { return player.cb.petDisplayIndex == 2 },
+            
+        },
+        gdCheckpoint: {
+            title: "Gd Checkpoint",
+            body() { return "This guy feels a little bit familiar, but you don't know why. You just ignore it." },
+            unlocked() { return player.cb.petDisplayIndex == 3 },
+            
+        },
+        slax: {
+            title: "Slax",
+            body() { return "A being of neon green and plasma. The energy of the void radiates within it's presence." },
+            unlocked() { return player.cb.petDisplayIndex == 4 },
+            
+        },
+        spider: {
+            title: "Spider",
+            body() { return "This eight-legged bug has no place in these worlds, but a small crack in the fabric of reality made it slip through and gain enough power to be your pet." },
+            unlocked() { return player.cb.petDisplayIndex == 5 },
+            
+        },
+        blob: {
+            title: "Blob",
+            body() { return "Blob." },
+            unlocked() { return player.cb.petDisplayIndex == 5 },
+            
+        },
     },
     microtabs: {
         stuff: {

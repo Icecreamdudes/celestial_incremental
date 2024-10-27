@@ -478,7 +478,7 @@
             } 
         }   
 
-        player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(180), new Decimal(1500), new Decimal(1)]
+        player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1)]
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
         {
             player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(buyableEffect("ev0", 14))
@@ -645,7 +645,7 @@
         player.cb.canteEnergyXPButtonBase = [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ]
         player.cb.canteEnergyPetButtonBase = [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9),]
         player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
-        player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),]
+        player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),]
     },
     levelup()
     {
@@ -963,7 +963,7 @@
         24: {
             title() { return player.cb.rarePetButtonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.rarePetButtonTimers[3]) + "." : "<h3>+" + format(player.cb.rarePetPointBase[3]) + " Pet Points."},
             canClick() { return player.cb.rarePetButtonTimers[3].lt(0) },
-            tooltip() { return "25% chance for an evo shard"},
+            tooltip() { return "25% chance for an evo shard."},
             unlocked() { return player.cb.rarePetDisplayIndex == 3 },
             onClick() {
                 player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[3])
@@ -1101,6 +1101,42 @@
                 }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        32: {
+            title() { return player.cb.rarePetButtonTimers[5].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.rarePetButtonTimers[5]) + "." : "<h3>+" + format(player.cb.rarePetPointBase[5]) + " Pet Points."},
+            canClick() { return player.cb.rarePetButtonTimers[5].lt(0) },
+            tooltip() { return "2% chance for an paragon shard."},
+            unlocked() { return player.cb.rarePetDisplayIndex == 5 },
+            onClick() {
+                player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[5])
+                player.cb.rarePetButtonTimers[5] = player.cb.rarePetButtonTimersMax[5]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[5].mul(player.ca.canteEnergyMult))
+
+                if (player.cb.highestLevel.gt(250))
+                {
+                    let random = getRandomInt(50)
+                    if (random == 1)
+                    {
+                        player.cb.paragonShards = player.cb.paragonShards.add(1);
+                        callAlert("You gained a PARAGON SHARD! (2%)", "resources/paragonShard.png");
+                    }
+                }
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        33: {
+            title() { return player.cb.rarePetButtonTimers[6].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.rarePetButtonTimers[6]) + "." : "<h3>+" + format(player.cb.rarePetPointBase[6]) + " Pet Points."},
+            canClick() { return player.cb.rarePetButtonTimers[6].lt(0) },
+            tooltip() { return "+200% of golden grass value on claim.<br>(You have " + format(player.g.goldGrass) + " golden grass)"},
+            unlocked() { return player.cb.rarePetDisplayIndex == 6 },
+            onClick() {
+                player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[6])
+                player.cb.rarePetButtonTimers[6] = player.cb.rarePetButtonTimersMax[6]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[6].mul(player.ca.canteEnergyMult))
+
+                player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(2))
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
         },
         //PETS
         101: {
@@ -1490,6 +1526,126 @@
         onClick() {
             player.cb.rarePetAmounts[4] = player.cb.rarePetAmounts[4].sub(player.cb.rarePetReq[4])
             player.cb.rarePetLevels[4] = player.cb.rarePetLevels[4].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    144: {
+        title() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) ? player.cb.commonPetImage[7] : player.cb.lockedImg},
+        canClick() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[7][0]) + " to replicanti mult.<br>x" + format(player.cb.commonPetEffects[7][1]) + " to all galaxy dust.": ""},
+        onClick() {
+            player.cb.petDisplayIndex = new Decimal(7)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    145: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.commonPetAmounts[7].gte(player.cb.commonPetReq[7]) },
+        unlocked() { return player.cb.petDisplayIndex == 7 },
+        onClick() {
+            player.cb.commonPetAmounts[7] = player.cb.commonPetAmounts[7].sub(player.cb.commonPetReq[7])
+            player.cb.commonPetLevels[7] = player.cb.commonPetLevels[7].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    146: {
+        title() { return player.cb.commonPetAmounts[8].gt(0) || player.cb.commonPetLevels[8].gt(0) ? player.cb.commonPetImage[8] : player.cb.lockedImg},
+        canClick() { return player.cb.commonPetAmounts[8].gt(0) || player.cb.commonPetLevels[8].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.commonPetAmounts[8].gt(0) || player.cb.commonPetLevels[8].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[8][0]) + " to all mastery points.<br>x" + format(player.cb.commonPetEffects[8][1]) + " to all hex points.": ""},
+        onClick() {
+            player.cb.petDisplayIndex = new Decimal(8)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    147: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.commonPetAmounts[8].gte(player.cb.commonPetReq[8]) },
+        unlocked() { return player.cb.petDisplayIndex == 8 },
+        onClick() {
+            player.cb.commonPetAmounts[8] = player.cb.commonPetAmounts[8].sub(player.cb.commonPetReq[8])
+            player.cb.commonPetLevels[8] = player.cb.commonPetLevels[8].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    148: {
+        title() { return player.cb.uncommonPetAmounts[7].gt(0) || player.cb.uncommonPetLevels[7].gt(0) ? player.cb.uncommonPetImage[7] : player.cb.lockedImg},
+        canClick() { return player.cb.uncommonPetAmounts[7].gt(0) || player.cb.uncommonPetLevels[7].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.uncommonPetAmounts[7].gt(0) || player.cb.uncommonPetLevels[7].gt(0) ? "<h3>x" + format(player.cb.uncommonPetEffects[7][0]) + " to infinity dimensions.<br>x" + format(player.cb.uncommonPetEffects[7][1]) + " to negative infinity points.<br>x" + format(player.cb.uncommonPetEffects[7][2]) + " to broken infinities.": ""},
+        onClick() {
+            player.cb.uncommonPetDisplayIndex = new Decimal(7)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    149: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.uncommonPetAmounts[7].gte(player.cb.uncommonPetReq[7]) },
+        unlocked() { return player.cb.uncommonPetDisplayIndex == 7 },
+        onClick() {
+            player.cb.uncommonPetAmounts[7] = player.cb.uncommonPetAmounts[7].sub(player.cb.uncommonPetReq[7])
+            player.cb.uncommonPetLevels[7] = player.cb.uncommonPetLevels[7].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    151: {
+        title() { return player.cb.uncommonPetAmounts[8].gt(0) || player.cb.uncommonPetLevels[8].gt(0) ? player.cb.uncommonPetImage[8] : player.cb.lockedImg},
+        canClick() { return player.cb.uncommonPetAmounts[8].gt(0) || player.cb.uncommonPetLevels[8].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.uncommonPetAmounts[8].gt(0) || player.cb.uncommonPetLevels[8].gt(0) ? "<h3>x" + format(player.cb.uncommonPetEffects[8][0]) + " to dimension power.<br>x" + format(player.cb.uncommonPetEffects[8][1]) + " to alternate broken infinities.<br>x" + format(player.cb.uncommonPetEffects[8][2]) + " to time cubes.": ""},
+        onClick() {
+            player.cb.uncommonPetDisplayIndex = new Decimal(8)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    152: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.uncommonPetAmounts[8].gte(player.cb.uncommonPetReq[8]) },
+        unlocked() { return player.cb.uncommonPetDisplayIndex == 8 },
+        onClick() {
+            player.cb.uncommonPetAmounts[8] = player.cb.uncommonPetAmounts[8].sub(player.cb.uncommonPetReq[8])
+            player.cb.uncommonPetLevels[8] = player.cb.uncommonPetLevels[8].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    153: {
+        title() { return player.cb.rarePetAmounts[5].gt(0) || player.cb.rarePetLevels[5].gt(0) ? player.cb.rarePetImage[5] : player.cb.lockedImg},
+        canClick() { return player.cb.rarePetAmounts[5].gt(0) || player.cb.rarePetLevels[5].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.rarePetAmounts[5].gt(0) || player.cb.rarePetLevels[5].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[5][0]) + " to steel (based on rage power).<br>x" + format(player.cb.rarePetEffects[5][1]) + " to crystals (based on rage power).": ""},
+        onClick() {
+            player.cb.rarePetDisplayIndex = new Decimal(5)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    154: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.rarePetAmounts[5].gte(player.cb.rarePetReq[5]) },
+        unlocked() { return player.cb.rarePetDisplayIndex == 5 },
+        onClick() {
+            player.cb.rarePetAmounts[5] = player.cb.rarePetAmounts[5].sub(player.cb.rarePetReq[5])
+            player.cb.rarePetLevels[5] = player.cb.rarePetLevels[5].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    155: {
+        title() { return player.cb.rarePetAmounts[6].gt(0) || player.cb.rarePetLevels[6].gt(0) ? player.cb.rarePetImage[6] : player.cb.lockedImg},
+        canClick() { return player.cb.rarePetAmounts[6].gt(0) || player.cb.rarePetLevels[6].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.rarePetAmounts[6].gt(0) || player.cb.rarePetLevels[6].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[6][0]) + " to blank mods (based on golden grass).<br>x" + format(player.cb.rarePetEffects[6][1]) + " to rage power (based on golden grass).": ""},
+        onClick() {
+            player.cb.rarePetDisplayIndex = new Decimal(6)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    156: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.rarePetAmounts[6].gte(player.cb.rarePetReq[6]) },
+        unlocked() { return player.cb.rarePetDisplayIndex == 6 },
+        onClick() {
+            player.cb.rarePetAmounts[6] = player.cb.rarePetAmounts[6].sub(player.cb.rarePetReq[6])
+            player.cb.rarePetLevels[6] = player.cb.rarePetLevels[6].add(1)
         },
         style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
     },
@@ -2345,11 +2501,11 @@
                 [
                         ["raw-html", function () { return player.cb.petDisplay[player.cb.petDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 111], ["clickable", 135], ["clickable", 136],  ["clickable", 201],  ["clickable", 203], ["clickable", 202], ["clickable", 204], ["clickable", 216], ["clickable", 215], ["clickable", 214], ["clickable", 217], ["clickable", 227], ["clickable", 229], ["clickable", 228], ["clickable", 231], ["clickable", 301], ["clickable", 302], ]],
+                        ["row", [["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 111], ["clickable", 135], ["clickable", 136], ["clickable", 145], ["clickable", 147],  ["clickable", 201],  ["clickable", 203], ["clickable", 202], ["clickable", 204], ["clickable", 216], ["clickable", 215], ["clickable", 214], ["clickable", 217], ["clickable", 227], ["clickable", 229], ["clickable", 228], ["clickable", 231], ["clickable", 301], ["clickable", 302], ]],
                         ["blank", "25px"],
                         ["raw-html", function () { return "Common Pets" }, { "color": "#9bedff", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], ["clickable", 133], ["clickable", 134]]],
+                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], ["clickable", 133], ["clickable", 134], ["clickable", 144], ["clickable", 146]]],
                 ]
 
             },
@@ -2360,13 +2516,13 @@
                 [
                     ["raw-html", function () { return player.cb.uncommonPetDisplay[player.cb.uncommonPetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141],
+                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141], ["clickable", 149], ["clickable", 152], 
                     ["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],  
                     ["clickable", 221], ["clickable", 219], ["clickable", 218], ["clickable", 222], ["clickable", 238], ["clickable", 237], ["clickable", 236], ["clickable", 239], ["clickable", 303], ["clickable", 304],  ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Uncommon Pets" }, { "color": "#88e688", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 112], ["clickable", 114], ["clickable", 115], ["clickable", 116], ["clickable", 117], ["clickable", 137], ["clickable", 138]]],
+                    ["row", [["clickable", 112], ["clickable", 114], ["clickable", 115], ["clickable", 116], ["clickable", 117], ["clickable", 137], ["clickable", 138], ["clickable", 148], ["clickable", 151], ]],
                 ]
 
             },
@@ -2378,11 +2534,11 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.rarePetDisplay[player.cb.rarePetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27], ["clickable", 125], ["clickable", 225], ["clickable", 224], ["clickable", 223], ["clickable", 226], ["clickable", 232], ["clickable", 234], ["clickable", 233], ["clickable", 235], ["clickable", 305], ["clickable", 306], ]],
+                    ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27],  ["clickable", 154], ["clickable", 32],["clickable", 156], ["clickable", 33], ["clickable", 125], ["clickable", 225], ["clickable", 224], ["clickable", 223], ["clickable", 226], ["clickable", 232], ["clickable", 234], ["clickable", 233], ["clickable", 235], ["clickable", 305], ["clickable", 306], ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Rare Pets" }, { "color": "#4e7cff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 123], ["clickable", 126], ["clickable", 128], ["clickable", 131], ["clickable", 142]]],
+                    ["row", [["clickable", 123], ["clickable", 126], ["clickable", 128], ["clickable", 131], ["clickable", 142], ["clickable", 153], ["clickable", 155]]],
                 ]
 
             },

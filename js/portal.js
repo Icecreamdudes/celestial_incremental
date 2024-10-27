@@ -6,7 +6,7 @@ addLayer("po", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-        lastUniverse: '',
+        lastUniverse: 'i',
 
         featureSlots: new Decimal(1),
         featureSlotsMax: new Decimal(1),

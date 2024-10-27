@@ -27,13 +27,13 @@
 
         //pets
         lockedImg: "<img src='resources/secret.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        petDisplay: ["","","","","","",""],
+        petDisplay: ["","","","","","","","",""],
         petDisplayIndex: new Decimal(0),
 
-        commonPetUnlocks: [false, false, false, false, false, false, false],
-        commonPetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        commonPetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        commonPetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        commonPetUnlocks: [false, false, false, false, false, false, false, false, false],
+        commonPetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        commonPetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        commonPetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
         commonPetImage: ["<img src='resources/gwaCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/eggCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/unsmithCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
@@ -42,38 +42,41 @@
         "<img src='resources/spiderCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/blobCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>"],
         commonPetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),],
-         [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),]],
+         [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),],
+         [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]
+        ],
 
-        uncommonPetDisplay: ["","","","","","","",],
+        uncommonPetDisplay: ["","","","","","","","","",],
         uncommonPetDisplayIndex: new Decimal(0),
 
-        uncommonPetUnlocks: [false, false, false, false, false, false, false],
-        uncommonPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
-        uncommonPetAmounts: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
-        uncommonPetReq: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        uncommonPetUnlocks: [false, false, false, false, false, false, false, false, false],
+        uncommonPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
+        uncommonPetAmounts: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
+        uncommonPetReq: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
         uncommonPetImage: ["<img src='resources/testeUncommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         ],
         uncommonPetEffects: [[new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),],
-        [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]],
+        [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]
+        , [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]],
 
-        rarePetDisplay: ["","","","","",],
+        rarePetDisplay: ["","","","","","","",],
         rarePetDisplayIndex: new Decimal(0),
 
-        rarePetUnlocks: [false, false, false, false, false],
-        rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        rarePetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        rarePetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        rarePetUnlocks: [false, false, false, false, false, false, false],
+        rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        rarePetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        rarePetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
         rarePetImage: ["<img src='resources/novaRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/diceRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/ufoRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/goofyAhhThingRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
     ],
-        rarePetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),]],
+        rarePetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),]],
 
         petPoints: new Decimal(0),
-        rarePetPointBase: [new Decimal(1),new Decimal(0.1),new Decimal(12),new Decimal(180),new Decimal(4),],
-        rarePetButtonTimersMax: [new Decimal(40), new Decimal(20), new Decimal(600), new Decimal(18000), new Decimal(180)],
-        rarePetButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        rarePetPointBase: [new Decimal(1),new Decimal(0.1),new Decimal(12),new Decimal(180),new Decimal(4),new Decimal(25),new Decimal(0.05)],
+        rarePetButtonTimersMax: [new Decimal(40), new Decimal(20), new Decimal(600), new Decimal(18000), new Decimal(180), new Decimal(1000), new Decimal(1)],
+        rarePetButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
 
         lastDicePetRoll: new Decimal(0),
         dicePetRoll: new Decimal(0),
@@ -124,9 +127,9 @@
 
         //cante?
         canteEnergyXPButtonBase: [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ],
-        canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9),],
+        canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(13),],
         canteEnergyXPBoostButtonBase: [new Decimal(10), new Decimal(30)],
-        canteEnergyPetPointButtonBase: [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),],
+        canteEnergyPetPointButtonBase: [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),],
     }
     },
     automate() {
@@ -271,7 +274,7 @@
             player.cb.petButtonUnlocks[0] = true 
         }
         
-        player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800)]
+        player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(43200)]
         for (let i = 0; i < player.cb.petButtonTimersMax.length; i++)
         {
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cb.commonPetEffects[4][0])
@@ -289,6 +292,8 @@
             "Slax: " + formatWhole(player.cb.commonPetAmounts[4]) + "/" + formatWhole(player.cb.commonPetReq[4]) + " to level up (Currently level " + formatWhole(player.cb.commonPetLevels[4]) + ")",
             "Spider: " + formatWhole(player.cb.commonPetAmounts[5]) + "/" + formatWhole(player.cb.commonPetReq[5]) + " to level up (Currently level " + formatWhole(player.cb.commonPetLevels[5]) + ")",
             "Blob: " + formatWhole(player.cb.commonPetAmounts[6]) + "/" + formatWhole(player.cb.commonPetReq[6]) + " to level up (Currently level " + formatWhole(player.cb.commonPetLevels[6]) + ")",
+            "Replicator: " + formatWhole(player.cb.commonPetAmounts[7]) + "/" + formatWhole(player.cb.commonPetReq[7]) + " to level up (Currently level " + formatWhole(player.cb.commonPetLevels[7]) + ")",
+            "Smoke: " + formatWhole(player.cb.commonPetAmounts[8]) + "/" + formatWhole(player.cb.commonPetReq[8]) + " to level up (Currently level " + formatWhole(player.cb.commonPetLevels[8]) + ")",
         ]
 
         player.cb.lockedImg = "<img src='resources/secret.png'style='width:calc(125%);height:calc(125%);margin:-20%'></img>"
@@ -300,6 +305,8 @@
         "<img src='resources/slaxCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         "<img src='resources/spiderCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         "<img src='resources/blobCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+        "<img src='resources/replicatorCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+        "<img src='resources/smokeCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
     ]
 
         if (player.cb.viewingEvolved[0]) 
@@ -316,6 +323,8 @@
             player.cb.commonPetLevels[4].add(1).pow(1.15).floor(),
             player.cb.commonPetLevels[5].add(1).pow(1.18).floor(),
             player.cb.commonPetLevels[6].add(1).pow(1.18).floor(),
+            player.cb.commonPetLevels[7].add(1).pow(1.2).floor(),
+            player.cb.commonPetLevels[8].add(1).pow(1.2).floor(),
         ]
 
 
@@ -334,6 +343,8 @@
             [player.cb.commonPetLevels[4].mul(0.01).add(1), player.cb.commonPetLevels[4].mul(0.02).add(1),],
             [player.cb.commonPetLevels[5].pow(1.6).mul(0.5).add(1), player.cb.commonPetLevels[5].pow(1.6).mul(0.5).add(1),], //antimatter and 7th dim
             [player.cb.commonPetLevels[6].mul(0.01).add(1), ], //xpboost
+            [player.cb.commonPetLevels[7].mul(0.1).add(1), player.cb.commonPetLevels[7].pow(1.05).mul(0.2).add(1),], //replicanti mult and galaxy dust
+            [player.cb.commonPetLevels[8].pow(1.2).mul(0.7).add(1), player.cb.commonPetLevels[5].pow(1.8).mul(1.2).add(1),], //mastery and all hex points
 
         ]
         }
@@ -358,6 +369,8 @@
             "THE WATCHING EYE: " + formatWhole(player.cb.uncommonPetAmounts[4]) + "/" + formatWhole(player.cb.uncommonPetReq[4]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[4]) + ")",
             "Clock: " + formatWhole(player.cb.uncommonPetAmounts[5]) + "/" + formatWhole(player.cb.uncommonPetReq[5]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[5]) + ")",
             "Trollface: " + formatWhole(player.cb.uncommonPetAmounts[6]) + "/" + formatWhole(player.cb.uncommonPetReq[6]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[6]) + ")",
+            "Infinity Breaker: " + formatWhole(player.cb.uncommonPetAmounts[7]) + "/" + formatWhole(player.cb.uncommonPetReq[7]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[7]) + ")",
+            "John: " + formatWhole(player.cb.uncommonPetAmounts[8]) + "/" + formatWhole(player.cb.uncommonPetReq[8]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[8]) + ")",
         ]
 
         player.cb.uncommonPetImage = ["<img src='resources/testeUncommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
@@ -367,6 +380,8 @@
         "<img src='resources/eyeUncommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         "<img src='resources/clockUncommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         "<img src='resources/trollUncommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+        "<img src='resources/infinityBreakerUncommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+        "<img src='resources/johnUncommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
     ]
 
         player.cb.uncommonPetReq = [
@@ -377,6 +392,8 @@
             player.cb.uncommonPetLevels[4].mul(2.2).add(1).floor(),
             player.cb.uncommonPetLevels[5].mul(1.6).add(1).floor(),
             player.cb.uncommonPetLevels[6].mul(1.6).add(1).floor(),
+            player.cb.uncommonPetLevels[7].mul(1.8).add(1).floor(),
+            player.cb.uncommonPetLevels[8].mul(1.8).add(1).floor(),
         ]
 
         if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
@@ -389,6 +406,10 @@
             [player.cb.uncommonPetLevels[4].mul(0.05).add(1),], //check back xp
             [player.cb.uncommonPetLevels[5].mul(0.2).add(1),player.cb.uncommonPetLevels[5].mul(0.2).add(1),player.cb.uncommonPetLevels[5].mul(0.2).add(1),], //1st, 3rd, 5th
             [player.cb.uncommonPetLevels[6].mul(0.2).add(1),player.cb.uncommonPetLevels[6].mul(0.2).add(1),player.cb.uncommonPetLevels[6].mul(0.2).add(1),], //2nd, 4th, 6th
+            [player.cb.uncommonPetLevels[7].pow(1.25).mul(0.7).add(1),player.cb.uncommonPetLevels[7].pow(1.8).mul(3).add(1),player.cb.uncommonPetLevels[7].pow(1.2).add(1),], //inf dims, neg ip, broken inf
+            [player.cb.uncommonPetLevels[8].pow(1.3).mul(0.4).add(1),player.cb.uncommonPetLevels[8].pow(1.1).mul(0.5).add(1),player.cb.uncommonPetLevels[8].pow(1.2).add(1),], //dim power, alternate broken inf, time cubes
+
+            //WORK HERE
         ]
         }
         else
@@ -410,6 +431,8 @@
             "Drippy Ufo: " + formatWhole(player.cb.rarePetAmounts[2]) + "/" + formatWhole(player.cb.rarePetReq[2]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[2]) + ")",
             "Goofy Ahh Thing: " + formatWhole(player.cb.rarePetAmounts[3]) + "/" + formatWhole(player.cb.rarePetReq[3]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[3]) + ")",
             "Antimatter: " + formatWhole(player.cb.rarePetAmounts[4]) + "/" + formatWhole(player.cb.rarePetReq[4]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[4]) + ")",
+            "Hex Shadow: " + formatWhole(player.cb.rarePetAmounts[5]) + "/" + formatWhole(player.cb.rarePetReq[5]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[5]) + ")",
+            "Grass Square: " + formatWhole(player.cb.rarePetAmounts[6]) + "/" + formatWhole(player.cb.rarePetReq[6]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[6]) + ")",
         ]
 
         player.cb.rarePetImage = [
@@ -418,6 +441,8 @@
             "<img src='resources/ufoRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
             "<img src='resources/goofyAhhThingRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
             "<img src='resources/antimatterRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/hexShadowRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/grassSquareRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         ]
 
         player.cb.rarePetReq = [
@@ -426,6 +451,8 @@
             player.cb.rarePetLevels[2].pow(1.4).add(1).floor(),
             player.cb.rarePetLevels[3].pow(1.2).add(1).floor(),
             player.cb.rarePetLevels[4].pow(1.25).add(1).floor(),
+            player.cb.rarePetLevels[5].pow(1.3).add(1).floor(),
+            player.cb.rarePetLevels[6].pow(1.3).add(1).floor(),
         ]
 
         if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
@@ -436,6 +463,8 @@
             [player.cb.petPoints.pow(0.7).mul(0.1).add(1).pow(player.cb.rarePetLevels[2].pow(0.25)), player.cb.rarePetLevels[2].mul(0.04).add(1)], //Rocket Fuel based on pet points, Golden grass spawn time
             [player.cb.evolutionShards.pow(0.85).mul(0.6).add(1).pow(player.cb.rarePetLevels[3].pow(0.3)), player.cb.rarePetLevels[3].mul(0.03).add(1)], //Grasshoppers based on evo shards, Level Req
             [player.in.infinities.pow(0.55).mul(0.1).add(1).pow(player.cb.rarePetLevels[4].pow(0.25)), player.cb.rarePetLevels[4].pow(1.1).add(1)], //Antimatter dimensions based on infinities, golden grass
+            [player.h.ragePower.pow(1.2).mul(0.3).add(1).pow(player.cb.rarePetLevels[5].pow(0.4)), player.h.ragePower.pow(1.01).mul(0.2).add(1).pow(player.cb.rarePetLevels[5].pow(0.3))], //steel and crystal based on rage power
+            [player.g.goldGrass.pow(0.1).mul(0.01).add(1).pow(player.cb.rarePetLevels[6].pow(0.2)), player.g.goldGrass.pow(0.12).mul(0.015).add(1).pow(player.cb.rarePetLevels[6].pow(0.25))], //Blank mods and rage power based on golden grass
         ]
         }
         else
@@ -449,7 +478,7 @@
             } 
         }   
 
-        player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180)]
+        player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(180), new Decimal(1500), new Decimal(1)]
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
         {
             player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(buyableEffect("ev0", 14))
@@ -460,7 +489,7 @@
             player.cb.rarePetButtonTimers[i] = player.cb.rarePetButtonTimers[i].sub(onepersec.mul(delta))
         }
 
-        player.cb.rarePetPointBase = [new Decimal(2), new Decimal(0.25), new Decimal(12), new Decimal(100), new Decimal(4)]
+        player.cb.rarePetPointBase = [new Decimal(2), new Decimal(0.25), new Decimal(12), new Decimal(100), new Decimal(4), new Decimal(25), new Decimal(0.05)]
         for (let i = 0; i < player.cb.rarePetPointBase.length; i++)
         {
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.cb.evolvedEffects[1][1])
@@ -472,6 +501,8 @@
         player.cb.rarePetPointBase[2] = player.cb.rarePetPointBase[2].mul(player.cb.rarePetLevels[2].mul(0.5).add(1))
         player.cb.rarePetPointBase[3] = player.cb.rarePetPointBase[3].mul(player.cb.rarePetLevels[3].mul(0.1).add(1))
         player.cb.rarePetPointBase[4] = player.cb.rarePetPointBase[4].mul(player.cb.rarePetLevels[4].mul(0.6).add(1))
+        player.cb.rarePetPointBase[5] = player.cb.rarePetPointBase[5].mul(player.cb.rarePetLevels[5].mul(0.3).add(1))
+        player.cb.rarePetPointBase[6] = player.cb.rarePetPointBase[6].mul(player.cb.rarePetLevels[6].mul(0.2).add(1))
 
         if (player.cb.dicePetCombo > player.cb.highestDicePetCombo)
         {
@@ -2352,6 +2383,19 @@
                     ["raw-html", function () { return "Rare Pets" }, { "color": "#4e7cff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 123], ["clickable", 126], ["clickable", 128], ["clickable", 131], ["clickable", 142]]],
+                ]
+
+            },
+            "Epic": {
+                buttonStyle() { return { 'color': '#7d3c98', 'border-color': '#7d3c98', 'background-color': '#cb79ed' } },
+                unlocked() { return player.cb.highestLevel.gte(1500) },
+                content:
+                [
+                    //["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    //["raw-html", function () { return player.cb.rarePetDisplay[player.cb.rarePetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Epic Pets" }, { "color": "#cb79ed", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                 ]
 
             },

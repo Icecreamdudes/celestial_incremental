@@ -357,7 +357,7 @@
                 player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
             break;
             case 4:
-                player.rf.abilityEffects[4] = amount.log10().plus(1).mul(2).add(1)
+                player.rf.abilityEffects[4] = amount.log10().plus(1).mul(2).add(1).abs()
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.rf.abilityTimers[4] = amount.log10().add(1).mul(100)
             break;

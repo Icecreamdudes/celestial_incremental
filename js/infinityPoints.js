@@ -73,7 +73,7 @@
                  //   player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
                  //   player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
                 }
-                if (!hasMiestone("ip", 21)) 
+                if (!hasMilestone("ip", 21)) 
                 {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21))

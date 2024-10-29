@@ -46,14 +46,17 @@
         player.tad.shatteredInfinitiesToGet = player.bi.brokenInfinities.pow(0.4)
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("p", 18))
+        player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
         
         player.tad.disfiguredInfinitiesToGet = player.bi.brokenInfinities.pow(0.4)
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("p", 18))
+        player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
 
         player.tad.corruptedInfinitiesToGet = player.bi.brokenInfinities.pow(0.4)
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("p", 18))
+        player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
     },
     branches: ["ta",],
     clickables: {

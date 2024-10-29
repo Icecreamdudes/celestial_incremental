@@ -37,8 +37,12 @@
         galaxyEffect: new Decimal(1),
         galaxyBase: new Decimal(0.02),
         galaxyText: "",
+        galaxyLimit: new Decimal(16),
 
         extraDimsGalaxiesLocked: true, //6 dims, 1 galaxy
+
+        //pause
+        revCrunchPause: new Decimal(0),
     }
     },
     automate() {
@@ -224,6 +228,13 @@
             if (!hasUpgrade("bi", 112)) layers.ad.galaxyReset()
         }
         player.ad.galaxyPause = player.ad.galaxyPause.sub(1)
+        
+
+        player.ad.galaxyLimit = new Decimal(16)
+        if (player.ad.galaxyAmount.gt(player.ad.galaxyLimit))
+        {
+            player.ad.galaxyAmount = player.ad.galaxyLimit
+        }
 
 
         if (!hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = true
@@ -232,6 +243,12 @@
         if (!hasUpgrade("ad", 11))
         {
             player.ad.antimatter = new Decimal(0)
+        }
+
+        player.ad.revCrunchPause = player.ad.revCrunchPause.sub(1)
+        if (player.ad.revCrunchPause.gt(0))
+        {
+            layers.revc.reverseCrunch();
         }
     },
     branches: [""],
@@ -293,7 +310,7 @@
         },
         12: {
             title() { return "<h3>" + formatWhole(player.ad.galaxyAmount) + " Antimatter Galaxies<br><h3>" + player.ad.galaxyText + " +" + format(player.ad.galaxyEffect) + " to tickspeed base." },
-            canClick() { return  player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq) && (player.ad.galaxyAmount.lt(1)) : player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq)},
+            canClick() { return player.ad.extraDimsGalaxiesLocked ? player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq) && (player.ad.galaxyAmount.lt(1)) && !player.ad.galaxyAmount.gte(player.ad.galaxyLimit)  : player.ad.dimensionAmounts[player.ad.galaxyDimCost].gte(player.ad.galaxyReq) && !player.ad.galaxyAmount.gte(player.ad.galaxyLimit) },
             unlocked() { return true },
             onClick() {
                 player.ad.galaxyAmount = player.ad.galaxyAmount.add(1)
@@ -324,7 +341,7 @@
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
-                layers.revc.reverseCrunch()
+                player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
             style: { width: '300px', "min-height": '120px' },
@@ -802,6 +819,8 @@
                     ["row", [["raw-html", function () { return player.ad.dimensionsUnlocked[7] ? player.ad.dimensionText[7] + "&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 18]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["clickable", 12]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Antimatter galaxy limit: " + formatWhole(player.g.galaxyLimit) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "You are capped at 6 dimension boosts and 1 galaxy (for now)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "Progress gets halted at 1e300 antimatter." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

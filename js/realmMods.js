@@ -49,6 +49,7 @@
         let onepersec = new Decimal(1)
 
         player.rm.blankModsToGet = player.m.mods.pow(0.01)
+        player.rm.blankModsToGet = player.rm.blankModsToGet.mul(player.cb.rarePetEffects[6][0])
 
         if (player.rm.blankModsPause.gt(0)) {
             layers.rm.blankModReset();

@@ -58,6 +58,7 @@
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(buyableEffect("r", 14))
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.ca.replicantiEffect2)
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.rm.realmModsEffect[3])
+        player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.cb.uncommonPetEffects[7][0])
 
         for (let i = 0; i < player.id.dimensionAmounts.length; i++)
         {
@@ -70,6 +71,7 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("r", 14))
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.ca.replicantiEffect2)
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.rm.realmModsEffect[3])
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.cb.uncommonPetEffects[7][0])
 
             //mults
         }

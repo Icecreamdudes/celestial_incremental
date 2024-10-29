@@ -83,6 +83,7 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.rm.realmModsEffect[1])
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.evolvedEffects[6][1])
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.rarePetEffects[5][1])
     },
     prestigeReset()
     {

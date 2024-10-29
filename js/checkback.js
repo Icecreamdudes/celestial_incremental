@@ -1533,7 +1533,7 @@
         title() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) ? player.cb.commonPetImage[7] : player.cb.lockedImg},
         canClick() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) },
         unlocked() { return true },
-        tooltip() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[7][0]) + " to replicanti mult.<br>x" + format(player.cb.commonPetEffects[7][1]) + " to all galaxy dust.": ""},
+        tooltip() { return player.cb.commonPetAmounts[7].gt(0) || player.cb.commonPetLevels[7].gt(0) ? "<h3>x" + format(player.cb.commonPetEffects[7][0]) + " to replicanti mult.<br>x" + format(player.cb.commonPetEffects[7][1]) + " to galaxy dust.": ""},
         onClick() {
             player.cb.petDisplayIndex = new Decimal(7)
         },

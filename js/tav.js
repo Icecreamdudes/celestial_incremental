@@ -141,6 +141,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("rm", 32))
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.cb.uncommonPetEffects[7][1])
 
 
         player.ta.negativeInfinityPause = player.ta.negativeInfinityPause.sub(1)
@@ -166,7 +167,8 @@
             if (hasUpgrade('ip', 44)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ip", 44))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("om", 14))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("gh", 36))
-            player.ta.dimensionPower[i] = player.ta.dimensionPower[i].add(player.ta.dimensionPowerPerSecond[i].mul(delta))
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(player.cb.uncommonPetEffects[8][0])
+        player.ta.dimensionPower[i] = player.ta.dimensionPower[i].add(player.ta.dimensionPowerPerSecond[i].mul(delta))
 
             if (i == 0) player.ta.dimensionPowerTexts[i] = "You have " + format(player.ta.dimensionPower[i]) + " " + formatWhole(player.ta.dimensionPowerIndex.add(1)) + "st dimension power, which boosts antimatter by x" + format(player.ta.dimensionPowerEffects[i]) + ".\nYou are producing " + format(player.ta.dimensionPowerPerSecond[i]) + " 1st dimenion power per second."
             if (i == 1) player.ta.dimensionPowerTexts[i] = "You have " + format(player.ta.dimensionPower[i]) +  " " + formatWhole(player.ta.dimensionPowerIndex.add(1)) + "nd dimension power, which boosts 1st dimensions by x" + format(player.ta.dimensionPowerEffects[i]) + ".\nYou are producing " + format(player.ta.dimensionPowerPerSecond[i]) + " 2nd dimenion power per second."

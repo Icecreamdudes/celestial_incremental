@@ -59,6 +59,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 18))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(player.cb.commonPetEffects[7][0])
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
@@ -93,6 +94,7 @@
         player.ca.canteEnergyReq = player.ca.canteCores.mul(10).add(100)
 
         player.ca.galaxyDustToGet = player.ca.replicanti.plus(1).log10().pow(0.8)
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.cb.commonPetEffects[7][1])
         player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
         
         //rep galax

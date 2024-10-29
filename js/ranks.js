@@ -172,6 +172,7 @@
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("id", 23))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("oi", 23))
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.cb.uncommonPetEffects[8][2])
         }
 
         player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))

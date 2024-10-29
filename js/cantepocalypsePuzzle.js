@@ -58,7 +58,7 @@ addLayer("cap", {
             player.cap.reqDisplay = "Answer questions about your journey so far."
         }
 
-        if (hasUpgrade("i", 31) && hasUpgrade("i", 32) && hasUpgrade("i", 33) && hasUpgrade("i", 34) && hasUpgrade("i", 35))
+        if (hasUpgrade("i", 31) && hasUpgrade("i", 32) && hasUpgrade("i", 33) && hasUpgrade("i", 34))
         {
             player.cap.passingReqs[0] = true
         }

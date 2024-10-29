@@ -678,7 +678,7 @@
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "....???",
-            unlocked() { return hasChallenge("ip", 17) },
+            unlocked() { return hasChallenge("ip", 17) && !hasChallenge('ip', 18) },
             onEnter() {
                 player.in.infinityPause = new Decimal(5)
             },
@@ -740,6 +740,8 @@
                         ["blank", "25px"],
                         ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
                         ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
 
             },

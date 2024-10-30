@@ -149,7 +149,7 @@
         },
         2: {
             title() { return "1%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0) : player.rf.rocketFuel.gt(0) && player.rf.abilityTimers[4].lte(0) },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
@@ -170,7 +170,7 @@
         },
         3: {
             title() { return "30%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0) : player.rf.rocketFuel.gt(0) && player.rf.abilityTimers[4].lte(0) },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.3))
@@ -222,7 +222,7 @@
         },
         13: {
             title() { return "10%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0) : player.rf.rocketFuel.gt(0) && player.rf.abilityTimers[4].lte(0)  },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0)  },
             unlocked() { return player.rf.abilitiesUnlocked[0]  },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
@@ -243,7 +243,7 @@
         },
         14: {
             title() { return "100%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0) : player.rf.rocketFuel.gt(0) && player.rf.abilityTimers[4].lte(0) },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)

@@ -458,7 +458,7 @@
         if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
         {
         player.cb.rarePetEffects = [
-            [player.g.grass.pow(0.02).div(2).add(1).pow(player.cb.rarePetLevels[0].pow(0.4)), player.cb.level.mul(0.001).mul(player.cb.rarePetLevels[0]).add(1),], //Fertilizer based on Grass, XP based on Level
+            [player.g.grass.pow(0.02).div(2).add(1).pow(player.cb.rarePetLevels[0].pow(0.4)), player.cb.level.mul(0.0007).mul(player.cb.rarePetLevels[0]).pow(0.5).add(1),], //Fertilizer based on Grass, XP based on Level
             [player.cb.highestDicePetCombo.add(1).pow(player.cb.rarePetLevels[1].pow(0.3)), player.d.dicePoints.pow(0.1).mul(player.cb.rarePetLevels[1].pow(1.2)).add(1),], //Dice points based on combo, Mods based on dice points
             [player.cb.petPoints.pow(0.7).mul(0.1).add(1).pow(player.cb.rarePetLevels[2].pow(0.25)), player.cb.rarePetLevels[2].mul(0.04).add(1)], //Rocket Fuel based on pet points, Golden grass spawn time
             [player.cb.evolutionShards.pow(0.85).mul(0.6).add(1).pow(player.cb.rarePetLevels[3].pow(0.3)), player.cb.rarePetLevels[3].mul(0.03).add(1)], //Grasshoppers based on evo shards, Level Req

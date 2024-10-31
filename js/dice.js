@@ -269,6 +269,8 @@
                 {
                     player.in.infinityPause = new Decimal(5)
                 }
+                
+                if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
             },
             style: { width: '200px', "min-height": '100px' },
         },

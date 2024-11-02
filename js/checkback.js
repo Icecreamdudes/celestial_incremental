@@ -656,17 +656,17 @@
     },
     levelToXP(quantity)
     {
-        let xxpp = new Decimal(0)
-        xxpp = ((quantity.add(3)).pow(2.2)).mul(5/11)
-        xxpp = xxpp.div(player.cb.uncommonPetEffects[2][2])
-        xxpp = xxpp.div(player.cb.rarePetEffects[3][1])
-        return xxpp
+        quantity = ((quantity.add(3)).pow(2.2)).mul(5/11)
+        quantity = quantity.div(player.cb.uncommonPetEffects[2][2])
+        quantity = quantity.div(player.cb.rarePetEffects[3][1])
+        return quantity
     },
     xpToLevel(quantity)
     {
         quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
         quantity = quantity.mul(player.cb.rarePetEffects[3][1])
-        return ((quantity.div(5/11)).pow(5/11)).sub(3).floor()
+        quantity = ((quantity.div(5/11)).pow(5/11)).sub(3).floor()
+        return quantity
     },
     levelup()
     {

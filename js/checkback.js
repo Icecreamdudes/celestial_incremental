@@ -143,7 +143,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.cb.totalxp == 5.1 && player.cb.level > 0)
+        if (player.cb.totalxp == 5.1 && player.cb.level > 1)
         {
             player.cb.totalxp = levelToXP(player.cb.level).add(player.cb.xp)
         }

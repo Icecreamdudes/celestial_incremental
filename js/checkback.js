@@ -654,19 +654,19 @@
         player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
         player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),]
     },
-    levelToXP(l)
+    levelToXP(quantity)
     {
         let xxpp = new Decimal(0)
-        xxpp = ((l.add(3)).pow(2.2)).mul(5/11)
+        xxpp = ((quantity.add(3)).pow(2.2)).mul(5/11)
         xxpp = xxpp.div(player.cb.uncommonPetEffects[2][2])
         xxpp = xxpp.div(player.cb.rarePetEffects[3][1])
         return xxpp
     },
-    xpToLevel(x)
+    xpToLevel(quantity)
     {
-        x = x.mul(player.cb.uncommonPetEffects[2][2])
-        x = x.mul(player.cb.rarePetEffects[3][1])
-        return ((x.div(5/11)).pow(5/11)).sub(3).floor()
+        quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
+        quantity = quantity.mul(player.cb.rarePetEffects[3][1])
+        return ((quantity.div(5/11)).pow(5/11)).sub(3).floor()
     },
     levelup()
     {

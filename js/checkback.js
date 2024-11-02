@@ -9,6 +9,7 @@
         level: new Decimal(1),
         levelEffect: new Decimal(1),
         xp: new Decimal(0),
+        totalxp: new Decimal(5.1),
         xpMult: new Decimal(1),
         req: new Decimal(4),
         effectActivate: false,
@@ -142,6 +143,11 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        if (player.cb.totalxp == 5.1 && player.cb.level > 0)
+        {
+            player.cb.totalxp = levelToXP(player.cb.level).add(player.cb.xp)
+        }
+        
         if (player.cb.level.gte(player.cb.highestLevel))
         {
             player.cb.highestLevel = player.cb.level
@@ -155,9 +161,7 @@
             player.cb.effectActivate = false
         }
 
-        player.cb.req = player.cb.level.pow(1.2).add(4).floor()
-        player.cb.req = player.cb.req.div(player.cb.uncommonPetEffects[2][2])
-        player.cb.req = player.cb.req.div(player.cb.rarePetEffects[3][1])
+        player.cb.req = levelToXP(player.cb.level.add(1)).sub(levelToXP(player.cb.level))
 
         for (let i = 0; i < player.cb.buttonTimers.length; i++)
         {
@@ -605,11 +609,13 @@
         { 
             player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
             player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
+            player.cb.totalxp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
 
             if (player.cb.xp.lt(0))
             {
-                player.cb.level = player.cb.level.sub(2)
-                player.cb.xp = player.cb.req.sub(1)
+                player.cb.totalxp = player.cb.totalxp.sub(player.cb.req).add(player.cb.req.div(5))
+                player.cb.level = player.cb.level.sub(1)
+                player.cb.xp = player.cb.req.div(5)
             }
         }
 
@@ -626,6 +632,7 @@
             {
                 player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimersMax[i]
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[i].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[i].mul(player.cb.xpMult))
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[i].mul(player.ca.canteEnergyMult))
             }
         }
@@ -647,11 +654,33 @@
         player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
         player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),]
     },
+    levelToXP(lev)
+    {
+        let xxpp = 0
+        if (lev == 0) {
+            return 0
+        } else {
+            xxpp = ((lev.add(3)).pow(2.2)).mul(5/11)
+            xxpp = xxpp.div(player.cb.uncommonPetEffects[2][2])
+            xxpp = xxpp.div(player.cb.rarePetEffects[3][1])
+            return xxpp
+        }
+    },
+    xpToLevel(xxpp)
+    {
+        xxpp = xxpp.mul(player.cb.uncommonPetEffects[2][2])
+        xxpp = xxpp.mul(player.cb.rarePetEffects[3][1])
+        if (xxpp < 5) {
+            return 0
+        } else {
+            return ((xxpp.div(5/11)).pow(5/11)).sub(3).floor()
+        }
+    },
     levelup()
     {
         let leftover = new Decimal(0)
-        leftover = player.cb.xp.sub(player.cb.req)
-        player.cb.level = player.cb.level.add(1)
+        player.cb.level = xpToLevel(player.cb.totalxp)
+        leftover = player.cb.totalxp - levelToXP(player.cb.level)
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
@@ -740,6 +769,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.5%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[0].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[0].mul(player.cb.xpMult))
                 player.cb.buttonTimers[0] = player.cb.buttonTimersMax[0]
 
                 if (player.cb.highestLevel.gt(35))
@@ -762,6 +792,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 1%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[1].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[1].mul(player.cb.xpMult))
                 player.cb.buttonTimers[1] = player.cb.buttonTimersMax[1]
 
                 if (player.cb.highestLevel.gt(35))
@@ -784,6 +815,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 2%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[2].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[2].mul(player.cb.xpMult))
                 player.cb.buttonTimers[2] = player.cb.buttonTimersMax[2]
 
                 if (player.cb.highestLevel.gt(35))
@@ -806,6 +838,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.2%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[3].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[3].mul(player.cb.xpMult))
                 player.cb.buttonTimers[3] = player.cb.buttonTimersMax[3]
 
                 if (player.cb.highestLevel.gt(35))
@@ -840,6 +873,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 5%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[4].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[4].mul(player.cb.xpMult))
                 player.cb.buttonTimers[4] = player.cb.buttonTimersMax[4]
 
                 if (player.cb.highestLevel.gt(35))
@@ -910,6 +944,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 20%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[5].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[5].mul(player.cb.xpMult))
                 player.cb.buttonTimers[5] = player.cb.buttonTimersMax[5]
 
                 if (player.cb.highestLevel.gt(35))
@@ -945,6 +980,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 50%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[6].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[6].mul(player.cb.xpMult))
                 player.cb.buttonTimers[6] = player.cb.buttonTimersMax[6]
 
                 if (player.cb.highestLevel.gt(35))
@@ -1013,6 +1049,7 @@
                     }
                     player.cb.level = new Decimal(1)
                     player.cb.xp = new Decimal(0)
+                    player.cb.totalxp = new Decimal(5.1)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[0].mul(player.ca.canteEnergyMult))
             } else
                 {
@@ -1054,6 +1091,7 @@
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 98%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[7].mul(player.cb.xpMult))
+                player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[7].mul(player.cb.xpMult))
                 player.cb.buttonTimers[7] = player.cb.buttonTimersMax[7]
 
                 if (player.cb.highestLevel.gt(35))
@@ -1094,6 +1132,7 @@
                     }
                     player.cb.level = new Decimal(1)
                     player.cb.xp = new Decimal(0)
+                    player.cb.totalxp = new Decimal(5.1)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[1].mul(player.ca.canteEnergyMult))
             } else
                 {

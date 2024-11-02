@@ -20,7 +20,7 @@
         buttonBaseXP: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.04),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),],
 
         petsUnlocked: false,
-        
+
         //petButtons
         petButtonUnlocks: [false, false, false, false],
         petButtonTimersMax: [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600)],
@@ -89,7 +89,7 @@
         viewingEvolved: [false, false, false, false, false, false, false, false, false,],
         evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),new Decimal(3), new Decimal(1),new Decimal(5),],
-        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], 
+        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),],
         [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]],
 
         //xpboost
@@ -113,7 +113,7 @@
         automationShards: new Decimal(0),
         automationShardsInput: new Decimal(0),
         automationShardsInputAmount: new Decimal(0),
-        
+
         buttonAutomationAllocation: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         buttonAutomationTimersMax: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         buttonAutomationTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
@@ -145,9 +145,9 @@
 
         if (player.cb.totalxp == 5.1 && player.cb.level > 1)
         {
-            player.cb.totalxp = levelToXP(player.cb.level).add(player.cb.xp)
+            player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
         }
-        
+
         if (player.cb.level.gte(player.cb.highestLevel))
         {
             player.cb.highestLevel = player.cb.level
@@ -157,11 +157,11 @@
         {
             player.cb.effectActivate = true
         } else
-        { 
+        {
             player.cb.effectActivate = false
         }
 
-        player.cb.req = levelToXP(player.cb.level.add(1)).sub(levelToXP(player.cb.level))
+        player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 
         for (let i = 0; i < player.cb.buttonTimers.length; i++)
         {
@@ -275,9 +275,9 @@
         //Pet
         if (player.cb.highestLevel.gte(10))
         {
-            player.cb.petButtonUnlocks[0] = true 
+            player.cb.petButtonUnlocks[0] = true
         }
-        
+
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(43200)]
         for (let i = 0; i < player.cb.petButtonTimersMax.length; i++)
         {
@@ -287,7 +287,7 @@
             if (hasUpgrade("ev8", 12)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(1.1)
         }
 
-        player.cb.petDisplay = 
+        player.cb.petDisplay =
         [
             "Gwa: " + formatWhole(player.cb.commonPetAmounts[0]) + "/" + formatWhole(player.cb.commonPetReq[0]) + " to level up. (Currently level " + formatWhole(player.cb.commonPetLevels[0]) + ")",
             "Egg Guy: " + formatWhole(player.cb.commonPetAmounts[1]) + "/" + formatWhole(player.cb.commonPetReq[1]) + " to level up. (Currently level " + formatWhole(player.cb.commonPetLevels[1]) + ")",
@@ -313,7 +313,7 @@
         "<img src='resources/smokeCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
     ]
 
-        if (player.cb.viewingEvolved[0]) 
+        if (player.cb.viewingEvolved[0])
         {
             player.cb.commonPetImage[2] = "<img src='resources/goldsmithEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[2] = "Goldsmith: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[0]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[0]) + ")"
@@ -360,11 +360,11 @@
                 {
                     player.cb.commonPetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
         //uncommon
-        player.cb.uncommonPetDisplay = 
+        player.cb.uncommonPetDisplay =
         [
             "Teste: " + formatWhole(player.cb.uncommonPetAmounts[0]) + "/" + formatWhole(player.cb.uncommonPetReq[0]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[0]) + ")",
             "Star: " + formatWhole(player.cb.uncommonPetAmounts[1]) + "/" + formatWhole(player.cb.uncommonPetReq[1]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[1]) + ")",
@@ -424,11 +424,11 @@
                 {
                     player.cb.uncommonPetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
         //Rare
-        player.cb.rarePetDisplay = 
+        player.cb.rarePetDisplay =
         [
             "Nova: " + formatWhole(player.cb.rarePetAmounts[0]) + "/" + formatWhole(player.cb.rarePetReq[0]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[0]) + ")",
             "Dice: " + formatWhole(player.cb.rarePetAmounts[1]) + "/" + formatWhole(player.cb.rarePetReq[1]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[1]) + ")<br><h6>(Last roll: " + format(player.cb.dicePetPointsGain) + " pet points.) (Last roll: " + player.cb.lastDicePetRoll + ", Current roll combo: " + player.cb.dicePetCombo + ", highest is " + player.cb.highestDicePetCombo + ")",
@@ -479,8 +479,8 @@
                 {
                     player.cb.rarePetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
         player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1)]
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
@@ -513,42 +513,42 @@
             player.cb.highestDicePetCombo = player.cb.dicePetCombo
         }
 
-        if (player.cb.viewingEvolved[1]) 
+        if (player.cb.viewingEvolved[1])
         {
             player.cb.uncommonPetImage[3] = "<img src='resources/mrRedSharkEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[3] = "MrRedShark: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[1]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[1]) + ")"
         }
-        if (player.cb.viewingEvolved[2]) 
+        if (player.cb.viewingEvolved[2])
         {
             player.cb.uncommonPetImage[2] = "<img src='resources/insaneFaceEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[2] = "Insane Face: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[2]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[2]) + ")"
         }
-        if (player.cb.viewingEvolved[3]) 
+        if (player.cb.viewingEvolved[3])
         {
             player.cb.commonPetImage[0] = "<img src='resources/voidGwaEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[0] = "Voidgwa: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[3]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[3]) + ")"
         }
-        if (player.cb.viewingEvolved[4]) 
+        if (player.cb.viewingEvolved[4])
         {
             player.cb.uncommonPetImage[1] = "<img src='resources/sunEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[1] = "Sun: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[4]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[4]) + ")"
         }
-        if (player.cb.viewingEvolved[5]) 
+        if (player.cb.viewingEvolved[5])
         {
             player.cb.rarePetImage[1] = "<img src='resources/d20EvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.rarePetDisplay[1] = "d20: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[5]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[5]) + ")"
         }
-        if (player.cb.viewingEvolved[6]) 
+        if (player.cb.viewingEvolved[6])
         {
             player.cb.commonPetImage[5] = "<img src='resources/mutantSpiderEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[5] = "Mutant Spider: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[6]) + " evolution shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[6]) + ")"
         }
-        if (player.cb.viewingEvolved[7]) 
+        if (player.cb.viewingEvolved[7])
         {
             player.cb.rarePetImage[2] = "<img src='resources/moonEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.rarePetDisplay[2] = "Moon: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[7]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[7]) + ")"
         }
-        if (player.cb.viewingEvolved[8]) 
+        if (player.cb.viewingEvolved[8])
         {
             player.cb.uncommonPetImage[5] = "<img src='resources/marcelAcoplaoEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[5] = "Marcel Acoplao: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[8]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[8]) + ")"
@@ -606,7 +606,7 @@
 
         //chal 7
         if (inChallenge("ip", 17) && player.cb.level.gt(1))
-        { 
+        {
             player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
             player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
             player.cb.totalxp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
@@ -623,7 +623,7 @@
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++)
         {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimersMax[i] = player.cb.buttonTimersMax[i].mul(10).div(player.cb.buttonAutomationAllocation[i].pow(0.75))
-        }   
+        }
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++)
         {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(onepersec.mul(delta))
@@ -636,7 +636,7 @@
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[i].mul(player.ca.canteEnergyMult))
             }
         }
-        
+
         if (player.cb.automationShardsInput.gte(1)) player.cb.automationShardsInputAmount = player.cb.automationShardsInput.floor()
         if (player.cb.automationShardsInput.lt(1)) player.cb.automationShardsInputAmount = new Decimal(1)
 
@@ -644,7 +644,7 @@
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++)
         {
             usedAutomationShards = usedAutomationShards.add(player.cb.buttonAutomationAllocation[i])
-        } 
+        }
 
         player.cb.totalAutomationShards = player.cb.automationShards.add(usedAutomationShards)
 
@@ -656,23 +656,25 @@
     },
     levelToXP(quantity)
     {
-        quantity = ((quantity.add(3)).pow(2.2)).mul(5/11)
+        if (quantity == null) {quantity = new Decimal(1)}
+        quantity = quantity.add(3).pow(2.2).mul(5/11)
         quantity = quantity.div(player.cb.uncommonPetEffects[2][2])
         quantity = quantity.div(player.cb.rarePetEffects[3][1])
         return quantity
     },
     xpToLevel(quantity)
     {
+        if (quantity == null) {quantity = new Decimal(5.1)}
         quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
         quantity = quantity.mul(player.cb.rarePetEffects[3][1])
-        quantity = ((quantity.div(5/11)).pow(5/11)).sub(3).floor()
+        quantity = quantity.div(5/11).pow(5/11).sub(3).floor()
         return quantity
     },
     levelup()
     {
         let leftover = new Decimal(0)
-        player.cb.level = xpToLevel(player.cb.totalxp)
-        leftover = player.cb.totalxp - levelToXP(player.cb.level)
+        player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
+        leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
@@ -1029,7 +1031,7 @@
                 {
                     player.cb.XPBoost = player.cb.XPBoost.add(player.cb.XPBoostBase[0])
                     player.cb.XPBoostTimers[0] = player.cb.XPBoostTimersMax[0]
-    
+
                     if (player.cb.highestLevel.gt(250))
                     {
                         let random = getRandomInt(20)
@@ -1112,7 +1114,7 @@
                 {
                     player.cb.XPBoost = player.cb.XPBoost.add(player.cb.XPBoostBase[1])
                     player.cb.XPBoostTimers[1] = player.cb.XPBoostTimersMax[1]
-    
+
                     if (player.cb.highestLevel.gt(250))
                     {
                         let random = getRandomInt(5)
@@ -2116,7 +2118,7 @@
                 for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++)
                 {
                     player.cb.buttonAutomationAllocation[i] = new Decimal(0)
-                } 
+                }
             },
             style: { width: '100px', "min-height": '100px' },
         },
@@ -2310,7 +2312,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.cb.level = player.cb.level.sub(cost)
@@ -2342,7 +2344,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.cb.level = player.cb.level.sub(cost)
@@ -2374,7 +2376,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.cb.level = player.cb.level.sub(cost)
@@ -2406,7 +2408,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.cb.level = player.cb.level.sub(cost)
@@ -2428,43 +2430,43 @@
             title: "Gwa",
             body() { return "Has a childlike innocence and is very kind. Seems to have immense power but is also very reluctant to use the power." },
             unlocked() { return player.cb.petDisplayIndex == 0 },
-            
+
         },
         eggGuy: {
             title: "Egg Guy",
             body() { return "This fellow came out of a very powerful chicken... However he would meet his fate when the chicken inside hatches..." },
             unlocked() { return player.cb.petDisplayIndex == 1 },
-            
+
         },
         unsmith: {
             title: "Unsmith",
             body() { return "A creature that was synergized out of the purest form of SPV, which we don't know what it is yet... We will figure it out one day." },
             unlocked() { return player.cb.petDisplayIndex == 2 },
-            
+
         },
         gdCheckpoint: {
             title: "Gd Checkpoint",
             body() { return "This guy feels a little bit familiar, but you don't know why. You just ignore it." },
             unlocked() { return player.cb.petDisplayIndex == 3 },
-            
+
         },
         slax: {
             title: "Slax",
             body() { return "A being of neon green and plasma. The energy of the void radiates within it's presence." },
             unlocked() { return player.cb.petDisplayIndex == 4 },
-            
+
         },
         spider: {
             title: "Spider",
             body() { return "This eight-legged bug has no place in these worlds, but a small crack in the fabric of reality made it slip through and gain enough power to be your pet." },
             unlocked() { return player.cb.petDisplayIndex == 5 },
-            
+
         },
         blob: {
             title: "Blob",
             body() { return "Blob." },
             unlocked() { return player.cb.petDisplayIndex == 6 },
-            
+
         },
     },
     microtabs: {
@@ -2519,7 +2521,7 @@
                 content:
                 [
                     ["microtabs", "automation", { 'border-width': '0px' }],
-                    
+
                 ]
 
             },
@@ -2547,8 +2549,8 @@
                 [
                     ["raw-html", function () { return player.cb.uncommonPetDisplay[player.cb.uncommonPetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141], ["clickable", 149], ["clickable", 152], 
-                    ["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],  
+                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141], ["clickable", 149], ["clickable", 152],
+                    ["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],
                     ["clickable", 221], ["clickable", 219], ["clickable", 218], ["clickable", 222], ["clickable", 238], ["clickable", 237], ["clickable", 236], ["clickable", 239], ["clickable", 303], ["clickable", 304],  ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Uncommon Pets" }, { "color": "#88e688", "font-size": "24px", "font-family": "monospace" }],
@@ -2719,7 +2721,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

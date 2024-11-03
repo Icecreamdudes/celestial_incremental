@@ -160,8 +160,13 @@
         {
             player.cb.effectActivate = false
         }
-
-        player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
+        if (!inChallenge("ip", 17)) {
+            player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
+        } else {
+            player.cb.req = player.cb.level.pow(1.2).add(4).floor()
+            player.cb.req = player.cb.req.div(player.cb.uncommonPetEffects[2][2])
+            player.cb.req = player.cb.req.div(player.cb.rarePetEffects[3][1])
+        }
 
         for (let i = 0; i < player.cb.buttonTimers.length; i++)
         {
@@ -609,13 +614,11 @@
         {
             player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
             player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
-            player.cb.totalxp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
 
             if (player.cb.xp.lt(0))
             {
+                player.cb.level = player.cb.level.sub(2)
                 player.cb.xp = player.cb.req.sub(1)
-                player.cb.totalxp = player.cb.totalxp.sub(player.cb.req).sub(1)
-                layers.cb.levelup()
             }
         }
 
@@ -672,11 +675,19 @@
     },
     levelup()
     {
-        let leftover = new Decimal(0)
-        player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
-        leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
-        player.cb.xp = new Decimal(0)
-        player.cb.xp = player.cb.xp.add(leftover)
+        if (!inChallenge("ip", 17)) {
+            let leftover = new Decimal(0)
+            player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
+            leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
+            player.cb.xp = new Decimal(0)
+            player.cb.xp = player.cb.xp.add(leftover)
+        } else {
+            let leftover = new Decimal(0)
+            leftover = player.cb.xp.sub(player.cb.req)
+            player.cb.level = player.cb.level.add(1)
+            player.cb.xp = new Decimal(0)
+            player.cb.xp = player.cb.xp.add(leftover)
+        }
     },
     sacrificeCommonPet(index)
     {

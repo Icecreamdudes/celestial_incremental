@@ -613,9 +613,9 @@
 
             if (player.cb.xp.lt(0))
             {
-                player.cb.level = player.cb.level.sub(2)
                 player.cb.xp = player.cb.req.sub(1)
                 player.cb.totalxp = player.cb.totalxp.sub(player.cb.req).sub(1)
+                layers.cb.levelup()
             }
         }
 

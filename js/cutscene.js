@@ -257,10 +257,10 @@
         }
 
         //10
-        if (player.c.cutscenes[9] && hasUpgrade("bi", 28))
+        if (player.c.cutscenes[9] && hasUpgrade("bi", 24))
         {
             player.c.currentCutscene = 10
-        } else if (hasUpgrade("bi", 28))
+        } else if (hasUpgrade("bi", 24))
         {
             player.c.currentCutscene = 0
         }

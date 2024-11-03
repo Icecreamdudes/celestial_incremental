@@ -664,6 +664,7 @@
 
                 player.cb.level = new Decimal(1)
                 player.cb.xp = new Decimal(0)
+                player.cb.totalxp = new Decimal(5.1)
             },
             onExit() {
                 player.in.infinityPause = new Decimal(5)

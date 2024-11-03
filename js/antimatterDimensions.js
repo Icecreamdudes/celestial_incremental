@@ -820,7 +820,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["clickable", 12]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Antimatter galaxy limit: " + formatWhole(player.g.galaxyLimit) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Antimatter galaxy limit: " + formatWhole(player.ad.galaxyLimit) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "You are capped at 6 dimension boosts and 1 galaxy (for now)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.ad.extraDimsGalaxiesLocked ?  "Progress gets halted at 1e300 antimatter." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

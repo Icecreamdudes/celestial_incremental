@@ -1281,6 +1281,7 @@ addLayer("ev2", {
         if (player.ev2.xpDay)
         {
             player.cb.xp = player.cb.xp.add(player.ev2.xpReward)
+            player.cb.totalxp = player.cb.totalxp.add(player.ev2.xpReward)
             callAlert("You gained " + format(player.ev2.xpReward) + " XP!");
         } else if (player.ev2.petDay)
         {

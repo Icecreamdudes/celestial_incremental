@@ -47,7 +47,7 @@ addLayer("in", {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity && !inChallenge("ip", 11))
+        if (player.in.reachedInfinity)
         {
             if (!player.in.breakInfinity)
             {

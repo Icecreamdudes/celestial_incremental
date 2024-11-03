@@ -39,11 +39,29 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.1.1 - Tons of Bugfixes</h3><br>
+ 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+   		<br>
+     		<br>
+       		<br>
+	 	Bugfixes:<br>
+   		- Fixed Big Crunch not working properly.<br>
+     		- Added Galaxy Limit to prevent antimatter inflation bug.<br>
+       		- Barred entry on challenge 8 after completion due to inflation bug.<br>
+	 	- Added a minimum value to the XP rocket fuel effect to prevent exploitation.<br>
+     		- Fixed manual Booster Dice not giving challenge points if you own the dice pet evolution.<br>
+       		- Fixed hex, rage, and blank mod resets all accidentally resetting the last 4 dice effects.<br>
+	 	- Fixed star pet evolution buyable costs not being rounded.<br>
+   		- Fixed bug where buying dice pet evolution checked for current dice points instead of highest.<br>
+     		- Fixed cutscene 8 also playing cutscene 10.<br>
+       		- Fixed challenge 1 not automatically crunching when reaching infinite celestial points.<br>
+       		QoL:<br>
+	 	- Added an alert toggle to the pet shop.<br>
+   		- Reworked the leveling system to allow for bulk leveling.<br>
+   		Balancing:<br>
+     		- Nerfed the scaling of Nova's second effect.<br>
+       		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br>
 	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
-		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
-		<br>
-		<br>
-		<br>
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
@@ -85,7 +103,7 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset", "tierReset", "tetrReset", "prestigeReset", "loadGrass", "unloadGrass", 
-"pentReset", "loadGoldGrass", "unloadGoldGrass", "grasshopReset", "codeExperienceReset", "levelup", "petButton1", "petButton2", "resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
+"pentReset", "loadGoldGrass", "unloadGoldGrass", "grasshopReset", "codeExperienceReset", "levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2", "resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
 "rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5", "dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8", "dailyReward", "dailyRewardPet",
 "petButton4", "hexReset", "hexPointReset", "automationTierReset", "startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12", "startCutscene13", "antidebuffReset", "startCutscene14", 
 "negativeInfinityReset", "reverseCrunch", "startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities", "domainReset", "gainAutomationShard",

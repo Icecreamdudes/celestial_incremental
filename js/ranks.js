@@ -547,7 +547,7 @@
         },
         19: {
             requirementDescription: "<h3>Pent 30",
-            effectDescription() { return "Boosts tree and mod gain based on pent: Currenty: " + format(player.r.pentMilestone30Effect) + "x and " + format(player.r.pentMilestone30Effect2) + "x respectively." },
+            effectDescription() { return "Boosts tree and mod gain based on pent: Currently: " + format(player.r.pentMilestone30Effect) + "x and " + format(player.r.pentMilestone30Effect2) + "x respectively." },
             done() { return player.r.pent.gte(30) },
             unlocked() { return hasUpgrade("i", 19) },
             style: { width: '800px', "min-height": '75px' },

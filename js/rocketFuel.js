@@ -82,7 +82,7 @@
             "RF Fertilizer Boost: Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer. (" + formatTime(player.rf.abilityTimers[3]) + " left)", 
             "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)", 
             "RF Infinity Point Boost: Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points. (" + formatTime(player.rf.abilityTimers[5]) + " left)", 
-            "RF Button Cooldown: Divides XP button cooldown by /1.5. (" + formatTime(player.rf.abilityTimers[6]) + " left)", 
+            "RF Button Cooldown: Divides XP button cooldown by /1.2. (" + formatTime(player.rf.abilityTimers[6]) + " left)", 
             "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)", 
         ]
 
@@ -367,7 +367,7 @@
                 player.rf.abilityTimers[5] = amount.log10().add(1).mul(20)
             break;
             case 6:
-                player.rf.abilityTimers[6] = amount.log10().add(1).mul(10)
+                player.rf.abilityTimers[6] = amount.log10().add(1).mul(20)
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1)

@@ -138,9 +138,9 @@
         {
             player.gh.buyables[21] = new Decimal(200)
         }
-        if (player.gh.buyables[22].gt(20))
+        if (player.gh.buyables[22].gt(50))
         {
-            player.gh.buyables[22] = new Decimal(20)
+            player.gh.buyables[22] = new Decimal(50)
         }
         if (player.gh.buyables[23].gt(50))
         {
@@ -772,12 +772,12 @@
             style: { width: '150px', height: '150px', }
         },
         22: {
-            cost(x) { return new Decimal(1e6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e16) },
+            cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e19) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return hasMilestone("r", 18) },
-            canAfford() { return player.gh.fertilizer.gte(this.cost()) && player.gh.buyables[22].lt(20) && player.gh.buyables[19].gte(1)},
+            canAfford() { return player.gh.fertilizer.gte(this.cost()) && player.gh.buyables[22].lt(50) && player.gh.buyables[19].gte(1)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/20<br/>Check Back Study II"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Check Back Study II"
             },
             display() {
                 return "<h4>which dividing xp button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -785,8 +785,8 @@
             },
             branches: [21, 18],
             buy() {
-                let base = new Decimal(1e16)
-                let growth = 1e6
+                let base = new Decimal(1e19)
+                let growth = 1000
                 if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)

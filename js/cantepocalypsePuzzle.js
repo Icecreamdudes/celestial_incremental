@@ -87,13 +87,13 @@ addLayer("cap", {
 
         player.cap.quizAnswers = 
         [
-            player.in.infinityPoints.plus(1).log10().add(player.cb.level),
-            player.points.plus(1).log10().div(player.cb.petPoints.add(0.01)),
-            player.ca.canteEnergy.div(player.ca.canteEnergyReq).mul(player.ca.canteCores),
-            player.ta.negativeInfinityPoints.plus(1).log10().add(player.ca.canteCores.pow(4)),
-            player.cb.petPoints.sub(player.cb.level.mul(player.in.infinities.plus(1).log10())),
-            player.bi.brokenInfinities.plus(1).log10().add(player.in.infinitiesToGet.add(player.cb.evolutionShards.mul(player.cb.paragonShards))),
-            player.points.plus(1).log(1000).add(player.points.plus(1).log(100).add(player.gh.steel.plus(1).log10())),
+            player.in.infinityPoints.plus(1).log10().add(player.cb.level).abs(),
+            player.points.plus(1).log10().div(player.cb.petPoints.add(0.01)).abs(),
+            player.ca.canteEnergy.div(player.ca.canteEnergyReq).mul(player.ca.canteCores).abs(),
+            player.ta.negativeInfinityPoints.plus(1).log10().add(player.ca.canteCores.pow(4)).abs(),
+            player.cb.petPoints.sub(player.cb.level.mul(player.in.infinities.plus(1).log10())).abs(),
+            player.bi.brokenInfinities.plus(1).log10().add(player.in.infinitiesToGet.add(player.cb.evolutionShards.mul(player.cb.paragonShards))).abs(),
+            player.points.plus(1).log(1000).add(player.points.plus(1).log(100).add(player.gh.steel.plus(1).log10())).abs(),
             new Decimal(0)
         ]
 
@@ -250,6 +250,7 @@ addLayer("cap", {
                 [
         ["blank", "25px"],
         ["raw-html", function () { return "If the answer is close enough it can work." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "All answers are converted to positive." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "Your answer: " + format(player.cap.quizNumber) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["raw-html", function () { return player.cap.quizQuestions[player.cap.quizIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

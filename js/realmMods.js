@@ -370,42 +370,42 @@
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
         },
         12: {
-            title() { return "<img src='resources/symbolcreator.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
+            title() { return "<img src='resources/symbolCreator.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
             canClick() { return true },
             onClick() {
                 player.rm.currentDisplay = new Decimal(0) //Each number is assinged to its corresponding realm
             },
         },
         13: {
-            title() { return "<img src='resources/symbolhigh.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
+            title() { return "<img src='resources/symbolHigh.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
             canClick() { return true },
             onClick() {
                 player.rm.currentDisplay = new Decimal(1)
             },
         },
         14: {
-            title() { return "<img src='resources/symboldeath.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
+            title() { return "<img src='resources/symbolDeath.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
             canClick() { return true },
             onClick() {
                 player.rm.currentDisplay = new Decimal(2)
             },
         },
         15: {
-            title() { return "<img src='resources/symboldimension.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
+            title() { return "<img src='resources/symbolDimension.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
             canClick() { return true },
             onClick() {
                 player.rm.currentDisplay = new Decimal(3)
             },
         },
         16: {
-            title() { return "<img src='resources/symbolbackrooms.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
+            title() { return "<img src='resources/symbolBackrooms.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
             canClick() { return true },
             onClick() {
                 player.rm.currentDisplay = new Decimal(4)
             },
         },
         17: {
-            title() { return "<img src='resources/symbolvoid.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
+            title() { return "<img src='resources/symbolVoid.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
             canClick() { return true },
             onClick() {
                 player.rm.currentDisplay = new Decimal(5)

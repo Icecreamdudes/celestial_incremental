@@ -2302,129 +2302,137 @@
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(20).floor() },
+            cost(x) { return new Decimal(2.05).pow(x || getBuyableAmount(this.layer, this.id)).mul(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.level.gte(this.cost()) },
+            canAfford() { return player.cb.totalxp.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back OTF Boost."
             },
             display() {
                 return "which are multiplying hex 1 points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(20)
-                let growth = 1.4
+                let base = new Decimal(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
+                let growth = 2.05
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.level = player.cb.level.sub(buyonecost)
+                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    layers.cb.levelup()
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.level = player.cb.level.sub(cost)
+                player.cb.totalxp = player.cb.totalxp.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                layers.cb.levelup()
             }
             },
             style: { width: '275px', height: '150px', }
         },
         12: {
-            cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30).floor() },
+            cost(x) { return new Decimal(2.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.5).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.level.gte(this.cost()) },
+            canAfford() { return player.cb.totalxp.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back IP Boost."
             },
             display() {
                 return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(30)
-                let growth = 1.45
+                let base = new Decimal(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
+                let growth = 2.22
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.level = player.cb.level.sub(buyonecost)
+                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    layers.cb.levelup()
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.level = player.cb.level.sub(cost)
+                player.cb.totalxp = player.cb.totalxp.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                layers.cb.levelup()
             }
             },
             style: { width: '275px', height: '150px', }
         },
         13: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(50).floor() },
+            cost(x) { return new Decimal(2.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.level.gte(this.cost()) },
+            canAfford() { return player.cb.totalxp.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back XP Boost Boost."
             },
             display() {
                 return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(50)
-                let growth = 1.5
+                let base = new Decimal(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
+                let growth = 2.4
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.level = player.cb.level.sub(buyonecost)
+                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    layers.cb.levelup()
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.level = player.cb.level.sub(cost)
+                player.cb.totalxp = player.cb.totalxp.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                layers.cb.levelup()
             }
             },
             style: { width: '275px', height: '150px', }
         },
         14: {
-            cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80).floor() },
+            cost(x) { return new Decimal(2.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.level.gte(this.cost()) },
+            canAfford() { return player.cb.totalxp.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back Pet Point Boost."
             },
             display() {
                 return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Check Back Levels."
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(80)
-                let growth = 1.6
+                let base = new Decimal(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
+                let growth = 2.75
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.level = player.cb.level.sub(buyonecost)
+                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    layers.cb.levelup()
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.cb.level, base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.level = player.cb.level.sub(cost)
+                player.cb.totalxp = player.cb.totalxp.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                layers.cb.levelup()
             }
             },
             style: { width: '275px', height: '150px', }

@@ -69,11 +69,11 @@ addLayer("cap", {
 
         player.cap.quizNumber = player.cap.quizInput
 
-        player.cap.quizQuestions = ["log10(infinity points) + check back level", "log10(points)/pet points", "(cante energy/cante energy req) * cante cores",
+        player.cap.quizQuestions = ["log10(infinity points) + check back level", "log10(celestial points)/pet points", "(cante energy/cante energy req) * cante cores",
              "log10(negative infinity points) + cante cores^4",
              "pet points - (check back level * log10(infinities))", 
              "log10(broken infinities) + infinities on reset + (evolution shards * paragon shards)", 
-             "log1000(points) + log100(points) + log10(steel)", ""]
+             "log1000(celestial points) + log100(celestial points) + log10(steel)", ""]
 
         if (player.cap.quizIndex.eq(7))
         {

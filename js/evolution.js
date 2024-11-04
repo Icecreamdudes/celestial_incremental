@@ -1224,7 +1224,7 @@ addLayer("ev2", {
         xpDay: true,
         cooldown: new Decimal(0),
         cooldownMax: new Decimal(86400),
-        xpReward: new Decimal(500),
+        xpReward: new Decimal(150),
     }
     },
     automate() {
@@ -1236,8 +1236,17 @@ addLayer("ev2", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ev2.xpReward = new Decimal(500)
-        player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(50))
+        player.ev2.xpReward = new Decimal(150)
+        player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(15).pow(.8))
+        player.ev2.xpReward = player.ev2.xpReward.mul(buyableEffect("gh", 21))
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.commonPetEffects[0][1])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.uncommonPetEffects[4][0])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.rarePetEffects[0][1])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.ev0.coinDustEffect)
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.XPBoost)
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.d.diceEffects[12])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.rm.realmModsEffect[0])
+        player.ev2.xpReward = player.ev2.xpReward.mul(buyableEffect("g", 25))
 
         player.ev2.cooldown = player.ev2.cooldown.sub(onepersec.mul(delta))
     },

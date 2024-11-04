@@ -1036,7 +1036,7 @@
             title() { return player.cb.XPBoostTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[0]) + "." : "<h3>+" + format(player.cb.XPBoostBase[0]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[0].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[0] },
-            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
                 if (player.cb.highestLevel.gte(player.cb.XPBoostReq[0]))
                 {
@@ -1045,11 +1045,11 @@
 
                     if (player.cb.highestLevel.gt(250))
                     {
-                        let random = getRandomInt(20)
+                        let random = getRandomInt(10)
                         if (random == 1)
                         {
                             player.cb.paragonShards = player.cb.paragonShards.add(1);
-                            callAlert("You gained a PARAGON SHARD! (5%)", "resources/paragonShard.png");
+                            callAlert("You gained a PARAGON SHARD! (10%)", "resources/paragonShard.png");
                         }
                     }
                     player.cb.level = new Decimal(1)
@@ -1119,7 +1119,7 @@
             title() { return player.cb.XPBoostTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[1]) + "." : "<h3>+" + format(player.cb.XPBoostBase[1]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[1].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[1] },
-            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 20%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
                 if (player.cb.highestLevel.gte(player.cb.XPBoostReq[1]))
                 {
@@ -1128,11 +1128,11 @@
 
                     if (player.cb.highestLevel.gt(250))
                     {
-                        let random = getRandomInt(5)
+                        let random = getRandomInt(4)
                         if (random == 1)
                         {
                             player.cb.paragonShards = player.cb.paragonShards.add(1);
-                            callAlert("You gained a PARAGON SHARD! (20%)", "resources/paragonShard.png");
+                            callAlert("You gained a PARAGON SHARD! (25%)", "resources/paragonShard.png");
                         }
                     }
                     player.cb.level = new Decimal(1)

@@ -653,7 +653,7 @@
         },
         17: {
             name: "Challenge VII",
-            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECCOMENDED LEVEL 100)" },
+            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECOMMENDED LEVEL 100)" },
             goalDescription() { return "Level 60" },
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },

@@ -236,7 +236,7 @@
         19: {
             title() { return player.cb.uncommonPetImage[1] },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[4] && player.cb.level.gt(250)},
+            unlocked() { return !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gt(250)},
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(4)
             },
@@ -269,7 +269,7 @@
         22: {
             title() { return player.cb.rarePetImage[1] },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[5] && player.cb.level.gt(250)},
+            unlocked() { return !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gt(250)},
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(5)
             },

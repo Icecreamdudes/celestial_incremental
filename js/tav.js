@@ -321,6 +321,24 @@
             style: { width: '100px', "min-height": '50px' },
         },
         2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        4: {
             title() { return "<h3>Lower Dimension" },
             canClick() { return player.ta.dimensionPowerIndex.gt(0) },
             unlocked() { return true },
@@ -329,7 +347,7 @@
             },
             style: { width: '100px', "min-height": '100px' },
         },
-        3: {
+        5: {
             title() { return "<h3>Increase Dimension" },
             canClick() { return player.ta.dimensionPowerIndex.lt(7) },
             unlocked() { return true },
@@ -338,7 +356,7 @@
             },
             style: { width: '100px', "min-height": '100px' },
         },
-        4: {
+        6: {
             title() { return "<h3>Lower" },
             canClick() { return player.ta.dimensionAutobuyIndex.gt(0) },
             unlocked() { return true },
@@ -347,7 +365,7 @@
             },
             style: { width: '100px', "min-height": '100px' },
         },
-        5: {
+        7: {
             title() { return "<h3>Increase" },
             canClick() { return player.ta.dimensionAutobuyIndex.lt(10) },
             unlocked() { return true },
@@ -1716,6 +1734,8 @@
                     ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[6]) + " 7th dimension power, which boost 6th dimensions by x" + format(player.ta.dimensionPowerEffects[6]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have " + format(player.ta.dimensionPower[7]) + " 8th dimension power, which boost 7th dimensions by x" + format(player.ta.dimensionPowerEffects[7]) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
@@ -1739,6 +1759,8 @@
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 33], ["buyable", 34], ["buyable", 35]]],
                     ["row", [["buyable", 36], ["buyable", 37]]],
                 ]
@@ -1758,6 +1780,8 @@
         ["raw-html", function () { return "Highest values get updated on infinity resets." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "Tip: Use the halter for OTF progression." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
+        ["row", [["clickable", 2], ["clickable", 3]]],
+        ["blank", "25px"], 
         ["row", [["buyable", 41], ["buyable", 42], ["buyable", 43], ["buyable", 51]]],
         ["row", [["buyable", 44], ["buyable", 45], ["buyable", 46], ["buyable", 52]]],
         ["row", [["buyable", 47], ["buyable", 48], ["buyable", 49], ["buyable", 53]]],
@@ -1793,7 +1817,9 @@
                     ["raw-html", function () { return formatTime(player.ta.dimensionAutobuyTimer[player.ta.dimensionAutobuyIndex]) + "/" + formatTime(player.ta.dimensionAutobuyTimeReq[player.ta.dimensionAutobuyIndex]) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h4>You need at least 1 of the buyable to start autobuying." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 12], ["clickable", 13]]],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
+                    ["row", [["clickable", 6], ["clickable", 7], ["clickable", 12], ["clickable", 13]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24], ["buyable", 25], ["buyable", 26], ["buyable", 27], ["buyable", 28], ["buyable", 29], ["buyable", 31], ["buyable", 32]]],
                 ]

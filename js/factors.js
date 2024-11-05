@@ -220,7 +220,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -229,7 +229,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
     },
     bars: {
@@ -1789,14 +1789,13 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
                     ["raw-html", function () { return player.f.factorUnlocks[3] == false ?  "Next factor unlocks at tier 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.factorUnlocks[3] == true && player.f.factorUnlocks[4] == false ?  "Next factor unlocks at tier 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.factorUnlocks[4] == true && player.f.factorUnlocks[5] == false ?  "Next factor unlocks at tetr 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.factorUnlocks[5] == true && player.f.factorUnlocks[6] == false ?  "Next factor unlocks at Prestige Upgrade III." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.factorUnlocks[6] == true && player.f.factorUnlocks[7] == false ?  "Next factor unlocks at tetr 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                     ["blank", "25px"],
@@ -1820,6 +1819,8 @@
                     ["raw-html", function () { return player.f.powerFactorUnlocks[4] == true && player.f.powerFactorUnlocks[5] == false ?  "Next factor unlocks at tetr 11." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.powerFactorUnlocks[5] == true && player.f.powerFactorUnlocks[6] == false ?  "Next factor unlocks at 25 trees." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.powerFactorUnlocks[6] == true && player.f.powerFactorUnlocks[7] == false ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
                     ["row", [["buyable", 19], ["buyable", 21], ["buyable", 22], ["buyable", 23]]],
                     ["row", [["buyable", 24], ["buyable", 25], ["buyable", 26], ["buyable", 27]]],
                     ["blank", "25px"],
@@ -1839,6 +1840,8 @@
                     ["raw-html", function () { return player.f.treeFactorUnlocks[4] == true && player.f.treeFactorUnlocks[5] == false?  "Next factor unlocks at pent 3." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.treeFactorUnlocks[5] == true && player.f.treeFactorUnlocks[6] == false?  "Next factor unlocks at 20 mods." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.f.treeFactorUnlocks[6] == true && player.f.treeFactorUnlocks[7] == false?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
                     ["row", [["buyable", 28], ["buyable", 29], ["buyable", 31], ["buyable", 32]]],
                     ["row", [["buyable", 33], ["buyable", 34], ["buyable", 35], ["buyable", 36]]],
                     ["blank", "25px"],
@@ -1854,6 +1857,9 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.gh.fertilizer) + " fertilizer." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Factors unlock with Grass Study III."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]]],
                     ["row", [["buyable", 5], ["buyable", 6], ["buyable", 7], ["buyable", 8]]],
                     ["blank", "25px"],
@@ -1869,6 +1875,8 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.ta.negativeInfinityPoints) + " negative infinity points. (+" + format(player.ta.negativeInfinityPointsToGet) + ")"  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>You have " + format(player.in.infinityPoints) + " infinity points. (+" + format(player.in.infinityPointsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 41], ["buyable", 42], ["buyable", 43], ["buyable", 44]]],
                     ["row", [["buyable", 45], ["buyable", 46], ["buyable", 47], ["buyable", 48]]],
                     ["blank", "25px"],
@@ -1885,6 +1893,8 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.ta.negativeInfinityPoints) + " negative infinity points. (+" + format(player.ta.negativeInfinityPointsToGet) + ")"  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>You have " + format(player.in.infinityPoints) + " infinity points. (+" + format(player.in.infinityPointsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 51], ["buyable", 52], ["buyable", 53], ["buyable", 54]]],
                     ["row", [["buyable", 55], ["buyable", 56], ["buyable", 57], ["buyable", 58]]],
                     ["blank", "25px"],

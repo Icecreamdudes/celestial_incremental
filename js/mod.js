@@ -55,6 +55,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	 	- Fixed Cante Puzzle 1 upgrades being available when you haven't unlocked Cante Puzzles.<br>
 	 	- Fixed incorrect formatting of the last changelog.<br><br>
    		QoL:<br>
+			- Added Buy Max buttons above all buyables that were missing them. (Which was most of them.)<br>
      		- Fixed typos.<br>
        		- Specified Celestial Points in the Cante Quiz to prevent confusion.<br>
        		- Added a note to the bottom of IP challenges after you break infinity that it works in all challenges.<br><br>

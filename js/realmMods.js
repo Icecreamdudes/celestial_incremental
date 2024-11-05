@@ -348,7 +348,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -357,7 +357,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         11: {
             title() { return "<h3>Do the equivalent of a big crunch for blank mods." },
@@ -1162,6 +1162,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                     ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                 ]
@@ -1196,6 +1198,8 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return player.rm.realmEnergyText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 21], ["buyable", 22]]],
                     ["row", [["buyable", 23], ["buyable", 24]]],
                     ["row", [["buyable", 25], ["buyable", 26]]],

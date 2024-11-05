@@ -546,6 +546,8 @@
                 content:
                 [
         ["blank", "25px"],
+        ["row", [["clickable", 2], ["clickable", 3]]],
+        ["blank", "25px"], 
         ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
 
                 ]

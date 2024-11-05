@@ -101,6 +101,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
     },
     bars: {
     },
@@ -341,6 +359,8 @@
                         ["raw-html", function () { return "You have <h3>" + format(player.om.rocketFuelMasteryPoints) + "</h3> rocket fuel mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
+                        ["row", [["clickable", 2], ["clickable", 3]]],
+                        ["blank", "25px"], 
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                         ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                 ]

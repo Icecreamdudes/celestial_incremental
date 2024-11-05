@@ -311,7 +311,7 @@ addLayer("in", {
             }
         }
 
-        if (!player.po.keepOTFS || inChallenge("ip", 11) || inChallenge("ip", 13) || (inChallenge("ip", 15) && player.d.challengeDicePoints.lte(1)) || inChallenge("ip", 16))
+        if (!player.po.keepOTFS || inChallenge("ip", 16))
         {
             player.po.dice = false
             player.po.rocketFuel = false

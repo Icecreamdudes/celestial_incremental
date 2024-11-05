@@ -546,6 +546,14 @@
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "Unlock new grass studies.",
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.breakInfinity = false
+                player.po.realmMods = false
+                player.po.featureSlots = player.po.featureSlotsMax
+
                 player.in.infinityPause = new Decimal(5)
             },
             onExit() {
@@ -579,6 +587,14 @@
             rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.breakInfinity = false
+                player.po.realmMods = false
+                player.po.featureSlots = player.po.featureSlotsMax
+
                 player.in.infinityPause = new Decimal(5)
             },
             onExit() {
@@ -613,6 +629,14 @@
             rewardDescription: "Unlock new booster dice effects, and booster dice automation.",
             unlocked() { return hasChallenge("ip", 14) },
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.breakInfinity = false
+                player.po.realmMods = false
+                player.po.featureSlots = player.po.featureSlotsMax
+
                 player.in.infinityPause = new Decimal(5)
 
                 player.d.challengeDicePoints = new Decimal(0)

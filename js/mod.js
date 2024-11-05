@@ -50,7 +50,7 @@ let changelog = `<h1>Changelog:</h1><br>
        		- Made IP Challenges 1 and 3 reset OTF when entering to prevent being able to bring in unavailable OTFs.<br>
 	 	- Fixed IP Challenge 5 resetting OTF whenever the Booster Dice auto-crunches.<br>
    		- Fixed the "You will unlock something" message for Level 1500 only showing up on the XPBoost tab.<br>
-     		- Fixed the Evolution tab only showing Star and Dice evolutions if you are currently Level 250, instead of your highest level being 250.<br>
+     		- Fixed the Evolution tab showing the level 250 evolutions when your current Level was 250 when it should be your highest Level.<br>
        		- Fixed IP Challenges not clearing if the crunch() function isn't ran fast enough.<br>
 	 	- Fixed Cante Puzzle 1 upgrades being available when you haven't unlocked Cante Puzzles.<br>
 	 	- Fixed incorrect formatting of the last changelog.<br><br>

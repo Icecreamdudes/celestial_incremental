@@ -44,6 +44,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h2>BIG CRUNCH" },
             canClick() { return player.points.gte('1e308') },
@@ -546,6 +564,14 @@
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "Unlock new grass studies.",
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.breakInfinity = false
+                player.po.realmMods = false
+                player.po.featureSlots = player.po.featureSlotsMax
+
                 player.in.infinityPause = new Decimal(5)
             },
             onExit() {
@@ -579,6 +605,14 @@
             rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.breakInfinity = false
+                player.po.realmMods = false
+                player.po.featureSlots = player.po.featureSlotsMax
+
                 player.in.infinityPause = new Decimal(5)
             },
             onExit() {
@@ -613,6 +647,14 @@
             rewardDescription: "Unlock new booster dice effects, and booster dice automation.",
             unlocked() { return hasChallenge("ip", 14) },
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.breakInfinity = false
+                player.po.realmMods = false
+                player.po.featureSlots = player.po.featureSlotsMax
+
                 player.in.infinityPause = new Decimal(5)
 
                 player.d.challengeDicePoints = new Decimal(0)
@@ -653,7 +695,7 @@
         },
         17: {
             name: "Challenge VII",
-            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECCOMENDED LEVEL 100)" },
+            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECOMMENDED LEVEL 100)" },
             goalDescription() { return "Level 60" },
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },
@@ -742,6 +784,7 @@
                         ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
                         ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
                         ["blank", "25px"],
+                        ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
 
@@ -752,6 +795,8 @@
                 content:
                 [
                         ["blank", "25px"],
+                        ["row", [["clickable", 2], ["clickable", 3]]],
+                        ["blank", "25px"], 
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
 

@@ -69,6 +69,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h3>Convert broken infinities to shattered infinities" },
             canClick() { return player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && !player.tad.currentConversion.eq(0) },
@@ -652,6 +670,8 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                     ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                     ["row", [["buyable", 17], ["buyable", 18], ["buyable", 19]]],

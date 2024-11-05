@@ -141,6 +141,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h2>Do the equivalent of a big crunch, but hex.<br>Req: " + formatWhole(player.h.hexReq) + " Points" },
             canClick() { return player.points.gte(player.h.hexReq) },
@@ -1001,6 +1019,8 @@
          ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoints[0]) + "</h3> hex 1 points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
          ["raw-html", function () { return "You are gaining <h3>" + format(player.h.hexPointsToGet[0]) + "</h3> hex 1 points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["blank", "25px"],
+         ["row", [["clickable", 2], ["clickable", 3]]],
+         ["blank", "25px"], 
          ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
          ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
         ]
@@ -1025,6 +1045,8 @@
                 content:
                 [
          ["blank", "25px"],
+         ["row", [["clickable", 2], ["clickable", 3]]],
+         ["blank", "25px"], 
          ["row", [["buyable", 21], ["buyable", 22],["buyable", 23],]],
          ["blank", "25px"],
          ["raw-html", function () { return "These effects are always active."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

@@ -259,6 +259,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h3>Prestige, but reset all ranks and factors. <br>(Req: 100,000 Celestial Points)" },
             canClick() { return player.p.prestigePointsToGet.gte(1) && player.points.gte(100000)},
@@ -705,6 +723,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]

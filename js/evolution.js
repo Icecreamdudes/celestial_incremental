@@ -236,7 +236,7 @@
         19: {
             title() { return player.cb.uncommonPetImage[1] },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[4] && player.cb.level.gt(250)},
+            unlocked() { return !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gt(250)},
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(4)
             },
@@ -269,7 +269,7 @@
         22: {
             title() { return player.cb.rarePetImage[1] },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[5] && player.cb.level.gt(250)},
+            unlocked() { return !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gt(250)},
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(5)
             },
@@ -452,6 +452,24 @@ addLayer("ev0", {
             },
             style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #e7c97c, #fad25a)', 'border-width': "10px" },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
     },
     bars: {
     },
@@ -602,6 +620,8 @@ addLayer("ev0", {
                 content:
                 [
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
 
@@ -1224,7 +1244,7 @@ addLayer("ev2", {
         xpDay: true,
         cooldown: new Decimal(0),
         cooldownMax: new Decimal(86400),
-        xpReward: new Decimal(500),
+        xpReward: new Decimal(150),
     }
     },
     automate() {
@@ -1236,8 +1256,17 @@ addLayer("ev2", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ev2.xpReward = new Decimal(500)
-        player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(50))
+        player.ev2.xpReward = new Decimal(150)
+        player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(15).pow(.8))
+        player.ev2.xpReward = player.ev2.xpReward.mul(buyableEffect("gh", 21))
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.commonPetEffects[0][1])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.uncommonPetEffects[4][0])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.rarePetEffects[0][1])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.ev0.coinDustEffect)
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.XPBoost)
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.d.diceEffects[12])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.rm.realmModsEffect[0])
+        player.ev2.xpReward = player.ev2.xpReward.mul(buyableEffect("g", 25))
 
         player.ev2.cooldown = player.ev2.cooldown.sub(onepersec.mul(delta))
     },
@@ -1432,6 +1461,24 @@ addLayer("ev4", {
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
     },
     gainAutomationShard()
     {
@@ -1547,6 +1594,8 @@ addLayer("ev4", {
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards." }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards." }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12]]],
                     ["raw-html", function () { return "Offering multiplier: <h3>" + format(player.ev4.offeringsBase) + "</h3>x" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]

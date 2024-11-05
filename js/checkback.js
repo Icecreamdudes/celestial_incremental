@@ -273,7 +273,7 @@
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cb.commonPetEffects[4][1])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cb.uncommonPetEffects[1][2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("ev0", 12))
-            if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.5)
+            if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
         }
 
@@ -756,7 +756,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         4: {
             title() { return "Buy Max Off" },
@@ -765,7 +765,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         11: {
             title() { return player.cb.buttonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[0]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[0].mul(player.cb.xpMult)) + " XP."},
@@ -1036,7 +1036,7 @@
             title() { return player.cb.XPBoostTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[0]) + "." : "<h3>+" + format(player.cb.XPBoostBase[0]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[0].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[0] },
-            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
                 if (player.cb.highestLevel.gte(player.cb.XPBoostReq[0]))
                 {
@@ -1045,11 +1045,11 @@
 
                     if (player.cb.highestLevel.gt(250))
                     {
-                        let random = getRandomInt(20)
+                        let random = getRandomInt(10)
                         if (random == 1)
                         {
                             player.cb.paragonShards = player.cb.paragonShards.add(1);
-                            callAlert("You gained a PARAGON SHARD! (5%)", "resources/paragonShard.png");
+                            callAlert("You gained a PARAGON SHARD! (10%)", "resources/paragonShard.png");
                         }
                     }
                     player.cb.level = new Decimal(1)
@@ -1119,7 +1119,7 @@
             title() { return player.cb.XPBoostTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[1]) + "." : "<h3>+" + format(player.cb.XPBoostBase[1]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[1].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[1] },
-            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 20%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
                 if (player.cb.highestLevel.gte(player.cb.XPBoostReq[1]))
                 {
@@ -1128,11 +1128,11 @@
 
                     if (player.cb.highestLevel.gt(250))
                     {
-                        let random = getRandomInt(5)
+                        let random = getRandomInt(4)
                         if (random == 1)
                         {
                             player.cb.paragonShards = player.cb.paragonShards.add(1);
-                            callAlert("You gained a PARAGON SHARD! (20%)", "resources/paragonShard.png");
+                            callAlert("You gained a PARAGON SHARD! (25%)", "resources/paragonShard.png");
                         }
                     }
                     player.cb.level = new Decimal(1)
@@ -2628,6 +2628,7 @@
                     ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1500!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[4] ? "Auto: " + format(player.cb.buttonAutomationTimers[0]) + "/" +  format(player.cb.buttonAutomationTimersMax[0]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["row", [["clickable", 12], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[4] ? "Auto: " + format(player.cb.buttonAutomationTimers[1]) + "/" +  format(player.cb.buttonAutomationTimersMax[1]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
@@ -2659,6 +2660,7 @@
                     ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 250!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1500!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["row", [["clickable", 17]]],

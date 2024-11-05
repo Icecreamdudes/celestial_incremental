@@ -160,6 +160,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        3: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        4: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h2>Reset all content previous content (except grass and grass-skip) for oil. (Based on anonymity)" },
             canClick() { return player.oi.oilToGet.gte(1) },
@@ -580,6 +598,8 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return player.oi.linkerTexts[player.oi.linkerChoice] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.oi.linkerTextEffects[player.oi.linkerChoice] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["clickable", 12], ["clickable", 13]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14], ["buyable", 15], ["buyable", 16]]],
@@ -607,6 +627,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 14]]],
                     ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
                 ]
             },

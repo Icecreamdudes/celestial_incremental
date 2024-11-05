@@ -311,7 +311,7 @@ addLayer("in", {
             }
         }
 
-        if (!player.po.keepOTFS || inChallenge("ip", 15) || inChallenge("ip", 16))
+        if (!player.po.keepOTFS || inChallenge("ip", 16))
         {
             player.po.dice = false
             player.po.rocketFuel = false
@@ -367,31 +367,31 @@ addLayer("in", {
 
         player.de.antidebuffPoints = new Decimal(0)
 
-        if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gte(1e308))
+        if (inChallenge("ip", 11) && !hasChallenge("ip", 11))
         {
             completeChallenge("ip", 11)
         }
-        if (inChallenge("ip", 12) && !hasChallenge("ip", 12) && player.points.gte(1e308))
+        if (inChallenge("ip", 12) && !hasChallenge("ip", 12))
         {
             completeChallenge("ip", 12)
         }
-        if (inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.points.gte(1e308))
+        if (inChallenge("ip", 13) && !hasChallenge("ip", 13))
         {
             completeChallenge("ip", 13)
         }
-        if (inChallenge("ip", 14) && !hasChallenge("ip", 14) && player.points.gte(1e308))
+        if (inChallenge("ip", 14) && !hasChallenge("ip", 14))
         {
             completeChallenge("ip", 14)
         }
-        if (inChallenge("ip", 15) && !hasChallenge("ip", 15) && player.points.gte(1e308))
+        if (inChallenge("ip", 15) && !hasChallenge("ip", 15))
         {
             completeChallenge("ip", 15)
         }
-        if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gte(1e308))
+        if (inChallenge("ip", 16) && !hasChallenge("ip", 16))
         {
             completeChallenge("ip", 16)
         }
-        if (inChallenge("ip", 18) && !hasChallenge("ip", 18) && player.points.gte(1e308))
+        if (inChallenge("ip", 18) && !hasChallenge("ip", 18))
         {
             completeChallenge("ip", 18)
         }
@@ -510,31 +510,31 @@ addLayer("bigc", {
         player.in.infinityPause = new Decimal(5)
         player.in.reachedInfinity = false
 
-        if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gte(1e308))
+        if (inChallenge("ip", 11) && !hasChallenge("ip", 11))
         {
             completeChallenge("ip", 11)
         }
-        if (inChallenge("ip", 12) && !hasChallenge("ip", 12) && player.points.gte(1e308))
+        if (inChallenge("ip", 12) && !hasChallenge("ip", 12))
         {
             completeChallenge("ip", 12)
         }
-        if (inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.points.gte(1e308))
+        if (inChallenge("ip", 13) && !hasChallenge("ip", 13))
         {
             completeChallenge("ip", 13)
         }
-        if (inChallenge("ip", 14) && !hasChallenge("ip", 14) && player.points.gte(1e308))
+        if (inChallenge("ip", 14) && !hasChallenge("ip", 14))
         {
             completeChallenge("ip", 14)
         }
-        if (inChallenge("ip", 15) && !hasChallenge("ip", 15) && player.points.gte(1e308))
+        if (inChallenge("ip", 15) && !hasChallenge("ip", 15))
         {
             completeChallenge("ip", 15)
         }
-        if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gte(1e308))
+        if (inChallenge("ip", 16) && !hasChallenge("ip", 16))
         {
             completeChallenge("ip", 16)
         }
-        if (inChallenge("ip", 18) && !hasChallenge("ip", 18) && player.points.gte(1e308))
+        if (inChallenge("ip", 18) && !hasChallenge("ip", 18))
         {
             completeChallenge("ip", 18)
         }

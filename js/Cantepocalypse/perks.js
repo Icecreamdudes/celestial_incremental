@@ -59,7 +59,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -68,7 +68,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
     },
     bars: {
@@ -364,14 +364,14 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.pr.perkPoints) + "</h3> perk points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.pr.perkPointsToGet) + "</h3> perk points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Chance to gain perk points: <h3>" + format(player.pr.perkPointsChance.mul(100)) + "</h3>%" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-        ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
     ]
 
             },

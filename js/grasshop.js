@@ -138,9 +138,9 @@
         {
             player.gh.buyables[21] = new Decimal(200)
         }
-        if (player.gh.buyables[22].gt(20))
+        if (player.gh.buyables[22].gt(50))
         {
-            player.gh.buyables[22] = new Decimal(20)
+            player.gh.buyables[22] = new Decimal(50)
         }
         if (player.gh.buyables[23].gt(50))
         {
@@ -180,6 +180,24 @@
                 player.tab = "i"
             },
             style: { width: '100px', "min-height": '50px' },
+        },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
         },
         11: {
             title() { return "<h3>Grasshop, but reset everything except pent. <br>(Req: 10,000 Grass and 1e35 Celestial Points)" },
@@ -772,12 +790,12 @@
             style: { width: '150px', height: '150px', }
         },
         22: {
-            cost(x) { return new Decimal(1e6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e16) },
+            cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e19) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return hasMilestone("r", 18) },
-            canAfford() { return player.gh.fertilizer.gte(this.cost()) && player.gh.buyables[22].lt(20) && player.gh.buyables[19].gte(1)},
+            canAfford() { return player.gh.fertilizer.gte(this.cost()) && player.gh.buyables[22].lt(50) && player.gh.buyables[19].gte(1)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/20<br/>Check Back Study II"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Check Back Study II"
             },
             display() {
                 return "<h4>which dividing xp button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -785,8 +803,8 @@
             },
             branches: [21, 18],
             buy() {
-                let base = new Decimal(1e16)
-                let growth = 1e6
+                let base = new Decimal(1e19)
+                let growth = 1000
                 if (player.buyMax == false && !hasMilestone("ip", 17)/*automation*/)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
@@ -1165,6 +1183,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.gh.fertilizer) + "</h3> fertilizer, which boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.gh.fertilizerPerSecond) + "</h3> fertilizer per second." }, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 12], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 15], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 23]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 13], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 16], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 18]["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 18], ["raw-html", function () { return hasMilestone("r", 17) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 22], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 24],]],
@@ -1184,6 +1204,8 @@
                     ["raw-html", function () { return "Steel boosts grasshoper gain by <h3>" + format(player.gh.steelEffect) + "</h3>x."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 31], ["buyable", 32], ["buyable", 33], ["buyable", 34]]],
                     ["row", [["buyable", 35], ["buyable", 36], ["buyable", 37], ["buyable", 38]]],

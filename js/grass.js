@@ -258,7 +258,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -267,7 +267,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         4: {
             title() { return "<h3>Lower Level" },
@@ -1010,7 +1010,7 @@
                 unlocked() { return true },
                 content:
                 [
-                        ["blank", "15px"],
+                        ["blank", "25px"],
                         ["raw-html", function () { return "<h3>" + formatWhole(player.g.grassCount) + "/" + formatWhole(player.g.grassCap) + " Grass (Hover over the grass)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "<h3>" + format(player.g.grassTimer) + "/" + format(player.g.grassReq) + " Seconds to spawn grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "<div id=spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -1022,7 +1022,7 @@
                 unlocked() { return hasUpgrade("g", 13) },
                 content:
                 [
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass, which boost grass value by <h3>x" + format(player.g.goldGrassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Golden grass value: " + format(player.g.goldGrassVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1036,10 +1036,10 @@
                 unlocked() { return player.ev.evolutionsUnlocked[7] },
                 content:
                 [
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone, which boost golden grass value by <h3>x" + format(player.g.moonstoneEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Moonstone value: " + format(player.g.moonstoneVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "<h3>" + formatWhole(player.g.moonstoneCount) + "/" + formatWhole(player.g.moonstoneCap) + " Moonstone. (Click to shoot grass bullets at the moonstone)<h/3><h6>(Max HP: " + format(player.g.moonstoneMaxHealth) + ", Damage: " + format(player.g.moonstoneDamage) + ", Reload Time: " + format(player.g.reloadTime) + " ms, Level: " + formatWhole(player.g.moonstoneLevel) + "/" + formatWhole(player.g.moonstoneLevelMax) + ")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>" + format(player.g.moonstoneTimer) + "/" + format(player.g.moonstoneReq) + " Seconds to spawn moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<div id=mainCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -1051,9 +1051,11 @@
                 unlocked() { return player.ev.evolutionsUnlocked[7] },
                 content:
                 [
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "15px"],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
                     ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
                     ["row", [["buyable", 25], ["buyable", 26], ["buyable", 27], ["buyable", 28]]],
 
@@ -1064,10 +1066,10 @@
                 unlocked() { return player.ev.evolutionsUnlocked[7] },
                 content:
                 [
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>Level: " + formatWhole(player.g.moonstoneLevel) + "/" + formatWhole(player.g.moonstoneLevelMax) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "15px"],
+                    ["blank", "25px"],
                     ["row", [["buyable", 29]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5]]],

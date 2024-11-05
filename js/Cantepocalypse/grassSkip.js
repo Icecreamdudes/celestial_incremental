@@ -134,7 +134,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -143,7 +143,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         11: {
             title() { return "<h2>Reset all content previous alt-uni 1 content, but grass-skip.<br>Req: " + formatWhole(player.gs.grassSkipReq) + " Replicanti Points" },
@@ -492,7 +492,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + ". (+" + formatWhole(player.gs.grassSkipToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Your grass-skip boosts multiplies the replicanti point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 11]]],
+                    ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Milestones"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["milestone", 11]]],
@@ -509,14 +509,16 @@
                 unlocked() { return hasMilestone("gs", 11) },
                 content:
                 [
-        ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + format(player.gs.grassSkippers) + "</h3> grass-skippers." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.gs.grassSkippersPerSecond) + "</h3> grass-skippers per second." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Your grass-skippers are boosting rank, tier, and tetr points by x<h3>" + format(player.gs.grassSkippersEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-        ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
-    ]
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.gs.grassSkippers) + "</h3> grass-skippers." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.gs.grassSkippersPerSecond) + "</h3> grass-skippers per second." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Your grass-skippers are boosting rank, tier, and tetr points by x<h3>" + format(player.gs.grassSkippersEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"], 
+                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                ]
             },
         },
     }, 

@@ -1,4 +1,4 @@
-﻿let modInfo = {
+﻿﻿let modInfo = {
 	name: "Celestial Incremental",
 	id: "celestial",
 	author: "Icecreamdude",
@@ -18,8 +18,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "1.1",
+	name: "The Pet Update",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -39,11 +39,34 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.1.1 - Tons of Bugfixes</h3><br>
+	<h3>v1.1.2 - Even More Bugfixes</h3><br>
  		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
    		<br>
      		<br>
        		<br>
+	 	Bugfixes:<br>
+   		- Fixed Cante Quiz Questions breaking if the answer is negative.<br>
+     		- Fixed Realm Mod images not loading.<br>
+       		- Made IP Challenges 1 and 3 reset OTF when entering to prevent being able to bring in unavailable OTFs.<br>
+	 	- Fixed IP Challenge 5 resetting OTF whenever the Booster Dice auto-crunches.<br>
+   		- Fixed the "You will unlock something" message for Level 1500 only showing up on the XPBoost tab.<br>
+     		- Fixed the Evolution tab showing the level 250 evolutions when your current Level was 250 when it should be your highest Level.<br>
+       		- Fixed IP Challenges not clearing if the crunch() function isn't ran fast enough.<br>
+	 	- Fixed Cante Puzzle 1 upgrades being available when you haven't unlocked Cante Puzzles.<br>
+	 	- Fixed incorrect formatting of the last changelog.<br><br>
+   		QoL:<br>
+			- Added Buy Max buttons above all buyables that were missing them. (Which was most of them.)<br>
+     		- Fixed typos.<br>
+       		- Specified Celestial Points in the Cante Quiz to prevent confusion.<br>
+       		- Added a note to the bottom of IP challenges after you break infinity that it works in all challenges.<br><br>
+     		Balancing:<br>
+       		- Nerfed Rocket Fuel Button Cooldown Abilities effect from /1.5 -> /1.2.<br>
+	 	- Doubled Rocket Fuel Button Cooldown Abilities duration.<br>
+   		- Increased the amount of Grasshop Check Back Study II Upgrades you can buy from 20 -> 50.<br>
+   		- Decreased the cost scaling of Grasshop Check Back Study II Upgrades to account for the increased cap.<br>
+     		- Buffed the Daily XP Reward from the Insane Face evolution. (Decreased base, but now effected by multipliers)<br>
+       		- Buffed the chances to gain paragon shards from XPBoosting. (B1 5% -> 10%, B2 20% -> 25%)<br><br>
+	<h3>v1.1.1 - Tons of Bugfixes</h3><br>
 	 	Bugfixes:<br>
    		- Fixed Big Crunch not working properly.<br>
      		- Added Galaxy Limit to prevent antimatter inflation bug.<br>
@@ -54,13 +77,13 @@ let changelog = `<h1>Changelog:</h1><br>
 	 	- Fixed star pet evolution buyable costs not being rounded.<br>
    		- Fixed bug where buying dice pet evolution checked for current dice points instead of highest.<br>
      		- Fixed cutscene 8 also playing cutscene 10.<br>
-       		- Fixed challenge 1 not automatically crunching when reaching infinite celestial points.<br>
+       		- Fixed challenge 1 not automatically crunching when reaching infinite celestial points.<br><br>
        		QoL:<br>
 	 	- Added an alert toggle to the pet shop.<br>
-   		- Reworked the leveling system to allow for bulk leveling.<br>
+   		- Reworked the leveling system to allow for bulk leveling.<br><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
-       		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br>
+       		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
 	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
@@ -84,7 +107,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Buffed grass, rocket fuel, and ranks.<br>
 		- Changed some pet evolution requirements.<br>
 		- Made some challenges easier.<br><br>
-		<h3>v1.0</h3><br>
+	<h3>v1.0</h3><br>
 		- Added Universe 1, Universe 2, and Alternate Universe 1.<br>
 		- Added Ranks, Tiers, Tetrs, Pents, Factors, Prestige, Trees, Grass, Grasshop, and Code Experience.<br>
 		- Added Check Back.<br>

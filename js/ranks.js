@@ -297,6 +297,24 @@
             },
             style: { width: '100px', "min-height": '50px' },
         },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
         11: {
             title() { return "<h2>Reset celestial points, but rank up.<br>Req: " + format(player.r.rankReq) + " Points" },
             canClick() { return player.points.gte(player.r.rankReq) },
@@ -361,6 +379,7 @@
     upgrades: {
     },
     buyables: {
+
         11: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.2).add(1) },
@@ -547,7 +566,7 @@
         },
         19: {
             requirementDescription: "<h3>Pent 30",
-            effectDescription() { return "Boosts tree and mod gain based on pent: Currenty: " + format(player.r.pentMilestone30Effect) + "x and " + format(player.r.pentMilestone30Effect2) + "x respectively." },
+            effectDescription() { return "Boosts tree and mod gain based on pent: Currently: " + format(player.r.pentMilestone30Effect) + "x and " + format(player.r.pentMilestone30Effect2) + "x respectively." },
             done() { return player.r.pent.gte(30) },
             unlocked() { return hasUpgrade("i", 19) },
             style: { width: '800px', "min-height": '75px' },
@@ -620,6 +639,8 @@
                         ["raw-html", function () { return "You are gaining <h3>" + format(player.r.timeCubesPerSecond) + "</h3> time cubes per second. (based on points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["raw-html", function () { return "(Only the first 4 effects, and stacks with existing rocket fuel effect. Only active at >1e1000 points.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["blank", "25px"],
+                        ["row", [["clickable", 2], ["clickable", 3]]],
+                        ["blank", "25px"], 
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],    
                 ]
             },

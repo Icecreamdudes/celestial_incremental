@@ -756,7 +756,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         4: {
             title() { return "Buy Max Off" },
@@ -765,7 +765,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         11: {
             title() { return player.cb.buttonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[0]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[0].mul(player.cb.xpMult)) + " XP."},

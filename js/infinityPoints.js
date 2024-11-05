@@ -784,7 +784,7 @@
                         ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
                         ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
                         ["blank", "25px"],
-                        ["raw-html", function () { return player.po.breakInfinity ? "Break Infinity works in all challenges." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
 

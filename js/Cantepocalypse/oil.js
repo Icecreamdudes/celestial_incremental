@@ -627,7 +627,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 14]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 3], ["clickable", 4]]],
+                    ["row", [["clickable", 4], ["clickable", 5]]],
                     ["blank", "25px"], 
                     ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
                 ]

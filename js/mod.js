@@ -1,4 +1,4 @@
-﻿﻿let modInfo = {
+﻿let modInfo = {
 	name: "Celestial Incremental",
 	id: "celestial",
 	author: "Icecreamdude",
@@ -8,7 +8,7 @@
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
-	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js",],
+	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js",],
 
 	discordName: "",
 	discordLink: "",
@@ -18,7 +18,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.1",
+	num: "1.1.2",
 	name: "The Pet Update",
 }
 
@@ -31,11 +31,11 @@ let hotkey = `<h1>Hotkeys:</h1><br>
 
 let credits = `<h1>Credits:</h1><br>
 		-Game by Icecreamdude.<br>
-		-Music by !Sweet.<br>
+		-Music by !Sweet and 150percent.<br>
 		-Ideas and Balancing by Nova.<br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
-		-Bug Fixes by Tsanth.<br>
+		-Bug Fixes by Tsanth and Forwaken.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -83,8 +83,14 @@ let changelog = `<h1>Changelog:</h1><br>
    		- Reworked the leveling system to allow for bulk leveling.<br><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
+<<<<<<< Updated upstream
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
 	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
+=======
+       		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br>
+       		<br>
+			   <h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
+>>>>>>> Stashed changes
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
@@ -132,7 +138,8 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "negativeInfinityReset", "reverseCrunch", "startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities", "domainReset", "gainAutomationShard",
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
-"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", ]
+"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
+"commonPetBanner", "uncommonPetBanner", "rarePetBanner"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

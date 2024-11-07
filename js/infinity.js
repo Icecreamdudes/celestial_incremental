@@ -28,7 +28,7 @@ addLayer("in", {
             "border-color": "#119B35",
         }
       },
-    
+
     tooltip: "Universe 2 - Antimatter World",
     color: "white",
     branches: ["i"],
@@ -47,10 +47,34 @@ addLayer("in", {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity)
+        if (player.in.reachedInfinity && !inChallenge("ip", 18))
         {
             if (!player.in.breakInfinity)
             {
+                if (inChallenge("ip", 11) && !hasChallenge("ip", 11))
+                {
+                    completeChallenge("ip", 11)
+                }
+                if (inChallenge("ip", 12) && !hasChallenge("ip", 12))
+                {
+                    completeChallenge("ip", 12)
+                }
+                if (inChallenge("ip", 13) && !hasChallenge("ip", 13))
+                {
+                    completeChallenge("ip", 13)
+                }
+                if (inChallenge("ip", 14) && !hasChallenge("ip", 14))
+                {
+                    completeChallenge("ip", 14)
+                }
+                if (inChallenge("ip", 15) && !hasChallenge("ip", 15))
+                {
+                    completeChallenge("ip", 15)
+                }
+                if (inChallenge("ip", 16) && !hasChallenge("ip", 16))
+                {
+                    completeChallenge("ip", 16)
+                }
                 if (inChallenge("tad", 11))
                 {
                     if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
@@ -69,7 +93,7 @@ addLayer("in", {
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if (!hasMilestone("ip", 21)) 
+                if (!hasMilestone("ip", 21))
                 {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21))
@@ -115,7 +139,7 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 23))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
-        
+
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
         {
@@ -272,7 +296,7 @@ addLayer("in", {
 
         //dice
         player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)] 
+        player.d.diceRolls = [new Decimal(1)]
         player.d.dice = new Decimal(1)
 
         player.d.buyables[11] = new Decimal(0)
@@ -320,7 +344,7 @@ addLayer("in", {
             player.po.realmMods = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
-        
+
 
         //reset antimatter stuff
 
@@ -329,18 +353,18 @@ addLayer("in", {
             if (player.in.infinities.eq(0)) player.ad.antimatter = new Decimal(10)
 
             player.ad.buyables[1] = new Decimal(0)
-    
+
             for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
             {
                 player.ad.dimensionAmounts[i] = new Decimal(0)
                 player.ad.dimensionsPurchased[i] = new Decimal(0)
             }
-    
+
             player.ad.dimensionsUnlocked[4] = false
             player.ad.dimensionsUnlocked[5] = false
             player.ad.dimensionsUnlocked[6] = false
             player.ad.dimensionsUnlocked[7] = false
-            
+
             player.ad.dimBoostAmount = new Decimal(0)
             player.ad.galaxyAmount = new Decimal(0)
         }
@@ -350,7 +374,7 @@ addLayer("in", {
 
         if (!inChallenge("ip", 15))
         {
-        
+
         player.d.challengeDicePoints = new Decimal(0)
         player.d.buyables[21] = new Decimal(0)
         player.d.buyables[22] = new Decimal(0)
@@ -366,35 +390,6 @@ addLayer("in", {
         }
 
         player.de.antidebuffPoints = new Decimal(0)
-
-        if (inChallenge("ip", 11) && !hasChallenge("ip", 11))
-        {
-            completeChallenge("ip", 11)
-        }
-        if (inChallenge("ip", 12) && !hasChallenge("ip", 12))
-        {
-            completeChallenge("ip", 12)
-        }
-        if (inChallenge("ip", 13) && !hasChallenge("ip", 13))
-        {
-            completeChallenge("ip", 13)
-        }
-        if (inChallenge("ip", 14) && !hasChallenge("ip", 14))
-        {
-            completeChallenge("ip", 14)
-        }
-        if (inChallenge("ip", 15) && !hasChallenge("ip", 15))
-        {
-            completeChallenge("ip", 15)
-        }
-        if (inChallenge("ip", 16) && !hasChallenge("ip", 16))
-        {
-            completeChallenge("ip", 16)
-        }
-        if (inChallenge("ip", 18) && !hasChallenge("ip", 18))
-        {
-            completeChallenge("ip", 18)
-        }
     },
     branches: ["branch"],
     clickables: {
@@ -441,7 +436,7 @@ addLayer("in", {
             },
             "Settings": settingsMicrotab,
         },
-    }, 
+    },
 
     tabFormat: [
                         ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter, which boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -470,7 +465,7 @@ addLayer("bigc", {
         let onepersec = new Decimal(1)
 
         if (player.tab == "bigc" && !player.bigc.spawnedWisps)
-        {     
+        {
             player.bigc.spawnedWisps = true
         } else if (player.tab != "bigc")
         {
@@ -490,7 +485,7 @@ addLayer("bigc", {
             },
             style: { width: '300px', "min-height": '120px' },
         },
-        
+
     },
     crunch(){
         player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
@@ -509,35 +504,6 @@ addLayer("bigc", {
         }
         player.in.infinityPause = new Decimal(5)
         player.in.reachedInfinity = false
-
-        if (inChallenge("ip", 11) && !hasChallenge("ip", 11))
-        {
-            completeChallenge("ip", 11)
-        }
-        if (inChallenge("ip", 12) && !hasChallenge("ip", 12))
-        {
-            completeChallenge("ip", 12)
-        }
-        if (inChallenge("ip", 13) && !hasChallenge("ip", 13))
-        {
-            completeChallenge("ip", 13)
-        }
-        if (inChallenge("ip", 14) && !hasChallenge("ip", 14))
-        {
-            completeChallenge("ip", 14)
-        }
-        if (inChallenge("ip", 15) && !hasChallenge("ip", 15))
-        {
-            completeChallenge("ip", 15)
-        }
-        if (inChallenge("ip", 16) && !hasChallenge("ip", 16))
-        {
-            completeChallenge("ip", 16)
-        }
-        if (inChallenge("ip", 18) && !hasChallenge("ip", 18))
-        {
-            completeChallenge("ip", 18)
-        }
 
         if (hasUpgrade("ta", 17))
         {
@@ -561,7 +527,7 @@ addLayer("bigc", {
         }
 
         player.rm.halterBoostCheck = true
-    }, 
+    },
     bars: {
     },
     upgrades: {

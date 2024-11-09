@@ -566,6 +566,7 @@
             onClick() {
                 player.ps.uncommonPetsBought = player.ps.uncommonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.uncommonPetPrices[0])
+                player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(1);
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },

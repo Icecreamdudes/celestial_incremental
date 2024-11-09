@@ -179,6 +179,7 @@
         player.ad.tickspeedMult = new Decimal(1.125)
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(player.ad.galaxyEffect)
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
+        if (hasUpgrade("ev1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ev1", 12))
         //dimboost
 
         if (player.ad.dimBoostAmount.gt(4)) 
@@ -198,6 +199,7 @@
 
         player.ad.dimBoostMult = new Decimal(2)
         player.ad.dimBoostMult = player.ad.dimBoostMult.mul(buyableEffect("ca", 21))
+        if (hasUpgrade("ev2", 11)) player.ad.dimBoostMult = player.ad.dimBoostMult.mul(upgradeEffect("ev2", 11))
         player.ad.dimBoostEffect = Decimal.pow(player.ad.dimBoostMult, player.ad.dimBoostAmount)
 
         if (player.ad.dimBoostDimCost.eq(3)) player.ad.dimBoostText = "Req: " + player.ad.dimBoostReq + " 4th dimensions."

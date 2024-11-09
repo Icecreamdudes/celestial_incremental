@@ -160,6 +160,7 @@
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
+        if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
 
         if (hasUpgrade("i", 29)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
 

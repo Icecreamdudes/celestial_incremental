@@ -94,7 +94,7 @@
             "<br>"  + formatWhole(player.cb.evolvedLevels[1]) + "/6 MrRedShark Level" + 
             "<br>"  + formatWhole(player.cb.evolvedLevels[2]) + "/5 Insane Face Level" + 
             "<br>"  + format(player.cb.XPBoost) + "/7.00 XPBoost" + 
-            "<br>"  + formatWhole(player.cb.rarePetLevels[1]) + "/5 Dice Level",
+            "<br>"  + formatWhole(player.cb.rarePetLevels[1]) + "/3 Dice Level",
 
             "Evolve Spider<br>" + formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
             "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" + 
@@ -277,7 +277,7 @@
         },
         23: {
             title() { return "EVOLVE" },
-            canClick() { return player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(1) && player.ta.highestDicePoints.gte(1e45) && player.cb.evolvedLevels[0].gte(6) && player.cb.evolvedLevels[1].gte(6) && player.cb.evolvedLevels[2].gte(5) && player.cb.XPBoost.gte(7) && player.cb.rarePetLevels[1].gte(5) },
+            canClick() { return player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(1) && player.ta.highestDicePoints.gte(1e45) && player.cb.evolvedLevels[0].gte(6) && player.cb.evolvedLevels[1].gte(6) && player.cb.evolvedLevels[2].gte(5) && player.cb.XPBoost.gte(7) && player.cb.rarePetLevels[1].gte(3) },
             unlocked() { return player.ev.evolutionDisplayIndex == 5 },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)

@@ -56,6 +56,7 @@ addLayer("cp", {
         if (hasUpgrade("an", 23)) multAdd = multAdd.mul(upgradeEffect("an", 23))
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
+        multAdd = multAdd.mul(player.cb.epicPetEffects[1][0])
         
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))

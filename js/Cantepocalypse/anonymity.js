@@ -27,6 +27,7 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("gs", 16))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.oi.linkingPowerEffect[2])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.evolvedEffects[8][0])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.epicPetEffects[1][1])
 
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },

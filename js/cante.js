@@ -60,6 +60,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(player.cb.commonPetEffects[7][0])
+        if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
@@ -85,6 +86,7 @@
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
         player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(player.ca.rememberanceCoresEffect)
+        player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(player.cb.epicPetEffects[2][0])
 
         if (player.ca.canteEnergy.gte(player.ca.canteEnergyReq))
         {

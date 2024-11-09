@@ -18,8 +18,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.1.2",
-	name: "The Pet Update",
+	num: "1.2",
+	name: "The Pet Update Part II: Epic Pets",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -39,11 +39,25 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+<h3>v1.2 - Epic Pets!!! :)</h3><br>
+- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+  <br>
+	Content:<br>
+	-Added 3 new epic pets!!! (They are hard to get so good luck)<br>
+	-Added 2 new pet crates.<br>
+	-Added 2 new common pets.<br>
+	-Added 2 new uncommon pets.<br>
+	-Added 2 new rare pets.<br>
+	-Added epic pet fragments.<br>
+	-Added a pet shop expansion.<br>
+	-New song for check back by 150percent!!!<br>
+	<br>
+	Bugfixes: I lost track lmao<br>
+	<br>
+	QoL: I lost track again lmao<br>
+	<br>
+
 	<h3>v1.1.2 - Even More Bugfixes</h3><br>
- 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
-   		<br>
-     		<br>
-       		<br>
 	 	Bugfixes:<br>
    		- Fixed Cante Quiz Questions breaking if the answer is negative.<br>
      		- Fixed Realm Mod images not loading.<br>
@@ -83,14 +97,8 @@ let changelog = `<h1>Changelog:</h1><br>
    		- Reworked the leveling system to allow for bulk leveling.<br><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
-<<<<<<< Updated upstream
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
-	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
-=======
-       		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br>
-       		<br>
 			   <h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
->>>>>>> Stashed changes
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>

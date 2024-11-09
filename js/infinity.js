@@ -139,7 +139,7 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 23))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
-
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cb.epicPetEffects[2][1])
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
         {

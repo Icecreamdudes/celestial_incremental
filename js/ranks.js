@@ -173,7 +173,8 @@
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("id", 23))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("oi", 23))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.cb.uncommonPetEffects[8][2])
-        }
+            if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
+    }
 
         player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
 
@@ -524,7 +525,7 @@
         },
         13: {
             requirementDescription: "<h3>Pent 3",
-            effectDescription() { return "Autobuys grass buyables, and unlocks tree factor VI.<br>Boosts celestial points based on grass: Currenty: " + format(player.r.pentMilestone3Effect) + "x" },
+            effectDescription() { return "Autobuys grass buyables, and unlocks tree factor VI.<br>Boosts celestial points based on grass: Currently: " + format(player.r.pentMilestone3Effect) + "x" },
             done() { return player.r.pent.gte(3) },
             style: { width: '800px', "min-height": '75px' },
         },

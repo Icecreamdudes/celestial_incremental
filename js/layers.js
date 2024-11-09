@@ -48,6 +48,10 @@ addLayer("i", {
             player.gain = new Decimal(1)
         }
 
+        if (player.tab == "cb")
+        {
+            player.universe = 0.5
+        }
         if (player.tab == "i")
         {
             player.universe = 1
@@ -82,6 +86,9 @@ addLayer("i", {
         } else if (player.universe == 2 && options.musicToggle)
         {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
+        } else if (player.universe == 0.5 && options.musicToggle)
+        {
+            playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
         } 
         else if (player.universe == -1 && options.musicToggle)
         {

@@ -44,6 +44,7 @@
         multAdd = new Decimal(0)
         multAdd = buyableEffect("rt", 11)
         multAdd = multAdd.mul(player.rg.repliGrassEffect2)
+        multAdd = multAdd.mul(player.cb.epicPetEffects[1][2])
 
         player.rt.repliLeavesTimerReq = new Decimal(6)
         if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)

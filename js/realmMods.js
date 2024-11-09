@@ -1214,7 +1214,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Hurrent halt: /" + format(player.po.pointHalt) + "." }],
+                    ["raw-html", function () { return "<h3>Current halt: /" + format(player.po.pointHalt) + "." }],
                     ["raw-html", function () { return "<h3>Eligibility to gain boost: " + player.rm.halterBoostCheck + "." }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h1>Highest Halt: " + format(player.rm.halterBoost) + "."}],

@@ -849,7 +849,7 @@
             },
             buy() {
                 let base = new Decimal(2)
-                let growth = 1.4
+                let growth = 1.345
                 if (player.buyMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)

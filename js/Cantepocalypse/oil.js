@@ -91,6 +91,7 @@
         player.oi.linkingPowerEffect[5] = player.oi.linkingPower[5].pow(0.25).add(1)
 
         player.oi.protoMemoriesPerSecond = player.oi.linkingPower[0].mul(player.oi.linkingPower[1].mul(player.oi.linkingPower[2].mul(player.oi.linkingPower[3].mul(player.oi.linkingPower[4].mul(player.oi.linkingPower[5]))))).plus(1).pow(0.55).div(1e7)
+        player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.cb.epicPetEffects[2][2])
 
         player.oi.protoMemorySecondsToGet = player.cp.replicantiPoints.plus(1).log10().mul(8).pow(0.5)
 

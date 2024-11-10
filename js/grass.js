@@ -49,7 +49,11 @@
         moonstoneDamage: new Decimal(20),
         reloadTime: new Decimal(400),
         moonstoneLevel: new Decimal(1),
-        moonstoneLevelEffects: [new Decimal(1),new Decimal(1),new Decimal(1),],
+        moonstoneLevelEffects: [
+            new Decimal(1),
+            new Decimal(1),
+            new Decimal(1),
+        ],
         moonstoneLevelMax: new Decimal(1),
     }
     },
@@ -177,24 +181,6 @@
         updateGrass(delta)
         updateGoldGrass(delta)
         updateMoonstone(delta)
-
-        player.g.moonstoneLevelEffects = [
-        player.g.moonstoneLevel.pow(1.5),
-        player.g.moonstoneLevel.pow(0.2),
-        player.g.moonstoneLevel.pow(1.2)
-        ]
-
-        player.g.moonstoneMaxHealth = new Decimal(100)
-        player.g.moonstoneMaxHealth = player.g.moonstoneMaxHealth.mul(player.g.moonstoneLevelEffects[0])
-
-        player.g.moonstoneDamage = new Decimal(20)
-        player.g.moonstoneDamage = player.g.moonstoneDamage.mul(buyableEffect("g", 22))
-        if (hasUpgrade("ev8", 18)) player.g.moonstoneDamage = player.g.moonstoneDamage.mul(2)
-
-        player.g.reloadTime = new Decimal(400)
-        player.g.reloadTime = player.g.reloadTime.div(buyableEffect("g", 23))
-
-        player.g.moonstoneLevelMax = buyableEffect("g", 29)
     },
     unloadGrass() {
         // N.B. this space intentionally left blank
@@ -1521,6 +1507,10 @@ const updateMoonstone = (delta) => {
         // Reset the timer
         player.g.moonstoneTimer = new Decimal(0);
     }
+
+    player.g.reloadTime = new Decimal(400)
+        .div(buyableEffect('g', 23))
+
     // =================================================================
     // Effect logic
 
@@ -1528,29 +1518,46 @@ const updateMoonstone = (delta) => {
         .mul(4)
         .pow(1.5)
         .add(1)
+
+    player.g.moonstoneLevelEffects = [
+        player.g.moonstoneLevel.pow(1.5),
+        player.g.moonstoneLevel.pow(0.2),
+        player.g.moonstoneLevel.pow(1.2)
+    ]
+
+    player.g.moonstoneMaxHealth = new Decimal(100)
+        .mul(player.g.moonstoneLevelEffects[0])
+
+    player.g.moonstoneDamage = new Decimal(20)
+        .mul(buyableEffect('g', 22))
+    if (hasUpgrade('ev8', 18)) {
+        player.g.moonstoneDamage = player.g.moonstoneDamage.mul(2)
+    }
+
+    player.g.moonstoneLevelMax = buyableEffect('g', 29)
+
     // =================================================================
     // Currency logic
 
-    /*player.g.goldGrass = player.g.goldGrass
-        .add(player.g.goldGrassVal
-            .mul(buyableEffect("gh", 18)
-                .mul(delta)
-            )
-        ) */
+    // ...
 
     // =================================================================
     // Value logic
 
     player.g.moonstoneVal = new Decimal(1)
-    player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("g", 21))
-    player.g.moonstoneVal = player.g.moonstoneVal.mul(player.g.moonstoneLevelEffects[2])
-    if (hasUpgrade("ev8", 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
+        .mul(buyableEffect('g', 21))
+        .mul(player.g.moonstoneLevelEffects[2])
+
+    if (hasUpgrade('ev8', 17)) {
+        player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
+    }
+
     // =================================================================
     // Spawn-time logic
 
     player.g.moonstoneReq = new Decimal(15)
-    player.g.moonstoneReq = player.g.moonstoneReq.div(buyableEffect("g", 24))
-    player.g.moonstoneReq = player.g.moonstoneReq.mul(player.g.moonstoneLevelEffects[1])
+        .div(buyableEffect('g', 24))
+        .mul(player.g.moonstoneLevelEffects[1])
 
     // =================================================================
     // Cap logic

@@ -1644,6 +1644,11 @@ function isCollision(x, y) {
 }
 
 function removeGrass(square) {
+    // Sanity check: only remove squares with parents
+    if (!square.parentNode) {
+        return
+    }
+
     square.parentNode.removeChild(square);
 }
 
@@ -1857,19 +1862,6 @@ function createMoonstone(quantity) {
         });
     }
 }
-
-function removeGrass(moonstone) {
-    if (moonstone.parentNode) {
-        moonstone.parentNode.removeChild(moonstone); // Remove the moonstone from DOM
-    }
-}
-
-function isCollision(x, y) {
-    // This function should check if there is a collision
-    // Implement collision logic according to your game requirements
-    return false; // Modify this logic based on your collision detection requirements
-}
-
 
 // Ensure this function is called correctly to spawn moonstones
 

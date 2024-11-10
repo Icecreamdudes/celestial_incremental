@@ -89,11 +89,6 @@
         // not we're actively on their specific microtab, so we handle the
         // loading/unloading logic here, before splitting off into specific
         // sub-handlers.
-        if (player.g.buyables[13].gte(13))
-        {
-            player.g.buyables[13] = new Decimal(500)
-        }
-
         const state = {
             // I.e. we currently have the Grass layer loaded
             inGrassLayer: player.tab === 'g',
@@ -1132,6 +1127,12 @@ const updateGrass = (delta) => {
     // XXX: in what cases does this get pushed over 200, and why?
     if (player.g.buyables[12].gt(200)) {
         player.g.buyables[12] = new Decimal(200)
+    }
+
+    // Cap grass capacity at 500
+    // XXX: why are we jumping from 13 to 500?
+    if (player.g.buyables[13].gte(13)) {
+        player.g.buyables[13] = new Decimal(500)
     }
 
     // =================================================================

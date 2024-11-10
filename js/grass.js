@@ -141,7 +141,6 @@
                 layers.g.loadMoonstone()
                 player.g.isMoonstoneLoaded = true
             }
-
         }
 
         // Grass isn't loaded if we leave its microtab
@@ -176,7 +175,6 @@
         }
 
         // =================================================================
-
 
         updateGrass(delta)
         updateGoldGrass(delta)

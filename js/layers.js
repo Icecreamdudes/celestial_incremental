@@ -76,33 +76,33 @@ addLayer("i", {
         //music control
         if (player.universe == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) )
         {
-            playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/universe1.mp3", options.musicVolume/100);
         } else if (player.universe == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle)
         {
-            playAndLoopAudio("music/tav.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/tav.mp3", options.musicVolume/100);
         } else if (player.universe == 0 && options.musicToggle)
         {
-            playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/portal.mp3", options.musicVolume/100);
         } else if (player.universe == 2 && options.musicToggle)
         {
-            playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/universe2.mp3", options.musicVolume/100);
         } else if (player.universe == 0.5 && options.musicToggle)
         {
-            playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/checkback.mp3", options.musicVolume/100);
         } 
         else if (player.universe == -1 && options.musicToggle)
         {
             if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12)
             {
-               playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+               playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/100);
             } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13)
             {
-                playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+                playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/100);
             }
         } 
         else if (player.universe == 1.5 && options.musicToggle)
         {
-            playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
+            playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/100);
         } else
         {
             stopAudio();

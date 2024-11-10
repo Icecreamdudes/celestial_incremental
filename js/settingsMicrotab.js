@@ -55,7 +55,7 @@ const settingsMicrotab = {
     ["blank", "25px"],
 
     ["raw-html",
-      () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>",
+      () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=100 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>",
       settingsMicrotabStyle],
 
     ["blank", "25px"],

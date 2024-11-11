@@ -1866,8 +1866,10 @@ function createMoonstone(quantity) {
 // Ensure this function is called correctly to spawn moonstones
 
 function shootSmallCircle(event) {
-    // Check if the player can shoot
-    if (!canShoot) return; // Exit if cooldown is active
+    // Sanity check: is cooldown active?
+    if (!canShoot) {
+        return
+    }
 
     // Create a new small circle (as previously defined)
     if (player.tab == "g" && player.subtabs["g"]["stuff"] == "Moonstone") {

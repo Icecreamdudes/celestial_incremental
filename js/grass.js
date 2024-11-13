@@ -1841,6 +1841,38 @@ function getDistance(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
 }
 
+// XXX: testing shows that this function returns true _very_ infrequently, e.g.
+// after reloading the grass microtab ~30 times with 1250 grass, I got only
+// 30 exact occlusions, total; if we had fewer grass squares on the board,
+// we should expect the exact occlusion count to drop precipitously, as well.
+function doesOcclude(selector, x, y) {
+    // Valid selectors (so far):
+    //    .green-square
+    //    .gold-square
+    //    .moonstone
+    const elements = document.querySelectorAll(selector)
+    for (let i = 0; i < elements.length; ++i) {
+        const ele = elements[i]
+
+        // 1) All grass/golden grass/moonstone squares are the exact
+        //    same size as others of their type
+        // 2) We have exact overlap if the left and top are exact matches
+        // 3) We are okay with partial overlap, but NOT with exact overlap
+        //
+        // N.B. getBoundingClientRect() is much more expensive than
+        // accessing offsetLeft and offsetTop directly
+        const isExactOverlap = (x === ele.offsetLeft) && (y === ele.offsetTop)
+        if (isExactOverlap) {
+            // Debugging output!
+            // console.log('occlude!')
+
+            return true
+        }
+    }
+
+    return false
+}
+
 function createGrass(quantity) {
     // This _shouldn't_ happen, but there existed cases where e.g.
     // player.g.savedGrass (when it used to exist) somehow got a
@@ -1865,7 +1897,7 @@ function createGrass(quantity) {
         do {
             randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
             randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
-        } while (isCollision(randomX, randomY));
+        } while (doesOcclude('.green-square', randomX, randomY));
 
         const greenSquare = document.createElement('div');
         greenSquare.style.width = '20px';
@@ -1905,17 +1937,6 @@ function createGrass(quantity) {
         // Add the mousemove event listener to check the distance from the cursor
         document.addEventListener('mousemove', checkCursorDistance);
     }
-}
-
-function isCollision(x, y) {
-    const existingGrassSquares = document.querySelectorAll('.green-square');
-    for (let i = 0; i < existingGrassSquares.length; i++) {
-        const squareRect = existingGrassSquares[i].getBoundingClientRect();
-        if (x >= squareRect.left && x <= squareRect.right && y >= squareRect.top && y <= squareRect.bottom) {
-            return true; // Collision detecteds
-        }
-    }
-    return false; // No collision detected
 }
 
 function removeGrass(square) {
@@ -1961,7 +1982,7 @@ function createGoldGrass(quantity) {
         do {
             randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
             randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
-        } while (isCollision(randomX, randomY));
+        } while (doesOcclude('.gold-square', randomX, randomY));
 
         const goldSquare = document.createElement('div');
         goldSquare.style.width = '20px';
@@ -2029,7 +2050,7 @@ function createMoonstone(quantity) {
         do {
             randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20));
             randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20));
-        } while (isCollision(randomX, randomY));
+        } while (doesOcclude('.moonstone', randomX, randomY));
 
         const moonstone = document.createElement('div');
         moonstone.style.width = '20px';

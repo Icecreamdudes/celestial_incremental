@@ -1950,16 +1950,19 @@ function removeGrass(square) {
 
 function removeAllGrass() {
     const squares = document.querySelectorAll('.green-square');
-    squares.forEach(square => square.parentNode.removeChild(square));
+    squares.forEach(square => removeGrass(square));
 }
+
 function removeAllGoldGrass() {
     const squares = document.querySelectorAll('.gold-square');
-    squares.forEach(square => square.parentNode.removeChild(square));
+    squares.forEach(square => removeGrass(square));
 }
+
 function removeAllMoonstone() {
     const squares = document.querySelectorAll('moonstone');
-    squares.forEach(square => square.parentNode.removeChild(square));
+    squares.forEach(square => removeGrass(square));
 }
+
 window.addEventListener('load', function() {
     // This function will be executed after the page is reloaded
     // You can perform any necessary tasks here

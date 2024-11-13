@@ -62,6 +62,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Tav Domain's Stop Conversions button being misspelt as 'Converions'.<br>
 			- Fixed Pent Milestone 3 misspelling Currently as 'Currenty'.<br>
 			- Fixed Pent Milestone 4 saying that mods are under trees, when they aren't.<br>
+			- Fixed Clock Evolution's special feature having misspelt upgrade names.<br>
 			- Fixed Drippy Ufo Evolution tooltip misspelling Moonstone as 'moontstone'.<br><br>
 		QoL:<br>
 			- Booster Dice can no longer roll the current boosted effect.<br>

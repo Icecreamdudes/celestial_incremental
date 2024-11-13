@@ -1742,7 +1742,7 @@ addLayer("ev8", {
         },
         15:
         {
-            title: "Shard Research VI",
+            title: "Shard Research V",
             unlocked() { return true },
             description: "Divides XP button cooldown by /1.15.",
             cost: new Decimal(25),
@@ -1752,7 +1752,7 @@ addLayer("ev8", {
         },
         16:
         {
-            title: "Shard Research VII",
+            title: "Shard Research VI",
             unlocked() { return true },
             description: "Multiplies XPBoost gain by x1.2.",
             cost: new Decimal(35),
@@ -1762,7 +1762,7 @@ addLayer("ev8", {
         },
         17:
         {
-            title: "Shard Research VIII",
+            title: "Shard Research VII",
             unlocked() { return player.ev.evolutionsUnlocked[7] },
             description: "Multiplies moonstone value by x2.",
             cost: new Decimal(3),
@@ -1772,7 +1772,7 @@ addLayer("ev8", {
         },
         18:
         {
-            title: "Shard Research IX",
+            title: "Shard Research VIII",
             unlocked() { return player.ev.evolutionsUnlocked[7] },
             description: "Multiplies moonstone damage by x2.",
             cost: new Decimal(3),

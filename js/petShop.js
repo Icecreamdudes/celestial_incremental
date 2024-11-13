@@ -47,7 +47,6 @@
         crate4Bought: new Decimal(0),
         crate4Cost: new Decimal(150),
 
-
         crate5Bought: new Decimal(0),
         crate5Cost: new Decimal(50),
 
@@ -204,7 +203,9 @@
                 player.ps.evoShardsBought = player.ps.evoShardsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.evoShardsCost)
                 player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                callAlert("You gained an Evolution Shard!", "resources/evoShard.png");
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained an Evolution Shard!", "resources/evoShard.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -239,7 +240,7 @@
             style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
         },
         26: {
-            title() { return "Buy <br>Common/<br>Uncommon Crate" },
+            title() { return "Buy Common/<br>Uncommon Crate" },
             canClick() { return player.cb.petPoints.gte(player.ps.crate2Cost) },
             unlocked() { return player.ps.miscIndex == 2 },
             tooltip() { return "7% - Gwa<br>7% - Egg Guy<br>7% - Unsmith<br>7% - Gd Checkpoint<br>7% - Slax<br>11% - Teste<br>12% - Star<br>12% - Normal Face<br>12% - Shark<br>12% - THE WATCHING EYE<br>7% - Nova"},
@@ -388,6 +389,9 @@
                 player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[0])
                 player.cb.commonPetAmounts[0] = player.cb.commonPetAmounts[0].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Gwa!", "resources/gwaCommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -399,6 +403,9 @@
                 player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[1])
                 player.cb.commonPetAmounts[1] = player.cb.commonPetAmounts[1].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained an Egg Guy!", "resources/eggCommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -410,6 +417,9 @@
                 player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[2])
                 player.cb.commonPetAmounts[2] = player.cb.commonPetAmounts[2].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained an Unsmith!", "resources/unsmithCommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -421,6 +431,9 @@
                 player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[0])
                 player.cb.commonPetAmounts[3] = player.cb.commonPetAmounts[3].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Gd Checkpoint!", "resources/checkpointCommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -432,86 +445,9 @@
                 player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[4])
                 player.cb.commonPetAmounts[4] = player.cb.commonPetAmounts[4].add(1);
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
-        },
-        112: {
-            title() { return player.cb.commonPetImage[5] },
-            canClick() { return true },
-            unlocked() { return player.ps.unlockedMisc2 },
-            onClick() {
-                player.ps.commonDisplayIndex = new Decimal(5)
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
-        },
-        113: {
-            title() { return player.cb.commonPetImage[6] },
-            canClick() { return true },
-            unlocked() { return player.ps.unlockedMisc2 },
-            onClick() {
-                player.ps.commonDisplayIndex = new Decimal(6)
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
-        },
-        114: {
-            title() { return player.cb.commonPetImage[7] },
-            canClick() { return true },
-            unlocked() { return player.ps.unlockedMisc2 },
-            onClick() {
-                player.ps.commonDisplayIndex = new Decimal(7)
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
-        },
-        115: {
-            title() { return player.cb.commonPetImage[8] },
-            canClick() { return true },
-            unlocked() { return player.ps.unlockedMisc2 },
-            onClick() {
-                player.ps.commonDisplayIndex = new Decimal(8)
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
-        },
-        116: {
-            title() { return "Buy Pet" },
-            canClick() { return player.cb.petPoints.gte(player.ps.commonPetPrices[5]) },
-            unlocked() { return player.ps.commonDisplayIndex == 5 },
-            onClick() {
-                player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
-                player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[5])
-                player.cb.commonPetAmounts[5] = player.cb.commonPetAmounts[5].add(1);
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
-        },
-        117: {
-            title() { return "Buy Pet" },
-            canClick() { return player.cb.petPoints.gte(player.ps.commonPetPrices[6]) },
-            unlocked() { return player.ps.commonDisplayIndex == 6 },
-            onClick() {
-                player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
-                player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[6])
-                player.cb.commonPetAmounts[6] = player.cb.commonPetAmounts[6].add(1);
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
-        },
-        118: {
-            title() { return "Buy Pet" },
-            canClick() { return player.cb.petPoints.gte(player.ps.commonPetPrices[7]) },
-            unlocked() { return player.ps.commonDisplayIndex == 7 },
-            onClick() {
-                player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
-                player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[0])
-                player.cb.commonPetAmounts[7] = player.cb.commonPetAmounts[7].add(1);
-            },
-            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
-        },
-        119: {
-            title() { return "Buy Pet" },
-            canClick() { return player.cb.petPoints.gte(player.ps.commonPetPrices[8]) },
-            unlocked() { return player.ps.commonDisplayIndex == 8 },
-            onClick() {
-                player.ps.commonPetsBought = player.ps.commonPetsBought.add(1)
-                player.cb.petPoints = player.cb.petPoints.sub(player.ps.commonPetPrices[8])
-                player.cb.commonPetAmounts[8] = player.cb.commonPetAmounts[8].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Slax!", "resources/slaxCommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -661,6 +597,9 @@
                 player.ps.uncommonPetsBought = player.ps.uncommonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.uncommonPetPrices[0])
                 player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -672,6 +611,9 @@
                 player.ps.uncommonPetsBought = player.ps.uncommonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.uncommonPetPrices[1])
                 player.cb.uncommonPetAmounts[1] = player.cb.uncommonPetAmounts[1].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Star!", "resources/starUncommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -683,6 +625,9 @@
                 player.ps.uncommonPetsBought = player.ps.uncommonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.uncommonPetPrices[2])
                 player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Normal Face!", "resources/normalFaceUncommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -694,6 +639,9 @@
                 player.ps.uncommonPetsBought = player.ps.uncommonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.uncommonPetPrices[0])
                 player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a Shark!", "resources/sharkUncommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -705,6 +653,9 @@
                 player.ps.uncommonPetsBought = player.ps.uncommonPetsBought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.uncommonPetPrices[4])
                 player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained THE WATCHING EYE!", "resources/eyeUncommonPet.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },

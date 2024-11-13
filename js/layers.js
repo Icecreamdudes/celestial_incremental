@@ -89,6 +89,7 @@ addLayer("i", {
         } else if (player.universe == 0.5 && options.musicToggle)
         {
             playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
+
         } else if (player.universe == -1 && options.musicToggle)
         {
             if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12)

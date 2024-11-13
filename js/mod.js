@@ -1,4 +1,4 @@
-﻿﻿let modInfo = {
+﻿let modInfo = {
 	name: "Celestial Incremental",
 	id: "celestial",
 	author: "Icecreamdude",
@@ -130,7 +130,7 @@ let changelog = `<h1>Changelog:</h1><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
-	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
+			   <h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>

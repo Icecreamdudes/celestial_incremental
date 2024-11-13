@@ -2752,7 +2752,7 @@ addLayer("cb", {
             },
             display() {
                 return "which are multiplying hex 1 points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2786,7 +2786,7 @@ addLayer("cb", {
             },
             display() {
                 return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2820,7 +2820,7 @@ addLayer("cb", {
             },
             display() {
                 return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2854,7 +2854,7 @@ addLayer("cb", {
             },
             display() {
                 return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])

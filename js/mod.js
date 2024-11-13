@@ -45,38 +45,38 @@ let changelog = `<h1>Changelog:</h1><br>
 		<br>
 		<br>
 		Bugfixes:<br>
-		- Fixed Oil buy max buttons not loading correctly.<br>
-		- Fixed Dice rolling with one less side then intended.<br>
-		- Fixed tooltip on the first XP Boost button.<br>
-		- Fixed many visual bugs with Grass Upgrade 11.<br>
-		- Hopefully fixed the challenge completion bug this time. Maybe.<br>
-		- Fixed inflation bug caused by TAV debuff upgrade 1 working outside of the challenge.<br>
-		- Added check to revert any inflation from a previously fixed TAV debuff inflation bug.<br>
-		- Fixed method to spam rocket fuel XP button.<br>
-		- Fixed Grass Factor unlock text showing even when having all grass factors unlocked.<br>
-		- Thanks to buyable code rework, fixed multiple bugs related to grasshopper buyable cap.<br>
-		- Fixed Prestige Points on reset text showing at 250,000 points instead of 100,000 points.<br>
-		- Fixed Clock Evolution tooltip not showing.<br><br>
+			- Fixed Oil buy max buttons not loading correctly.<br>
+			- Fixed Dice rolling with one less side then intended.<br>
+			- Fixed tooltip on the first XP Boost button.<br>
+			- Fixed many visual bugs with Grass Upgrade 11.<br>
+			- Hopefully fixed the challenge completion bug this time. Maybe.<br>
+			- Fixed inflation bug caused by TAV debuff upgrade 1 working outside of the challenge.<br>
+			- Added check to revert any inflation from a previously fixed TAV debuff inflation bug.<br>
+			- Fixed method to spam rocket fuel XP button.<br>
+			- Fixed Grass Factor unlock text showing even when having all grass factors unlocked.<br>
+			- Thanks to buyable code rework, fixed multiple bugs related to grasshopper buyable cap.<br>
+			- Fixed Prestige Points on reset text showing at 250,000 points instead of 100,000 points.<br>
+			- Fixed Clock Evolution tooltip not showing.<br><br>
 		Typos:<br>
-		- Fixed OTF Mastery buyable 'Alternate Infinity Mastery Multiplier' having a misspelt effect.<br>
-		- Fixed Tav Domain's Stop Conversions button being misspelt as 'Converions'.<br>
-		- Fixed Pent Milestone 3 misspelling Currently as 'Currenty'.<br>
-		- Fixed Pent Milestone 4 saying that mods are under trees, when they aren't.<br>
-		- Fixed Drippy Ufo Evolution tooltip misspelling Moonstone as 'moontstone'.<br><br>
+			- Fixed OTF Mastery buyable 'Alternate Infinity Mastery Multiplier' having a misspelt effect.<br>
+			- Fixed Tav Domain's Stop Conversions button being misspelt as 'Converions'.<br>
+			- Fixed Pent Milestone 3 misspelling Currently as 'Currenty'.<br>
+			- Fixed Pent Milestone 4 saying that mods are under trees, when they aren't.<br>
+			- Fixed Drippy Ufo Evolution tooltip misspelling Moonstone as 'moontstone'.<br><br>
 		QoL:<br>
-		- Booster Dice can no longer roll the current boosted effect.<br>
-		- Re-added shop alerts and the alert toggle, because options are nice.<br>
-		- You can now gain mastery points with break infinity.<br>
-		- Changed Challenge 7's recommendation to prevent confusion.<br><br>
+			- Booster Dice can no longer roll the current boosted effect.<br>
+			- Re-added shop alerts and the alert toggle, because options are nice.<br>
+			- You can now gain mastery points with break infinity.<br>
+			- Changed Challenge 7's recommendation to prevent confusion.<br><br>
 		Balancing:<br>
-		- Added slight softcaps to both Check Back Level and Check Back XP Boost when you reach levels 10,000 and 100,000.<br>
-		- Reduced the base cost of Dice Buyable 'DP Multiplier' from 6,000 to 2,000.<br>
-		- Locked Rocket Fuel OTF behind having your first infinity.<br>
-		- Severely decreased Cante challenge upgrade costs.<br><br>
+			- Added slight softcaps to both Check Back Level and Check Back XP Boost when you reach levels 10,000 and 100,000.<br>
+			- Reduced the base cost of Dice Buyable 'DP Multiplier' from 6,000 to 2,000.<br>
+			- Locked Rocket Fuel OTF behind having your first infinity.<br>
+			- Severely decreased Cante challenge upgrade costs.<br><br>
 		???:<br>
-		- Begun work on buyable code rework, current layers done are: Ranks, Factors, Prestige, Trees, Grasshoppers.<br>
-		- Since of this, all buy max buttons on those layers are subtab specific and not controlled by the main variable.<br>
-		- There was sadly not enough time to get to all layers, so hopefully more work on this can be done later.<br><br>
+			- Begun work on buyable code rework, current layers done are: Ranks, Factors, Prestige, Trees, Grasshoppers.<br>
+			- Since of this, all buy max buttons on those layers are subtab specific and not controlled by the main variable.<br>
+			- There was sadly not enough time to get to all layers, so hopefully more work on this can be done later.<br><br>
 	<h3>v1.2 - Epic Pets!!! :)</h3><br>
 		Content:<br>
 			- Added 3 new epic pets!!! (They are hard to get so good luck)<br>

@@ -1334,11 +1334,33 @@
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Grass value: " + format(player.g.grassVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ['raw-html', () =>
+            'You have <h3>' + format(player.g.grass) +
+                '</h3> grass, which boost leaf gain by <h3>x' +
+                format(player.g.grassEffect) + '.',
+            {
+                'color': 'white',
+                'font-size': '24px',
+                'font-family': 'monospace',
+            },
         ],
+        ['raw-html', () =>
+            'Grass value: ' + format(player.g.grassVal) + '.',
+            {
+                'color': 'white',
+                'font-size': '20px',
+                'font-family': 'monospace',
+            },
+        ],
+        ['row', [
+            ['clickable', 1]
+        ]],
+        ['microtabs', 'stuff',
+            {
+                'border-width': '0px'
+            }
+        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade('i', 17) }
 })
 

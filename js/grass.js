@@ -2064,15 +2064,6 @@ function createGoldGrass(quantity) {
     spawnArea.append(...newChildren)
 }
 
-//moonstone
-// Variable to track the cooldown
-let canShoot = true;
-
-// Set up click event listener on the document to shoot circles
-document.addEventListener('click', (event) => {
-    shootSmallCircle(event);
-});
-
 var maxHealth = new Decimal(100)
 var damage = new Decimal(20)
 function createMoonstone(quantity) {
@@ -2196,69 +2187,93 @@ function createMoonstone(quantity) {
     }
 }
 
-// Ensure this function is called correctly to spawn moonstones
-
+let canShoot = true
 function shootSmallCircle(event) {
     // Sanity check: is cooldown active?
     if (!canShoot) {
         return
     }
 
-    // Create a new small circle (as previously defined)
-    if (player.tab == 'g' && player.subtabs['g']['stuff'] == 'Moonstone') {
-        const smallCircle = document.createElement('div');
-        smallCircle.style.width = '20px';
-        smallCircle.style.height = '20px';
-        smallCircle.style.backgroundColor = 'green';
-        smallCircle.style.borderRadius = '50%';
-        smallCircle.style.position = 'absolute';
-        smallCircle.style.border = '2px solid black'; // Add a black border
-        smallCircle.style.zIndex = '20'; // Ensures small circles are on top
-        document.body.appendChild(smallCircle);
+    // Kick out if one of these is true:
+    //    1) We're not in the Grass tab
+    //    2) We're not in the Moonstone microtab
+    if (player.tab != 'g' || player.subtabs.g.stuff != 'Moonstone') {
+        return
+    }
 
-        // Get the center position of the main circle
-        const rect = mainCircle.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+    // Shots spawn in the middle of the main circle
+    const rect = mainCircle.getBoundingClientRect()
+    const centerX = rect.left + (rect.width / 2)
+    const centerY = rect.top + (rect.height / 2)
 
-        // Position the small circle at the center of the main circle
-        smallCircle.style.left = `${centerX - 10}px`; // Centering small circle
-        smallCircle.style.top = `${centerY - 10}px`; // Centering small circle
+    const smallCircle = document.createElement('div')
+    Object.assign(smallCircle.style, {
+        width: '20px',
+        height: '20px',
+        backgroundColor: 'green',
+        borderRadius: '50%',
+        position: 'absolute',
+        left: `${centerX - 10}px`,
+        top: `${centerY - 10}px`,
+        border: '2px solid black',
+        zIndex: '20', // Shots render on top of everything else
+    })
+    document.body.appendChild(smallCircle)
 
-        // Calculate the angle towards the click position
-        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-        const speed = 20; // pixels per frame
-        let x = parseFloat(smallCircle.style.left);
-        let y = parseFloat(smallCircle.style.top);
+    // Calculate the angle towards the click position
+    const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX)
+    let x = parseFloat(smallCircle.style.left);
+    let y = parseFloat(smallCircle.style.top);
 
-        function move() {
-            x += Math.cos(angle) * speed;
-            y += Math.sin(angle) * speed;
-
-            smallCircle.style.left = `${x}px`;
-            smallCircle.style.top = `${y}px`;
-
-            // Emit a custom event to check for collision with moonstones
-            const collisionEvent = new CustomEvent('smallCircleFired', {
-                detail: smallCircle
-            });
-            document.dispatchEvent(collisionEvent);
-
-            requestAnimationFrame(move);
+    let last = -1
+    function move(timestamp) {
+        if (last < 0) {
+            last = timestamp
         }
 
-        // Start moving the small circle
-        requestAnimationFrame(move);
+        requestAnimationFrame(move)
 
-        // Remove the small circle after 8 seconds
-        setTimeout(() => {
-            smallCircle.remove();
-        }, 8000);
+        // Target FPS is limited by TMT's framecap
+        const targetFps = 60
+        const frameMs = 1000 / targetFps
+        const elapsedMs = timestamp - last
+        if (elapsedMs < frameMs) {
+            return
+        }
 
-        // Set the cooldown
-        canShoot = false; // Prevent shooting
-        setTimeout(() => {
-            canShoot = true; // Allow shooting again after 1 second
-        }, player.g.reloadTime);
+        const speed = 20 // pixels per frame
+        x += Math.cos(angle) * speed * elapsedMs / frameMs
+        y += Math.sin(angle) * speed * elapsedMs / frameMs
+
+        Object.assign(smallCircle.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+        })
+
+        // Emit a custom event to check for collision with moonstones
+        const collisionEvent = new CustomEvent('smallCircleFired', {
+            detail: smallCircle
+        })
+        document.dispatchEvent(collisionEvent)
+
+        last = timestamp
     }
+
+    // Start moving the small circle
+    requestAnimationFrame(move)
+
+    // Shots only live for so many seconds
+    const lifetimeMs = 8000
+    setTimeout(() => {
+        smallCircle.remove()
+    }, lifetimeMs)
+
+    // Set the cooldown
+    canShoot = false
+    setTimeout(() => {
+        canShoot = true
+    }, player.g.reloadTime)
 }
+
+// Set up click event listener on the document to shoot circles
+document.addEventListener('click', (event) => shootSmallCircle(event))

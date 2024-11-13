@@ -240,7 +240,7 @@ function fixOldSave(oldVersion){
 		player.de.tavPoints = new Decimal(1e104)
 		player.de.tavEssence = new Decimal(0)
 		player.gh.steel = new Decimal(0)
-		player.p.crystal = new Decimal(0)
+		player.p.crystals = new Decimal(0)
 		callAlert("Oh no, your save file was inflated. Steel, Crystal, and debuff currencies are reset.", "resources/gat.png")
 	}
 }

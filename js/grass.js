@@ -2064,8 +2064,6 @@ function createGoldGrass(quantity) {
     spawnArea.append(...newChildren)
 }
 
-var maxHealth = new Decimal(100)
-var damage = new Decimal(20)
 function createMoonstone(quantity) {
     const spawnArea = document.getElementById('moonstone-spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();

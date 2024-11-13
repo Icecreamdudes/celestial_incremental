@@ -1845,12 +1845,11 @@ function getDistance(x1, y1, x2, y2) {
 // after reloading the grass microtab ~30 times with 1250 grass, I got only
 // 30 exact occlusions, total; if we had fewer grass squares on the board,
 // we should expect the exact occlusion count to drop precipitously, as well.
-function doesOcclude(selector, x, y) {
+function doesOcclude(elements, x, y) {
     // Valid selectors (so far):
     //    .green-square
     //    .gold-square
     //    .moonstone
-    const elements = document.querySelectorAll(selector)
     for (let i = 0; i < elements.length; ++i) {
         const ele = elements[i]
 
@@ -1873,6 +1872,25 @@ function doesOcclude(selector, x, y) {
     return false
 }
 
+function getRandomXY (selector, areaWidth, areaHeight, eleWidth, eleHeight) {
+    const deadZone = 20
+
+    const coords = {
+        randomX: -1,
+        randomY: -1
+    }
+    const elements = document.querySelectorAll(selector)
+    do {
+        const rightBound = areaWidth - (2 * deadZone) - eleWidth
+        coords.randomX = Math.floor(Math.random() * rightBound) + deadZone
+
+        const bottomBound = areaHeight - (2 * deadZone) - eleHeight
+        coords.randomY = Math.floor(Math.random() * bottomBound) + deadZone
+    } while (doesOcclude(elements, coords.x, coords.y))
+
+    return coords
+}
+
 function createGrass(quantity) {
     // This _shouldn't_ happen, but there existed cases where e.g.
     // player.g.savedGrass (when it used to exist) somehow got a
@@ -1892,51 +1910,60 @@ function createGrass(quantity) {
     }
 
     // Create grass squares based on quantity
+    const newChildren = []
     for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
-        } while (doesOcclude('.green-square', randomX, randomY));
+        const squareWidth = 20
+        const squareHeight = 20
+        const { randomX, randomY } = getRandomXY('.green-square',
+            spawnAreaRect.width, spawnAreaRect.height,
+            squareWidth, squareHeight)
 
-        const greenSquare = document.createElement('div');
-        greenSquare.style.width = '20px';
-        greenSquare.style.height = '20px';
-        greenSquare.style.backgroundColor = '#18e34e';
-        greenSquare.style.position = 'absolute';
-        greenSquare.style.left = `${randomX}px`;
-        greenSquare.style.top = `${randomY}px`;
-        greenSquare.style.border = '2px solid black'; // Add a black border
-        greenSquare.classList.add('green-square');
+        const greenSquare = document.createElement('div')
+        Object.assign(greenSquare.style, {
+            width: `${squareWidth}px`,
+            height: `${squareHeight}px`,
+            backgroundColor: '#18e34e',
+            position: 'absolute',
+            left: `${randomX}px`,
+            top: `${randomY}px`,
+            border: '2px solid black',
+        })
+        greenSquare.classList.add('green-square')
 
-        spawnArea.appendChild(greenSquare); // Append to spawnArea instead of document.body
+        newChildren.push(greenSquare)
 
-        // Function to check if cursor is within 150px radius of the greenSquare
+        // Is the cursor within range of the square?
         function checkCursorDistance(event) {
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
+            const bounds = greenSquare.getBoundingClientRect()
+            const centerX = bounds.left + (bounds.width / 2)
+            const centerY = bounds.top + (bounds.height / 2)
 
-            const greenSquareRect = greenSquare.getBoundingClientRect();
-            const squareCenterX = greenSquareRect.left + greenSquareRect.width / 2;
-            const squareCenterY = greenSquareRect.top + greenSquareRect.height / 2;
+            const cursorX = event.clientX
+            const cursorY = event.clientY
+            const distance = getDistance(cursorX, cursorY, centerX, centerY)
 
-            const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
-
-            // If the cursor is within a certain pixel range, remove the grass square
-            if (distance <= 100) {
-                removeGrass(greenSquare);
-                player.g.grassCount = player.g.grassCount.sub(1);
+            // If the cursor is within a certain pixel range,
+            // remove the grass square
+            const detectThreshold = 100
+            if (distance <= detectThreshold) {
+                removeGrass(greenSquare)
+                player.g.grassCount = player.g.grassCount
+                    .sub(1)
                 player.g.grass = player.g.grass
-                    .add(player.g.grassVal);
+                    .add(player.g.grassVal)
 
                 // Remove the mousemove listener once grass is collected
-                document.removeEventListener('mousemove', checkCursorDistance);
+                document.removeEventListener('mousemove', checkCursorDistance)
             }
         }
 
-        // Add the mousemove event listener to check the distance from the cursor
-        document.addEventListener('mousemove', checkCursorDistance);
+        // Detect when we move in range
+        document.addEventListener('mousemove', checkCursorDistance)
     }
+
+    // Appending all the children at once saves on reflows, which _greatly_
+    // speeds up rendering time!
+    spawnArea.append(...newChildren)
 }
 
 function removeGrass(square) {
@@ -1980,51 +2007,60 @@ function createGoldGrass(quantity) {
     }
 
     // Create golden grass squares based on quantity
+    const newChildren = []
     for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
-        } while (doesOcclude('.gold-square', randomX, randomY));
+        const squareWidth = 20
+        const squareHeight = 20
+        const { randomX, randomY } = getRandomXY('.gold-square',
+            spawnAreaRect.width, spawnAreaRect.height,
+            squareWidth, squareHeight)
 
         const goldSquare = document.createElement('div');
-        goldSquare.style.width = '20px';
-        goldSquare.style.height = '20px';
-        goldSquare.style.backgroundColor = '#ffcf40';
-        goldSquare.style.position = 'absolute';
-        goldSquare.style.left = `${randomX}px`;
-        goldSquare.style.top = `${randomY}px`;
-        goldSquare.style.border = '2px solid black'; // Add a black border
-        goldSquare.classList.add('gold-square');
+        Object.assign(goldSquare.style, {
+            width: `${squareWidth}px`,
+            height: `${squareHeight}px`,
+            backgroundColor: '#ffcf40',
+            position: 'absolute',
+            left: `${randomX}px`,
+            top: `${randomY}px`,
+            border: '2px solid black',
+        })
+        goldSquare.classList.add('gold-square')
 
-        spawnArea.appendChild(goldSquare); // Append to spawnArea instead of document.body
+        newChildren.push(goldSquare)
 
-        // Function to check if cursor is within 100px radius of the goldenSquare
+        // Is the cursor within range of the square?
         function checkCursorDistance(event) {
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
+            const bounds = goldSquare.getBoundingClientRect()
+            const centerX = bounds.left + (bounds.width / 2)
+            const centerY = bounds.top + (bounds.height / 2)
 
-            const goldSquareRect = goldSquare.getBoundingClientRect();
-            const squareCenterX = goldSquareRect.left + goldSquareRect.width / 2;
-            const squareCenterY = goldSquareRect.top + goldSquareRect.height / 2;
+            const cursorX = event.clientX
+            const cursorY = event.clientY
+            const distance = getDistance(cursorX, cursorY, centerX, centerY)
 
-            const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
-
-            // If the cursor is within 100 pixels, remove the golden grass square
-            if (distance <= 100) {
+            // If the cursor is within a certain pixel range,
+            // remove the grass square
+            const detectThreshold = 100
+            if (distance <= detectThreshold) {
                 removeGrass(goldSquare);
-                player.g.goldGrassCount = player.g.goldGrassCount.sub(1)
+                player.g.goldGrassCount = player.g.goldGrassCount
+                    .sub(1)
                 player.g.goldGrass = player.g.goldGrass
-                    .add(player.g.goldGrassVal);
+                    .add(player.g.goldGrassVal)
 
-                // Remove the mousemove listener once the golden grass is collected
+                // Remove the mousemove listener once grass is collected
                 document.removeEventListener('mousemove', checkCursorDistance);
             }
         }
 
-        // Add the mousemove event listener to check the distance from the cursor
+        // Detect when we move in range
         document.addEventListener('mousemove', checkCursorDistance);
     }
+
+    // Appending all the children at once saves on reflows, which _greatly_
+    // speeds up rendering time!
+    spawnArea.append(...newChildren)
 }
 
 //moonstone
@@ -2049,15 +2085,15 @@ function createMoonstone(quantity) {
 
     // Function to create moonstone elements
     for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20));
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20));
-        } while (doesOcclude('.moonstone', randomX, randomY));
+        const squareWidth = 20
+        const squareHeight = 20
+        const { randomX, randomY } = getRandomXY('.moonstone',
+            spawnAreaRect.width, spawnAreaRect.height,
+            squareWidth, squareHeight)
 
         const moonstone = document.createElement('div');
-        moonstone.style.width = '20px';
-        moonstone.style.height = '20px';
+        moonstone.style.width = `${squareWidth}px`;
+        moonstone.style.height = `${squareHeight}px`;
         moonstone.style.backgroundColor = '#047ce4';
         moonstone.style.position = 'absolute';
         moonstone.style.left = `${randomX}px`;

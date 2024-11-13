@@ -1837,6 +1837,10 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneCap = player.cb.evolvedEffects[7][0]
 }
 
+function getDistance(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+}
+
 function createGrass(quantity) {
     // This _shouldn't_ happen, but there existed cases where e.g.
     // player.g.savedGrass (when it used to exist) somehow got a
@@ -1851,11 +1855,8 @@ function createGrass(quantity) {
     const spawnArea = document.getElementById('spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to calculate the distance between two points
-    function getDistance(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    if (!spawnAreaRect) {
+        return
     }
 
     // Create grass squares based on quantity
@@ -1950,11 +1951,8 @@ function createGoldGrass(quantity) {
     const spawnArea = document.getElementById('gold-spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to calculate the distance between two points
-    function getDistance(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    if (!spawnAreaRect) {
+        return
     }
 
     // Create golden grass squares based on quantity

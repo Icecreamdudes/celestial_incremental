@@ -1742,34 +1742,41 @@ const updateMoonstone = (delta) => {
     // Timer logic
 
     // Timer is always running if we're below grass cap
-    const belowMoonstoneCap = player.g.moonstoneCount.lt(player.g.moonstoneCap);
-    if (belowMoonstoneCap) player.g.moonstoneTimer = player.g.moonstoneTimer.add(seconds);
+    const belowMoonstoneCap = player.g.moonstoneCount.lt(player.g.moonstoneCap)
+    if (belowMoonstoneCap) {
+        player.g.moonstoneTimer = player.g.moonstoneTimer
+            .add(seconds)
+    }
 
-    const passedMoonstoneSpawnTime = player.g.moonstoneTimer.gte(player.g.moonstoneReq);
+    const passedMoonstoneSpawnTime =
+        player.g.moonstoneTimer.gte(player.g.moonstoneReq)
 
     if (passedMoonstoneSpawnTime && belowMoonstoneCap) {
-        const moonstoneToAdd = player.g.moonstoneTimer.div(player.g.moonstoneReq).floor();
+        const moonstoneToAdd = player.g.moonstoneTimer
+            .div(player.g.moonstoneReq)
+            .floor()
 
         // Add moonstone
         if (belowMoonstoneCap) {
-            player.g.moonstoneCount = player.g.moonstoneCount.add(moonstoneToAdd);
+            player.g.moonstoneCount = player.g.moonstoneCount
+                .add(moonstoneToAdd)
         }
 
         // Sanity check: respect the cap
         if (player.g.moonstoneCount.gt(player.g.moonstoneCap)) {
-            player.g.moonstoneCount = player.g.moonstoneCap;
+            player.g.moonstoneCount = player.g.moonstoneCap
         }
 
         // Only create when we're loaded
         if (player.g.isMoonstoneLoaded) {
-            createMoonstone(moonstoneToAdd);
+            createMoonstone(moonstoneToAdd)
         }
 
         // Reset the timer
-        player.g.moonstoneTimer = new Decimal(0);
+        player.g.moonstoneTimer = new Decimal(0)
     } else if (passedMoonstoneSpawnTime && !belowMoonstoneCap) {
         // Reset the timer
-        player.g.moonstoneTimer = new Decimal(0);
+        player.g.moonstoneTimer = new Decimal(0)
     }
 
     player.g.reloadTime = new Decimal(400)
@@ -1813,7 +1820,8 @@ const updateMoonstone = (delta) => {
         .mul(player.g.moonstoneLevelEffects[2])
 
     if (hasUpgrade('ev8', 17)) {
-        player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
+        player.g.moonstoneVal = player.g.moonstoneVal
+            .mul(2)
     }
 
     // =================================================================

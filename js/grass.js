@@ -1361,7 +1361,7 @@
             }
         ],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade('i', 17) }
+    layerShown: () => player.startedGame && hasUpgrade('i', 17),
 })
 
 const updateGrass = (delta) => {

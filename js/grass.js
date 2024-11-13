@@ -1993,8 +1993,9 @@ function removeAllMoonstone() {
 window.addEventListener('load', function() {
     // This function will be executed after the page is reloaded
     // You can perform any necessary tasks here
-    layers.g.loadGrass();
-    layers.g.loadGoldGrass();
+    layers.g.loadGrass()
+    layers.g.loadGoldGrass()
+    layers.g.loadMoonstone()
 });
 
 

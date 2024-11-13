@@ -985,106 +985,350 @@
     microtabs: {
         stuff: {
             'Grass': {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "<h3>" + formatWhole(player.g.grassCount) + "/" + formatWhole(player.g.grassCap) + " Grass (Hover over the grass)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<h3>" + format(player.g.grassTimer) + "/" + format(player.g.grassReq) + " Seconds to spawn grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<div id=spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "600px"],
-            ]
+                buttonStyle: {
+                    'color': 'white',
+                },
+                unlocked: true,
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>' + formatWhole(player.g.grassCount) +
+                            '/' + formatWhole(player.g.grassCap) +
+                            ' Grass (Hover over the grass)',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        }
+                    ],
+                    ['raw-html', () =>
+                        '<h3>' + format(player.g.grassTimer) +
+                            '/' + format(player.g.grassReq) +
+                            ' Seconds to spawn grass.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        }
+                    ],
+                    ['raw-html', () =>
+                        '<div id=spawn-area class=spawn-area></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        }
+                    ],
+                    ['blank', '600px'],
+                ],
             },
             'Golden Grass': {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasUpgrade("g", 13) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass, which boost grass value by <h3>x" + format(player.g.goldGrassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Golden grass value: " + format(player.g.goldGrassVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>" + formatWhole(player.g.goldGrassCount) + "/" + formatWhole(player.g.goldGrassCap) + " Golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>" + format(player.g.goldGrassTimer) + "/" + format(player.g.goldGrassReq) + " Seconds to spawn golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=gold-spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                ]
+                buttonStyle: {
+                    'color': 'white',
+                },
+                unlocked: () => hasUpgrade('g', 13),
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.goldGrass) +
+                            '</h3> golden grass, which boost ' +
+                            'grass value by <h3>x' +
+                            format(player.g.goldGrassEffect) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        'Golden grass value: ' +
+                            format(player.g.goldGrassVal) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '20px',
+                            'font-family': 'monospace'
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>' + formatWhole(player.g.goldGrassCount) +
+                            '/' + formatWhole(player.g.goldGrassCap) +
+                            ' Golden grass.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h3>' + format(player.g.goldGrassTimer) + '/' +
+                            format(player.g.goldGrassReq) +
+                            ' Seconds to spawn golden grass.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<div id=gold-spawn-area class=spawn-area></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                ],
             },
             'Moonstone': {
-                buttonStyle() { return { 'color': '#047ce4', "border-color": "#0490f4"} },
-                unlocked() { return player.ev.evolutionsUnlocked[7] },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone, which boost golden grass value by <h3>x" + format(player.g.moonstoneEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Moonstone value: " + format(player.g.moonstoneVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>" + formatWhole(player.g.moonstoneCount) + "/" + formatWhole(player.g.moonstoneCap) + " Moonstone. (Click to shoot grass bullets at the moonstone)<h/3><h6>(Max HP: " + format(player.g.moonstoneMaxHealth) + ", Damage: " + format(player.g.moonstoneDamage) + ", Reload Time: " + format(player.g.reloadTime) + " ms, Level: " + formatWhole(player.g.moonstoneLevel) + "/" + formatWhole(player.g.moonstoneLevelMax) + ")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>" + format(player.g.moonstoneTimer) + "/" + format(player.g.moonstoneReq) + " Seconds to spawn moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=mainCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=moonstone-spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                ]
+                buttonStyle: {
+                    'color': '#047ce4',
+                    'border-color': '#0490f4'
+                },
+                unlocked: () => player.ev.evolutionsUnlocked[7],
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.moonstone) +
+                            '</h3> moonstone, which boost golden grass ' +
+                            'value by <h3>x' +
+                            format(player.g.moonstoneEffect) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        'Moonstone value: ' +
+                            format(player.g.moonstoneVal) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '20px',
+                            'font-family': 'monospace'
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>' + formatWhole(player.g.moonstoneCount) +
+                            '/' + formatWhole(player.g.moonstoneCap) +
+                            ' Moonstone. (Click to shoot grass bullets ' +
+                            'at the moonstone)</h3><h6>(Max HP: ' +
+                            format(player.g.moonstoneMaxHealth) +
+                            ', Damage: ' + format(player.g.moonstoneDamage) +
+                            ', Reload Time: ' + format(player.g.reloadTime) +
+                            ' ms, Level: ' +
+                            formatWhole(player.g.moonstoneLevel) +
+                            '/' + formatWhole(player.g.moonstoneLevelMax) +
+                            ')',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h3>' + format(player.g.moonstoneTimer) + '/' +
+                            format(player.g.moonstoneReq) +
+                            ' Seconds to spawn moonstone.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<div id=mainCircle></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<div id=moonstone-spawn-area class=spawn-area></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                ],
             },
             'Moonstone Buyables': {
-                buttonStyle() { return { 'color': '#047ce4', "border-color": "#0490f4"} },
-                unlocked() { return player.ev.evolutionsUnlocked[7] },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
-                    ["row", [["buyable", 25], ["buyable", 26], ["buyable", 27], ["buyable", 28]]],
-
-                ]
+                buttonStyle: {
+                    'color': '#047ce4',
+                    'border-color': '#0490f4'
+                },
+                unlocked: () => player.ev.evolutionsUnlocked[7],
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.moonstone) +
+                            '</h3> moonstone.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['clickable', 2],
+                        ['clickable', 3]
+                    ]],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['buyable', 21],
+                        ['buyable', 22],
+                        ['buyable', 23],
+                        ['buyable', 24]
+                    ]],
+                    ['row', [
+                        ['buyable', 25],
+                        ['buyable', 26],
+                        ['buyable', 27],
+                        ['buyable', 28]
+                    ]],
+                ],
             },
             'Moonstone Levels': {
-                buttonStyle() { return { 'color': '#047ce4', "border-color": "#0490f4"} },
-                unlocked() { return player.ev.evolutionsUnlocked[7] },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>Level: " + formatWhole(player.g.moonstoneLevel) + "/" + formatWhole(player.g.moonstoneLevelMax) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 29]]],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Effects:" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h4>x" + format(player.g.moonstoneLevelEffects[0]) + " to moonstone health." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h4>x" + format(player.g.moonstoneLevelEffects[1]) + " to moonstone spawn time." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h4>x" + format(player.g.moonstoneLevelEffects[2]) + " to moonstone value." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-
-                ]
+                buttonStyle:  {
+                    'color': '#047ce4',
+                    'border-color': '#0490f4'
+                },
+                unlocked: () => player.ev.evolutionsUnlocked[7],
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.moonstone) +
+                            '</h3> moonstone.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) +
+                            '/' + formatWhole(player.g.moonstoneLevelMax),
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['buyable', 29]
+                    ]],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['clickable', 4],
+                        ['clickable', 5]
+                    ]],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>Effects:',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[0]) +
+                            ' to moonstone health.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[1]) +
+                            ' to moonstone spawn time.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[2]) +
+                            ' to moonstone value.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                ],
             },
             'Buyables': {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-                        ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
-                        ["blank", "25px"],
-                    ["raw-html", function () { return hasUpgrade("g", 13) ? "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["buyable", 17], ["buyable", 18], ["buyable", 19]]],
-                ]
+                buttonStyle: {
+                    'color': 'white'
+                },
+                unlocked: true,
+                content: [
+                    ['blank', '25px'],
+                    ['row', [
+                        ['clickable', 2],
+                        ['clickable', 3]
+                    ]],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['buyable', 11],
+                        ['buyable', 12],
+                        ['buyable', 13]
+                    ]],
+                    ['row', [
+                        ['buyable', 14],
+                        ['buyable', 15],
+                        ['buyable', 16]
+                    ]],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        hasUpgrade('g', 13)
+                            ? 'You have <h3>' + format(player.g.goldGrass) +
+                                '</h3> golden grass.'
+                            : '',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['row', [
+                        ['buyable', 17],
+                        ['buyable', 18],
+                        ['buyable', 19]
+                    ]],
+                ],
             },
             'Upgrades': {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("r", 11) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22]]],
-                ]
+                buttonStyle: {
+                    'color': 'white'
+                },
+                unlocked: () => hasMilestone('r', 11),
+                content: [
+                    ['blank', '25px'],
+                    ['row', [
+                        ['upgrade', 11],
+                        ['upgrade', 12],
+                        ['upgrade', 13],
+                        ['upgrade', 14],
+                        ['upgrade', 15],
+                        ['upgrade', 16]
+                    ]],
+                    ['row', [
+                        ['upgrade', 17],
+                        ['upgrade', 18],
+                        ['upgrade', 19],
+                        ['upgrade', 21],
+                        ['upgrade', 22]
+                    ]],
+                ],
             },
         },
     },

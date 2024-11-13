@@ -30,7 +30,7 @@ addLayer("cp", {
             "border-color": "#012738",
         }
       },
-    
+
     tooltip: "Alt-Universe 1: Cantepocalypse",
     color: "white",
     branches: ["i"],
@@ -56,7 +56,8 @@ addLayer("cp", {
         if (hasUpgrade("an", 23)) multAdd = multAdd.mul(upgradeEffect("an", 23))
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
-        
+        multAdd = multAdd.mul(player.cb.epicPetEffects[1][0])
+
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
 
@@ -138,7 +139,7 @@ addLayer("cp", {
             display() {
                 return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
             },
-        }, 
+        },
     },
     upgrades: {
         11:
@@ -150,7 +151,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         12:
         {
             title: "Feature II",
@@ -160,7 +161,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         13:
         {
             title: "Feature III",
@@ -170,7 +171,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         14:
         {
             title: "Feature IV",
@@ -180,7 +181,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         15:
         {
             title: "Feature V",
@@ -190,7 +191,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         16:
         {
             title: "Feature VI",
@@ -200,7 +201,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         17:
         {
             title: "Feature VII",
@@ -210,7 +211,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
         18:
         {
             title: "Feature VIII",
@@ -220,7 +221,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
-        }, 
+        },
     },
     buyables: {
     },
@@ -276,7 +277,7 @@ addLayer("cp", {
             },
             "Settings": settingsMicrotab,
         },
-    }, 
+    },
 
     tabFormat: [
 

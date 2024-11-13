@@ -12,6 +12,7 @@
         crystalEffect: new Decimal(0),
         crystalsToGet: new Decimal(0),
         crystalPause: new Decimal(0),
+        crystalMax: false,
     }
     },
     automate() {
@@ -29,7 +30,7 @@
             buyUpgrade("p", 21)
             buyUpgrade("p", 22)
             buyUpgrade("p", 23)
-        }  
+        }
     },
     nodeStyle() {
     },
@@ -67,7 +68,7 @@
         if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta)))
         {
             player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.6 * delta))
-        } 
+        }
 
         if (player.p.crystalPause.gt(0)) {
             layers.p.crystalReset();
@@ -84,6 +85,7 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.evolvedEffects[6][1])
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.rarePetEffects[5][1])
+        if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
     },
     prestigeReset()
     {
@@ -95,14 +97,9 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
 
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
+        for (let i = 11; i < 19; i++) {
+            player.f.buyables[i] = new Decimal(0)
+        }
 
         player.f.factorPower = new Decimal(0)
     },
@@ -127,73 +124,43 @@
         player.f.factorPowerPerSecond = new Decimal(0)
         player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
 
-        player.f.buyables[1] = new Decimal(0)
-        player.f.buyables[2] = new Decimal(0)
-        player.f.buyables[3] = new Decimal(0)
-        player.f.buyables[4] = new Decimal(0)
-        player.f.buyables[5] = new Decimal(0)
-        player.f.buyables[6] = new Decimal(0)
-        player.f.buyables[7] = new Decimal(0)
-        player.f.buyables[8] = new Decimal(0)
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
-        player.f.buyables[28] = new Decimal(0)
-        player.f.buyables[29] = new Decimal(0)
-        player.f.buyables[31] = new Decimal(0)
-        player.f.buyables[32] = new Decimal(0)
-        player.f.buyables[33] = new Decimal(0)
-        player.f.buyables[34] = new Decimal(0)
-        player.f.buyables[35] = new Decimal(0)
-        player.f.buyables[36] = new Decimal(0)
+        for (let i = 1; i < 9; i++) {
+            player.f.buyables[i] = new Decimal(0)
+        }
+        for (let i = 11; i < 20; i++) {
+            player.f.buyables[i] = new Decimal(0)
+        }
+        for (let i = 21; i < 30; i++) {
+            player.f.buyables[i] = new Decimal(0)
+        }
+        for (let i = 31; i < 37; i++) {
+            player.f.buyables[i] = new Decimal(0)
+        }
 
         player.p.prestigePoints = new Decimal(0)
 
         if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
         {
-        for (let i = 0; i < player.p.upgrades.length; i++) {
-            if (+player.p.upgrades[i] < 24) {
-                player.p.upgrades.splice(i, 1);
-                i--;
+            for (let i = 0; i < player.p.upgrades.length; i++) {
+                if (+player.p.upgrades[i] < 24) {
+                    player.p.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
 
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
+        for (let i = 11; i < 19; i++) {
+            player.t.buyables[i] = new Decimal(0)
+        }
 
         player.f.factorPower = new Decimal(0)
 
         player.t.leaves = new Decimal(0)
         player.t.trees = new Decimal(0)
 
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
+        for (let i = 11; i < 19; i++) {
+            player.g.buyables[i] = new Decimal(0)
+        }
 
         if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
         {
@@ -228,15 +195,9 @@
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
 
-        player.gh.buyables[11] = new Decimal(0)
-        player.gh.buyables[12] = new Decimal(0)
-        player.gh.buyables[13] = new Decimal(0)
-        player.gh.buyables[14] = new Decimal(0)
-        player.gh.buyables[15] = new Decimal(0)
-        player.gh.buyables[16] = new Decimal(0)
-        player.gh.buyables[17] = new Decimal(0)
-        player.gh.buyables[18] = new Decimal(0)
-        player.gh.buyables[19] = new Decimal(0)
+        for (let i = 11; i < 20; i++) {
+            player.gh.buyables[i] = new Decimal(0)
+        }
         player.gh.buyables[21] = new Decimal(0)
         player.gh.buyables[22] = new Decimal(0)
 
@@ -244,10 +205,9 @@
         player.m.linesOfCode = new Decimal(0)
         player.m.mods = new Decimal(0)
 
-        player.m.buyables[11] = new Decimal(0)
-        player.m.buyables[12] = new Decimal(0)
-        player.m.buyables[13] = new Decimal(0)
-        player.m.buyables[14] = new Decimal(0)
+        for (let i = 11; i < 15; i++) {
+            player.m.buyables[i] = new Decimal(0)
+        }
     },
     clickables: {
         1: {
@@ -261,19 +221,19 @@
         },
         2: {
             title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
+            canClick() { return player.p.crystalMax == false },
             unlocked() { return true },
             onClick() {
-                player.buyMax = true
+                player.p.crystalMax = true
             },
             style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
+            canClick() { return player.p.crystalMax == true  },
             unlocked() { return true },
             onClick() {
-                player.buyMax = false
+                player.p.crystalMax = false
             },
             style: { width: '75px', "min-height": '50px', }
         },
@@ -310,7 +270,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-        }, 
+        },
         12:
         {
             title: "Prestige Upgrade II",
@@ -325,7 +285,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         13:
         {
             title: "Prestige Upgrade III",
@@ -335,7 +295,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-        }, 
+        },
         14:
         {
             title: "Prestige Upgrade IV",
@@ -345,7 +305,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-        }, 
+        },
         15:
         {
             title: "Prestige Upgrade V",
@@ -356,7 +316,7 @@
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
             tooltip() { return "Autobuyers don't spend resources. This applies to most autobuyers in the game." },
-        }, 
+        },
         16:
         {
             title: "Prestige Upgrade VI",
@@ -370,7 +330,7 @@
                 return player.r.tetr.pow(0.6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         17:
         {
             title: "Prestige Upgrade VII",
@@ -380,7 +340,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-        }, 
+        },
         18:
         {
             title: "Prestige Upgrade VIII",
@@ -390,7 +350,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-        }, 
+        },
         19:
         {
             title: "Prestige Upgrade IX",
@@ -434,10 +394,14 @@
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(1.08).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.08) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Prestige Point Crystallizer"
             },
@@ -446,30 +410,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(10)
-                let growth = 1.08
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         12: {
-            cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(20) },
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.1) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Lines of Code and Mod Crystallizer"
             },
@@ -478,30 +442,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(20)
-                let growth = 1.1
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         13: {
-            cost(x) { return new Decimal(1.12).pow(x || getBuyableAmount(this.layer, this.id)).mul(35) },
+            costBase() { return new Decimal(35) },
+            costGrowth() { return new Decimal(1.12) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(7).pow(1.2).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Code Experience Crystallizer"
             },
@@ -510,30 +474,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(35)
-                let growth = 1.12
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         14: {
-            cost(x) { return new Decimal(1.14).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.14) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Steel Crystallizer"
             },
@@ -542,30 +506,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(50)
-                let growth = 1.14
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         15: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.25) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Infinity Crystallizer"
             },
@@ -574,30 +538,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(100)
-                let growth = 1.25
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         16: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
+            costBase() { return new Decimal(150) },
+            costGrowth() { return new Decimal(1.3) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Broken Infinity Crystallizer"
             },
@@ -606,30 +570,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(150)
-                let growth = 1.3
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         17: {
-            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(250) },
+            costBase() { return new Decimal(250) },
+            costGrowth() { return new Decimal(1.35) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Mastery Point Crystallizer"
             },
@@ -638,30 +602,30 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(250)
-                let growth = 1.35
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         18: {
-            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(400) },
+            costBase() { return new Decimal(400) },
+            costGrowth() { return new Decimal(1.4) },
+            currency() { return player.p.crystals},
+            pay(amt) { player.p.crystals = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
             unlocked() { return true },
-            canAfford() { return player.p.crystals.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Tav's Domain Infinity Crystallizer"
             },
@@ -670,22 +634,18 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                let base = new Decimal(400)
-                let growth = 1.4
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.p.crystals = player.p.crystals.sub(buyonecost)
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
-    
-                let max = Decimal.affordGeometricSeries(player.p.crystals, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.p.crystals = player.p.crystals.sub(cost)
+                if (player.p.crystalMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
@@ -724,18 +684,18 @@
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.points.gt(250000) ? "You will gain <h3>" + format(player.p.prestigePointsToGet) + "</h3> prestige points on reset." : ""}, { "color": "#31aeb0", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return player.points.gt(100000) ? "You will gain <h3>" + format(player.p.prestigePointsToGet) + "</h3> prestige points on reset." : ""}, { "color": "#31aeb0", "font-size": "16px", "font-family": "monospace" }],
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

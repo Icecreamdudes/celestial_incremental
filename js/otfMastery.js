@@ -38,7 +38,7 @@
             "border-color": "purple",
         };
       },
-    
+
     tooltip: "Otherworldy Feature Mastery",
     color: "#8a00a9",
     update(delta) {
@@ -50,7 +50,7 @@
         } else
         {
             player.om.diceMasteryPointsToGet = new Decimal(0)
-        } 
+        }
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("om", 16))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 19))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 23))
@@ -58,7 +58,7 @@
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(player.cb.commonPetEffects[8][0])
 
-        if (player.po.rocketFuel && player.rf.rocketFuel.gte(1)) 
+        if (player.po.rocketFuel && player.rf.rocketFuel.gte(1))
         {
             player.om.rocketFuelMasteryPointsToGet = player.rf.rocketFuel.plus(1).log10().pow(2.7)
         } else
@@ -147,7 +147,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.om.diceMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(cost)
@@ -179,7 +179,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.om.rocketFuelMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(cost)
@@ -198,7 +198,7 @@
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Alternate Infinity Mastery Multiplier"
             },
             display() {
-                return "which are multiplying alterate infinity types by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying alternate infinity types by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Mastery Points"
             },
             buy() {
@@ -211,7 +211,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.om.hexMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(cost)
@@ -243,7 +243,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.om.diceMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(cost)
@@ -275,7 +275,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.om.rocketFuelMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(cost)
@@ -307,7 +307,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.om.hexMasteryPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(cost)
@@ -360,14 +360,14 @@
                         ["raw-html", function () { return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"], 
+                        ["blank", "25px"],
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                         ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                 ]
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["row", [["clickable", 1]]],

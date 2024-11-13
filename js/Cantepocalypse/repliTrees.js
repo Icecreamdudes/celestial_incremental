@@ -44,6 +44,7 @@
         multAdd = new Decimal(0)
         multAdd = buyableEffect("rt", 11)
         multAdd = multAdd.mul(player.rg.repliGrassEffect2)
+        multAdd = multAdd.mul(player.cb.epicPetEffects[1][2])
 
         player.rt.repliLeavesTimerReq = new Decimal(6)
         if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
@@ -82,7 +83,7 @@
         }
 
         if (player.rt.repliLeaves.gte(player.rt.repliTreeReq)) {
-            player.rt.repliTrees = player.rt.repliTrees.add(player.rt.repliTreesToGet) 
+            player.rt.repliTrees = player.rt.repliTrees.add(player.rt.repliTreesToGet)
             player.rt.repliLeaves = new Decimal(1)
         }
     },
@@ -149,7 +150,7 @@
             display() {
                 return "Time: " + formatTime(player.rt.repliLeavesTimer) + "/" + formatTime(player.rt.repliLeavesTimerReq);
             },
-        }, 
+        },
     },
     upgrades: {
     },
@@ -176,7 +177,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
@@ -208,7 +209,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
@@ -240,7 +241,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
@@ -272,7 +273,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
@@ -304,7 +305,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
@@ -336,7 +337,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
@@ -368,7 +369,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
@@ -400,7 +401,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
@@ -412,7 +413,7 @@
         },
     },
     milestones: {
-   
+
     },
     challenges: {
     },
@@ -435,13 +436,13 @@
                     ["row", [["bar", "replileafBar"]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.an.anonymity) + "</h3> anonymity." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

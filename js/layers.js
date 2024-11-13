@@ -23,7 +23,7 @@ addLayer("i", {
             buyUpgrade("i", 18)
             buyUpgrade("i", 19)
             buyUpgrade("i", 21)
-        }  
+        }
     },
     nodeStyle() {
         return {
@@ -48,6 +48,10 @@ addLayer("i", {
             player.gain = new Decimal(1)
         }
 
+        if (player.tab == "cb")
+        {
+            player.universe = 0.5
+        }
         if (player.tab == "i")
         {
             player.universe = 1
@@ -82,8 +86,10 @@ addLayer("i", {
         } else if (player.universe == 2 && options.musicToggle)
         {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
-        } 
-        else if (player.universe == -1 && options.musicToggle)
+        } else if (player.universe == 0.5 && options.musicToggle)
+        {
+            playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
+        } else if (player.universe == -1 && options.musicToggle)
         {
             if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12)
             {
@@ -92,7 +98,7 @@ addLayer("i", {
             {
                 playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
             }
-        } 
+        }
         else if (player.universe == 1.5 && options.musicToggle)
         {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
@@ -109,7 +115,7 @@ addLayer("i", {
         {
             stopRain();
         }
-        
+
         //Celestial Point boosts
         player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
@@ -178,10 +184,10 @@ addLayer("i", {
 
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        
+
         if (player.po.realmMods) player.gain = player.gain.pow(0.2)
         player.points = player.points.add(player.gain.mul(delta))
-        
+
         player.gain = player.gain.div(player.po.halterEffects[0])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
@@ -207,7 +213,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
-        }, 
+        },
         11:
         {
             title: "Feature I",
@@ -217,7 +223,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
-        }, 
+        },
         12:
         {
             title: "Feature II",
@@ -393,7 +399,7 @@ addLayer("i", {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e28750"),
+            cost: new Decimal("1e11000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -403,7 +409,7 @@ addLayer("i", {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e28400"),
+            cost: new Decimal("1e10500"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -413,7 +419,7 @@ addLayer("i", {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e6150"),
+            cost: new Decimal("1e2750"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -423,7 +429,7 @@ addLayer("i", {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e1380"),
+            cost: new Decimal("1e8000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -433,7 +439,7 @@ addLayer("i", {
             title: "Challenge VIII.",
             unlocked() { return inChallenge("ip", 18) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e10750"),
+            cost: new Decimal("1e10000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -485,7 +491,7 @@ addLayer("i", {
             },
             "Settings": settingsMicrotab,
         },
-    }, 
+    },
 
     tabFormat: [
          ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -564,12 +570,12 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
 }
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
-        player.tab = "i" 
+        player.tab = "i"
     }
     if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13) && options.toggleHotkey) {
         player.tab = "cp"
     }
     if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
-        player.tab = "in" 
+        player.tab = "in"
     }
 });

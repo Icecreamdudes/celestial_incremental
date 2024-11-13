@@ -11,7 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="css/popup.css" />
 	<link rel="stylesheet" type="text/css" href="css/tree-node.css" />
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<link rel="icon" href="resources/gameIcon.png">
+	<link rel="icon" href="resources/gat.png">
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
@@ -67,9 +67,9 @@
 		</div>
 
 		<div id="treeOverlay" v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" class="treeOverlay" onscroll="resizeCanvas()"
-			v-bind:class="{ 
-			fullWidth: (player.tab == 'none' || player.navTab == 'none'), 
-			col: (player.tab !== 'none' && player.navTab !== 'none'), 
+			v-bind:class="{
+			fullWidth: (player.tab == 'none' || player.navTab == 'none'),
+			col: (player.tab !== 'none' && player.navTab !== 'none'),
 			left: (player.tab !== 'none' && player.navTab !== 'none')}"
 			 :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
 			<button
@@ -81,8 +81,8 @@
 				</div>
 			</div>
 		</div>
-		
-		<div v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen)" id="treeTab"  onscroll="resizeCanvas()" 
+
+		<div v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen)" id="treeTab"  onscroll="resizeCanvas()"
 			v-bind:class="{ fullWidth: (player.tab == 'none' || player.navTab == 'none'), col: (player.tab !== 'none' && player.navTab !== 'none'), left: (player.tab !== 'none' && player.navTab !== 'none')}">
 			<br><br><br><br>
 			<overlay-head id="fakeHead" style="visibility: hidden;">

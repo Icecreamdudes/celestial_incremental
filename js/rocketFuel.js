@@ -24,23 +24,23 @@
         function degreesToRadians(degrees) {
             return (degrees * Math.PI) / 180;
         }
-        
+
         // Define the base hue value for dark blue (between 0 and 360 degrees)
         const darkBlueHue = 210;
-        
+
         // Define the base lightness values for dark blue and light gray (between 0 and 100%)
         const darkBlueLightness = 20; // Adjust for darker blue
         const lightGrayLightness = 80; // Adjust for lighter gray
-        
+
         // Calculate the current lightness value based on time (smoothly oscillating between dark blue and light gray)
         const currentTime = new Date().getTime();
         const lightnessOffset = (Math.sin(currentTime / 400) + 1) / 9; // Adjust the divisor to change oscillation speed
         const lightness1 = darkBlueLightness + (lightnessOffset * (lightGrayLightness - darkBlueLightness));
         const lightness2 = lightGrayLightness - (lightnessOffset * (lightGrayLightness - darkBlueLightness));
-        
+
         // Create the gradient string using the HSL colors
         const gradient = `linear-gradient(to right, hsl(${darkBlueHue}, 80%, ${lightness1}%), hsl(${darkBlueHue}, 80%, ${lightness2}%))`;
-        
+
         return {
             background: gradient,
             "background-origin": "border-box",
@@ -76,14 +76,14 @@
         player.rf.rocketFuelPause = player.rf.rocketFuelPause.sub(1)
 
         player.rf.abilityDesc = [
-            "RF Point Boost: Gives a x" + format(player.rf.abilityEffects[0]) + " boost to points. (" + formatTime(player.rf.abilityTimers[0]) + " left)", 
-            "RF Tree Boost: Gives a x" + format(player.rf.abilityEffects[1]) + " boost to trees. (" + formatTime(player.rf.abilityTimers[1]) + " left)", 
-            "RF Grass Boost: Gives a x" + format(player.rf.abilityEffects[2]) + " boost to grass. (" + formatTime(player.rf.abilityTimers[2]) + " left)", 
-            "RF Fertilizer Boost: Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer. (" + formatTime(player.rf.abilityTimers[3]) + " left)", 
-            "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)", 
-            "RF Infinity Point Boost: Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points. (" + formatTime(player.rf.abilityTimers[5]) + " left)", 
-            "RF Button Cooldown: Divides XP button cooldown by /1.2. (" + formatTime(player.rf.abilityTimers[6]) + " left)", 
-            "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)", 
+            "RF Point Boost: Gives a x" + format(player.rf.abilityEffects[0]) + " boost to points. (" + formatTime(player.rf.abilityTimers[0]) + " left)",
+            "RF Tree Boost: Gives a x" + format(player.rf.abilityEffects[1]) + " boost to trees. (" + formatTime(player.rf.abilityTimers[1]) + " left)",
+            "RF Grass Boost: Gives a x" + format(player.rf.abilityEffects[2]) + " boost to grass. (" + formatTime(player.rf.abilityTimers[2]) + " left)",
+            "RF Fertilizer Boost: Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer. (" + formatTime(player.rf.abilityTimers[3]) + " left)",
+            "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)",
+            "RF Infinity Point Boost: Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points. (" + formatTime(player.rf.abilityTimers[5]) + " left)",
+            "RF Button Cooldown: Divides XP button cooldown by /1.2. (" + formatTime(player.rf.abilityTimers[6]) + " left)",
+            "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)",
         ]
 
         if (player.rf.rocketFuel.gt(0))
@@ -116,7 +116,7 @@
         for (let i = 0; i < player.rf.abilityTimers.length; i++)
         {
             player.rf.abilityTimers[i] = player.rf.abilityTimers[i].sub(onepersec.mul(delta))
-        }        
+        }
         for (let i = 0; i < player.rf.abilityTimers.length; i++)
         {
             if (player.rf.abilityTimers[i] <= 0)
@@ -124,7 +124,7 @@
                 player.rf.abilityEffects[i] = new Decimal(1)
                 player.rf.abilityTimers[i] = new Decimal(0)
             }
-        }    
+        }
 
         if (hasUpgrade("tad", 12))
         {
@@ -149,7 +149,7 @@
         },
         2: {
             title() { return "1%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0) },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
@@ -170,7 +170,7 @@
         },
         3: {
             title() { return "30%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0) },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.3))
@@ -222,7 +222,7 @@
         },
         13: {
             title() { return "10%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0)  },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
             unlocked() { return player.rf.abilitiesUnlocked[0]  },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
@@ -243,7 +243,7 @@
         },
         14: {
             title() { return "100%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(0.1) : player.rf.rocketFuel.gt(0.1) && player.rf.abilityTimers[4].lte(0) },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)
@@ -521,7 +521,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
-        }, 
+        },
         12:
         {
             title: "Rocket Fuel Upgrade II",
@@ -531,7 +531,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
-        }, 
+        },
         13:
         {
             title: "Rocket Fuel Upgrade III",
@@ -541,7 +541,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
-        }, 
+        },
         14:
         {
             title: "Rocket Fuel Upgrade IV",
@@ -551,7 +551,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
-        }, 
+        },
         15:
         {
             title: "Rocket Fuel Upgrade V",
@@ -565,7 +565,7 @@
                 return player.rf.rocketFuel.pow(0.3).mul(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         16:
         {
             title: "Rocket Fuel Upgrade VII",
@@ -579,7 +579,7 @@
                 return player.rf.rocketFuel.pow(0.5).mul(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         17:
         {
             title: "Rocket Fuel Upgrade VIII",
@@ -589,7 +589,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
-        }, 
+        },
     },
     buyables: {
     },
@@ -623,7 +623,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

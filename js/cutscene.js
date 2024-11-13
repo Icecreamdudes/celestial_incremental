@@ -15,17 +15,17 @@
         cutsceneDice: true,
         cutsceneRocketFuel: true,
         cutsceneHex: true,
-        
+
         //celestial
         tavCutscene: false,
 
         //Cutscene Info
-        cutsceneText: [ 
+        cutsceneText: [
             "You find yourself in a vast desert of black sand.",
             "The wind is moderate. It is quite cold.",
             "It seems as if it's always night. The stars stand in place.",
             '"You hear a voice in the distance. "This place is dead. Bring it back to life and know your purpose."',
-            "As the voice fades away, you look at your own hands, and see ten points manifest as rings. One for each finger.",           
+            "As the voice fades away, you look at your own hands, and see ten points manifest as rings. One for each finger.",
         ],
         cutsceneIndex: 0,
 
@@ -39,35 +39,36 @@
 
         //Background
         document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2 || player.c.cutscene13) && player.tab == "c" ? "black":
-        player.tab == "t" ? "#02172f" : 
-        player.tab == "g" ? "#042347" : 
-        player.tab == "gh" ? "#073b77" : 
-        player.tab == "cb" || player.tab == "ps" ? "#021124" : 
-        player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" : 
-        player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
-        player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
-        player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
-        player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
-        player.tab == "bigc" ? "#b87c34" : 
-        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.tab == "bi" || player.tab == "om" || player.tab == "id" ? "#001f18" : 
-        player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
-        player.tab == "revc" ? "#31aeb0" : 
-        player.tab == "tad" ? "#b2d8d8" : 
-        player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" : 
-        player.tab == "ca" ? "#2a3e66" : 
-        player.tab == "cap" ? "#1f1e33" : 
-        player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" ? "#204387" : 
-        player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
-        player.tab == "ev8" ? "#242525" : 
-        player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
-        player.tab == "s" ? "#2D0000" : 
+        player.tab == "t" ? "#02172f" :
+        player.tab == "g" ? "#042347" :
+        player.tab == "gh" ? "#073b77" :
+        player.tab == "cb" || player.tab == "ps" ? "#021124" :
+        player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" :
+        player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" :
+        player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" :
+        player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" :
+        player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" :
+        player.tab == "bigc" ? "#b87c34" :
+        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.tab == "bi" || player.tab == "om" || player.tab == "id" ? "#001f18" :
+        player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' :
+        player.tab == "revc" ? "#31aeb0" :
+        player.tab == "tad" ? "#b2d8d8" :
+        player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" :
+        player.tab == "ca" ? "#2a3e66" :
+        player.tab == "cap" ? "#1f1e33" :
+        player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" ? "#204387" :
+        player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" :
+        player.tab == "ev8" ? "#242525" :
+        player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" :
+        player.tab == "s" ? "#2D0000" :
+        player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" ? "#7d3f98" : 
         "#161616");
 
         //1
         if (player.c.cutscenes[0] && player.startedGame)
         {
             player.c.currentCutscene = 1
-        } else 
+        } else
         {
             player.c.currentCutscene = 0
         }
@@ -125,7 +126,7 @@
             player.subtabs["in"]['stuff'] = 'Features'
             player.c.cutscenes[2] = false
         }
-            
+
         //4
         if (player.c.cutscenes[3] && player.ta.negativeInfinityPoints.gt(0))
         {
@@ -145,10 +146,10 @@
             player.tab = "i"
             player.subtabs["i"]['stuff'] = 'Features'
             player.c.cutscenes[3] = false
-            
+
         }
 
-        
+
         //5
         if (player.c.cutscenes[4] && player.ta.negativeInfinityPoints.gt(1000))
         {
@@ -170,7 +171,7 @@
             player.c.cutscenes[4] = false
         }
 
-        
+
         //6
         if (player.c.cutscenes[5] && inChallenge("tad", 11))
         {
@@ -192,7 +193,7 @@
             player.c.cutscenes[5] = false
         }
 
-        
+
         //7
         if (player.c.cutscenes[6] && player.in.unlockedBreak)
         {
@@ -359,7 +360,7 @@
             player.subtabs["i"]['stuff'] = 'Features'
         }
 
-        
+
         //rf
         if (player.c.cutsceneRocketFuel && player.po.rocketFuel)
         {
@@ -380,7 +381,7 @@
             player.subtabs["i"]['stuff'] = 'Features'
         }
 
-        
+
         //h
         if (player.c.cutsceneHex && player.h.hex.gte(1))
         {
@@ -640,10 +641,10 @@ evoCutscenes(pet) {
         break;
         case 2:
             player.c.cutsceneText = [
-                "This peculiar being has been so full of joy.", 
-                "Evolution shards would certainly turn that frown upside down.", 
-                "This questions the ethics of pet evolutions.", 
-                "Do they really enjoy being evolved?", 
+                "This peculiar being has been so full of joy.",
+                "Evolution shards would certainly turn that frown upside down.",
+                "This questions the ethics of pet evolutions.",
+                "Do they really enjoy being evolved?",
             ]
         break;
     }
@@ -665,7 +666,7 @@ evoCutscenes(pet) {
                 player.c.cutsceneIndex = player.c.cutsceneIndex - 1
             },
         },
-        
+
     },
     upgrades: {
     },

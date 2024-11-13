@@ -3,12 +3,12 @@
 	id: "celestial",
 	author: "Icecreamdude",
 	pointsName: "celestial points",
-	modFiles: ["settingsMicrotab.js", "layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js", 
-	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "petShop.js", "evolution.js", "rocketFuel.js", "infinity.js", 
+	modFiles: ["settingsMicrotab.js", "layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
+	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "petShop.js", "evolution.js", "rocketFuel.js", "infinity.js",
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
-	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js",],
+	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js",],
 
 	discordName: "",
 	discordLink: "",
@@ -18,8 +18,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.1",
-	name: "The Pet Update",
+	num: "1.2",
+	name: "The Pet Update Part II: Epic Pets",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -31,39 +31,51 @@ let hotkey = `<h1>Hotkeys:</h1><br>
 
 let credits = `<h1>Credits:</h1><br>
 		-Game by Icecreamdude.<br>
-		-Music by !Sweet.<br>
+		-Music by !Sweet and 150percent.<br>
 		-Ideas and Balancing by Nova.<br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
-		-Bug Fixes by Tsanth.<br>
+		-Bug Fixes by Tsanth and Forwaken.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.2 - Epic Pets!!! :)</h3><br>
+		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+		<br>
+		<br>
+		<br>
+		Content:<br>
+			- Added 3 new epic pets!!! (They are hard to get so good luck)<br>
+			- Added 2 new pet crates.<br>
+			- Added 2 new common pets.<br>
+			- Added 2 new uncommon pets.<br>
+			- Added 2 new rare pets.<br>
+			- Added epic pet fragments.<br>
+			- Added a pet shop expansion.<br>
+			- New song for check back by 150percent!!!<br><br>
+		Bugfixes: I lost track lmao<br><br>
+		QoL: I lost track again lmao<br><br>
 	<h3>v1.1.2 - Even More Bugfixes</h3><br>
- 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
-   		<br>
-     		<br>
-       		<br>
 	 	Bugfixes:<br>
-   		- Fixed Cante Quiz Questions breaking if the answer is negative.<br>
+   			- Fixed Cante Quiz Questions breaking if the answer is negative.<br>
      		- Fixed Realm Mod images not loading.<br>
        		- Made IP Challenges 1 and 3 reset OTF when entering to prevent being able to bring in unavailable OTFs.<br>
-	 	- Fixed IP Challenge 5 resetting OTF whenever the Booster Dice auto-crunches.<br>
-   		- Fixed the "You will unlock something" message for Level 1500 only showing up on the XPBoost tab.<br>
+	 		- Fixed IP Challenge 5 resetting OTF whenever the Booster Dice auto-crunches.<br>
+   			- Fixed the "You will unlock something" message for Level 1500 only showing up on the XPBoost tab.<br>
      		- Fixed the Evolution tab showing the level 250 evolutions when your current Level was 250 when it should be your highest Level.<br>
        		- Fixed IP Challenges not clearing if the crunch() function isn't ran fast enough.<br>
-	 	- Fixed Cante Puzzle 1 upgrades being available when you haven't unlocked Cante Puzzles.<br>
-	 	- Fixed incorrect formatting of the last changelog.<br><br>
+	 		- Fixed Cante Puzzle 1 upgrades being available when you haven't unlocked Cante Puzzles.<br>
+	 		- Fixed incorrect formatting of the last changelog.<br><br>
    		QoL:<br>
 			- Added Buy Max buttons above all buyables that were missing them. (Which was most of them.)<br>
      		- Fixed typos.<br>
        		- Specified Celestial Points in the Cante Quiz to prevent confusion.<br>
        		- Added a note to the bottom of IP challenges after you break infinity that it works in all challenges.<br><br>
-     		Balancing:<br>
+     	Balancing:<br>
        		- Nerfed Rocket Fuel Button Cooldown Abilities effect from /1.5 -> /1.2.<br>
-	 	- Doubled Rocket Fuel Button Cooldown Abilities duration.<br>
-   		- Increased the amount of Grasshop Check Back Study II Upgrades you can buy from 20 -> 50.<br>
-   		- Decreased the cost scaling of Grasshop Check Back Study II Upgrades to account for the increased cap.<br>
+	 		- Doubled Rocket Fuel Button Cooldown Abilities duration.<br>
+   			- Increased the amount of Grasshop Check Back Study II Upgrades you can buy from 20 -> 50.<br>
+   			- Decreased the cost scaling of Grasshop Check Back Study II Upgrades to account for the increased cap.<br>
      		- Buffed the Daily XP Reward from the Insane Face evolution. (Decreased base, but now effected by multipliers)<br>
        		- Buffed the chances to gain paragon shards from XPBoosting. (B1 5% -> 10%, B2 20% -> 25%)<br><br>
 	<h3>v1.1.1 - Tons of Bugfixes</h3><br>
@@ -125,14 +137,15 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
-var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset", "tierReset", "tetrReset", "prestigeReset", "loadGrass", "unloadGrass", 
+var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset", "tierReset", "tetrReset", "prestigeReset", "loadGrass", "unloadGrass",
 "pentReset", "loadGoldGrass", "unloadGoldGrass", "grasshopReset", "codeExperienceReset", "levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2", "resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
 "rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5", "dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8", "dailyReward", "dailyRewardPet",
-"petButton4", "hexReset", "hexPointReset", "automationTierReset", "startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12", "startCutscene13", "antidebuffReset", "startCutscene14", 
+"petButton4", "hexReset", "hexPointReset", "automationTierReset", "startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12", "startCutscene13", "antidebuffReset", "startCutscene14",
 "negativeInfinityReset", "reverseCrunch", "startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities", "domainReset", "gainAutomationShard",
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
-"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", ]
+"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
+"commonPetBanner", "uncommonPetBanner", "rarePetBanner"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

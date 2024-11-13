@@ -47,7 +47,7 @@
             "border-color": "#0f354c",
         };
     },
-    
+
     tooltip: "Cante, the Celestial of Replicanti",
     color: "white",
     update(delta) {
@@ -60,6 +60,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(player.cb.commonPetEffects[7][0])
+        if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
@@ -81,10 +82,11 @@
         if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.plus(1).log10().pow(1.4).pow(0.75).mul(10).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
         if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.plus(1).log10().pow(2.6).pow(0.45).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
         player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
-        
+
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
         player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(player.ca.rememberanceCoresEffect)
+        player.ca.canteEnergyMult = player.ca.canteEnergyMult.mul(player.cb.epicPetEffects[2][0])
 
         if (player.ca.canteEnergy.gte(player.ca.canteEnergyReq))
         {
@@ -96,7 +98,7 @@
         player.ca.galaxyDustToGet = player.ca.replicanti.plus(1).log10().pow(0.8)
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.cb.commonPetEffects[7][1])
         player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
-        
+
         //rep galax
         player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
 
@@ -280,7 +282,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -312,7 +314,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -344,7 +346,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -376,7 +378,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
@@ -408,7 +410,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
@@ -440,7 +442,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
@@ -472,7 +474,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -504,7 +506,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -536,7 +538,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -568,7 +570,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -600,7 +602,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -632,7 +634,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -664,7 +666,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
@@ -716,7 +718,7 @@
         ["raw-html", function () { return "Replicate Chance: " + format(player.ca.replicateChance.mul(100)) + "%" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["row", [["clickable", 2], ["clickable", 3]]],
-        ["blank", "25px"], 
+        ["blank", "25px"],
         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
         ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
         ["row", [["buyable", 17], ["buyable", 18], ["buyable", 19]]],
@@ -736,7 +738,7 @@
         ["row", [["clickable", 12]]],
         ["blank", "25px"],
         ["row", [["clickable", 2], ["clickable", 3]]],
-        ["blank", "25px"], 
+        ["blank", "25px"],
         ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
         ["blank", "25px"],
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, { "color": "#979EE8", "font-size": "24px", "font-family": "monospace" }],
@@ -792,9 +794,9 @@
 
             },
         },
-    }, 
+    },
 
-    tabFormat: [        
+    tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],

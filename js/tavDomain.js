@@ -29,7 +29,7 @@
             "transform": "scale(0.7)",
         };
       },
-    
+
     tooltip: "Tav's Domain",
     color: "#333c81",
     update(delta) {
@@ -47,7 +47,7 @@
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("p", 18))
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
-        
+
         player.tad.disfiguredInfinitiesToGet = player.bi.brokenInfinities.pow(0.4)
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("p", 18))
@@ -115,7 +115,7 @@
             style: { width: '200px', "min-height": '100px',},
         },
         14: {
-            title() { return "<h3>Stop Converions" },
+            title() { return "<h3>Stop Conversions" },
             canClick() { return true},
             unlocked() { return true },
             onClick() {
@@ -224,7 +224,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
@@ -256,7 +256,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
@@ -288,7 +288,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
@@ -320,7 +320,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
@@ -352,7 +352,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
@@ -384,7 +384,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
@@ -416,7 +416,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
@@ -448,7 +448,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
@@ -480,7 +480,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
@@ -512,7 +512,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
@@ -544,7 +544,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
@@ -576,7 +576,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
@@ -660,7 +660,7 @@
             },
             "Buyables and Upgrades": {
                 buttonStyle() { return { 'color': 'black' } },
-                unlocked() { return true }, 
+                unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
@@ -671,7 +671,7 @@
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                     ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                     ["row", [["buyable", 17], ["buyable", 18], ["buyable", 19]]],
@@ -752,7 +752,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
          ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],

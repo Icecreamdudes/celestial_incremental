@@ -100,12 +100,6 @@ addLayer("in", {
                 {
                     layers.bigc.crunch()
                 }
-                if (hasUpgrade("bi", 14))
-                {
-                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-                }
             }
         }
 
@@ -140,9 +134,34 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cb.epicPetEffects[2][1])
+
         player.in.infinityPause = player.in.infinityPause.sub(1)
         if (player.in.infinityPause.gt(0))
         {
+            if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gt(1e300))
+            {
+                completeChallenge("ip", 11)
+            }
+            if (inChallenge("ip", 12) && !hasChallenge("ip", 12) && player.points.gt(1e300))
+            {
+                completeChallenge("ip", 12)
+            }
+            if (inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.points.gt(1e300))
+            {
+                completeChallenge("ip", 13)
+            }
+            if (inChallenge("ip", 14) && !hasChallenge("ip", 14) && player.points.gt(1e300))
+            {
+                completeChallenge("ip", 14)
+            }
+            if (inChallenge("ip", 15) && !hasChallenge("ip", 15) && player.points.gt(1e300))
+            {
+                completeChallenge("ip", 15)
+            }
+            if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gt(1e300))
+            {
+                completeChallenge("ip", 16)
+            }
             layers.in.bigCrunch();
         }
 
@@ -335,7 +354,7 @@ addLayer("in", {
             }
         }
 
-        if (!player.po.keepOTFS || inChallenge("ip", 16))
+        if (!player.po.keepOTFS)
         {
             player.po.dice = false
             player.po.rocketFuel = false
@@ -387,6 +406,14 @@ addLayer("in", {
                 i--;
             }
         }
+        }
+
+        // Mastery Point Stuff
+        if (hasUpgrade("bi", 14))
+        {
+            if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+            if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+            if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
         }
 
         player.de.antidebuffPoints = new Decimal(0)

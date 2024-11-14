@@ -56,7 +56,7 @@ addLayer("po", {
             player.in.reachedInfinity = true
         }
 
-        if (player.po.pointHaltInput.gte(1)) 
+        if (player.po.pointHaltInput.gte(1))
         {
             if (player.po.pointHaltInput.neq(player.po.pointHalt))
             {
@@ -67,7 +67,7 @@ addLayer("po", {
         if (player.po.pointHaltInput.lt(1)) player.po.pointHalt = new Decimal(1)
 
         let oldVal = player.po.pointHaltInput
-        
+
 
         player.po.featureSlotsMax = new Decimal(1)
         if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 27)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
@@ -140,7 +140,7 @@ addLayer("po", {
             10 - Mods
         */
 
-        if (player.po.halterInput.gte(1)) 
+        if (player.po.halterInput.gte(1))
         {
             if (player.po.halterInput.neq(player.po.halterEffects[player.po.halterIndex]))
             {
@@ -148,7 +148,7 @@ addLayer("po", {
             }
         }
         if (player.po.halterInput.lt(1)) player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
-        
+
     },
     branches: ["branch"],
     clickables: {
@@ -168,7 +168,7 @@ addLayer("po", {
             },
             canClick() { return true },
             unlocked() { return hasMilestone("ip", 18) && !player.po.keepOTFS},
-            onClick() { 
+            onClick() {
                 player.po.keepOTFS = true
             },
             style: {
@@ -180,7 +180,7 @@ addLayer("po", {
             title() { return "Don't keep OTFs on reset. (Currently on)" },
             canClick() { return true },
             unlocked() { return hasMilestone("ip", 18) && player.po.keepOTFS},
-            onClick() { 
+            onClick() {
                 player.po.keepOTFS = false
             },
             style: {
@@ -243,7 +243,7 @@ addLayer("po", {
                     "Currently divides fertilizer gain by /" + format(player.po.halterEffects[7]) + "\n" +
                     "Currently divides code experience gain by /" + format(player.po.halterEffects[8]) + "\n" +
                     "Currently divides lines of code gain by /" + format(player.po.halterEffects[9]) + "\n" +
-                    "Currently divides mod gain by /" + format(player.po.halterEffects[10]) + "\n" 
+                    "Currently divides mod gain by /" + format(player.po.halterEffects[10]) + "\n"
                 )
             },
             style: { width: '100px', "min-height": '100px' },
@@ -255,7 +255,7 @@ addLayer("po", {
             },
             canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
-            onClick() { 
+            onClick() {
                 player.po.dice = true
             },
             style: {
@@ -272,31 +272,31 @@ addLayer("po", {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
             canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e170) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
-            unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
-            onClick() { 
+            unlocked() { return hasMilestone("ip", 1) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
+            onClick() {
                 player.po.rocketFuel = true
             },
             style() {
                 function degreesToRadians(degrees) {
                     return (degrees * Math.PI) / 180;
                 }
-                
+
                 // Define the base hue value for dark blue (between 0 and 360 degrees)
                 const darkBlueHue = 210;
-                
+
                 // Define the base lightness values for dark blue and light gray (between 0 and 100%)
                 const darkBlueLightness = 20; // Adjust for darker blue
                 const lightGrayLightness = 80; // Adjust for lighter gray
-                
+
                 // Calculate the current lightness value based on time (smoothly oscillating between dark blue and light gray)
                 const currentTime = new Date().getTime();
                 const lightnessOffset = (Math.sin(currentTime / 400) + 1) / 9; // Adjust the divisor to change oscillation speed
                 const lightness1 = darkBlueLightness + (lightnessOffset * (lightGrayLightness - darkBlueLightness));
                 const lightness2 = lightGrayLightness - (lightnessOffset * (lightGrayLightness - darkBlueLightness));
-                
+
                 // Create the gradient string using the HSL colors
                 const gradient = `linear-gradient(to right, hsl(${darkBlueHue}, 80%, ${lightness1}%), hsl(${darkBlueHue}, 80%, ${lightness2}%))`;
-                
+
                 return {
                     width: '200px',
                     "min-height": '200px',
@@ -314,7 +314,7 @@ addLayer("po", {
             },
             canClick() { return player.po.featureSlots.gte(1) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
             unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))  && (!inChallenge("ip", 16) && hasChallenge("ip", 13))     },
-            onClick() { 
+            onClick() {
                 player.po.hex = true
             },
             style: {
@@ -332,7 +332,7 @@ addLayer("po", {
             },
             canClick() { return player.po.featureSlots.gte(1) && player.in.unlockedBreak && !inChallenge("tad", 11)},
             unlocked() { return player.in.unlockedBreak },
-            onClick() { 
+            onClick() {
                 player.po.breakInfinity = true
             },
             style: {
@@ -351,7 +351,7 @@ addLayer("po", {
             },
             canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308) && player.ca.canteCores.gte(1)},
             unlocked() { return hasUpgrade("bi", 27) },
-            onClick() { 
+            onClick() {
                 player.in.infinityPause = new Decimal(8)
                 player.po.keepOTFS = true
                 player.po.realmMods = true
@@ -474,7 +474,7 @@ addLayer("po", {
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["row", [["clickable", 1]]],

@@ -54,7 +54,7 @@
             "border-color": "#119B35",
         };
       },
-    
+
     tooltip: "Antimatter Dimensions",
     color: "rgba(30,181,22,1)",
     update(delta) {
@@ -158,7 +158,7 @@
 
         if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
         player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(player.cb.commonPetEffects[5][1])
-        
+
         player.ad.dimensionCosts = [new Decimal(10),new Decimal(100),new Decimal(10000),new Decimal(1e6),new Decimal(1e9),new Decimal(1e13),new Decimal(1e18),new Decimal(1e24),]
 
         player.ad.dimensionCosts[0] = player.ad.dimensionCosts[0].mul(Decimal.pow(1e3, player.ad.dimensionsPurchased[0]))
@@ -182,14 +182,14 @@
         if (hasUpgrade("ev1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ev1", 12))
         //dimboost
 
-        if (player.ad.dimBoostAmount.gt(4)) 
+        if (player.ad.dimBoostAmount.gt(4))
         {
             player.ad.dimBoostReq = player.ad.dimBoostAmount.sub(4).mul(2).add(2)
         } else
         {
             player.ad.dimBoostReq = new Decimal(2)
         }
-        if (player.ad.dimBoostAmount.lte(4)) 
+        if (player.ad.dimBoostAmount.lte(4))
         {
         player.ad.dimBoostDimCost = player.ad.dimBoostAmount.add(3)
         } else
@@ -230,7 +230,7 @@
             if (!hasUpgrade("bi", 112)) layers.ad.galaxyReset()
         }
         player.ad.galaxyPause = player.ad.galaxyPause.sub(1)
-        
+
 
         player.ad.galaxyLimit = new Decimal(16)
         if (player.ad.galaxyAmount.gt(player.ad.galaxyLimit))
@@ -241,7 +241,7 @@
 
         if (!hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = true
         if (hasChallenge("ip", 18)) player.ad.extraDimsGalaxiesLocked = false
-        
+
         if (!hasUpgrade("ad", 11))
         {
             player.ad.antimatter = new Decimal(0)
@@ -360,7 +360,7 @@
             player.ad.dimensionAmounts[i] = new Decimal(0)
             player.ad.dimensionsPurchased[i] = new Decimal(0)
         }
-        
+
     },
     galaxyReset()
     {
@@ -378,7 +378,7 @@
         player.ad.dimensionsUnlocked[5] = false
         player.ad.dimensionsUnlocked[6] = false
         player.ad.dimensionsUnlocked[7] = false
-        
+
         player.ad.dimBoostAmount = new Decimal(0)
     },
     bars: {
@@ -397,7 +397,7 @@
             {
                 player.ad.antimatter = new Decimal(10)
             }
-        }, 
+        },
         12:
         {
             title: "AD Upgrade II",
@@ -540,7 +540,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -568,7 +568,7 @@
                     player.ad.dimensionAmounts[0] = player.ad.dimensionAmounts[0].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[0])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[0])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -597,7 +597,7 @@
                     player.ad.dimensionAmounts[1] = player.ad.dimensionAmounts[1].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[1])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[1])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -626,7 +626,7 @@
                     player.ad.dimensionAmounts[2] = player.ad.dimensionAmounts[2].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[2])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[2])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -655,7 +655,7 @@
                     player.ad.dimensionAmounts[3] = player.ad.dimensionAmounts[3].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[3])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[3])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -684,7 +684,7 @@
                     player.ad.dimensionAmounts[4] = player.ad.dimensionAmounts[4].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[4])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[4])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -713,7 +713,7 @@
                     player.ad.dimensionAmounts[5] = player.ad.dimensionAmounts[5].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[5])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[5])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -742,7 +742,7 @@
                     player.ad.dimensionAmounts[6] = player.ad.dimensionAmounts[6].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[6])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[6])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -771,7 +771,7 @@
                     player.ad.dimensionAmounts[7] = player.ad.dimensionAmounts[7].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ad.antimatter, base, growth, player.ad.dimensionsPurchased[7])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.ad.dimensionsPurchased[7])
                 if (!hasUpgrade("bi", 105)) player.ad.antimatter = player.ad.antimatter.sub(cost)
@@ -844,7 +844,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter, which boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

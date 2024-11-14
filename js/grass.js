@@ -142,7 +142,7 @@
                 layers.g.loadMoonstone()
                 player.g.isMoonstoneLoaded = true
             }
-            
+
         }
 
         // Grass isn't loaded if we leave its microtab
@@ -178,7 +178,7 @@
 
         // =================================================================
 
-        
+
         updateGrass(delta)
         updateGoldGrass(delta)
         updateMoonstone(delta)
@@ -409,8 +409,8 @@
         },
         22:
         {
-            title: "Grass Upgrade X",
-            unlocked() { return player.po.realmMods },
+            title: "Grass Upgrade XI",
+            unlocked() { return player.po.realmMods || hasUpgrade("g", 22) },
             description() { return "Raise golden grass effect by ^6." },
             cost: new Decimal("1e550"),
             currencyLocation() { return player.g },
@@ -1493,27 +1493,27 @@ const updateMoonstone = (delta) => {
     // Timer is always running if we're below grass cap
     const belowMoonstoneCap = player.g.moonstoneCount.lt(player.g.moonstoneCap);
     if (belowMoonstoneCap) player.g.moonstoneTimer = player.g.moonstoneTimer.add(seconds);
-    
+
     const passedMoonstoneSpawnTime = player.g.moonstoneTimer.gte(player.g.moonstoneReq);
-    
+
     if (passedMoonstoneSpawnTime && belowMoonstoneCap) {
         const moonstoneToAdd = player.g.moonstoneTimer.div(player.g.moonstoneReq).floor();
-    
+
         // Add moonstone
         if (belowMoonstoneCap) {
             player.g.moonstoneCount = player.g.moonstoneCount.add(moonstoneToAdd);
         }
-    
+
         // Sanity check: respect the cap
         if (player.g.moonstoneCount.gt(player.g.moonstoneCap)) {
             player.g.moonstoneCount = player.g.moonstoneCap;
         }
-    
+
         // Only create when we're loaded
         if (player.g.isMoonstoneLoaded) {
             createMoonstone(moonstoneToAdd);
         }
-    
+
         // Reset the timer
         player.g.moonstoneTimer = new Decimal(0);
     } else if (passedMoonstoneSpawnTime && !belowMoonstoneCap) {
@@ -1882,46 +1882,46 @@ function shootSmallCircle(event) {
         smallCircle.style.border = "2px solid black"; // Add a black border
         smallCircle.style.zIndex = '20'; // Ensures small circles are on top
         document.body.appendChild(smallCircle);
-    
+
         // Get the center position of the main circle
         const rect = mainCircle.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-    
+
         // Position the small circle at the center of the main circle
         smallCircle.style.left = `${centerX - 10}px`; // Centering small circle
         smallCircle.style.top = `${centerY - 10}px`; // Centering small circle
-    
+
         // Calculate the angle towards the click position
         const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
         const speed = 20; // pixels per frame
         let x = parseFloat(smallCircle.style.left);
         let y = parseFloat(smallCircle.style.top);
-    
+
         function move() {
             x += Math.cos(angle) * speed;
             y += Math.sin(angle) * speed;
-    
+
             smallCircle.style.left = `${x}px`;
             smallCircle.style.top = `${y}px`;
-    
+
             // Emit a custom event to check for collision with moonstones
             const collisionEvent = new CustomEvent('smallCircleFired', {
                 detail: smallCircle
             });
             document.dispatchEvent(collisionEvent);
-    
+
             requestAnimationFrame(move);
         }
-    
+
         // Start moving the small circle
         requestAnimationFrame(move);
-    
+
         // Remove the small circle after 8 seconds
         setTimeout(() => {
             smallCircle.remove();
         }, 8000);
-        
+
         // Set the cooldown
         canShoot = false; // Prevent shooting
         setTimeout(() => {

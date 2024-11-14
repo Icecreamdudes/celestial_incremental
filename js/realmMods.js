@@ -64,7 +64,7 @@
             player.rm.realmModBoostText = "Check back level boosts conversions by x" + format(player.rm.realmModsMulti[player.rm.currentDisplay]) + "."
             player.rm.realmModEffectText = "Creator realm mods boosts check back xp gain by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
         }
-        if (player.rm.currentDisplay.eq(1)) 
+        if (player.rm.currentDisplay.eq(1))
         {
             player.rm.realmModTitleText = "You are converting for THE HIGHER PLANE OF EXISTENCE"
             player.rm.realmModCountText = "You have " + format(player.rm.realmMods[player.rm.currentDisplay]) + " higher plane mods (+" + format(player.rm.realmModsToGet[player.rm.currentDisplay]) + ")"
@@ -72,7 +72,7 @@
             player.rm.realmModBoostText = "Steel boosts conversions by x" + format(player.rm.realmModsMulti[player.rm.currentDisplay]) + "."
             player.rm.realmModEffectText = "Higher plane mods boosts crystal and steel gain by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
         }
-        if (player.rm.currentDisplay.eq(2)) 
+        if (player.rm.currentDisplay.eq(2))
         {
             player.rm.realmModTitleText = "You are converting for THE DEATH REALM"
             player.rm.realmModCountText = "You have " + format(player.rm.realmMods[player.rm.currentDisplay]) + " death realm mods (+" + format(player.rm.realmModsToGet[player.rm.currentDisplay]) + ")"
@@ -88,7 +88,7 @@
             player.rm.realmModBoostText = "Infinity power boosts conversions by x" + format(player.rm.realmModsMulti[player.rm.currentDisplay]) + "."
             player.rm.realmModEffectText = "Dimensional realm mods boosts infinity dimensions by x" + format(player.rm.realmModsEffect[player.rm.currentDisplay]) + "."
         }
-        if (player.rm.currentDisplay.eq(4)) 
+        if (player.rm.currentDisplay.eq(4))
         {
             player.rm.realmModTitleText = "You are converting for THE DREAM REALM"
             player.rm.realmModCountText = "You have " + format(player.rm.realmMods[player.rm.currentDisplay]) + " dream realm mods (+" + format(player.rm.realmModsToGet[player.rm.currentDisplay]) + ")"
@@ -291,7 +291,7 @@
 
         //dice
         player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)] 
+        player.d.diceRolls = [new Decimal(1)]
         player.d.dice = new Decimal(1)
 
         player.d.buyables[11] = new Decimal(0)
@@ -410,7 +410,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(5)
             },
-        },      
+        },
         21: {
             title() { return "<h3>Convert Creator Realm Mods (Req: Check Back Level 150)" },
             canClick() { return player.cb.level.gte(150)},
@@ -423,7 +423,7 @@
                 player.cb.totalxp = new Decimal(5.1)
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
-        },  
+        },
         22: {
             title() { return "<h3>Convert Higher Plane Mods (Req: 1e15 steel)" },
             canClick() { return player.gh.steel.gte(1e15)},
@@ -458,7 +458,7 @@
                 player.gh.buyables[38] = new Decimal(0)
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
-        },  
+        },
         23: {
             title() { return "<h3>Convert Death Realm Mods (Req: hex 21)" },
             canClick() { return player.h.hex.gte(21)},
@@ -475,7 +475,7 @@
                 }
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
-        },  
+        },
         24: {
             title() { return "<h3>Convert Dimensional Realm Mods (Req: 1.79e308 replicanti)" },
             canClick() { return player.ca.replicanti.gte(1.79e308)},
@@ -491,7 +491,7 @@
                 }
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
-        },  
+        },
         25: {
             title() { return "<h3>Convert Dream Realm Mods (Req: 1e18 negative infinity points)" },
             canClick() { return player.ta.negativeInfinityPoints.gte(1e18)},
@@ -538,7 +538,7 @@
 
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
-        },  
+        },
         26: {
             title() { return "<h3>Convert Void Mods (Req: 5,000,000 infinities)" },
             canClick() { return player.in.infinities.gte(5e6)},
@@ -559,7 +559,7 @@
                 player.bi.buyables[13] = new Decimal(0)
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
-        },  
+        },
     },
     bars: {
     },
@@ -588,7 +588,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.blankMods = player.rm.blankMods.sub(cost)
@@ -620,7 +620,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.blankMods = player.rm.blankMods.sub(cost)
@@ -652,7 +652,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.blankMods = player.rm.blankMods.sub(cost)
@@ -684,7 +684,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.blankMods = player.rm.blankMods.sub(cost)
@@ -716,7 +716,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.blankMods = player.rm.blankMods.sub(cost)
@@ -748,7 +748,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.blankMods = player.rm.blankMods.sub(cost)
@@ -782,7 +782,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(cost)
@@ -814,7 +814,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(cost)
@@ -846,7 +846,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[1], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(cost)
@@ -878,7 +878,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[1], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(cost)
@@ -910,7 +910,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[2], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(cost)
@@ -942,7 +942,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[2], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(cost)
@@ -974,7 +974,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
@@ -1006,7 +1006,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
@@ -1038,7 +1038,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[4], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(cost)
@@ -1070,7 +1070,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[4], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(cost)
@@ -1102,7 +1102,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[5], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(cost)
@@ -1134,7 +1134,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[5], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(cost)
@@ -1163,7 +1163,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                     ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
                 ]
@@ -1199,7 +1199,7 @@
                     ["raw-html", function () { return player.rm.realmEnergyText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 21], ["buyable", 22]]],
                     ["row", [["buyable", 23], ["buyable", 24]]],
                     ["row", [["buyable", 25], ["buyable", 26]]],
@@ -1225,7 +1225,7 @@
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["raw-html", function () { return "You have <h3>" + format(player.rm.blankMods) + "</h3> Blank Mods" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

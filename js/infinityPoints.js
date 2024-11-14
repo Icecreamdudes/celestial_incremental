@@ -27,7 +27,7 @@
             "border-color": "#7c5423",
         };
       },
-    
+
     tooltip: "Infinity",
     color: "white",
     update(delta) {
@@ -91,7 +91,7 @@
                  //   player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
                  //   player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
                 }
-                if (!hasMilestone("ip", 21)) 
+                if (!hasMilestone("ip", 21))
                 {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21))
@@ -128,7 +128,7 @@
                 return player.ip.diceRuns.pow(1.1).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         13:
         {
             title: "Upgrade (1, 3)",
@@ -142,7 +142,7 @@
                 return player.ip.rocketFuelRuns.pow(0.9).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        },  
+        },
         14:
         {
             title: "Upgrade (1, 4)",
@@ -156,7 +156,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         21:
         {
             title: "Upgrade (2, 1)",
@@ -170,7 +170,7 @@
                 return player.in.infinities.pow(1.4).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         22:
         {
             title: "Upgrade (2, 2)",
@@ -184,7 +184,7 @@
                 return player.in.infinities.pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         23:
         {
             title: "Upgrade (2, 3)",
@@ -198,7 +198,7 @@
                 return player.in.infinities.pow(1.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         24:
         {
             title: "Upgrade (2, 4)",
@@ -212,7 +212,7 @@
                 return player.in.infinities.add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         31:
         {
             title: "Upgrade (3, 1)",
@@ -236,7 +236,7 @@
                 return player.in.infinityPoints.mul(0.5).pow(0.7).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         33:
         {
             title: "Upgrade (3, 3)",
@@ -250,7 +250,7 @@
                 return player.in.infinityPoints.mul(0.65).pow(0.65).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         34:
         {
             title: "Upgrade (3, 4)",
@@ -264,7 +264,7 @@
                 return player.in.infinityPoints.mul(0.3).pow(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         41:
         {
             title: "Upgrade (4, 1)",
@@ -278,7 +278,7 @@
                 return player.in.infinityPoints.plus(1).log10().mul(0.65).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         42:
         {
             title: "Upgrade (4, 2)",
@@ -292,7 +292,7 @@
                 return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         43:
         {
             title: "Upgrade (4, 3)",
@@ -306,7 +306,7 @@
                 return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.35).mul(2.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         44:
         {
             title: "Upgrade (4, 4)",
@@ -320,7 +320,7 @@
                 return player.in.infinityPoints.plus(1).log10().pow(1.25).mul(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
     },
     buyables: {
         11: {
@@ -345,7 +345,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -377,7 +377,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -409,7 +409,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -441,7 +441,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -453,6 +453,12 @@
         },
     },
     milestones: {
+        1: {
+            requirementDescription: "<h3>1 Infinity",
+            effectDescription: "Unlock the Otherworldy Feature: Rocket Fuel.",
+            done() { return player.in.infinities.gte(1) },
+            style: { width: '800px', "min-height": '75px' },
+        },
         11: {
             requirementDescription: "<h3>2 Infinities",
             effectDescription: "Keeps grass and prestige upgrades on all resets.",
@@ -568,9 +574,12 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.breakInfinity = false
                 player.po.realmMods = false
-                player.po.featureSlots = player.po.featureSlotsMax
+                if (player.po.breakInfinity = true) {
+                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
+                } else {
+                    player.po.featureSlots = player.po.featureSlotsMax
+                }
 
                 player.in.infinityPause = new Decimal(5)
             },
@@ -609,9 +618,12 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.breakInfinity = false
                 player.po.realmMods = false
-                player.po.featureSlots = player.po.featureSlotsMax
+                if (player.po.breakInfinity = true) {
+                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
+                } else {
+                    player.po.featureSlots = player.po.featureSlotsMax
+                }
 
                 player.in.infinityPause = new Decimal(5)
             },
@@ -651,9 +663,12 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.breakInfinity = false
                 player.po.realmMods = false
-                player.po.featureSlots = player.po.featureSlotsMax
+                if (player.po.breakInfinity = true) {
+                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
+                } else {
+                    player.po.featureSlots = player.po.featureSlotsMax
+                }
 
                 player.in.infinityPause = new Decimal(5)
 
@@ -662,7 +677,7 @@
                 player.d.buyables[22] = new Decimal(0)
                 player.d.buyables[23] = new Decimal(0)
                 player.d.buyables[24] = new Decimal(0)
-        
+
                 for (let i = 0; i < player.d.upgrades.length; i++) {
                     if (+player.d.upgrades[i] < 100) {
                         player.d.upgrades.splice(i, 1);
@@ -685,6 +700,17 @@
             rewardDescription: "Unlock new rocket fuel abilities, and gain 20% of rocket fuel per second.",
             unlocked() { return hasChallenge("ip", 15) },
             onEnter() {
+                //OTF is reset here and not in crunch to prevent a bug
+                player.po.dice = false
+                player.po.rocketFuel = false
+                player.po.hex = false
+                player.po.realmMods = false
+                if (player.po.breakInfinity = true) {
+                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
+                } else {
+                    player.po.featureSlots = player.po.featureSlotsMax
+                }
+
                 player.in.infinityPause = new Decimal(5)
             },
             onExit() {
@@ -695,7 +721,7 @@
         },
         17: {
             name: "Challenge VII",
-            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECOMMENDED LEVEL 100)" },
+            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECOMMENDED AFTER FIRST XPBOOST)" },
             goalDescription() { return "Level 60" },
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },
@@ -757,6 +783,7 @@
                         ["blank", "25px"],
                         ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
+                        ["row", [["milestone", 1]]],
                         ["row", [["milestone", 11]]],
                         ["row", [["milestone", 12]]],
                         ["row", [["milestone", 13]]],
@@ -796,7 +823,7 @@
                 [
                         ["blank", "25px"],
                         ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"], 
+                        ["blank", "25px"],
                         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
 
@@ -812,7 +839,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [                        ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
          ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

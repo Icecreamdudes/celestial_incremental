@@ -11,7 +11,7 @@
         //dice
         dice: new Decimal(1),
 
-        //player.d.diceRolls = [new Decimal(1)] 
+        //player.d.diceRolls = [new Decimal(1)]
         //player.d.dice = new Decimal(1)
 
         diceRolls: [new Decimal(1)],
@@ -29,6 +29,7 @@
         lowestRoll: new Decimal(1),
 
         //Booster
+        previousBoosterRoll: new Decimal(-1),
         currentBoosterText: "",
         currentBoosterRoll: new Decimal(-1),
         /*
@@ -185,7 +186,7 @@
         let max = new Decimal(1)
         for (let i = 0; i < player.d.diceRolls.length; i++)
         {
-            player.d.diceRolls[i] = Decimal.add(getRandomInt(player.d.diceSides.sub(player.d.lowestRoll)), player.d.lowestRoll)
+            player.d.diceRolls[i] = Decimal.add(getRandomInt(player.d.diceSides.sub(player.d.lowestRoll.sub(1))), player.d.lowestRoll)
             player.d.gainedDicePoints = player.d.gainedDicePoints.mul(player.d.diceRolls[i])
             max = max.mul(player.d.diceSides)
         }
@@ -217,7 +218,7 @@
             tooltip() { return "<h3>You won't gain any pets from automation." },
             canClick() { return true },
             unlocked() { return hasChallenge("ip", 15) && !player.d.boosterDiceAutomation},
-            onClick() { 
+            onClick() {
                 player.d.boosterDiceAutomation = true
             },
             style: {
@@ -230,7 +231,7 @@
             canClick() { return true },
             tooltip() { return "<h3>You won't gain any pets from automation." },
             unlocked() { return hasChallenge("ip", 15) && player.d.boosterDiceAutomation},
-            onClick() { 
+            onClick() {
                 player.d.boosterDiceAutomation = false
             },
             style: {
@@ -272,8 +273,22 @@
             tooltip() { return "<h3>5% chance for a pet???" },
             unlocked() { return true },
             onClick() {
-                if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
-                if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
+                if (!hasChallenge("ip", 15))
+                {
+                    do {
+                      player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                      player.d.currentBoosterRoll = getRandomInt(11)
+                    }
+                    while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
+                }
+                if (hasChallenge("ip", 15))
+                {
+                    do {
+                      player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                      player.d.currentBoosterRoll = getRandomInt(15)
+                    }
+                    while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
+                }
                 player.d.boosterDiceCooldown = new Decimal(120)
 
                 let random = getRandomInt(20)
@@ -288,7 +303,7 @@
                 {
                     player.in.infinityPause = new Decimal(5)
                 }
-                
+
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
             },
             style: { width: '200px', "min-height": '100px' },
@@ -313,7 +328,7 @@
             onClick() {
                 if (!hasChallenge("ip", 15))
                 {
-                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" + 
+                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" +
                     "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
                     "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
                     "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
@@ -325,9 +340,9 @@
                     "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
                     "Code Experience: x" + format(player.d.diceEffects[10]) + "\n"
                     )
-                } else 
+                } else
                 {
-                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" + 
+                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" +
                     "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
                     "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
                     "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
@@ -339,7 +354,7 @@
                     "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
                     "Code Experience: x" + format(player.d.diceEffects[10]) + "\n" +
                     "Infinity Points: x" + format(player.d.diceEffects[11]) + "\n" +
-                    "Check Back XP: x" + format(player.d.diceEffects[12]) + "\n" + 
+                    "Check Back XP: x" + format(player.d.diceEffects[12]) + "\n" +
                     "Rocket Fuel: x" + format(player.d.diceEffects[13]) + "\n" +
                     "Hex 1 Points: x" + format(player.d.diceEffects[14]) + "\n"
                     )
@@ -416,7 +431,7 @@
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",
             currencyInternalName: "challengeDicePoints",
-        }, 
+        },
         12:
         {
             title: "Something boosts dice outside of this layer!?",
@@ -431,7 +446,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '200px', height: '100px', }
-        }, 
+        },
         13:
         {
             title: "Pointy boost.",
@@ -445,7 +460,7 @@
                 return player.d.dicePoints.pow(0.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         14:
         {
             title: "Grassy boost.",
@@ -459,7 +474,7 @@
                 return player.d.dicePoints.pow(0.085).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         15:
         {
             title: "Reversey Boost.",
@@ -474,7 +489,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         16:
         {
             title: "Self Synergize.",
@@ -488,7 +503,7 @@
                 return player.d.dicePoints.pow(0.125).div(100).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         17:
         {
             title: "Challengey Prestigey Pointy Boosty.",
@@ -503,7 +518,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
     },
     buyables: {
         11: {
@@ -549,7 +564,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(cost)
@@ -581,7 +596,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
@@ -600,7 +615,7 @@
                 return format(getBuyableAmount(this.layer, this.id), 0) + "/" + formatWhole(player.d.diceSides.sub(player.d.buyables[22].mul(2))) + "<br/>Low Roll Removal"
             },
             display() {
-                return "which are removing " + formatWhole(tmp[this.layer].buyables[this.id].effect) + " of the lowest rolls.\n\
+                return "which are removing " + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1)) + " of the lowest rolls.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy() {
@@ -613,7 +628,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
@@ -624,7 +639,7 @@
             style: { width: '175px', height: '100px', }
         },
         15: {
-            cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(6000) },
+            cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(2000) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost())},
@@ -636,7 +651,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy() {
-                let base = new Decimal(6000)
+                let base = new Decimal(2000)
                 let growth = 2
                 if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
                 {
@@ -645,7 +660,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
@@ -679,7 +694,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.challengeDicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.d.challengeDicePoints = player.d.challengeDicePoints.sub(cost)
@@ -711,7 +726,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.challengeDicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.d.challengeDicePoints = player.d.challengeDicePoints.sub(cost)
@@ -743,7 +758,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.challengeDicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.d.challengeDicePoints = player.d.challengeDicePoints.sub(cost)
@@ -775,7 +790,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.d.challengeDicePoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.d.challengeDicePoints = player.d.challengeDicePoints.sub(cost)
@@ -808,7 +823,7 @@
                     ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 12], ["buyable", 13], ["buyable", 14], ["buyable", 15]]],
     ]
 
@@ -843,7 +858,7 @@
         ["raw-html", function () { return "You will gain <h3>" + format(player.d.challengeDicePointsToGet) + "</h3> challenge dice points next booster dice roll." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["row", [["clickable", 4], ["clickable", 5]]],
-        ["blank", "25px"], 
+        ["blank", "25px"],
         ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
         ["blank", "25px"],
         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
@@ -866,7 +881,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],

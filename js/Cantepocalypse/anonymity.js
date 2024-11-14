@@ -71,22 +71,22 @@
             display() {
                 return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
             },
-        }, 
+        },
     },
     upgrades: {
         11:
         {
-            title: "Anonymity Upgrade I", 
+            title: "Anonymity Upgrade I",
             unlocked() { return true },
             description: "Multiplies replicanti mult by x1.5.",
             cost: new Decimal(2),
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-        }, 
+        },
         12:
         {
-            title: "Anonymity Upgrade II", 
+            title: "Anonymity Upgrade II",
             unlocked() { return true },
             description: "Multiplies replicanti mult based on anonymity.",
             cost: new Decimal(5),
@@ -97,30 +97,30 @@
                 return player.an.anonymity.plus(1).log10().pow(1.25).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         13:
         {
-            title: "Anonymity Upgrade III", 
+            title: "Anonymity Upgrade III",
             unlocked() { return true },
             description: "Gain 5% of rank points per second.",
             cost: new Decimal(16),
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-        }, 
+        },
         14:
         {
-            title: "Anonymity Upgrade IV", 
+            title: "Anonymity Upgrade IV",
             unlocked() { return true },
             description: "Extend the first and second softcap by x1,000.",
             cost: new Decimal(48),
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-        }, 
+        },
         15:
         {
-            title: "Anonymity Upgrade V", 
+            title: "Anonymity Upgrade V",
             unlocked() { return true },
             description: "Gain 25% of rank points per second, and gain 5% of tier points per second.",
             cost: new Decimal(212),
@@ -128,10 +128,10 @@
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         16:
         {
-            title: "Anonymity Upgrade VI", 
+            title: "Anonymity Upgrade VI",
             unlocked() { return true },
             description: "Boost perk points based on anonymity.",
             cost: new Decimal(666),
@@ -143,10 +143,10 @@
                 return player.an.anonymity.pow(0.15).div(6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         17:
         {
-            title: "Anonymity Upgrade VII", 
+            title: "Anonymity Upgrade VII",
             unlocked() { return true },
             description: "Boost anonymity based on perk points.",
             cost: new Decimal(2345),
@@ -158,10 +158,10 @@
                 return player.pr.perkPoints.pow(0.2).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        }, 
+        },
         18:
         {
-            title: "Anonymity Upgrade VIII", 
+            title: "Anonymity Upgrade VIII",
             unlocked() { return true },
             description: "Gain 100% of rank points per second, and gain 25% of tier points per second, and gain 5% of tetr points per second.",
             cost: new Decimal(15000),
@@ -169,10 +169,10 @@
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
             style: { width: '150px', height: '100px', },
-        }, 
+        },
         19:
         {
-            title: "Anonymity Upgrade IX", 
+            title: "Anonymity Upgrade IX",
             unlocked() { return true },
             description: "Extend first and second softcap based on anonymity.",
             cost: new Decimal(250000),
@@ -185,10 +185,10 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', },
-        }, 
+        },
         21:
         {
-            title: "Anonymity Upgrade X", 
+            title: "Anonymity Upgrade X",
             unlocked() { return true },
             description: "Reduce repli-leaf time by 1.5s.",
             cost: new Decimal(4e6),
@@ -196,10 +196,10 @@
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
             style: { width: '125px', hesight: '100px', },
-        }, 
+        },
         22:
         {
-            title: "Anonymity Upgrade XI", 
+            title: "Anonymity Upgrade XI",
             unlocked() { return true },
             description: "Weaken second softcap based on second softcap start.",
             cost: new Decimal(6e7),
@@ -214,7 +214,7 @@
         },
         23:
         {
-            title: "Anonymity Upgrade XII", 
+            title: "Anonymity Upgrade XII",
             unlocked() { return true },
             description: "Multiplies replicanti mult more based on anonymity.",
             cost: new Decimal(2e10),
@@ -226,13 +226,13 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', hesight: '100px', },
-        },  
+        },
     },
     buyables: {
 
     },
     milestones: {
-   
+
     },
     challenges: {
     },
@@ -257,7 +257,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],

@@ -45,7 +45,7 @@
             "<br>"  + formatWhole(player.cb.commonPetAmounts[1]) + "/6 Egg Guy" +
             "<br>"  + formatWhole(player.cb.commonPetAmounts[2]) + "/6 Unsmith" +
             "<br>"  + formatWhole(player.cb.commonPetAmounts[3]) + "/6 Gd Checkpoint" +
-            "<br>"  + formatWhole(player.cb.commonPetAmounts[4]) + "/6 Slax" + 
+            "<br>"  + formatWhole(player.cb.commonPetAmounts[4]) + "/6 Slax" +
             "<br>"  + formatWhole(player.cb.commonPetLevels[2]) + "/7 Unsmith Level" +
             "<br>"  + formatWhole(player.cb.highestDicePetCombo) + "/2 Highest Dice Pet Combo",
 
@@ -54,60 +54,60 @@
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[1]) + "/3 Star" +
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[2]) + "/3 Normal Face" +
             "<br>"  + formatWhole(player.cb.uncommonPetAmounts[3]) + "/3 Shark" +
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[4]) + "/3 THE WATCHING EYE" + 
-            "<br>"  + formatWhole(player.cb.rarePetAmounts[2]) + "/2 Drippy Ufo" + 
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[4]) + "/3 THE WATCHING EYE" +
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[2]) + "/2 Drippy Ufo" +
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[3]) + "/4 Shark Level",
 
             "Evolve Normal Face<br>" + formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
-            "<br>"  + formatWhole(player.ip.diceRuns) + "/2 Dice Runs" + 
-            "<br>"  + formatWhole(player.ip.rocketFuelRuns) + "/2 Rocket Fuel Runs" + 
-            "<br>"  + formatWhole(player.cb.rarePetAmounts[0]) + "/3 Nova" + 
-            "<br>"  + formatWhole(player.cb.rarePetAmounts[3]) + "/3 Goofy Ahh Thing" + 
+            "<br>"  + formatWhole(player.ip.diceRuns) + "/2 Dice Runs" +
+            "<br>"  + formatWhole(player.ip.rocketFuelRuns) + "/2 Rocket Fuel Runs" +
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[0]) + "/3 Nova" +
+            "<br>"  + formatWhole(player.cb.rarePetAmounts[3]) + "/3 Goofy Ahh Thing" +
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[2]) + "/6 Normal Face Level",
 
             "Evolve Gwa<br>" + formatWhole(player.cb.evolutionShards) + "/8 Evolution Shards" +
-            "<br>"  + formatWhole(player.ip.diceRuns) + "/2,000 Dice Runs" + 
-            "<br>"  + formatWhole(player.ip.rocketFuelRuns) + "/2,000 Rocket Fuel Runs" + 
-            "<br>"  + formatWhole(player.ip.hexRuns) + "/2,000 Hex Runs" + 
-            "<br>"  + formatWhole(player.points) + "/1e550 Celestial Points" + 
-            "<br>"  + formatWhole(player.bi.brokenInfinities) + "/50,000 Broken Infinities" + 
-            "<br>"  + formatWhole(player.cb.petPoints) + "/500 Pet Points" + 
+            "<br>"  + formatWhole(player.ip.diceRuns) + "/2,000 Dice Runs" +
+            "<br>"  + formatWhole(player.ip.rocketFuelRuns) + "/2,000 Rocket Fuel Runs" +
+            "<br>"  + formatWhole(player.ip.hexRuns) + "/2,000 Hex Runs" +
+            "<br>"  + formatWhole(player.points) + "/1e550 Celestial Points" +
+            "<br>"  + formatWhole(player.bi.brokenInfinities) + "/50,000 Broken Infinities" +
+            "<br>"  + formatWhole(player.cb.petPoints) + "/500 Pet Points" +
             "<br>"  + formatWhole(player.cb.commonPetLevels[0]) + "/12 Gwa Level",
 
             "Evolve Star<br>" + formatWhole(player.cb.evolutionShards) + "/20 Evolution Shards" +
-            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shard" + 
-            "<br>"  + formatWhole(player.in.infinityPoints) + "/1e11 Infinity Points" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[0]) + "/10 Teste" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[1]) + "/10 Star" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[2]) + "/10 Normal Face" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[3]) + "/10 Shark" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[4]) + "/10 THE WATCHING EYE" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[5]) + "/2 Clock" + 
-            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[6]) + "/2 Trollface" + 
-            "<br>"  + formatWhole(player.cb.petPoints) + "/1,000 Pet Points" + 
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shard" +
+            "<br>"  + formatWhole(player.in.infinityPoints) + "/1e11 Infinity Points" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[0]) + "/10 Teste" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[1]) + "/10 Star" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[2]) + "/10 Normal Face" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[3]) + "/10 Shark" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[4]) + "/10 THE WATCHING EYE" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[5]) + "/2 Clock" +
+            "<br>"  + formatWhole(player.cb.uncommonPetAmounts[6]) + "/2 Trollface" +
+            "<br>"  + formatWhole(player.cb.petPoints) + "/1,000 Pet Points" +
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[1]) + "/9 Star Level",
 
             "Evolve Dice<br>" + formatWhole(player.cb.evolutionShards) + "/25 Evolution Shards" +
-            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shard" + 
-            "<br>"  + formatWhole(player.ta.highestDicePoints) + "/1e45 Highest Dice Points" + 
-            "<br>"  + formatWhole(player.cb.evolvedLevels[0]) + "/6 Goldsmith Level" + 
-            "<br>"  + formatWhole(player.cb.evolvedLevels[1]) + "/6 MrRedShark Level" + 
-            "<br>"  + formatWhole(player.cb.evolvedLevels[2]) + "/5 Insane Face Level" + 
-            "<br>"  + format(player.cb.XPBoost) + "/7.00 XPBoost" + 
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shard" +
+            "<br>"  + formatWhole(player.ta.highestDicePoints) + "/1e45 Highest Dice Points" +
+            "<br>"  + formatWhole(player.cb.evolvedLevels[0]) + "/6 Goldsmith Level" +
+            "<br>"  + formatWhole(player.cb.evolvedLevels[1]) + "/6 MrRedShark Level" +
+            "<br>"  + formatWhole(player.cb.evolvedLevels[2]) + "/5 Insane Face Level" +
+            "<br>"  + format(player.cb.XPBoost) + "/7.00 XPBoost" +
             "<br>"  + formatWhole(player.cb.rarePetLevels[1]) + "/3 Dice Level",
 
             "Evolve Spider<br>" + formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
-            "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" + 
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" +
             "<br>"  + formatWhole(player.cb.XPBoost) + "/25 XPBoost",
 
             "Evolve Drippy Ufo<br>" + formatWhole(player.cb.evolutionShards) + "/25 Evolution Shards" +
-            "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" + 
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" +
             "<br>"  + format(player.ev4.offerings) + "/200 Pet Sacrifice Offerings" +
             "<br>"  + formatWhole(player.g.goldGrass) + "/1e12 Golden Grass" +
             "<br>"  + formatWhole(player.rf.rocketFuel) + "/1e80 Rocket Fuel",
 
             "Evolve Clock<br>" + formatWhole(player.cb.evolutionShards) + "/40 Evolution Shards" +
-            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" + 
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" +
             "<br>"  + formatWhole(player.cb.level) + "/1,500 Check Back Levels" +
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[5]) + "/8 Clock Level" +
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[6]) + "/8 Trollface Level" +
@@ -400,7 +400,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -420,7 +420,7 @@ addLayer("ev0", {
 
         coinDust: new Decimal(0),
         coinDustEffect: new Decimal(1),
-        coinDustPerSecond: new Decimal(0), 
+        coinDustPerSecond: new Decimal(0),
     }
     },
     automate() {
@@ -498,7 +498,7 @@ addLayer("ev0", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ev0.coinDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ev0.coinDust = player.ev0.coinDust.sub(cost)
@@ -530,7 +530,7 @@ addLayer("ev0", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ev0.coinDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ev0.coinDust = player.ev0.coinDust.sub(cost)
@@ -562,7 +562,7 @@ addLayer("ev0", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ev0.coinDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ev0.coinDust = player.ev0.coinDust.sub(cost)
@@ -594,7 +594,7 @@ addLayer("ev0", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.ev0.coinDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.ev0.coinDust = player.ev0.coinDust.sub(cost)
@@ -621,13 +621,13 @@ addLayer("ev0", {
                 [
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -712,7 +712,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -743,7 +743,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -774,7 +774,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -805,7 +805,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -836,7 +836,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -867,7 +867,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -898,7 +898,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -929,7 +929,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -960,7 +960,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -991,7 +991,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1022,7 +1022,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1053,7 +1053,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1084,7 +1084,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1115,7 +1115,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1146,7 +1146,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1177,7 +1177,7 @@ addLayer("ev1", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.petPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.petPoints = player.cb.petPoints.sub(cost)
@@ -1206,22 +1206,22 @@ addLayer("ev1", {
          ["blank", "25px"],
                         ["row", [["clickable", 2], ["clickable", 3]]],
                         ["blank", "25px"],
-                        ["column", [               
-                    ["row", [["column", [["raw-html", function () { return "Button 1 Base: " + format(player.cb.buttonBaseXP[0]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 1 Cooldown: " + formatTime(player.cb.buttonTimersMax[0]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 13], ["buyable", 14]]],                    
-                    ["row", [["column", [["raw-html", function () { return "Button 2 Base: " + format(player.cb.buttonBaseXP[1]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 2 Cooldown: " + formatTime(player.cb.buttonTimersMax[1]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 15], ["buyable", 16]]],                    
-                    ["row", [["column", [["raw-html", function () { return "Button 3 Base: " + format(player.cb.buttonBaseXP[2]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 3 Cooldown: " + formatTime(player.cb.buttonTimersMax[2]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 17], ["buyable", 18]]],                    
-                    ["row", [["column", [["raw-html", function () { return "Button 4 Base: " + format(player.cb.buttonBaseXP[3]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 4 Cooldown: " + formatTime(player.cb.buttonTimersMax[3]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 11], ["buyable", 12]]],                    
-                    ["row", [["column", [["raw-html", function () { return "Button 5 Base: " + format(player.cb.buttonBaseXP[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 5 Cooldown: " + formatTime(player.cb.buttonTimersMax[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 21], ["buyable", 22]]],                    
-                    ["row", [["column", [["raw-html", function () { return "Button 6 Base: " + format(player.cb.buttonBaseXP[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 6 Cooldown: " + formatTime(player.cb.buttonTimersMax[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 23], ["buyable", 24]]],     
-                    ["row", [["column", [["raw-html", function () { return "Button 7 Base: " + format(player.cb.buttonBaseXP[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 7 Cooldown: " + formatTime(player.cb.buttonTimersMax[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 25], ["buyable", 26]]],     
-                    ["row", [["column", [["raw-html", function () { return "Button 8 Base: " + format(player.cb.buttonBaseXP[7]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 8 Cooldown: " + formatTime(player.cb.buttonTimersMax[7]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 27], ["buyable", 28]]],     
-                ]]                                
+                        ["column", [
+                    ["row", [["column", [["raw-html", function () { return "Button 1 Base: " + format(player.cb.buttonBaseXP[0]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 1 Cooldown: " + formatTime(player.cb.buttonTimersMax[0]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 13], ["buyable", 14]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 2 Base: " + format(player.cb.buttonBaseXP[1]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 2 Cooldown: " + formatTime(player.cb.buttonTimersMax[1]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 15], ["buyable", 16]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 3 Base: " + format(player.cb.buttonBaseXP[2]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 3 Cooldown: " + formatTime(player.cb.buttonTimersMax[2]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 4 Base: " + format(player.cb.buttonBaseXP[3]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 4 Cooldown: " + formatTime(player.cb.buttonTimersMax[3]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 11], ["buyable", 12]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 5 Base: " + format(player.cb.buttonBaseXP[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 5 Cooldown: " + formatTime(player.cb.buttonTimersMax[4]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 21], ["buyable", 22]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 6 Base: " + format(player.cb.buttonBaseXP[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 6 Cooldown: " + formatTime(player.cb.buttonTimersMax[5]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 23], ["buyable", 24]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 7 Base: " + format(player.cb.buttonBaseXP[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 7 Cooldown: " + formatTime(player.cb.buttonTimersMax[6]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 25], ["buyable", 26]]],
+                    ["row", [["column", [["raw-html", function () { return "Button 8 Base: " + format(player.cb.buttonBaseXP[7]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],["raw-html", function () { return "Button 8 Cooldown: " + formatTime(player.cb.buttonTimersMax[7]) }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],]], ["blank", "25px"], ["buyable", 27], ["buyable", 28]]],
+                ]]
                 ]
 
             },
-            
+
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -1329,52 +1329,52 @@ addLayer("ev2", {
         } else if (rng > 0.9)
         {
             player.cb.rarePetAmounts[3] = player.cb.rarePetAmounts[3].add(1);
-            callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");  
+            callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");
         } else if (rng > 0.8)
         {
             player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(2);
-            callAlert("You gained 2 Testes!", "resources/testeUncommonPet.png");  
+            callAlert("You gained 2 Testes!", "resources/testeUncommonPet.png");
         }else if (rng > 0.7)
         {
             player.cb.uncommonPetAmounts[1] = player.cb.uncommonPetAmounts[1].add(2);
-            callAlert("You gained 2 Stars!", "resources/starUncommonPet.png");  
+            callAlert("You gained 2 Stars!", "resources/starUncommonPet.png");
         }else if (rng > 0.6)
         {
             player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].add(2);
-            callAlert("You gained 2 Normal Faces!", "resources/normalFaceUncommonPet.png");  
+            callAlert("You gained 2 Normal Faces!", "resources/normalFaceUncommonPet.png");
         }else if (rng > 0.5)
         {
             player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].add(2);
-            callAlert("You gained 2 Sharks!", "resources/sharkUncommonPet.png");  
+            callAlert("You gained 2 Sharks!", "resources/sharkUncommonPet.png");
         }
         else if (rng > 0.4)
         {
             player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].add(2);
-            callAlert("You gained 2 WATCHING EYES!", "resources/eyeUncommonPet.png");  
+            callAlert("You gained 2 WATCHING EYES!", "resources/eyeUncommonPet.png");
         }
         else if (rng > 0.32)
         {
             player.cb.commonPetAmounts[0] = player.cb.commonPetAmounts[0].add(5);
-            callAlert("You gained 5 Gwas!", "resources/gwaCommonPet.png");  
+            callAlert("You gained 5 Gwas!", "resources/gwaCommonPet.png");
         }
         else if (rng > 0.24)
         {
             player.cb.commonPetAmounts[1] = player.cb.commonPetAmounts[1].add(5);
-            callAlert("You gained 5 Egg Guys!", "resources/eggCommonPet.png");  
+            callAlert("You gained 5 Egg Guys!", "resources/eggCommonPet.png");
         }
         else if (rng > 0.16)
         {
             player.cb.commonPetAmounts[2] = player.cb.commonPetAmounts[2].add(5);
-            callAlert("You gained 5 Unsmith!", "resources/unsmithCommonPet.png");  
+            callAlert("You gained 5 Unsmith!", "resources/unsmithCommonPet.png");
         }
         else if (rng > 0.08)
         {
             player.cb.commonPetAmounts[3] = player.cb.commonPetAmounts[3].add(5);
-            callAlert("You gained 5 Gd Checkpoints!", "resources/checkpointCommonPet.png");  
+            callAlert("You gained 5 Gd Checkpoints!", "resources/checkpointCommonPet.png");
         } else
         {
             player.cb.commonPetAmounts[4] = player.cb.commonPetAmounts[4].add(5);
-            callAlert("You gained 5 Slaxes!", "resources/slaxCommonPet.png");  
+            callAlert("You gained 5 Slaxes!", "resources/slaxCommonPet.png");
         }
     },
     bars: {
@@ -1405,7 +1405,7 @@ addLayer("ev2", {
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -1530,7 +1530,7 @@ addLayer("ev4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.evolutionShards, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(cost)
@@ -1562,7 +1562,7 @@ addLayer("ev4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.cb.paragonShards, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.cb.paragonShards = player.cb.paragonShards.sub(cost)
@@ -1595,13 +1595,13 @@ addLayer("ev4", {
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards." }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12]]],
                     ["raw-html", function () { return "Offering multiplier: <h3>" + format(player.ev4.offeringsBase) + "</h3>x" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.automationShards) + "</h3> automation shards. (" + formatWhole(player.cb.totalAutomationShards) + " total)"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -1742,7 +1742,7 @@ addLayer("ev8", {
         },
         15:
         {
-            title: "Shard Research VI",
+            title: "Shard Research V",
             unlocked() { return true },
             description: "Divides XP button cooldown by /1.15.",
             cost: new Decimal(25),
@@ -1752,7 +1752,7 @@ addLayer("ev8", {
         },
         16:
         {
-            title: "Shard Research VII",
+            title: "Shard Research VI",
             unlocked() { return true },
             description: "Multiplies XPBoost gain by x1.2.",
             cost: new Decimal(35),
@@ -1762,7 +1762,7 @@ addLayer("ev8", {
         },
         17:
         {
-            title: "Shard Research VIII",
+            title: "Shard Research VII",
             unlocked() { return player.ev.evolutionsUnlocked[7] },
             description: "Multiplies moonstone value by x2.",
             cost: new Decimal(3),
@@ -1772,7 +1772,7 @@ addLayer("ev8", {
         },
         18:
         {
-            title: "Shard Research IX",
+            title: "Shard Research VIII",
             unlocked() { return player.ev.evolutionsUnlocked[7] },
             description: "Multiplies moonstone damage by x2.",
             cost: new Decimal(3),
@@ -1827,7 +1827,7 @@ addLayer("ev8", {
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["row", [["clickable", 1]]],

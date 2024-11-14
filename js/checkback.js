@@ -1,4 +1,4 @@
-﻿addLayer("cb", {
+addLayer("cb", {
     name: "Check Back", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CB", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -15,12 +15,12 @@
         effectActivate: false,
 
         buttonUnlocks: [true, false, false, false, false, false, false],
-        buttonTimersMax: [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400), new Decimal(86400),],
+        buttonTimersMax: [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),new Decimal(86400),],
         buttonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         buttonBaseXP: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.04),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),],
 
         petsUnlocked: false,
-        
+
         //petButtons
         petButtonUnlocks: [false, false, false, false, false, false],
         petButtonTimersMax: [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600), new Decimal(7200), new Decimal(36000),],
@@ -100,7 +100,7 @@
         viewingEvolved: [false, false, false, false, false, false, false, false, false,],
         evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),new Decimal(3), new Decimal(1),new Decimal(5),],
-        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], 
+        evolvedEffects: [[new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(0),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),],
         [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]],
 
         //xpboost
@@ -124,7 +124,7 @@
         automationShards: new Decimal(0),
         automationShardsInput: new Decimal(0),
         automationShardsInputAmount: new Decimal(0),
-        
+
         buttonAutomationAllocation: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         buttonAutomationTimersMax: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         buttonAutomationTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
@@ -159,7 +159,7 @@
         {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
         }
-        
+
         if (player.cb.level.gte(player.cb.highestLevel))
         {
             player.cb.highestLevel = player.cb.level
@@ -169,13 +169,19 @@
         {
             player.cb.effectActivate = true
         } else
-        { 
+        {
             player.cb.effectActivate = false
         }
         if (!inChallenge("ip", 17)) {
             player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
         } else {
-            player.cb.req = player.cb.level.pow(1.2).add(4).floor()
+            if (player.cb.level.lt(10000)) {
+                player.cb.req = player.cb.level.pow(1.2).add(4).floor()
+            } else if (player.cb.level.lt(100000)) {
+                player.cb.req = player.cb.level.pow(1.4).sub(335008).floor()
+            } else {
+                player.cb.req = player.cb.level.pow(1.6).sub(90335008).floor()
+            }
             player.cb.req = player.cb.req.div(player.cb.uncommonPetEffects[2][2])
             player.cb.req = player.cb.req.div(player.cb.rarePetEffects[3][1])
         }
@@ -297,9 +303,9 @@
         //Pet
         if (player.cb.highestLevel.gte(10))
         {
-            player.cb.petButtonUnlocks[0] = true 
+            player.cb.petButtonUnlocks[0] = true
         }
-        
+
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000),]
         for (let i = 0; i < player.cb.petButtonTimersMax.length; i++)
         {
@@ -309,7 +315,7 @@
             if (hasUpgrade("ev8", 12)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(1.1)
         }
 
-        player.cb.petDisplay = 
+        player.cb.petDisplay =
         [
             "Gwa: " + formatWhole(player.cb.commonPetAmounts[0]) + "/" + formatWhole(player.cb.commonPetReq[0]) + " to level up. (Currently level " + formatWhole(player.cb.commonPetLevels[0]) + ")",
             "Egg Guy: " + formatWhole(player.cb.commonPetAmounts[1]) + "/" + formatWhole(player.cb.commonPetReq[1]) + " to level up. (Currently level " + formatWhole(player.cb.commonPetLevels[1]) + ")",
@@ -335,7 +341,7 @@
         "<img src='resources/smokeCommonPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
     ]
 
-        if (player.cb.viewingEvolved[0]) 
+        if (player.cb.viewingEvolved[0])
         {
             player.cb.commonPetImage[2] = "<img src='resources/goldsmithEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[2] = "Goldsmith: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[0]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[0]) + ")"
@@ -382,11 +388,11 @@
                 {
                     player.cb.commonPetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
         //uncommon
-        player.cb.uncommonPetDisplay = 
+        player.cb.uncommonPetDisplay =
         [
             "Teste: " + formatWhole(player.cb.uncommonPetAmounts[0]) + "/" + formatWhole(player.cb.uncommonPetReq[0]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[0]) + ")",
             "Star: " + formatWhole(player.cb.uncommonPetAmounts[1]) + "/" + formatWhole(player.cb.uncommonPetReq[1]) + " to level up. (Currently level " + formatWhole(player.cb.uncommonPetLevels[1]) + ")",
@@ -446,11 +452,11 @@
                 {
                     player.cb.uncommonPetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
         //Rare
-        player.cb.rarePetDisplay = 
+        player.cb.rarePetDisplay =
         [
             "Nova: " + formatWhole(player.cb.rarePetAmounts[0]) + "/" + formatWhole(player.cb.rarePetReq[0]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[0]) + ")",
             "Dice: " + formatWhole(player.cb.rarePetAmounts[1]) + "/" + formatWhole(player.cb.rarePetReq[1]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[1]) + ")<br><h6>(Last roll: " + format(player.cb.dicePetPointsGain) + " pet points.) (Last roll: " + player.cb.lastDicePetRoll + ", Current roll combo: " + player.cb.dicePetCombo + ", highest is " + player.cb.highestDicePetCombo + ")",
@@ -501,8 +507,8 @@
                 {
                     player.cb.rarePetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
         player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1)]
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
@@ -538,7 +544,7 @@
         }
 
         //epic
-        player.cb.epicPetDisplay = 
+        player.cb.epicPetDisplay =
         [
             "Dotknight: " + formatWhole(player.cb.epicPetFragments[0]) + "/" + formatWhole(player.cb.epicPetFragmentReq[0]) + " fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[0]) + ")",
             "Dragon: " + formatWhole(player.cb.epicPetFragments[1]) + "/" + formatWhole(player.cb.epicPetFragmentReq[1]) + " fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[1]) + ")",
@@ -592,45 +598,45 @@
                 {
                     player.cb.epicPetEffects[i][j] = new Decimal(1)
                 }
-            } 
-        }   
+            }
+        }
 
-        if (player.cb.viewingEvolved[1]) 
+        if (player.cb.viewingEvolved[1])
         {
             player.cb.uncommonPetImage[3] = "<img src='resources/mrRedSharkEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[3] = "MrRedShark: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[1]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[1]) + ")"
         }
-        if (player.cb.viewingEvolved[2]) 
+        if (player.cb.viewingEvolved[2])
         {
             player.cb.uncommonPetImage[2] = "<img src='resources/insaneFaceEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[2] = "Insane Face: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[2]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[2]) + ")"
         }
-        if (player.cb.viewingEvolved[3]) 
+        if (player.cb.viewingEvolved[3])
         {
             player.cb.commonPetImage[0] = "<img src='resources/voidGwaEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[0] = "Voidgwa: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[3]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[3]) + ")"
         }
-        if (player.cb.viewingEvolved[4]) 
+        if (player.cb.viewingEvolved[4])
         {
             player.cb.uncommonPetImage[1] = "<img src='resources/sunEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[1] = "Sun: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[4]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[4]) + ")"
         }
-        if (player.cb.viewingEvolved[5]) 
+        if (player.cb.viewingEvolved[5])
         {
             player.cb.rarePetImage[1] = "<img src='resources/d20EvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.rarePetDisplay[1] = "d20: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[5]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[5]) + ")"
         }
-        if (player.cb.viewingEvolved[6]) 
+        if (player.cb.viewingEvolved[6])
         {
             player.cb.commonPetImage[5] = "<img src='resources/mutantSpiderEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.petDisplay[5] = "Mutant Spider: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[6]) + " evolution shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[6]) + ")"
         }
-        if (player.cb.viewingEvolved[7]) 
+        if (player.cb.viewingEvolved[7])
         {
             player.cb.rarePetImage[2] = "<img src='resources/moonEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.rarePetDisplay[2] = "Moon: " + formatWhole(player.cb.paragonShards) + "/" + formatWhole(player.cb.evolvedReq[7]) + " paragon shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[7]) + ")"
         }
-        if (player.cb.viewingEvolved[8]) 
+        if (player.cb.viewingEvolved[8])
         {
             player.cb.uncommonPetImage[5] = "<img src='resources/marcelAcoplaoEvoPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>"
             player.cb.uncommonPetDisplay[5] = "Marcel Acoplao: " + formatWhole(player.cb.evolutionShards) + "/" + formatWhole(player.cb.evolvedReq[8]) + " evo shards to level up. (Currently level " + formatWhole(player.cb.evolvedLevels[8]) + ")"
@@ -666,10 +672,18 @@
         //xpboost
 
         player.cb.XPBoostBase = [new Decimal(0.2),new Decimal(0.5),]
+        if (player.cb.level.lt(10000)) {
+            player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(100).pow(1.2))
+            player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(80).pow(1.1))
+        } else if (player.cb.level.lt(100000)) {
+            player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(40))
+            player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(50))
+        } else {
+            player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(16.8).pow(0.9))
+            player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(21.5).pow(0.9))
+        }
         for (let i = 0; i < player.cb.XPBoostBase.length; i++)
         {
-            player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(100).pow(0.6))
-            player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(80).pow(0.55))
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.evolvedEffects[2][1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.commonPetEffects[6][0])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
@@ -689,7 +703,7 @@
 
         //chal 7
         if (inChallenge("ip", 17) && player.cb.level.gt(1))
-        { 
+        {
             player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
             player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
 
@@ -704,7 +718,7 @@
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++)
         {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimersMax[i] = player.cb.buttonTimersMax[i].mul(10).div(player.cb.buttonAutomationAllocation[i].pow(0.75))
-        }   
+        }
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++)
         {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(onepersec.mul(delta))
@@ -717,7 +731,7 @@
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[i].mul(player.ca.canteEnergyMult))
             }
         }
-        
+
         if (player.cb.automationShardsInput.gte(1)) player.cb.automationShardsInputAmount = player.cb.automationShardsInput.floor()
         if (player.cb.automationShardsInput.lt(1)) player.cb.automationShardsInputAmount = new Decimal(1)
 
@@ -725,7 +739,7 @@
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++)
         {
             usedAutomationShards = usedAutomationShards.add(player.cb.buttonAutomationAllocation[i])
-        } 
+        }
 
         player.cb.totalAutomationShards = player.cb.automationShards.add(usedAutomationShards)
 
@@ -737,19 +751,45 @@
     },
     levelToXP(quantity)
     {
-        if (quantity == null) {quantity = new Decimal(1)}
-        quantity = quantity.add(3).pow(2.2).mul(5/11)
-        quantity = quantity.div(player.cb.uncommonPetEffects[2][2])
-        quantity = quantity.div(player.cb.rarePetEffects[3][1])
-        return quantity
+        if (!quantity.gte(10000)) {
+            quantity = quantity.add(2).pow(2.2).mul(5/11)
+            quantity = quantity.div(player.cb.uncommonPetEffects[2][2])
+            quantity = quantity.div(player.cb.rarePetEffects[3][1])
+            return quantity
+        } else if (!quantity.gte(100000)) {
+            quantity = quantity.sub(10000)
+            quantity = quantity.add(1436).pow(2.4).sub(37772059).add(286925000)
+            quantity = quantity.div(player.cb.uncommonPetEffects[2][2])
+            quantity = quantity.div(player.cb.rarePetEffects[3][1])
+            return quantity
+        } else {
+            quantity = quantity.sub(100000)
+            quantity = quantity.add(20875).pow(2.6).sub(170227162034).add(806892071467)
+            quantity = quantity.div(player.cb.uncommonPetEffects[2][2])
+            quantity = quantity.div(player.cb.rarePetEffects[3][1])
+            return quantity
+        }
     },
     xpToLevel(quantity)
     {
-        if (quantity == null) {quantity = new Decimal(5.1)}
-        quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
-        quantity = quantity.mul(player.cb.rarePetEffects[3][1])
-        quantity = quantity.div(5/11).pow(5/11).sub(3).floor()
-        return quantity
+        if (!quantity.gte(new Decimal(286925000).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]))) {
+            quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
+            quantity = quantity.mul(player.cb.rarePetEffects[3][1])
+            quantity = quantity.div(5/11).pow(5/11).sub(2).floor()
+            return quantity
+        } else if (!quantity.gte(new Decimal(806892071467).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]))) {
+            quantity = quantity.sub(new Decimal(286925000).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]))
+            quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
+            quantity = quantity.mul(player.cb.rarePetEffects[3][1])
+            quantity = quantity.add(37772059).pow(5/12).sub(1436).add(10000).floor()
+            return quantity
+        } else {
+            quantity = quantity.sub(new Decimal(806892071467).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]))
+            quantity = quantity.mul(player.cb.uncommonPetEffects[2][2])
+            quantity = quantity.mul(player.cb.rarePetEffects[3][1])
+            quantity = quantity.add(170227162034).pow(5/13).sub(20875).add(100000).floor()
+            return quantity
+        }
     },
     levelup()
     {
@@ -834,7 +874,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         4: {
             title() { return "Buy Max Off" },
@@ -843,7 +883,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '75px', }
+            style: { width: '75px', "min-height": '50px', }
         },
         5: {
             title() { return "Gain Fragments"},
@@ -1123,7 +1163,7 @@
             title() { return player.cb.XPBoostTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[0]) + "." : "<h3>+" + format(player.cb.XPBoostBase[0]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[0].lt(0) },
             unlocked() { return player.cb.XPBoostUnlocks[0] },
-            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 10%" : ""},
             onClick() {
                 if (player.cb.highestLevel.gte(player.cb.XPBoostReq[0]))
                 {
@@ -1552,7 +1592,7 @@
             title() { return player.cb.rarePetAmounts[2].gt(0) || player.cb.rarePetLevels[2].gt(0) ? player.cb.rarePetImage[2] : player.cb.lockedImg},
             canClick() { return player.cb.rarePetAmounts[2].gt(0) || player.cb.rarePetLevels[2].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.rarePetAmounts[2].gt(0) && !player.cb.viewingEvolved[7] || player.cb.rarePetLevels[2].gt(0) && !player.cb.viewingEvolved[7]  ? "<h3>x" + format(player.cb.rarePetEffects[2][0]) + " to rocket fuel (based on pet points).<br>/" + format(player.cb.rarePetEffects[2][1]) + " to golden grass spawn time." : player.cb.viewingEvolved[7] ? "<h3>+" + format(player.cb.evolvedEffects[7][0]) + " max moontstone.<br>x" + format(player.cb.evolvedEffects[7][1]) + " to golden grass." : ""},
+            tooltip() { return player.cb.rarePetAmounts[2].gt(0) && !player.cb.viewingEvolved[7] || player.cb.rarePetLevels[2].gt(0) && !player.cb.viewingEvolved[7]  ? "<h3>x" + format(player.cb.rarePetEffects[2][0]) + " to rocket fuel (based on pet points).<br>/" + format(player.cb.rarePetEffects[2][1]) + " to golden grass spawn time." : player.cb.viewingEvolved[7] ? "<h3>+" + format(player.cb.evolvedEffects[7][0]) + " max moonstone.<br>x" + format(player.cb.evolvedEffects[7][1]) + " to golden grass." : ""},
             onClick() {
                 player.cb.rarePetDisplayIndex = new Decimal(2)
             },
@@ -1631,7 +1671,7 @@
         137: {
             title() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)? player.cb.uncommonPetImage[5] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[5].gt(0) || player.cb.uncommonPetLevels[5].gt(0)},
-            tooltip() { return player.cb.uncommonPetAmounts[5].gt(0) && !player.cb.viewingEvolved[8] || player.cb.uncommonPetLevels[5].gt(0) && !player.cb.viewingEvolved[8] ? "<h3>x" + format(player.cb.uncommonPetEffects[5][0]) + " to 1st dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][1]) + " to 3rd dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][2]) + " to 5th dimensions." : player.cb.viewingEvolved[6] ? "<h3>x" + format(player.cb.evolvedEffects[8][0]) + " to anonymity.<br>x" + format(player.cb.evolvedEffects[8][1]) + " to oil."  : ""} ,
+            tooltip() { return player.cb.uncommonPetAmounts[5].gt(0) && !player.cb.viewingEvolved[8] || player.cb.uncommonPetLevels[5].gt(0) && !player.cb.viewingEvolved[8] ? "<h3>x" + format(player.cb.uncommonPetEffects[5][0]) + " to 1st dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][1]) + " to 3rd dimensions.<br>x" + format(player.cb.uncommonPetEffects[5][2]) + " to 5th dimensions." : player.cb.viewingEvolved[8] ? "<h3>x" + format(player.cb.evolvedEffects[8][0]) + " to anonymity.<br>x" + format(player.cb.evolvedEffects[8][1]) + " to oil."  : ""} ,
             unlocked() { return true },
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(5)
@@ -2330,7 +2370,7 @@
                 for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++)
                 {
                     player.cb.buttonAutomationAllocation[i] = new Decimal(0)
-                } 
+                }
             },
             style: { width: '100px', "min-height": '100px' },
         },
@@ -2340,23 +2380,34 @@
 
         if (rng > 0.95) {
             player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(1);
-            callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
-        }
-        else if (rng > 0.82) {
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
+            }
+        } else if (rng > 0.82) {
             player.cb.commonPetAmounts[4] = player.cb.commonPetAmounts[4].add(1);
-            callAlert("You gained a Slax!", "resources/slaxCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Slax!", "resources/slaxCommonPet.png");
+            }
         } else if (rng > 0.66) {
             player.cb.commonPetAmounts[3] = player.cb.commonPetAmounts[3].add(1);
-            callAlert("You gained a Gd Checkpoint!", "resources/checkpointCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Gd Checkpoint!", "resources/checkpointCommonPet.png");
+            }
         } else if (rng > 0.49) {
             player.cb.commonPetAmounts[2] = player.cb.commonPetAmounts[2].add(1);
-            callAlert("You gained an Unsmith!", "resources/unsmithCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained an Unsmith!", "resources/unsmithCommonPet.png");
+            }
         } else if (rng > 0.27) {
             player.cb.commonPetAmounts[1] = player.cb.commonPetAmounts[1].add(1);
-            callAlert("You gained an Egg Guy!", "resources/eggCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained an Egg Guy!", "resources/eggCommonPet.png");
+            }
         } else {
             player.cb.commonPetAmounts[0] = player.cb.commonPetAmounts[0].add(1);
-            callAlert("You gained a Gwa!", "resources/gwaCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Gwa!", "resources/gwaCommonPet.png");
+            }
         }
     },
     petButton2() {
@@ -2364,38 +2415,59 @@
 
         if (rng > 0.93) {
             player.cb.rarePetAmounts[0] = player.cb.rarePetAmounts[0].add(1);
-            callAlert("You gained a Nova!", "resources/novaRarePet.png");
-        }
-        else if (rng > 0.82) {
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Nova!", "resources/novaRarePet.png");
+            }
+        } else if (rng > 0.82) {
             player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].add(1);
-            callAlert("You gained THE WATCHING EYE!", "resources/eyeUncommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained THE WATCHING EYE!", "resources/eyeUncommonPet.png");
+            }
         } else if (rng > 0.70) {
             player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].add(1);
-            callAlert("You gained a Shark!", "resources/sharkUncommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Shark!", "resources/sharkUncommonPet.png");
+            }
         } else if (rng > 0.58) {
             player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].add(1);
-            callAlert("You gained a Normal Face!", "resources/normalFaceUncommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Normal Face!", "resources/normalFaceUncommonPet.png");
+            }
         } else if (rng > 0.46) {
             player.cb.uncommonPetAmounts[1] = player.cb.uncommonPetAmounts[1].add(1);
-            callAlert("You gained a Star!", "resources/starUncommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Star!", "resources/starUncommonPet.png");
+            }
         } else if (rng > 0.35) {
             player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(1);
-            callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
+            }
         }else if (rng > 0.28) {
             player.cb.commonPetAmounts[4] = player.cb.commonPetAmounts[4].add(3);
-            callAlert("You gained 3 Slaxes!", "resources/slaxCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained 3 Slaxes!", "resources/slaxCommonPet.png");
+            }
         } else if (rng > 0.21) {
             player.cb.commonPetAmounts[3] = player.cb.commonPetAmounts[3].add(3);
-            callAlert("You gained 3 Gd Checkpoints!", "resources/checkpointCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained 3 Gd Checkpoints!", "resources/checkpointCommonPet.png");
+            }
         } else if (rng > 0.14) {
             player.cb.commonPetAmounts[2] = player.cb.commonPetAmounts[2].add(3);
-            callAlert("You gained 3 Unsmiths!", "resources/unsmithCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained 3 Unsmiths!", "resources/unsmithCommonPet.png");
+            }
         } else if (rng > 0.7) {
             player.cb.commonPetAmounts[1] = player.cb.commonPetAmounts[1].add(3);
-            callAlert("You gained 3 Egg Guys!", "resources/eggCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained 3 Egg Guys!", "resources/eggCommonPet.png");
+            }
         } else {
             player.cb.commonPetAmounts[0] = player.cb.commonPetAmounts[0].add(3);
-            callAlert("You gained 3 Gwas!", "resources/gwaCommonPet.png");
+            if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                callAlert("You gained 3 Gwas!", "resources/gwaCommonPet.png");
+            }
         }
     },
     petButton3() {
@@ -2403,26 +2475,31 @@
 
         if (rng > 0.2) {
             let random =  getRandomInt(5)
-            if (random == 0)
-            {
+            if (random == 0) {
                 player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(1);
-                callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
-            } else if (random == 1)
-            {
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
+                }
+            } else if (random == 1) {
                 player.cb.uncommonPetAmounts[1] = player.cb.uncommonPetAmounts[1].add(1);
-                callAlert("You gained a Star!", "resources/starUncommonPet.png");
-            } else if (random == 2)
-            {
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Star!", "resources/starUncommonPet.png");
+                }
+            } else if (random == 2) {
                 player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].add(1);
-                callAlert("You gained a Normal Face!", "resources/normalFaceUncommonPet.png");
-            } else if (random == 3)
-            {
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Normal Face!", "resources/normalFaceUncommonPet.png");
+                }
+            } else if (random == 3) {
                 player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].add(1);
-                callAlert("You gained a Shark!", "resources/sharkUncommonPet.png");
-            }  else if (random == 4)
-            {
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Shark!", "resources/sharkUncommonPet.png");
+                }
+            }  else if (random == 4) {
                 player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].add(1);
-                callAlert("You gained THE WATCHING EYE!", "resources/eyeUncommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained THE WATCHING EYE!", "resources/eyeUncommonPet.png");
+                }
             }
         }
         if (rng < 0.2)
@@ -2430,12 +2507,16 @@
             if (rng > 0.08)
             {
                 player.cb.rarePetAmounts[3] = player.cb.rarePetAmounts[3].add(1);
-                callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");
+                }
             }
             if (rng < 0.08)
             {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                callAlert("You gained an Evolution Shard!", "resources/evoShard.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained an Evolution Shard!", "resources/evoShard.png");
+                }
             }
         }
     },
@@ -2448,11 +2529,15 @@
             if (random == 0)
             {
                 player.cb.commonPetAmounts[5] = player.cb.commonPetAmounts[5].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Spiders!", "resources/spiderCommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Spiders!", "resources/spiderCommonPet.png");
+                }
             } else if (random == 1)
             {
                 player.cb.commonPetAmounts[6] = player.cb.commonPetAmounts[6].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Blobs!", "resources/blobCommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Blobs!", "resources/blobCommonPet.png");
+                }
             }
         } else if (rng > 0.2 && rng < 0.5)
         {
@@ -2461,11 +2546,15 @@
             if (random == 0)
             {
                 player.cb.uncommonPetAmounts[5] = player.cb.uncommonPetAmounts[5].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Clocks!", "resources/clockUncommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Clocks!", "resources/clockUncommonPet.png");
+                }
             } else if (random == 1)
             {
                 player.cb.uncommonPetAmounts[6] = player.cb.uncommonPetAmounts[6].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Trollfaces!", "resources/trollUncommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Trollfaces!", "resources/trollUncommonPet.png");
+                }
             }
         }
         else if (rng < 0.2)
@@ -2473,12 +2562,16 @@
             if (rng > 0.05)
             {
                 player.cb.rarePetAmounts[4] = player.cb.rarePetAmounts[4].add(1);
-                callAlert("You gained an Antimatter!", "resources/antimatterRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained an Antimatter!", "resources/antimatterRarePet.png");
+                }
             }
             if (rng < 0.05)
             {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(3);
-                callAlert("You gained 3 Evolution Shards!", "resources/evoShard.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained 3 Evolution Shards!", "resources/evoShard.png");
+                }
             }
         }
     },
@@ -2491,11 +2584,15 @@
             if (random == 0)
             {
                 player.cb.commonPetAmounts[7] = player.cb.commonPetAmounts[7].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Replicators!", "resources/replicatorCommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Replicators!", "resources/replicatorCommonPet.png");
+                }
             } else if (random == 1)
             {
                 player.cb.commonPetAmounts[8] = player.cb.commonPetAmounts[8].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Smoke!", "resources/smokeCommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Smoke!", "resources/smokeCommonPet.png");
+                }
             }
         } else if (rng > 0.2 && rng < 0.5)
         {
@@ -2504,11 +2601,15 @@
             if (random == 0)
             {
                 player.cb.uncommonPetAmounts[7] = player.cb.uncommonPetAmounts[7].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Infinity Breakers!", "resources/infinityBreakerUncommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Infinity Breakers!", "resources/infinityBreakerUncommonPet.png");
+                }
             } else if (random == 1)
             {
                 player.cb.uncommonPetAmounts[8] = player.cb.uncommonPetAmounts[8].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Johns!", "resources/johnUncommonPet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Johns!", "resources/johnUncommonPet.png");
+                }
             }
         }
         else if (rng < 0.2)
@@ -2516,12 +2617,16 @@
             if (rng > 0.1)
             {
                 player.cb.rarePetAmounts[5] = player.cb.rarePetAmounts[5].add(1);
-                callAlert("You gained a Hex Shadow!", "resources/hexShadowRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Hex Shadow!", "resources/hexShadowRarePet.png");
+                }
             }
             if (rng < 0.1)
             {
                 player.cb.rarePetAmounts[6] = player.cb.rarePetAmounts[6].add(1);
-                callAlert("You gained a Grass Square!", "resources/grassSquareRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained a Grass Square!", "resources/grassSquareRarePet.png");
+                }
             }
         }
     },
@@ -2535,36 +2640,50 @@
             if (random == 0)
             {
                 player.cb.rarePetAmounts[0] = player.cb.rarePetAmounts[0].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Novas!", "resources/novaRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Novas!", "resources/novaRarePet.png");
+                }
             } else if (random == 1)
             {
                 player.cb.rarePetAmounts[1] = player.cb.rarePetAmounts[1].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Dices!", "resources/diceRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Dices!", "resources/diceRarePet.png");
+                }
             }
             else if (random == 2)
             {
                 player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Drippy Ufos!", "resources/ufoRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Drippy Ufos!", "resources/ufoRarePet.png");
+                }
             }
             else if (random == 3)
             {
                 player.cb.rarePetAmounts[3] = player.cb.rarePetAmounts[3].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Goofy Ahh Things!", "resources/goofyAhhThingRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Goofy Ahh Things!", "resources/goofyAhhThingRarePet.png");
+                }
             }
             else if (random == 4)
             {
                 player.cb.rarePetAmounts[4] = player.cb.rarePetAmounts[4].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Antimatters!", "resources/antimatterRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Antimatters!", "resources/antimatterRarePet.png");
+                }
             }
             else if (random == 5)
             {
                 player.cb.rarePetAmounts[5] = player.cb.rarePetAmounts[5].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Hex Shadows!", "resources/hexShadowRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Hex Shadows!", "resources/hexShadowRarePet.png");
+                }
             }
             else if (random == 6)
             {
                 player.cb.rarePetAmounts[6] = player.cb.rarePetAmounts[6].add(gainedPets);
-                callAlert("You gained " + formatWhole(gainedPets) + " Grass Squares!", "resources/grassSquareRarePet.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Grass Squares!", "resources/grassSquareRarePet.png");
+                }
             }
         }
         else if (rng < 0.3)
@@ -2575,25 +2694,31 @@
             if (random == 0)
             {
                 player.cb.epicPetFragments[0] = player.cb.epicPetFragments[0].add(gainedFragments);
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment4.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment1.png");
+                    if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment2.png");
+                    if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment3.png");
+                    if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment4.png");
+                }
             } else if (random == 1)
             {
                 player.cb.epicPetFragments[1] = player.cb.epicPetFragments[1].add(gainedFragments);
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment4.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment1.png");
+                    if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment2.png");
+                    if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment3.png");
+                    if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment4.png");
+                }
             }
             else if (random == 2)
             {
                 player.cb.epicPetFragments[2] = player.cb.epicPetFragments[2].add(gainedFragments);
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment4.png");
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment1.png");
+                    if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment2.png");
+                    if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment3.png");
+                    if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment4.png");
+                }
             }
         }
     },
@@ -2627,7 +2752,7 @@
             },
             display() {
                 return "which are multiplying hex 1 points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2661,7 +2786,7 @@
             },
             display() {
                 return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2695,7 +2820,7 @@
             },
             display() {
                 return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2729,7 +2854,7 @@
             },
             display() {
                 return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost.mul(player.cb.uncommonPetEffects[2][2]).mul(player.cb.rarePetEffects[3][1]).div(5/11).pow(5/11).sub(3).floor()) + " Check Back Levels worth of XP."
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
                 let base = new Decimal(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
@@ -2765,128 +2890,128 @@
             title: "Gwa",
             body() { return "Has a childlike innocence and is very kind. Seems to have immense power but is also very reluctant to use the power." },
             unlocked() { return player.cb.petDisplayIndex == 0 && !player.cb.viewingEvolved[3]},
-            
+
         },
         c2: {
             title: "Egg Guy",
             body() { return "This fellow came out of a very powerful chicken... However he would meet his fate when the chicken inside hatches..." },
             unlocked() { return player.cb.petDisplayIndex == 1 },
-            
+
         },
         c3: {
             title: "Unsmith",
             body() { return "A creature that was synergized out of the purest form of SPV, which we don't know what it is yet... We will figure it out one day." },
             unlocked() { return player.cb.petDisplayIndex == 2 && !player.cb.viewingEvolved[0]},
-            
+
         },
         c4: {
             title: "Gd Checkpoint",
             body() { return "This guy feels a little bit familiar, but you don't know why. You just ignore it." },
             unlocked() { return player.cb.petDisplayIndex == 3 },
-            
+
         },
         c5: {
             title: "Slax",
             body() { return "A being of neon green and plasma. The energy of the void radiates within it's presence." },
             unlocked() { return player.cb.petDisplayIndex == 4 },
-            
+
         },
         c6: {
             title: "Spider",
             body() { return "This eight-legged bug has no place in these worlds, but a small crack in the fabric of reality made it slip through and gain enough power to be your pet." },
             unlocked() { return player.cb.petDisplayIndex == 5 && !player.cb.viewingEvolved[6]},
-            
+
         },
         c7: {
             title: "Blob",
             body() { return "Blob." },
             unlocked() { return player.cb.petDisplayIndex == 6 },
-            
+
         },
         c8: {
             title: "Replicator",
             body() { return "This creature was the result of a failed replicant galaxy transformation. It holds the power of 1.79e308 replicanti, but can not replicate itself no more." },
             unlocked() { return player.cb.petDisplayIndex == 7 },
-            
+
         },
         c9: {
             title: "Smoke",
             body() { return "A burning world that once was. Reduced to nothingness and ash. Smoke from that world made its way over here. The new world." },
             unlocked() { return player.cb.petDisplayIndex == 8 },
-            
+
         },
         u1: {
             title: "Teste",
             body() { return "A cat that likes committing murder on walls." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 0 },
-            
+
         },
         u2: {
             title: "Star",
             body() { return "One of the many stars from the night sky. A burning ball of gas." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 1 && !player.cb.viewingEvolved[4]},
-            
+
         },
         u3: {
             title: "Normal Face",
             body() { return "Originated from a vast land of blocks and spikes. A victim of lobotomy." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 2 && !player.cb.viewingEvolved[2]},
-            
+
         },
         u4: {
             title: "Shark",
             body() { return "A shark that was once swimming in an infinite sea found itself trapped in this universe." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 3 && !player.cb.viewingEvolved[1]},
-            
+
         },
         u5: {
             title: "THE WATCHING EYE",
             body() { return "It's always watching." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 4},
-            
+
         },
         u6: {
             title: "Clock",
             body() { return "This clock is the symbol of check back. Must be one patient fellow. You can feel the presence of evolution shards..." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 5 && !player.cb.viewingEvolved[8]},
-            
+
         },
         u7: {
             title: "Troll Face",
             body() { return "You can NOT trust this guy no matter what. Also please do not evolve it either." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 6},
-            
+
         },
         u8: {
             title: "Infinity Breaker",
             body() { return "This pet has been breaking your infinities all along. It is made of an unknown metal. It seems familiar." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 7},
-            
+
         },
         u9: {
             title: "John",
             body() { return "Just a cartoon doodle dude that got transported here for literally no reason." },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 8},
-            
+
         },
         //make rares
         r1: {
             title: "Nova",
             body() { return "A clown from the domain of singularity. Likes playing pranks and causing havoc. Only here to watch what you are doing." },
             unlocked() { return player.cb.rarePetDisplayIndex == 0},
-            
+
         },
         r2: {
             title: "Dice",
             body() { return "One of Zar's creations. This pet will always output a random number between 1 and 6." },
             unlocked() { return player.cb.rarePetDisplayIndex == 1 && !player.cb.viewingEvolved[5]},
-            
+
         },
         r3: {
             title: "Drippy Ufo",
             body() { return "An unknown flying object, but with style. Iridite's messenger. Be careful what you tell it." },
             unlocked() { return player.cb.rarePetDisplayIndex == 2 && !player.cb.viewingEvolved[7]},
-            
+
         },
         r4: {
             title: "Goofy Ahh Thing",
@@ -2913,19 +3038,19 @@
             title: "Dotknight",
             body() { return "A knight of unknown origin that wields the cursword, which is one of the most powerful swords. He is yet to awaken its true power." },
             unlocked() { return player.cb.epicPetDisplayIndex == 0 && player.cb.epicPetLevels[0].gte(1)},
-            
+
         },
         e2: {
             title: "Dragon",
             body() { return "This dragon is heavily associated with the number 12. Seems oddly familiar. You might've seen this dragon in a dream before." },
             unlocked() { return player.cb.epicPetDisplayIndex == 1 && player.cb.epicPetLevels[1].gte(1)},
-            
+
         },
         e3: {
             title: "Cookie",
             body() { return "This cookie is imbued with large amounts of incremental power. Clicking it would be very dangerous." },
             unlocked() { return player.cb.epicPetDisplayIndex == 2 && player.cb.epicPetLevels[2].gte(1)},
-            
+
         },
         //evo
         /*
@@ -3037,7 +3162,6 @@
                 content:
                 [
                     ["microtabs", "automation", { 'border-width': '0px' }],
-                    
                 ]
 
             },
@@ -3067,8 +3191,8 @@
                 [
                     ["raw-html", function () { return player.cb.uncommonPetDisplay[player.cb.uncommonPetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141], ["clickable", 149], ["clickable", 152], 
-                    ["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],  
+                    ["row", [["clickable", 113], ["clickable", 118], ["clickable", 119], ["clickable", 121], ["clickable", 122], ["clickable", 139],["clickable", 141], ["clickable", 149], ["clickable", 152],
+                    ["clickable", 205],  ["clickable", 207], ["clickable", 206], ["clickable", 208], ["clickable", 209],  ["clickable", 212], ["clickable", 211], ["clickable", 213],
                     ["clickable", 221], ["clickable", 219], ["clickable", 218], ["clickable", 222], ["clickable", 238], ["clickable", 237], ["clickable", 236], ["clickable", 239], ["clickable", 303], ["clickable", 304],  ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Uncommon Pets" }, { "color": "#88e688", "font-size": "24px", "font-family": "monospace" }],
@@ -3288,18 +3412,27 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are level " + formatWhole(player.cb.level) + ", which boosts celestial point gain by x" + format(player.cb.levelEffect) + "."}, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", function () {
+            if (player.cb.level.lt(10000)) {
+                return ""
+            } else if (player.cb.level.lt(100000)) {
+                return "<b>[SOFTCAPPED]</b>"
+            } else {
+                return "<b>[SOFTCAPPED<sup>2</sup>]</b>"
+            }
+        }, { "color": "white", "font-size": "14px", "font-family": "monospace" }],
         ["raw-html", function () { return "(Highest Level: " + formatWhole(player.cb.highestLevel) + ")"}, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return !hasMilestone("ip", 24) ? "YOU MUST REACH 1e100 POINTS TO ACTIVATE CHECK BACK AND PET EFFECT" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "xpbar"]]],
-                        ["blank", "25px"],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) }
 })

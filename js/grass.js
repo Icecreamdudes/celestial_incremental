@@ -2065,15 +2065,15 @@ function createGoldGrass(quantity) {
 }
 
 function createMoonstone(quantity) {
-    const spawnArea = document.getElementById('moonstone-spawn-area');
-    const spawnAreaRect = spawnArea?.getBoundingClientRect();
+    const spawnArea = document.getElementById('moonstone-spawn-area')
+    const spawnAreaRect = spawnArea?.getBoundingClientRect()
 
-    const maxHealth = player.g.moonstoneMaxHealth;
-    const damage = player.g.moonstoneDamage;
+    // Sanity check: only render on an existing spawnAreaRect
+    if (!spawnAreaRect) {
+        return
+    }
 
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to create moonstone elements
+    // Create moonstone based on quantity
     for (let i = 0; i < quantity; i++) {
         const squareWidth = 20
         const squareHeight = 20
@@ -2081,107 +2081,140 @@ function createMoonstone(quantity) {
             spawnAreaRect.width, spawnAreaRect.height,
             squareWidth, squareHeight)
 
-        const moonstone = document.createElement('div');
-        moonstone.style.width = `${squareWidth}px`;
-        moonstone.style.height = `${squareHeight}px`;
-        moonstone.style.backgroundColor = '#047ce4';
-        moonstone.style.position = 'absolute';
-        moonstone.style.left = `${randomX}px`;
-        moonstone.style.top = `${randomY}px`;
-        moonstone.style.border = '2px solid black'; // Add a black border
-        moonstone.classList.add('moonstone');
+        const moonstone = document.createElement('div')
+        Object.assign(moonstone.style, {
+            width: `${squareWidth}px`,
+            height: `${squareHeight}px`,
+            backgroundColor: '#047ce4',
+            position: 'absolute',
+            left: `${randomX}px`,
+            top: `${randomY}px`,
+            border: '2px solid black',
+        })
+        moonstone.classList.add('moonstone')
 
-        // Assign health properties
-        moonstone.health = maxHealth; // Set max health
-        moonstone.damage = damage; // Set damage value
+        moonstone.health = player.g.moonstoneMaxHealth
+        moonstone.damage = player.g.moonstoneDamage
 
         // Create health bar
-        const healthBar = document.createElement('div');
-        healthBar.style.width = '100%';
-        healthBar.style.height = '5px';
-        healthBar.style.backgroundColor = 'red'; // Background color of health bar
-        healthBar.style.position = 'absolute';
-        healthBar.style.bottom = '100%'; // Position it above the moonstone
-        healthBar.style.left = '0';
-        healthBar.style.zIndex = '50'; // Ensure it appears above the moonstone
+        function getNewHealthBar() {
+            const hb = document.createElement('div')
+            Object.assign(hb.style, {
+                width: '100%',
+                height: '5px',
+                backgroundColor: 'red',
+                position: 'absolute',
+                left: '0',
+                bottom: '100%', // Spawn above the moonstone
+                zIndex: '50', // Render above everything else
+            })
 
-        // Append health bar to moonstone
-        moonstone.appendChild(healthBar);
-        spawnArea.appendChild(moonstone);
+            return hb
+        }
+
+        moonstone.appendChild(getNewHealthBar())
+        spawnArea.appendChild(moonstone)
+
+        function getPosOrNeg() {
+            return Math.random() < 0.5
+                ? -1
+                : 1
+        }
+
+        function getRandomVelocity(multiplier) {
+            return ((Math.random() * 2) + 1) * multiplier
+        }
 
         // Set initial velocity
-        let vx = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 2 + 1) * 40; // Random x velocity
-        let vy = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 2 + 1) * 40; // Random y velocity
-
-        // Function to update health bar width
-        function updateHealthBar() {
-            const healthPercentage = (moonstone.health / maxHealth) * 100;
-            healthBar.style.width = `${healthPercentage}%`;
-        }
+        let vx = getPosOrNeg() * getRandomVelocity(40)
+        let vy = getPosOrNeg() * getRandomVelocity(40)
 
         // Function to handle the bouncing and movement
         function bounce() {
             const moonstoneRect = moonstone.getBoundingClientRect();
 
-            // Reverse direction if hitting left or right boundary
+            // Bounce off left
             if (moonstoneRect.left <= spawnAreaRect.left) {
-                vx = Math.abs(vx); // Move right
-                moonstone.style.left = `${spawnAreaRect.left}px`; // Ensure it's inside
-            }
-            if (moonstoneRect.right >= spawnAreaRect.right) {
-                vx = -Math.abs(vx); // Move left
-                moonstone.style.left = `${spawnAreaRect.right - moonstoneRect.width}px`; // Ensure it's inside
+                vx = Math.abs(vx)
+
+                // Pop to inside
+                moonstone.style.left = `${spawnAreaRect.left}px`
             }
 
-            // Reverse direction if hitting top or bottom boundary
-            if (moonstoneRect.top <= spawnAreaRect.top) {
-                vy = Math.abs(vy); // Move down
-                moonstone.style.top = `${spawnAreaRect.top}px`; // Ensure it's inside
+            // Bounce off right
+            if (moonstoneRect.right >= spawnAreaRect.right) {
+                vx = -Math.abs(vx)
+
+                // Pop to inside
+                moonstone.style.left =
+                    `${spawnAreaRect.right - moonstoneRect.width}px`
             }
+
+            // Bounce off top
+            if (moonstoneRect.top <= spawnAreaRect.top) {
+                vy = Math.abs(vy)
+
+                // Pop to inside
+                moonstone.style.top = `${spawnAreaRect.top}px`
+            }
+
+            // Bounce off bottom
             if (moonstoneRect.bottom >= spawnAreaRect.bottom) {
-                vy = -Math.abs(vy); // Move up
-                moonstone.style.top = `${spawnAreaRect.bottom - moonstoneRect.height}px`; // Ensure it's inside
+                vy = -Math.abs(vy)
+
+                // Pop to inside
+                moonstone.style.top =
+                    `${spawnAreaRect.bottom - moonstoneRect.height}px`
             }
 
             // Update position
             moonstone.style.left = `${moonstone.offsetLeft + vx}px`;
             moonstone.style.top = `${moonstone.offsetTop + vy}px`;
 
-            // Request the next animation frame
             requestAnimationFrame(bounce);
         }
 
         // Start the bouncing animation
-        bounce();
+        bounce()
 
         // Check for collision with small circles
         document.addEventListener('smallCircleFired', (event) => {
-            const smallCircle = event.detail;
-            const smallCircleRect = smallCircle.getBoundingClientRect();
-            const moonstoneRect = moonstone.getBoundingClientRect();
+            function updateHealthBar() {
+                const healthPercentage =
+                    moonstone.health / player.g.moonstoneMaxHealth * 100
+
+                // XXX: this may need to change if we attach more children
+                moonstone.firstChild.style.width = `${healthPercentage}%`
+            }
+
+            const smallCircle = event.detail
+            const smallCircleRect = smallCircle.getBoundingClientRect()
+            const moonstoneRect = moonstone.getBoundingClientRect()
 
             // Check for collision
-            if (
+            const shotInMoonstone = 
                 moonstoneRect.left < smallCircleRect.right &&
                 moonstoneRect.right > smallCircleRect.left &&
                 moonstoneRect.top < smallCircleRect.bottom &&
                 moonstoneRect.bottom > smallCircleRect.top
-            ) {
+            if (shotInMoonstone) {
                 // Reduce health
-                moonstone.health -= moonstone.damage;
-                updateHealthBar(); // Update the health bar
+                moonstone.health -= moonstone.damage
+                updateHealthBar()
 
                 // Remove small circle upon collision
-                smallCircle.remove();
+                smallCircle.remove()
 
                 // Remove moonstone if health is zero or less
                 if (moonstone.health <= 0) {
-                    removeGrass(moonstone);
-                    player.g.moonstoneCount = player.g.moonstoneCount.sub(1);
-                    player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal);
+                    removeGrass(moonstone)
+                    player.g.moonstoneCount = player.g.moonstoneCount
+                        .sub(1)
+                    player.g.moonstone = player.g.moonstone
+                        .add(player.g.moonstoneVal)
                 }
             }
-        });
+        })
     }
 }
 

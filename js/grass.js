@@ -1,6 +1,6 @@
-﻿addLayer("g", {
-    name: "Grass", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "G", // This appears on the layer's node. Default is the id with the first letter capitalized
+addLayer('g', {
+    name: 'Grass', // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: 'G', // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -14,7 +14,6 @@
         // yn: s !p
         // yy: s p
         lastLayerState: 'nn',
-        menuState: true,
 
         isGrassLoaded: false,
         grass: new Decimal(0),
@@ -50,51 +49,50 @@
         moonstoneDamage: new Decimal(20),
         reloadTime: new Decimal(400),
         moonstoneLevel: new Decimal(1),
-        moonstoneLevelEffects: [new Decimal(1),new Decimal(1),new Decimal(1),],
+        moonstoneLevelEffects: [
+            new Decimal(1),
+            new Decimal(1),
+            new Decimal(1),
+        ],
         moonstoneLevelMax: new Decimal(1),
     }
     },
     automate() {
-        if (hasMilestone("r", 13))
+        if (hasMilestone('r', 13))
         {
-            buyBuyable("g", 11)
-            buyBuyable("g", 12)
-            buyBuyable("g", 13)
-            buyBuyable("g", 14)
-            buyBuyable("g", 15)
-            buyBuyable("g", 16)
-            buyBuyable("g", 17)
-            buyBuyable("g", 18)
-            buyBuyable("g", 19)
+            buyBuyable('g', 11)
+            buyBuyable('g', 12)
+            buyBuyable('g', 13)
+            buyBuyable('g', 14)
+            buyBuyable('g', 15)
+            buyBuyable('g', 16)
+            buyBuyable('g', 17)
+            buyBuyable('g', 18)
+            buyBuyable('g', 19)
         }
-        if (hasMilestone("r", 15) && player.g.auto == true)
+        if (hasMilestone('r', 15) && player.g.auto == true)
         {
-            buyUpgrade("g", 11)
-            buyUpgrade("g", 12)
-            buyUpgrade("g", 13)
-            buyUpgrade("g", 14)
-            buyUpgrade("g", 15)
-            buyUpgrade("g", 16)
-            buyUpgrade("g", 17)
-            buyUpgrade("g", 18)
-            buyUpgrade("g", 19)
-            buyUpgrade("g", 21)
+            buyUpgrade('g', 11)
+            buyUpgrade('g', 12)
+            buyUpgrade('g', 13)
+            buyUpgrade('g', 14)
+            buyUpgrade('g', 15)
+            buyUpgrade('g', 16)
+            buyUpgrade('g', 17)
+            buyUpgrade('g', 18)
+            buyUpgrade('g', 19)
+            buyUpgrade('g', 21)
         }
     },
     nodeStyle() {
     },
-    tooltip: "Grass",
-    color: "#119B35",
+    tooltip: 'Grass',
+    color: '#119B35',
     update(delta) {
         // Grass/gold grass-specific logic relies on knowing whether or
         // not we're actively on their specific microtab, so we handle the
         // loading/unloading logic here, before splitting off into specific
         // sub-handlers.
-        if (player.g.buyables[13].gte(13))
-        {
-            player.g.buyables[13] = new Decimal(500)
-        }
-
         const state = {
             // I.e. we currently have the Grass layer loaded
             inGrassLayer: player.tab === 'g',
@@ -143,7 +141,6 @@
                 layers.g.loadMoonstone()
                 player.g.isMoonstoneLoaded = true
             }
-
         }
 
         // Grass isn't loaded if we leave its microtab
@@ -179,28 +176,9 @@
 
         // =================================================================
 
-
         updateGrass(delta)
         updateGoldGrass(delta)
         updateMoonstone(delta)
-
-        player.g.moonstoneLevelEffects = [
-        player.g.moonstoneLevel.pow(1.5),
-        player.g.moonstoneLevel.pow(0.2),
-        player.g.moonstoneLevel.pow(1.2)
-        ]
-
-        player.g.moonstoneMaxHealth = new Decimal(100)
-        player.g.moonstoneMaxHealth = player.g.moonstoneMaxHealth.mul(player.g.moonstoneLevelEffects[0])
-
-        player.g.moonstoneDamage = new Decimal(20)
-        player.g.moonstoneDamage = player.g.moonstoneDamage.mul(buyableEffect("g", 22))
-        if (hasUpgrade("ev8", 18)) player.g.moonstoneDamage = player.g.moonstoneDamage.mul(2)
-
-        player.g.reloadTime = new Decimal(400)
-        player.g.reloadTime = player.g.reloadTime.div(buyableEffect("g", 23))
-
-        player.g.moonstoneLevelMax = buyableEffect("g", 29)
     },
     unloadGrass() {
         // N.B. this space intentionally left blank
@@ -241,52 +219,52 @@
         removeAllMoonstone()
         createMoonstone(player.g.moonstoneCount)
     },
-    branches: ["t"],
+    branches: ['t'],
     clickables: {
         1: {
-            title() { return "<h2>Return" },
+            title() { return '<h2>Return' },
             canClick() { return true },
             unlocked() { return options.newMenu == false },
             onClick() {
-                player.tab = "i"
+                player.tab = 'i'
             },
-            style: { width: '100px', "min-height": '50px' },
+            style: { width: '100px', 'min-height': '50px' },
         },
         2: {
-            title() { return "Buy Max On" },
+            title() { return 'Buy Max On' },
             canClick() { return player.buyMax == false },
             unlocked() { return true },
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', 'min-height': '50px', }
         },
         3: {
-            title() { return "Buy Max Off" },
+            title() { return 'Buy Max Off' },
             canClick() { return player.buyMax == true  },
             unlocked() { return true },
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', 'min-height': '50px', }
         },
         4: {
-            title() { return "<h3>Lower Level" },
+            title() { return '<h3>Lower Level' },
             canClick() { return player.g.moonstoneLevel.gt(1) },
             unlocked() { return true },
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.sub(1)
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', 'min-height': '100px' },
         },
         5: {
-            title() { return "<h3>Increase Level" },
+            title() { return '<h3>Increase Level' },
             canClick() { return player.g.moonstoneLevel.lt(player.g.moonstoneLevelMax) },
             unlocked() { return true },
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.add(1)
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', 'min-height': '100px' },
         },
     },
     bars: {
@@ -294,119 +272,119 @@
     upgrades: {
         11:
         {
-            title: "Grass Upgrade I",
+            title: 'Grass Upgrade I',
             unlocked() { return true },
-            description() { return "Boosts grass value based on prestige points." },
+            description() { return 'Boosts grass value based on prestige points.' },
             cost: new Decimal(250),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
             effect() {
                 return player.p.prestigePoints.pow(0.05).div(9).add(1)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
         },
         12:
         {
-            title: "Grass Upgrade II",
+            title: 'Grass Upgrade II',
             unlocked() { return true },
-            description() { return "Boost tree gain based on grass." },
+            description() { return 'Boost tree gain based on grass.' },
             cost: new Decimal(400),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
             effect() {
                 return player.g.grass.pow(0.3).div(7).add(1)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
         },
         13:
         {
-            title: "Grass Upgrade III",
+            title: 'Grass Upgrade III',
             unlocked() { return true },
-            description() { return "Unlocks Golden Grass." },
+            description() { return 'Unlocks Golden Grass.' },
             cost: new Decimal(800),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
         },
         14:
         {
-            title: "Grass Upgrade IV",
-            unlocked() { return hasUpgrade("g", 13) },
-            description() { return "Unlocks golden grass buyables." },
+            title: 'Grass Upgrade IV',
+            unlocked() { return hasUpgrade('g', 13) },
+            description() { return 'Unlocks golden grass buyables.' },
             cost: new Decimal(1500),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
         },
         15:
         {
-            title: "Grass Upgrade V",
-            unlocked() { return hasUpgrade("g", 13) },
-            description() { return "Unlocks more tree buyables." },
+            title: 'Grass Upgrade V',
+            unlocked() { return hasUpgrade('g', 13) },
+            description() { return 'Unlocks more tree buyables.' },
             cost: new Decimal(3000),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
         },
         16:
         {
-            title: "Grass Upgrade VI",
-            unlocked() { return hasUpgrade("g", 13) },
-            description() { return "Divides golden grass spawn time by /1.3." },
+            title: 'Grass Upgrade VI',
+            unlocked() { return hasUpgrade('g', 13) },
+            description() { return 'Divides golden grass spawn time by /1.3.' },
             cost: new Decimal(4500),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
         },
         17:
         {
-            title: "Grass Upgrade VII",
-            unlocked() { return hasMilestone("r", 12) },
-            description() { return "Unlocks tree factor V." },
+            title: 'Grass Upgrade VII',
+            unlocked() { return hasMilestone('r', 12) },
+            description() { return 'Unlocks tree factor V.' },
             cost: new Decimal(7777),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
         },
         18:
         {
-            title: "Grass Upgrade VIII",
-            unlocked() { return hasMilestone("r", 14) },
-            description() { return "Increases grass capacity by +150 and golden grass by +6." },
+            title: 'Grass Upgrade VIII',
+            unlocked() { return hasMilestone('r', 14) },
+            description() { return 'Increases grass capacity by +150 and golden grass by +6.' },
             cost: new Decimal(1e7),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
         },
         19:
         {
-            title: "Grass Upgrade IX",
-            unlocked() { return hasMilestone("r", 14) },
-            description() { return "Increases grass capacity based on pent. (Max: 1000)" },
+            title: 'Grass Upgrade IX',
+            unlocked() { return hasMilestone('r', 14) },
+            description() { return 'Increases grass capacity based on pent. (Max: 1000)' },
             cost: new Decimal(1e9),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
             effect() {
                 return player.r.pent.lte(100) ? player.r.pent.mul(10) : new Decimal(1000)
             },
-            effectDisplay() { return "+"+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            effectDisplay() { return '+'+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
         21:
         {
-            title: "Grass Upgrade X",
-            unlocked() { return hasMilestone("r", 17) },
-            description() { return "Boosts mod gain based on check back level." },
+            title: 'Grass Upgrade X',
+            unlocked() { return hasMilestone('r', 17) },
+            description() { return 'Boosts mod gain based on check back level.' },
             cost: new Decimal(1e25),
             currencyLocation() { return player.g },
-            currencyDisplayName: "Grass",
-            currencyInternalName: "grass",
+            currencyDisplayName: 'Grass',
+            currencyInternalName: 'grass',
             effect() {
                 return player.cb.level.pow(0.8).add(1)
             },
-            effectDisplay() { return "x"+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            effectDisplay() { return 'x'+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
         23:
         {
@@ -440,26 +418,26 @@
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Value"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Value'
             },
             display() {
-                return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
+                return 'which are boosting grass value by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -472,26 +450,26 @@
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) && player.g.buyables[12].lt(200)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/200<br/>Grass Grow Rate"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/200<br/>Grass Grow Rate'
             },
             display() {
-                return "which are dividing grass time requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
+                return 'which are dividing grass time requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
                 let base = new Decimal(15)
                 let growth = 1.25
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -504,26 +482,26 @@
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) && player.g.buyables[13].lt(500)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Grass Capacity"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/500<br/>Grass Capacity'
             },
             display() {
-                return "which are increasing grass capacity by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
+                return 'which are increasing grass capacity by +' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
                 let base = new Decimal(25)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -536,26 +514,26 @@
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Celestial Point Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Celestial Point Boost'
             },
             display() {
-                return "which are boosting celestial point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
+                return 'which are boosting celestial point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
                 let base = new Decimal(20)
                 let growth = 1.22
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -568,26 +546,26 @@
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Factor Power Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Factor Power Boost'
             },
             display() {
-                return "which are boosting factor power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
+                return 'which are boosting factor power gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
                 let base = new Decimal(35)
                 let growth = 1.34
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -600,26 +578,26 @@
             unlocked() { return true },
             canAfford() { return player.g.grass.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Prestige Point Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Prestige Point Boost'
             },
             display() {
-                return "which are boosting prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
+                return 'which are boosting prestige point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
                 let base = new Decimal(60)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.grass = player.g.grass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -629,29 +607,29 @@
         17: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
-            unlocked() { return hasUpgrade("g", 14) },
+            unlocked() { return hasUpgrade('g', 14) },
             canAfford() { return player.g.goldGrass.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Golden Grass Value"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Golden Grass Value'
             },
             display() {
-                return "which are boosting golden grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Golden Grass"
+                return 'which are boosting golden grass value by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy() {
                 let base = new Decimal(4)
                 let growth = 1.25
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -661,29 +639,29 @@
         18: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
-            unlocked() { return hasUpgrade("g", 14) },
+            unlocked() { return hasUpgrade('g', 14) },
             canAfford() { return player.g.goldGrass.gte(this.cost()) && player.g.buyables[18].lt(500)},
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Golden Grass Capacity"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/500<br/>Golden Grass Capacity'
             },
             display() {
-                return "which are increasing golden grass capacity by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Golden Grass"
+                return 'which are increasing golden grass capacity by +' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy() {
                 let base = new Decimal(8)
                 let growth = 1.45
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -693,29 +671,29 @@
         19: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(15) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(3).add(1) },
-            unlocked() { return hasUpgrade("g", 14) },
+            unlocked() { return hasUpgrade('g', 14) },
             canAfford() { return player.g.goldGrass.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Pent Requirement Divider"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Pent Requirement Divider'
             },
             display() {
-                return "which are dividing pent requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Golden Grass"
+                return 'which are dividing pent requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy() {
                 let base = new Decimal(15)
                 let growth = 1.7
-                if (player.buyMax == false && !hasMilestone("r", 13))
+                if (player.buyMax == false && !hasMilestone('r', 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
+                    if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("r", 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
+                if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -728,11 +706,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Moonstone Value"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Value'
             },
             display() {
-                return "which are boosting moonstone value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are boosting moonstone value by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(2)
@@ -760,11 +738,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Moonstone Damage"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Damage'
             },
             display() {
-                return "which are boosting damage dealt to moonstone by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are boosting damage dealt to moonstone by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(3)
@@ -792,11 +770,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Moonstone Reload Time"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Reload Time'
             },
             display() {
-                return "which are dividing moonstone reload time by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are dividing moonstone reload time by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(4)
@@ -824,11 +802,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Moonstone Spawn Time"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Spawn Time'
             },
             display() {
-                return "which are dividing moonstone spawn time by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are dividing moonstone spawn time by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(5)
@@ -856,11 +834,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back XP Lunar Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Check Back XP Lunar Boost'
             },
             display() {
-                return "which are boosting check back xp gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are boosting check back xp gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(2)
@@ -888,11 +866,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Replicanti Lunar Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Replicanti Lunar Boost'
             },
             display() {
-                return "which are boosting replicanti mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are boosting replicanti mult by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(3)
@@ -920,11 +898,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hex Lunar Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Hex Lunar Boost'
             },
             display() {
-                return "which are boosting hex 0 points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which are boosting hex 0 points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(4)
@@ -952,11 +930,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Challenge Dice Lunar Boost"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Challenge Dice Lunar Boost'
             },
             display() {
-                return "which boosting challenge dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'which boosting challenge dice points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(5)
@@ -984,11 +962,11 @@
             unlocked() { return true },
             canAfford() { return player.g.moonstone.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Increase Max Level"
+                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Increase Max Level'
             },
             display() {
-                return "Current max level: " + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Moonstone"
+                return 'Current max level: ' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
                 let base = new Decimal(100)
@@ -1020,118 +998,385 @@
     },
     microtabs: {
         stuff: {
-            "Grass": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "<h3>" + formatWhole(player.g.grassCount) + "/" + formatWhole(player.g.grassCap) + " Grass (Hover over the grass)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<h3>" + format(player.g.grassTimer) + "/" + format(player.g.grassReq) + " Seconds to spawn grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "<div id=spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "600px"],
-            ]
+            'Grass': {
+                buttonStyle: {
+                    'color': 'white',
+                },
+                unlocked: true,
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>' + formatWhole(player.g.grassCount) +
+                            '/' + formatWhole(player.g.grassCap) +
+                            ' Grass (Hover over the grass)',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        }
+                    ],
+                    ['raw-html', () =>
+                        '<h3>' + format(player.g.grassTimer) +
+                            '/' + format(player.g.grassReq) +
+                            ' Seconds to spawn grass.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        }
+                    ],
+                    ['raw-html', () =>
+                        '<div id=spawn-area class=spawn-area></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        }
+                    ],
+                    ['blank', '600px'],
+                ],
             },
-            "Golden Grass": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasUpgrade("g", 13) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass, which boost grass value by <h3>x" + format(player.g.goldGrassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Golden grass value: " + format(player.g.goldGrassVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>" + formatWhole(player.g.goldGrassCount) + "/" + formatWhole(player.g.goldGrassCap) + " Golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>" + format(player.g.goldGrassTimer) + "/" + format(player.g.goldGrassReq) + " Seconds to spawn golden grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=gold-spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                ]
+            'Golden Grass': {
+                buttonStyle: {
+                    'color': 'white',
+                },
+                unlocked: () => hasUpgrade('g', 13),
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.goldGrass) +
+                            '</h3> golden grass, which boost ' +
+                            'grass value by <h3>x' +
+                            format(player.g.goldGrassEffect) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        'Golden grass value: ' +
+                            format(player.g.goldGrassVal) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '20px',
+                            'font-family': 'monospace'
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>' + formatWhole(player.g.goldGrassCount) +
+                            '/' + formatWhole(player.g.goldGrassCap) +
+                            ' Golden grass.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h3>' + format(player.g.goldGrassTimer) + '/' +
+                            format(player.g.goldGrassReq) +
+                            ' Seconds to spawn golden grass.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<div id=gold-spawn-area class=spawn-area></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                ],
             },
-            "Moonstone": {
-                buttonStyle() { return { 'color': '#047ce4', "border-color": "#0490f4"} },
-                unlocked() { return player.ev.evolutionsUnlocked[7] },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone, which boost golden grass value by <h3>x" + format(player.g.moonstoneEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Moonstone value: " + format(player.g.moonstoneVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>" + formatWhole(player.g.moonstoneCount) + "/" + formatWhole(player.g.moonstoneCap) + " Moonstone. (Click to shoot grass bullets at the moonstone)<h/3><h6>(Max HP: " + format(player.g.moonstoneMaxHealth) + ", Damage: " + format(player.g.moonstoneDamage) + ", Reload Time: " + format(player.g.reloadTime) + " ms, Level: " + formatWhole(player.g.moonstoneLevel) + "/" + formatWhole(player.g.moonstoneLevelMax) + ")" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>" + format(player.g.moonstoneTimer) + "/" + format(player.g.moonstoneReq) + " Seconds to spawn moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=mainCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=moonstone-spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                ]
+            'Moonstone': {
+                buttonStyle: {
+                    'color': '#047ce4',
+                    'border-color': '#0490f4'
+                },
+                unlocked: () => player.ev.evolutionsUnlocked[7],
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.moonstone) +
+                            '</h3> moonstone, which boost golden grass ' +
+                            'value by <h3>x' +
+                            format(player.g.moonstoneEffect) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        'Moonstone value: ' +
+                            format(player.g.moonstoneVal) + '.',
+                        {
+                            'color': 'white',
+                            'font-size': '20px',
+                            'font-family': 'monospace'
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>' + formatWhole(player.g.moonstoneCount) +
+                            '/' + formatWhole(player.g.moonstoneCap) +
+                            ' Moonstone. (Click to shoot grass bullets ' +
+                            'at the moonstone)</h3><h6>(Max HP: ' +
+                            format(player.g.moonstoneMaxHealth) +
+                            ', Damage: ' + format(player.g.moonstoneDamage) +
+                            ', Reload Time: ' + format(player.g.reloadTime) +
+                            ' ms, Level: ' +
+                            formatWhole(player.g.moonstoneLevel) +
+                            '/' + formatWhole(player.g.moonstoneLevelMax) +
+                            ')',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h3>' + format(player.g.moonstoneTimer) + '/' +
+                            format(player.g.moonstoneReq) +
+                            ' Seconds to spawn moonstone.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<div id=mainCircle></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<div id=moonstone-spawn-area class=spawn-area></div>',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                ],
             },
-            "Moonstone Buyables": {
-                buttonStyle() { return { 'color': '#047ce4', "border-color": "#0490f4"} },
-                unlocked() { return player.ev.evolutionsUnlocked[7] },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
-                    ["row", [["buyable", 25], ["buyable", 26], ["buyable", 27], ["buyable", 28]]],
-
-                ]
+            'Moonstone Buyables': {
+                buttonStyle: {
+                    'color': '#047ce4',
+                    'border-color': '#0490f4'
+                },
+                unlocked: () => player.ev.evolutionsUnlocked[7],
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.moonstone) +
+                            '</h3> moonstone.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['clickable', 2],
+                        ['clickable', 3]
+                    ]],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['buyable', 21],
+                        ['buyable', 22],
+                        ['buyable', 23],
+                        ['buyable', 24]
+                    ]],
+                    ['row', [
+                        ['buyable', 25],
+                        ['buyable', 26],
+                        ['buyable', 27],
+                        ['buyable', 28]
+                    ]],
+                ],
             },
-            "Moonstone Levels": {
-                buttonStyle() { return { 'color': '#047ce4', "border-color": "#0490f4"} },
-                unlocked() { return player.ev.evolutionsUnlocked[7] },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>Level: " + formatWhole(player.g.moonstoneLevel) + "/" + formatWhole(player.g.moonstoneLevelMax) + "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 29]]],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Effects:" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h4>x" + format(player.g.moonstoneLevelEffects[0]) + " to moonstone health." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h4>x" + format(player.g.moonstoneLevelEffects[1]) + " to moonstone spawn time." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h4>x" + format(player.g.moonstoneLevelEffects[2]) + " to moonstone value." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-
-                ]
+            'Moonstone Levels': {
+                buttonStyle:  {
+                    'color': '#047ce4',
+                    'border-color': '#0490f4'
+                },
+                unlocked: () => player.ev.evolutionsUnlocked[7],
+                content: [
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        'You have <h3>' + format(player.g.moonstone) +
+                            '</h3> moonstone.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) +
+                            '/' + formatWhole(player.g.moonstoneLevelMax),
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['buyable', 29]
+                    ]],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['clickable', 4],
+                        ['clickable', 5]
+                    ]],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>Effects:',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[0]) +
+                            ' to moonstone health.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[1]) +
+                            ' to moonstone spawn time.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[2]) +
+                            ' to moonstone value.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                ],
             },
-            "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-                        ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
-                        ["blank", "25px"],
-                    ["raw-html", function () { return hasUpgrade("g", 13) ? "You have <h3>" + format(player.g.goldGrass) + "</h3> golden grass." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["buyable", 17], ["buyable", 18], ["buyable", 19]]],
-                ]
+            'Buyables': {
+                buttonStyle: {
+                    'color': 'white'
+                },
+                unlocked: true,
+                content: [
+                    ['blank', '25px'],
+                    ['row', [
+                        ['clickable', 2],
+                        ['clickable', 3]
+                    ]],
+                    ['blank', '25px'],
+                    ['row', [
+                        ['buyable', 11],
+                        ['buyable', 12],
+                        ['buyable', 13]
+                    ]],
+                    ['row', [
+                        ['buyable', 14],
+                        ['buyable', 15],
+                        ['buyable', 16]
+                    ]],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        hasUpgrade('g', 13)
+                            ? 'You have <h3>' + format(player.g.goldGrass) +
+                                '</h3> golden grass.'
+                            : '',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['row', [
+                        ['buyable', 17],
+                        ['buyable', 18],
+                        ['buyable', 19]
+                    ]],
+                ],
             },
-            "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("r", 11) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 23], ["upgrade", 22]]],
-                ]
+            'Upgrades': {
+                buttonStyle: {
+                    'color': 'white'
+                },
+                unlocked: () => hasMilestone('r', 11),
+                content: [
+                    ['blank', '25px'],
+                    ['row', [
+                        ['upgrade', 11],
+                        ['upgrade', 12],
+                        ['upgrade', 13],
+                        ['upgrade', 14],
+                        ['upgrade', 15],
+                        ['upgrade', 16]
+                    ]],
+                    ['row', [
+                        ['upgrade', 17],
+                        ['upgrade', 18],
+                        ['upgrade', 19],
+                        ['upgrade', 21],
+                        ['upgrade', 23],
+                        ['upgrade', 22]
+                    ]],
+                ],
             },
         },
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Grass value: " + format(player.g.grassVal) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ['raw-html', () =>
+            'You have <h3>' + format(player.g.grass) +
+                '</h3> grass, which boost leaf gain by <h3>x' +
+                format(player.g.grassEffect) + '.',
+            {
+                'color': 'white',
+                'font-size': '24px',
+                'font-family': 'monospace',
+            },
         ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 17) }
+        ['raw-html', () =>
+            'Grass value: ' + format(player.g.grassVal) + '.',
+            {
+                'color': 'white',
+                'font-size': '20px',
+                'font-family': 'monospace',
+            },
+        ],
+        ['row', [
+            ['clickable', 1]
+        ]],
+        ['microtabs', 'stuff',
+            {
+                'border-width': '0px'
+            }
+        ],
+    ],
+    layerShown: () => player.startedGame && hasUpgrade('i', 17),
 })
 
 const updateGrass = (delta) => {
@@ -1147,6 +1392,12 @@ const updateGrass = (delta) => {
     // XXX: in what cases does this get pushed over 200, and why?
     if (player.g.buyables[12].gt(200)) {
         player.g.buyables[12] = new Decimal(200)
+    }
+
+    // Cap grass capacity at 500
+    // XXX: why are we jumping from 13 to 500?
+    if (player.g.buyables[13].gte(13)) {
+        player.g.buyables[13] = new Decimal(500)
     }
 
     // =================================================================
@@ -1425,7 +1676,7 @@ const updateGoldGrass = (delta) => {
         .mul(0.15)
         .add(1)
 
-    if (hasUpgrade("g", 22)) {
+    if (hasUpgrade('g', 22)) {
         player.g.goldGrassEffect = player.g.goldGrassEffect
             .pow(6)
     }
@@ -1435,7 +1686,7 @@ const updateGoldGrass = (delta) => {
 
     player.g.goldGrass = player.g.goldGrass
         .add(player.g.goldGrassVal
-            .mul(buyableEffect("gh", 18)
+            .mul(buyableEffect('gh', 18)
                 .mul(delta)
             )
         )
@@ -1458,7 +1709,7 @@ const updateGoldGrass = (delta) => {
     // Infinity Points challenge: Challenge 14
     if (hasUpgrade('ip', 24) && !inChallenge('ip', 14)) {
         player.g.goldGrassVal = player.g.goldGrassVal
-            .add(upgradeEffect("ip", 24))
+            .add(upgradeEffect('ip', 24))
     }
 
     // -------------------------
@@ -1480,22 +1731,22 @@ const updateGoldGrass = (delta) => {
     // Spawn-time logic
 
     player.g.goldGrassReq = new Decimal(40)
-    if (hasUpgrade("g", 16)) {
+    if (hasUpgrade('g', 16)) {
         player.g.goldGrassReq = player.g.goldGrassReq
             .div(1.3)
     }
 
     player.g.goldGrassReq = player.g.goldGrassReq
-        .div(buyableEffect("gh", 12))
+        .div(buyableEffect('gh', 12))
         .div(player.cb.rarePetEffects[2][1])
 
     // =================================================================
     // Cap logic
 
     player.g.goldGrassCap = new Decimal(15)
-        .add(buyableEffect("g", 18))
+        .add(buyableEffect('g', 18))
 
-    if (hasUpgrade("g", 18)) {
+    if (hasUpgrade('g', 18)) {
         player.g.goldGrassCap = player.g.goldGrassCap
             .add(6)
     }
@@ -1519,35 +1770,46 @@ const updateMoonstone = (delta) => {
     // Timer logic
 
     // Timer is always running if we're below grass cap
-    const belowMoonstoneCap = player.g.moonstoneCount.lt(player.g.moonstoneCap);
-    if (belowMoonstoneCap) player.g.moonstoneTimer = player.g.moonstoneTimer.add(seconds);
+    const belowMoonstoneCap = player.g.moonstoneCount.lt(player.g.moonstoneCap)
+    if (belowMoonstoneCap) {
+        player.g.moonstoneTimer = player.g.moonstoneTimer
+            .add(seconds)
+    }
 
-    const passedMoonstoneSpawnTime = player.g.moonstoneTimer.gte(player.g.moonstoneReq);
+    const passedMoonstoneSpawnTime =
+        player.g.moonstoneTimer.gte(player.g.moonstoneReq)
 
     if (passedMoonstoneSpawnTime && belowMoonstoneCap) {
-        const moonstoneToAdd = player.g.moonstoneTimer.div(player.g.moonstoneReq).floor();
+        const moonstoneToAdd = player.g.moonstoneTimer
+            .div(player.g.moonstoneReq)
+            .floor()
 
         // Add moonstone
         if (belowMoonstoneCap) {
-            player.g.moonstoneCount = player.g.moonstoneCount.add(moonstoneToAdd);
+            player.g.moonstoneCount = player.g.moonstoneCount
+                .add(moonstoneToAdd)
         }
 
         // Sanity check: respect the cap
         if (player.g.moonstoneCount.gt(player.g.moonstoneCap)) {
-            player.g.moonstoneCount = player.g.moonstoneCap;
+            player.g.moonstoneCount = player.g.moonstoneCap
         }
 
         // Only create when we're loaded
         if (player.g.isMoonstoneLoaded) {
-            createMoonstone(moonstoneToAdd);
+            createMoonstone(moonstoneToAdd)
         }
 
         // Reset the timer
-        player.g.moonstoneTimer = new Decimal(0);
+        player.g.moonstoneTimer = new Decimal(0)
     } else if (passedMoonstoneSpawnTime && !belowMoonstoneCap) {
         // Reset the timer
-        player.g.moonstoneTimer = new Decimal(0);
+        player.g.moonstoneTimer = new Decimal(0)
     }
+
+    player.g.reloadTime = new Decimal(400)
+        .div(buyableEffect('g', 23))
+
     // =================================================================
     // Effect logic
 
@@ -1555,34 +1817,106 @@ const updateMoonstone = (delta) => {
         .mul(4)
         .pow(1.5)
         .add(1)
+
+    player.g.moonstoneLevelEffects = [
+        player.g.moonstoneLevel.pow(1.5),
+        player.g.moonstoneLevel.pow(0.2),
+        player.g.moonstoneLevel.pow(1.2)
+    ]
+
+    player.g.moonstoneMaxHealth = new Decimal(100)
+        .mul(player.g.moonstoneLevelEffects[0])
+
+    player.g.moonstoneDamage = new Decimal(20)
+        .mul(buyableEffect('g', 22))
+    if (hasUpgrade('ev8', 18)) {
+        player.g.moonstoneDamage = player.g.moonstoneDamage.mul(2)
+    }
+
+    player.g.moonstoneLevelMax = buyableEffect('g', 29)
+
     // =================================================================
     // Currency logic
 
-    /*player.g.goldGrass = player.g.goldGrass
-        .add(player.g.goldGrassVal
-            .mul(buyableEffect("gh", 18)
-                .mul(delta)
-            )
-        ) */
+    // ...
 
     // =================================================================
     // Value logic
 
     player.g.moonstoneVal = new Decimal(1)
-    player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("g", 21))
-    player.g.moonstoneVal = player.g.moonstoneVal.mul(player.g.moonstoneLevelEffects[2])
-    if (hasUpgrade("ev8", 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
+        .mul(buyableEffect('g', 21))
+        .mul(player.g.moonstoneLevelEffects[2])
+
+    if (hasUpgrade('ev8', 17)) {
+        player.g.moonstoneVal = player.g.moonstoneVal
+            .mul(2)
+    }
+
     // =================================================================
     // Spawn-time logic
 
     player.g.moonstoneReq = new Decimal(15)
-    player.g.moonstoneReq = player.g.moonstoneReq.div(buyableEffect("g", 24))
-    player.g.moonstoneReq = player.g.moonstoneReq.mul(player.g.moonstoneLevelEffects[1])
+        .div(buyableEffect('g', 24))
+        .mul(player.g.moonstoneLevelEffects[1])
 
     // =================================================================
     // Cap logic
 
     player.g.moonstoneCap = player.cb.evolvedEffects[7][0]
+}
+
+function getDistance(x1, y1, x2, y2) {
+    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+}
+
+// XXX: testing shows that this function returns true _very_ infrequently, e.g.
+// after reloading the grass microtab ~30 times with 1250 grass, I got only
+// 30 exact occlusions, total; if we had fewer grass squares on the board,
+// we should expect the exact occlusion count to drop precipitously, as well.
+function doesOcclude(elements, x, y) {
+    // Valid selectors (so far):
+    //    .green-square
+    //    .gold-square
+    //    .moonstone
+    for (let i = 0; i < elements.length; ++i) {
+        const ele = elements[i]
+
+        // 1) All grass/golden grass/moonstone squares are the exact
+        //    same size as others of their type
+        // 2) We have exact overlap if the left and top are exact matches
+        // 3) We are okay with partial overlap, but NOT with exact overlap
+        //
+        // N.B. getBoundingClientRect() is much more expensive than
+        // accessing offsetLeft and offsetTop directly
+        const isExactOverlap = (x === ele.offsetLeft) && (y === ele.offsetTop)
+        if (isExactOverlap) {
+            // Debugging output!
+            // console.log('occlude!')
+
+            return true
+        }
+    }
+
+    return false
+}
+
+function getRandomXY (selector, areaWidth, areaHeight, eleWidth, eleHeight) {
+    const deadZone = 20
+
+    const coords = {
+        randomX: -1,
+        randomY: -1
+    }
+    const elements = document.querySelectorAll(selector)
+    do {
+        const rightBound = areaWidth - (2 * deadZone) - eleWidth
+        coords.randomX = Math.floor(Math.random() * rightBound) + deadZone
+
+        const bottomBound = areaHeight - (2 * deadZone) - eleHeight
+        coords.randomY = Math.floor(Math.random() * bottomBound) + deadZone
+    } while (doesOcclude(elements, coords.x, coords.y))
+
+    return coords
 }
 
 function createGrass(quantity) {
@@ -1599,93 +1933,97 @@ function createGrass(quantity) {
     const spawnArea = document.getElementById('spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to calculate the distance between two points
-    function getDistance(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    if (!spawnAreaRect) {
+        return
     }
 
     // Create grass squares based on quantity
+    const newChildren = []
     for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
-        } while (isCollision(randomX, randomY));
+        const squareWidth = 20
+        const squareHeight = 20
+        const { randomX, randomY } = getRandomXY('.green-square',
+            spawnAreaRect.width, spawnAreaRect.height,
+            squareWidth, squareHeight)
 
-        const greenSquare = document.createElement('div');
-        greenSquare.style.width = '20px';
-        greenSquare.style.height = '20px';
-        greenSquare.style.backgroundColor = '#18e34e';
-        greenSquare.style.position = 'absolute';
-        greenSquare.style.left = `${randomX}px`;
-        greenSquare.style.top = `${randomY}px`;
-        greenSquare.style.border = '2px solid black'; // Add a black border
-        greenSquare.classList.add('green-square');
+        const greenSquare = document.createElement('div')
+        Object.assign(greenSquare.style, {
+            width: `${squareWidth}px`,
+            height: `${squareHeight}px`,
+            backgroundColor: '#18e34e',
+            position: 'absolute',
+            left: `${randomX}px`,
+            top: `${randomY}px`,
+            border: '2px solid black',
+        })
+        greenSquare.classList.add('green-square')
 
-        spawnArea.appendChild(greenSquare); // Append to spawnArea instead of document.body
+        newChildren.push(greenSquare)
 
-        // Function to check if cursor is within 150px radius of the greenSquare
+        // Is the cursor within range of the square?
         function checkCursorDistance(event) {
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
+            const bounds = greenSquare.getBoundingClientRect()
+            const centerX = bounds.left + (bounds.width / 2)
+            const centerY = bounds.top + (bounds.height / 2)
 
-            const greenSquareRect = greenSquare.getBoundingClientRect();
-            const squareCenterX = greenSquareRect.left + greenSquareRect.width / 2;
-            const squareCenterY = greenSquareRect.top + greenSquareRect.height / 2;
+            const cursorX = event.clientX
+            const cursorY = event.clientY
+            const distance = getDistance(cursorX, cursorY, centerX, centerY)
 
-            const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
-
-            // If the cursor is within a certain pixel range, remove the grass square
-            if (distance <= 100) {
-                removeGrass(greenSquare);
-                player.g.grassCount = player.g.grassCount.sub(1);
+            // If the cursor is within a certain pixel range,
+            // remove the grass square
+            const detectThreshold = 100
+            if (distance <= detectThreshold) {
+                removeGrass(greenSquare)
+                player.g.grassCount = player.g.grassCount
+                    .sub(1)
                 player.g.grass = player.g.grass
-                    .add(player.g.grassVal);
+                    .add(player.g.grassVal)
 
                 // Remove the mousemove listener once grass is collected
-                document.removeEventListener('mousemove', checkCursorDistance);
+                document.removeEventListener('mousemove', checkCursorDistance)
             }
         }
 
-        // Add the mousemove event listener to check the distance from the cursor
-        document.addEventListener('mousemove', checkCursorDistance);
+        // Detect when we move in range
+        document.addEventListener('mousemove', checkCursorDistance)
     }
-}
 
-function isCollision(x, y) {
-    const existingGrassSquares = document.querySelectorAll('.green-square');
-    for (let i = 0; i < existingGrassSquares.length; i++) {
-        const squareRect = existingGrassSquares[i].getBoundingClientRect();
-        if (x >= squareRect.left && x <= squareRect.right && y >= squareRect.top && y <= squareRect.bottom) {
-            return true; // Collision detecteds
-        }
-    }
-    return false; // No collision detected
+    // Appending all the children at once saves on reflows, which _greatly_
+    // speeds up rendering time!
+    spawnArea.append(...newChildren)
 }
 
 function removeGrass(square) {
+    // Sanity check: only remove squares with parents
+    if (!square.parentNode) {
+        return
+    }
+
     square.parentNode.removeChild(square);
 }
 
 function removeAllGrass() {
     const squares = document.querySelectorAll('.green-square');
-    squares.forEach(square => square.parentNode.removeChild(square));
+    squares.forEach(square => removeGrass(square));
 }
+
 function removeAllGoldGrass() {
     const squares = document.querySelectorAll('.gold-square');
-    squares.forEach(square => square.parentNode.removeChild(square));
+    squares.forEach(square => removeGrass(square));
 }
+
 function removeAllMoonstone() {
     const squares = document.querySelectorAll('moonstone');
-    squares.forEach(square => square.parentNode.removeChild(square));
+    squares.forEach(square => removeGrass(square));
 }
+
 window.addEventListener('load', function() {
     // This function will be executed after the page is reloaded
     // You can perform any necessary tasks here
-    layers.g.loadGrass();
-    layers.g.loadGoldGrass();
+    layers.g.loadGrass()
+    layers.g.loadGoldGrass()
+    layers.g.loadMoonstone()
 });
 
 
@@ -1693,267 +2031,308 @@ function createGoldGrass(quantity) {
     const spawnArea = document.getElementById('gold-spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
 
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to calculate the distance between two points
-    function getDistance(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    if (!spawnAreaRect) {
+        return
     }
 
     // Create golden grass squares based on quantity
+    const newChildren = []
     for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20)); // Adjust to ensure squares spawn within horizontal range
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20)); // Adjust to ensure squares spawn within vertical range
-        } while (isCollision(randomX, randomY));
+        const squareWidth = 20
+        const squareHeight = 20
+        const { randomX, randomY } = getRandomXY('.gold-square',
+            spawnAreaRect.width, spawnAreaRect.height,
+            squareWidth, squareHeight)
 
         const goldSquare = document.createElement('div');
-        goldSquare.style.width = '20px';
-        goldSquare.style.height = '20px';
-        goldSquare.style.backgroundColor = '#ffcf40';
-        goldSquare.style.position = 'absolute';
-        goldSquare.style.left = `${randomX}px`;
-        goldSquare.style.top = `${randomY}px`;
-        goldSquare.style.border = '2px solid black'; // Add a black border
-        goldSquare.classList.add('gold-square');
+        Object.assign(goldSquare.style, {
+            width: `${squareWidth}px`,
+            height: `${squareHeight}px`,
+            backgroundColor: '#ffcf40',
+            position: 'absolute',
+            left: `${randomX}px`,
+            top: `${randomY}px`,
+            border: '2px solid black',
+        })
+        goldSquare.classList.add('gold-square')
 
-        spawnArea.appendChild(goldSquare); // Append to spawnArea instead of document.body
+        newChildren.push(goldSquare)
 
-        // Function to check if cursor is within 100px radius of the goldenSquare
+        // Is the cursor within range of the square?
         function checkCursorDistance(event) {
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
+            const bounds = goldSquare.getBoundingClientRect()
+            const centerX = bounds.left + (bounds.width / 2)
+            const centerY = bounds.top + (bounds.height / 2)
 
-            const goldSquareRect = goldSquare.getBoundingClientRect();
-            const squareCenterX = goldSquareRect.left + goldSquareRect.width / 2;
-            const squareCenterY = goldSquareRect.top + goldSquareRect.height / 2;
+            const cursorX = event.clientX
+            const cursorY = event.clientY
+            const distance = getDistance(cursorX, cursorY, centerX, centerY)
 
-            const distance = getDistance(cursorX, cursorY, squareCenterX, squareCenterY);
-
-            // If the cursor is within 100 pixels, remove the golden grass square
-            if (distance <= 100) {
+            // If the cursor is within a certain pixel range,
+            // remove the grass square
+            const detectThreshold = 100
+            if (distance <= detectThreshold) {
                 removeGrass(goldSquare);
-                player.g.goldGrassCount = player.g.goldGrassCount.sub(1)
+                player.g.goldGrassCount = player.g.goldGrassCount
+                    .sub(1)
                 player.g.goldGrass = player.g.goldGrass
-                    .add(player.g.goldGrassVal);
+                    .add(player.g.goldGrassVal)
 
-                // Remove the mousemove listener once the golden grass is collected
+                // Remove the mousemove listener once grass is collected
                 document.removeEventListener('mousemove', checkCursorDistance);
             }
         }
 
-        // Add the mousemove event listener to check the distance from the cursor
+        // Detect when we move in range
         document.addEventListener('mousemove', checkCursorDistance);
     }
+
+    // Appending all the children at once saves on reflows, which _greatly_
+    // speeds up rendering time!
+    spawnArea.append(...newChildren)
 }
 
-//moonstone
-// Variable to track the cooldown
-let canShoot = true;
-
-// Set up click event listener on the document to shoot circles
-document.addEventListener('click', (event) => {
-    shootSmallCircle(event);
-});
-
-var maxHealth = new Decimal(100)
-var damage = new Decimal(20)
 function createMoonstone(quantity) {
-    const spawnArea = document.getElementById('moonstone-spawn-area');
-    const spawnAreaRect = spawnArea?.getBoundingClientRect();
+    const spawnArea = document.getElementById('moonstone-spawn-area')
+    const spawnAreaRect = spawnArea?.getBoundingClientRect()
 
-    const maxHealth = player.g.moonstoneMaxHealth;
-    const damage = player.g.moonstoneDamage;
+    // Sanity check: only render on an existing spawnAreaRect
+    if (!spawnAreaRect) {
+        return
+    }
 
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to create moonstone elements
+    // Create moonstone based on quantity
     for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 20));
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 20));
-        } while (isCollision(randomX, randomY));
+        const squareWidth = 20
+        const squareHeight = 20
+        const { randomX, randomY } = getRandomXY('.moonstone',
+            spawnAreaRect.width, spawnAreaRect.height,
+            squareWidth, squareHeight)
 
-        const moonstone = document.createElement('div');
-        moonstone.style.width = '20px';
-        moonstone.style.height = '20px';
-        moonstone.style.backgroundColor = '#047ce4';
-        moonstone.style.position = 'absolute';
-        moonstone.style.left = `${randomX}px`;
-        moonstone.style.top = `${randomY}px`;
-        moonstone.style.border = '2px solid black'; // Add a black border
-        moonstone.classList.add('moonstone');
+        const moonstone = document.createElement('div')
+        Object.assign(moonstone.style, {
+            width: `${squareWidth}px`,
+            height: `${squareHeight}px`,
+            backgroundColor: '#047ce4',
+            position: 'absolute',
+            left: `${randomX}px`,
+            top: `${randomY}px`,
+            border: '2px solid black',
+        })
+        moonstone.classList.add('moonstone')
 
-        // Assign health properties
-        moonstone.health = maxHealth; // Set max health
-        moonstone.damage = damage; // Set damage value
+        moonstone.health = player.g.moonstoneMaxHealth
+        moonstone.damage = player.g.moonstoneDamage
 
         // Create health bar
-        const healthBar = document.createElement('div');
-        healthBar.style.width = '100%';
-        healthBar.style.height = '5px';
-        healthBar.style.backgroundColor = 'red'; // Background color of health bar
-        healthBar.style.position = 'absolute';
-        healthBar.style.bottom = '100%'; // Position it above the moonstone
-        healthBar.style.left = '0';
-        healthBar.style.zIndex = '50'; // Ensure it appears above the moonstone
+        function getNewHealthBar() {
+            const hb = document.createElement('div')
+            Object.assign(hb.style, {
+                width: '100%',
+                height: '5px',
+                backgroundColor: 'red',
+                position: 'absolute',
+                left: '0',
+                bottom: '100%', // Spawn above the moonstone
+                zIndex: '50', // Render above everything else
+            })
 
-        // Append health bar to moonstone
-        moonstone.appendChild(healthBar);
-        spawnArea.appendChild(moonstone);
+            return hb
+        }
+
+        moonstone.appendChild(getNewHealthBar())
+        spawnArea.appendChild(moonstone)
+
+        function getPosOrNeg() {
+            return Math.random() < 0.5
+                ? -1
+                : 1
+        }
+
+        function getRandomVelocity(multiplier) {
+            return ((Math.random() * 2) + 1) * multiplier
+        }
 
         // Set initial velocity
-        let vx = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 2 + 1) * 40; // Random x velocity
-        let vy = (Math.random() < 0.5 ? -1 : 1) * (Math.random() * 2 + 1) * 40; // Random y velocity
-
-        // Function to update health bar width
-        function updateHealthBar() {
-            const healthPercentage = (moonstone.health / maxHealth) * 100;
-            healthBar.style.width = `${healthPercentage}%`;
-        }
+        let vx = getPosOrNeg() * getRandomVelocity(40)
+        let vy = getPosOrNeg() * getRandomVelocity(40)
 
         // Function to handle the bouncing and movement
         function bounce() {
             const moonstoneRect = moonstone.getBoundingClientRect();
 
-            // Reverse direction if hitting left or right boundary
+            // Bounce off left
             if (moonstoneRect.left <= spawnAreaRect.left) {
-                vx = Math.abs(vx); // Move right
-                moonstone.style.left = `${spawnAreaRect.left}px`; // Ensure it's inside
-            }
-            if (moonstoneRect.right >= spawnAreaRect.right) {
-                vx = -Math.abs(vx); // Move left
-                moonstone.style.left = `${spawnAreaRect.right - moonstoneRect.width}px`; // Ensure it's inside
+                vx = Math.abs(vx)
+
+                // Pop to inside
+                moonstone.style.left = `${spawnAreaRect.left}px`
             }
 
-            // Reverse direction if hitting top or bottom boundary
-            if (moonstoneRect.top <= spawnAreaRect.top) {
-                vy = Math.abs(vy); // Move down
-                moonstone.style.top = `${spawnAreaRect.top}px`; // Ensure it's inside
+            // Bounce off right
+            if (moonstoneRect.right >= spawnAreaRect.right) {
+                vx = -Math.abs(vx)
+
+                // Pop to inside
+                moonstone.style.left =
+                    `${spawnAreaRect.right - moonstoneRect.width}px`
             }
+
+            // Bounce off top
+            if (moonstoneRect.top <= spawnAreaRect.top) {
+                vy = Math.abs(vy)
+
+                // Pop to inside
+                moonstone.style.top = `${spawnAreaRect.top}px`
+            }
+
+            // Bounce off bottom
             if (moonstoneRect.bottom >= spawnAreaRect.bottom) {
-                vy = -Math.abs(vy); // Move up
-                moonstone.style.top = `${spawnAreaRect.bottom - moonstoneRect.height}px`; // Ensure it's inside
+                vy = -Math.abs(vy)
+
+                // Pop to inside
+                moonstone.style.top =
+                    `${spawnAreaRect.bottom - moonstoneRect.height}px`
             }
 
             // Update position
             moonstone.style.left = `${moonstone.offsetLeft + vx}px`;
             moonstone.style.top = `${moonstone.offsetTop + vy}px`;
 
-            // Request the next animation frame
             requestAnimationFrame(bounce);
         }
 
         // Start the bouncing animation
-        bounce();
+        bounce()
 
         // Check for collision with small circles
         document.addEventListener('smallCircleFired', (event) => {
-            const smallCircle = event.detail;
-            const smallCircleRect = smallCircle.getBoundingClientRect();
-            const moonstoneRect = moonstone.getBoundingClientRect();
+            function updateHealthBar() {
+                const healthPercentage =
+                    moonstone.health / player.g.moonstoneMaxHealth * 100
+
+                // XXX: this may need to change if we attach more children
+                moonstone.firstChild.style.width = `${healthPercentage}%`
+            }
+
+            const smallCircle = event.detail
+            const smallCircleRect = smallCircle.getBoundingClientRect()
+            const moonstoneRect = moonstone.getBoundingClientRect()
 
             // Check for collision
-            if (
+            const shotInMoonstone =
                 moonstoneRect.left < smallCircleRect.right &&
                 moonstoneRect.right > smallCircleRect.left &&
                 moonstoneRect.top < smallCircleRect.bottom &&
                 moonstoneRect.bottom > smallCircleRect.top
-            ) {
+            if (shotInMoonstone) {
                 // Reduce health
-                moonstone.health -= moonstone.damage;
-                updateHealthBar(); // Update the health bar
+                moonstone.health -= moonstone.damage
+                updateHealthBar()
 
                 // Remove small circle upon collision
-                smallCircle.remove();
+                smallCircle.remove()
 
                 // Remove moonstone if health is zero or less
                 if (moonstone.health <= 0) {
-                    removeGrass(moonstone);
-                    player.g.moonstoneCount = player.g.moonstoneCount.sub(1);
-                    player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal);
+                    removeGrass(moonstone)
+                    player.g.moonstoneCount = player.g.moonstoneCount
+                        .sub(1)
+                    player.g.moonstone = player.g.moonstone
+                        .add(player.g.moonstoneVal)
                 }
             }
-        });
+        })
     }
 }
 
-function removeGrass(moonstone) {
-    if (moonstone.parentNode) {
-        moonstone.parentNode.removeChild(moonstone); // Remove the moonstone from DOM
-    }
-}
-
-function isCollision(x, y) {
-    // This function should check if there is a collision
-    // Implement collision logic according to your game requirements
-    return false; // Modify this logic based on your collision detection requirements
-}
-
-
-// Ensure this function is called correctly to spawn moonstones
-
+let canShoot = true
 function shootSmallCircle(event) {
-    // Check if the player can shoot
-    if (!canShoot) return; // Exit if cooldown is active
+    // Sanity check: is cooldown active?
+    if (!canShoot) {
+        return
+    }
 
-    // Create a new small circle (as previously defined)
-    if (player.tab == "g" && player.subtabs["g"]["stuff"] == "Moonstone") {
-        const smallCircle = document.createElement('div');
-        smallCircle.style.width = '20px';
-        smallCircle.style.height = '20px';
-        smallCircle.style.backgroundColor = 'green';
-        smallCircle.style.borderRadius = '50%';
-        smallCircle.style.position = 'absolute';
-        smallCircle.style.border = "2px solid black"; // Add a black border
-        smallCircle.style.zIndex = '20'; // Ensures small circles are on top
-        document.body.appendChild(smallCircle);
+    // Kick out if one of these is true:
+    //    1) We're not in the Grass tab
+    //    2) We're not in the Moonstone microtab
+    if (player.tab != 'g' || player.subtabs.g.stuff != 'Moonstone') {
+        return
+    }
 
-        // Get the center position of the main circle
-        const rect = mainCircle.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+    // Shots spawn in the middle of the main circle
+    const rect = mainCircle.getBoundingClientRect()
+    const centerX = rect.left + (rect.width / 2)
+    const centerY = rect.top + (rect.height / 2)
 
-        // Position the small circle at the center of the main circle
-        smallCircle.style.left = `${centerX - 10}px`; // Centering small circle
-        smallCircle.style.top = `${centerY - 10}px`; // Centering small circle
+    const smallCircle = document.createElement('div')
+    Object.assign(smallCircle.style, {
+        width: '20px',
+        height: '20px',
+        backgroundColor: 'green',
+        borderRadius: '50%',
+        position: 'absolute',
+        left: `${centerX - 10}px`,
+        top: `${centerY - 10}px`,
+        border: '2px solid black',
+        zIndex: '20', // Shots render on top of everything else
+    })
+    document.body.appendChild(smallCircle)
 
-        // Calculate the angle towards the click position
-        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-        const speed = 20; // pixels per frame
-        let x = parseFloat(smallCircle.style.left);
-        let y = parseFloat(smallCircle.style.top);
+    // Calculate the angle towards the click position
+    const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX)
+    let x = parseFloat(smallCircle.style.left);
+    let y = parseFloat(smallCircle.style.top);
 
-        function move() {
-            x += Math.cos(angle) * speed;
-            y += Math.sin(angle) * speed;
-
-            smallCircle.style.left = `${x}px`;
-            smallCircle.style.top = `${y}px`;
-
-            // Emit a custom event to check for collision with moonstones
-            const collisionEvent = new CustomEvent('smallCircleFired', {
-                detail: smallCircle
-            });
-            document.dispatchEvent(collisionEvent);
-
-            requestAnimationFrame(move);
+    let last = -1
+    function move(timestamp) {
+        if (last < 0) {
+            last = timestamp
         }
 
-        // Start moving the small circle
-        requestAnimationFrame(move);
+        requestAnimationFrame(move)
 
-        // Remove the small circle after 8 seconds
-        setTimeout(() => {
-            smallCircle.remove();
-        }, 8000);
+        // Target FPS is limited by TMT's framecap
+        const targetFps = 60
+        const frameMs = 1000 / targetFps
+        const elapsedMs = timestamp - last
+        if (elapsedMs < frameMs) {
+            return
+        }
 
-        // Set the cooldown
-        canShoot = false; // Prevent shooting
-        setTimeout(() => {
-            canShoot = true; // Allow shooting again after 1 second
-        }, player.g.reloadTime);
+        const speed = 20 // pixels per frame
+        x += Math.cos(angle) * speed * elapsedMs / frameMs
+        y += Math.sin(angle) * speed * elapsedMs / frameMs
+
+        Object.assign(smallCircle.style, {
+            left: `${x}px`,
+            top: `${y}px`,
+        })
+
+        // Emit a custom event to check for collision with moonstones
+        const collisionEvent = new CustomEvent('smallCircleFired', {
+            detail: smallCircle
+        })
+        document.dispatchEvent(collisionEvent)
+
+        last = timestamp
     }
+
+    // Start moving the small circle
+    requestAnimationFrame(move)
+
+    // Shots only live for so many seconds
+    const lifetimeMs = 8000
+    setTimeout(() => {
+        smallCircle.remove()
+    }, lifetimeMs)
+
+    // Set the cooldown
+    canShoot = false
+    setTimeout(() => {
+        canShoot = true
+    }, player.g.reloadTime)
 }
+
+// Set up click event listener on the document to shoot circles
+document.addEventListener('click', (event) => shootSmallCircle(event))

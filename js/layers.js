@@ -1,4 +1,4 @@
-﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "gh", "rf"], ["de", "m", "cb", "d"], ["rm", "oi"]]
+﻿var tree = [["h", "r", "f", "p"], ["t", "g", "pe", "pol", "gh", "rf"], ["de", "m", "cb", "d"], ["rm", "oi"]]
 var gwa = [["gt"]]
 
 addLayer("i", {
@@ -50,47 +50,53 @@ addLayer("i", {
 
         if (player.tab == "cb")
         {
-            player.universe = 0.5
+            if (options.newMenu == false) player.universe = 0.5
+            player.musuniverse = 0.5
         }
         if (player.tab == "i")
         {
-            player.universe = 1
+            if (options.newMenu == false) player.universe = 1
+            player.musuniverse = 1
         }
         if (player.tab == "in")
         {
-            player.universe = 2
+            if (options.newMenu == false) player.universe = 2
+            player.musuniverse = 2
         }
         if (player.tab == "cp")
         {
-            player.universe = 1.5
+            if (options.newMenu == false) player.universe = 1.5
+            player.musuniverse = 1.5
         }
         if (player.tab == "po")
         {
-            player.universe = 0
+            if (options.newMenu == false) player.universe = 0
+            player.musuniverse = 0
         }
         if (player.tab == "c")
         {
-            player.universe = -1
+            if (options.newMenu == false) player.universe = -1
+            player.musuniverse = -1
         }
 
         //music control
-        if (player.universe == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) )
+        if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) )
         {
             playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
-        } else if (player.universe == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle)
+        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle)
         {
             playAndLoopAudio("music/tav.mp3", options.musicVolume/10);
-        } else if (player.universe == 0 && options.musicToggle)
+        } else if (player.musuniverse == 0 && options.musicToggle)
         {
             playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
-        } else if (player.universe == 2 && options.musicToggle)
+        } else if (player.musuniverse == 2 && options.musicToggle)
         {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
-        } else if (player.universe == 0.5 && options.musicToggle)
+        } else if (player.musuniverse == 0.5 && options.musicToggle)
         {
             playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
 
-        } else if (player.universe == -1 && options.musicToggle)
+        } else if (player.musuniverse == -1 && options.musicToggle)
         {
             if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12)
             {
@@ -100,7 +106,7 @@ addLayer("i", {
                 playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
             }
         }
-        else if (player.universe == 1.5 && options.musicToggle)
+        else if (player.musuniverse == 1.5 && options.musicToggle)
         {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
         } else
@@ -108,7 +114,7 @@ addLayer("i", {
             stopAudio();
         }
 
-        if (player.universe == 1.5)
+        if (player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || player.tab == "a1u" || player.tab == "a1s")
         {
             startRain("#1486ff");
         }
@@ -151,7 +157,6 @@ addLayer("i", {
         if (inChallenge("ip", 15)) player.gain = player.gain.pow(0.9)
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
         if (hasUpgrade("d", 17)) player.gain = player.gain.mul(upgradeEffect("d", 17))
-        player.gain = player.gain.div(player.po.pointHalt)
         if (inChallenge("ip", 16)) player.gain = player.gain.pow(0.05)
         if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
@@ -161,6 +166,7 @@ addLayer("i", {
         if (inChallenge("tad", 11)) player.gain = player.gain.pow(buyableEffect("de", 11))
         if (inChallenge("tad", 11)) player.gain = player.gain.mul(player.de.tavPointsEffect)
         if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
+        if (player.pol.pollinatorsIndex == 1) player.gain = player.gain.mul(player.pol.pollinatorsEffect[0])
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.mul(buyableEffect("gh", 31))
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
@@ -317,85 +323,95 @@ addLayer("i", {
         },
         22:
         {
-            title: "Steel",
+            title: "Pollinate",
             unlocked() { return hasUpgrade("i", 21) && hasUpgrade("bi", 106)},
-            description: "Unlocks Steelie reset layer (in grasshop).",
-            cost: new Decimal("1e850"),
+            description: "Use the experience of debuffs and pests to create Pollinators.",
+            cost: new Decimal("1e600"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         23:
         {
-            title: "Crystallize",
+            title: "Steel",
             unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
-            description: "Unlocks Crystallize reset layer (in prestige).",
-            cost: new Decimal("1e1000"),
+            description: "Unlocks Steelie reset layer (in grasshop).",
+            cost: new Decimal("1e800"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         24:
         {
-            title: "Random Mod Boost",
+            title: "Crystallize",
             unlocked() { return hasUpgrade("i", 23) && hasUpgrade("bi", 106)},
-            description: "If points are above 1e400, boost mod gain by 1e18.",
-            cost: new Decimal("1e1200"),
+            description: "Unlocks Crystallize reset layer (in prestige).",
+            cost: new Decimal("1e1000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         25:
         {
-            title: "Time Reversal",
+            title: "Productive Pollination",
             unlocked() { return hasUpgrade("i", 24) && hasUpgrade("bi", 106)},
-            description: "Unlocks Time Reversal (in ranks layer).",
-            cost: new Decimal("1e1400"),
+            description: "Unlocks more Pollinator upgrades.",
+            cost: new Decimal("1e1200"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         26:
         {
-            title: "Pentomation",
+            title: "Time Reversal",
             unlocked() { return hasUpgrade("i", 25) && hasUpgrade("bi", 106)},
-            description: "Automatically gain pent without resetting.",
-            cost: new Decimal("1e1600"),
+            description: "Unlocks Time Reversal (in ranks layer).",
+            cost: new Decimal("1e1400"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         27:
         {
-            title: "2nd OTF slot...",
+            title: "Pentomation",
             unlocked() { return hasUpgrade("i", 26) && hasUpgrade("bi", 106)},
-            description: "Gain a 2nd OTF slot. (doesn't stack with tav's domain)",
-            cost: new Decimal("1e1800"),
+            description: "Automatically gain pent without resetting.",
+            cost: new Decimal("1e1600"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         28:
         {
-            title: "Rage Power",
-            unlocked() { return (hasUpgrade("i", 27) && hasUpgrade("bi", 106) && player.po.hex && player.ca.unlockedCante) || hasUpgrade("i", 28)},
-            description: "Unlock Rage Power (requires hex, in hex).",
-            cost: new Decimal("1e3333"),
+            title: "2nd OTF slot...",
+            unlocked() { return hasUpgrade("i", 27) && hasUpgrade("bi", 106)},
+            description: "Gain a 2nd OTF slot. (doesn't stack with tav's domain)",
+            cost: new Decimal("1e1800"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
         29:
         {
+            title: "Rage Power",
+            unlocked() { return (hasUpgrade("i", 28) && hasUpgrade("bi", 106) && player.po.hex && player.ca.unlockedCante) || hasUpgrade("i", 29)},
+            description: "Unlock Rage Power (requires hex, in hex).",
+            cost: new Decimal("1e3333"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        31:
+        {
             title: "Auto CDPs",
-            unlocked() { return (hasUpgrade("i", 27) && hasUpgrade("bi", 106) && player.po.dice && player.ca.unlockedCante && player.ev.evolutionsUnlocked[5]) || hasUpgrade("i", 29)},
+            unlocked() { return (hasUpgrade("i", 28) && hasUpgrade("bi", 106) && player.po.dice && player.ca.unlockedCante && player.ev.evolutionsUnlocked[5]) || hasUpgrade("i", 31)},
             description: "Gain 5% challenge dice points per second.",
             cost: new Decimal("1e4600"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
-        31:
+        37:
         {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
@@ -405,7 +421,7 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
-        32:
+        38:
         {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
@@ -415,7 +431,7 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
-        33:
+        39:
         {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
@@ -425,22 +441,12 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
-        34:
+        41:
         {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
             cost: new Decimal("1e8000"),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-        },
-        35:
-        {
-            title: "Challenge VIII.",
-            unlocked() { return inChallenge("ip", 18) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
-            description: ".",
-            cost: new Decimal("1e10000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -484,7 +490,8 @@ addLayer("i", {
                         ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                         ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                         ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
-                        ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34], ["upgrade", 35]]],
+                        ["row", [["upgrade", 31]]],
+                        ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
                         ["blank", "25px"],
                         ["tree", gwa],
                     ]
@@ -571,12 +578,24 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
 }
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
-        player.tab = "i"
+        if (!options.newMenu) {
+            player.tab = "i"
+        } else {
+            player.universe = 1
+        }
     }
     if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13) && options.toggleHotkey) {
-        player.tab = "cp"
+        if (!options.newMenu) {
+            player.tab = "cp"
+        } else {
+            player.universe = 1.5
+        }
     }
     if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
-        player.tab = "in"
+        if (!options.newMenu) {
+            player.tab = "in"
+        } else {
+            player.universe = 2
+        }
     }
 });

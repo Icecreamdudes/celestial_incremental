@@ -64,6 +64,7 @@
         if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.35)
         if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
         if (hasUpgrade("de", 11) && inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
+        if (player.pol.pollinatorsIndex == 5) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorsEffect[8])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
@@ -96,6 +97,7 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.pe.pestEffect[6])
         if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
+        if (player.pol.pollinatorsIndex == 5) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorsEffect[9])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
 
@@ -126,7 +128,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -1133,7 +1135,7 @@
             },
             "Steelie": {
                 buttonStyle() { return { 'color': 'white', 'border-color': "black", 'background': 'grey', } },
-                unlocked() { return hasUpgrade("i", 22) },
+                unlocked() { return hasUpgrade("i", 23) },
                 content:
                 [
                     ["blank", "25px"],

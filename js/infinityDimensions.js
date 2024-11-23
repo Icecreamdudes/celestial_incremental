@@ -32,7 +32,7 @@
             "border-color": "#b87400",
         };
       },
-    
+
     tooltip: "Infinity Dimensions",
     color: "white",
     update(delta) {
@@ -75,7 +75,7 @@
 
             //mults
         }
-        
+
         player.id.dimensionCosts = [new Decimal(1e11),new Decimal(1e12),new Decimal(1e14),new Decimal(1e17),new Decimal(1e21),new Decimal(1e26),new Decimal(1e32),new Decimal(1e39),]
 
         player.id.dimensionCosts[0] = player.id.dimensionCosts[0].mul(Decimal.pow(1e2, player.id.dimensionsPurchased[0]))
@@ -105,7 +105,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "in"
             },
@@ -165,7 +165,7 @@
                     player.id.dimensionAmounts[0] = player.id.dimensionAmounts[0].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[0])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[0])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -194,7 +194,7 @@
                     player.id.dimensionAmounts[1] = player.id.dimensionAmounts[1].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[1])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[1])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -223,7 +223,7 @@
                     player.id.dimensionAmounts[2] = player.id.dimensionAmounts[2].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[2])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[2])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -252,7 +252,7 @@
                     player.id.dimensionAmounts[3] = player.id.dimensionAmounts[3].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[3])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[3])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -281,7 +281,7 @@
                     player.id.dimensionAmounts[4] = player.id.dimensionAmounts[4].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[4])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[4])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -310,7 +310,7 @@
                     player.id.dimensionAmounts[5] = player.id.dimensionAmounts[5].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[5])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[5])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -339,7 +339,7 @@
                     player.id.dimensionAmounts[6] = player.id.dimensionAmounts[6].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[6])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[6])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -368,7 +368,7 @@
                     player.id.dimensionAmounts[7] = player.id.dimensionAmounts[7].add(1)
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, player.id.dimensionsPurchased[7])
                 let cost = Decimal.sumGeometricSeries(max, base, growth, player.id.dimensionsPurchased[7])
                 player.in.infinityPoints = player.in.infinityPoints.sub(cost)
@@ -401,7 +401,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.id.infinityPower, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.id.infinityPower = player.id.infinityPower.sub(cost)
@@ -433,7 +433,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.id.infinityPower, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.id.infinityPower = player.id.infinityPower.sub(cost)
@@ -465,7 +465,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.id.infinityPower, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.id.infinityPower = player.id.infinityPower.sub(cost)
@@ -497,7 +497,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.id.infinityPower, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.id.infinityPower = player.id.infinityPower.sub(cost)
@@ -547,16 +547,16 @@
                 [
         ["blank", "25px"],
         ["row", [["clickable", 2], ["clickable", 3]]],
-        ["blank", "25px"], 
+        ["blank", "25px"],
         ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
 
                 ]
 
             },
         },
-    }, 
+    },
 
-    tabFormat: [        
+    tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power, which boosts antimatter dimensions by x" + format(player.id.infinityPowerEffect) + ", and points by x" + format(player.id.infinityPowerEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.id.infinityPowerPerSecond) + "</h3> infinity power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["row", [["clickable", 1]]],

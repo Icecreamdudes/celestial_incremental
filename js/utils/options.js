@@ -18,6 +18,8 @@ function getStartOptions() {
 		musicVolume: 3,
 		toggleHotkey: true,
 		toggleParticle: true,
+		menuShown: true,
+		newMenu: false,
 	}
 }
 function updateMusicVolume() {

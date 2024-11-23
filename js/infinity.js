@@ -313,6 +313,8 @@ addLayer("in", {
         player.m.buyables[13] = new Decimal(0)
         player.m.buyables[14] = new Decimal(0)
 
+        player.pol.pollinators = new Decimal(0)
+
         //dice
         player.d.dicePoints = new Decimal(0)
         player.d.diceRolls = [new Decimal(1)]
@@ -423,7 +425,7 @@ addLayer("in", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "po"
             },

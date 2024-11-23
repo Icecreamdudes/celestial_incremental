@@ -158,7 +158,7 @@
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
-        if (hasUpgrade("i", 26) && player.points.gte(player.r.pentReq))
+        if (hasUpgrade("i", 27) && player.points.gte(player.r.pentReq))
         {
             player.r.pent = player.r.pent.add(1)
         }
@@ -281,7 +281,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -616,7 +616,7 @@
             },
             "Time Reversal": {
                 buttonStyle() { return {'color': 'white', 'border-color': "grey", 'background': '#d82cd4',} },
-                unlocked() { return hasUpgrade("i", 25) },
+                unlocked() { return hasUpgrade("i", 26) },
                 content:
                 [
                         ["blank", "25px"],

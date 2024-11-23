@@ -33,7 +33,7 @@
             "border-color": "#2B7F0A",
         };
       },
-    
+
     tooltip: "Break Infinity",
     color: "#2B7F0A",
     update(delta) {
@@ -82,7 +82,7 @@
                     if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
                     if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
             }
-            if (!hasMilestone("ip", 21)) 
+            if (!hasMilestone("ip", 21))
             {
                 player.tab = "bigc"
             } else if (hasMilestone("ip", 21))
@@ -90,7 +90,7 @@
                 layers.bigc.crunch()
             }
         }
-        
+
         if (player.ta.negativeInfinityPointsToGet.gte(player.bi.autoreverseCrunchAmount) && player.bi.autoreverseCrunchToggle && player.ad.antimatter.gte(1e308))
         {
             layers.revc.reverseCrunch()
@@ -106,7 +106,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "in"
             },
@@ -551,7 +551,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
@@ -583,7 +583,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
@@ -615,7 +615,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
@@ -646,7 +646,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                 ]
 
@@ -706,7 +706,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

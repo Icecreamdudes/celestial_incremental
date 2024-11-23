@@ -59,6 +59,7 @@
         if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("h", 13))
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
+        if (player.pol.pollinatorsIndex == 3) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorsEffect[4])
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32))
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
         player.t.treesToGet = player.t.treesToGet.pow(buyableEffect("rm", 24))
@@ -81,6 +82,7 @@
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("h", 13))
         if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
+        if (player.pol.pollinatorsIndex == 3) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorsEffect[5])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 32))
 
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
@@ -109,7 +111,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },

@@ -21,7 +21,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -52,7 +52,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["row", [["clickable", 1]]],

@@ -14,6 +14,7 @@
         // yn: s !p
         // yy: s p
         lastLayerState: 'nn',
+        menuState: true,
 
         isGrassLoaded: false,
         grass: new Decimal(0),
@@ -245,7 +246,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -407,9 +408,23 @@
             },
             effectDisplay() { return "x"+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
-        22:
+        23:
         {
             title: "Grass Upgrade XI",
+            unlocked() { return hasUpgrade("i", 22) },
+            description() { return "Boost Pollinators gain based on golden grass." },
+            cost: new Decimal("1e250"),
+            currencyLocation() { return player.g },
+            currencyDisplayName: "Grass",
+            currencyInternalName: "grass",
+            effect() {
+                return player.g.goldGrass.add(1).log(10).pow(0.3).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        22:
+        {
+            title: "Grass Upgrade XII",
             unlocked() { return player.po.realmMods || hasUpgrade("g", 22) },
             description() { return "Raise golden grass effect by ^6." },
             cost: new Decimal("1e550"),
@@ -1104,7 +1119,7 @@
                 [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 23], ["upgrade", 22]]],
                 ]
             },
         },
@@ -1293,6 +1308,13 @@ const updateGrass = (delta) => {
     // REORDERING BOUNDARY: above stays above, below stays below
     // -------------------------
 
+    // Wind Pollinator effect
+    if (player.pol.pollinatorsIndex == 4) {
+        player.g.grassVal = player.g.grassVal
+            .mul(player.pol.pollinatorsEffect[6])
+    }
+
+    // Steel buyable and Time Cube effect
     player.g.grassVal = player.g.grassVal
         .mul(buyableEffect('gh', 33))
         .mul(player.r.timeCubeEffects[2])
@@ -1442,6 +1464,12 @@ const updateGoldGrass = (delta) => {
     // -------------------------
     // REORDERING BOUNDARY: above stays above, below stays below
     // -------------------------
+
+    // Wind Pollinator effect
+    if (player.pol.pollinatorsIndex == 4) {
+        player.g.goldGrassVal = player.g.goldGrassVal
+            .mul(player.pol.pollinatorsEffect[7])
+    }
 
     player.g.goldGrassVal = player.g.goldGrassVal
         .mul(player.cb.rarePetEffects[4][1])

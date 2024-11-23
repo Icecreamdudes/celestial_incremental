@@ -5,7 +5,7 @@
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-        
+
         grassSkip: new Decimal(0),
         grassSkipToGet: new Decimal(0),
         grassSkipReq: new Decimal(1e40),
@@ -111,7 +111,7 @@
         }
 
         for (let i = 0; i < player.an.upgrades.length; i++) {
-            if (+player.an.upgrades[i] < 23) {
+            if (+player.an.upgrades[i] < 24) {
                 player.an.upgrades.splice(i, 1);
                 i--;
             }
@@ -121,7 +121,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cp"
             },
@@ -171,7 +171,7 @@
             display() {
                 return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
             },
-        }, 
+        },
     },
     upgrades: {
     },
@@ -198,7 +198,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -230,7 +230,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -262,7 +262,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -294,7 +294,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -326,7 +326,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -358,7 +358,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -390,7 +390,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -422,7 +422,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
                 player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
@@ -436,7 +436,7 @@
     milestones: {
         11: {
             requirementDescription: "<h3>Grass-Skip 1",
-            effectDescription: "Unlock Grass-Skippers", 
+            effectDescription: "Unlock Grass-Skippers",
             done() { return player.gs.grassSkip.gte(1) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -476,7 +476,7 @@
             done() { return player.gs.grassSkip.gte(15) },
             style: { width: '800px', "min-height": '75px' },
         },
-        
+
     },
     challenges: {
     },
@@ -515,13 +515,13 @@
                     ["raw-html", function () { return "Your grass-skippers are boosting rank, tier, and tetr points by x<h3>" + format(player.gs.grassSkippersEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],

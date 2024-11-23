@@ -43,7 +43,7 @@
         player.tab == "g" ? "#042347" :
         player.tab == "gh" ? "#073b77" :
         player.tab == "cb" || player.tab == "ps" ? "#021124" :
-        player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" :
+        player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter" ? "linear-gradient(45deg, #8a00a9, #0061ff)" :
         player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" :
         player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" :
         player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" :
@@ -56,12 +56,12 @@
         player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" :
         player.tab == "ca" ? "#2a3e66" :
         player.tab == "cap" ? "#1f1e33" :
-        player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" ? "#204387" :
+        player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || player.tab == "a1u" || player.tab == "a1s" ? "#204387" :
         player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" :
         player.tab == "ev8" ? "#242525" :
         player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" :
         player.tab == "s" ? "#2D0000" :
-        player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" ? "#7d3f98" : 
+        player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" ? "#7d3f98" :
         "#161616");
 
         //1

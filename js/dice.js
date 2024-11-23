@@ -106,6 +106,7 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 41))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
+        if (player.pol.pollinatorsIndex == 7) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorsEffect[12])
 
         if (player.d.autoRollCooldown.lt(0))
         {
@@ -163,7 +164,7 @@
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
         if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
 
-        if (hasUpgrade("i", 29)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
+        if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
 
         player.d.boosterDiceStatsPerSecond = buyableEffect("d", 21)
         for (let i = 0; i < 11; i++)
@@ -207,7 +208,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },

@@ -119,7 +119,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
                 stopRain('#4b79ff');
@@ -427,7 +427,7 @@ addLayer("ev0", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Goldsmith",
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -445,7 +445,7 @@ addLayer("ev0", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
                 stopRain('#4b79ff');
@@ -651,7 +651,7 @@ addLayer("ev1", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "MrRedShark",
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -661,7 +661,7 @@ addLayer("ev1", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
@@ -1251,7 +1251,7 @@ addLayer("ev2", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Insane Face",
     color: "#106ccc",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -1275,7 +1275,7 @@ addLayer("ev2", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
                 stopRain('#4b79ff');
@@ -1433,7 +1433,7 @@ addLayer("ev4", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Sun",
     color: "#febc06",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -1455,7 +1455,7 @@ addLayer("ev4", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
@@ -1633,7 +1633,7 @@ addLayer("ev8", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Marcel",
     color: "grey",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -1665,7 +1665,7 @@ addLayer("ev8", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },

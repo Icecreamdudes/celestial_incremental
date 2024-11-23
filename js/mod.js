@@ -8,7 +8,7 @@
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
-	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js",],
+	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -36,6 +36,7 @@ let credits = `<h1>Credits:</h1><br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
 		-Bug Fixes by Tsanth and Forwaken.<br>
+		-Revamped Menu Concept by Seder3214.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -209,6 +210,7 @@ function addedPlayerData() { return {
 	//meta stuff
 	gain: new Decimal(0),
 	universe: 1,
+	musuniverse: 1,
 }}
 
 // Display extra things at the top of the page

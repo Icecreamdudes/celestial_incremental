@@ -17,7 +17,7 @@
             "color": "#2672e3",
         };
       },
-    
+
     tooltip: "Galaxy",
     color: "#333c81",
     update(delta) {
@@ -28,7 +28,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "in"
             },
@@ -59,7 +59,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

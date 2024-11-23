@@ -9,6 +9,193 @@
 	text-size-adjust: none;
 
 }
+.titleHeader {
+	position: absolute;
+	width: 262px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.75);
+	font-size:20px;
+	z-index:10000;
+	background: linear-gradient(45deg, #8a00a9, #0061ff);
+	border: 2px solid #7a7a7a;
+}
+.layerMenu {
+	position: absolute;
+	z-index:1000;
+	width: 200px;
+	top: 62px;
+	justify-content: auto;
+	user-select: none;
+	height:calc(100% - 66px);
+	left:50px;
+	background: #0f0f0f;
+	display: block;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	flex-direction: column;
+	border-bottom: 2px solid #7a7a7a;
+}
+.menuButton {
+	width: 175px;
+	height: 50px;
+	justify-content: auto;
+	margin-bottom: 10px;
+	color: rgba(0, 0, 0, 0.9);
+	font-size:16px;
+	z-index:10000;
+	cursor: pointer;
+	pointer-events: auto;
+	background: #a3a3a3;
+	border: var(--hqProperty1);
+	border-radius: 15px;
+	border-color: rgba(0, 0, 0, 0.125);
+	transition: all 0s;
+}
+.menuButton:hover {
+	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
+}
+.contentMenu {
+	position: absolute;
+	z-index:1001;
+	width: 66px;
+	top: 62px;
+	justify-content: auto;
+	user-select: none;
+	height:calc(100% - 64px);
+	left:50px;
+	background: #0f0f0f;
+	display: flex;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	flex-direction: column;
+}
+.uniMenu {
+	z-index:1001;
+	width: 60px;
+	justify-content: auto;
+	flex: 1;
+	height:calc(100% - 76px);
+	left:0px;
+	background: #0f0f0f;
+	display: block;
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-direction: column;
+	border-left: 2px solid #7a7a7a;
+	border-right: 4px solid #7a7a7a;
+	border-top: 2px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+}
+.uniButton {
+	width: 50px;
+	height: 50px;
+	margin-bottom: 10px;
+	color: rgba(0, 0, 0, 0.9);
+	font-size:20px;
+	z-index:10000;
+	cursor: pointer;
+	pointer-events: auto;
+	background: #a3a3a3;
+	border: var(--hqProperty1);
+	border-radius: 15px;
+	border-color: rgba(0, 0, 0, 0.125);
+	transition: all 0s;
+}
+.uniButton:hover {
+	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
+}
+.metaMenu {
+	z-index:1001;
+	width: 60px;
+	height: auto;
+	justify-content: auto;
+	background: #0f0f0f;
+	display: block;
+	flex: none;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	flex-direction: column;
+	border-left: 2px solid #7a7a7a;
+	border-right: 4px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+}
+.miscMenu {
+	z-index:1001;
+	width: 60px;
+	height: 60px;
+	background: #0f0f0f;
+	display: block;
+	flex: none;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	border-left: 2px solid #7a7a7a;
+	border-right: 4px solid #7a7a7a;
+	border-top: 2px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+}
+.miscButton {
+	width: 50px;
+	height: 50px;
+	margin-top: 5px;
+	z-index:10000;
+	cursor: pointer;
+	pointer-events: auto;
+	transition: all 0.5s;
+}
+.miscButton:hover {
+	transform: rotate(180deg)
+}
+.backButton {
+	width: 50px;
+	position: absolute;
+	left:0px;
+	top:0px;
+	height: 50px;
+	justify-content: auto;
+	user-select: none;
+	margin-bottom: 5px;
+	color: white;
+	font-size:25px;
+	z-index:10000;
+	cursor: pointer;
+	pointer-events: auto;
+	background: #0f0f0f;
+	border: 2px solid #7a7a7a;
+	transition: all 0.5s;
+	vertical-align:baseline;
+}
+.contentHeader {
+	width: 60px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.9);
+	font-size:18px;
+	z-index:10000;
+	background: linear-gradient(90deg, #3e3e3e 0%, #262626 50%, #3e3e3e 100%);
+	border-bottom: 2px solid #7a7a7a;
+	margin-bottom: 10px;
+}
+.menuHeader {
+	width: 185px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.9);
+	font-size:18px;
+	z-index:10000;
+	background: linear-gradient(90deg, #3e3e3e 0%, #262626 50%, #3e3e3e 100%);
+	border-top: 2px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+	border-left: 0px solid #3e3e3e;
+	border-right: 0px solid #3e3e3e;
+	margin-bottom: 10px;
+}
 
 *:focus {
 	outline: none;
@@ -168,10 +355,10 @@ ul {
 	transition-duration: 0s
 }
 
-.tooltipBox { 
+.tooltipBox {
 	position: relative;
   }
-  
+
   .tooltipBox:hover .tooltip{
 	opacity: 1;
   }
@@ -179,7 +366,7 @@ ul {
   .forceTooltip .tooltip{
 	opacity: 1;
   }
-  
+
 .respecCheckbox {
 	display: inline-block;
 }
@@ -248,4 +435,3 @@ button > * {
 	background-image: none !important;
 	--background: transparent !important;
 }
-

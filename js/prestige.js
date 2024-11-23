@@ -59,6 +59,7 @@
         if (inChallenge("tad", 11)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.3)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("p", 11))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("id", 22))
+        if (player.pol.pollinatorsIndex == 2) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorsEffect[3])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("rm", 23))
 
         player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
@@ -85,6 +86,7 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.evolvedEffects[6][1])
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.rarePetEffects[5][1])
+        if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
         if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
     },
     prestigeReset()
@@ -213,7 +215,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -673,7 +675,7 @@
             },
             "Crystallize": {
                 buttonStyle() { return { 'color': 'white', 'border-color': "#31aeb0", 'background': '#98245c',} },
-                unlocked() { return hasUpgrade("i", 23) },
+                unlocked() { return hasUpgrade("i", 24) },
                 content:
                 [
                     ["blank", "25px"],

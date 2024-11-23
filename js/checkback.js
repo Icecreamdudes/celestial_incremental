@@ -13,6 +13,7 @@ addLayer("cb", {
         xpMult: new Decimal(1),
         req: new Decimal(4),
         effectActivate: false,
+        xpBuyableMax: false,
 
         buttonUnlocks: [true, false, false, false, false, false, false],
         buttonTimersMax: [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),new Decimal(86400),],
@@ -118,6 +119,11 @@ addLayer("cb", {
 
         //paragon
         paragonShards: new Decimal(0),
+
+        //pity system
+        pityEvoCurrent: new Decimal(0),
+        pityParaCurrent: new Decimal(0),
+        pityMax: new Decimal(200),
 
         //autom
         totalAutomationShards: new Decimal(0),
@@ -748,6 +754,20 @@ addLayer("cb", {
         player.cb.canteEnergyPetButtonBase = [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14),]
         player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
         player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),]
+
+        player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))
+
+        if (player.cb.pityEvoCurrent.gte(player.cb.pityMax)) {
+            player.cb.evolutionShards = player.cb.evolutionShards.add(1)
+            player.cb.pityEvoCurrent = new Decimal(0)
+            callAlert("You gained an Evolution Shard! (Pity)", "resources/evoShard.png");
+        }
+        if (player.cb.pityParaCurrent.gte(player.cb.pityMax)) {
+            player.cb.paragonShards = player.cb.paragonShards.add(1)
+            player.cb.pityParaCurrent = new Decimal(0)
+            callAlert("You gained a PARAGON SHARD! (Pity)", "resources/paragonShard.png");
+        }
+
     },
     levelToXP(quantity)
     {
@@ -851,7 +871,7 @@ addLayer("cb", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -869,19 +889,19 @@ addLayer("cb", {
         },
         3: {
             title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
+            canClick() { return player.cb.xpBuyableMax == false },
             unlocked() { return true },
             onClick() {
-                player.buyMax = true
+                player.cb.xpBuyableMax = true
             },
             style: { width: '75px', "min-height": '50px', }
         },
         4: {
             title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
+            canClick() { return player.cb.xpBuyableMax == true  },
             unlocked() { return true },
             onClick() {
-                player.buyMax = false
+                player.cb.xpBuyableMax = false
             },
             style: { width: '75px', "min-height": '50px', }
         },
@@ -907,10 +927,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(200)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (0.5%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(0.5);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[0].mul(player.ca.canteEnergyMult))
@@ -930,10 +952,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(100)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (1%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[1].mul(player.ca.canteEnergyMult))
@@ -953,10 +977,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(50)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (2%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[2].mul(player.ca.canteEnergyMult))
@@ -976,10 +1002,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(500)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (0.2%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(0.2);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[3].mul(player.ca.canteEnergyMult))
@@ -1011,10 +1039,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(20)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (5%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(5);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[4].mul(player.ca.canteEnergyMult))
@@ -1082,10 +1112,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(5)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (20%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(20);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[5].mul(player.ca.canteEnergyMult))
@@ -1118,10 +1150,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(2)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (50%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(50);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[6].mul(player.ca.canteEnergyMult))
@@ -1141,7 +1175,10 @@ addLayer("cb", {
                 if (random == 1)
                 {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    player.cb.pityEvoCurrent = new Decimal(0)
                     callAlert("You gained an Evolution Shard! (25%)", "resources/evoShard.png");
+                } else {
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent(25)
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[3].mul(player.ca.canteEnergyMult))
             },
@@ -1173,10 +1210,12 @@ addLayer("cb", {
                     if (player.cb.highestLevel.gt(250))
                     {
                         let random = getRandomInt(10)
-                        if (random == 1)
-                        {
+                        if (random == 1) {
                             player.cb.paragonShards = player.cb.paragonShards.add(1);
+                            player.cb.pityParaCurrent = new Decimal(0);
                             callAlert("You gained a PARAGON SHARD! (10%)", "resources/paragonShard.png");
+                        } else {
+                            player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10);
                         }
                     }
                     player.cb.level = new Decimal(1)
@@ -1229,12 +1268,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(35))
                 {
                     let random = getRandomInt(50)
-                    if (random != 1)
-                    {
+                    if (random != 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0)
                         callAlert("You gained an Evolution Shard! (98%)", "resources/evoShard.png");
-                    } else
-                    {
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(98)
                         callAlert("Damn bro you didn't gain an evo shard. Take a screenshot, send to the discord, and ping the dev. I think ur still cool.");
                     }
                 }
@@ -1256,10 +1295,12 @@ addLayer("cb", {
                     if (player.cb.highestLevel.gt(250))
                     {
                         let random = getRandomInt(4)
-                        if (random == 1)
-                        {
+                        if (random == 1) {
                             player.cb.paragonShards = player.cb.paragonShards.add(1);
+                            player.cb.pityParaCurrent = new Decimal(0);
                             callAlert("You gained a PARAGON SHARD! (25%)", "resources/paragonShard.png");
+                        } else {
+                            player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(25);
                         }
                     }
                     player.cb.level = new Decimal(1)
@@ -1286,10 +1327,12 @@ addLayer("cb", {
                 if (player.cb.highestLevel.gt(250))
                 {
                     let random = getRandomInt(50)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
+                        player.cb.pityParaCurrent = new Decimal(0);
                         callAlert("You gained a PARAGON SHARD! (2%)", "resources/paragonShard.png");
+                    } else {
+                        player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(2);
                     }
                 }
             },
@@ -2477,26 +2520,31 @@ addLayer("cb", {
             let random =  getRandomInt(5)
             if (random == 0) {
                 player.cb.uncommonPetAmounts[0] = player.cb.uncommonPetAmounts[0].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(8);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained a Teste!", "resources/testeUncommonPet.png");
                 }
             } else if (random == 1) {
                 player.cb.uncommonPetAmounts[1] = player.cb.uncommonPetAmounts[1].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(8);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained a Star!", "resources/starUncommonPet.png");
                 }
             } else if (random == 2) {
                 player.cb.uncommonPetAmounts[2] = player.cb.uncommonPetAmounts[2].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(8);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained a Normal Face!", "resources/normalFaceUncommonPet.png");
                 }
             } else if (random == 3) {
                 player.cb.uncommonPetAmounts[3] = player.cb.uncommonPetAmounts[3].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(8);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained a Shark!", "resources/sharkUncommonPet.png");
                 }
             }  else if (random == 4) {
                 player.cb.uncommonPetAmounts[4] = player.cb.uncommonPetAmounts[4].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(8);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained THE WATCHING EYE!", "resources/eyeUncommonPet.png");
                 }
@@ -2507,6 +2555,7 @@ addLayer("cb", {
             if (rng > 0.08)
             {
                 player.cb.rarePetAmounts[3] = player.cb.rarePetAmounts[3].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(8);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");
                 }
@@ -2514,8 +2563,9 @@ addLayer("cb", {
             if (rng < 0.08)
             {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                player.cb.pityEvoCurrent = new Decimal(0);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
-                    callAlert("You gained an Evolution Shard!", "resources/evoShard.png");
+                    callAlert("You gained an Evolution Shard! (8%)", "resources/evoShard.png");
                 }
             }
         }
@@ -2529,12 +2579,14 @@ addLayer("cb", {
             if (random == 0)
             {
                 player.cb.commonPetAmounts[5] = player.cb.commonPetAmounts[5].add(gainedPets);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(15);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained " + formatWhole(gainedPets) + " Spiders!", "resources/spiderCommonPet.png");
                 }
             } else if (random == 1)
             {
                 player.cb.commonPetAmounts[6] = player.cb.commonPetAmounts[6].add(gainedPets);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(15);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained " + formatWhole(gainedPets) + " Blobs!", "resources/blobCommonPet.png");
                 }
@@ -2546,12 +2598,14 @@ addLayer("cb", {
             if (random == 0)
             {
                 player.cb.uncommonPetAmounts[5] = player.cb.uncommonPetAmounts[5].add(gainedPets);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(15);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained " + formatWhole(gainedPets) + " Clocks!", "resources/clockUncommonPet.png");
                 }
             } else if (random == 1)
             {
                 player.cb.uncommonPetAmounts[6] = player.cb.uncommonPetAmounts[6].add(gainedPets);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(15);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained " + formatWhole(gainedPets) + " Trollfaces!", "resources/trollUncommonPet.png");
                 }
@@ -2562,6 +2616,7 @@ addLayer("cb", {
             if (rng > 0.05)
             {
                 player.cb.rarePetAmounts[4] = player.cb.rarePetAmounts[4].add(1);
+                player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(15);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained an Antimatter!", "resources/antimatterRarePet.png");
                 }
@@ -2569,6 +2624,7 @@ addLayer("cb", {
             if (rng < 0.05)
             {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(3);
+                player.cb.pityEvoCurrent = new Decimal(0);
                 if (!(player.ps.togglealert == false && player.tab == "ps")) {
                     callAlert("You gained 3 Evolution Shards!", "resources/evoShard.png");
                 }
@@ -2738,15 +2794,49 @@ addLayer("cb", {
                 return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.</h5>";
             },
         },
+        pityEvoBar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 400,
+            height: 50,
+            progress() {
+                return player.cb.pityEvoCurrent.div(player.cb.pityMax)
+            },
+            fillStyle: {
+                "background-color": "#d487fd",
+            },
+            display() {
+                return "<h5>" + format(player.cb.pityEvoCurrent) + "/" + formatWhole(player.cb.pityMax) + "<h5> Pity until Evolution Shard.</h5>";
+            },
+        },
+        pityParaBar: {
+            unlocked() { return player.cb.highestLevel.gte(250) },
+            direction: RIGHT,
+            width: 400,
+            height: 50,
+            progress() {
+                return player.cb.pityParaCurrent.div(player.cb.pityMax)
+            },
+            fillStyle: {
+                "background-color": "#2842eb",
+            },
+            display() {
+                return "<h5>" + format(player.cb.pityParaCurrent) + "/" + formatWhole(player.cb.pityMax) + "<h5> Pity until Paragon Shard.</h5>";
+            },
+        },
     },
     upgrades: {
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(2.05).pow(x || getBuyableAmount(this.layer, this.id)).mul(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
+            costBase() { return new Decimal(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]) },
+            costGrowth() { return new Decimal(2.05) },
+            currency() { return player.cb.totalxp},
+            pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.totalxp.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back OTF Boost."
             },
@@ -2755,32 +2845,32 @@ addLayer("cb", {
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(420).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
-                let growth = 2.05
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
+                if (player.cb.xpBuyableMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                     layers.cb.levelup()
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.totalxp = player.cb.totalxp.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                layers.cb.levelup()
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    layers.cb.levelup()
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         12: {
-            cost(x) { return new Decimal(2.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.5).add(1) },
+            costBase() { return new Decimal(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]) },
+            costGrowth() { return new Decimal(2.22) },
+            currency() { return player.cb.totalxp},
+            pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.5).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.totalxp.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back IP Boost."
             },
@@ -2789,32 +2879,32 @@ addLayer("cb", {
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(950).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
-                let growth = 2.22
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
+                if (player.cb.xpBuyableMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                     layers.cb.levelup()
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.totalxp = player.cb.totalxp.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                layers.cb.levelup()
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    layers.cb.levelup()
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         13: {
-            cost(x) { return new Decimal(2.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            costBase() { return new Decimal(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]) },
+            costGrowth() { return new Decimal(2.4) },
+            currency() { return player.cb.totalxp},
+            pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.totalxp.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back XP Boost Boost."
             },
@@ -2823,32 +2913,32 @@ addLayer("cb", {
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(2750).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
-                let growth = 2.4
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
+                if (player.cb.xpBuyableMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                     layers.cb.levelup()
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.totalxp = player.cb.totalxp.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                layers.cb.levelup()
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    layers.cb.levelup()
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         14: {
-            cost(x) { return new Decimal(2.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]).floor() },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            costBase() { return new Decimal(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]) },
+            costGrowth() { return new Decimal(2.75) },
+            currency() { return player.cb.totalxp},
+            pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.cb.totalxp.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back Pet Point Boost."
             },
@@ -2857,24 +2947,90 @@ addLayer("cb", {
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {
-                let base = new Decimal(7500).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1])
-                let growth = 2.75
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.cb.totalxp = player.cb.totalxp.sub(buyonecost)
+                if (player.cb.xpBuyableMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                     layers.cb.levelup()
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.cb.totalxp, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.cb.totalxp = player.cb.totalxp.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    layers.cb.levelup()
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        15: {
+            costBase() { return new Decimal(1850).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]) },
+            costGrowth() { return new Decimal(2.3) },
+            currency() { return player.cb.totalxp},
+            pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.15).add(1) },
+            unlocked() { return hasUpgrade("bi", 106)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back Pollinators Boost."
+            },
+            display() {
+                return "which are multiplying pollinators per second by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+            },
+            buy() {
+                if (player.cb.xpBuyableMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                layers.cb.levelup()
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    layers.cb.levelup()
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    layers.cb.levelup()
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        16: {
+            costBase() { return new Decimal(10000).div(player.cb.uncommonPetEffects[2][2]).div(player.cb.rarePetEffects[3][1]) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(20) },
+            currency() { return player.cb.totalxp},
+            pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5) },
+            unlocked() { return true },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/20<br/>Check Back Pity Req. Reducer."
+            },
+            display() {
+                return "which are reducing the pity requirement by " + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+            },
+            buy() {
+                if (player.cb.xpBuyableMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    layers.cb.levelup()
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                    layers.cb.levelup()
+                }
             },
             style: { width: '275px', height: '150px', }
         },
@@ -3139,8 +3295,16 @@ addLayer("cb", {
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards." }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h5>(Gained from check back buttons)" }, { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
+                    ["row", [["bar", "pityEvoBar"]]],
+                    ["raw-html", function () { return "<h5>Gained from failing to obtain an Evolution Shard." }, { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h5>Reset when you gain any uncertain Evolution Shards." }, { "color": "#d487fd", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                     ["raw-html", function () { return player.cb.highestLevel.gte(250) ? "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards." : ""}, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.highestLevel.gte(250) ? "<h5>(Gained from XPBoost buttons)" : "" }, { "color": "#2842eb", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["bar", "pityParaBar"]]],
+                    ["raw-html", function () { return player.cb.highestLevel.gte(250) ? "<h5>Gained from failing to obtain a Paragon Shard." : "" }, { "color": "#2842eb", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cb.highestLevel.gte(250) ? "<h5>Reset when you gain any uncertain Paragon Shards." : "" }, { "color": "#2842eb", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                 ]
             },
@@ -3152,7 +3316,8 @@ addLayer("cb", {
                     ["blank", "25px"],
                     ["row", [["clickable", 3], ["clickable", 4]]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 15]]],
+                    ["row", [["buyable", 13], ["buyable", 14], ["buyable", 16]]],
                 ]
 
             },

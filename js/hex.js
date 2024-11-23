@@ -78,11 +78,12 @@
         {
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.h.hexPointsEffect[i+1])
             if (hasUpgrade("ta", 18)) player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(upgradeEffect("ta", 18))
-        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 47))
-        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 48))
-        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 49))
-        player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.rm.realmModsEffect[2])
-    }
+            if (player.pol.pollinatorsIndex == 7) player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.pol.pollinatorsEffect[14])
+            player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 47))
+            player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 48))
+            player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 49))
+            player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.rm.realmModsEffect[2])
+        }
         player.h.hexPointsToGet[player.h.currentRagePowerEffect] = player.h.hexPointsToGet[player.h.currentRagePowerEffect].mul(player.h.ragePowerCycleEffect)
 
         player.h.hexPointsToGet[0] = player.h.hex.pow(2).mul(player.h.hexPointsEffect[1])
@@ -135,7 +136,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -391,7 +392,7 @@
 
         //dice
         player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)] 
+        player.d.diceRolls = [new Decimal(1)]
         player.d.dice = new Decimal(1)
 
         player.d.buyables[11] = new Decimal(0)
@@ -574,7 +575,7 @@
 
         //dice
         player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)] 
+        player.d.diceRolls = [new Decimal(1)]
         player.d.dice = new Decimal(1)
 
         player.d.buyables[11] = new Decimal(0)
@@ -648,7 +649,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -680,7 +681,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -712,7 +713,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -744,7 +745,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -776,7 +777,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -808,7 +809,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -840,7 +841,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -871,7 +872,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("tad", 11)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
@@ -903,7 +904,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[5], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.h.hexPoints[5] = player.h.hexPoints[5].sub(cost)
@@ -935,7 +936,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[11], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.h.hexPoints[11] = player.h.hexPoints[11].sub(cost)
@@ -967,7 +968,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.h.hexPoints[19], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.h.hexPoints[19] = player.h.hexPoints[19].sub(cost)
@@ -1020,7 +1021,7 @@
          ["raw-html", function () { return "You are gaining <h3>" + format(player.h.hexPointsToGet[0]) + "</h3> hex 1 points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["blank", "25px"],
          ["row", [["clickable", 2], ["clickable", 3]]],
-         ["blank", "25px"], 
+         ["blank", "25px"],
          ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
          ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
         ]
@@ -1046,7 +1047,7 @@
                 [
          ["blank", "25px"],
          ["row", [["clickable", 2], ["clickable", 3]]],
-         ["blank", "25px"], 
+         ["blank", "25px"],
          ["row", [["buyable", 21], ["buyable", 22],["buyable", 23],]],
          ["blank", "25px"],
          ["raw-html", function () { return "These effects are always active."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -1056,7 +1057,7 @@
             },
             "RAGE POWER": {
                 buttonStyle() { return { 'border-color': '#5e0000', 'background-color': '#ff5555', "color": "red" } },
-                unlocked() { return hasUpgrade("i", 28) },
+                unlocked() { return hasUpgrade("i", 29) },
                 content:
                 [
          ["blank", "25px"],
@@ -1082,7 +1083,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

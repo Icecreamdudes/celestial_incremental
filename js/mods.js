@@ -49,8 +49,8 @@
         if (inChallenge("ip", 13) || player.po.hex) player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("h", 18))
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
         if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
+        if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
-        if (hasUpgrade("i", 24) && player.points.gte("1e400")) player.m.modsToGet = player.m.modsToGet.mul(1e18)
         player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("rm", 28))
         player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
 
@@ -61,6 +61,7 @@
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.pe.pestEffect[5])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("p", 12))
+        if (player.pol.pollinatorsIndex == 6) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.pol.pollinatorsEffect[10])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.div(player.po.halterEffects[9])
 
         if (player.m.mods.gte(player.m.modSoftcapStart))
@@ -75,7 +76,7 @@
 
         player.m.linesOfCode = player.m.linesOfCode.add(player.m.linesOfCodePerSecond.mul(delta))
         if (player.m.linesOfCode.gte(player.m.modsReq)) {
-            player.m.mods = player.m.mods.add(player.m.modsToGet) 
+            player.m.mods = player.m.mods.add(player.m.modsToGet)
             player.m.linesOfCode = new Decimal(0)
         }
 
@@ -121,7 +122,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -287,7 +288,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
@@ -319,7 +320,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
@@ -351,7 +352,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
@@ -383,7 +384,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.m.mods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("ip", 17)) player.m.mods = player.m.mods.sub(cost)
@@ -414,7 +415,7 @@
                     ["raw-html", function () { return "<h2>You have " + formatWhole(player.m.mods) + "<h2> mods, which boost tree gain by x" + format(player.m.modEffect) + "."}],
                     ["raw-html", function () { return "<h2>You will gain " + format(player.m.modsToGet, 1) + "<h2> mods." }],
                     ["raw-html", function () { return player.m.mods.gte(player.m.modSoftcapStart) ? "After " + formatWhole(player.m.modSoftcapStart) + " mods, lines of code gain is divided by " + format(player.m.modSoftcap) + " (Based on mods)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],   
+                    ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                 ]
             },
@@ -432,7 +433,7 @@
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

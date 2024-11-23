@@ -40,11 +40,29 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
+	<h3>v1.2.2 - 90% QoL 10% Inflation</h3><br>
 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
 		<br>
 		<br>
 		<br>
+		Content:<br>
+			- Added the Pollinators Layer.<br>
+			- Added a new Layout, please check it out in Settings.<br><br>
+		Bugfixes:<br>
+			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
+			- Fixed Repli-Trees softcap system not functioning correctly.<br>
+			- Fixed Dragon buttons not giving the correct shard.<br><br>
+		Typos:<br>
+			- Fixed multiple instances of "replicanti points" being incorrectly typed as just "replicanti".<br>
+			- Fixed Repli-Grass buyable 1's description accidentally saying it multiplied repli-leaf instead of repli-grass.<br>
+			- Fixed dragon button alerts not showing the correct shard chance.<br><br>
+		QoL:<br>
+			- Added a pity system to Check Back shards.<br>
+			- Made oil a bit brighter to improve contrast.<br>
+			- Added import/export file.<br><br>
+		Refactoring:<br>
+			- Grass code refactored to improve framerate (Thanks Tsanth)<br><br>
+	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
 			- Fixed Oil buy max buttons not loading correctly.<br>
 			- Fixed Dice rolling with one less side then intended.<br>

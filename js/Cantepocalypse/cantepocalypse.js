@@ -39,6 +39,7 @@ addLayer("cp", {
         let onepersec = new Decimal(1)
 
         if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
+            player.cp.cantepocalypsePrep = false
             player.cp.cantepocalypseActive = true
             if (options.newMenu == true) showTab("a1u")
         }

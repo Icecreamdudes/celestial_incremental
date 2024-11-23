@@ -908,7 +908,7 @@
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.rarePetPrices[6])
                 player.cb.rarePetAmounts[6] = player.cb.rarePetAmounts[6].add(1);
                 if (player.ps.togglealert == true) {
-                    callAlert("You gained a Grass Square!", "resources/grassSqaureRarePet.png");
+                    callAlert("You gained a Grass Square!", "resources/grassSquareRarePet.png");
                 }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },

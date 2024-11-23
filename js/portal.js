@@ -358,13 +358,13 @@ addLayer("po", {
             width: 476,
             height: 476,
             progress() {
-                return player.points.log10().div("308")
+                return player.points.log10().div("308.25")
             },
             fillStyle: {
                 "background-color": "#e81cff",
             },
             display() {
-                return "<h1>" + format(player.points.log10().div("308").mul(100)) + "%</h5>";
+                return "<h1>" + format(player.points.log10().div("308.25").mul(100)) + "%</h5>";
             },
         },
     },

@@ -1178,7 +1178,7 @@ addLayer("cb", {
                     player.cb.pityEvoCurrent = new Decimal(0)
                     callAlert("You gained an Evolution Shard! (25%)", "resources/evoShard.png");
                 } else {
-                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent(25)
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(25)
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[3].mul(player.ca.canteEnergyMult))
             },
@@ -2238,8 +2238,12 @@ addLayer("cb", {
             unlocked() { return player.cb.petDisplayIndex == 5 && player.ev.evolutionsUnlocked[6] == true && player.cb.viewingEvolved[6] == true},
             onClick() {
                 player.po.lastUniverse = "cb"
-                 player.tab = "po"
-                player.subtabs["po"]['stuff'] = 'ADVANCED HALTER'
+                if (options.newMenu) {
+                    player.tab = "halter"
+                } else {
+                    player.tab = "po"
+                    player.subtabs["po"]['stuff'] = 'Halter'
+                }
             },
             style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -2970,7 +2974,7 @@ addLayer("cb", {
             currency() { return player.cb.totalxp},
             pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.15).add(1) },
-            unlocked() { return hasUpgrade("bi", 106)},
+            unlocked() { return player.in.unlockedBreak},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

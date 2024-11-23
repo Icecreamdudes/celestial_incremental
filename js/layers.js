@@ -324,9 +324,9 @@ addLayer("i", {
         22:
         {
             title: "Pollinate",
-            unlocked() { return hasUpgrade("i", 21) && hasUpgrade("bi", 106)},
+            unlocked() { return player.in.unlockedBreak},
             description: "Use the experience of debuffs and pests to create Pollinators.",
-            cost: new Decimal("1e600"),
+            cost: new Decimal("1e450"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",

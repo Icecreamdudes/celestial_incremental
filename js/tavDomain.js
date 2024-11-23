@@ -129,8 +129,12 @@
             unlocked() { return true },
             onClick() {
                 player.in.unlockedBreak = true
-                player.tab = 'po'
-                player.subtabs["po"]['stuff'] = 'Otherworldly Features'
+                if (options.newMenu) {
+                    player.tab = 'otherfeat'
+                } else {
+                    player.tab = 'po'
+                    player.subtabs["po"]['stuff'] = 'Otherworldly Features'
+                }
             },
             style: { width: '500px', "min-height": '200px',},
         },

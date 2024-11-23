@@ -80,8 +80,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 1)
         {
             player.c.cutscenes[0] = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Upgrades'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Upgrades'
+            }
             player.c.cutscenes[0] = false
         }
 
@@ -101,8 +105,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 2)
         {
             player.c.cutscenes[1] = false
-            player.tab = "po"
-            player.subtabs["po"]['stuff'] = 'Otherworldly Features'
+            if (options.newMenu) {
+                player.tab = "otherfeat"
+            } else {
+                player.tab = "po"
+                player.subtabs["po"]['stuff'] = 'Otherworldly Features'
+            }
             player.c.cutscenes[1] = false
         }
 
@@ -122,8 +130,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3)
         {
             player.c.cutscenes[2] = false
-            player.tab = "in"
-            player.subtabs["in"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "ip"
+            } else {
+                player.tab = "in"
+                player.subtabs["in"]['stuff'] = 'Features'
+            }
             player.c.cutscenes[2] = false
         }
 
@@ -143,8 +155,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 4)
         {
             player.c.cutscenes[3] = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Features'
+            }
             player.c.cutscenes[3] = false
 
         }
@@ -166,8 +182,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 5)
         {
             player.c.cutscenes[4] = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Features'
+            }
             player.c.cutscenes[4] = false
         }
 
@@ -188,8 +208,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 6)
         {
             player.c.cutscenes[5] = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Features'
+            }
             player.c.cutscenes[5] = false
         }
 
@@ -210,8 +234,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 7)
         {
             player.c.cutscenes[6] = false
-            player.tab = "po"
-            player.subtabs["po"]['stuff'] = 'Otherworldly Features'
+            if (options.newMenu) {
+                player.tab = "otherfeat"
+            } else {
+                player.tab = "po"
+                player.subtabs["po"]['stuff'] = 'Otherworldly Features'
+            }
             player.c.cutscenes[6] = false
         }
 
@@ -231,8 +259,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8)
         {
             player.c.cutscenes[7] = false
-            player.tab = "in"
-            player.subtabs["in"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "ip"
+            } else {
+                player.tab = "in"
+                player.subtabs["in"]['stuff'] = 'Features'
+            }
             player.c.cutscenes[7] = false
         }
 
@@ -252,8 +284,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9)
         {
             player.c.cutscenes[8] = false
-            player.tab = "in"
-            player.subtabs["in"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "ip"
+            } else {
+                player.tab = "in"
+                player.subtabs["in"]['stuff'] = 'Features'
+            }
             player.c.cutscenes[8] = false
         }
 
@@ -336,8 +372,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 13)
         {
             player.c.cutscenes[12] = false
-            player.tab = "po"
-            player.subtabs["po"]['stuff'] = 'Portals'
+            if (options.newMenu) {
+                player.tab = "ip"
+            } else {
+                player.tab = "po"
+                player.subtabs["po"]['stuff'] = 'Portals'
+            }
             player.c.cutscenes[12] = false
         }
         //d
@@ -356,8 +396,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -1)
         {
             player.c.cutsceneDice = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Features'
+            }
         }
 
 
@@ -377,8 +421,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -2)
         {
             player.c.cutsceneRocketFuel = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Features'
+            }
         }
 
 
@@ -398,8 +446,12 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -3)
         {
             player.c.cutsceneHex = false
-            player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Upgrades'
+            if (options.newMenu) {
+                player.tab = "u1u"
+            } else {
+                player.tab = "i"
+                player.subtabs["i"]['stuff'] = 'Upgrades'
+            }
         }
 
         if (player.tab != "c" && player.tab != "bigc" && player.c.cutsceneIndex == player.c.cutsceneText.length)

@@ -508,7 +508,11 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "in"
+                if (options.newMenu) {
+                    player.tab = "ip"
+                } else {
+                    player.tab = "in"
+                }
 
                 layers.bigc.crunch()
             },

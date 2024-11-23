@@ -51,14 +51,16 @@ let changelog = `<h1>Changelog:</h1><br>
 		Bugfixes:<br>
 			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
 			- Fixed Repli-Trees softcap system not functioning correctly.<br>
+			- Fixed Portal bar being very slightly inaccurate.<br>
 			- Fixed Dragon buttons not giving the correct shard.<br><br>
 		Typos:<br>
 			- Fixed multiple instances of "replicanti points" being incorrectly typed as just "replicanti".<br>
 			- Fixed Repli-Grass buyable 1's description accidentally saying it multiplied repli-leaf instead of repli-grass.<br>
-			- Fixed dragon button alerts not showing the correct shard chance.<br><br>
+			- Fixed Dragon button alerts not showing the correct shard chance.<br>
+			- Fixed Cookie upgrades 1 and 2's effects being mislabeled as "based on dragon points".<br><br>
 		QoL:<br>
 			- Added a pity system to Check Back shards.<br>
-			- Made oil a bit brighter to improve contrast.<br>
+			- Made Oil a bit brighter to improve contrast.<br>
 			- Added import/export file.<br><br>
 		Refactoring:<br>
 			- Grass code refactored to improve framerate (Thanks Tsanth)<br><br>

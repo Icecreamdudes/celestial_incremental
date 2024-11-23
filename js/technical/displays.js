@@ -67,8 +67,8 @@ function constructUniButtonStyle(layer){
 			break;
 		case 'halter':
 			style.push({
-			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
-			"background-origin": "border-box",
+			"color": "white",
+			"background-color": "black",
 			"border-color": "purple"});
 			if (player.tab == layer) {
 				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})

@@ -959,7 +959,7 @@ addLayer("ep2", {
         {
             title: "Cookie Upgrade I",
             unlocked() { return true },
-            description() { return "Boosts dimension boost base based on dragon points." },
+            description() { return "Boosts dimension boost base based on cookie points." },
             cost: new Decimal(100),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookie Points",
@@ -974,7 +974,7 @@ addLayer("ep2", {
         {
             title: "Cookie Upgrade II",
             unlocked() { return true },
-            description() { return "Boosts challenge dice points based on dragon points." },
+            description() { return "Boosts challenge dice points based on cookie points." },
             cost: new Decimal(250),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookie Points",

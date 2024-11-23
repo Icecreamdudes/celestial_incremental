@@ -117,7 +117,11 @@
             }
         }  else if (player.tab == "revc")
         {
-            player.tab = "in"
+            if (options.newMenu) {
+                player.tab = "ip"
+            } else {
+                player.tab = "in"
+            }
         }
 
         if (!player.ta.unlockedReverseBreak) player.ta.negativeInfinityPointsToGet = new Decimal(1)
@@ -377,7 +381,7 @@
         11: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "in"
             },
@@ -1912,7 +1916,11 @@ addLayer("revc", {
             unlocked() { return true },
             onClick() {
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
-                player.tab = "in"
+                if (options.newMenu) {
+                    player.tab = "ip"
+                } else {
+                    player.tab = "in"
+                }
                 player.revc.minipause = new Decimal(3)
              },
             style: { width: '300px', "min-height": '120px' },

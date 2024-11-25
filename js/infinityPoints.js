@@ -548,13 +548,20 @@
             style: { width: '800px', "min-height": '90px' },
         },
         25: {
-            requirementDescription: "<h3>30000 Infinities",
-            effectDescription() { return "Tav's domain don't reset infinity milestones." },
-            done() { return player.in.infinities.gte(30000) },
-            unlocked() { return player.in.unlockedBreak },
+            requirementDescription: "<h3>10000 Infinities",
+            effectDescription() { return "Keep Universe 1 upgrades." },
+            done() { return hasChallenge("ip", 18) && player.in.infinities.gte(10000) },
+            unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         26: {
+            requirementDescription: "<h3>30000 Infinities",
+            effectDescription() { return "Tav's domain don't reset infinity milestones." },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) },
+            unlocked() { return player.in.unlockedBreak },
+            style: { width: '800px', "min-height": '90px' },
+        },
+        27: {
             requirementDescription: "<h3>70000 Infinities",
             effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
             done() { return player.in.infinities.gte(70000) },
@@ -799,6 +806,7 @@
                         ["row", [["milestone", 24]]],
                         ["row", [["milestone", 25]]],
                         ["row", [["milestone", 26]]],
+                        ["row", [["milestone", 27]]],
                 ]
 
             },

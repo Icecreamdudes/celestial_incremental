@@ -348,11 +348,12 @@ addLayer("in", {
                 i--;
             }
         }
-
-        for (let i = 0; i < player.i.upgrades.length; i++) {
-            if (+player.i.upgrades[i] < 22) {
-                player.i.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 25)) {
+            for (let i = 0; i < player.i.upgrades.length; i++) {
+                if (+player.i.upgrades[i] < 22) {
+                    player.i.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
 

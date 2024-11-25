@@ -36,7 +36,7 @@ let credits = `<h1>Credits:</h1><br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
 		-Bug Fixes by Tsanth and Forwaken.<br>
-		-Revamped Menu Concept by Seder3214.<br>
+		-Revamped Layout Concept by Seder3214.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -57,11 +57,14 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed multiple instances of "replicanti points" being incorrectly typed as just "replicanti".<br>
 			- Fixed Repli-Grass buyable 1's description accidentally saying it multiplied repli-leaf instead of repli-grass.<br>
 			- Fixed Dragon button alerts not showing the correct shard chance.<br>
+			- Fixed Alternate Infinity production text not correctly showing on all "Infinities" tabs.<br>
 			- Fixed Cookie upgrades 1 and 2's effects being mislabeled as "based on dragon points".<br><br>
 		QoL:<br>
 			- Added a pity system to Check Back shards.<br>
 			- Made Oil a bit brighter to improve contrast.<br>
-			- Added import/export file.<br><br>
+			- Added import/export file.<br>
+			- Added a new infinity milestone that keeps Universe 1 upgrades.<br>
+			- Added the option to autocrunch based on time.<br><br>
 		Refactoring:<br>
 			- Grass code refactored to improve framerate (Thanks Tsanth)<br><br>
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>

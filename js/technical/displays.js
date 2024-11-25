@@ -116,6 +116,19 @@ function constructMenuButtonStyle(layer){
 			"background-origin": "border-box",
 			"border-color": "#3A2558"});
 			break;
+		case 'd':
+			style.push({
+			background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
+			"background-origin": "border-box",
+			"border-color": "#0061ff"});
+			break;
+		case 'rm':
+			style.push({
+			"background-image": "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
+			"background-origin": "border-box",
+			"color": "white",
+			"border-color": "#0061ff"});
+			break;
 		case 'ad':
 			style.push({
 			background: "linear-gradient(140deg, rgba(0,255,202,1) 0%, rgba(30,181,22,1) 100%)",

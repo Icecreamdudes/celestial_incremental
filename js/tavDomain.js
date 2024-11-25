@@ -625,7 +625,7 @@
         player.ta.negativeInfinityPause = new Decimal(5)
         player.in.infinities = new Decimal(0)
         player.bi.brokenInfinities = new Decimal(0)
-        if (!hasMilestone("ip", 25) && player.in.unlockedBreak)
+        if (!hasMilestone("ip", 26) && player.in.unlockedBreak)
         {
             for (let i = 0; i < player.ip.milestones.length; i++) {
                 if (+player.ip.milestones[i] < 25) {
@@ -727,6 +727,7 @@
                     ["raw-html", function () { return player.tad.currentConversion.eq(0) ? "You are producing shattered infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.tad.currentConversion.eq(1) ? "You are producing disfigured infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.tad.currentConversion.eq(2) ? "You are producing corrupted infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.tad.currentConversion.eq(-1) ? "You are not producing an alternate broken infinity type." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.disfiguredInfinities) + "</h3> disfigured infinities. (REQUIRES ROCKET FUEL)" }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
@@ -745,6 +746,7 @@
                     ["raw-html", function () { return player.tad.currentConversion.eq(0) ? "You are producing shattered infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.tad.currentConversion.eq(1) ? "You are producing disfigured infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.tad.currentConversion.eq(2) ? "You are producing corrupted infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.tad.currentConversion.eq(-1) ? "You are not producing an alternate broken infinity type." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.corruptedInfinities) + "</h3> corrupted infinities. (REQUIRES DICE)" }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],

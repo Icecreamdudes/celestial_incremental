@@ -56,7 +56,7 @@
 				<div class="contentHeader" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && (player.cp.cantepocalypseActive == false)">META</div>
 				<button class="uniButton" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13)) && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('otherfeat') " onclick="showTab('otherfeat')"><span class="buttonText">OTF</span></button>
 				<button class="uniButton" v-if="hasMilestone('ip', 23) && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('halter') " onclick="showTab('halter')"><span class="buttonText">HLT</span></button>
-				<button class="uniButton" v-if="layerShown('cb') && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('cb') " onclick="player.universe='0.5'"><span class="buttonText">CB</span></button>
+				<button class="uniButton" v-if="layerShown('cb') && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('cb') " onclick="player.universe='0.5';showTab('cb')"><span class="buttonText">CB</span></button>
 			</div>
 		<!-- Settings -->
 			<div class="miscMenu">
@@ -82,7 +82,7 @@
 				<button class="menuButton" v-if="layerShown('gh') && player.universe == 1" v-bind:style="constructMenuButtonStyle('gh') " onclick="showTab('gh')"><span class="buttonText">Grasshop</span></button>
 				<button class="menuButton" v-if="layerShown('rf') && player.universe == 1" v-bind:style="constructMenuButtonStyle('rf') " onclick="showTab('rf')"><span class="buttonText">Rocket Fuel</span></button>
 
-			<div class="menuHeader" v-if="(layerShown('de') || layerShown('m') || layerShown('cb') || layerShown('d')) && player.universe == 1">Row 3</div>
+			<div class="menuHeader" v-if="(layerShown('de') || layerShown('m') || layerShown('d')) && player.universe == 1">Row 3</div>
 				<button class="menuButton" v-if="layerShown('de') && player.universe == 1" v-bind:style="constructMenuButtonStyle('de') " onclick="showTab('de')"><span class="buttonText">Debuff</span></button>
 				<button class="menuButton" v-if="layerShown('m') && player.universe == 1" v-bind:style="constructMenuButtonStyle('m') " onclick="showTab('m')"><span class="buttonText">Mods</span></button>
 				<button class="menuButton" v-if="layerShown('d') && player.universe == 1" v-bind:style="constructMenuButtonStyle('d') " onclick="showTab('d')"><span class="buttonText">Dice</span></button>

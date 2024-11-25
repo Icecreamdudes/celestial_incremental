@@ -52,7 +52,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
 			- Fixed Repli-Trees softcap system not functioning correctly.<br>
 			- Fixed Portal bar being very slightly inaccurate.<br>
-			- Fixed Dragon buttons not giving the correct shard.<br><br>
+			- Fixed Dragon buttons not giving the correct shard.<br>
+			- Fixed Automation buyables not being autobought correctly.<br><br>
 		Typos:<br>
 			- Fixed multiple instances of "replicanti points" being incorrectly typed as just "replicanti".<br>
 			- Fixed Repli-Grass buyable 1's description accidentally saying it multiplied repli-leaf instead of repli-grass.<br>
@@ -64,9 +65,12 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Made Oil a bit brighter to improve contrast.<br>
 			- Added import/export file.<br>
 			- Added a new infinity milestone that keeps Universe 1 upgrades.<br>
+			- Revamped the look of Tav's dimension power tab.<br>
+			- Added new option in Tav Autobuy.<br>
 			- Added the option to autocrunch based on time.<br><br>
 		Refactoring:<br>
-			- Grass code refactored to improve framerate (Thanks Tsanth)<br><br>
+			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
+			- Grass code refactored to improve framerate. (Thanks Tsanth)<br><br>
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
 			- Fixed Oil buy max buttons not loading correctly.<br>

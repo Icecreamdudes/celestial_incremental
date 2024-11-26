@@ -87,28 +87,26 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("rm", 31))
 
         // Calculate Dimension Amounts
-        for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
             player.ad.dimensionAmounts[i] = player.ad.dimensionAmounts[i].add(player.ad.dimensionsPerSecond[i].mul(delta))
         }
-        for (let i = 0; i < player.ad.dimensionAmounts.length-1; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length-1; i++) {
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionAmounts[i+1].mul(buyableEffect("ad", i+12).div(10))
 
             //mults
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 1))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ad", 2))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 23))
-            if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.cb.rarePetEffects[4][0])
+            if (hasUpgrade("ad", 17)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ad", 17))
             if (player.ad.antimatter.gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
             if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
             if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.975)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i])
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
-            if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("bi", 13))
+            if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
             if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.55)
             if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("de", 12))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("tad", 13))
@@ -134,14 +132,12 @@
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
         if (hasUpgrade("ev1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ev1", 12))
 
-        if (!hasUpgrade("ad", 11))
-        {
+        if (!hasUpgrade("ad", 11)) {
             player.ad.antimatter = new Decimal(0)
         }
 
         player.ad.revCrunchPause = player.ad.revCrunchPause.sub(1)
-        if (player.ad.revCrunchPause.gt(0))
-        {
+        if (player.ad.revCrunchPause.gt(0)) {
             layers.revc.reverseCrunch();
         }
     },

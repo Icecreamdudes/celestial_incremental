@@ -569,7 +569,7 @@
         },
         16:
         {
-            title: "Rocket Fuel Upgrade VII",
+            title: "Rocket Fuel Upgrade VI",
             unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
             description: "Rocket Fuel boosts points.",
             cost: new Decimal(1e10),
@@ -583,7 +583,7 @@
         },
         17:
         {
-            title: "Rocket Fuel Upgrade VIII",
+            title: "Rocket Fuel Upgrade VII",
             unlocked() { return hasUpgrade("rf", 16) && inChallenge("ip", 16)},
             description: "Gain 20% of rocket fuel per second.",
             cost: new Decimal(1e12),

@@ -18,7 +18,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.2.1",
+	num: "1.2.2",
 	name: "The Pet Update Part II: Epic Pets",
 }
 
@@ -59,6 +59,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Repli-Grass buyable 1's description accidentally saying it multiplied repli-leaf instead of repli-grass.<br>
 			- Fixed Dragon button alerts not showing the correct shard chance.<br>
 			- Fixed Alternate Infinity production text not correctly showing on all "Infinities" tabs.<br>
+			- Fixed upgrade names in IP Challenge 6 being incorrectly numbered.<br>
 			- Fixed Cookie upgrades 1 and 2's effects being mislabeled as "based on dragon points".<br><br>
 		QoL:<br>
 			- Added a pity system to Check Back shards.<br>
@@ -67,9 +68,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a new infinity milestone that keeps Universe 1 upgrades.<br>
 			- Revamped the look of Tav's dimension power tab.<br>
 			- Added new option in Tav Autobuy.<br>
-			- Added the option to autocrunch based on time.<br><br>
+			- Added the option to autocrunch based on time.<br>
+			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br><br>
 		Refactoring:<br>
 			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
+			- Infinity Dimensions code refactored to fix uncountable bugs.<br>
 			- Grass code refactored to improve framerate. (Thanks Tsanth)<br><br>
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>

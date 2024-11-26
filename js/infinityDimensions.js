@@ -161,7 +161,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -191,7 +191,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -221,7 +221,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -251,7 +251,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -281,7 +281,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -311,7 +311,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -341,7 +341,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -371,7 +371,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.ad.dimMax == false) {
+                if (player.id.dimMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 

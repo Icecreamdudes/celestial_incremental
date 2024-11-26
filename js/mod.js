@@ -72,7 +72,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br><br>
 		Refactoring:<br>
 			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
-			- Infinity Dimensions code refactored to fix uncountable bugs.<br>
+			- Infinity Dimensions code refactored to fix uncountable bugs. Sadly due to the code now being completely different, it reset everyones purchased dimensions :[<br>
 			- Grass code refactored to improve framerate. (Thanks Tsanth)<br><br>
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
@@ -162,7 +162,7 @@ let changelog = `<h1>Changelog:</h1><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
-			   <h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
+	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
@@ -275,6 +275,17 @@ function fixOldSave(oldVersion){
 		player.gh.steel = new Decimal(0)
 		player.p.crystals = new Decimal(0)
 		callAlert("Oh no, your save file was inflated. Steel, Crystal, and debuff currencies are reset.", "resources/gat.png")
+	}
+	if (oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
+		setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)
+		setBuyableAmount("id", 11, player.id.dimensionsPurchased[0])
+		setBuyableAmount("id", 12, player.id.dimensionsPurchased[1])
+		setBuyableAmount("id", 13, player.id.dimensionsPurchased[2])
+		setBuyableAmount("id", 14, player.id.dimensionsPurchased[3])
+		setBuyableAmount("id", 15, player.id.dimensionsPurchased[4])
+		setBuyableAmount("id", 16, player.id.dimensionsPurchased[5])
+		setBuyableAmount("id", 17, player.id.dimensionsPurchased[6])
+		setBuyableAmount("id", 18, player.id.dimensionsPurchased[7])
 	}
 }
 

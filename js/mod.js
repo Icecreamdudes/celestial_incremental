@@ -72,7 +72,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br><br>
 		Refactoring:<br>
 			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
-			- Infinity Dimensions code refactored to fix uncountable bugs. Sadly due to the code now being completely different, it reset everyones purchased dimensions :[<br>
+			- Infinity Dimensions code refactored to fix uncountable bugs.<br>
 			- Grass code refactored to improve framerate. (Thanks Tsanth)<br><br>
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>

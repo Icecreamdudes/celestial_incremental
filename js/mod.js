@@ -13,7 +13,7 @@
 	discordName: "",
 	discordLink: "",
 	initialStartPoints: new Decimal(0), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
@@ -47,7 +47,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		<br>
 		Content:<br>
 			- Added the Pollinators Layer.<br>
-			- Added a new Layout, please check it out in Settings.<br><br>
+			- Added the Sidebar Layout, please check it out in Settings.<br><br>
 		Bugfixes:<br>
 			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
 			- Fixed Repli-Trees softcap system not functioning correctly.<br>
@@ -62,6 +62,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed upgrade names in IP Challenge 6 being incorrectly numbered.<br>
 			- Fixed Cookie upgrades 1 and 2's effects being mislabeled as "based on dragon points".<br><br>
 		QoL:<br>
+			- Check Back now runs offline with no offline cap.<br>
+			- Automation Shards can trigger once while offline. (Gives use to last buttons)<br>
 			- Added a pity system to Check Back shards.<br>
 			- Made Oil a bit brighter to improve contrast.<br>
 			- Added import/export file.<br>
@@ -211,7 +213,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
-"commonPetBanner", "uncommonPetBanner", "rarePetBanner"]
+"commonPetBanner", "uncommonPetBanner", "rarePetBanner", "offlineCooldown"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

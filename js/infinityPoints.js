@@ -588,10 +588,10 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -604,10 +604,10 @@
             rewardDescription: "Unlocks a new check back button at level 125.",
             unlocked() { return hasChallenge("ip", 11) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -632,10 +632,10 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -649,10 +649,10 @@
             rewardDescription: "Unlocks infinity point buyables and new milestones.",
             unlocked() { return hasChallenge("ip", 13) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -677,7 +677,7 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
 
                 player.d.challengeDicePoints = new Decimal(0)
                 player.d.buyables[21] = new Decimal(0)
@@ -693,7 +693,7 @@
                 }
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -718,10 +718,10 @@
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -735,14 +735,14 @@
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
 
                 player.cb.level = new Decimal(1)
                 player.cb.xp = new Decimal(0)
                 player.cb.totalxp = new Decimal(5.1)
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -756,10 +756,10 @@
             rewardDescription: "....???",
             unlocked() { return hasChallenge("ip", 17) && !hasChallenge('ip', 18) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 

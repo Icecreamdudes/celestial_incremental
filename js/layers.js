@@ -471,31 +471,26 @@ addLayer("i", {
                     ["blank", "25px"],
                     ["tree", tree],
                 ]
-
-            },
-            "Portal": {
-                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("i", 21) || hasUpgrade('ad', 13)},
-                content:
-                [
-                ]
-
             },
             "Upgrades": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
                 content:
                 [
-                        ["blank", "25px"],
-                        ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                        ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-                        ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
-                        ["row", [["upgrade", 31]]],
-                        ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
-                        ["blank", "25px"],
-                        ["tree", gwa],
-                    ]
-
+                    ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+                    ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
+                    ["row", [["upgrade", 31]]],
+                    ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
+                    ["blank", "25px"],
+                    ["tree", gwa],
+                ]
+            },
+            "Portal": {
+                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
+                unlocked() { return hasUpgrade("i", 21) || hasUpgrade('ad', 13)},
+                content: []
             },
             "Settings": settingsMicrotab,
         },

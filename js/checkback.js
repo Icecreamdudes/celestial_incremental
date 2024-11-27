@@ -149,6 +149,7 @@ addLayer("cb", {
         canteEnergyXPBoostButtonBase: [new Decimal(10), new Decimal(30)],
         canteEnergyPetPointButtonBase: [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),],
 
+        time: new Decimal(0) // Offline Time
     }
     },
     automate() {
@@ -160,6 +161,10 @@ addLayer("cb", {
     color: "#06366e",
     update(delta) {
         let onepersec = new Decimal(1)
+
+        if (player.cb.time.gt(0)) {
+            layers.cb.offlineCooldown()
+        }
 
         if (player.cb.totalxp == 5.1 && player.cb.level > 1)
         {
@@ -825,6 +830,63 @@ addLayer("cb", {
             player.cb.level = player.cb.level.add(1)
             player.cb.xp = new Decimal(0)
             player.cb.xp = player.cb.xp.add(leftover)
+        }
+    },
+    offlineCooldown() {
+        let time = player.cb.time
+        player.cb.time = new Decimal(0)
+
+        // XP Buttons
+        for (let i = 0; i < player.cb.buttonTimers.length; i++) {
+            player.cb.buttonTimers[i] = player.cb.buttonTimers[i].sub(time)
+        }
+
+        // Pet Buttons
+        for (let i = 0; i < player.cb.petButtonTimers.length; i++) {
+            player.cb.petButtonTimers[i] = player.cb.petButtonTimers[i].sub(time)
+        }
+
+        // Pet Point Buttons
+        for (let i = 0; i < player.cb.rarePetButtonTimers.length; i++) {
+            player.cb.rarePetButtonTimers[i] = player.cb.rarePetButtonTimers[i].sub(time)
+        }
+
+        // XP Boost Buttons
+        for (let i = 0; i < player.cb.XPBoostTimers.length; i++) {
+            player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(time)
+        }
+
+        // Automation Timers (only triggers once)
+        for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
+            if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(time)
+        }
+
+        // Pet Shop
+        player.ps.priceResetTimer = player.ps.priceResetTimer.sub(time)
+
+        // Epic Fragmentation Timer
+        player.epic.bannerResetTimer = player.epic.bannerResetTimer.sub(time)
+
+        // Epic Pet Timers
+        for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++) {
+            player.ep0.dotknightPointButtonTimers[i] = player.ep0.dotknightPointButtonTimers[i].sub(time)
+        }
+        for (let i = 0; i < player.ep1.dragonPointButtonTimers.length; i++) {
+            player.ep1.dragonPointButtonTimers[i] = player.ep1.dragonPointButtonTimers[i].sub(time)
+        }
+        for (let i = 0; i < player.ep2.cookiePointButtonTimers.length; i++) {
+            player.ep2.cookiePointButtonTimers[i] = player.ep2.cookiePointButtonTimers[i].sub(time)
+        }
+
+        // Daily Reward (Insane Face Evo)
+        player.ev2.cooldown = player.ev2.cooldown.sub(time)
+
+        // Shard Buttons (Marcel Evo)
+        for (let i = 0; i < player.ev8.evoButtonTimers.length; i++) {
+            player.ev8.evoButtonTimers[i] = player.ev8.evoButtonTimers[i].sub(time)
+        }
+        for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++) {
+            player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(time)
         }
     },
     sacrificeCommonPet(index)
@@ -3044,7 +3106,6 @@ addLayer("cb", {
     },
     challenges: {
     },
-
     infoboxes: {
         c1: {
             title: "Gwa",
@@ -3545,6 +3606,7 @@ addLayer("cb", {
                 [
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.automationShards) + "</h3> automation shards. (" + formatWhole(player.cb.totalAutomationShards) + " total)" }, { "color": "grey", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h5>(Gained from pet sacrifices)" }, { "color": "grey", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h5>(Automation triggers only once while offline)" }, { "color": "grey", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Automating Button " + formatWhole(player.cb.buttonIndex.add(1)) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have " + formatWhole(player.cb.buttonAutomationAllocation[player.cb.buttonIndex]) + " allocated into this button." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

@@ -9,11 +9,11 @@ const TMT_VERSION = {
 
 function getResetGain(layer, useType = null) {
 	let type = useType
-	if (!useType){ 
+	if (!useType){
 		type = tmp[layer].type
 		if (layers[layer].getResetGain !== undefined)
 			return layers[layer].getResetGain()
-	} 
+	}
 	if(tmp[layer].type == "none")
 		return new Decimal (0)
 	if (tmp[layer].gainExp.eq(0)) return decimalZero
@@ -49,7 +49,7 @@ function getNextAt(layer, canMax=false, useType = null) {
 	if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity)
 	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity)
 
-	if (type=="static") 
+	if (type=="static")
 	{
 		if (!tmp[layer].canBuyMax) canMax = false
 		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0).div(tmp[layer].directMult)
@@ -109,20 +109,20 @@ function shouldNotify(layer){
 			}
 		}
 	}
-	 
+
 	return false
-	
+
 }
 
 function canReset(layer)
-{	
+{
 	if (layers[layer].canReset!== undefined)
 		return run(layers[layer].canReset, layers[layer])
 	else if(tmp[layer].type == "normal")
 		return tmp[layer].baseAmount.gte(tmp[layer].requires)
 	else if(tmp[layer].type== "static")
-		return tmp[layer].baseAmount.gte(tmp[layer].nextAt) 
-	else 
+		return tmp[layer].baseAmount.gte(tmp[layer].nextAt)
+	else
 		return false
 }
 
@@ -176,20 +176,20 @@ function doReset(layer, force=false) {
 	if (tmp[layer].type == "none") return
 	let row = tmp[layer].row
 	if (!force) {
-		
+
 		if (tmp[layer].canReset === false) return;
-		
+
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
 		let gain = tmp[layer].resetGain
 		if (tmp[layer].type=="static") {
 			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
 			gain =(tmp[layer].canBuyMax ? gain : 1)
-		} 
+		}
 
 
 		if (layers[layer].onPrestige)
 			run(layers[layer].onPrestige, layers[layer], gain)
-		
+
 		addPoints(layer, gain)
 		updateMilestones(layer)
 		updateAchievements(layer)
@@ -204,7 +204,7 @@ function doReset(layer, force=false) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
 			}
 		}
-	
+
 	}
 
 	if (run(layers[layer].resetsNothing, layers[layer])) return
@@ -252,7 +252,7 @@ function startChallenge(layer, x) {
 		Vue.set(player[layer], "activeChallenge", null)
 		} else {
 		enter = true
-	}	
+	}
 	doReset(layer, true)
 	if(enter) {
 		Vue.set(player[layer], "activeChallenge", x)
@@ -270,11 +270,11 @@ function canCompleteChallenge(layer, x)
 	if (challenge.currencyInternalName){
 		let name = challenge.currencyInternalName
 		if (challenge.currencyLocation){
-			return !(challenge.currencyLocation[name].lt(challenge.goal)) 
+			return !(challenge.currencyLocation[name].lt(challenge.goal))
 		}
 		else if (challenge.currencyLayer){
 			let lr = challenge.currencyLayer
-			return !(player[lr][name].lt(challenge.goal)) 
+			return !(player[lr][name].lt(challenge.goal))
 		}
 		else {
 			return !(player[name].lt(challenge.goal))
@@ -289,7 +289,7 @@ function canCompleteChallenge(layer, x)
 function completeChallenge(layer, x) {
 	var x = player[layer].activeChallenge
 	if (!x) return
-	
+
 	let completions = canCompleteChallenge(layer, x)
 	if (!completions){
 		Vue.set(player[layer], "activeChallenge", null)
@@ -315,7 +315,7 @@ function autobuyUpgrades(layer){
 	if (!tmp[layer].upgrades) return
 	for (id in tmp[layer].upgrades)
 		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true))
-			buyUpg(layer, id) 
+			buyUpg(layer, id)
 }
 
 function gameLoop(diff) {
@@ -355,7 +355,7 @@ function gameLoop(diff) {
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
 		}
-	}	
+	}
 
 	for (let x = maxRow; x >= 0; x--){
 		for (item in TREE_LAYERS[x]) {
@@ -401,15 +401,6 @@ var interval = setInterval(function() {
 	let now = Date.now()
 	let diff = (now - player.time) / 1e3
 	let trueDiff = diff
-	if (player.offTime !== undefined) {
-		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600
-		if (player.offTime.remain > 0) {
-			let offlineDiff = Math.max(player.offTime.remain / 10, diff)
-			player.offTime.remain -= offlineDiff
-			diff += offlineDiff
-		}
-		if (!options.offlineProd || player.offTime.remain <= 0) player.offTime = undefined
-	}
 	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now
 	if (needCanvasUpdate){ resizeCanvas();
@@ -460,7 +451,7 @@ function adjustMusic() {
     let body = document.body;
     let originalBackground = body.style.background;
     let originalText = body.innerHTML;
-    
+
     function showText() {
         let overlay = document.createElement('div');
         overlay.style.position = 'absolute';
@@ -480,14 +471,14 @@ function adjustMusic() {
         textContainer.style.fontSize = "5em"; // Adjust text size as needed
         textContainer.style.textAlign = "center"; // Center the text
         body.appendChild(textContainer);
-        
+
         if (Array.isArray(text)) {
             let currentIndex = 0;
             let interval = setInterval(() => {
                 textContainer.innerHTML = text[currentIndex];
                 currentIndex = (currentIndex + 1) % text.length;
             }, duration);
-            
+
             setTimeout(() => {
                 clearInterval(interval);
                 body.removeChild(overlay);
@@ -505,7 +496,7 @@ function adjustMusic() {
             }, duration);
         }
     }
-    
+
     showText();
 }
 
@@ -517,7 +508,7 @@ function swarmParticles(particleColor, flashColor) {
 	const screenHeight = window.innerHeight;
 	const horizontalCount = Math.ceil(screenWidth / particleSize);
 	const verticalCount = Math.ceil(screenHeight / particleSize);
-  
+
 	for (let i = 0; i < horizontalCount; i++) {
 	  for (let j = 0; j < verticalCount; j++) {
 		const particle = document.createElement('div');
@@ -529,7 +520,7 @@ function swarmParticles(particleColor, flashColor) {
 		particle.style.top = getRandomOffScreenPosition(screenHeight, particleSize) + 'px'; // Random vertical position off-screen
 		document.body.appendChild(particle);
 		particles.push(particle);
-  
+
 		// Animate particle to its designated position
 		setTimeout(() => {
 		  particle.style.transition = 'left 2s, top 2s'; // Transition animation duration
@@ -538,7 +529,7 @@ function swarmParticles(particleColor, flashColor) {
 		}, 10); // Delay animation to ensure particles start off-screen
 	  }
 	}
-  
+
 	// Remove particles after animation
 	setTimeout(() => {
 	  particles.forEach(particle => particle.remove()); // Remove particles
@@ -546,7 +537,7 @@ function swarmParticles(particleColor, flashColor) {
 	  flashBackground(flashColor);
 	}, 5000);
   }
-  
+
   // Function to flash background
   function flashBackground(color) {
 	document.body.style.backgroundColor = color;
@@ -554,7 +545,7 @@ function swarmParticles(particleColor, flashColor) {
 	  document.body.style.backgroundColor = 'white'; // Reset background color
 	}, 1000);
   }
-  
+
   // Function to get random off-screen position
   function getRandomOffScreenPosition(screenDimension, particleSize) {
 	return Math.random() > 0.5 ? -particleSize : screenDimension + particleSize;
@@ -572,16 +563,16 @@ function swarmParticles(particleColor, flashColor) {
 	  wisp.velocity = { x: velocityX, y: velocityY };
 	  document.body.appendChild(wisp);
 	}
-	
+
 	setInterval(moveWisps, 1000 / 60); // Update wisps position approximately every 60th of a second
   }
-  
+
   function moveWisps() {
 	const wisps = document.querySelectorAll('.wisp');
 	wisps.forEach(wisp => {
 	  wisp.style.left = parseFloat(wisp.style.left) + wisp.velocity.x + 'px';
 	  wisp.style.top = parseFloat(wisp.style.top) + wisp.velocity.y + 'px';
-	  
+
 	  // Wrap-around effect when wisps reach the screen boundaries
 	  if (parseFloat(wisp.style.left) < -20) {
 		wisp.style.left = window.innerWidth + 'px';
@@ -595,7 +586,7 @@ function swarmParticles(particleColor, flashColor) {
 	  }
 	});
   }
-  
+
   function removeWisps() {
 	const wisps = document.querySelectorAll('.wisp');
 	wisps.forEach(wisp => wisp.remove());
@@ -605,12 +596,12 @@ function swarmParticles(particleColor, flashColor) {
   let isAudioInitialized = false;
   let currentAudioSrc = '';  // Track the currently playing audio source
   let volume = 1.0; // Default volume
-  
+
   // Load audio state from local storage on page load
   window.onload = function() {
 	  const savedAudioSrc = localStorage.getItem('audioSrc');
 	  const savedVolume = localStorage.getItem('volume');
-  
+
 	  if (savedAudioSrc) {
 		  currentAudioSrc = savedAudioSrc;
 		  volume = savedVolume ? parseFloat(savedVolume) : 1.0; // Use saved volume or default to 1.0
@@ -618,14 +609,14 @@ function swarmParticles(particleColor, flashColor) {
 		  audio.volume = volume;
 		  audio.loop = true;
 		  isAudioInitialized = true;
-  
+
 		  // Attempt to play the audio
 		  audio.play().catch(function(err) {
 			  console.log("Audio playback failed: ", err);
 		  });
 	  }
   };
-  
+
   function playAndLoopAudio(audioSrc, newVolume) {
 	  // Only proceed if the new audioSrc is different from the current one
 	  if (audioSrc !== currentAudioSrc) {
@@ -635,7 +626,7 @@ function swarmParticles(particleColor, flashColor) {
 			  audio.currentTime = 0;
 			  isAudioInitialized = false;
 		  }
-  
+
 		  // Set the new audio source
 		  audio.src = audioSrc;
 		  currentAudioSrc = audioSrc; // Update the current playing audio source
@@ -644,7 +635,7 @@ function swarmParticles(particleColor, flashColor) {
 		  audio.volume = newVolume; // Set initial volume
 		  localStorage.setItem('audioSrc', audioSrc); // Save to local storage
 		  localStorage.setItem('volume', newVolume); // Save volume to local storage
-		  
+
 		  // Play the new audio
 		  audio.play().catch(function(err) {
 			  console.log("Audio playback failed: ", err);
@@ -658,7 +649,7 @@ function swarmParticles(particleColor, flashColor) {
 		  });
 	  }
   }
-  
+
   function stopAudio() {
 	  if (isAudioInitialized) {
 		  audio.pause();
@@ -669,4 +660,3 @@ function swarmParticles(particleColor, flashColor) {
 		  localStorage.removeItem('volume'); // Clear the saved volume
 	  }
   }
-  

@@ -336,10 +336,10 @@ addLayer("po", {
             canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308) && player.ca.canteCores.gte(1)},
             unlocked() { return hasUpgrade("bi", 27) },
             onClick() {
-                player.in.infinityPause = new Decimal(8)
                 player.po.keepOTFS = true
                 player.po.realmMods = true
                 player.ca.canteCores = player.ca.canteCores.sub(1)
+                layers.in.bigCrunch();
             },
             style: {
                 width: '200px',

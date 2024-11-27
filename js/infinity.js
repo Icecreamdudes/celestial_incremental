@@ -13,7 +13,6 @@ addLayer("in", {
 
         infinityPoints: new Decimal(0),
         infinityPointsToGet: new Decimal(0),
-        infinityPause: new Decimal(0),
 
         infinities: new Decimal(0),
         infinitiesToGet: new Decimal(1),
@@ -35,69 +34,35 @@ addLayer("in", {
     update(delta) {
 
         let onepersec = new Decimal(1)
-        if (player.subtabs["in"]['stuff'] == 'Portal')
-        {
+        if (player.subtabs["in"]['stuff'] == 'Portal') {
             player.po.lastUniverse = 'in'
             player.tab = "po"
             player.subtabs["in"]['stuff'] = 'Features'
         }
 
-        if (player.in.infinityPoints.gt(0))
-        {
+        if (player.in.infinityPoints.gt(0)) {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity && !inChallenge("ip", 18))
-        {
-            if (!player.in.breakInfinity)
-            {
-                if (inChallenge("ip", 11) && !hasChallenge("ip", 11))
-                {
-                    completeChallenge("ip", 11)
-                }
-                if (inChallenge("ip", 12) && !hasChallenge("ip", 12))
-                {
-                    completeChallenge("ip", 12)
-                }
-                if (inChallenge("ip", 13) && !hasChallenge("ip", 13))
-                {
-                    completeChallenge("ip", 13)
-                }
-                if (inChallenge("ip", 14) && !hasChallenge("ip", 14))
-                {
-                    completeChallenge("ip", 14)
-                }
-                if (inChallenge("ip", 15) && !hasChallenge("ip", 15))
-                {
-                    completeChallenge("ip", 15)
-                }
-                if (inChallenge("ip", 16) && !hasChallenge("ip", 16))
-                {
-                    completeChallenge("ip", 16)
-                }
-                if (inChallenge("tad", 11))
-                {
-                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
-                    {
+        if (player.in.reachedInfinity && !inChallenge("ip", 18)) {
+            if (!player.in.breakInfinity) {
+                if (inChallenge("tad", 11)) {
+                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0)) {
                         player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
                     }
-                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
-                    {
+                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1)) {
                         player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
                     }
-                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
-                    {
+                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2)) {
                         player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if (!hasMilestone("ip", 21))
-                {
+                if (!hasMilestone("ip", 21)) {
                     player.tab = "bigc"
-                } else if (hasMilestone("ip", 21))
-                {
+                } else if (hasMilestone("ip", 21)) {
                     layers.bigc.crunch()
                 }
             }
@@ -135,44 +100,31 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cb.epicPetEffects[2][1])
 
-        player.in.infinityPause = player.in.infinityPause.sub(1)
-        if (player.in.infinityPause.gt(0))
-        {
-            if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gt(1e300))
-            {
-                completeChallenge("ip", 11)
-            }
-            if (inChallenge("ip", 12) && !hasChallenge("ip", 12) && player.points.gt(1e300))
-            {
-                completeChallenge("ip", 12)
-            }
-            if (inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.points.gt(1e300))
-            {
-                completeChallenge("ip", 13)
-            }
-            if (inChallenge("ip", 14) && !hasChallenge("ip", 14) && player.points.gt(1e300))
-            {
-                completeChallenge("ip", 14)
-            }
-            if (inChallenge("ip", 15) && !hasChallenge("ip", 15) && player.points.gt(1e300))
-            {
-                completeChallenge("ip", 15)
-            }
-            if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gt(1e300))
-            {
-                completeChallenge("ip", 16)
-            }
-            layers.in.bigCrunch();
-        }
-
         player.in.infinitiesToGet = new Decimal(1)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("bi", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("tad", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
     },
-    bigCrunch()
-    {
+    bigCrunch() {
+        if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gt(1e300)) {
+            completeChallenge("ip", 11)
+        }
+        if (inChallenge("ip", 12) && !hasChallenge("ip", 12) && player.points.gt(1e300)) {
+            completeChallenge("ip", 12)
+        }
+        if (inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.points.gt(1e300)) {
+            completeChallenge("ip", 13)
+        }
+        if (inChallenge("ip", 14) && !hasChallenge("ip", 14) && player.points.gt(1e300)) {
+            completeChallenge("ip", 14)
+        }
+        if (inChallenge("ip", 15) && !hasChallenge("ip", 15) && player.points.gt(1e300)) {
+            completeChallenge("ip", 15)
+        }
+        if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gt(1e300)) {
+            completeChallenge("ip", 16)
+        }
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
@@ -536,7 +488,7 @@ addLayer("bigc", {
         {
             player.ip.hexRuns = player.ip.hexRuns.add(1)
         }
-        player.in.infinityPause = new Decimal(5)
+        layers.in.bigCrunch()
         player.in.reachedInfinity = false
 
         if (hasUpgrade("ta", 17))

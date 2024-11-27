@@ -605,16 +605,16 @@
             unlocked() { return true },
             onEnter() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = new Decimal(16)
+                layers.in.bigCrunch();
             },
             onExit() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = new Decimal(16)
 
                 player.po.hex = false
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.featureSlots = new Decimal(0)
+                layers.in.bigCrunch();
             },
             style: { width: '350px', height: '275px', }
 

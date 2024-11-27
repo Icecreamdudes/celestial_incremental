@@ -102,7 +102,6 @@ addLayer("settings", {
         ["row", [
             ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('offlineProd')>Offline Prod</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=hardReset()>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
         ]],
 
@@ -128,8 +127,7 @@ addLayer("settings", {
 
         ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["raw-html", () => "Autosave: " + options.autosave, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Offline Production: " + options.offlineProd, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "New Layout: " + options.newMenu, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["raw-html", () => "Sidebar Layout: " + options.newMenu, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["raw-html", () => "Music Toggle: " + options.musicToggle, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["raw-html", () => "Hotkey Toggle: " + options.toggleHotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
 

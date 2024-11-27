@@ -148,7 +148,7 @@
         {
             if (inChallenge("ip", 15))
             {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch();
             }
             if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
             if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
@@ -302,7 +302,7 @@
 
                 if (inChallenge("ip", 15))
                 {
-                    player.in.infinityPause = new Decimal(5)
+                    layers.in.bigCrunch();
                 }
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)

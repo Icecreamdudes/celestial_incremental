@@ -46,17 +46,17 @@
 		<!-- Universes -->
 			<div class="uniMenu">
 				<div class="contentHeader">UNI</div>
-				<button class="uniButton" v-if="layerShown('i') && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe='1'"><span class="buttonText">1</span></button>
-				<button class="uniButton" v-if="layerShown('in') && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('in') " onclick="player.universe='2'"><span class="buttonText">2</span></button>
+				<button class="uniButton" v-if="layerShown('i') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe='1'"><span class="buttonText">1</span></button>
+				<button class="uniButton" v-if="layerShown('in') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('in') " onclick="player.universe='2'"><span class="buttonText">2</span></button>
 				<button class="uniButton" v-if="layerShown('cp')" v-bind:style="constructUniButtonStyle('cp') " onclick="player.universe='1.5'"><span class="buttonText">A1</span></button>
-				<button class="uniButton" v-if="layerShown('s') && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe='3'"><span class="buttonText">3</span></button>
+				<button class="uniButton" v-if="layerShown('s') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe='3'"><span class="buttonText">3</span></button>
 			</div>
 		<!-- Meta Content -->
-			<div class="metaMenu" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && (player.cp.cantepocalypseActive == false)">
-				<div class="contentHeader" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && (player.cp.cantepocalypseActive == false)">META</div>
-				<button class="uniButton" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13)) && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('otherfeat') " onclick="showTab('otherfeat')"><span class="buttonText">OTF</span></button>
-				<button class="uniButton" v-if="hasMilestone('ip', 23) && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('halter') " onclick="showTab('halter')"><span class="buttonText">HLT</span></button>
-				<button class="uniButton" v-if="layerShown('cb') && (player.cp.cantepocalypseActive == false)" v-bind:style="constructUniButtonStyle('cb') " onclick="player.universe='0.5';showTab('cb')"><span class="buttonText">CB</span></button>
+			<div class="metaMenu" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">
+				<div class="contentHeader" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">META</div>
+				<button class="uniButton" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13)) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('otherfeat')" onclick="showTab('otherfeat')"><span class="buttonText">OTF</span></button>
+				<button class="uniButton" v-if="hasMilestone('ip', 23) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('halter') " onclick="showTab('halter')"><span class="buttonText">HLT</span></button>
+				<button class="uniButton" v-if="layerShown('cb') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('cb') " onclick="player.universe='0.5';showTab('cb')"><span class="buttonText">CB</span></button>
 			</div>
 		<!-- Settings -->
 			<div class="miscMenu">

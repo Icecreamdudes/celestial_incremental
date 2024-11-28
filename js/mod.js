@@ -73,7 +73,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added new option in Tav Autobuy.<br>
 			- Added the option to autocrunch based on time.<br>
 			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br>
-			- Added buttons to scroll through the epic shops when in tree-layout.<br>
+			- Added buttons to scroll through the epic shops when in tree-layout.<br><br>
 		Refactoring:<br>
 			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
 			- Infinity Dimensions code refactored to fix uncountable bugs.<br>

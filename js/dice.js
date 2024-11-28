@@ -294,8 +294,6 @@
 
                 let random = getRandomInt(100)
                 let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
-                console.log(random)
-                console.log(format(prob))
 
                 if (new Decimal(random).lte(prob))
                 {

@@ -45,7 +45,7 @@ addLayer("pol", {
             case 1:
                 player.pol.pollinatorsEffect = [
                     player.pol.pollinators.pow(2.75).div(10).add(1).pow(buyableEffect("pol", 14)), // Celestial Points
-                    player.pol.pollinators.log(10).add(1).pow(buyableEffect("pol", 14)), // Factor Base
+                    player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)), // Factor Base
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 player.pol.pollinatorsText = "<h1>You are currently selecting the Beetle.";
@@ -98,10 +98,10 @@ addLayer("pol", {
             case 7:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)), // Dice Points
-                    player.pol.pollinators.log(10).add(1).pow(buyableEffect("pol", 14)), // Rocket Fuel
-                    player.pol.pollinators.log(100).add(1).pow(buyableEffect("pol", 14)), // All Hex Points
-                    player.pol.pollinators.log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)) // Realm Mod Energy
+                    player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)), // Dice Points
+                    player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)), // Rocket Fuel
+                    player.pol.pollinators.add(1).log(100).add(1).pow(buyableEffect("pol", 14)), // All Hex Points
+                    player.pol.pollinators.add(1).log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)) // Realm Mod Energy
                 ];
                 player.pol.pollinatorsText = "<h1>You are currently selecting the Ant.";
                 break;

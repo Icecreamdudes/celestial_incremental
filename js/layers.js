@@ -38,89 +38,68 @@ addLayer("i", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.startedGame == false && player.tab == "i")
-        {
+        if (player.startedGame == false && player.tab == "i") {
             player.startedGame = true
         }
 
-        if (player.startedGame == true && player.c.cutscene1 == false)
-        {
+        if (player.startedGame == true && player.c.cutscene1 == false) {
             player.gain = new Decimal(1)
         }
 
-        if (player.tab == "cb")
-        {
+        if (player.tab == "cb" || player.tab == "ps" || player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ev" || player.tab == "ev0"
+          || player.tab == "ev1" || player.tab == "ev2" || player.tab == "ev4" || player.tab == "ev8" ) {
             if (options.newMenu == false) player.universe = 0.5
             player.musuniverse = 0.5
         }
-        if (player.tab == "i")
-        {
+        if (player.tab == "i" || player.tab == "u1u" || player.tab == "h" || player.tab == "r" || player.tab == "f" || player.tab == "p" || player.tab == "t" || player.tab == "g"
+          || player.tab == "pe" || player.tab == "pol" || player.tab == "gh" || player.tab == "rf" || player.tab == "de" || player.tab == "m" || player.tab == "d" || player.tab == "rm") {
             if (options.newMenu == false) player.universe = 1
             player.musuniverse = 1
         }
-        if (player.tab == "in")
-        {
+        if (player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "id" || player.tab == "tad" || player.tab == "ta" || player.tab == "bi" || player.tab == "om"
+          || player.tab == "ga" || player.tab == "ca") {
             if (options.newMenu == false) player.universe = 2
             player.musuniverse = 2
         }
-        if (player.tab == "cp")
-        {
+        if (player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi"
+          || player.tab == "a1u" || player.tab == "a1s") {
             if (options.newMenu == false) player.universe = 1.5
             player.musuniverse = 1.5
+            startRain("#1486ff");
+        } else {
+            stopRain();
         }
-        if (player.tab == "po")
-        {
+        if (player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter") {
             if (options.newMenu == false) player.universe = 0
             player.musuniverse = 0
         }
-        if (player.tab == "c")
-        {
+        if (player.tab == "c" || player.tab == "gt") {
             if (options.newMenu == false) player.universe = -1
             player.musuniverse = -1
         }
 
         //music control
-        if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) )
-        {
+        if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) ) {
             playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle)
-        {
+        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle) {
             playAndLoopAudio("music/tav.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 0 && options.musicToggle)
-        {
+        } else if (player.musuniverse == 0 && options.musicToggle) {
             playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 2 && options.musicToggle)
-        {
+        } else if (player.musuniverse == 2 && options.musicToggle) {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 0.5 && options.musicToggle)
-        {
+        } else if (player.musuniverse == 0.5 && options.musicToggle) {
             playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
-
-        } else if (player.musuniverse == -1 && options.musicToggle)
-        {
-            if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12)
-            {
+        } else if (player.musuniverse == -1 && options.musicToggle) {
+            if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12) {
                playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13)
-            {
+            } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13) {
                 playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
             }
         }
-        else if (player.musuniverse == 1.5 && options.musicToggle)
-        {
+        else if (player.musuniverse == 1.5 && options.musicToggle) {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
-        } else
-        {
+        } else {
             stopAudio();
-        }
-
-        if (player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || player.tab == "a1u" || player.tab == "a1s")
-        {
-            startRain("#1486ff");
-        }
-         else
-        {
-            stopRain();
         }
 
         //Celestial Point boosts

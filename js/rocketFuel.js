@@ -152,7 +152,7 @@
             title() { return "1%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.01))
@@ -163,7 +163,7 @@
             title() { return "30%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.3).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.3).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.3))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.3))
@@ -195,7 +195,7 @@
             title() { return "10%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
             unlocked() { return player.rf.abilitiesUnlocked[0]  },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.1).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.1))
@@ -206,7 +206,7 @@
             title() { return "100%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel)
@@ -320,11 +320,11 @@
                 }
             break;
             case 5:
-                player.rf.abilityEffects[5] = amount.log10().add(1).div(66).add(1)
-                player.rf.abilityTimers[5] = amount.log10().add(1).mul(20)
+                player.rf.abilityEffects[5] = amount.add(1).log10().add(1).div(66).add(1)
+                player.rf.abilityTimers[5] = amount.add(1).log10().add(1).mul(20)
             break;
             case 6:
-                player.rf.abilityTimers[6] = amount.log10().add(1).mul(20)
+                player.rf.abilityTimers[6] = amount.add(1).log10().add(1).mul(20)
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1)

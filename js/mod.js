@@ -47,7 +47,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		<br>
 		Content:<br>
 			- Added the Pollinators Layer.<br>
-			- Added the Sidebar Layout, please check it out in Settings.<br><br>
+			- Added the Sidebar Layout, which is currently the default layout.<br><br>
 		Bugfixes:<br>
 			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
 			- Fixed Repli-Trees softcap system not functioning correctly.<br>

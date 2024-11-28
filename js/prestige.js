@@ -61,6 +61,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("id", 22))
         if (player.pol.pollinatorsIndex == 2) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorsEffect[3])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("rm", 23))
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
 
         player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
         if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))

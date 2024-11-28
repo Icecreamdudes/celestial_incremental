@@ -42,6 +42,18 @@ addLayer("i", {
             player.startedGame = true
         }
 
+        if (player.startedGame && options.newMenu) {
+            if (player.tab == "i") {
+                player.tab = "u1u"
+            } else if (player.tab == "in") {
+                player.tab = "ip"
+            } else if (player.tab == "cp" && !player.cap.cantepocalypsePrep) {
+                player.tab = "a1u"
+            } else if (player.tab == "po") {
+                player.tab = "otherfeat"
+            }
+        }
+
         if (player.startedGame == true && player.c.cutscene1 == false) {
             player.gain = new Decimal(1)
         }
@@ -151,6 +163,7 @@ addLayer("i", {
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
         player.gain = player.gain.mul(player.r.timeCubeEffects[0])
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
+        player.gain = player.gain.div(player.po.halterEffects[0])
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta)))
         {
             player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -173,12 +186,6 @@ addLayer("i", {
 
         if (player.po.realmMods) player.gain = player.gain.pow(0.2)
         player.points = player.points.add(player.gain.mul(delta))
-
-        player.gain = player.gain.div(player.po.halterEffects[0])
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
-        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
-        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
-        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
 
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
         {

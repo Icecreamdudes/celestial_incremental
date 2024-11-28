@@ -1115,6 +1115,7 @@ addLayer('g', {
                             'color': 'white',
                             'font-size': '24px',
                             'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['raw-html', () =>
@@ -1123,7 +1124,8 @@ addLayer('g', {
                         {
                             'color': 'white',
                             'font-size': '20px',
-                            'font-family': 'monospace'
+                            'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['blank', '25px'],
@@ -1143,6 +1145,7 @@ addLayer('g', {
                             'color': 'white',
                             'font-size': '24px',
                             'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['raw-html', () =>
@@ -1153,6 +1156,7 @@ addLayer('g', {
                             'color': 'white',
                             'font-size': '24px',
                             'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['raw-html', () =>
@@ -1584,6 +1588,14 @@ const updateGrass = (delta) => {
 
     player.g.grassVal = player.g.grassVal
         .pow(buyableEffect('rm', 25))
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    // Grass Halter Divider
+    player.g.grassVal = player.g.grassVal
+        .div(player.po.halterEffects[5])
 
     // -------------------------
     // REORDERING BOUNDARY: above stays above, below stays below

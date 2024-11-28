@@ -1,7 +1,7 @@
-﻿                   addLayer("c", {
-                    name: "cutscene", // This is optional, only used in a few places, If absent it just uses the layer id.
-                    symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
-                    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+﻿addLayer("c", {
+    name: "cutscene", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     tooltip: "cutscene", // Row the layer is in on the tree (0 is the first row)
     color: "white",
     startData() { return {
@@ -65,11 +65,9 @@
         "#161616");
 
         //1
-        if (player.c.cutscenes[0] && player.startedGame)
-        {
+        if (player.c.cutscenes[0] && player.startedGame) {
             player.c.currentCutscene = 1
-        } else
-        {
+        } else {
             player.c.currentCutscene = 0
         }
         if (player.c.currentCutscene == 1)

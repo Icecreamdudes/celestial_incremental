@@ -63,6 +63,7 @@
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32))
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
         player.t.treesToGet = player.t.treesToGet.pow(buyableEffect("rm", 24))
+        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
@@ -84,6 +85,7 @@
         if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
         if (player.pol.pollinatorsIndex == 3) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorsEffect[5])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 32))
+        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
 
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
 

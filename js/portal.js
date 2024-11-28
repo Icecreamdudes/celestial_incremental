@@ -98,17 +98,17 @@ addLayer("po", {
 
         player.po.halterText =
         [
-            "Currently divides point gain by /" + format(player.po.halterEffects[0]),
-            "Currently divides factor power gain by /" + format(player.po.halterEffects[1]),
-            "Currently divides prestige points gain by /" + format(player.po.halterEffects[2]),
-            "Currently divides leaf gain by /" + format(player.po.halterEffects[3]),
-            "Currently divides trees gain by /" + format(player.po.halterEffects[4]),
-            "Currently divides grass gain by /" + format(player.po.halterEffects[5]),
-            "Currently divides grasshoppers gain by /" + format(player.po.halterEffects[6]),
-            "Currently divides fertilizer gain by /" + format(player.po.halterEffects[7]),
-            "Currently divides code experience gain by /" + format(player.po.halterEffects[8]),
-            "Currently divides lines of code gain by /" + format(player.po.halterEffects[9]),
-            "Currently divides mod gain by /" + format(player.po.halterEffects[10]),
+            "<h2>You have " + format(player.points) + " Celestial Points.<br><h3>You are gaining " + format(player.gain) + " Celestial Points per second.<br><br><h3>Celestial Point gain: /" + format(player.po.halterEffects[0]),
+            "<h2>You have " + format(player.f.factorPower) + " Factor Power.<br><h3>You are gaining " + format(player.f.factorPowerPerSecond) + " Factor Power per second.<br><br><h3>Factor Power gain: /" + format(player.po.halterEffects[1]),
+            "<h2>You have " + format(player.p.prestigePoints) + " Prestige Points.<br><h3>You will gain " + format(player.p.prestigePointsToGet) + " Prestige Points on reset.<br><br><h3>Prestige Points gain: /" + format(player.po.halterEffects[2]),
+            "<h2>You have " + format(player.t.leaves) + " Leaves.<br><h3>You are making " + format(player.t.leavesPerSecond) + " Leaves per second.<br><br><h3>Leaf gain: /" + format(player.po.halterEffects[3]),
+            "<h2>You have " + format(player.t.trees) + " Trees.<br><h3>You will gain " + format(player.t.treesToGet) + " Trees.<br><br><h3>Tree gain: /" + format(player.po.halterEffects[4]),
+            "<h2>You have " + format(player.g.grass) + " Grass.<br><h3>Current Grass Value: " + format(player.g.grassVal) + ".<br><br><h3>Grass gain: /" + format(player.po.halterEffects[5]),
+            "<h2>You have " + format(player.gh.grasshoppers) + " Grasshoppers.<br><h3>You will gain " + format(player.gh.grasshoppersToGet) + " Grasshoppers on reset.<br><br><h3>Grasshopper gain: /" + format(player.po.halterEffects[6]),
+            "<h2>You have " + format(player.gh.fertilizer) + " Fertilizer.<br><h3>You are gaining " + format(player.gh.fertilizerPerSecond) + " Fertilizer per second.<br><br><h3>Fertilizer gain: /" + format(player.po.halterEffects[7]),
+            "<h2>You have " + format(player.m.codeExperience) + " Code Experience.<br><h3>You will gain " + format(player.m.codeExperienceToGet) + " Code Experience on reset.<br><br><h3>Code Experience gain: /" + format(player.po.halterEffects[8]),
+            "<h2>You have " + format(player.m.linesOfCode) + " Lines of Code.<br><h3>You are making " + format(player.m.linesOfCodePerSecond) + " Lines of Code per second.<br><br><h3>Lines of Code gain: /" + format(player.po.halterEffects[9]),
+            "<h2>You have " + format(player.m.mods) + " Mods.<br><h3>You will gain " + format(player.m.modsToGet) + " Mods.<br><br><h3>Mod gain: /" + format(player.po.halterEffects[10]),
         ]
         /*
             0 - Points
@@ -217,17 +217,17 @@ addLayer("po", {
             unlocked() { return player.ev.evolutionsUnlocked[6] },
             onClick() {
                 callAlert(
-                    "Currently divides point gain by /" + format(player.po.halterEffects[0]) + "\n" +
-                    "Currently divides factor power gain by /" + format(player.po.halterEffects[1]) + "\n" +
-                    "Currently divides prestige points gain by /" + format(player.po.halterEffects[2]) + "\n" +
-                    "Currently divides leaf gain by /" + format(player.po.halterEffects[3]) + "\n" +
-                    "Currently divides trees gain by /" + format(player.po.halterEffects[4]) + "\n" +
-                    "Currently divides grass gain by /" + format(player.po.halterEffects[5]) + "\n" +
-                    "Currently divides grasshoppers gain by /" + format(player.po.halterEffects[6]) + "\n" +
-                    "Currently divides fertilizer gain by /" + format(player.po.halterEffects[7]) + "\n" +
-                    "Currently divides code experience gain by /" + format(player.po.halterEffects[8]) + "\n" +
-                    "Currently divides lines of code gain by /" + format(player.po.halterEffects[9]) + "\n" +
-                    "Currently divides mod gain by /" + format(player.po.halterEffects[10]) + "\n"
+                    "Celestial Point gain: /" + format(player.po.halterEffects[0]) + "\n" +
+                    "Factor Power gain: /" + format(player.po.halterEffects[1]) + "\n" +
+                    "Prestige Point gain: /" + format(player.po.halterEffects[2]) + "\n" +
+                    "Leaf gain: /" + format(player.po.halterEffects[3]) + "\n" +
+                    "Tree gain: /" + format(player.po.halterEffects[4]) + "\n" +
+                    "Grass gain: /" + format(player.po.halterEffects[5]) + "\n" +
+                    "Grasshopper gain: /" + format(player.po.halterEffects[6]) + "\n" +
+                    "Fertilizer gain: /" + format(player.po.halterEffects[7]) + "\n" +
+                    "Code Experience gain: /" + format(player.po.halterEffects[8]) + "\n" +
+                    "Lines of Code gain: /" + format(player.po.halterEffects[9]) + "\n" +
+                    "Mod gain: /" + format(player.po.halterEffects[10]) + "\n"
                 )
             },
             style: { width: '100px', "min-height": '100px' },

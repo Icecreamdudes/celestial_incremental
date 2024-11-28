@@ -271,7 +271,7 @@
         12: {
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
-            tooltip() { return "<h3>5% chance for a pet???" },
+            tooltip() { return "<h3>" + player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(5).floor() + "% chance for a pet???" },
             unlocked() { return true },
             onClick() {
                 if (!hasChallenge("ip", 15))
@@ -292,9 +292,12 @@
                 }
                 player.d.boosterDiceCooldown = new Decimal(120)
 
-                let random = getRandomInt(20)
+                let random = getRandomInt(100)
+                let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
+                console.log(random)
+                console.log(format(prob))
 
-                if (random == 1)
+                if (new Decimal(random).lte(prob))
                 {
                     player.cb.rarePetAmounts[1] = player.cb.rarePetAmounts[1].add(1);
                     callAlert("You gained a Dice!", "resources/diceRarePet.png");

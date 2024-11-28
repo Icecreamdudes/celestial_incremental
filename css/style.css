@@ -926,7 +926,7 @@ button > * {
     position: absolute;
     bottom: 10vh; /* Distance from the bottom of the viewport */
     left: calc(50% + 133px); /* Center horizontally */
-    transform: translateX(calc(-50%)); /* Ensure it's centered */
+    transform: translateX(-50%); /* Ensure it's centered */
     border: 2px solid black;
     box-sizing: border-box;
     overflow: hidden; /* Ensure content stays within bounds */
@@ -997,7 +997,7 @@ button > * {
 
 
 /* Styling for the large green circle */
-#mainCircle {
+.mainCircle {
     width: 80px;
     height: 80px;
     background-color: green;
@@ -1005,6 +1005,20 @@ button > * {
     position: absolute;
     top: 50%;
     left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10; /* Ensure the circle appears above the spawn area */
+	border: 2px solid black; /* Add a black border */
+}
+
+/* Styling for the large green circle when Sidebar Layout is enabled.*/
+.menuMainCircle {
+    width: 80px;
+    height: 80px;
+    background-color: green;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 133px);
     transform: translate(-50%, -50%);
     z-index: 10; /* Ensure the circle appears above the spawn area */
 	border: 2px solid black; /* Add a black border */

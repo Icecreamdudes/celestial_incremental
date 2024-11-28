@@ -417,6 +417,24 @@ addLayer("ep0", {
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
         },
+        2: {
+            title() { return player.cb.epicPetLevels[2].gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[2].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep2"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
+        3: {
+            title() { return player.cb.epicPetLevels[1].gt(0) ? "<img src='resources/dragonEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[1].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep1"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
         11: {
             title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
             canClick() { return player.ep0.dotknightPointButtonTimers[0].lt(0) },
@@ -566,7 +584,7 @@ addLayer("ep0", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }
@@ -639,6 +657,24 @@ addLayer("ep1", {
                 player.tab = "cb"
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+        2: {
+            title() { return player.cb.epicPetLevels[0].gt(0) ? "<img src='resources/dotknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[0].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep0"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
+        3: {
+            title() { return player.cb.epicPetLevels[2].gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[2].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep2"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         11: {
             title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
@@ -790,7 +826,7 @@ addLayer("ep1", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }
@@ -863,6 +899,24 @@ addLayer("ep2", {
                 player.tab = "cb"
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+        2: {
+            title() { return player.cb.epicPetLevels[1].gt(0) ? "<img src='resources/dragonEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[1].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep1"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
+        3: {
+            title() { return player.cb.epicPetLevels[0].gt(0) ? "<img src='resources/dotknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[0].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep0"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         11: {
             title() { return player.ep2.cookiePointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[0]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[0]) + " Cookie Points."},
@@ -1040,7 +1094,7 @@ addLayer("ep2", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep2.cookiePoints) + "</h3> cookie points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }

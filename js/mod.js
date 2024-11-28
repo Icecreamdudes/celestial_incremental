@@ -65,13 +65,15 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Check Back now runs offline with no offline cap.<br>
 			- Automation Shards can trigger once while offline. (Gives use to last buttons)<br>
 			- Added a pity system to Check Back shards.<br>
+			- Improved the rates of Dice and Drippy Ufo pet.<br>
 			- Made Oil a bit brighter to improve contrast.<br>
 			- Added import/export file.<br>
 			- Added a new infinity milestone that keeps Universe 1 upgrades.<br>
 			- Revamped the look of Tav's dimension power tab.<br>
 			- Added new option in Tav Autobuy.<br>
 			- Added the option to autocrunch based on time.<br>
-			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br><br>
+			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br>
+			- Added buttons to scroll through the epic shops when in tree-layout.<br>
 		Refactoring:<br>
 			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
 			- Infinity Dimensions code refactored to fix uncountable bugs.<br>

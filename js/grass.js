@@ -1026,7 +1026,9 @@ addLayer('g', {
                         }
                     ],
                     ['raw-html', () =>
-                        '<div id=spawn-area class=spawn-area></div>',
+                        options.newMenu
+                            ? '<div id=spawn-area class=menu-spawn-area></div>'
+                            : '<div id=spawn-area class=spawn-area></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1085,7 +1087,9 @@ addLayer('g', {
                         },
                     ],
                     ['raw-html', () =>
-                        '<div id=gold-spawn-area class=spawn-area></div>',
+                        options.newMenu
+                            ? '<div id=gold-spawn-area class=menu-spawn-area></div>'
+                            : '<div id=gold-spawn-area class=spawn-area></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1152,7 +1156,9 @@ addLayer('g', {
                         },
                     ],
                     ['raw-html', () =>
-                        '<div id=mainCircle></div>',
+                        options.newMenu
+                            ? '<div id=mainCircle class=menuMainCircle></div>'
+                            : '<div id=mainCircle class=mainCircle></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1160,7 +1166,9 @@ addLayer('g', {
                         },
                     ],
                     ['raw-html', () =>
-                        '<div id=moonstone-spawn-area class=spawn-area></div>',
+                        options.newMenu
+                            ? '<div id=moonstone-spawn-area class=menu-spawn-area></div>'
+                            : '<div id=moonstone-spawn-area class=spawn-area></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',

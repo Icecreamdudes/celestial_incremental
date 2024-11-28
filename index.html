@@ -146,7 +146,7 @@
 				<button class="menuButton" v-if="player.cb.epicPetLevels[2].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep2') " onclick="showTab('ep2')"><span class="buttonText">Cookie</span></button>
 
 		</div>
-		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab != 'c' ?{'left':'0px'}:{'left':'264px'}">{{options.menuShown==true?'<':'>'}}</button>
+		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'264px'}">{{options.menuShown==true?'<':'>'}}</button>
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth">

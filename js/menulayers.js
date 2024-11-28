@@ -109,7 +109,7 @@ addLayer("settings", {
             ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=(toggleOpt('newMenu'));(player.tab='i')>Toggle Layout (BETA)</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+            ["raw-html", () => "<button class=opt onclick=(toggleOpt('newMenu'));(player.tab='i')>Toggle Layout</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
 
         ["row", [

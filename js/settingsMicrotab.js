@@ -39,7 +39,7 @@ const settingsMicrotab = {
         () => "<button class=opt onclick=switchTheme()>Change Theme</button>",
         settingsMicrotabStyle],
       ["raw-html",
-        () => "<button class=opt onclick=toggleOpt(toggleOpt('newMenu'));(player.tab='settings')>Toggle Layout (BETA)</button>",
+        () => "<button class=opt onclick=toggleOpt(toggleOpt('newMenu'));(player.tab='settings')>Toggle Layout</button>",
         settingsMicrotabStyle],
     ]],
 

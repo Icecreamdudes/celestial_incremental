@@ -386,6 +386,7 @@ function gameLoop(diff) {
 function hardReset(resetOptions) {
 	if (!confirm("So are you sure you want to reset everything???")) return
 	player = null
+	options.newMenu = false
 	if(resetOptions) options = null
 	save(true);
 	window.location.reload();

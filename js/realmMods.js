@@ -146,7 +146,7 @@
         }
         player.rm.realmEnergyText = "You have " + format(player.rm.realmEnergy[player.rm.currentDisplay]) + " energy for this realm.<br><h5>You are gaining " + format(player.rm.realmEnergyPerSecond[player.rm.currentDisplay]) + " energy per second. (Based on realm mods)"
 
-        player.rm.halterBoostEffect = player.rm.halterBoost.plus(1).log10().pow(0.1).add(1)
+        player.rm.halterBoostEffect = player.rm.halterBoost.add(1).log10().pow(0.1).add(1)
     },
     blankModReset()
     {

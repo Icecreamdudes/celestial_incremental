@@ -509,7 +509,7 @@ addLayer("bigc", {
 
         if (player.rm.halterBoostCheck && player.po.realmMods)
         {
-            player.rm.halterBoost = player.po.pointHalt
+            player.rm.halterBoost = player.po.halterEffects[0]
         }
 
         player.rm.halterBoostCheck = true

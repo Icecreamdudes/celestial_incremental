@@ -281,7 +281,8 @@ function fixOldSave(oldVersion){
 		callAlert("Oh no, your save file was inflated. Steel, Crystal, and debuff currencies are reset.", "resources/gat.png")
 	}
 	if (oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
-		setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)
+		setBuyableAmount("ad", 2, player.ad.dimBoostAmount)
+		setBuyableAmount("ad", 3, player.ad.galaxyAmount)
 		setBuyableAmount("id", 11, player.id.dimensionsPurchased[0])
 		setBuyableAmount("id", 12, player.id.dimensionsPurchased[1])
 		setBuyableAmount("id", 13, player.id.dimensionsPurchased[2])

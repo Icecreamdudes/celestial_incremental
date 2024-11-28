@@ -548,7 +548,7 @@
             style: { width: '800px', "min-height": '90px' },
         },
         25: {
-            requirementDescription: "<h3>100000 Infinities",
+            requirementDescription: "<h3>15000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(100000) },
             unlocked() { return hasChallenge("ip", 14) },
@@ -804,9 +804,9 @@
                         ["row", [["milestone", 22]]],
                         ["row", [["milestone", 23]]],
                         ["row", [["milestone", 24]]],
+                        ["row", [["milestone", 25]]],
                         ["row", [["milestone", 26]]],
                         ["row", [["milestone", 27]]],
-                        ["row", [["milestone", 25]]],
                 ]
 
             },

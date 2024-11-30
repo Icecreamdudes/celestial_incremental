@@ -18,8 +18,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.2.2",
-	name: "The Pet Update Part II: Epic Pets",
+	num: "1.3",
+	name: "The Layout Update - with QoL",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -40,14 +40,14 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.2.2 - 90% QoL 10% Inflation</h3><br>
+	<h3>v1.3 - The Layout Update - with QoL</h3><br>
 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
 		<br>
 		<br>
 		<br>
 		Content:<br>
-			- Added the Pollinators Layer.<br>
-			- Added the Sidebar Layout.<br><br>
+			- Added the Sidebar Layout.<br>
+			- Added the Pollinators Layer.<br><br>
 		Bugfixes:<br>
 			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
 			- Fixed Repli-Trees softcap system not functioning correctly.<br>

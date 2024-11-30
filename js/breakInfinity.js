@@ -349,13 +349,13 @@
         {
             title: "BI IP Upgrade VII",
             unlocked() { return true },
-            description: "Total hex runs boost code experience gain.",
+            description: "Total hex runs boost pollinator gain.",
             cost: new Decimal(1e12),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.ip.hexRuns.mul(1.02).add(1)
+                return player.ip.hexRuns.add(1).log10().add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '125px', height: '100px', }

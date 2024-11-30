@@ -19,6 +19,7 @@
 
         //milestone
         milestone2Effect: new Decimal(1),
+        milestone8Effect: new Decimal(1),
     }
     },
     automate() {
@@ -57,6 +58,11 @@
         player.gs.grassSkippersEffect = player.gs.grassSkippers.pow(0.275).add(1)
 
         player.gs.milestone2Effect = player.cp.replicantiPoints.plus(1).log10().pow(1.35).add(1)
+        if (player.gs.grassSkip.gte(15)) {
+            player.gs.milestone8Effect = player.gs.grassSkip.sub(10).div(5).pow(0.9).add(1)
+        } else {
+            player.gs.milestone8Effect = player.gs.grassSkip.div(15).add(1)
+        }
 
         if (player.subtabs["oi"]['stuff'] == 'REMEMBERANCE CORES')
         {
@@ -476,7 +482,12 @@
             done() { return player.gs.grassSkip.gte(15) },
             style: { width: '800px', "min-height": '75px' },
         },
-
+        18: {
+            requirementDescription: "<h3>Grass-Skip 20",
+            effectDescription() { return "Grass-Skips boost pollinator gain. Currently: " + format(player.gs.milestone8Effect)+"x" },
+            done() { return player.gs.grassSkip.gte(15) },
+            style: { width: '800px', "min-height": '75px' },
+        },
     },
     challenges: {
     },
@@ -502,6 +513,7 @@
                     ["row", [["milestone", 15]]],
                     ["row", [["milestone", 16]]],
                     ["row", [["milestone", 17]]],
+                    ["row", [["milestone", 18]]],
                 ]
             },
             "Grass-Skippers": {

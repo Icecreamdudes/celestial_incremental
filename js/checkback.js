@@ -3043,7 +3043,7 @@ addLayer("cb", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back Pollinators Boost."
             },
             display() {
-                return "which are multiplying pollinators per second by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying pollinators by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy() {

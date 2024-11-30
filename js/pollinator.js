@@ -11,7 +11,6 @@ addLayer("pol", {
 
         pollinatorsEffect: [new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         pollinatorsIndex: 0,
-        pollinatorsText: "",
         pollinatorsMax: false
     }
     },
@@ -27,11 +26,14 @@ addLayer("pol", {
 
         if (hasUpgrade("i", 22)) {
             player.pol.pollinatorsPerSecond = player.g.grass.add(1).log(10).pow(0.75).div(3)
-            if (hasUpgrade("pol", 11)) { player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("pol", 11)) }
+            if (hasUpgrade("pol", 12)) { player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("pol", 12)) }
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 12))
             if (hasUpgrade("g", 23)) { player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("g", 23)) }
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("cb", 15))
-            if (player.pol.pollinators.gt(1e10)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(0.9)
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("p", 13))
+            if (hasUpgrade("bi", 17)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("bi", 17))
+            if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
+            if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(0.8)
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
@@ -40,60 +42,53 @@ addLayer("pol", {
 
         switch (player.pol.pollinatorsIndex) {
             case 0:
-                player.pol.pollinatorsText = "<h1>You are currently selecting nothing.";
                 break;
             case 1:
                 player.pol.pollinatorsEffect = [
-                    player.pol.pollinators.pow(2.75).div(10).add(1).pow(buyableEffect("pol", 14)), // Celestial Points
+                    player.pol.pollinators.pow(2.7).div(10).add(1).pow(buyableEffect("pol", 14)), // Celestial Points
                     player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)), // Factor Base
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting the Beetle.";
                 break;
             case 2:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0),
-                    player.pol.pollinators.pow(3).div(10).add(1).pow(buyableEffect("pol", 14)), // Factor Power
-                    player.pol.pollinators.pow(3.25).div(10).add(1).pow(buyableEffect("pol", 14)), // Prestige Points
+                    player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)), // Factor Power
+                    player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Prestige Points
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting the Fly.";
                 break;
             case 3:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(3.25).div(10).add(1).pow(buyableEffect("pol", 14)), // Leafs
-                    player.pol.pollinators.pow(3).div(10).add(1).pow(buyableEffect("pol", 14)), // Trees
+                    player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Leafs
+                    player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)), // Trees
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting the Bat.";
                 break;
             case 4:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(2.25).div(10).add(1).pow(buyableEffect("pol", 14)), // Grass Value
-                    player.pol.pollinators.pow(0.5).div(10).add(1).pow(buyableEffect("pol", 14)), // Golden Grass Value
+                    player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Grass Value
+                    player.pol.pollinators.pow(0.45).div(10).add(1).pow(buyableEffect("pol", 14)), // Golden Grass Value
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting Wind.";
                 break;
             case 5:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(0.8).div(10).add(1).pow(buyableEffect("pol", 14)), // Grasshoppers
-                    player.pol.pollinators.pow(1.5).div(10).add(1).pow(buyableEffect("pol", 14)), // Fertilizer
+                    player.pol.pollinators.pow(0.7).div(10).add(1).pow(buyableEffect("pol", 14)), // Grasshoppers
+                    player.pol.pollinators.pow(1.3).div(10).add(1).pow(buyableEffect("pol", 14)), // Fertilizer
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting the Bee.";
                 break;
             case 6:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(2.5).div(10).add(1).pow(buyableEffect("pol", 14)), // Lines of Code
-                    player.pol.pollinators.pow(2.25).div(10).add(1).pow(buyableEffect("pol", 14)), // Mods
+                    player.pol.pollinators.pow(2.3).div(10).add(1).pow(buyableEffect("pol", 14)), // Lines of Code
+                    player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Mods
                     new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting the Butterfly.";
                 break;
             case 7:
                 player.pol.pollinatorsEffect = [
@@ -103,7 +98,6 @@ addLayer("pol", {
                     player.pol.pollinators.add(1).log(100).add(1).pow(buyableEffect("pol", 14)), // All Hex Points
                     player.pol.pollinators.add(1).log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)) // Realm Mod Energy
                 ];
-                player.pol.pollinatorsText = "<h1>You are currently selecting the Ant.";
                 break;
         }
     },
@@ -175,7 +169,7 @@ addLayer("pol", {
         15: {
             title() { return "💨"},
             canClick() { return true },
-            unlocked() { return hasUpgrade("pol", 12) },
+            unlocked() { return hasUpgrade("pol", 11) },
             onClick() {
                 player.pol.pollinatorsIndex = 4
             },
@@ -216,8 +210,18 @@ addLayer("pol", {
         {
             title: "Pollinator Upgrade I",
             unlocked() { return true },
-            description() { return "Boost pollinators per second based on pollinators." },
+            description() { return "Unlocks the wind pollinator." },
             cost: new Decimal(1000),
+            currencyLocation() { return player.pol },
+            currencyDisplayName: "Pollinators",
+            currencyInternalName: "pollinators",
+        },
+        12:
+        {
+            title: "Pollinator Upgrade II",
+            unlocked() { return true },
+            description() { return "Boost pollinator gain based on pollinators." },
+            cost: new Decimal(2500),
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
@@ -225,16 +229,7 @@ addLayer("pol", {
                 return player.pol.pollinators.add(1).pow(new Decimal(0.1).add(buyableEffect("pol", 13))).div(4).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-        },
-        12:
-        {
-            title: "Pollinator Upgrade II",
-            unlocked() { return true },
-            description() { return "Unlocks the wind pollinator." },
-            cost: new Decimal(2500),
-            currencyLocation() { return player.pol },
-            currencyDisplayName: "Pollinators",
-            currencyInternalName: "pollinators",
+            style: { width: '150px', height: '120px', },
         },
         13:
         {
@@ -289,6 +284,7 @@ addLayer("pol", {
                 return player.pol.pollinators.add(1).log(10).div(2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '120px', },
         },
         18:
         {
@@ -307,7 +303,7 @@ addLayer("pol", {
             costGrowth() { return new Decimal(2) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.1).mul(4) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5) },
             unlocked() { return hasUpgrade("pol", 13) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -339,7 +335,7 @@ addLayer("pol", {
             costGrowth() { return new Decimal(2.25) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.25).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.75).mul(0.25).add(1) },
             unlocked() { return hasUpgrade("pol", 13) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -347,7 +343,7 @@ addLayer("pol", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Plentiful Pollinators"
             },
             display() {
-                return "which boosts pollinators per second by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which boosts pollinator gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy() {
@@ -371,7 +367,7 @@ addLayer("pol", {
             costGrowth() { return new Decimal(2.5) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.03) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03) },
             unlocked() { return hasUpgrade("pol", 15) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -401,14 +397,15 @@ addLayer("pol", {
         14: {
             costBase() { return new Decimal(1000000) },
             costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(25) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return hasUpgrade("pol", 15) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Potent Pollination"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>Potent Pollination"
             },
             display() {
                 return "which boosts pollinator effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -422,6 +419,7 @@ addLayer("pol", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -486,23 +484,18 @@ addLayer("pol", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.pol.pollinatorsText }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "<h2>Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "<h2>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "<h2>Factor Power: x" + format(player.pol.pollinatorsEffect[2]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "<h2>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h2>Leafs: x" + format(player.pol.pollinatorsEffect[4]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h2>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h2>Grass Value: x" + format(player.pol.pollinatorsEffect[6]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h2>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h2>Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h2>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h2>Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h2>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.dice ? "<h2>Dice Points: x" + format(player.pol.pollinatorsEffect[12]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.rocketFuel ? "<h2>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.hex ? "<h2>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.realmMods ? "<h2>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 0 ? "<h1>You are currently selecting nothing." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "<h1>You are currently selecting the Beetle.<br><h2>Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) + "<br><h2>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "<h1>You are currently selecting the Fly.<br><h2>Factor Power: x" + format(player.pol.pollinatorsEffect[2]) + "<br><h2>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h1>You are currently selecting the Bat.<br><h2>Leafs: x" + format(player.pol.pollinatorsEffect[4]) + "<br><h2>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h1>You are currently selecting Wind.<br><h2>Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br><h2>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h1>You are currently selecting the Bee.<br><h2>Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br><h2>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h1>You are currently selecting the Butterfly.<br><h2>Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br><h2>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "<h1>You are currently selecting the Ant." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.dice ? "<h2>Dice Points: x" + format(player.pol.pollinatorsEffect[12]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.rocketFuel ? "<h2>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.hex ? "<h2>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.realmMods ? "<h2>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]]],
                     ["row", [["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
@@ -531,7 +524,7 @@ addLayer("pol", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { "color": "#cb8e00", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { "color": "#cb8e00", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.pol.pollinators.gt(1e10) ? "[SOFTCAPPED]" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

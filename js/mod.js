@@ -47,7 +47,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		<br>
 		Content:<br>
 			- Added the Pollinators Layer.<br>
-			- Added the Sidebar Layout, which is currently the default layout.<br><br>
+			- Added the Sidebar Layout.<br><br>
 		Bugfixes:<br>
 			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
 			- Fixed Repli-Trees softcap system not functioning correctly.<br>
@@ -288,6 +288,7 @@ function fixOldSave(oldVersion){
 	if (oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
 		setBuyableAmount("ad", 2, player.ad.dimBoostAmount)
 		setBuyableAmount("ad", 3, player.ad.galaxyAmount)
+		setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)
 		setBuyableAmount("id", 11, player.id.dimensionsPurchased[0])
 		setBuyableAmount("id", 12, player.id.dimensionsPurchased[1])
 		setBuyableAmount("id", 13, player.id.dimensionsPurchased[2])
@@ -296,6 +297,41 @@ function fixOldSave(oldVersion){
 		setBuyableAmount("id", 16, player.id.dimensionsPurchased[5])
 		setBuyableAmount("id", 17, player.id.dimensionsPurchased[6])
 		setBuyableAmount("id", 18, player.id.dimensionsPurchased[7])
+		// Prevent old save factor buyables from being over cap
+		for (let i = 1; i < 9; i++) {
+			if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+		for (let i = 11; i < 20; i++) {
+			if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+		for (let i = 21; i < 30; i++) {
+            if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+        for (let i = 31; i < 37; i++) {
+            if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+		for (let i = 41; i < 49; i++) {
+			if (getBuyableAmount("f", i).gt(250)) setBuyableAmount("f", i, 250)
+        }
+		for (let i = 51; i < 59; i++) {
+			if (getBuyableAmount("f", i).gt(1000)) setBuyableAmount("f", i, 1000)
+        }
+
+		// Prevent old save tree buyables from being over cap
+		if (getBuyableAmount("t", 11).gt(5000)) setBuyableAmount("t", 11, 5000)
+		if (getBuyableAmount("t", 12).gt(1000)) setBuyableAmount("t", 12, 1000)
+		if (getBuyableAmount("t", 13).gt(5000)) setBuyableAmount("t", 13, 5000)
+		for (let i = 14; i < 19; i++) {
+			if (getBuyableAmount("t", i).gt(1000)) setBuyableAmount("t", i, 1000)
+		}
+
+		// Prevent old save grass buyables from being over cap
+		if (getBuyableAmount("g", 11).gt(1000)) setBuyableAmount("g", 11, 1000)
+		if (getBuyableAmount("g", 12).gt(200)) setBuyableAmount("g", 12, 200)
+		if (getBuyableAmount("g", 13).gt(500)) setBuyableAmount("g", 13, 500)
+		if (getBuyableAmount("g", 14).gt(1000)) setBuyableAmount("g", 14, 1000)
+		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
+		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)
 	}
 }
 

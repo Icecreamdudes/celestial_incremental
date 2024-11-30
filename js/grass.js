@@ -711,7 +711,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.g.goldGrass},
             pay(amt) { player.g.goldGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(3).add(1) },
             unlocked() { return hasUpgrade('g', 14) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

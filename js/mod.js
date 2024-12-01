@@ -82,7 +82,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Grass code refactored to improve framerate. (Thanks Tsanth)<br><br>
 		???:<br>
 			- Continued work on the buyable code rework, layers improved this patch are hex, grass, AD, and ID.<br>
-			- As I said last patch, this also means the buy max buttons on those layers are subtab specific now.<br>
+			- As I said last patch, this also means the buy max buttons on those layers are subtab specific now.<br><br>
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
 			- Fixed Oil buy max buttons not loading correctly.<br>

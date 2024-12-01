@@ -22,6 +22,7 @@ addLayer("otherfeat", {
     microtabs: {},
     tabFormat: [
         ["layer-proxy", ["po", [
+            ["clickable", 1],
             ["blank", "25px"],
             ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
             ["raw-html", function () { return inChallenge("ip", 14) ? "You can pick an OTF once you are at pent 15." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -56,6 +57,7 @@ addLayer("halter", {
     microtabs: {},
     tabFormat: [
         ["layer-proxy", ["po", [
+            ["clickable", 1],
             ["blank", "25px"],
             ["raw-html", function () { return "<h3>" + player.po.halterText[player.po.halterIndex]}],
             ["text-input", "halterInput", {

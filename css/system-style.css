@@ -11,7 +11,7 @@
 }
 .titleHeader {
 	position: absolute;
-	width: 262px;
+	width: 272px;
 	height: 60px;
 	display: flex;
 	justify-content: center;
@@ -29,8 +29,8 @@
 	top: 62px;
 	justify-content: auto;
 	user-select: none;
-	height:calc(100% - 66px);
-	left:50px;
+	height:calc(100% - 64px);
+	left:60px;
 	background: #0f0f0f;
 	display: block;
 	overflow-y: scroll;
@@ -60,7 +60,7 @@
 .contentMenu {
 	position: absolute;
 	z-index:1001;
-	width: 66px;
+	width: 77px;
 	top: 62px;
 	justify-content: auto;
 	user-select: none;
@@ -68,20 +68,22 @@
 	left:50px;
 	background: #0f0f0f;
 	display: flex;
-	overflow-y: hidden;
+	flex-grow:1;
+	overflow-y: scroll;
 	overflow-x: hidden;
 	flex-direction: column;
+	border-bottom: 2px solid #7a7a7a;
 }
 .uniMenu {
 	z-index:1001;
 	width: 60px;
 	justify-content: auto;
-	flex: 1;
-	height:calc(100% - 76px);
+	flex: 1 0 auto;
+	height:auto;
 	left:0px;
 	background: #0f0f0f;
 	display: block;
-	overflow-y: auto;
+	overflow-y: hidden;
 	overflow-x: hidden;
 	flex-direction: column;
 	border-left: 2px solid #7a7a7a;
@@ -120,7 +122,6 @@
 	flex-direction: column;
 	border-left: 2px solid #7a7a7a;
 	border-right: 4px solid #7a7a7a;
-	border-bottom: 2px solid #7a7a7a;
 }
 .miscMenu {
 	z-index:1001;
@@ -134,7 +135,6 @@
 	border-left: 2px solid #7a7a7a;
 	border-right: 4px solid #7a7a7a;
 	border-top: 2px solid #7a7a7a;
-	border-bottom: 2px solid #7a7a7a;
 }
 .miscButton {
 	width: 50px;

@@ -152,6 +152,26 @@
             layers.ta.negativeInfinityReset();
         }
 
+        player.ta.dimensionPowerPerSecond[0] = buyableEffect("ta", 11)
+        player.ta.dimensionPowerPerSecond[1] = buyableEffect("ta", 12)
+        player.ta.dimensionPowerPerSecond[2] = buyableEffect("ta", 13)
+        player.ta.dimensionPowerPerSecond[3] = buyableEffect("ta", 14)
+        player.ta.dimensionPowerPerSecond[4] = buyableEffect("ta", 15)
+        player.ta.dimensionPowerPerSecond[5] = buyableEffect("ta", 16)
+        player.ta.dimensionPowerPerSecond[6] = buyableEffect("ta", 17)
+        player.ta.dimensionPowerPerSecond[7] = buyableEffect("ta", 18)
+        for (let i = 0; i < player.ta.dimensionPowerEffects.length; i++) {
+            player.ta.dimensionPowerEffects[i] = player.ta.dimensionPower[i].pow(0.6).div(10).add(1)
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("ip", 13))
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("ta", 35))
+            if (hasUpgrade('ta', 12)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ta", 12))
+            if (hasUpgrade('ip', 44)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ip", 44))
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("om", 14))
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("gh", 36))
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(player.cb.uncommonPetEffects[8][0])
+            player.ta.dimensionPower[i] = player.ta.dimensionPower[i].add(player.ta.dimensionPowerPerSecond[i].mul(delta))
+        }
+
         for (let i = 0; i < 11; i++) {
             if (player.ta.dimensionAutobuyToggles[i]) player.ta.dimensionAutobuyTimer[i] = player.ta.dimensionAutobuyTimer[i].add(onepersec.mul(delta))
             if (player.ta.dimensionAutobuyTimer[i].gte(player.ta.dimensionAutobuyTimeReq[i])) {

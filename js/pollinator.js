@@ -131,7 +131,7 @@ addLayer("pol", {
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "❌"},
+            title() { return "<img src='resources/pollinators/cross.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -140,7 +140,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#28242c", 'border-width': '4px' },
         },
         12: {
-            title() { return "🪲"},
+            title() { return "<img src='resources/pollinators/beetle.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -149,7 +149,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#eaf6f7", 'border-width': '4px' },
         },
         13: {
-            title() { return "🪰"},
+            title() { return "<img src='resources/pollinators/fly.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -158,7 +158,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#31aeb0", 'border-width': '4px' },
         },
         14: {
-            title() { return "🦇"},
+            title() { return "<img src='resources/pollinators/bat.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -167,7 +167,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#0B6623", 'border-width': '4px' },
         },
         15: {
-            title() { return "💨"},
+            title() { return "<img src='resources/pollinators/wind.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 11) },
             onClick() {
@@ -176,7 +176,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#119B35", 'border-width': '4px' },
         },
         16: {
-            title() { return "🐝"},
+            title() { return "<img src='resources/pollinators/bee.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 14) },
             onClick() {
@@ -185,7 +185,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#19e04d", 'border-width': '4px' },
         },
         17: {
-            title() { return "🦋"},
+            title() { return "<img src='resources/pollinators/butterfly.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 16) },
             onClick() {
@@ -194,7 +194,7 @@ addLayer("pol", {
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#0951a6", 'border-width': '4px' },
         },
         18: {
-            title() { return "🐜"},
+            title() { return "<img src='resources/pollinators/ant.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 18) },
             onClick() {
@@ -375,7 +375,7 @@ addLayer("pol", {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Propagating Pollinators"
             },
             display() {
-                return "which improves pollinator upgrade I's scaling by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which improves pollinator upgrade II's scaling by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy() {
@@ -487,7 +487,7 @@ addLayer("pol", {
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 0 ? "<h1>You are currently selecting nothing." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "<h1>You are currently selecting the Beetle.<br><h2>Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) + "<br><h2>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "<h1>You are currently selecting the Fly.<br><h2>Factor Power: x" + format(player.pol.pollinatorsEffect[2]) + "<br><h2>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h1>You are currently selecting the Bat.<br><h2>Leafs: x" + format(player.pol.pollinatorsEffect[4]) + "<br><h2>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h1>You are currently selecting the Bat.<br><h2>Leaves: x" + format(player.pol.pollinatorsEffect[4]) + "<br><h2>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h1>You are currently selecting Wind.<br><h2>Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br><h2>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h1>You are currently selecting the Bee.<br><h2>Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br><h2>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h1>You are currently selecting the Butterfly.<br><h2>Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br><h2>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

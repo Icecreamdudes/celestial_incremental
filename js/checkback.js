@@ -866,6 +866,9 @@ addLayer("cb", {
 
         // Epic Fragmentation Timer
         player.epic.bannerResetTimer = player.epic.bannerResetTimer.sub(time)
+        for (let i = 0; i < player.epic.bannerButtonTimers.length; i++) {
+            player.epic.bannerButtonTimers[i] = player.epic.bannerButtonTimers[i].sub(time)
+        }
 
         // Epic Pet Timers
         for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++) {

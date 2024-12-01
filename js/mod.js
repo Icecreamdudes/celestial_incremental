@@ -286,6 +286,9 @@ function fixOldSave(oldVersion){
 		callAlert("Oh no, your save file was inflated. Steel, Crystal, and debuff currencies are reset.", "resources/gat.png")
 	}
 	if (oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
+		if ((player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs") && !hasUpgrade("cp", 18)) {
+			player.cp.cantepocalypseActive = true
+		}
 		setBuyableAmount("ad", 2, player.ad.dimBoostAmount)
 		setBuyableAmount("ad", 3, player.ad.galaxyAmount)
 		setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)

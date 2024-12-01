@@ -50,10 +50,10 @@
         if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
         player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.div(buyableEffect("rt", 12))
 
-        player.rt.repliTreesSoftcapStart = new Decimal(10)
-        player.rt.repliTreesSoftcapStart = player.rt.repliTreesSoftcapStart.mul(buyableEffect("rt", 18))
-        player.rt.repliTreesSoftcapStart = player.rt.repliTreesSoftcapStart.mul(buyableEffect("rg", 18))
-        player.rt.repliTreesSoftcapStart = player.rt.repliTreesSoftcapStart.mul(player.oi.oilEffect)
+        player.rt.repliTreeSoftcapStart = new Decimal(10)
+        player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("rt", 18))
+        player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("rg", 18))
+        player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(player.oi.oilEffect)
 
         player.rt.repliTreeSoftcapEffect = player.rt.repliTrees.sub(player.rt.repliTreeSoftcapStart).pow(1.25).div(10).add(1)
         if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart))
@@ -95,7 +95,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cp"
             },
@@ -430,7 +430,7 @@
                     ["raw-html", function () { return "<h2>You have " + formatWhole(player.rt.repliTrees) + "<h2> repli-trees, which boost anonymity gain by x" + format(player.rt.repliTreesEffect) + "."}],
                     ["raw-html", function () { return "<h2>You will gain " + format(player.rt.repliTreesToGet, 1) + "<h2> repli-trees." }],
                     ["raw-html", function () { return "<h2>Repli-Leaves mult: x" + format(player.rt.repliLeavesMult, 4) + "<h2>." }],
-                    ["raw-html", function () { return player.rt.repliTrees.gte(player.rt.repliTreesSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) + " (Based on repli-trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) + " (Based on repli-trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["bar", "repliTreeBar"]]],
                     ["row", [["bar", "replileafBar"]]],

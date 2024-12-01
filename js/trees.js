@@ -59,9 +59,11 @@
         if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("h", 13))
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
+        if (player.pol.pollinatorsIndex == 3) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorsEffect[4])
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32))
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
         player.t.treesToGet = player.t.treesToGet.pow(buyableEffect("rm", 24))
+        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
 
         player.t.leavesPerSecond = buyableEffect("t", 11)
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("t", 12))
@@ -81,7 +83,9 @@
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("h", 13))
         if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
+        if (player.pol.pollinatorsIndex == 3) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorsEffect[5])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 32))
+        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
 
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
 
@@ -109,7 +113,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -157,6 +161,7 @@
         11: {
             costBase() { return new Decimal(100000) },
             costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(5000) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.3) },
@@ -164,7 +169,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Leaf Producer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Leaf Producer"
             },
             display() {
                 return "which are producing " + format(tmp[this.layer].buyables[this.id].effect) + " leaves per second.\n\
@@ -178,6 +183,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -189,6 +195,7 @@
         12: {
             costBase() { return new Decimal(4) },
             costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
@@ -196,7 +203,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Leaf Multiplier"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Leaf Multiplier"
             },
             display() {
                 return "which are boosting leaf gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -210,6 +217,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -221,6 +229,7 @@
         13: {
             costBase() { return new Decimal(250000) },
             costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(5000) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
@@ -228,7 +237,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Extender"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Softcap Extender"
             },
             display() {
                 return "which are extending the tree softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -242,6 +251,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -253,6 +263,7 @@
         14: {
             costBase() { return new Decimal(12) },
             costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
@@ -260,7 +271,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Requirement Divider"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Requirement Divider"
             },
             display() {
                 return "which are dividing the tree requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -274,6 +285,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -285,6 +297,7 @@
         15: {
             costBase() { return new Decimal(30) },
             costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.35).add(1) },
@@ -292,7 +305,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Celestial Point Booster"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Celestial Point Booster"
             },
             display() {
                 return "which are boosting celestial point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -306,6 +319,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -317,6 +331,7 @@
         16: {
             costBase() { return new Decimal(40) },
             costGrowth() { return new Decimal(1.22) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.1) },
@@ -324,7 +339,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Factor Power Booster"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Factor Power Booster"
             },
             display() {
                 return "which are boosting factor power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -338,6 +353,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -349,6 +365,7 @@
         17: {
             costBase() { return new Decimal(200) },
             costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
@@ -356,7 +373,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Value Booster"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Grass Value Booster"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -370,6 +387,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 
@@ -381,6 +399,7 @@
         18: {
             costBase() { return new Decimal(400) },
             costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
@@ -388,7 +407,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Golden Grass Value Booster"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Golden Grass Value Booster"
             },
             display() {
                 return "which are boosting golden grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -402,6 +421,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("r", 12)) this.pay(cost)
 

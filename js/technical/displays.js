@@ -4,11 +4,11 @@ function prestigeButtonText(layer) {
 	if (tmp[layer].type == "normal")
 		return `${player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") : ""}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource} ${tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? `<br><br>Next at ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${tmp[layer].baseResource}` : ""}`
 	if (tmp[layer].type == "static")
-		return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && (tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax ? "Next:" : "Req:") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${tmp[layer].baseResource}		
+		return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && (tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax ? "Next:" : "Req:") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${tmp[layer].baseResource}
 		`
 	if (tmp[layer].type == "none")
 		return ""
-    
+
         return "You need prestige button text"
 }
 
@@ -24,6 +24,233 @@ function constructNodeStyle(layer){
     return style
 }
 
+function constructUniButtonStyle(layer){
+	let style = []
+	let uni = 0
+	switch (layer) {
+		case 'i':
+			style.push({
+			background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
+			"background-origin": "border-box",
+			"border-color": "#555555"});
+			uni = 1;
+			break;
+		case 'in':
+			style.push({
+			background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
+			"background-origin": "border-box",
+			"border-color": "#119B35"});
+			uni = 2;
+			break;
+		case 's':
+			style.push({
+			background: "linear-gradient(140deg, red 0%, black 125%)",
+			"background-origin": "border-box",
+			"border-color": "#800000"});
+			uni = 3;
+			break;
+		case 'cp':
+			style.push({
+			background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
+			"background-origin": "border-box",
+			"border-color": "#013851"});
+			uni = 1.5;
+			break;
+		case 'otherfeat':
+			style.push({
+			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
+			"background-origin": "border-box",
+			"border-color": "purple"});
+			if (player.tab == layer) {
+				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
+			};
+			break;
+		case 'halter':
+			style.push({
+			"color": "white",
+			"background-color": "black",
+			"border-color": "purple"});
+			if (player.tab == layer) {
+				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
+			};
+			break;
+		case 'cb':
+			style.push({'background-color': tmp[layer].color});
+			uni = 0.5;
+			break;
+		default:
+			style.push({'background-color': tmp[layer].color});
+	}
+	if (player.universe == uni) {
+		style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
+	}
+	if(tmp[layer].notify && player[layer].unlocked)
+		style.push({'box-shadow': 'var(--hqProperty2a), 0 0 20px ' + tmp[layer].trueGlowColor})
+    return style
+}
+
+function constructMenuButtonStyle(layer){
+	let style = []
+	switch (layer) {
+		case 'h':
+			style.push({
+			"color": "white",
+			"background-color": "black",
+			"border-color": "#0061ff"});
+			break;
+		case 'pe':
+			style.push({
+			background: "linear-gradient(0deg, #770022 0%, #8D71B4 100%)",
+			"background-origin": "border-box",
+			"border-color": "#770022"});
+			break;
+		case 'rf':
+			style.push({
+			background: "linear-gradient(to right, hsl(210, 60%, 40%), hsl(210, 40%, 60%))",
+			"background-origin": "border-box",
+			"border-color": "#119B35"});
+			break;
+		case 'de':
+			style.push({
+			background: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)",
+			"background-origin": "border-box",
+			"border-color": "#3A2558"});
+			break;
+		case 'd':
+			style.push({
+			background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
+			"background-origin": "border-box",
+			"border-color": "#0061ff"});
+			break;
+		case 'rm':
+			style.push({
+			"background-image": "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
+			"background-origin": "border-box",
+			"color": "white",
+			"border-color": "#0061ff"});
+			break;
+		case 'ad':
+			style.push({
+			background: "linear-gradient(140deg, rgba(0,255,202,1) 0%, rgba(30,181,22,1) 100%)",
+			"background-origin": "border-box",
+			"border-color": "#119B35"});
+			break;
+		case 'ip':
+			style.push({
+			background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)",
+			"background-origin": "border-box",
+			"border-color": "#7c5423"});
+			break;
+		case 'id':
+			style.push({
+			background: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)",
+			"background-origin": "border-box",
+			"border-color": "#b87400"});
+			break;
+		case 'tad':
+			style.push({
+			background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
+			"background-origin": "border-box",
+			"border-color": "#b2d8d8",
+			"color": "#b2d8d8"});
+			break;
+		case 'ta':
+			style.push({
+			background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)",
+			"background-origin": "border-box",
+			"border-color": "#31aeb0",
+			"color": "#008080"});
+			break;
+		case 'bi':
+			style.push({
+			background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)",
+			"background-origin": "border-box",
+			"border-color": "#2B7F0A"});
+			break;
+		case 'om':
+			style.push({
+			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
+			"background-origin": "border-box",
+			"border-color": "purple"});
+			break;
+		case 'ca':
+			style.push({
+			background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+			"background-origin": "border-box",
+			"border-color": "#0f354c"});
+			break;
+		default:
+			style.push({'background-color': tmp[layer].color});
+	}
+	if (player.tab == layer) {
+		if (layer != "r" && layer != "tad") {
+			style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
+		} else {
+			style.push({"outline": "2px solid rgb(255,255,255,1)"})
+		}
+	}
+	if(tmp[layer].notify && player[layer].unlocked)
+		style.push({'box-shadow': 'var(--hqProperty2a), 0 0 20px ' + tmp[layer].trueGlowColor})
+    return style
+}
+
+function constructCbButtonStyle(layer) {
+	let style = []
+	switch (layer) {
+		case 'ps':
+			style.push({"background-color": "#4e7cff"});
+			break;
+		case 'ev0':
+			style.push({
+			background: "linear-gradient(90deg, #e7c97c, #fad25a)",
+			"background-origin": "border-box",
+			"border-color": "#655421",
+			"color": "#655421"});
+			break;
+		case 'ev1':
+			style.push({
+			background: "linear-gradient(140deg, #b00000 0%, #bda500 50%, #b00000 100%)",
+			"background-origin": "border-box",
+			"border-color": "#750000"});
+			break;
+		case 'ev2':
+			style.push({
+			background: "#106ccc",
+			"background-origin": "border-box",
+			"border-color": "black"});
+			break;
+		case 'ev4':
+			style.push({
+			background: "linear-gradient(-90deg, #f38004, #fc3404)",
+			"background-origin": "border-box",
+			"border-color": "#DC2D03"});
+			break;
+		case 'ev8':
+			style.push({
+			background: "linear-gradient(90deg, #d487fd, #4b79ff)",
+			"background-origin": "border-box",
+			"border-color": "#1500bf",
+			"color": "#1500bf"});
+			break;
+		case 'ep0':
+			style.push({"background-color": "#9176af"});
+			break;
+		case 'ep1':
+			style.push({"background-color": "#689b3a"});
+			break;
+		case 'ep2':
+			style.push({"background-color": "#b9966d"});
+			break;
+		default:
+			style.push({'background-color': tmp[layer].color});
+	}
+	if (player.tab == layer) {
+		style.push({"outline": "2px solid rgb(255,255,255,1)"})
+	}
+	if(tmp[layer].notify && player[layer].unlocked)
+		style.push({'box-shadow': 'var(--hqProperty2a), 0 0 20px ' + tmp[layer].trueGlowColor})
+    return style
+}
 
 function challengeStyle(layer, id) {
 	if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) return "canComplete"
@@ -39,9 +266,9 @@ function challengeButtonText(layer, id) {
 function achievementStyle(layer, id){
     ach = tmp[layer].achievements[id]
     let style = []
-    if (ach.image){ 
+    if (ach.image){
         style.push({'background-image': 'url("' + ach.image + '")'})
-    } 
+    }
     if (!ach.unlocked) style.push({'visibility': 'hidden'})
     style.push(ach.style)
     return style
@@ -176,7 +403,7 @@ function updateTabFormat(layer) {
 	}
 
 	// Check for embedded layer
-	if (isPlainObject(tmp[layer].tabFormat) && tmp[layer].tabFormat[tab].embedLayer !== undefined) { 
+	if (isPlainObject(tmp[layer].tabFormat) && tmp[layer].tabFormat[tab].embedLayer !== undefined) {
 		updateTabFormat(tmp[layer].tabFormat[tab].embedLayer)
 	}
 

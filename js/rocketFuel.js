@@ -62,6 +62,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 44))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 45))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 46))
+        if (player.pol.pollinatorsIndex == 7) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorsEffect[13])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.evolvedEffects[4][1])
 
 
@@ -80,7 +81,7 @@
             "RF Tree Boost: Gives a x" + format(player.rf.abilityEffects[1]) + " boost to trees. (" + formatTime(player.rf.abilityTimers[1]) + " left)",
             "RF Grass Boost: Gives a x" + format(player.rf.abilityEffects[2]) + " boost to grass. (" + formatTime(player.rf.abilityTimers[2]) + " left)",
             "RF Fertilizer Boost: Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer. (" + formatTime(player.rf.abilityTimers[3]) + " left)",
-            "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)",
+            "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)<br><h6>(Based on first XP Button)",
             "RF Infinity Point Boost: Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points. (" + formatTime(player.rf.abilityTimers[5]) + " left)",
             "RF Button Cooldown: Divides XP button cooldown by /1.2. (" + formatTime(player.rf.abilityTimers[6]) + " left)",
             "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)",
@@ -141,7 +142,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -151,20 +152,10 @@
             title() { return "1%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.01))
-
-                if (player.rf.abilityIndex == 4)
-                {
-                    let random = getRandomInt(20)
-
-                    if (random == 1)
-                    {
-                        player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
-                        callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
-                    }
-                }
             },
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -172,20 +163,10 @@
             title() { return "30%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.3).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.3))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.3))
-
-                if (player.rf.abilityIndex == 4)
-                {
-                    let random = getRandomInt(20)
-
-                    if (random == 1)
-                    {
-                        player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
-                        callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
-                    }
-                }
             },
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -203,20 +184,10 @@
             title() { return "1" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(1) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>5% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), new Decimal(1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(1)
-
-                if (player.rf.abilityIndex == 4)
-                {
-                    let random = getRandomInt(20)
-
-                    if (random == 1)
-                    {
-                        player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
-                        callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
-                    }
-                }
             },
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -224,20 +195,10 @@
             title() { return "10%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
             unlocked() { return player.rf.abilitiesUnlocked[0]  },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.1).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.1))
-
-                if (player.rf.abilityIndex == 4)
-                {
-                    let random = getRandomInt(20)
-
-                    if (random == 1)
-                    {
-                        player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
-                        callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
-                    }
-                }
             },
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -245,20 +206,10 @@
             title() { return "100%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel)
-
-                if (player.rf.abilityIndex == 4)
-                {
-                    let random = getRandomInt(20)
-
-                    if (random == 1)
-                    {
-                        player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
-                        callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
-                    }
-                }
             },
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -302,7 +253,6 @@
             title() { return "RF XP Button" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[4] },
-            tooltip() { return "<h3>5% chance for a pet???" },
             onClick() {
                 player.rf.abilityIndex = new Decimal(4)
             },
@@ -357,17 +307,24 @@
                 player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
             break;
             case 4:
-                player.rf.abilityEffects[4] = amount.log10().plus(1).mul(2).add(1).abs()
+                player.rf.abilityEffects[4] = player.cb.buttonBaseXP[0].mul(amount.log10().pow(0.8).div(10).add(1))
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
-                player.rf.abilityTimers[4] = amount.log10().add(1).mul(100)
+                player.rf.abilityTimers[4] = player.cb.buttonTimersMax[0].mul(amount.log10().pow(0.8).div(10).add(1.7))
+                let prob = amount.log10().pow(0.75).div(2).add(4).floor()
+                let random = getRandomInt(100)
+
+                if (new Decimal(random).lte(prob)) {
+                    player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
+                    callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
+                }
             break;
             case 5:
-                player.rf.abilityEffects[5] = amount.log10().div(66).add(1)
-                player.rf.abilityTimers[5] = amount.log10().add(1).mul(20)
+                player.rf.abilityEffects[5] = amount.add(1).log10().add(1).div(66).add(1)
+                player.rf.abilityTimers[5] = amount.add(1).log10().add(1).mul(20)
             break;
             case 6:
-                player.rf.abilityTimers[6] = amount.log10().add(1).mul(20)
+                player.rf.abilityTimers[6] = amount.add(1).log10().add(1).mul(20)
             break;
             case 7:
                 player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1)
@@ -568,7 +525,7 @@
         },
         16:
         {
-            title: "Rocket Fuel Upgrade VII",
+            title: "Rocket Fuel Upgrade VI",
             unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
             description: "Rocket Fuel boosts points.",
             cost: new Decimal(1e10),
@@ -582,7 +539,7 @@
         },
         17:
         {
-            title: "Rocket Fuel Upgrade VIII",
+            title: "Rocket Fuel Upgrade VII",
             unlocked() { return hasUpgrade("rf", 16) && inChallenge("ip", 16)},
             description: "Gain 20% of rocket fuel per second.",
             cost: new Decimal(1e12),

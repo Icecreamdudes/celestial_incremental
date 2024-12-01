@@ -23,7 +23,7 @@
       },
     tooltip: "Pests",
     color: "#770022",
-    
+
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -34,7 +34,7 @@
         player.pe.pestsPerSecond = player.pe.pestsPerSecond.div(player.de.antidebuffPointsEffect)
         player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
         }
-        
+
         player.pe.pestEffect = [
             player.pe.pests.pow(1.25).div(10).add(1),
             player.pe.pests.pow(1.05).div(10).add(1),
@@ -52,7 +52,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -96,7 +96,7 @@
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],

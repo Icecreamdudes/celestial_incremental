@@ -23,7 +23,7 @@ addLayer("lo", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "po"
                 player.subtabs["po"]['stuff'] = 'Portals'
@@ -65,7 +65,7 @@ addLayer("lo", {
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["row", [["clickable", 1]]],
@@ -98,7 +98,7 @@ addLayer("los", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "lo"
             },
@@ -129,7 +129,7 @@ addLayer("los", {
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                         ["row", [["clickable", 1]]],

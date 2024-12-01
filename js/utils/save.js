@@ -197,11 +197,8 @@ function load() {
 		loadOptions();
 	}
 
-	if (options.offlineProd) {
-		if (player.offTime === undefined)
-			player.offTime = { remain: 0 };
-		player.offTime.remain += (Date.now() - player.time) / 1000;
-	}
+	player.cb.time = player.cb.time.add((Date.now() - player.time) / 1000);
+
 	player.time = Date.now();
 	versionCheck();
 	changeTheme();
@@ -218,9 +215,9 @@ function load() {
 
 function loadOptions() {
 	let get2 = localStorage.getItem(modInfo.id+"_options");
-	if (get2) 
+	if (get2)
 		options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
-	else 
+	else
 		options = getStartOptions()
 	if (themes.indexOf(options.theme) < 0) theme = "default"
 	fixData(options, getStartOptions())
@@ -287,6 +284,36 @@ function importSave(imported = undefined, forced = false) {
 		return;
 	}
 }
+
+function exportFile() {
+	let data = btoa(JSON.stringify(player));
+	let file = new Blob([data], {type: "text/plain"});
+	if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, "CI_Save");
+    else { // Others
+        var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = "CI_Save";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+}
+
+function importFile() {
+	const input = document.querySelector('input[type="file"]');
+	if (!input.files?.length) return;
+
+	const file = input.files.item(0);
+	if (!file) return;
+
+	file.text().then(data => importSave(data));
+}
+
 function versionCheck() {
 	let setVersion = true;
 

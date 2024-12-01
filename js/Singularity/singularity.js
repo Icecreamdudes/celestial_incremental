@@ -17,7 +17,7 @@ addLayer("s", {
             "border-color": "#800000",
         }
       },
-    
+
     tooltip: "Universe 3 - Domain of Singularity",
     color: "white",
     update(delta) {
@@ -35,7 +35,7 @@ addLayer("s", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "po"
             },
@@ -76,10 +76,10 @@ addLayer("s", {
             },
             "Settings": settingsMicrotab,
         },
-    }, 
+    },
 
     tabFormat: [
-                        ["microtabs", "stuff", { 'border-width': '0px' }], 
+                        ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && player.ca.defeatedCante}
 })

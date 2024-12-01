@@ -64,6 +64,7 @@
         if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.35)
         if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
         if (hasUpgrade("de", 11) && inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
+        if (player.pol.pollinatorsIndex == 5) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorsEffect[8])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
@@ -96,6 +97,7 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.pe.pestEffect[6])
         if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
+        if (player.pol.pollinatorsIndex == 5) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorsEffect[9])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
 
@@ -126,7 +128,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -831,6 +833,7 @@
         31: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(7).pow(1.3).add(1) },
@@ -838,7 +841,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Point Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Point Reinforcer"
             },
             display() {
                 return "which are multiplying point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -852,6 +855,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -863,6 +867,7 @@
         32: {
             costBase() { return new Decimal(100) },
             costGrowth() { return new Decimal(1.125) },
+            purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(1.6).pow(1.2).add(1) },
@@ -870,7 +875,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Leaf and Tree Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Leaf and Tree Reinforcer"
             },
             display() {
                 return "which are multiplying leaf and tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -884,6 +889,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -895,6 +901,7 @@
         33: {
             costBase() { return new Decimal(200) },
             costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(1.15).add(1) },
@@ -902,7 +909,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Grass Reinforcer"
             },
             display() {
                 return "which are multiplying grass gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -916,6 +923,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -927,6 +935,7 @@
         34: {
             costBase() { return new Decimal(350) },
             costGrowth() { return new Decimal(1.175) },
+            purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.1).add(1) },
@@ -934,7 +943,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fertilizer Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Fertilizer Reinforcer"
             },
             display() {
                 return "which are multiplying fertilizer gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -948,6 +957,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -961,6 +971,7 @@
         35: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(8).pow(1.3).add(1) },
@@ -968,7 +979,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Animatter Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Antimatter Reinforcer"
             },
             display() {
                 return "which are multiplying antimatter gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -982,6 +993,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -993,6 +1005,7 @@
         36: {
             costBase() { return new Decimal(1500) },
             costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.26).add(1) },
@@ -1000,7 +1013,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Dimension Power Reinforcer"
             },
             display() {
                 return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1014,6 +1027,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -1025,6 +1039,7 @@
         37: {
             costBase() { return new Decimal(2500) },
             costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.6).pow(1.05).add(1) },
@@ -1032,7 +1047,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Antimatter Dimension Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Antimatter Dimension Reinforcer"
             },
             display() {
                 return "which are multiplying all antimatter dimension production by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1046,6 +1061,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -1057,6 +1073,7 @@
         38: {
             costBase() { return new Decimal(4000) },
             costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).pow(0.8).add(1) },
@@ -1064,7 +1081,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Point Reinforcer"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Infinity Point Reinforcer"
             },
             display() {
                 return "which are multiplying infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1078,6 +1095,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -1133,7 +1151,7 @@
             },
             "Steelie": {
                 buttonStyle() { return { 'color': 'white', 'border-color': "black", 'background': 'grey', } },
-                unlocked() { return hasUpgrade("i", 22) },
+                unlocked() { return hasUpgrade("i", 23) },
                 content:
                 [
                     ["blank", "25px"],

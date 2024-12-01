@@ -8,18 +8,18 @@
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
-	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js",],
+	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js"],
 
 	discordName: "",
 	discordLink: "",
 	initialStartPoints: new Decimal(0), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.2.1",
-	name: "The Pet Update Part II: Epic Pets",
+	num: "1.3",
+	name: "The Layout Update - with QoL",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -36,14 +36,54 @@ let credits = `<h1>Credits:</h1><br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
 		-Bug Fixes by Tsanth and Forwaken.<br>
+		-Revamped Layout Concept by Seder3214.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
+	<h3>v1.3 - The Layout Update - with QoL</h3><br>
 		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
 		<br>
 		<br>
 		<br>
+		Content:<br>
+			- Added the Sidebar Layout.<br>
+			- Added the Pollinators Layer.<br><br>
+		Bugfixes:<br>
+			- Fixed Grass Skip not resetting the last anonymity upgrade.<br>
+			- Fixed Repli-Trees softcap system not functioning correctly.<br>
+			- Fixed Portal bar being very slightly inaccurate.<br>
+			- Fixed Dragon buttons not giving the correct shard.<br>
+			- Fixed Automation buyables not being autobought correctly.<br><br>
+		Typos:<br>
+			- Fixed multiple instances of "replicanti points" being incorrectly typed as just "replicanti".<br>
+			- Fixed Repli-Grass buyable 1's description accidentally saying it multiplied repli-leaf instead of repli-grass.<br>
+			- Fixed Dragon button alerts not showing the correct shard chance.<br>
+			- Fixed Alternate Infinity production text not correctly showing on all "Infinities" tabs.<br>
+			- Fixed upgrade names in IP Challenge 6 being incorrectly numbered.<br>
+			- Fixed Cookie upgrades 1 and 2's effects being mislabeled as "based on dragon points".<br><br>
+		QoL:<br>
+			- Check Back now runs offline with no offline cap.<br>
+			- Automation Shards can trigger once while offline. (Gives use to last buttons)<br>
+			- Added a pity system to Check Back shards.<br>
+			- Improved the rates of Dice and Drippy Ufo pet.<br>
+			- Made Oil a bit brighter to improve contrast.<br>
+			- Added import/export file.<br>
+			- Added a new infinity milestone that keeps Universe 1 upgrades.<br>
+			- Revamped the look of Tav's dimension power tab.<br>
+			- Added new option in Tav Autobuy.<br>
+			- Added the option to autocrunch based on time.<br>
+			- Added Paragon Shards to the pet shop, unlocked at level 3,000.<br>
+			- Added buttons to scroll through the epic shops when in tree-layout.<br><br>
+		Balancing:<br>
+			- Added caps to most uni 1 buyables to prevent lag from automation.<br><br>
+		Refactoring:<br>
+			- Antimatter Dimensions code refactored to fix uncountable bugs.<br>
+			- Infinity Dimensions code refactored to fix uncountable bugs.<br>
+			- Grass code refactored to improve framerate. (Thanks Tsanth)<br><br>
+		???:<br>
+			- Continued work on the buyable code rework, layers improved this patch are hex, grass, AD, and ID.<br>
+			- As I said last patch, this also means the buy max buttons on those layers are subtab specific now.<br><br>
+	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
 			- Fixed Oil buy max buttons not loading correctly.<br>
 			- Fixed Dice rolling with one less side then intended.<br>
@@ -131,7 +171,7 @@ let changelog = `<h1>Changelog:</h1><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
-			   <h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
+	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
@@ -180,7 +220,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
-"commonPetBanner", "uncommonPetBanner", "rarePetBanner"]
+"commonPetBanner", "uncommonPetBanner", "rarePetBanner", "offlineCooldown"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
@@ -209,6 +249,7 @@ function addedPlayerData() { return {
 	//meta stuff
 	gain: new Decimal(0),
 	universe: 1,
+	musuniverse: 1,
 }}
 
 // Display extra things at the top of the page
@@ -243,6 +284,54 @@ function fixOldSave(oldVersion){
 		player.gh.steel = new Decimal(0)
 		player.p.crystals = new Decimal(0)
 		callAlert("Oh no, your save file was inflated. Steel, Crystal, and debuff currencies are reset.", "resources/gat.png")
+	}
+	if (oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
+		setBuyableAmount("ad", 2, player.ad.dimBoostAmount)
+		setBuyableAmount("ad", 3, player.ad.galaxyAmount)
+		setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)
+		setBuyableAmount("id", 11, player.id.dimensionsPurchased[0])
+		setBuyableAmount("id", 12, player.id.dimensionsPurchased[1])
+		setBuyableAmount("id", 13, player.id.dimensionsPurchased[2])
+		setBuyableAmount("id", 14, player.id.dimensionsPurchased[3])
+		setBuyableAmount("id", 15, player.id.dimensionsPurchased[4])
+		setBuyableAmount("id", 16, player.id.dimensionsPurchased[5])
+		setBuyableAmount("id", 17, player.id.dimensionsPurchased[6])
+		setBuyableAmount("id", 18, player.id.dimensionsPurchased[7])
+		// Prevent old save factor buyables from being over cap
+		for (let i = 1; i < 9; i++) {
+			if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+		for (let i = 11; i < 20; i++) {
+			if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+		for (let i = 21; i < 30; i++) {
+            if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+        for (let i = 31; i < 37; i++) {
+            if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
+        }
+		for (let i = 41; i < 49; i++) {
+			if (getBuyableAmount("f", i).gt(250)) setBuyableAmount("f", i, 250)
+        }
+		for (let i = 51; i < 59; i++) {
+			if (getBuyableAmount("f", i).gt(1000)) setBuyableAmount("f", i, 1000)
+        }
+
+		// Prevent old save tree buyables from being over cap
+		if (getBuyableAmount("t", 11).gt(5000)) setBuyableAmount("t", 11, 5000)
+		if (getBuyableAmount("t", 12).gt(1000)) setBuyableAmount("t", 12, 1000)
+		if (getBuyableAmount("t", 13).gt(5000)) setBuyableAmount("t", 13, 5000)
+		for (let i = 14; i < 19; i++) {
+			if (getBuyableAmount("t", i).gt(1000)) setBuyableAmount("t", i, 1000)
+		}
+
+		// Prevent old save grass buyables from being over cap
+		if (getBuyableAmount("g", 11).gt(1000)) setBuyableAmount("g", 11, 1000)
+		if (getBuyableAmount("g", 12).gt(200)) setBuyableAmount("g", 12, 200)
+		if (getBuyableAmount("g", 13).gt(500)) setBuyableAmount("g", 13, 500)
+		if (getBuyableAmount("g", 14).gt(1000)) setBuyableAmount("g", 14, 1000)
+		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
+		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)
 	}
 }
 

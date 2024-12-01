@@ -158,7 +158,7 @@
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
-        if (hasUpgrade("i", 26) && player.points.gte(player.r.pentReq))
+        if (hasUpgrade("i", 27) && player.points.gte(player.r.pentReq))
         {
             player.r.pent = player.r.pent.add(1)
         }
@@ -281,7 +281,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -372,6 +372,7 @@
         11: {
             costBase() { return new Decimal(100) },
             costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.r.timeCubes},
             pay(amt) { player.r.timeCubes = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.2).add(1) },
@@ -379,7 +380,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Golden Grass Reverser"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br>Golden Grass Reverser"
             },
             display() {
                 return "which are multiplying golden grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -393,6 +394,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -404,6 +406,7 @@
         12: {
             costBase() { return new Decimal(300) },
             costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.r.timeCubes},
             pay(amt) { player.r.timeCubes = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(0.8).add(1) },
@@ -411,7 +414,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Crystal Reverser"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br>Crystal Reverser"
             },
             display() {
                 return "which are multiplying crystal gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -425,6 +428,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -436,6 +440,7 @@
         13: {
             costBase() { return new Decimal(700) },
             costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.r.timeCubes},
             pay(amt) { player.r.timeCubes = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).pow(0.75).add(1) },
@@ -443,7 +448,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Negative Infinity Reverser"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br>Negative Infinity Reverser"
             },
             display() {
                 return "which are multiplying negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -457,6 +462,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -468,6 +474,7 @@
         14: {
             costBase() { return new Decimal(1500) },
             costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.r.timeCubes},
             pay(amt) { player.r.timeCubes = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.6).add(1) },
@@ -475,7 +482,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br>Infinity Dimension Reverser"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br>Infinity Dimension Reverser"
             },
             display() {
                 return "which are boosting infinity dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -489,6 +496,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     this.pay(cost)
 
@@ -616,7 +624,7 @@
             },
             "Time Reversal": {
                 buttonStyle() { return {'color': 'white', 'border-color': "grey", 'background': '#d82cd4',} },
-                unlocked() { return hasUpgrade("i", 25) },
+                unlocked() { return hasUpgrade("i", 26) },
                 content:
                 [
                         ["blank", "25px"],

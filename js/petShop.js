@@ -35,6 +35,9 @@
         evoShardsBought: new Decimal(0),
         evoShardsCost: new Decimal(250),
 
+        paraShardsBought: new Decimal(0),
+        paraShardsCost: new Decimal(5000),
+
         crate1Bought: new Decimal(0),
         crate1Cost: new Decimal(6),
 
@@ -124,6 +127,9 @@
         player.ps.evoShardsCost = new Decimal(250)
         player.ps.evoShardsCost = player.ps.evoShardsCost.add(player.ps.evoShardsBought.mul(50))
 
+        player.ps.paraShardsCost = new Decimal(5000)
+        player.ps.paraShardsCost = player.ps.paraShardsCost.add(player.ps.paraShardsBought.mul(1000))
+
         player.ps.crate1Cost = new Decimal(6)
         player.ps.crate1Cost = player.ps.crate1Cost.add(player.ps.crate1Bought.mul(3))
 
@@ -150,6 +156,7 @@
             "Crate 4 cost: " + format(player.ps.crate4Cost),
             "Crate 5 cost: " + format(player.ps.crate5Cost),
             "Crate 6 cost: " + format(player.ps.crate6Cost),
+            "Paragon shard cost: " + format(player.ps.paraShardsCost),
         ]
     },
     resetPrices()
@@ -158,6 +165,7 @@
         player.ps.uncommonPetsBought = new Decimal(0)
         player.ps.rarePetsBought = new Decimal(0)
         player.ps.evoShardsBought = new Decimal(0)
+        player.ps.paraShardsBought = new Decimal(0)
         player.ps.crate1Bought = new Decimal(0)
         player.ps.crate2Bought = new Decimal(0)
         player.ps.crate3Bought = new Decimal(0)
@@ -170,7 +178,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
@@ -332,6 +340,29 @@
                 player.ps.crate6Bought = player.ps.crate6Bought.add(1)
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.crate6Cost)
                 layers.cb.petButton6();
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
+        },
+        36: {
+            title() { return "<img src='resources/paragonShard.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>" },
+            canClick() { return true },
+            unlocked() { return player.ps.unlockedMisc2 },
+            onClick() {
+                player.ps.miscIndex = new Decimal(7)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        37: {
+            title() { return "Buy Paragon Shard" },
+            canClick() { return player.cb.petPoints.gte(player.ps.paraShardsCost) },
+            unlocked() { return player.ps.miscIndex == 7 },
+            onClick() {
+                player.ps.paraShardsBought = player.ps.paraShardsBought.add(1)
+                player.cb.petPoints = player.cb.petPoints.sub(player.ps.paraShardsCost)
+                player.cb.paragonShards = player.cb.paragonShards.add(1);
+                if (player.ps.togglealert == true) {
+                    callAlert("You gained a PARAGON SHARD!", "resources/paragonShard.png");
+                }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
         },
@@ -908,7 +939,7 @@
                 player.cb.petPoints = player.cb.petPoints.sub(player.ps.rarePetPrices[6])
                 player.cb.rarePetAmounts[6] = player.cb.rarePetAmounts[6].add(1);
                 if (player.ps.togglealert == true) {
-                    callAlert("You gained a Grass Square!", "resources/grassSqaureRarePet.png");
+                    callAlert("You gained a Grass Square!", "resources/grassSquareRarePet.png");
                 }
             },
             style: { width: '100px', "min-height": '100px', 'border-radius': "5%" },
@@ -956,11 +987,11 @@
                     ["row", [["clickable", 11]]],
                     ["raw-html", function () { return !player.ps.unlockedMisc ? "Unlocks at check back level 65!" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 22], ["clickable", 24], ["clickable", 26], ["clickable", 28], ["clickable", 31], ["clickable", 33], ["clickable", 35]]],
+                    ["row", [["clickable", 22], ["clickable", 37], ["clickable", 24], ["clickable", 26], ["clickable", 28], ["clickable", 31], ["clickable", 33], ["clickable", 35]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.ps.unlockedMisc ? player.ps.miscDisplay[player.ps.miscIndex] : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 21], ["clickable", 23], ["clickable", 25], ["clickable", 27], ["clickable", 29], ["clickable", 32], ["clickable", 34]]],
+                    ["row", [["clickable", 21], ["clickable", 36], ["clickable", 23], ["clickable", 25], ["clickable", 27], ["clickable", 29], ["clickable", 32], ["clickable", 34]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 901], ["clickable", 902]]],
                 ]

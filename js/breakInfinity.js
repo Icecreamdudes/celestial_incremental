@@ -9,13 +9,19 @@
         brokenInfinities: new Decimal(0),
         brokenInfinitiesToGet: new Decimal(0),
 
-        autocrunchToggle: false,
-        autocrunchInput: new Decimal(0),
-        autocrunchAmount: new Decimal(0),
+        // IAC: Infinity Autocruch
+        IACtoggle: false,
+        IACinput: new Decimal(0),
+        IACamount: new Decimal(1),
+        IACtype: false, // False: Amount ; True: Time
+        IACtime: new Decimal(0),
 
-        autoreverseCrunchInput: new Decimal(0),
-        autoreverseCrunchAmount: new Decimal(0),
-        autoreverseCrunchToggle: false,
+        // NAC: Negative Infinity Autocrunch
+        NACinput: new Decimal(0),
+        NACamount: new Decimal(1),
+        NACtoggle: false,
+        NACtype: false, // False: Amount ; True: Time
+        NACtime: new Decimal(0),
     }
     },
     automate() {
@@ -33,13 +39,13 @@
             "border-color": "#2B7F0A",
         };
       },
-    
+
     tooltip: "Break Infinity",
     color: "#2B7F0A",
     update(delta) {
         let onepersec = new Decimal(1)
 
-
+        // Broken Infinities Calculations
         player.bi.brokenInfinitiesToGet = player.in.infinities
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("bi", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("tad", 12))
@@ -50,51 +56,90 @@
 
         if (hasUpgrade("bi", 25)) player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet.mul(Decimal.mul(0.04, delta)))
 
-        if (player.bi.autocrunchInput.gte(1)) player.bi.autocrunchAmount = player.bi.autocrunchInput
-        if (player.bi.autocrunchInput.lt(1)) player.bi.autocrunchAmount = new Decimal(1)
+        // Set Autocrunch Values
+        if (player.bi.IACinput.gte(1) && !player.bi.IACtype) player.bi.IACamount = player.bi.IACinput
+        if (player.bi.IACinput.lt(1) && !player.bi.IACtype) player.bi.IACamount = new Decimal(1)
+        if (player.bi.IACinput.gte(0) && player.bi.IACtype) player.bi.IACamount = player.bi.IACinput
+        if (player.bi.IACinput.lt(0) && player.bi.IACtype) player.bi.IACamount = new Decimal(1)
 
-        if (player.bi.autoreverseCrunchInput.gte(1)) player.bi.autoreverseCrunchAmount = player.bi.autoreverseCrunchInput
-        if (player.bi.autoreverseCrunchInput.lt(1)) player.bi.autoreverseCrunchAmount = new Decimal(1)
+        // Set Negative Autocrunch Values
+        if (player.bi.NACinput.gte(1) && !player.bi.NACtype) player.bi.NACamount = player.bi.NACinput
+        if (player.bi.NACinput.lt(1) && !player.bi.NACtype) player.bi.NACamount = new Decimal(1)
+        if (player.bi.NACinput.gte(0) && player.bi.NACtype) player.bi.NACamount = player.bi.NACinput
+        if (player.bi.NACinput.lt(0) && player.bi.NACtype) player.bi.NACamount = new Decimal(1)
 
-        if (player.in.infinityPointsToGet.gte(player.bi.autocrunchAmount) && player.bi.autocrunchToggle && player.points.gte(1e308))
-        {
-            if (inChallenge("tad", 11))
-            {
-                if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
-                {
+        // Autocrunch Functionality
+        if (player.in.infinityPointsToGet.gte(player.bi.IACamount) && player.bi.IACtoggle && !player.bi.IACtype && player.points.gte(1e308)) {
+            if (inChallenge("tad", 11)) {
+                if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
                     player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
                     player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
                 }
-                if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
-                {
+                if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
                     player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
                     player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
                 }
-                if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
-                {
+                if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
                     player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
                     player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                 }
             }
-            if (hasUpgrade("bi", 14))
-            {
+            if (hasUpgrade("bi", 14)) {
                     if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
                     if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
                     if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
             }
-            if (!hasMilestone("ip", 21)) 
-            {
+            if (!hasMilestone("ip", 21)) {
                 player.tab = "bigc"
-            } else if (hasMilestone("ip", 21))
-            {
+            } else {
                 layers.bigc.crunch()
             }
         }
-        
-        if (player.ta.negativeInfinityPointsToGet.gte(player.bi.autoreverseCrunchAmount) && player.bi.autoreverseCrunchToggle && player.ad.antimatter.gte(1e308))
-        {
+
+        if (player.bi.IACtoggle && player.bi.IACtype) {
+            player.bi.IACtime = player.bi.IACtime.add(onepersec.mul(delta));
+            if (player.bi.IACtime.gte(player.bi.IACamount) && player.points.gte(1e308)) {
+                player.bi.IACtime = new Decimal(0)
+                if (inChallenge("tad", 11)) {
+                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
+                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
+                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
+                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                    }
+                }
+                if (hasUpgrade("bi", 14)) {
+                        if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                        if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                        if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
+                if (!hasMilestone("ip", 21)) {
+                    player.tab = "bigc"
+                } else {
+                    layers.bigc.crunch()
+                }
+            }
+        }
+
+        // Negative Autocrunch Functionality
+        if (player.ta.negativeInfinityPointsToGet.gte(player.bi.NACamount) && player.bi.NACtoggle && !player.bi.NACtype && player.ad.antimatter.gte(1e308)) {
             layers.revc.reverseCrunch()
             player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
+        }
+
+        if (player.bi.NACtoggle && player.bi.NACtype) {
+            player.bi.NACtime = player.bi.NACtime.add(onepersec.mul(delta));
+            if (player.bi.NACtime.gte(player.bi.NACamount) && player.ad.antimatter.gte(1e308)) {
+                player.bi.NACtime = new Decimal(0)
+                layers.revc.reverseCrunch()
+                player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
+            }
         }
     },
     breakInfinities()
@@ -106,7 +151,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "in"
             },
@@ -161,38 +206,74 @@
         14: {
             title() { return "<h2>Autocrunch Toggle: On" },
             canClick() { return true },
-            unlocked() { return player.bi.autocrunchToggle },
+            unlocked() { return player.bi.IACtoggle },
             onClick() {
-                player.bi.autocrunchToggle = false
+                player.bi.IACtoggle = false
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '80px' },
         },
         15: {
             title() { return "<h2>Autocrunch Toggle: Off" },
             canClick() { return true },
-            unlocked() { return !player.bi.autocrunchToggle },
+            unlocked() { return !player.bi.IACtoggle },
             onClick() {
-                player.bi.autocrunchToggle = true
+                player.bi.IACtoggle = true
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '80px' },
         },
         16: {
             title() { return "<h2>Auto Reverse Crunch Toggle: On" },
             canClick() { return true },
-            unlocked() { return player.bi.autoreverseCrunchToggle },
+            unlocked() { return player.bi.NACtoggle },
             onClick() {
-                player.bi.autoreverseCrunchToggle = false
+                player.bi.NACtoggle = false
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '80px' },
         },
         17: {
             title() { return "<h2>Auto Reverse Crunch Toggle: Off" },
             canClick() { return true },
-            unlocked() { return !player.bi.autoreverseCrunchToggle },
+            unlocked() { return !player.bi.NACtoggle },
             onClick() {
-                player.bi.autoreverseCrunchToggle = true
+                player.bi.NACtoggle = true
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '80px' },
+        },
+        18: {
+            title() { return "Amount" },
+            canClick() { return player.bi.IACtype },
+            unlocked() { return true },
+            onClick() {
+                player.bi.IACtype = false
+            },
+            style: { width: '150px', "min-height": '40px' },
+        },
+        19: {
+            title() { return "Time" },
+            canClick() { return !player.bi.IACtype },
+            unlocked() { return true },
+            onClick() {
+                player.bi.IACtype = true
+            },
+            style: { width: '150px', "min-height": '40px' },
+        },
+        21: {
+            title() { return "Amount" },
+            canClick() { return player.bi.NACtype },
+            unlocked() { return true },
+            onClick() {
+                player.bi.NACtype = false
+            },
+            style: { width: '150px', "min-height": '40px' },
+        },
+        22: {
+            title() { return "Time" },
+            canClick() { return !player.bi.NACtype },
+            unlocked() { return true },
+            onClick() {
+                player.bi.NACtype = true
+            },
+            style: { width: '150px', "min-height": '40px' },
         },
     },
     bars: {
@@ -268,13 +349,13 @@
         {
             title: "BI IP Upgrade VII",
             unlocked() { return true },
-            description: "Total hex runs boost code experience gain.",
+            description: "Total hex runs boost pollinator gain.",
             cost: new Decimal(1e12),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.ip.hexRuns.mul(1.02).add(1)
+                return player.ip.hexRuns.add(1).log10().add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '125px', height: '100px', }
@@ -551,7 +632,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
@@ -583,7 +664,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
@@ -615,7 +696,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.bi.brokenInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(cost)
@@ -646,7 +727,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
                 ]
 
@@ -673,12 +754,13 @@
             },
             "Autocruncher(s)": {
                 buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 26) },
+                unlocked() { return hasMilestone("ip", 27) },
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Autocrunch amount: " + formatWhole(player.bi.autocrunchAmount) + " infinity points on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["text-input", "autocrunchInput", {
+                    ["raw-html", function () { return !player.bi.IACtype ? "Autocrunch amount: " + formatWhole(player.bi.IACamount) + " infinity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.bi.IACtype ? "Autocrunch time: " + formatTime(player.bi.IACtime) + "/" + formatTime(player.bi.IACamount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["text-input", "IACinput", {
                         color: "var(--color)",
                         width: "400px",
                         "font-family": "Calibri",
@@ -688,10 +770,12 @@
                         background: "var(--background)",
                     }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 18], ["clickable", 19]]],
                     ["row", [["clickable", 14], ["clickable", 15]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Autocrunch amount: " + formatWhole(player.bi.autoreverseCrunchAmount) + " negative infinity points on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["text-input", "autoreverseCrunchInput", {
+                    ["raw-html", function () { return !player.bi.NACtype ? "Autocrunch amount: " + formatWhole(player.bi.NACamount) + " negative infinity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.bi.NACtype ? "Autocrunch time: " + formatTime(player.bi.NACtime) + "/" + formatTime(player.bi.NACamount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["text-input", "NACinput", {
                         color: "var(--color)",
                         width: "400px",
                         "font-family": "Calibri",
@@ -701,12 +785,13 @@
                         background: "var(--background)",
                     }],
                     ["blank", "25px"],
+                    ["row", [["clickable", 21], ["clickable", 22]]],
                     ["row", [["clickable", 16], ["clickable", 17]]],
                 ]
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

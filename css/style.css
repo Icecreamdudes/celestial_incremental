@@ -28,6 +28,55 @@ html, body {
 	height: 100%;
 }
 
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background: black;
+	border: 2px solid #7a7a7a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(0deg, #343434 0%, #3B3B3B 50%, #424242 100%);
+	border: 2px solid #7a7a7a;
+	height: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(0deg, #3B3B3B 0%, #424242 50%, #545454 100%);
+	border: 2px solid #7a7a7a;
+	height: 50px;
+}
+
+::-webkit-scrollbar-button:single-button {
+    background-color: #3B3B3B;
+	border: 2px solid #7a7a7a;
+
+    display: block;
+    background-size: 9px;
+    background-repeat: no-repeat;
+}
+::-webkit-scrollbar-button:single-button:hover {
+    background-color: #424242;
+	border: 2px solid #7a7a7a;
+
+    display: block;
+    background-size: 9px;
+    background-repeat: no-repeat;
+}
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+    height: 16px;
+    width: 16px;
+    background-position: center 4px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(122, 122, 122)'><polygon points='50,00 0,50 100,50'/></svg>");
+}
+::-webkit-scrollbar-button:single-button:vertical:increment {
+    height: 16px;
+    width: 16px;
+    background-position: center 4px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(122, 122, 122)'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
 td {
 	padding: 0
 }
@@ -751,59 +800,59 @@ button > * {
 	font-size: 24px;
 	text-shadow: 0px 0px 5px #000000;
    }
-   
+
    .Title-Text-M {
 	font-size: 28px;
 	text-shadow: 0px 0px 0px #000000;
    }
-   
+
    .Title-Text-L {
 	font-size: 32px;
 	text-shadow: 0px 0px 0px #000000;
    }
-   
+
    /*Buyable or clickable texts*/
    .Body-Text-4XS {
 	 font-size: 10px;
    }
-   
+
    .Body-Text-3XS {
 	 font-size: 12px;
    }
-   
+
    .Body-Text-XXS {
 	font-size: 14px;
    }
-   
+
    .Body-Text-XS {
 	font-size: 16px;
    }
-   
+
    .Body-Text-S {
 	font-size: 18px;
 	text-shadow: 0px 0px 0px #000000;
    }
-   
+
    .Body-Text-M {
 	font-size: 20px;
 	text-shadow: 0px 0px 0px #000000;
    }
-   
+
    .Body-Text-L {
 	font-size: 22px;
 	text-shadow: 0px 0px 0px #000000;
    }
-   
+
    .Body-Text-XL {
 	font-size: 24px;
 	text-shadow: 0px 0px 10px #000000;
    }
-   
+
    .Body-Text-XXL {
 	font-size: 26px;
 	text-shadow: 0px 0px 10px #000000;
    }
-   
+
    .st-dialog {
 	 position: fixed;
 	 top: 50%;
@@ -819,7 +868,7 @@ button > * {
 	 display: none;
 	 transition: opacity 2s ease;
    }
-   
+
    .st-dialog.appear {
 	 opacity: 1;
    }
@@ -835,7 +884,7 @@ button > * {
 	align-items: center;
 	justify-content: center;
   }
-  
+
   .modal-content {
 	background: #ccc;
 	padding: 20px;
@@ -843,7 +892,7 @@ button > * {
 	text-align: center;
 	color: #000; /* Set text color to black */
   }
-  
+
   .big-title-text {
 	font-size: 100px;
   }
@@ -862,6 +911,21 @@ button > * {
     position: absolute;
     bottom: 10vh; /* Distance from the bottom of the viewport */
     left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Ensure it's centered */
+    border: 2px solid black;
+    box-sizing: border-box;
+    overflow: hidden; /* Ensure content stays within bounds */
+    z-index: 1; /* Spawn area stays below other elements */
+}
+
+/* Spawn Area when new layout is active */
+.menu-spawn-area {
+    width: calc(80vw - 266px); /* Set width relative to viewport width */
+    height: 50vh; /* Set height relative to viewport height */
+    opacity: 90%;
+    position: absolute;
+    bottom: 10vh; /* Distance from the bottom of the viewport */
+    left: calc(50% + 133px); /* Center horizontally */
     transform: translateX(-50%); /* Ensure it's centered */
     border: 2px solid black;
     box-sizing: border-box;
@@ -930,10 +994,10 @@ button > * {
 	pointer-events: none; /* This ensures the mouse events pass through the wisps */
 	/* You can customize further styles like box-shadow, animation, etc. */
   }
-  
+
 
 /* Styling for the large green circle */
-#mainCircle {
+.mainCircle {
     width: 80px;
     height: 80px;
     background-color: green;
@@ -946,13 +1010,27 @@ button > * {
 	border: 2px solid black; /* Add a black border */
 }
 
+/* Styling for the large green circle when Sidebar Layout is enabled.*/
+.menuMainCircle {
+    width: 80px;
+    height: 80px;
+    background-color: green;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 133px);
+    transform: translate(-50%, -50%);
+    z-index: 10; /* Ensure the circle appears above the spawn area */
+	border: 2px solid black; /* Add a black border */
+}
+
 /* Styling for the smaller circles (the projectiles) */
 .smallCircle {
   width: 20px;
   height: 20px;
   background-color: green;
   border-radius: 50%;
-  
+
   position: absolute;
   animation: moveInLine 2s linear infinite;
 }

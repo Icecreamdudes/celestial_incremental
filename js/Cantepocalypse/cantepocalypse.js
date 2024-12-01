@@ -7,6 +7,7 @@ addLayer("cp", {
     startData() { return {
         unlocked: true,
         unlockedPortal: false,
+        cantepocalypseActive: false,
 
         replicantiPoints: new Decimal(1),
         replicantiPointsMult: new Decimal(0),
@@ -36,6 +37,12 @@ addLayer("cp", {
     branches: ["i"],
     update(delta) {
         let onepersec = new Decimal(1)
+
+        if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
+            player.cp.cantepocalypsePrep = false
+            player.cp.cantepocalypseActive = true
+            if (options.newMenu == true) showTab("a1u")
+        }
 
         if (player.subtabs["cp"]['stuff'] == 'Portal')
         {
@@ -117,7 +124,7 @@ addLayer("cp", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "po"
             },
@@ -218,6 +225,9 @@ addLayer("cp", {
             unlocked() { return true },
             description: "Unlocks THE PORTAL.",
             cost: new Decimal(1e90),
+            onPurchase() {
+                player.cp.cantepocalypseActive = false
+            },
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
@@ -261,10 +271,10 @@ addLayer("cp", {
                 [
                         ["blank", "25px"],
                         ["raw-html", function () { return "Softcap starts at <h3>" + format(player.cp.replicantiSoftcapStart) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
-["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
                 ]
 
             },

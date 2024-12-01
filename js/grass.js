@@ -1,4 +1,4 @@
-﻿addLayer('g', {
+addLayer('g', {
     name: 'Grass', // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: 'G', // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -55,6 +55,9 @@
             new Decimal(1),
         ],
         moonstoneLevelMax: new Decimal(1),
+
+        grassMax: false,
+        moonMax: false,
     }
     },
     automate() {
@@ -224,7 +227,7 @@
         1: {
             title() { return '<h2>Return' },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = 'i'
             },
@@ -232,23 +235,41 @@
         },
         2: {
             title() { return 'Buy Max On' },
-            canClick() { return player.buyMax == false },
+            canClick() { return player.g.grassMax == false },
             unlocked() { return true },
             onClick() {
-                player.buyMax = true
+                player.g.grassMax = true
             },
             style: { width: '75px', 'min-height': '50px', }
         },
         3: {
             title() { return 'Buy Max Off' },
-            canClick() { return player.buyMax == true  },
+            canClick() { return player.g.grassMax == true  },
             unlocked() { return true },
             onClick() {
-                player.buyMax = false
+                player.g.grassMax = false
             },
             style: { width: '75px', 'min-height': '50px', }
         },
         4: {
+            title() { return 'Buy Max On' },
+            canClick() { return player.g.moonMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.g.moonMax = true
+            },
+            style: { width: '75px', 'min-height': '50px', }
+        },
+        5: {
+            title() { return 'Buy Max Off' },
+            canClick() { return player.g.moonMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.g.moonMax = false
+            },
+            style: { width: '75px', 'min-height': '50px', }
+        },
+        6: {
             title() { return '<h3>Lower Level' },
             canClick() { return player.g.moonstoneLevel.gt(1) },
             unlocked() { return true },
@@ -257,7 +278,7 @@
             },
             style: { width: '100px', 'min-height': '100px' },
         },
-        5: {
+        7: {
             title() { return '<h3>Increase Level' },
             canClick() { return player.g.moonstoneLevel.lt(player.g.moonstoneLevelMax) },
             unlocked() { return true },
@@ -386,55 +407,76 @@
             },
             effectDisplay() { return 'x'+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
+        23:
+        {
+            title: "Grass Upgrade XI",
+            unlocked() { return hasUpgrade("i", 22) },
+            description() { return "Boost pollinator gain based on golden grass." },
+            cost: new Decimal("1e250"),
+            currencyLocation() { return player.g },
+            currencyDisplayName: "Grass",
+            currencyInternalName: "grass",
+            effect() {
+                return player.g.goldGrass.add(1).log(10).pow(0.3).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
         22:
         {
-            title: 'Grass Upgrade XI',
-            unlocked() { return player.po.realmMods || hasUpgrade('g', 22) },
-            description() { return 'Raise golden grass effect by ^6.' },
-            cost: new Decimal('1e550'),
+            title: "Grass Upgrade XII",
+            unlocked() { return player.po.realmMods || hasUpgrade("g", 22) },
+            description() { return "Raise golden grass effect by ^6." },
+            cost: new Decimal("1e550"),
             currencyLocation() { return player.g },
-            currencyDisplayName: 'Grass',
-            currencyInternalName: 'grass',
+            currencyDisplayName: "Grass",
+            currencyInternalName: "grass",
         },
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.grass},
+            pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Value'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Grass Value'
             },
             display() {
                 return 'which are boosting grass value by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
-                let base = new Decimal(10)
-                let growth = 1.2
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         12: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(15) },
+            costBase() { return new Decimal(15) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(200) },
+            currency() { return player.g.grass},
+            pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) && player.g.buyables[12].lt(200)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + '/200<br/>Grass Grow Rate'
             },
@@ -443,30 +485,32 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
-                let base = new Decimal(15)
-                let growth = 1.25
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         13: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(25) },
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.g.grass},
+            pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(2) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) && player.g.buyables[13].lt(500)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + '/500<br/>Grass Capacity'
             },
@@ -475,504 +519,531 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
-                let base = new Decimal(25)
-                let growth = 1.3
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         14: {
-            cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(20) },
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.22) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.grass},
+            pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(3).pow(1.25).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Celestial Point Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Grass Celestial Point Boost'
             },
             display() {
                 return 'which are boosting celestial point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
-                let base = new Decimal(20)
-                let growth = 1.22
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         15: {
-            cost(x) { return new Decimal(1.34).pow(x || getBuyableAmount(this.layer, this.id)).mul(35) },
+            costBase() { return new Decimal(35) },
+            costGrowth() { return new Decimal(1.34) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.grass},
+            pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(2).pow(1.15).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Factor Power Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Grass Factor Power Boost'
             },
             display() {
                 return 'which are boosting factor power gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
-                let base = new Decimal(35)
-                let growth = 1.34
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         16: {
-            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(60) },
+            costBase() { return new Decimal(60) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.grass},
+            pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.grass.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Grass Prestige Point Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Grass Prestige Point Boost'
             },
             display() {
                 return 'which are boosting prestige point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy() {
-                let base = new Decimal(60)
-                let growth = 1.4
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.grass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.grass = player.g.grass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         17: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.g.goldGrass},
+            pay(amt) { player.g.goldGrass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return hasUpgrade('g', 14) },
-            canAfford() { return player.g.goldGrass.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Golden Grass Value'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/250<br/>Golden Grass Value'
             },
             display() {
                 return 'which are boosting golden grass value by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy() {
-                let base = new Decimal(4)
-                let growth = 1.25
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         18: {
-            cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
+            costBase() { return new Decimal(8) },
+            costGrowth() { return new Decimal(1.45) },
+            purchaseLimit() { return new Decimal(200) },
+            currency() { return player.g.goldGrass},
+            pay(amt) { player.g.goldGrass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
             unlocked() { return hasUpgrade('g', 14) },
-            canAfford() { return player.g.goldGrass.gte(this.cost()) && player.g.buyables[18].lt(500)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/500<br/>Golden Grass Capacity'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/200<br/>Golden Grass Capacity'
             },
             display() {
                 return 'which are increasing golden grass capacity by +' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy() {
-                let base = new Decimal(8)
-                let growth = 1.45
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         19: {
-            cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(15) },
+            costBase() { return new Decimal(15) },
+            costGrowth() { return new Decimal(1.7) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.g.goldGrass},
+            pay(amt) { player.g.goldGrass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(3).add(1) },
             unlocked() { return hasUpgrade('g', 14) },
-            canAfford() { return player.g.goldGrass.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Pent Requirement Divider'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Pent Requirement Divider'
             },
             display() {
                 return 'which are dividing pent requirement by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy() {
-                let base = new Decimal(15)
-                let growth = 1.7
-                if (player.buyMax == false && !hasMilestone('r', 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(buyonecost)
+                if (player.g.grassMax == false && !hasMilestone("r", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("r", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.goldGrass, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('r', 13)) player.g.goldGrass = player.g.goldGrass.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
             style: { width: '275px', height: '150px', }
         },
         21: {
-            cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(2) },
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.15) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Value'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Moonstone Value'
             },
             display() {
                 return 'which are boosting moonstone value by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(2)
-                let growth = 1.15
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         22: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Damage'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Moonstone Damage'
             },
             display() {
                 return 'which are boosting damage dealt to moonstone by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(3)
-                let growth = 1.25
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         23: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.6).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Reload Time'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Moonstone Reload Time'
             },
             display() {
                 return 'which are dividing moonstone reload time by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(4)
-                let growth = 1.3
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         24: {
-            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.6).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Moonstone Spawn Time'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Moonstone Spawn Time'
             },
             display() {
                 return 'which are dividing moonstone spawn time by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(5)
-                let growth = 1.35
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         25: {
-            cost(x) { return new Decimal(1.345).pow(x || getBuyableAmount(this.layer, this.id)).mul(2) },
+            costBase() { return new Decimal(2) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).pow(0.9).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Check Back XP Lunar Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Check Back XP Lunar Boost'
             },
             display() {
                 return 'which are boosting check back xp gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(2)
-                let growth = 1.345
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         26: {
-            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Replicanti Lunar Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Replicanti Lunar Boost'
             },
             display() {
                 return 'which are boosting replicanti mult by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(3)
-                let growth = 1.2
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         27: {
-            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(44).pow(4).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Hex Lunar Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Hex Lunar Boost'
             },
             display() {
                 return 'which are boosting hex 0 points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(4)
-                let growth = 1.35
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         28: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(22).pow(2).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Challenge Dice Lunar Boost'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000<br/>Challenge Dice Lunar Boost'
             },
             display() {
                 return 'which boosting challenge dice points by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(5)
-                let growth = 1.3
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
         29: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(99) },
+            currency() { return player.g.moonstone},
+            pay(amt) { player.g.moonstone = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
             unlocked() { return true },
-            canAfford() { return player.g.moonstone.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '<br/>Increase Max Level'
+                return format(getBuyableAmount(this.layer, this.id), 0) + '/99<br/>Increase Max Level'
             },
             display() {
                 return 'Current max level: ' + formatWhole(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Moonstone'
             },
             buy() {
-                let base = new Decimal(100)
-                let growth = 10
-                if (player.buyMax == false)
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.g.moonstone = player.g.moonstone.sub(buyonecost)
+                if (player.g.moonMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.g.moonstone, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.g.moonstone = player.g.moonstone.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '200px', height: '150px', }
         },
     },
     milestones: {
@@ -1012,7 +1083,9 @@
                         }
                     ],
                     ['raw-html', () =>
-                        '<div id=spawn-area class=spawn-area></div>',
+                        options.newMenu
+                            ? '<div id=spawn-area class=menu-spawn-area></div>'
+                            : '<div id=spawn-area class=spawn-area></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1071,7 +1144,9 @@
                         },
                     ],
                     ['raw-html', () =>
-                        '<div id=gold-spawn-area class=spawn-area></div>',
+                        options.newMenu
+                            ? '<div id=gold-spawn-area class=menu-spawn-area></div>'
+                            : '<div id=gold-spawn-area class=spawn-area></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1097,6 +1172,7 @@
                             'color': 'white',
                             'font-size': '24px',
                             'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['raw-html', () =>
@@ -1105,7 +1181,8 @@
                         {
                             'color': 'white',
                             'font-size': '20px',
-                            'font-family': 'monospace'
+                            'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['blank', '25px'],
@@ -1125,6 +1202,7 @@
                             'color': 'white',
                             'font-size': '24px',
                             'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['raw-html', () =>
@@ -1135,10 +1213,13 @@
                             'color': 'white',
                             'font-size': '24px',
                             'font-family': 'monospace',
+                            'user-select': 'none',
                         },
                     ],
                     ['raw-html', () =>
-                        '<div id=mainCircle></div>',
+                        options.newMenu
+                            ? '<div id=mainCircle class=menuMainCircle></div>'
+                            : '<div id=mainCircle class=mainCircle></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1146,7 +1227,9 @@
                         },
                     ],
                     ['raw-html', () =>
-                        '<div id=moonstone-spawn-area class=spawn-area></div>',
+                        options.newMenu
+                            ? '<div id=moonstone-spawn-area class=menu-spawn-area></div>'
+                            : '<div id=moonstone-spawn-area class=spawn-area></div>',
                         {
                             'color': 'white',
                             'font-size': '24px',
@@ -1174,95 +1257,87 @@
                     ],
                     ['blank', '25px'],
                     ['row', [
-                        ['clickable', 2],
-                        ['clickable', 3]
-                    ]],
-                    ['blank', '25px'],
-                    ['row', [
-                        ['buyable', 21],
-                        ['buyable', 22],
-                        ['buyable', 23],
-                        ['buyable', 24]
-                    ]],
-                    ['row', [
-                        ['buyable', 25],
-                        ['buyable', 26],
-                        ['buyable', 27],
-                        ['buyable', 28]
-                    ]],
-                ],
-            },
-            'Moonstone Levels': {
-                buttonStyle:  {
-                    'color': '#047ce4',
-                    'border-color': '#0490f4'
-                },
-                unlocked: () => player.ev.evolutionsUnlocked[7],
-                content: [
-                    ['blank', '25px'],
-                    ['raw-html', () =>
-                        'You have <h3>' + format(player.g.moonstone) +
-                            '</h3> moonstone.',
-                        {
-                            'color': 'white',
-                            'font-size': '24px',
-                            'font-family': 'monospace',
-                        },
-                    ],
-                    ['raw-html', () =>
-                        '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) +
-                            '/' + formatWhole(player.g.moonstoneLevelMax),
-                        {
-                            'color': 'white',
-                            'font-size': '24px',
-                            'font-family': 'monospace',
-                        },
-                    ],
-                    ['blank', '25px'],
-                    ['row', [
-                        ['buyable', 29]
-                    ]],
-                    ['blank', '25px'],
-                    ['row', [
                         ['clickable', 4],
                         ['clickable', 5]
                     ]],
                     ['blank', '25px'],
-                    ['raw-html', () =>
-                        '<h3>Effects:',
-                        {
-                            'color': 'white',
-                            'font-size': '24px',
-                            'font-family': 'monospace',
-                        },
-                    ],
-                    ['raw-html', () =>
-                        '<h4>x' + format(player.g.moonstoneLevelEffects[0]) +
-                            ' to moonstone health.',
-                        {
-                            'color': 'white',
-                            'font-size': '24px',
-                            'font-family': 'monospace',
-                        },
-                    ],
-                    ['raw-html', () =>
-                        '<h4>x' + format(player.g.moonstoneLevelEffects[1]) +
-                            ' to moonstone spawn time.',
-                        {
-                            'color': 'white',
-                            'font-size': '24px',
-                            'font-family': 'monospace',
-                        },
-                    ],
-                    ['raw-html', () =>
-                        '<h4>x' + format(player.g.moonstoneLevelEffects[2]) +
-                            ' to moonstone value.',
-                        {
-                            'color': 'white',
-                            'font-size': '24px',
-                            'font-family': 'monospace',
-                        },
-                    ],
+                    ['row', [
+                        ['column', [
+                            ['row', [
+                                ['buyable', 21],
+                                ['buyable', 22],
+                            ]],
+                            ['row', [
+                                ['buyable', 23],
+                                ['buyable', 24]
+                            ]],
+                            ['row', [
+                                ['buyable', 25],
+                                ['buyable', 26]
+                            ]],
+                            ['row', [
+                                ['buyable', 27],
+                                ['buyable', 28]
+                            ]],
+                        ]],
+                        ['raw-html', function () { return "&nbsp"}, { 'font-size': '100px', 'user-select': 'none'}], // Serves as blank
+                        ['v-line', '600px'],
+                        ['raw-html', function () { return "&nbsp"}, { 'font-size': '100px', 'user-select': 'none'}], // Serves as blank
+                        ['column', [
+                            ['buyable', 29],
+                            ['blank', '25px'],
+                            ['row', [
+                                ['clickable', 6],
+                                ['clickable', 7]
+                            ]],
+                            ['blank', '25px'],
+                            ['raw-html', () =>
+                                '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) +
+                                    '/' + formatWhole(player.g.moonstoneLevelMax),
+                                {
+                                    'color': 'white',
+                                    'font-size': '24px',
+                                    'font-family': 'monospace',
+                                },
+                            ],
+                            ['blank', '25px'],
+                            ['raw-html', () =>
+                                '<h3>Level Effects:',
+                                {
+                                    'color': 'white',
+                                    'font-size': '24px',
+                                    'font-family': 'monospace',
+                                },
+                            ],
+                            ['raw-html', () =>
+                                '<h4>x' + format(player.g.moonstoneLevelEffects[0]) +
+                                    ' to moonstone health.',
+                                {
+                                    'color': 'white',
+                                    'font-size': '24px',
+                                    'font-family': 'monospace',
+                                },
+                            ],
+                            ['raw-html', () =>
+                                '<h4>x' + format(player.g.moonstoneLevelEffects[1]) +
+                                    ' to moonstone spawn time.',
+                                {
+                                    'color': 'white',
+                                    'font-size': '24px',
+                                    'font-family': 'monospace',
+                                },
+                            ],
+                            ['raw-html', () =>
+                                '<h4>x' + format(player.g.moonstoneLevelEffects[2]) +
+                                    ' to moonstone value.',
+                                {
+                                    'color': 'white',
+                                    'font-size': '24px',
+                                    'font-family': 'monospace',
+                                },
+                            ],
+                        ]],
+                    ]],
                 ],
             },
             'Buyables': {
@@ -1326,6 +1401,7 @@
                         ['upgrade', 18],
                         ['upgrade', 19],
                         ['upgrade', 21],
+                        ['upgrade', 23],
                         ['upgrade', 22]
                     ]],
                 ],
@@ -1372,18 +1448,6 @@ const updateGrass = (delta) => {
 
     // Pre-calculate how much grass we're adding this tick
     const seconds = new Decimal(1).mul(delta)
-
-    // Cap grass grow rate at 200
-    // XXX: in what cases does this get pushed over 200, and why?
-    if (player.g.buyables[12].gt(200)) {
-        player.g.buyables[12] = new Decimal(200)
-    }
-
-    // Cap grass capacity at 500
-    // XXX: why are we jumping from 13 to 500?
-    if (player.g.buyables[13].gte(13)) {
-        player.g.buyables[13] = new Decimal(500)
-    }
 
     // =================================================================
     // Timer logic
@@ -1544,6 +1608,13 @@ const updateGrass = (delta) => {
     // REORDERING BOUNDARY: above stays above, below stays below
     // -------------------------
 
+    // Wind Pollinator effect
+    if (player.pol.pollinatorsIndex == 4) {
+        player.g.grassVal = player.g.grassVal
+            .mul(player.pol.pollinatorsEffect[6])
+    }
+
+    // Steel buyable and Time Cube effect
     player.g.grassVal = player.g.grassVal
         .mul(buyableEffect('gh', 33))
         .mul(player.r.timeCubeEffects[2])
@@ -1554,6 +1625,14 @@ const updateGrass = (delta) => {
 
     player.g.grassVal = player.g.grassVal
         .pow(buyableEffect('rm', 25))
+
+    // -------------------------
+    // REORDERING BOUNDARY: above stays above, below stays below
+    // -------------------------
+
+    // Grass Halter Divider
+    player.g.grassVal = player.g.grassVal
+        .div(player.po.halterEffects[5])
 
     // -------------------------
     // REORDERING BOUNDARY: above stays above, below stays below
@@ -1693,6 +1772,12 @@ const updateGoldGrass = (delta) => {
     // -------------------------
     // REORDERING BOUNDARY: above stays above, below stays below
     // -------------------------
+
+    // Wind Pollinator effect
+    if (player.pol.pollinatorsIndex == 4) {
+        player.g.goldGrassVal = player.g.goldGrassVal
+            .mul(player.pol.pollinatorsEffect[7])
+    }
 
     player.g.goldGrassVal = player.g.goldGrassVal
         .mul(player.cb.rarePetEffects[4][1])
@@ -2192,7 +2277,7 @@ function createMoonstone(quantity) {
             const moonstoneRect = moonstone.getBoundingClientRect()
 
             // Check for collision
-            const shotInMoonstone = 
+            const shotInMoonstone =
                 moonstoneRect.left < smallCircleRect.right &&
                 moonstoneRect.right > smallCircleRect.left &&
                 moonstoneRect.top < smallCircleRect.bottom &&

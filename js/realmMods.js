@@ -141,11 +141,12 @@
         for (let i = 0; i < 6; i++)
         {
             player.rm.realmEnergyPerSecond[i] = player.rm.realmMods[i].pow(0.7).div(10)
+            if (player.pol.pollinatorsIndex == 7) player.rm.realmEnergyPerSecond[i] = player.rm.realmEnergyPerSecond[i].mul(player.pol.pollinatorsEffect[15])
             player.rm.realmEnergy[i] = player.rm.realmEnergy[i].add(player.rm.realmEnergyPerSecond[i].mul(delta))
         }
         player.rm.realmEnergyText = "You have " + format(player.rm.realmEnergy[player.rm.currentDisplay]) + " energy for this realm.<br><h5>You are gaining " + format(player.rm.realmEnergyPerSecond[player.rm.currentDisplay]) + " energy per second. (Based on realm mods)"
 
-        player.rm.halterBoostEffect = player.rm.halterBoost.plus(1).log10().pow(0.1).add(1)
+        player.rm.halterBoostEffect = player.rm.halterBoost.add(1).log10().pow(0.1).add(1)
     },
     blankModReset()
     {
@@ -335,7 +336,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },

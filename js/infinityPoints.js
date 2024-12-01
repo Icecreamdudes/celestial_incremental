@@ -38,7 +38,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "in"
             },
@@ -548,13 +548,20 @@
             style: { width: '800px', "min-height": '90px' },
         },
         25: {
-            requirementDescription: "<h3>30000 Infinities",
-            effectDescription() { return "Tav's domain don't reset infinity milestones." },
-            done() { return player.in.infinities.gte(30000) },
-            unlocked() { return player.in.unlockedBreak },
+            requirementDescription: "<h3>15000 Infinities",
+            effectDescription() { return "Keep Universe 1 upgrades." },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(100000) },
+            unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         26: {
+            requirementDescription: "<h3>30000 Infinities",
+            effectDescription() { return "Tav's domain don't reset infinity milestones." },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) },
+            unlocked() { return player.in.unlockedBreak },
+            style: { width: '800px', "min-height": '90px' },
+        },
+        27: {
             requirementDescription: "<h3>70000 Infinities",
             effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
             done() { return player.in.infinities.gte(70000) },
@@ -575,16 +582,16 @@
                 player.po.rocketFuel = false
                 player.po.hex = false
                 player.po.realmMods = false
-                if (player.po.breakInfinity = true) {
+                if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -597,10 +604,10 @@
             rewardDescription: "Unlocks a new check back button at level 125.",
             unlocked() { return hasChallenge("ip", 11) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -619,16 +626,16 @@
                 player.po.rocketFuel = false
                 player.po.hex = false
                 player.po.realmMods = false
-                if (player.po.breakInfinity = true) {
+                if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -642,10 +649,10 @@
             rewardDescription: "Unlocks infinity point buyables and new milestones.",
             unlocked() { return hasChallenge("ip", 13) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -664,13 +671,13 @@
                 player.po.rocketFuel = false
                 player.po.hex = false
                 player.po.realmMods = false
-                if (player.po.breakInfinity = true) {
+                if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
 
                 player.d.challengeDicePoints = new Decimal(0)
                 player.d.buyables[21] = new Decimal(0)
@@ -686,7 +693,7 @@
                 }
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -705,16 +712,16 @@
                 player.po.rocketFuel = false
                 player.po.hex = false
                 player.po.realmMods = false
-                if (player.po.breakInfinity = true) {
+                if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
                     player.po.featureSlots = player.po.featureSlotsMax
                 }
 
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -728,14 +735,14 @@
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
 
                 player.cb.level = new Decimal(1)
                 player.cb.xp = new Decimal(0)
                 player.cb.totalxp = new Decimal(5.1)
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -749,10 +756,10 @@
             rewardDescription: "....???",
             unlocked() { return hasChallenge("ip", 17) && !hasChallenge('ip', 18) },
             onEnter() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             onExit() {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
 
@@ -799,6 +806,7 @@
                         ["row", [["milestone", 24]]],
                         ["row", [["milestone", 25]]],
                         ["row", [["milestone", 26]]],
+                        ["row", [["milestone", 27]]],
                 ]
 
             },

@@ -35,11 +35,11 @@
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Epic Fragmentation",
     color: "#cb79ed",
     update(delta) {
         let onepersec = new Decimal(1)
-        
+
         player.epic.bannerResetTimer = player.epic.bannerResetTimer.sub(onepersec.mul(delta))
         if (player.epic.bannerResetTimer.lte(0))
         {
@@ -57,7 +57,7 @@
         ]
 
         player.epic.bannerButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(7200),]
-        
+
         for (let i = 0; i < player.epic.bannerButtonTimersMax.length; i++)
         {
             player.epic.bannerButtonTimers[i] = player.epic.bannerButtonTimers[i].sub(onepersec.mul(delta))
@@ -68,7 +68,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
@@ -340,7 +340,7 @@
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["row", [["clickable", 1]]],
@@ -370,7 +370,7 @@ addLayer("ep0", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Dotknight",
     color: "#cb79ed",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -411,11 +411,29 @@ addLayer("ep0", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+        2: {
+            title() { return player.cb.epicPetLevels[2].gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[2].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep2"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
+        3: {
+            title() { return player.cb.epicPetLevels[1].gt(0) ? "<img src='resources/dragonEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[1].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep1"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         11: {
             title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
@@ -427,10 +445,12 @@ addLayer("ep0", {
                 player.ep0.dotknightPointButtonTimers[0] = player.ep0.dotknightPointButtonTimersMax[0]
 
                     let random = getRandomInt(100)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (1%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -445,10 +465,12 @@ addLayer("ep0", {
                 player.ep0.dotknightPointButtonTimers[1] = player.ep0.dotknightPointButtonTimersMax[1]
 
                     let random = getRandomInt(50)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (2%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -463,10 +485,12 @@ addLayer("ep0", {
                 player.ep0.dotknightPointButtonTimers[2] = player.ep0.dotknightPointButtonTimersMax[2]
 
                     let random = getRandomInt(50)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained 2 Evolution Shards! (2%)", "resources/evoShard.png");
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(4)
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -489,7 +513,7 @@ addLayer("ep0", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         12:
         {
             title: "Dotknight Upgrade II",
@@ -504,7 +528,7 @@ addLayer("ep0", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         13:
         {
             title: "Dotknight Upgrade III",
@@ -519,7 +543,7 @@ addLayer("ep0", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
     },
     buyables: {
     },
@@ -556,11 +580,11 @@ addLayer("ep0", {
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }
@@ -587,11 +611,11 @@ addLayer("ep1", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Dragon",
     color: "#cb79ed",
     update(delta) {
         let onepersec = new Decimal(1)
-        
+
         player.ep1.dragonLevelEffect = player.cb.epicPetLevels[1].pow(1.15).div(14).add(1)
 
         player.ep1.dragonPointsToGet = [new Decimal(0.2), new Decimal(0.45), new Decimal(0.9),]
@@ -628,11 +652,29 @@ addLayer("ep1", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+        2: {
+            title() { return player.cb.epicPetLevels[0].gt(0) ? "<img src='resources/dotknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[0].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep0"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
+        3: {
+            title() { return player.cb.epicPetLevels[2].gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[2].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep2"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         11: {
             title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
@@ -646,8 +688,11 @@ addLayer("ep1", {
                     let random = getRandomInt(2500)
                     if (random == 1)
                     {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.paragonShards = player.cb.paragonShards.add(1);
+                        player.cb.pityParaCurrent = new Decimal(0);
                         callAlert("You gained an Paragon Shard! (0.04%)", "resources/paragonShard.png");
+                    } else {
+                        player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.04);
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -662,10 +707,12 @@ addLayer("ep1", {
                 player.ep1.dragonPointButtonTimers[1] = player.ep1.dragonPointButtonTimersMax[1]
 
                     let random = getRandomInt(1000)
-                    if (random == 1)
-                    {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        callAlert("You gained an Paragon Shard! (1%)", "resources/paragonShard.png");
+                    if (random == 1) {
+                        player.cb.paragonShards = player.cb.paragonShards.add(1);
+                        player.cb.pityParaCurrent = new Decimal(0);
+                        callAlert("You gained an Paragon Shard! (0.1%)", "resources/paragonShard.png");
+                    } else {
+                        player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.1);
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -680,10 +727,12 @@ addLayer("ep1", {
                 player.ep1.dragonPointButtonTimers[2] = player.ep1.dragonPointButtonTimersMax[2]
 
                     let random = getRandomInt(500)
-                    if (random == 1)
-                    {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        callAlert("You gained a Paragon Shard! (2%)", "resources/paragonShard.png");
+                    if (random == 1) {
+                        player.cb.paragonShards = player.cb.paragonShards.add(1);
+                        player.cb.pityParaCurrent = new Decimal(0);
+                        callAlert("You gained a Paragon Shard! (0.2%)", "resources/paragonShard.png");
+                    } else {
+                        player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.2);
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -706,7 +755,7 @@ addLayer("ep1", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         12:
         {
             title: "Dragon Upgrade II",
@@ -721,7 +770,7 @@ addLayer("ep1", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         13:
         {
             title: "Dragon Upgrade III",
@@ -736,7 +785,7 @@ addLayer("ep1", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
     },
     buyables: {
     },
@@ -773,11 +822,11 @@ addLayer("ep1", {
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }
@@ -789,7 +838,7 @@ addLayer("ep2", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-        
+
         cookiePoints: new Decimal(0),
         cookieLevelEffect: new Decimal(1),
         cookiePointsToGet: [new Decimal(10), new Decimal(25), new Decimal(60),],
@@ -804,7 +853,7 @@ addLayer("ep2", {
     },
     nodeStyle() {
     },
-    tooltip: "Evolution",
+    tooltip: "Cookie",
     color: "#cb79ed",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -845,11 +894,29 @@ addLayer("ep2", {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "cb"
             },
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+        2: {
+            title() { return player.cb.epicPetLevels[1].gt(0) ? "<img src='resources/dragonEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[1].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep1"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
+        },
+        3: {
+            title() { return player.cb.epicPetLevels[0].gt(0) ? "<img src='resources/dotknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return player.cb.epicPetLevels[0].gt(0) },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "ep0"
+            },
+            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         11: {
             title() { return player.ep2.cookiePointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[0]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[0]) + " Cookie Points."},
@@ -860,19 +927,23 @@ addLayer("ep2", {
                 player.ep2.cookiePoints = player.ep2.cookiePoints.add(player.ep2.cookiePointsToGet[0])
                 player.ep2.cookiePointButtonTimers[0] = player.ep2.cookiePointButtonTimersMax[0]
 
-                    let random = getRandomInt(10)
-                    if (random == 1)
-                    {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        callAlert("You gained an Evolution Shard! (10%)", "resources/evoShard.png");
-                    }
+                let random = getRandomInt(10)
+                if (random == 1) {
+                    player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    player.cb.pityEvoCurrent = new Decimal(0);
+                    callAlert("You gained an Evolution Shard! (10%)", "resources/evoShard.png");
+                } else {
+                    player.cb.pityEvoCurrent = player.cb.pityParaCurrent.add(10);
+                }
 
-                    let random1 = getRandomInt(100)
-                    if (random1 == 1)
-                    {
-                        player.cb.paragonShards = player.cb.paragonShards.add(1);
-                        callAlert("You gained a Paragon Shard! (1%)", "resources/paragonShard.png");
-                    }
+                let random1 = getRandomInt(100)
+                if (random1 == 1) {
+                    player.cb.paragonShards = player.cb.paragonShards.add(1);
+                    player.cb.pityParaCurrent = new Decimal(0);
+                    callAlert("You gained a Paragon Shard! (1%)", "resources/paragonShard.png");
+                } else {
+                    player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(1);
+                }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -886,17 +957,21 @@ addLayer("ep2", {
                 player.ep2.cookiePointButtonTimers[1] = player.ep2.cookiePointButtonTimersMax[1]
 
                 let random = getRandomInt(5)
-                if (random == 1)
-                {
+                if (random == 1) {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    player.cb.pityEvoCurrent = new Decimal(0);
                     callAlert("You gained an Evolution Shard! (20%)", "resources/evoShard.png");
+                } else {
+                    player.cb.pityEvoCurrent = player.cb.pityParaCurrent.add(20);
                 }
 
                 let random1 = getRandomInt(40)
-                if (random1 == 1)
-                {
+                if (random1 == 1) {
                     player.cb.paragonShards = player.cb.paragonShards.add(1);
+                    player.cb.pityParaCurrent = new Decimal(0);
                     callAlert("You gained a Paragon Shard! (2.5%)", "resources/paragonShard.png");
+                } else {
+                    player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(2.5);
                 }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -911,17 +986,21 @@ addLayer("ep2", {
                 player.ep2.cookiePointButtonTimers[2] = player.ep2.cookiePointButtonTimersMax[2]
 
                     let random = getRandomInt(3)
-                    if (random == 1)
-                    {
+                    if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                        player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (33%)", "resources/evoShard.png");
-                    } 
+                    } else {
+                        player.cb.pityEvoCurrent = player.cb.pityParaCurrent.add(33);
+                    }
 
                     let random1 = getRandomInt(25)
-                    if (random1 == 1)
-                    {
+                    if (random1 == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
+                        player.cb.pityParaCurrent = new Decimal(0);
                         callAlert("You gained a Paragon Shard! (4%)", "resources/paragonShard.png");
+                    } else {
+                        player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(4);
                     }
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
@@ -934,7 +1013,7 @@ addLayer("ep2", {
         {
             title: "Cookie Upgrade I",
             unlocked() { return true },
-            description() { return "Boosts dimension boost base based on dragon points." },
+            description() { return "Boosts dimension boost base based on cookie points." },
             cost: new Decimal(100),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookie Points",
@@ -944,12 +1023,12 @@ addLayer("ep2", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         12:
         {
             title: "Cookie Upgrade II",
             unlocked() { return true },
-            description() { return "Boosts challenge dice points based on dragon points." },
+            description() { return "Boosts challenge dice points based on cookie points." },
             cost: new Decimal(250),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookie Points",
@@ -959,7 +1038,7 @@ addLayer("ep2", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        }, 
+        },
         13:
         {
             title: "Cookie Upgrade III",
@@ -974,7 +1053,7 @@ addLayer("ep2", {
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
-        },  
+        },
     },
     buyables: {
     },
@@ -1011,11 +1090,11 @@ addLayer("ep2", {
                 ]
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep2.cookiePoints) + "</h3> cookie points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }

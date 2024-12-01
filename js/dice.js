@@ -106,6 +106,7 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 41))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
+        if (player.pol.pollinatorsIndex == 7) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorsEffect[12])
 
         if (player.d.autoRollCooldown.lt(0))
         {
@@ -147,7 +148,7 @@
         {
             if (inChallenge("ip", 15))
             {
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch();
             }
             if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
             if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
@@ -163,7 +164,7 @@
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
         if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
 
-        if (hasUpgrade("i", 29)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
+        if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
 
         player.d.boosterDiceStatsPerSecond = buyableEffect("d", 21)
         for (let i = 0; i < 11; i++)
@@ -207,7 +208,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -270,7 +271,7 @@
         12: {
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
-            tooltip() { return "<h3>5% chance for a pet???" },
+            tooltip() { return "<h3>" + player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(5).floor() + "% chance for a pet???" },
             unlocked() { return true },
             onClick() {
                 if (!hasChallenge("ip", 15))
@@ -291,9 +292,10 @@
                 }
                 player.d.boosterDiceCooldown = new Decimal(120)
 
-                let random = getRandomInt(20)
+                let random = getRandomInt(100)
+                let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
 
-                if (random == 1)
+                if (new Decimal(random).lte(prob))
                 {
                     player.cb.rarePetAmounts[1] = player.cb.rarePetAmounts[1].add(1);
                     callAlert("You gained a Dice!", "resources/diceRarePet.png");
@@ -301,7 +303,7 @@
 
                 if (inChallenge("ip", 15))
                 {
-                    player.in.infinityPause = new Decimal(5)
+                    layers.in.bigCrunch();
                 }
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)

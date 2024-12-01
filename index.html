@@ -41,6 +41,114 @@
 
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
+		<div class="titleHeader" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
+		<div class="contentMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-270px'}:{'left':'0px'}">
+		<!-- Universes -->
+			<div class="uniMenu">
+				<div class="contentHeader">UNI</div>
+				<button class="uniButton" v-if="layerShown('i') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe='1'"><span class="buttonText">1</span></button>
+				<button class="uniButton" v-if="layerShown('in') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('in') " onclick="player.universe='2'"><span class="buttonText">2</span></button>
+				<button class="uniButton" v-if="layerShown('cp')" v-bind:style="constructUniButtonStyle('cp') " onclick="player.universe='1.5'"><span class="buttonText">A1</span></button>
+				<button class="uniButton" v-if="layerShown('s') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe='3'"><span class="buttonText">3</span></button>
+			</div>
+		<!-- Meta Content -->
+			<div class="metaMenu" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">
+				<div class="contentHeader" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">META</div>
+				<button class="uniButton" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13)) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('otherfeat')" onclick="showTab('otherfeat')"><span class="buttonText">OTF</span></button>
+				<button class="uniButton" v-if="hasMilestone('ip', 23) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('halter') " onclick="showTab('halter')"><span class="buttonText">HLT</span></button>
+				<button class="uniButton" v-if="layerShown('cb') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('cb') " onclick="player.universe='0.5';showTab('cb')"><span class="buttonText">CB</span></button>
+			</div>
+		<!-- Settings -->
+			<div class="miscMenu">
+				<img class="miscButton" onclick="showTab('settings')" src="options_wheel.png"></img>
+			</div>
+		</div>
+		<div class="layerMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-200px'}:{'left':'76px'}">
+		<!-- Universe 1 Stuff -->
+			<div class="uniHeader" v-if="player.universe == 1">Universe 1<br>Overworld</div>
+				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1u') " onclick="showTab('u1u')"><span class="buttonText">Upgrades</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('h') || layerShown('r') || layerShown('f') || layerShown('p')) && player.universe == 1">Row 1</div>
+				<button class="menuButton" v-if="layerShown('h') && player.universe == 1" v-bind:style="constructMenuButtonStyle('h') " onclick="showTab('h')"><span class="buttonText">Hex</span></button>
+				<button class="menuButton" v-if="layerShown('r') && player.universe == 1" v-bind:style="constructMenuButtonStyle('r') " onclick="showTab('r')"><span class="buttonText">Ranks</span></button>
+				<button class="menuButton" v-if="layerShown('f') && player.universe == 1" v-bind:style="constructMenuButtonStyle('f') " onclick="showTab('f')"><span class="buttonText">Factors</span></button>
+				<button class="menuButton" v-if="layerShown('p') && player.universe == 1" v-bind:style="constructMenuButtonStyle('p') " onclick="showTab('p')"><span class="buttonText">Prestige</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('t') || layerShown('g') || layerShown('pe') || layerShown('pol') || layerShown('gh') || layerShown('rf')) && player.universe == 1">Row 2</div>
+				<button class="menuButton" v-if="layerShown('t') && player.universe == 1" v-bind:style="constructMenuButtonStyle('t') " onclick="showTab('t')"><span class="buttonText">Trees</span></button>
+				<button class="menuButton" v-if="layerShown('g') && player.universe == 1" v-bind:style="constructMenuButtonStyle('g') " onclick="showTab('g')"><span class="buttonText">Grass</span></button>
+				<button class="menuButton" v-if="layerShown('pe') && player.universe == 1" v-bind:style="constructMenuButtonStyle('pe') " onclick="showTab('pe')"><span class="buttonText">Pests</span></button>
+				<button class="menuButton" v-if="layerShown('pol') && player.universe == 1" v-bind:style="constructMenuButtonStyle('pol') " onclick="showTab('pol')"><span class="buttonText">Pollinators</span></button>
+				<button class="menuButton" v-if="layerShown('gh') && player.universe == 1" v-bind:style="constructMenuButtonStyle('gh') " onclick="showTab('gh')"><span class="buttonText">Grasshop</span></button>
+				<button class="menuButton" v-if="layerShown('rf') && player.universe == 1" v-bind:style="constructMenuButtonStyle('rf') " onclick="showTab('rf')"><span class="buttonText">Rocket Fuel</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('de') || layerShown('m') || layerShown('d')) && player.universe == 1">Row 3</div>
+				<button class="menuButton" v-if="layerShown('de') && player.universe == 1" v-bind:style="constructMenuButtonStyle('de') " onclick="showTab('de')"><span class="buttonText">Debuff</span></button>
+				<button class="menuButton" v-if="layerShown('m') && player.universe == 1" v-bind:style="constructMenuButtonStyle('m') " onclick="showTab('m')"><span class="buttonText">Mods</span></button>
+				<button class="menuButton" v-if="layerShown('d') && player.universe == 1" v-bind:style="constructMenuButtonStyle('d') " onclick="showTab('d')"><span class="buttonText">Dice</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('rm') || layerShown('oi')) && player.universe == 1">Row 4</div>
+				<button class="menuButton" v-if="layerShown('rm') && player.universe == 1" v-bind:style="constructMenuButtonStyle('rm') " onclick="showTab('rm')"><span class="buttonText">Realm Mods</span></button>
+				<button class="menuButton" v-if="layerShown('oi') && player.universe == 1" v-bind:style="constructMenuButtonStyle('oi') " onclick="showTab('oi')"><span class="buttonText">Oil</span></button>
+
+		<!-- Universe 2 Stuff -->
+			<div class="uniHeader" style="margin-bottom:0px; border-bottom:0px" v-if="player.universe == 2">Universe 2<br>Antimatter World</div>
+			<div class="menuHeader" v-if="(layerShown('ad') || layerShown('ip') || layerShown('id')) && player.universe == 2">Row 1</div>
+				<button class="menuButton" v-if="layerShown('ad') && player.universe == 2" v-bind:style="constructMenuButtonStyle('ad') " onclick="showTab('ad')"><span class="buttonText">Antimatter Dimensions</span></button>
+				<button class="menuButton" v-if="layerShown('ip') && player.universe == 2" v-bind:style="constructMenuButtonStyle('ip') " onclick="showTab('ip')"><span class="buttonText">Infinity</span></button>
+				<button class="menuButton" v-if="layerShown('id') && player.universe == 2" v-bind:style="constructMenuButtonStyle('id') " onclick="showTab('id')"><span class="buttonText">Infinity Dimensions</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('tad') || layerShown('ta') || layerShown('bi') || layerShown('om')) && player.universe == 2">Row 2</div>
+				<button class="menuButton" v-if="layerShown('tad') && player.universe == 2" v-bind:style="constructMenuButtonStyle('tad') " onclick="showTab('tad')"><span class="buttonText">Tav's Domain</span></button>
+				<button class="menuButton" v-if="layerShown('ta') && player.universe == 2" v-bind:style="constructMenuButtonStyle('ta') " onclick="showTab('ta')"><span class="buttonText">Tav, Celestial of Limits</span></button>
+				<button class="menuButton" v-if="layerShown('bi') && player.universe == 2" v-bind:style="constructMenuButtonStyle('bi') " onclick="showTab('bi')"><span class="buttonText">Break Infinity</span></button>
+				<button class="menuButton" v-if="layerShown('om') && player.universe == 2" v-bind:style="constructMenuButtonStyle('om') " onclick="showTab('om')"><span class="buttonText">Otherworldly Feature Mastery</span></button>
+
+			<div class="menuHeader" v-if="layerShown('ca') && player.universe == 2">Row 3</div>
+				<button class="menuButton" v-if="layerShown('ca') && player.universe == 2" v-bind:style="constructMenuButtonStyle('ca') " onclick="showTab('ca')"><span class="buttonText">Cante, Celestial of Replicanti</span></button>
+
+		<!-- Universe A1 Stuff -->
+			<div class="uniHeader" v-if="player.universe == 1.5">Alt-Universe 1<br>Cantepocalypse</div>
+				<button class="menuButton" v-if="player.universe == 1.5" v-bind:style="constructMenuButtonStyle('a1u') " onclick="showTab('a1u')"><span class="buttonText">Upgrades</span></button>
+				<button class="menuButton" v-if="player.universe == 1.5" v-bind:style="constructMenuButtonStyle('a1s') " onclick="showTab('a1s')"><span class="buttonText">Softcap</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('ar') || layerShown('pr') || layerShown('an')) && player.universe == 1.5">Row 1</div>
+				<button class="menuButton" v-if="layerShown('ar') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('ar') " onclick="showTab('ar')"><span class="buttonText">Alternate Ranks</span></button>
+				<button class="menuButton" v-if="layerShown('pr') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('pr') " onclick="showTab('pr')"><span class="buttonText">Perks</span></button>
+				<button class="menuButton" v-if="layerShown('an') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('an') " onclick="showTab('an')"><span class="buttonText">Anonymity</span></button>
+
+			<div class="menuHeader" v-if="(layerShown('rt') || layerShown('rg') || layerShown('gs')) && player.universe == 1.5">Row 2</div>
+				<button class="menuButton" v-if="layerShown('rt') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('rt') " onclick="showTab('rt')"><span class="buttonText">Repli-Trees</span></button>
+				<button class="menuButton" v-if="layerShown('rg') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('rg') " onclick="showTab('rg')"><span class="buttonText">Repli-Grass</span></button>
+				<button class="menuButton" v-if="layerShown('gs') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('gs') " onclick="showTab('gs')"><span class="buttonText">Grass-Skip</span></button>
+
+			<div class="menuHeader" v-if="layerShown('oi') && player.universe == 1.5">Row 3</div>
+				<button class="menuButton" v-if="layerShown('oi') && player.universe == 1.5" v-bind:style="constructMenuButtonStyle('oi') " onclick="showTab('oi')"><span class="buttonText">Oil</span></button>
+
+		<!-- Universe 3 Stuff -->
+			<div class="uniHeader" v-if="player.universe == 3">Universe 3<br>Singularity</div>
+			<span v-if="player.universe == 3">COMING SOON!!!</span>
+
+		<!-- Check Back Stuff -->
+			<div class="uniHeader" v-if="player.universe == 0.5">Check Back</div>
+				<button class="menuButton" v-if="player.universe == 0.5" v-bind:style="constructCbButtonStyle('cb') " onclick="showTab('cb')"><span class="buttonText">Check Back</span></button>
+				<button class="menuButton" v-if="(player.cb.highestLevel.gte(25) || player.cb.XPBoostUnlock) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ps') " onclick="showTab('ps')"><span class="buttonText">Pet Shop</span></button>
+				<button class="menuButton" v-if="player.cb.highestLevel.gte(1500) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('epic') " onclick="showTab('epic')"><span class="buttonText">Epic Fragmentation</span></button>
+
+			<div class="menuHeader" v-if="(player.ev.evolutionsUnlocked[0] || player.ev.evolutionsUnlocked[1] || player.ev.evolutionsUnlocked[2] || player.ev.evolutionsUnlocked[4] || player.ev.evolutionsUnlocked[8]) && player.universe == 0.5">Evo. Features</div>
+				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[0] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev0') " onclick="showTab('ev0')"><span class="buttonText">Goldsmith</span></button>
+				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[1] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev1') " onclick="showTab('ev1')"><span class="buttonText">MrRedShark</span></button>
+				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[2] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev2') " onclick="showTab('ev2')"><span class="buttonText">Insane Face</span></button>
+				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[4] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev4') " onclick="showTab('ev4')"><span class="buttonText">Sun</span></button>
+				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[8] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev8') " onclick="showTab('ev8')"><span class="buttonText">Marcel</span></button>
+
+			<div class="menuHeader" v-if="(player.cb.epicPetLevels[0].gte(1) || player.cb.epicPetLevels[1].gte(1) || player.cb.epicPetLevels[2].gte(1)) && player.universe == 0.5">Epic Shops</div>
+				<button class="menuButton" v-if="player.cb.epicPetLevels[0].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep0') " onclick="showTab('ep0')"><span class="buttonText">Dotknight</span></button>
+				<button class="menuButton" v-if="player.cb.epicPetLevels[1].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep1') " onclick="showTab('ep1')"><span class="buttonText">Dragon</span></button>
+				<button class="menuButton" v-if="player.cb.epicPetLevels[2].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep2') " onclick="showTab('ep2')"><span class="buttonText">Cookie</span></button>
+
+		</div>
+		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'274px'}">{{options.menuShown==true?'<':'>'}}</button>
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth">

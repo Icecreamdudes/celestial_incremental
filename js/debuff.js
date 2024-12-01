@@ -34,10 +34,10 @@
       },
     tooltip: "Debuff",
     color: "#3A2558",
-    
+
     update(delta) {
         let onepersec = new Decimal(1)
-        
+
         if (player.de.antidebuffPause.gt(0)) {
             layers.de.antidebuffReset();
         }
@@ -313,7 +313,7 @@
 
         //dice
         player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)] 
+        player.d.diceRolls = [new Decimal(1)]
         player.d.dice = new Decimal(1)
 
         player.d.buyables[11] = new Decimal(0)
@@ -345,14 +345,14 @@
             }
         }
 
-        
+
     },
     branches: ["t", "m"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -455,7 +455,7 @@
             unlocked() { return true },
             onClick() {
                 player.tad.domainResetPause = new Decimal(5)
-                player.in.infinityPause = new Decimal(5)
+                layers.in.bigCrunch();
                 player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet)
             },
             style: { width: '400px', "min-height": '100px' },
@@ -595,7 +595,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -627,7 +627,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -659,7 +659,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -691,7 +691,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -723,7 +723,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -755,7 +755,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -787,7 +787,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -819,7 +819,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-    
+
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player.de.tavEssence = player.de.tavEssence.sub(cost)
@@ -927,14 +927,14 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"], 
+                    ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                     ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
     ]
 
             },
         },
-    }, 
+    },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

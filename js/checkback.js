@@ -525,6 +525,7 @@ addLayer("cb", {
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
         {
             player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(buyableEffect("ev0", 14))
+            player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(player.cb.uncommonPetEffects[1][2])
             player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(player.cb.evolvedEffects[2][0])
             player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(player.cb.epicPetEffects[0][1])
         }
@@ -705,6 +706,7 @@ addLayer("cb", {
         player.cb.XPBoostTimersMax = [new Decimal(10800), new Decimal(129600)]
         for (let i = 0; i < player.cb.XPBoostTimersMax.length; i++)
         {
+            player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(player.cb.uncommonPetEffects[1][2])
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(player.cb.epicPetEffects[0][2])
         }
         for (let i = 0; i < player.cb.XPBoostTimers.length; i++)
@@ -1571,7 +1573,7 @@ addLayer("cb", {
             title() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? player.cb.uncommonPetImage[1] : player.cb.lockedImg},
             canClick() { return player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) },
             unlocked() { return true },
-            tooltip() { return player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4]|| player.cb.uncommonPetLevels[1].gt(0) && !player.cb.viewingEvolved[4] ? "<h3>x" + format(player.cb.uncommonPetEffects[1][0]) + " to lines of code.<br>x" + format(player.cb.uncommonPetEffects[1][1]) + " to leaves.<br>/" + format(player.cb.uncommonPetEffects[1][2]) + " to all check back button cooldowns." : player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? "^" + format(player.cb.evolvedEffects[4][0]) + " to star effect.<br>x" + format(player.cb.evolvedEffects[4][1]) + " to rocket fuel." :"" },
+            tooltip() { return player.cb.uncommonPetAmounts[1].gt(0)  && !player.cb.viewingEvolved[4]|| player.cb.uncommonPetLevels[1].gt(0) && !player.cb.viewingEvolved[4] ? "<h3>x" + format(player.cb.uncommonPetEffects[1][0]) + " to lines of code.<br>x" + format(player.cb.uncommonPetEffects[1][1]) + " to leaves.<br>/" + format(player.cb.uncommonPetEffects[1][2]) + " to main tab check back button cooldowns." : player.cb.uncommonPetAmounts[1].gt(0) || player.cb.uncommonPetLevels[1].gt(0) ? "^" + format(player.cb.evolvedEffects[4][0]) + " to star effect.<br>x" + format(player.cb.evolvedEffects[4][1]) + " to rocket fuel." :"" },
             onClick() {
                 player.cb.uncommonPetDisplayIndex = new Decimal(1)
             },

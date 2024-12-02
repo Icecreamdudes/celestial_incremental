@@ -597,7 +597,7 @@
     challenges: {
         11: {
             name: "Tav's Domain",
-            challengeDescription() { return "<h4>Debuffs explained in challenge!<h5>\nDoes an infinity reset, negative infinity reset, lose all infinities and milestones. (Also resets on challenge leave)" },
+            challengeDescription() { return "<h4>Debuffs explained in challenge!<h5>\nDoes an infinity reset and a negative infinity reset, and lose all infinities and milestones. (Also resets on leaving the challenge)" },
             goalDescription() { return "None" },
             goal() { return false },
             canComplete: function () { return false },

@@ -758,7 +758,7 @@
                 content:
                 [
         ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante's cores." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante cores." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["row", [["bar", "bar"]]],
         ["blank", "25px"],

@@ -452,7 +452,7 @@ addLayer("pol", {
         },
         p3: {
             title: "Bat",
-            body() { return "Fun Fact: 300 species of fruit rely on bats for pollination. These include species of bananas, mangoes and durians." },
+            body() { return "Fun Fact: 300 species of fruit rely on bats for pollination. These include species of bananas, mangoes, and durians." },
             unlocked() { return player.pol.pollinatorsIndex == 3},
         },
         p4: {

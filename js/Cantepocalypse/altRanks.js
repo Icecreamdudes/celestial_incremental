@@ -86,7 +86,7 @@
             style: { width: '400px', "min-height": '50px'},
         },
         13: {
-            title() { return "<h3>Reset replicanti points, rank points and tier points for tetr points." },
+            title() { return "<h3>Reset replicanti points, rank points, and tier points for tetr points." },
             canClick() { return player.ar.tetrPointsToGet.gte(1) },
             unlocked() { return hasUpgrade("cp", 13) },
             onClick() {

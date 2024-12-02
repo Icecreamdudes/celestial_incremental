@@ -531,7 +531,7 @@
                 return "You have " + format(player.d.dice, 0) + "/100 dice."
             },
             display() {
-                return "Buys another dice.\n\
+                return "Buys another die.\n\
                     Req: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy() {

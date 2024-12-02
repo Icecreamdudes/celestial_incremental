@@ -331,16 +331,11 @@ addLayer("in", {
             for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
             {
                 player.ad.dimensionAmounts[i] = new Decimal(0)
-                player.ad.dimensionsPurchased[i] = new Decimal(0)
+                player.ad.buyables[11+i] = new Decimal(0)
             }
 
-            player.ad.dimensionsUnlocked[4] = false
-            player.ad.dimensionsUnlocked[5] = false
-            player.ad.dimensionsUnlocked[6] = false
-            player.ad.dimensionsUnlocked[7] = false
-
-            player.ad.dimBoostAmount = new Decimal(0)
-            player.ad.galaxyAmount = new Decimal(0)
+            player.ad.buyables[2] = new Decimal(0)
+            player.ad.buyables[3] = new Decimal(0)
         }
 
         //challenge stuff

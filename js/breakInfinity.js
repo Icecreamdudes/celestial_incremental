@@ -568,7 +568,7 @@
         {
             title: "BI NIP Upgrade IX",
             unlocked() { return true },
-            description: "Autobuy mastery, break infinity and infinity point buyables.",
+            description: "Autobuy mastery, break infinity, and infinity point buyables.",
             cost: new Decimal(5e12),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",

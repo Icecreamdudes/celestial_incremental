@@ -933,7 +933,7 @@ addLayer("ep2", {
                     player.cb.pityEvoCurrent = new Decimal(0);
                     callAlert("You gained an Evolution Shard! (10%)", "resources/evoShard.png");
                 } else {
-                    player.cb.pityEvoCurrent = player.cb.pityParaCurrent.add(10);
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(10);
                 }
 
                 let random1 = getRandomInt(100)
@@ -962,7 +962,7 @@ addLayer("ep2", {
                     player.cb.pityEvoCurrent = new Decimal(0);
                     callAlert("You gained an Evolution Shard! (20%)", "resources/evoShard.png");
                 } else {
-                    player.cb.pityEvoCurrent = player.cb.pityParaCurrent.add(20);
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(20);
                 }
 
                 let random1 = getRandomInt(40)
@@ -991,7 +991,7 @@ addLayer("ep2", {
                         player.cb.pityEvoCurrent = new Decimal(0);
                         callAlert("You gained an Evolution Shard! (33%)", "resources/evoShard.png");
                     } else {
-                        player.cb.pityEvoCurrent = player.cb.pityParaCurrent.add(33);
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(33);
                     }
 
                     let random1 = getRandomInt(25)

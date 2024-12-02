@@ -1382,7 +1382,7 @@ addLayer("cb", {
         32: {
             title() { return player.cb.rarePetButtonTimers[5].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.rarePetButtonTimers[5]) + "." : "<h3>+" + format(player.cb.rarePetPointBase[5]) + " Pet Points."},
             canClick() { return player.cb.rarePetButtonTimers[5].lt(0) },
-            tooltip() { return "2% chance for an paragon shard."},
+            tooltip() { return "2% chance for a paragon shard."},
             unlocked() { return player.cb.rarePetDisplayIndex == 5 || player.subtabs["cb"]["buttons"] == "Pet Points" && player.subtabs["cb"]["stuff"] == "Main" && player.cb.rarePetLevels[5].gte(1)},
             onClick() {
                 player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[5])

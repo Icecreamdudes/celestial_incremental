@@ -448,7 +448,7 @@
         },
         12: {
             requirementDescription: "<h3>Grass-Skip 2",
-            effectDescription() { return "Replicanti Points boosts itself at a reduced rate. Currently: " + format(player.gs.milestone2Effect)+"x" },
+            effectDescription() { return "Replicanti Points boost themselves at a reduced rate. Currently: " + format(player.gs.milestone2Effect)+"x" },
             done() { return player.gs.grassSkip.gte(2) },
             style: { width: '800px', "min-height": '75px' },
         },

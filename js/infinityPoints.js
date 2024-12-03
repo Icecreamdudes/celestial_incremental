@@ -550,8 +550,8 @@
         25: {
             requirementDescription: "<h3>15000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(100000) },
-            unlocked() { return hasChallenge("ip", 14) },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) },
+            unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },
         },
         26: {

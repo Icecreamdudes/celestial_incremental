@@ -326,7 +326,7 @@
             style: { width: '400px', "min-height": '100px' },
         },
         13: {
-            title() { return "<h2>Reset celestial points ranks and tier, but tetr up.<br>Req: " + formatWhole(player.r.tetrReq) + " Tier" },
+            title() { return "<h2>Reset celestial points, ranks, and tiers, but tetr up.<br>Req: " + formatWhole(player.r.tetrReq) + " Tier" },
             canClick() { return player.r.tier.gte(player.r.tetrReq) },
             unlocked() { return hasUpgrade("i", 13) },
             onClick() {
@@ -628,7 +628,7 @@
                 content:
                 [
                         ["blank", "25px"],
-                        ["raw-html", function () { return "When time is reversed, stop all pre-OTF resource production stops, and points are drained." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "When time is reversed, points are drained and all pre-OTF resource production stops." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
                         ["row", [["clickable", 15], ["clickable", 16]]],
                         ["blank", "25px"],

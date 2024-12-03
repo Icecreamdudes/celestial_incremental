@@ -276,7 +276,7 @@ addLayer('g', {
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.sub(1)
             },
-            style: { width: '100px', 'min-height': '100px' },
+            style: { width: '100px', 'min-height': '75px' },
         },
         7: {
             title() { return '<h3>Increase Level' },
@@ -285,7 +285,7 @@ addLayer('g', {
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.add(1)
             },
-            style: { width: '100px', 'min-height': '100px' },
+            style: { width: '100px', 'min-height': '75px' },
         },
     },
     bars: {
@@ -771,7 +771,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         22: {
             costBase() { return new Decimal(3) },
@@ -805,7 +805,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         23: {
             costBase() { return new Decimal(4) },
@@ -839,7 +839,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         24: {
             costBase() { return new Decimal(5) },
@@ -873,7 +873,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         25: {
             costBase() { return new Decimal(2) },
@@ -907,7 +907,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         26: {
             costBase() { return new Decimal(3) },
@@ -941,7 +941,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         27: {
             costBase() { return new Decimal(4) },
@@ -975,7 +975,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         28: {
             costBase() { return new Decimal(5) },
@@ -1009,7 +1009,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '250px', height: '100px', }
         },
         29: {
             costBase() { return new Decimal(100) },
@@ -1043,7 +1043,7 @@ addLayer('g', {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '200px', height: '150px', }
+            style: { width: '200px', height: '100px', }
         },
     },
     milestones: {
@@ -1262,82 +1262,69 @@ addLayer('g', {
                     ]],
                     ['blank', '25px'],
                     ['row', [
-                        ['column', [
-                            ['row', [
-                                ['buyable', 21],
-                                ['buyable', 22],
-                            ]],
-                            ['row', [
-                                ['buyable', 23],
-                                ['buyable', 24]
-                            ]],
-                            ['row', [
-                                ['buyable', 25],
-                                ['buyable', 26]
-                            ]],
-                            ['row', [
-                                ['buyable', 27],
-                                ['buyable', 28]
-                            ]],
-                        ]],
-                        ['raw-html', function () { return "&nbsp"}, { 'font-size': '100px', 'user-select': 'none'}], // Serves as blank
-                        ['v-line', '600px'],
-                        ['raw-html', function () { return "&nbsp"}, { 'font-size': '100px', 'user-select': 'none'}], // Serves as blank
-                        ['column', [
-                            ['buyable', 29],
-                            ['blank', '25px'],
-                            ['row', [
-                                ['clickable', 6],
-                                ['clickable', 7]
-                            ]],
-                            ['blank', '25px'],
-                            ['raw-html', () =>
-                                '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) +
-                                    '/' + formatWhole(player.g.moonstoneLevelMax),
-                                {
-                                    'color': 'white',
-                                    'font-size': '24px',
-                                    'font-family': 'monospace',
-                                },
-                            ],
-                            ['blank', '25px'],
-                            ['raw-html', () =>
-                                '<h3>Level Effects:',
-                                {
-                                    'color': 'white',
-                                    'font-size': '24px',
-                                    'font-family': 'monospace',
-                                },
-                            ],
-                            ['raw-html', () =>
-                                '<h4>x' + format(player.g.moonstoneLevelEffects[0]) +
-                                    ' to moonstone health.',
-                                {
-                                    'color': 'white',
-                                    'font-size': '24px',
-                                    'font-family': 'monospace',
-                                },
-                            ],
-                            ['raw-html', () =>
-                                '<h4>x' + format(player.g.moonstoneLevelEffects[1]) +
-                                    ' to moonstone spawn time.',
-                                {
-                                    'color': 'white',
-                                    'font-size': '24px',
-                                    'font-family': 'monospace',
-                                },
-                            ],
-                            ['raw-html', () =>
-                                '<h4>x' + format(player.g.moonstoneLevelEffects[2]) +
-                                    ' to moonstone value.',
-                                {
-                                    'color': 'white',
-                                    'font-size': '24px',
-                                    'font-family': 'monospace',
-                                },
-                            ],
-                        ]],
+                        ['buyable', 21],
+                        ['buyable', 22],
+                        ['buyable', 23],
+                        ['buyable', 24]
                     ]],
+                    ['row', [
+                        ['buyable', 25],
+                        ['buyable', 26],
+                        ['buyable', 27],
+                        ['buyable', 28]
+                    ]],
+                    ['blank', '25px'],
+                    ['buyable', 29],
+                    ['row', [
+                        ['clickable', 6],
+                        ['clickable', 7]
+                    ]],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) +
+                            '/' + formatWhole(player.g.moonstoneLevelMax),
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['blank', '25px'],
+                    ['raw-html', () =>
+                        '<h3>Level Effects:',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[0]) +
+                            ' to moonstone health.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[1]) +
+                            ' to moonstone spawn time.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
+                    ['raw-html', () =>
+                        '<h4>x' + format(player.g.moonstoneLevelEffects[2]) +
+                            ' to moonstone value.',
+                        {
+                            'color': 'white',
+                            'font-size': '24px',
+                            'font-family': 'monospace',
+                        },
+                    ],
                 ],
             },
             'Buyables': {

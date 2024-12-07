@@ -483,9 +483,6 @@ addLayer("bigc", {
         {
             player.ip.hexRuns = player.ip.hexRuns.add(1)
         }
-        layers.in.bigCrunch()
-        player.in.reachedInfinity = false
-
         if (hasUpgrade("ta", 17))
         {
             if (player.d.dicePoints.gt(player.ta.highestDicePoints))
@@ -502,6 +499,9 @@ addLayer("bigc", {
             }
         }
 
+        layers.in.bigCrunch()
+        player.in.reachedInfinity = false
+        
         if (player.rm.halterBoostCheck && player.po.realmMods)
         {
             player.rm.halterBoost = player.po.halterEffects[0]

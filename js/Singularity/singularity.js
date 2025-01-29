@@ -350,7 +350,7 @@ addLayer("s", {
         },
         18: {
             requirementDescription: "<h3>12 Singularities",
-            effectDescription: "Start singularity with infinity broken and alt-uni 1 unlocked, and singularity resets don't change the screen.",
+            effectDescription: "Start singularity with infinity broken and alt-uni 1 unlocked, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
             done() { return player.s.singularities.gte(12) },
             style: { width: '800px', "min-height": '75px' },
         },

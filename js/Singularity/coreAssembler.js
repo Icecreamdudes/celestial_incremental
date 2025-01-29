@@ -1094,6 +1094,8 @@
         player.bi.buyables[11] = new Decimal(0)
         player.bi.buyables[12] = new Decimal(0)
         player.bi.buyables[13] = new Decimal(0)
+        if (!hasMilestone("s", 18)) player.bi.IACtoggle = false
+        if (!hasMilestone("s", 18)) player.bi.NACtoggle = false
         for (let i = 0; i < player.bi.upgrades.length; i++) {
             if (+player.bi.upgrades[i] < 200) {
                 player.bi.upgrades.splice(i, 1);

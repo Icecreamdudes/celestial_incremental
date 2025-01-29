@@ -65,9 +65,6 @@
         if (player.pol.pollinatorsIndex == 7) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorsEffect[13])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.evolvedEffects[4][1])
 
-
-        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
-
         player.rf.rocketFuelEffect = player.rf.rocketFuel.mul(30).pow(0.85).add(1)
 
         if (player.rf.rocketFuelPause.gt(0))
@@ -291,19 +288,19 @@
         switch (type)
         {
             case 0:
-                player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1)
+                player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[0] = amount.pow(0.14).mul(100)
                 break;
             case 1:
-                player.rf.abilityEffects[1] = amount.pow(1.1).mul(10).add(1)
+                player.rf.abilityEffects[1] = amount.pow(1.1).mul(10).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[1] = amount.pow(0.12).mul(80)
             break;
             case 2:
-                player.rf.abilityEffects[2] = amount.pow(0.9).mul(6).add(1)
+                player.rf.abilityEffects[2] = amount.pow(0.9).mul(6).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[2] = amount.pow(0.1).mul(60)
             break;
             case 3:
-                player.rf.abilityEffects[3] = amount.pow(0.7).mul(3).add(1)
+                player.rf.abilityEffects[3] = amount.pow(0.7).mul(3).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
             break;
             case 4:
@@ -320,14 +317,14 @@
                 }
             break;
             case 5:
-                player.rf.abilityEffects[5] = amount.add(1).log10().add(1).div(66).add(1)
+                player.rf.abilityEffects[5] = amount.add(1).log10().add(1).div(66).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[5] = amount.add(1).log10().add(1).mul(20)
             break;
             case 6:
                 player.rf.abilityTimers[6] = amount.add(1).log10().add(1).mul(20)
             break;
             case 7:
-                player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1)
+                player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[7] = amount.pow(0.05).mul(60)
             break;
         }

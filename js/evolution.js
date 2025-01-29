@@ -8,7 +8,7 @@
 
         evolutionDisplayIndex: new Decimal(-1),
         evolutionDisplay: [],
-        evolutionsUnlocked: [false, false, false, false, false, false, false, false, false],
+        evolutionsUnlocked: [false, false, false, false, false, false, false, false, false, false, false],
         /*
         0 - Unsmith
         1 - Shark
@@ -19,6 +19,8 @@
         6 - Spider
         7 - Ufo
         8 - Clock
+        9 - Gd Checkpoint
+        10 - Eye
         */
     }
     },
@@ -112,6 +114,22 @@
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[5]) + "/8 Clock Level" +
             "<br>"  + formatWhole(player.cb.uncommonPetLevels[6]) + "/8 Trollface Level" +
             "<br>"  + formatWhole(player.ca.rememberanceCores) + "/5 Rememberance Cores",
+
+            "Evolve Gd Checkpoint<br>" + formatWhole(player.cb.evolutionShards) + "/100 Evolution Shards" +
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/20 Paragon Shards" +
+            "<br>"  + format(player.points) + "/1e1,000,000 Celestial Points" +
+            "<br>"  + formatWhole(player.g.goldGrass) + "/1e40 Golden Grass" +
+            "<br>"  + formatWhole(player.g.moonstone) + "/2,000 Moonstone" +
+            "<br>"  + formatWhole(player.cp.replicantiPoints) + "/1e250 Replicanti Points" +
+            "<br>"  + formatWhole(player.ca.replicantiGalaxies) + "/15 Replicanti Galaxies" + 
+            "<br>"  + formatWhole(player.cs.paragonScraps) + "/100 Paragon Scraps",
+
+            "Evolve THE WATCHING EYE<br>" + formatWhole(player.cb.evolutionShards) + "/80 Evolution Shards" +
+            "<br>"  + formatWhole(player.cb.paragonShards) + "/5 Paragon Shards" +
+            "<br>"  + formatWhole(player.cb.level) + "/15,000 Check Back Levels" +
+            "<br>"  + formatWhole(player.cb.XPBoost) + "/1,000 XPBoost" +
+            "<br>"  + formatWhole(player.cb.petPoints) + "/10,000 Pet Points" +
+            "<br>"  + formatWhole(player.ev2.day) + "/24 Days of Daily Rewards",
         ]
     },
     branches: ["branch"],
@@ -368,6 +386,61 @@
             },
             style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
         },
+        31: {
+            title() { return player.cb.commonPetImage[3] },
+            canClick() { return true},
+            unlocked() { return !player.ev.evolutionsUnlocked[9] && hasMilestone("s", 12)},
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(9)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        32: {
+            title() { return "EVOLVE" },
+            canClick() { return player.cb.evolutionShards.gte(100) && player.cb.paragonShards.gte(20) && player.points.gte("1e1000000") && player.g.goldGrass.gte(1e40) && player.g.moonstone.gte(2000) && player.cp.replicantiPoints.gte(1e250) && player.ca.replicantiGalaxies.gte(15) && player.cs.paragonScraps.gte(100)},
+            unlocked() { return player.ev.evolutionDisplayIndex == 9 },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(100)
+                player.cb.paragonShards = player.cb.paragonShards.sub(20)
+                player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.sub(15)
+                player.g.goldGrass = player.g.goldGrass.sub(1e40)
+                player.g.moonstone = player.g.moonstone.sub(2000)
+                player.cs.paragonScraps = player.cs.paragonScraps.sub(100)
+
+                player.ev.evolutionsUnlocked[9] = true
+                player.cb.evolvedLevels[9] = new Decimal(1)
+            },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
+        },
+        33: {
+            title() { return player.cb.uncommonPetImage[4] },
+            canClick() { return true},
+            unlocked() { return !player.ev.evolutionsUnlocked[10] && hasMilestone("s", 12)},
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(10)
+            },
+            style: { width: '100px', "min-height": '100px', 'border-radius': "0%" },
+        },
+        34: {
+            title() { return "EVOLVE" },
+            canClick() { return player.cb.evolutionShards.gte(80) && player.cb.paragonShards.gte(5) && player.cb.level.gte(15000) && player.cb.XPBoost.gte(1000) && player.cb.petPoints.gte(10000) && player.ev2.day.gte(24)},
+            unlocked() { return player.ev.evolutionDisplayIndex == 10 },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(80)
+                player.cb.paragonShards = player.cb.paragonShards.sub(5)
+                player.cb.level = player.cb.level.sub(15000)
+                player.cb.XPBoost = player.cb.XPBoost.sub(1000)
+                player.cb.petPoints = player.cb.petPoints.sub(10000)
+
+                player.ev.evolutionsUnlocked[10] = true
+                player.cb.evolvedLevels[10] = new Decimal(1)
+            },
+            style: { width: '200px', "min-height": '100px', 'border-radius': "0%", 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%" },
+        },
     },
     bars: {
     },
@@ -391,11 +464,11 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Current Evolutions"}, { "color": "#4b79ff", "font-size": "36px", "font-family": "monospace" }],
-                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15], ["clickable", 17], ["clickable", 19], ["clickable", 22], ["clickable", 24], ["clickable", 26], ["clickable", 28]]],
+                    ["row", [["clickable", 11], ["clickable", 13], ["clickable", 15], ["clickable", 17], ["clickable", 19], ["clickable", 22], ["clickable", 24], ["clickable", 26], ["clickable", 28], ["clickable", 31], ["clickable", 33]]],
                     ["blank", "25px"],
                     ["row", [["raw-html", function () { return player.ev.evolutionDisplay[player.ev.evolutionDisplayIndex] }, { "color": "#4b79ff", "font-size": "28px", "font-family": "monospace" }]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16], ["clickable", 18], ["clickable", 21], ["clickable", 23], ["clickable", 25], ["clickable", 27], ["clickable", 29]]],
+                    ["row", [["clickable", 12], ["clickable", 14], ["clickable", 16], ["clickable", 18], ["clickable", 21], ["clickable", 23], ["clickable", 25], ["clickable", 27], ["clickable", 29], ["clickable", 32], ["clickable", 34]]],
                 ]
 
             },
@@ -421,6 +494,10 @@ addLayer("ev0", {
         coinDust: new Decimal(0),
         coinDustEffect: new Decimal(1),
         coinDustPerSecond: new Decimal(0),
+
+        coinShards: new Decimal(0),
+        coinShardEffect: new Decimal(0),
+        coinShardsPerSecond: new Decimal(0),
     }
     },
     automate() {
@@ -436,9 +513,21 @@ addLayer("ev0", {
 
         player.ev0.coinDustPerSecond = player.cb.evolvedEffects[0][1].div(3600)
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 11))
+        player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev0.coinShardEffect)
+        player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 18))
 
         if (player.ev0.coinDust.lt(1)) player.ev0.coinDustEffect = player.ev0.coinDust.mul(0.05).add(1)
         if (player.ev0.coinDust.gte(1)) player.ev0.coinDustEffect = player.ev0.coinDust.pow(0.3).mul(0.05).add(1)
+
+
+        player.ev0.coinShardsPerSecond = buyableEffect("ev0", 15)
+        player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(buyableEffect("ev0", 16))
+        player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(buyableEffect("ev0", 17))
+
+        player.ev0.coinShards = player.ev0.coinShards.add(player.ev0.coinShardsPerSecond.mul(delta))
+
+        player.ev0.coinShardEffect = player.ev0.coinShards.pow(0.4).add(1)
+        
     },
     branches: ["branch"],
     clickables: {
@@ -604,6 +693,135 @@ addLayer("ev0", {
             },
             style: { width: '275px', height: '150px', }
         },
+
+        15: {
+            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01) },
+            unlocked() { return true },
+            canAfford() { return player.cb.evolutionShards.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Shard Generator E"
+            },
+            display() {
+                return "which are producing +" + format(tmp[this.layer].buyables[this.id].effect) + " Coin Shards Per Second.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Evolution Shards"
+            },
+            buy() {
+                let base = new Decimal(6)
+                let growth = 1.3
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.evolutionShards = player.cb.evolutionShards.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+
+                let max = Decimal.affordGeometricSeries(player.cb.evolutionShards, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        16: {
+            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(2).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.cb.paragonShards.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Shard Generator P"
+            },
+            display() {
+                return "which are multiplying coin shard gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards"
+            },
+            buy() {
+                let base = new Decimal(2)
+                let growth = 1.2
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.cb.paragonShards = player.cb.paragonShards.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+
+                let max = Decimal.affordGeometricSeries(player.cb.paragonShards, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.cb.paragonShards = player.cb.paragonShards.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        17: {
+            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(500).floor() },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            unlocked() { return true },
+            canAfford() { return player.ev0.coinDust.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Shard Generator C"
+            },
+            display() {
+                return "which are multiplying coin shard gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
+            },
+            buy() {
+                let base = new Decimal(500)
+                let growth = 1.35
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.ev0.coinDust = player.ev0.coinDust.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+
+                let max = Decimal.affordGeometricSeries(player.ev0.coinDust, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.ev0.coinDust = player.ev0.coinDust.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        18: {
+            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(10).floor() },
+            effect(x) { return new Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return true },
+            canAfford() { return player.ev0.coinShards.gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Coin Dust Doubler"
+            },
+            display() {
+                return "which are multiplying coin dust gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Shards"
+            },
+            buy() {
+                let base = new Decimal(10)
+                let growth = 10
+                if (player.buyMax == false)
+                {
+                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
+                    player.ev0.coinShards = player.ev0.coinShards.sub(buyonecost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else
+                {
+
+                let max = Decimal.affordGeometricSeries(player.ev0.coinShards, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player.ev0.coinShards = player.ev0.coinShards.sub(cost)
+
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+            }
+            },
+            style: { width: '275px', height: '150px', }
+        },
     },
     milestones: {
 
@@ -623,6 +841,25 @@ addLayer("ev0", {
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                    ["blank", "25px"],
+                ]
+
+            },
+            "Coin Shards": {
+                buttonStyle() { return { 'color': '#655421', 'border-color': "#655421", 'background-image': 'linear-gradient(90deg, #e7c97c, #fad25a)',} },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards." }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return  "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards." }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+        ["raw-html", function () { return "You have <h3>" + format(player.ev0.coinShards) + "</h3> coin shards, which boosts coin dust gain by x" + format(player.ev0.coinShardEffect) + "." }, { "color": "#655421", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ev0.coinShardsPerSecond) + "</h3> coin shards per second." }, { "color": "#655421", "font-size": "24px", "font-family": "monospace" }],
+        ["blank", "25px"],
+                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
                 ]
 
             },
@@ -632,7 +869,7 @@ addLayer("ev0", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.ev0.coinDust) + "</h3> coin dust, which boosts check back xp gain by x" + format(player.ev0.coinDustEffect) + "." }, { "color": "#655421", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.ev0.coinDustPerSecond.lt(0.1) ? "You are gaining <h3>" + format(player.ev0.coinDustPerSecond.mul(3600)) + "</h3> coin dust per hour." : "You are gaining <h3>" + format(player.ev0.coinDustPerSecond) + "</h3> coin dust per second."  }, { "color": "#655421", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return player.ev0.coinDustPerSecond.lt(0.01) ? "You are gaining <h3>" + format(player.ev0.coinDustPerSecond.mul(3600)) + "</h3> coin dust per hour." : "You are gaining <h3>" + format(player.ev0.coinDustPerSecond) + "</h3> coin dust per second."  }, { "color": "#655421", "font-size": "16px", "font-family": "monospace" }],
          ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
@@ -1187,6 +1424,7 @@ addLayer("ev1", {
             },
             style: { width: '200px', height: '65px', }
         },
+        
     },
     milestones: {
 
@@ -1444,6 +1682,7 @@ addLayer("ev4", {
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ev4", 11))
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ev4", 12))
         if (hasUpgrade("ev8", 14)) player.ev4.offeringsBase = player.ev4.offeringsBase.mul(1.2)
+        player.ev4.offeringsBase = player.ev4.offeringsBase.mul(player.cb.evolvedEffects[10][2])
 
         if (player.ev4.offerings.gte(player.ev4.offeringReq))
         {
@@ -1618,15 +1857,15 @@ addLayer("ev8", {
     startData() { return {
         unlocked: true,
 
-        evoButtonUnlocks: [true,],
-        evoButtonTimersMax: [new Decimal(18000),],
-        evoButtonTimers: [new Decimal(0),],
-        evoButtonBase: [new Decimal(1),],
+        evoButtonUnlocks: [true, false, false, false,],
+        evoButtonTimersMax: [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),],
+        evoButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        evoButtonBase: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),],
 
-        paragonButtonUnlocks: [true,],
-        paragonButtonTimersMax: [new Decimal(180000),],
-        paragonButtonTimers: [new Decimal(0),],
-        paragonButtonBase: [new Decimal(1),],
+        paragonButtonUnlocks: [true, false, false,],
+        paragonButtonTimersMax: [new Decimal(180000),new Decimal(450000),new Decimal(864000),],
+        paragonButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),],
+        paragonButtonBase: [new Decimal(1),new Decimal(3),new Decimal(5),],
     }
     },
     automate() {
@@ -1638,8 +1877,8 @@ addLayer("ev8", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ev8.evoButtonTimersMax = [new Decimal(18000),]
-        player.ev8.evoButtonBase = [new Decimal(1),]
+        player.ev8.evoButtonTimersMax = [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),]
+        player.ev8.evoButtonBase = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),]
         for (let i = 0; i < player.ev8.evoButtonTimersMax.length; i++)
         {
             if (hasUpgrade("ev8", 11)) player.ev8.evoButtonTimersMax[i] = player.ev8.evoButtonTimersMax[i].div(1.1)
@@ -1648,9 +1887,15 @@ addLayer("ev8", {
         {
             player.ev8.evoButtonTimers[i] = player.ev8.evoButtonTimers[i].sub(onepersec.mul(delta))
         }
+        if (hasMilestone("s", 14))
+        {
+            player.ev8.evoButtonUnlocks[1] = true
+            player.ev8.evoButtonUnlocks[2] = true
+            player.ev8.evoButtonUnlocks[3] = true
+        }
 
-        player.ev8.paragonButtonTimersMax = [new Decimal(180000),]
-        player.ev8.paragonButtonBase = [new Decimal(1),]
+        player.ev8.paragonButtonTimersMax = [new Decimal(180000),new Decimal(450000),new Decimal(864000),]
+        player.ev8.paragonButtonBase = [new Decimal(1),new Decimal(3),new Decimal(5),]
         for (let i = 0; i < player.ev8.paragonButtonTimersMax.length; i++)
         {
             if (hasUpgrade("ev8", 11)) player.ev8.paragonButtonTimersMax[i] = player.ev8.paragonButtonTimersMax[i].div(1.1)
@@ -1658,6 +1903,11 @@ addLayer("ev8", {
         for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++)
         {
             player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(onepersec.mul(delta))
+        }
+        if (hasMilestone("s", 14))
+        {
+            player.ev8.paragonButtonUnlocks[1] = true
+            player.ev8.paragonButtonUnlocks[2] = true
         }
     },
     branches: ["branch"],
@@ -1683,7 +1933,36 @@ addLayer("ev8", {
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
-
+        12: {
+            title() { return player.ev8.evoButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[1]) + " Evo Shards."},
+            canClick() { return player.ev8.evoButtonTimers[1].lt(0) },
+            unlocked() { return player.ev8.evoButtonUnlocks[1] },
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[1])
+                player.ev8.evoButtonTimers[1] = player.ev8.evoButtonTimersMax[1]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        13: {
+            title() { return player.ev8.evoButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[2]) + " Evo Shards."},
+            canClick() { return player.ev8.evoButtonTimers[2].lt(0) },
+            unlocked() { return player.ev8.evoButtonUnlocks[2] },
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[2])
+                player.ev8.evoButtonTimers[2] = player.ev8.evoButtonTimersMax[2]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        14: {
+            title() { return player.ev8.evoButtonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[3]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[3]) + " Evo Shards."},
+            canClick() { return player.ev8.evoButtonTimers[3].lt(0) },
+            unlocked() { return player.ev8.evoButtonUnlocks[3] },
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[3])
+                player.ev8.evoButtonTimers[3] = player.ev8.evoButtonTimersMax[3]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
 
         //paragon
         101: {
@@ -1693,6 +1972,26 @@ addLayer("ev8", {
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[0])
                 player.ev8.paragonButtonTimers[0] = player.ev8.paragonButtonTimersMax[0]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        102: {
+            title() { return player.ev8.paragonButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[1]) + " Paragon Shards."},
+            canClick() { return player.ev8.paragonButtonTimers[1].lt(0) },
+            unlocked() { return player.ev8.paragonButtonUnlocks[1] },
+            onClick() {
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[1])
+                player.ev8.paragonButtonTimers[1] = player.ev8.paragonButtonTimersMax[1]
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
+        103: {
+            title() { return player.ev8.paragonButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[2]) + " Paragon Shards."},
+            canClick() { return player.ev8.paragonButtonTimers[2].lt(0) },
+            unlocked() { return player.ev8.paragonButtonUnlocks[2] },
+            onClick() {
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[2])
+                player.ev8.paragonButtonTimers[2] = player.ev8.paragonButtonTimersMax[2]
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
@@ -1780,6 +2079,58 @@ addLayer("ev8", {
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
         },
+        19:
+        {
+            title: "Shard Research IX",
+            unlocked() { return hasMilestone("s", 14) },
+            description: "Boosts radiation gain based on unspent paragon shards.",
+            cost: new Decimal(60),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+            effect() {
+                return player.cb.paragonShards.mul(0.3).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '135px', "min-height": '120px' },
+        },
+        21:
+        {
+            title: "Shard Research X",
+            unlocked() { return hasMilestone("s", 14) },
+            description: "Multiplies all epic pet currency gain by x1.4",
+            cost: new Decimal(80),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Evolution Shards",
+            currencyInternalName: "evolutionShards",
+
+        },
+        22:
+        {
+            title: "Shard Research XI",
+            unlocked() { return hasMilestone("s", 14) },
+            description: "Boosts singularity point gain based on unspent evolution shards.",
+            cost: new Decimal(7),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+            effect() {
+                return player.cb.evolutionShards.mul(0.02).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '135px', "min-height": '120px' },
+
+        },
+     /*   23:
+        {
+            title: "Shard Research XII",
+            unlocked() { return hasMilestone("s", 14) && hasUpgrade("ev8", 19) && hasUpgrade("ev8", 21) && hasUpgrade("ev8", 22)},
+            description: "Unlocks the TIME MACHINE.",
+            cost: new Decimal(15),
+            currencyLocation() { return player.cb },
+            currencyDisplayName: "Paragon Shards",
+            currencyInternalName: "paragonShards",
+        }, */
     },
     buyables: {
     },
@@ -1800,6 +2151,9 @@ addLayer("ev8", {
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["row", [["clickable", 11]]],
+        ["row", [["clickable", 12]]],
+        ["row", [["clickable", 13]]],
+        ["row", [["clickable", 14]]],
     ]
             },
             "Paragon": {
@@ -1810,6 +2164,8 @@ addLayer("ev8", {
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
         ["blank", "25px"],
         ["row", [["clickable", 101]]],
+        ["row", [["clickable", 102]]],
+        ["row", [["clickable", 103]]],
     ]
             },
             "Research": {
@@ -1823,6 +2179,7 @@ addLayer("ev8", {
         ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                     ["row", [["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                    ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], /*["upgrade", 23]*/]],
                 ]
 
             },
@@ -1831,6 +2188,385 @@ addLayer("ev8", {
 
     tabFormat: [
         ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return player.startedGame == true  }
+})
+addLayer("ev9", {
+    name: "Paragon Checkpoint", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "E9", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+
+        coreIndex: new Decimal(0),
+        offeringsOnSacrifice: [new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
+    }
+    },
+    automate() {
+    },
+    nodeStyle() {
+    },
+    tooltip: "Paragon Checkpoint",
+    color: "#5cd4a6",
+    update(delta) {
+        let onepersec = new Decimal(1)
+
+        for (let i = 0; i < player.ev9.offeringsOnSacrifice.length; i++)
+        {
+            if (player.coa.coreStrengths[i].gte(0)) 
+            {
+                player.ev9.offeringsOnSacrifice[i] = player.coa.coreStrengths[i].add(1).pow(1.7).mul(player.ev4.offeringsBase)
+            } else {
+                player.ev9.offeringsOnSacrifice[i] = new Decimal(0)
+            }
+        }
+    },
+    branches: ["branch"],
+    clickables: {
+        1: {
+            title() { return "<h2>Return" },
+            canClick() { return true },
+            unlocked() { return options.newMenu == false },
+            onClick() {
+                player.tab = "cb"
+            },
+            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
+        },
+        2: {
+            title() { return "Buy Max On" },
+            canClick() { return player.buyMax == false },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = true
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        3: {
+            title() { return "Buy Max Off" },
+            canClick() { return player.buyMax == true  },
+            unlocked() { return true },
+            onClick() {
+                player.buyMax = false
+            },
+            style: { width: '75px', "min-height": '50px', }
+        },
+        11: {
+            title() { return "Sacrifice this core." },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                if (player.ev.evolutionsUnlocked[9]) player.ev4.offerings = player.ev4.offerings.add(player.ev9.offeringsOnSacrifice[player.ev9.coreIndex])
+
+                    if (player.coa.coreOccupied[player.ev9.coreIndex])
+                {
+                    player.coa.coreCount = player.coa.coreCount.sub(1)
+                }
+                player.coa.coreFuelSources[player.ev9.coreIndex] = new Decimal(-1)
+                player.coa.coreStrengths[player.ev9.coreIndex] = new Decimal(-1)
+                player.coa.coreOccupied[player.ev9.coreIndex] = false
+            },
+            style: { width: '140px', "min-height": '70px' },
+        },
+        101: {
+            title() { return "<div id=core0 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 0
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        102: {
+            title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 1
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        103: {
+            title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 2
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        104: {
+            title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 3
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        105: {
+            title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 4
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        106: {
+            title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 5
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        107: {
+            title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 6
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        108: {
+            title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 7
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        109: {
+            title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 8
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        111: {
+            title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.ev9.coreIndex = 9
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+    },
+    bars: {
+        bar: {
+            unlocked() { return true },
+            direction: RIGHT,
+            width: 800,
+            height: 50,
+            progress() {
+                return player.ev4.offerings.div(player.ev4.offeringReq)
+            },
+            fillStyle: {
+                "background-color": "#f38004",
+            },
+            display() {
+                return "<h5>" + format(player.ev4.offerings) + "/" + formatWhole(player.ev4.offeringReq) + "<h5> Offerings to gain an automation shard.</h5>";
+            },
+        },
+    },
+    upgrades: {
+    },
+    buyables: {
+
+    },
+    milestones: {
+
+    },
+    challenges: {
+    },
+    infoboxes: {
+    },
+    microtabs: {
+        stuff: {
+            "Core Sacrifice": {
+                buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-image': 'linear-gradient(90deg, #e75753, #e1843c, #fff463, #90f32d, #5cd4a6)',} },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["bar", "bar"],
+                    ["blank", "25px"],
+        ["raw-html", function () { return "Offerings on sacrifice: <h3>" + format(player.ev9.offeringsOnSacrifice[player.ev9.coreIndex]) + "."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["blank", "25px"],
+                    ["row", [["clickable", 11]]],
+        ["blank", "25px"],
+        ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
+        ["raw-html", function () { return "Offerings will be gained when you remove cores out of the tab."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Pet crate automation is also unlocked!"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+    ]
+            },
+        },
+    },
+
+    tabFormat: [
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.automationShards) + "</h3> automation shards. (" + formatWhole(player.cb.totalAutomationShards) + " total)"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["clickable", 1]]],    
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return player.startedGame == true  }
+})
+addLayer("ev10", {
+    name: "Eye", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "E10", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+
+        /*
+        idea: sacrificing a certain amount of evo/paragon shards, you speed up time in check back by a certain amount for a certain amount of time
+        */
+       checkbackBoost: new Decimal(1),
+       checkbackBoostDuration: new Decimal(0),
+
+       shardsInput: new Decimal(0),
+       shardsInputAmount: new Decimal(0),
+
+       evoSacrificeCooldownTimer: new Decimal(0),
+       evoSacrificeBoostTimeToGet: new Decimal(0),
+       evoSacrificeCooldownTimerMax: new Decimal(10800),
+
+       paragonSacrificeCooldownTimer: new Decimal(0),
+       paragonSacrificeBoostTimeToGet: new Decimal(0),
+       paragonSacrificeCooldownTimerMax: new Decimal(43200),
+
+       activeBoost: new Decimal(0),
+
+    }
+    },
+    automate() {
+    },
+    nodeStyle() {
+    },
+    tooltip: "EYE",
+    color: "grey",
+    update(delta) {
+        let onepersec = new Decimal(1)
+
+        if (player.ev10.checkbackBoostDuration.gt(0))
+        {
+        player.ev10.checkbackBoostDuration = player.ev10.checkbackBoostDuration.sub(onepersec.mul(delta))
+        } else
+        {
+            player.ev10.checkbackBoostDuration = new Decimal(0)
+            player.ev10.activeBoost = new Decimal(0)
+        }
+
+        if (player.ev10.shardsInputAmount.gte(1)) player.ev10.shardsInputAmount = player.ev10.shardsInput.floor()
+        if (player.ev10.shardsInputAmount.lt(1)) player.ev10.shardsInputAmount = new Decimal(1)
+
+        player.ev10.evoSacrificeBoostTimeToGet = player.ev10.shardsInputAmount.pow(0.5).mul(180)
+        player.ev10.paragonSacrificeBoostTimeToGet = player.ev10.shardsInputAmount.pow(0.45).mul(50)
+
+        if (player.ev10.activeBoost.eq(1) && player.ev10.checkbackBoostDuration.gt(0))
+        {
+            player.ev10.checkbackBoost = player.ev10.checkbackBoostDuration.pow(0.35).add(1)
+        }
+        if (player.ev10.activeBoost.eq(2) && player.ev10.checkbackBoostDuration.gt(0))
+        {
+            player.ev10.checkbackBoost = player.ev10.checkbackBoostDuration.pow(0.35).mul(15).add(1)
+        }
+        if (player.ev10.activeBoost.eq(0))
+        {
+            player.ev10.checkbackBoost = new Decimal(1)
+        }
+
+        player.ev10.evoSacrificeCooldownTimer = player.ev10.evoSacrificeCooldownTimer.sub(onepersec.mul(delta))
+        player.ev10.paragonSacrificeCooldownTimer = player.ev10.paragonSacrificeCooldownTimer.sub(onepersec.mul(delta))
+    },
+    branches: ["branch"],
+    clickables: {
+        11: {
+            title() { return player.ev10.evoSacrificeCooldownTimer.lte(0) ? "Sacrifice Evolution Shards" : "Check back in " + formatTime(player.ev10.evoSacrificeCooldownTimer) + "."},
+            canClick() { return player.cb.evolutionShards.gte(player.ev10.shardsInputAmount) && player.ev10.checkbackBoostDuration.lte(0) && player.ev10.evoSacrificeCooldownTimer.lte(0) },
+            tooltip() { return "Boost Duration: " + formatTime(player.ev10.evoSacrificeBoostTimeToGet) + ".<br>Effect: " + format(player.ev10.shardsInputAmount.pow(0.5).mul(180).pow(0.35).add(1)) + "x." },
+            unlocked() { return true },
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.ev10.shardsInputAmount)
+
+                player.ev10.checkbackBoostDuration = player.ev10.evoSacrificeBoostTimeToGet
+                player.ev10.evoSacrificeCooldownTimer = player.ev10.evoSacrificeCooldownTimerMax
+                player.ev10.activeBoost = new Decimal(1)
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+        12: {
+            title() { return player.ev10.paragonSacrificeCooldownTimer.lte(0) ? "Sacrifice Paragon Shards" : "Check back in " + formatTime(player.ev10.paragonSacrificeCooldownTimer) + "."},
+            canClick() { return player.cb.paragonShards.gte(player.ev10.shardsInputAmount) && player.ev10.checkbackBoostDuration.lte(0) && player.ev10.paragonSacrificeCooldownTimer.lte(0) },
+            tooltip() { return "Boost Duration: " + formatTime(player.ev10.paragonSacrificeBoostTimeToGet) + ".<br>Effect: " + format(player.ev10.shardsInputAmount.pow(0.45).mul(50).pow(0.35).mul(15).add(1)) + "x." },
+            unlocked() { return true },
+            onClick() {
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.ev10.shardsInputAmount)
+
+                player.ev10.checkbackBoostDuration = player.ev10.paragonSacrificeBoostTimeToGet
+                player.ev10.paragonSacrificeCooldownTimer = player.ev10.paragonSacrificeCooldownTimerMax
+                player.ev10.activeBoost = new Decimal(2)
+            },
+            style: { width: '140px', "min-height": '140px' },
+        },
+    },
+    bars: {
+
+    },
+    upgrades: {
+    },
+    buyables: {
+
+    },
+    milestones: {
+
+    },
+    challenges: {
+    },
+    infoboxes: {
+    },
+    microtabs: {
+        stuff: {
+            "Shard Sacrifice": {
+                buttonStyle() { return { 'color': '#383737', 'border-color': "black", 'background-image': 'black',} },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatTime(player.ev10.checkbackBoostDuration) + "</h3> of boost time,"  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "which makes check back time go <h3>" + format(player.ev10.checkbackBoost) + "</h3>x faster."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Only affects time in the acutal check back tab. Epic pets and other stuff wont be affected.)"  }, { "color": "#2842eb", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11], ["clickable", 12]]],    
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You will sacrifice " + formatWhole(player.ev10.shardsInputAmount) + " shards."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["text-input", "shardsInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+    ]
+            },
+        },
+    },
+
+    tabFormat: [
+                    ["row", [["clickable", 1]]],    
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true  }

@@ -1,4 +1,4 @@
-addLayer('g', {
+﻿addLayer('g', {
     name: 'Grass', // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: 'G', // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -439,7 +439,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -541,7 +541,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(3).pow(1.25).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(3).pow(1.25).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -575,7 +575,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(2).pow(1.15).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(2).pow(1.15).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -609,7 +609,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -643,7 +643,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.g.goldGrass},
             pay(amt) { player.g.goldGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return hasUpgrade('g', 14) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -711,7 +711,7 @@ addLayer('g', {
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.g.goldGrass},
             pay(amt) { player.g.goldGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(3).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(3).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return hasUpgrade('g', 14) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1185,7 +1185,7 @@ addLayer('g', {
                             'user-select': 'none',
                         },
                     ],
-                    ['blank', '25px'],
+                    ['blank', '12.5px'],
                     ['raw-html', () =>
                         '<h3>' + formatWhole(player.g.moonstoneCount) +
                             '/' + formatWhole(player.g.moonstoneCap) +
@@ -1200,7 +1200,7 @@ addLayer('g', {
                             ')',
                         {
                             'color': 'white',
-                            'font-size': '24px',
+                            'font-size': '20px',
                             'font-family': 'monospace',
                             'user-select': 'none',
                         },
@@ -1211,7 +1211,7 @@ addLayer('g', {
                             ' Seconds to spawn moonstone.',
                         {
                             'color': 'white',
-                            'font-size': '24px',
+                            'font-size': '20px',
                             'font-family': 'monospace',
                             'user-select': 'none',
                         },
@@ -1890,6 +1890,7 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneVal = new Decimal(1)
         .mul(buyableEffect('g', 21))
         .mul(player.g.moonstoneLevelEffects[2])
+        .mul(player.cb.evolvedEffects[9][0])
 
     if (hasUpgrade('ev8', 17)) {
         player.g.moonstoneVal = player.g.moonstoneVal

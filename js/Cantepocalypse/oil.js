@@ -34,6 +34,19 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 16) && !inChallenge("fu", 11))
+        {
+            buyBuyable('oi', 11)
+            buyBuyable('oi', 12)
+            buyBuyable('oi', 13)
+            buyBuyable('oi', 14)
+            buyBuyable('oi', 15)
+            buyBuyable('oi', 16)
+            buyBuyable('oi', 21)
+            buyBuyable('oi', 22)
+            buyBuyable('oi', 23)
+            buyBuyable('oi', 24)
+        }
     },
     nodeStyle() {
     },
@@ -45,6 +58,14 @@
 
         player.oi.oilToGet = player.an.anonymity.div(1e25).pow(0.2)
         player.oi.oilToGet = player.oi.oilToGet.mul(player.cb.evolvedEffects[8][1])
+        if (player.pol.pollinatorsIndex == 8) player.oi.oilToGet = player.oi.oilToGet.mul(player.pol.pollinatorsEffect[17])
+        if (hasMilestone("fa", 17)) player.oi.oilToGet = player.oi.oilToGet.mul(player.fa.milestoneEffect[6])
+        player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("ra", 15))
+        player.oi.oilToGet = player.oi.oilToGet.mul(player.fu.funEffect)
+        if (hasUpgrade("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("fu", 12))
+        if (inChallenge("fu", 11)) player.oi.oilToGet = player.oi.oilToGet.pow(0.2)
+
+        if (!inChallenge("fu", 11)) player.oi.oil = player.oi.oil.add(player.oi.oilToGet.mul(Decimal.mul(buyableEffect("fa", 204), delta)))
 
         player.oi.oilEffect = player.oi.oil.pow(0.65).div(1.5).add(1)
 
@@ -54,12 +75,12 @@
         player.oi.oilPause = player.oi.oilPause.sub(1)
 
         player.oi.linkerTexts = [
-            "You have " + format(player.oi.linkingPower[0]) + " point linking power (+" + format(player.oi.linkingPowerPerSecond[0]) + "/s)\n(Based on points)",
-            "You have " + format(player.oi.linkingPower[1]) + " factor power linking power (+" + format(player.oi.linkingPowerPerSecond[1]) + "/s)\n(Based on factor power)",
-            "You have " + format(player.oi.linkingPower[2]) + " prestige point linking power (+" + format(player.oi.linkingPowerPerSecond[2]) + "/s)\n(Based on prestige points)",
-            "You have " + format(player.oi.linkingPower[3]) + " trees linking power (+" + format(player.oi.linkingPowerPerSecond[3]) + "/s)\n(Based on trees)",
-            "You have " + format(player.oi.linkingPower[4]) + " grass linking power (+" + format(player.oi.linkingPowerPerSecond[4]) + "/s)\n(Based on grass)",
-            "You have " + format(player.oi.linkingPower[5]) + " grasshopper linking power (+" + format(player.oi.linkingPowerPerSecond[5]) + "/s)\n(Based on grasshoppers)",
+            "You have " + format(player.oi.linkingPower[0]) + " point linking power (+" + format(player.oi.linkingPowerPerSecond[0]) + "/s), which boosts the replicanti point multiplier by x" + format(player.oi.linkingPowerEffect[0]) + ". ",
+            "You have " + format(player.oi.linkingPower[1]) + " factor power linking power (+" + format(player.oi.linkingPowerPerSecond[1]) + "/s), which boosts perk points by x" + format(player.oi.linkingPowerEffect[1]) + ".",
+            "You have " + format(player.oi.linkingPower[2]) + " prestige point linking power (+" + format(player.oi.linkingPowerPerSecond[2]) + "/s), which boosts anonymity by x" + format(player.oi.linkingPowerEffect[2]) + ".",
+            "You have " + format(player.oi.linkingPower[3]) + " trees linking power (+" + format(player.oi.linkingPowerPerSecond[3]) + "/s), which boosts repli-trees by x" + format(player.oi.linkingPowerEffect[3]) + ".",
+            "You have " + format(player.oi.linkingPower[4]) + " grass linking power (+" + format(player.oi.linkingPowerPerSecond[4]) + "/s), which boosts the repli-grass multiplier by x" + format(player.oi.linkingPowerEffect[4]) + ".",
+            "You have " + format(player.oi.linkingPower[5]) + " grasshopper linking power (+" + format(player.oi.linkingPowerPerSecond[5]) + "/s), which boosts grass-skippers by x" + format(player.oi.linkingPowerEffect[5]) + ".",
         ]
 
         player.oi.linkerTextEffects = [
@@ -71,10 +92,6 @@
             "which boosts grass-skippers by x" + format(player.oi.linkingPowerEffect[5]) + ".",
         ]
 
-        for (let i = 0; i < player.oi.linkingPower.length; i++)
-        {
-            player.oi.linkingPower[i] = player.oi.linkingPower[i].add(player.oi.linkingPowerPerSecond[i].mul(delta))
-        }
 
         player.oi.linkingPowerPerSecond[0] = player.points.abs().plus(1).log10().pow(0.21).mul(buyableEffect('oi', 11))
         player.oi.linkingPowerPerSecond[1] = player.f.factorPower.abs().plus(1).log10().pow(0.25).mul(buyableEffect('oi', 12))
@@ -82,6 +99,14 @@
         player.oi.linkingPowerPerSecond[3] = player.t.trees.abs().plus(1).log10().pow(0.285).mul(buyableEffect('oi', 14))
         player.oi.linkingPowerPerSecond[4] = player.g.grass.abs().plus(1).log10().pow(0.255).mul(buyableEffect('oi', 15))
         player.oi.linkingPowerPerSecond[5] = player.gh.grasshoppers.abs().plus(1).log10().pow(0.27).mul(buyableEffect('oi', 16))
+
+        for (let i = 0; i < player.oi.linkingPower.length; i++)
+        {
+            player.oi.linkingPower[i] = player.oi.linkingPower[i].add(player.oi.linkingPowerPerSecond[i].mul(delta))
+
+            player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(player.fu.funEffect2)
+            if (inChallenge("fu", 11)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].pow(0.1)
+        }
 
         player.oi.linkingPowerEffect[0] = player.oi.linkingPower[0].pow(0.4).add(1)
         player.oi.linkingPowerEffect[1] = player.oi.linkingPower[1].pow(0.175).add(1)
@@ -92,8 +117,10 @@
 
         player.oi.protoMemoriesPerSecond = player.oi.linkingPower[0].mul(player.oi.linkingPower[1].mul(player.oi.linkingPower[2].mul(player.oi.linkingPower[3].mul(player.oi.linkingPower[4].mul(player.oi.linkingPower[5]))))).plus(1).pow(0.55).div(1e7)
         player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.cb.epicPetEffects[2][2])
+        player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.fu.funEffect3)
 
         player.oi.protoMemorySecondsToGet = player.cp.replicantiPoints.plus(1).log10().mul(8).pow(0.5)
+        if (hasUpgrade("fu", 14)) player.oi.protoMemorySecondsToGet = player.oi.protoMemorySecondsToGet.mul(upgradeEffect("fu", 14))
 
         if (player.oi.protoMemorySeconds.gt(0))
         {
@@ -135,12 +162,27 @@
         player.rt.buyables[17] = new Decimal(0)
         player.rt.buyables[18] = new Decimal(0)
 
+
+        player.rg.repliGrass = new Decimal(1)
+
+        player.rg.buyables[11] = new Decimal(0)
+        player.rg.buyables[12] = new Decimal(0)
+        player.rg.buyables[13] = new Decimal(0)
+        player.rg.buyables[14] = new Decimal(0)
+        player.rg.buyables[15] = new Decimal(0)
+        player.rg.buyables[16] = new Decimal(0)
+        player.rg.buyables[17] = new Decimal(0)
+        player.rg.buyables[18] = new Decimal(0)
+
+
         for (let i = 0; i < player.an.upgrades.length; i++) {
-            if (+player.an.upgrades[i] < 23) {
+            if (+player.an.upgrades[i] < 24) {
                 player.an.upgrades.splice(i, 1);
                 i--;
             }
         }
+
+
     },
     clickables: {
         1: {
@@ -248,7 +290,7 @@
         11: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.oi.linkerChoice.eq(0) },
+            unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Point Linker"
@@ -260,7 +302,7 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -270,7 +312,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.oil = player.oi.oil.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -280,7 +322,7 @@
         12: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.oi.linkerChoice.eq(1) },
+            unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Factor Power Linker"
@@ -292,7 +334,7 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -302,7 +344,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.oil = player.oi.oil.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -312,7 +354,7 @@
         13: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.oi.linkerChoice.eq(2) },
+            unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Prestige Point Linker"
@@ -324,7 +366,7 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -334,7 +376,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.oil = player.oi.oil.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -344,7 +386,7 @@
         14: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.oi.linkerChoice.eq(3) },
+            unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tree Linker"
@@ -356,7 +398,7 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -366,7 +408,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.oil = player.oi.oil.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -376,7 +418,7 @@
         15: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.oi.linkerChoice.eq(4) },
+            unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Linker"
@@ -388,7 +430,7 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -398,7 +440,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.oil = player.oi.oil.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -408,7 +450,7 @@
         16: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.oi.linkerChoice.eq(5) },
+            unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grasshopper Linker"
@@ -420,7 +462,7 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -430,7 +472,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.oil = player.oi.oil.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -452,7 +494,7 @@
             buy() {
                 let base = new Decimal(20)
                 let growth = 1.2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -462,7 +504,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.protoMemories = player.oi.protoMemories.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -484,7 +526,7 @@
             buy() {
                 let base = new Decimal(35)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -494,7 +536,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.protoMemories = player.oi.protoMemories.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -516,7 +558,7 @@
             buy() {
                 let base = new Decimal(50)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -526,7 +568,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.protoMemories = player.oi.protoMemories.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -548,7 +590,7 @@
             buy() {
                 let base = new Decimal(80)
                 let growth = 1.35
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -558,7 +600,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.oi.protoMemories = player.oi.protoMemories.sub(cost)
+                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -597,13 +639,13 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> oil." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.oi.linkerTexts[player.oi.linkerChoice] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.oi.linkerTextEffects[player.oi.linkerChoice] }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.oi.linkerTexts.join("<br>") }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Each linking power is based on it's respective currency)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                     ["row", [["clickable", 3], ["clickable", 4]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 13]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14], ["buyable", 15], ["buyable", 16]]],
+                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
+                    ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
     ]
 
             },

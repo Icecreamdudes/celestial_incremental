@@ -22,6 +22,24 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 13))
+        {
+            buyBuyable("id", 21)
+            buyBuyable("id", 22)
+            buyBuyable("id", 23)
+            buyBuyable("id", 24)
+        }
+        if (hasMilestone("s", 17))
+        {
+            buyBuyable("id", 11)
+            buyBuyable("id", 12)
+            buyBuyable("id", 13)
+            buyBuyable("id", 14)
+            buyBuyable("id", 15)
+            buyBuyable("id", 16)
+            buyBuyable("id", 17)
+            buyBuyable("id", 18)
+        }
     },
     nodeStyle() {
         return {
@@ -49,6 +67,9 @@
             .mul(player.ca.replicantiEffect2)
             .mul(player.rm.realmModsEffect[3])
             .mul(player.cb.uncommonPetEffects[7][0])
+            .mul(player.sd.singularityPowerEffect2)
+            .pow(buyableEffect("fu", 42))
+        if (hasMilestone("fa", 16)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.fa.milestoneEffect[5])
 
         // Dimension Gain
         for (let i = 0; i < player.id.dimensionAmounts.length; i++) {
@@ -61,6 +82,11 @@
                 .mul(player.ca.replicantiEffect2)
                 .mul(player.rm.realmModsEffect[3])
                 .mul(player.cb.uncommonPetEffects[7][0])
+                .mul(player.sd.singularityPowerEffect2)
+                .pow(buyableEffect("fu", 42))
+
+        if (hasMilestone("fa", 16)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[5])
+
         }
     },
     branches: ["ad"],
@@ -161,7 +187,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -170,7 +196,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[0] = player.id.dimensionAmounts[0].add(max)
@@ -191,7 +217,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -200,7 +226,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[1] = player.id.dimensionAmounts[1].add(max)
@@ -221,7 +247,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -230,7 +256,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[2] = player.id.dimensionAmounts[2].add(max)
@@ -251,7 +277,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -260,7 +286,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[3] = player.id.dimensionAmounts[3].add(max)
@@ -281,7 +307,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -290,7 +316,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[4] = player.id.dimensionAmounts[4].add(max)
@@ -311,7 +337,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -320,7 +346,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[5] = player.id.dimensionAmounts[5].add(max)
@@ -341,7 +367,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -350,7 +376,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[6] = player.id.dimensionAmounts[6].add(max)
@@ -371,7 +397,7 @@
                 return "Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
             buy() {
-                if (player.id.dimMax == false) {
+                if (player.id.dimMax == false && !hasMilestone("s", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -380,7 +406,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 17)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                     player.id.dimensionAmounts[7] = player.id.dimensionAmounts[7].add(max)
@@ -405,7 +431,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
             },
             buy() {
-                if (player.id.ipMax == false) {
+                if (player.id.ipMax == false && !hasMilestone("s", 13) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -413,7 +439,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -437,7 +463,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
             },
             buy() {
-                if (player.id.ipMax == false) {
+                if (player.id.ipMax == false && !hasMilestone("s", 13) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -445,7 +471,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -469,7 +495,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
             },
             buy() {
-                if (player.id.ipMax == false) {
+                if (player.id.ipMax == false && !hasMilestone("s", 13) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -477,7 +503,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -501,7 +527,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Power"
             },
             buy() {
-                if (player.id.ipMax == false) {
+                if (player.id.ipMax == false && !hasMilestone("s", 13) ) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -509,7 +535,7 @@
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -567,5 +593,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 18)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 18)) || hasMilestone("s", 19)}
 })

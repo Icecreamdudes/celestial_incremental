@@ -34,6 +34,8 @@
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(buyableEffect("pr", 13))
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(player.ar.tetrPointsEffect)
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(player.gs.grassSkippersEffect)
+        player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(buyableEffect("fu", 21))
+        if (inChallenge("fu", 11)) player.ar.rankPointsToGet = player.ar.rankPointsToGet.pow(0.2)
 
         if (hasUpgrade("an", 13)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, 0.05)))
         if (hasUpgrade("an", 15)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, 0.25)))
@@ -44,6 +46,8 @@
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(buyableEffect("pr", 14))
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(player.ar.tetrPointsEffect)
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(player.gs.grassSkippersEffect)
+        player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(buyableEffect("fu", 21))
+        if (inChallenge("fu", 11)) player.ar.tierPointsToGet = player.ar.tierPointsToGet.pow(0.2)
 
         if (hasUpgrade("an", 15)) player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, 0.05)))
         if (hasUpgrade("an", 18)) player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, 0.25)))
@@ -52,7 +56,10 @@
         player.ar.tetrPointsEffect = player.ar.tetrPoints.pow(0.5).add(1)
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(buyableEffect("rg", 16))
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(player.gs.grassSkippersEffect)
-        if (hasUpgrade("an", 18)) player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, 0.05)))
+        player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(buyableEffect("fu", 21))
+        if (inChallenge("fu", 11)) player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.pow(0.2)
+
+            if (hasUpgrade("an", 18)) player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, 0.05)))
     },
     clickables: {
         1: {

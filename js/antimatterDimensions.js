@@ -13,6 +13,7 @@
         // Dimension Stuff
         dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        dimensionGrowths: [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),],
 
         tickspeedMult: new Decimal(1.1),
 
@@ -24,6 +25,19 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 17))
+        {
+            buyUpgrade("ad", 11)
+            buyUpgrade("ad", 12)
+            buyUpgrade("ad", 13)
+            buyUpgrade("ad", 14)
+            buyUpgrade("ad", 15)
+            buyUpgrade("ad", 16)
+            buyUpgrade("ad", 17)
+            buyUpgrade("ad", 18)
+            buyUpgrade("ad", 19)
+            buyUpgrade("ad", 21)
+        }
     },
     nodeStyle() {
         return {
@@ -50,6 +64,7 @@
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
+            player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("cs", 31))
 
         // Antimatter Per Second Calculations
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
@@ -77,10 +92,21 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 37))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.id.infinityPowerEffect)
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.h.ragePowerEffect)
+        if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
 
         if (player.ad.antimatter.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 310)))
-        if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 355)))
+        if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 1000)))
+        if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 1100)))
+
+        player.ad.dimensionGrowths = [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),]
+        if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21) )
+        {
+            player.ad.dimensionGrowths = [new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e120),new Decimal(1e15),]        
+        }
+        if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21) )
+        {
+            player.ad.dimensionGrowths = [new Decimal(1e15),new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e15),]        
+        }
 
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
@@ -115,6 +141,12 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.h.ragePowerEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("rm", 31))
+            if (hasMilestone("fa", 12)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[1])
+
+            if (player.cop.processedCoreFuel.eq(9))
+                {
+                    player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.cop.processedCoreInnateEffects[1])
+                }
         }
         player.ad.dimensionsPerSecond[0] = player.ad.dimensionsPerSecond[0].mul(player.cb.uncommonPetEffects[5][0])
         player.ad.dimensionsPerSecond[1] = player.ad.dimensionsPerSecond[1].mul(player.cb.uncommonPetEffects[6][0])
@@ -498,7 +530,7 @@
         },
         11: {
             costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1e3) },
+            costGrowth() { return player.ad.dimensionGrowths[0]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -528,7 +560,7 @@
         },
         12: {
             costBase() { return new Decimal(100) },
-            costGrowth() { return new Decimal(1e4) },
+            costGrowth() { return player.ad.dimensionGrowths[1] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -558,7 +590,7 @@
         },
         13: {
             costBase() { return new Decimal(1e4) },
-            costGrowth() { return new Decimal(1e5) },
+            costGrowth() { return player.ad.dimensionGrowths[2] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -588,7 +620,7 @@
         },
         14: {
             costBase() { return new Decimal(1e6) },
-            costGrowth() { return new Decimal(1e6) },
+            costGrowth() { return player.ad.dimensionGrowths[3]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -618,7 +650,7 @@
         },
         15: {
             costBase() { return new Decimal(1e9) },
-            costGrowth() { return new Decimal(1e8) },
+            costGrowth() { return player.ad.dimensionGrowths[4] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -648,7 +680,7 @@
         },
         16: {
             costBase() { return new Decimal(1e13) },
-            costGrowth() { return new Decimal(1e10) },
+            costGrowth() { return player.ad.dimensionGrowths[5]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -678,7 +710,7 @@
         },
         17: {
             costBase() { return new Decimal(1e18) },
-            costGrowth() { return new Decimal(1e12) },
+            costGrowth() { return player.ad.dimensionGrowths[6] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -708,7 +740,7 @@
         },
         18: {
             costBase() { return new Decimal(1e24) },
-            costGrowth() { return new Decimal(1e15) },
+            costGrowth() { return player.ad.dimensionGrowths[7]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
             effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
@@ -803,7 +835,7 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)) || hasMilestone("s", 19)}
 })
 
 // my friend ice LOVES copying and stealing game ideas to put in his own games

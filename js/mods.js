@@ -109,9 +109,7 @@
         if (inChallenge("tad", 11)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.4)
         if (inChallenge("tad", 11)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(buyableEffect("de", 17))
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halterEffects[8])
-
-        if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
-
+    
         if (inChallenge("ip", 18) && player.m.codeExperience.gt(player.m.codeExperience.mul(0.2 * delta)))
         {
             player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.2 * delta))
@@ -272,7 +270,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.25).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.25).add(1).pow(buyableEffect("cs", 27)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -306,7 +304,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.25).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.25).add(1).pow(buyableEffect("cs", 27)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -340,7 +338,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 27)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -374,7 +372,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 27)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

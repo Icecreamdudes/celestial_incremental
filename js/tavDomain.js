@@ -19,6 +19,27 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 13))
+        {
+            buyBuyable("tad", 11)
+            buyBuyable("tad", 12)
+            buyBuyable("tad", 13)
+            buyBuyable("tad", 14)
+            buyBuyable("tad", 15)
+            buyBuyable("tad", 16)
+            buyBuyable("tad", 17)
+            buyBuyable("tad", 18)
+            buyBuyable("tad", 19)
+            buyBuyable("tad", 21)
+            buyBuyable("tad", 22)
+            buyBuyable("tad", 23)
+        }
+        if (hasMilestone("s", 17))
+        {
+            buyUpgrade("tad", 11)
+            buyUpgrade("tad", 12)
+            buyUpgrade("tad", 13)
+        }
     },
     nodeStyle() {
         return {
@@ -48,15 +69,22 @@
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("p", 18))
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
 
+        if (hasUpgrade("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(Decimal.mul(player.tad.shatteredInfinitiesToGet.mul(0.1), delta))
+
         player.tad.disfiguredInfinitiesToGet = player.bi.brokenInfinities.pow(0.4)
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("p", 18))
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
 
+        if (hasUpgrade("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(Decimal.mul(player.tad.disfiguredInfinitiesToGet.mul(0.1), delta))
+
         player.tad.corruptedInfinitiesToGet = player.bi.brokenInfinities.pow(0.4)
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("om", 13))
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("p", 18))
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(player.cb.uncommonPetEffects[8][1])
+
+        if (hasUpgrade("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(Decimal.mul(player.tad.corruptedInfinitiesToGet.mul(0.1), delta))
+
     },
     branches: ["ta",],
     clickables: {
@@ -221,17 +249,17 @@
             buy() {
                 let base = new Decimal(3)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -253,17 +281,17 @@
             buy() {
                 let base = new Decimal(4)
                 let growth = 1.15
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -285,17 +313,17 @@
             buy() {
                 let base = new Decimal(2)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -317,17 +345,17 @@
             buy() {
                 let base = new Decimal(6)
                 let growth = 1.2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -349,17 +377,17 @@
             buy() {
                 let base = new Decimal(5)
                 let growth = 1.24
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -381,17 +409,17 @@
             buy() {
                 let base = new Decimal(8)
                 let growth = 1.16
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -413,17 +441,17 @@
             buy() {
                 let base = new Decimal(15)
                 let growth = 1.22
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -445,17 +473,17 @@
             buy() {
                 let base = new Decimal(15)
                 let growth = 1.22
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -477,17 +505,17 @@
             buy() {
                 let base = new Decimal(15)
                 let growth = 1.22
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -509,17 +537,17 @@
             buy() {
                 let base = new Decimal(30)
                 let growth = 1.26
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.shatteredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -541,17 +569,17 @@
             buy() {
                 let base = new Decimal(45)
                 let growth = 1.28
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.disfiguredInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -573,17 +601,17 @@
             buy() {
                 let base = new Decimal(60)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
+                    if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.tad.corruptedInfinities, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
+                if (!hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -766,5 +794,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return hasUpgrade("ta", 21)}
+    layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)}
 })

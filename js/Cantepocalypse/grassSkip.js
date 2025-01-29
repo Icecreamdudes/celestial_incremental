@@ -25,6 +25,17 @@
     automate() {
     },
     nodeStyle() {
+        if (hasMilestone("s", 16) && !inChallenge("fu", 11))
+        {
+            buyBuyable('gs', 11)
+            buyBuyable('gs', 12)
+            buyBuyable('gs', 13)
+            buyBuyable('gs', 14)
+            buyBuyable('gs', 15)
+            buyBuyable('gs', 16)
+            buyBuyable('gs', 17)
+            buyBuyable('gs', 18)
+        }
     },
     tooltip: "Grass-Skip",
     branches: ["rg"],
@@ -39,7 +50,7 @@
 
         if (player.gs.grassSkip.lt(15)) player.gs.grassSkipReq = player.gs.grassSkip.mul(Decimal.pow(1e2, player.gs.grassSkip)).pow(1.5).add(1).mul(1e40)
         if (player.gs.grassSkip.gte(15)) player.gs.grassSkipReq = player.gs.grassSkip.mul(Decimal.pow(1e3, player.gs.grassSkip)).pow(1.5).add(1).mul(1e35)
-        player.gs.grassSkipEffect = player.gs.grassSkip.pow(2.4).add(1)
+        player.gs.grassSkipEffect = player.gs.grassSkip.add(buyableEffect("fu", 24)).pow(2.4).add(1)
 
         if (player.cp.replicantiPoints.gte(1e40))
         {
@@ -48,12 +59,14 @@
 
         player.gs.grassSkippers = player.gs.grassSkippers.add(player.gs.grassSkippersPerSecond.mul(delta))
 
-        player.gs.grassSkippersPerSecond = player.gs.grassSkip.pow(5)
+        player.gs.grassSkippersPerSecond = player.gs.grassSkip.add(buyableEffect("fu", 24)).pow(5)
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 11))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 12))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 13))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("gs", 14))
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(player.oi.linkingPowerEffect[5])
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("fu", 57))
+        if (inChallenge("fu", 11)) player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.pow(0.2)
 
         player.gs.grassSkippersEffect = player.gs.grassSkippers.pow(0.275).add(1)
 
@@ -70,6 +83,8 @@
             player.subtabs["ca"]['stuff'] = 'REMEMBERANCE CORES'
             player.subtabs["oi"]['stuff'] = 'Main'
         }
+
+        player.gs.grassSkipReq = player.gs.grassSkipReq.div(buyableEffect("fu", 72))
     },
     grassSkipReset()
     {
@@ -116,11 +131,14 @@
             player.rg.buyables[18] = new Decimal(0)
         }
 
+        if (!hasUpgrade("s", 14))
+        {
         for (let i = 0; i < player.an.upgrades.length; i++) {
             if (+player.an.upgrades[i] < 24) {
                 player.an.upgrades.splice(i, 1);
                 i--;
             }
+        }
         }
     },
     clickables: {
@@ -197,7 +215,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -207,7 +225,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -229,7 +247,7 @@
             buy() {
                 let base = new Decimal(25)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -239,7 +257,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -261,7 +279,7 @@
             buy() {
                 let base = new Decimal(40)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -271,7 +289,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -293,7 +311,7 @@
             buy() {
                 let base = new Decimal(100)
                 let growth = 1.35
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -303,7 +321,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -325,7 +343,7 @@
             buy() {
                 let base = new Decimal(2500)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -335,7 +353,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -357,7 +375,7 @@
             buy() {
                 let base = new Decimal(6000)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -367,7 +385,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -389,7 +407,7 @@
             buy() {
                 let base = new Decimal(15000)
                 let growth = 1.35
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -399,7 +417,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -421,7 +439,7 @@
             buy() {
                 let base = new Decimal(40000)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -431,7 +449,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
+                if (!hasMilestone("s", 16)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -501,7 +519,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + ". (+" + formatWhole(player.gs.grassSkipToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !player.fu.buyables[24].gte(1) ? "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + ". (+" + formatWhole(player.gs.grassSkipToGet) + ")" : "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + " + " +  formatWhole(buyableEffect("fu", 24)) +". (+" + formatWhole(player.gs.grassSkipToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Your grass-skip boosts multiplies the replicanti point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],

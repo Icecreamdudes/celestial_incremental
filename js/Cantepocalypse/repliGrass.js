@@ -22,6 +22,17 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 16) && !inChallenge("fu", 11))
+        {
+            buyBuyable('rg', 11)
+            buyBuyable('rg', 12)
+            buyBuyable('rg', 13)
+            buyBuyable('rg', 14)
+            buyBuyable('rg', 15)
+            buyBuyable('rg', 16)
+            buyBuyable('rg', 17)
+            buyBuyable('rg', 18)
+        }
     },
     nodeStyle() {
     },
@@ -43,11 +54,15 @@
         {
             player.rg.inRepliGrassTab = true
             if (player.rg.repliGrassCount < player.rg.repliGrassCap) player.rg.repliGrassTimer = player.rg.repliGrassTimer.add(onepersec.mul(delta))
-            if (player.rg.repliGrassTimer.gt(player.rg.repliGrassReq) && player.rg.repliGrassCount < player.rg.repliGrassCap)
+            if (player.rg.repliGrassTimer.gt(player.rg.repliGrassReq))
             {
-                createRepliGrass(1);
-                player.rg.savedRepliGrass++;
+                if (player.rg.repliGrassCount < player.rg.repliGrassCap)
+                {
+                    createRepliGrass(1);
+                    player.rg.savedRepliGrass++;
+                }
                 player.rg.repliGrassTimer = new Decimal(0)
+                if (!inChallenge("fu", 11)) player.rg.repliGrass = player.rg.repliGrass.mul(Decimal.add(player.rg.repliGrassMult.sub(1).mul(buyableEffect("fa", 203)), 1))
             }
         } else if (!(player.tab == "rg"))
         {
@@ -75,11 +90,14 @@
 
         player.rg.repliGrassSoftcapStart = new Decimal(1000)
         player.rg.repliGrassSoftcapStart = player.rg.repliGrassSoftcapStart.mul(buyableEffect("rg", 14))
+        player.rg.repliGrassSoftcapStart = player.rg.repliGrassSoftcapStart.mul(buyableEffect("fu", 56))
 
         let multAdd = new Decimal(0.02)
         multAdd = multAdd.add(buyableEffect("rg", 11))
         multAdd = multAdd.mul(buyableEffect("gs", 18))
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[4])
+        multAdd = multAdd.add(buyableEffect("fu", 23))
+        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
         player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
         if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart))
@@ -158,7 +176,7 @@
             buy() {
                 let base = new Decimal(1.5)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -168,7 +186,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -190,7 +208,7 @@
             buy() {
                 let base = new Decimal(2)
                 let growth = 5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -199,7 +217,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -221,7 +239,7 @@
             buy() {
                 let base = new Decimal(4)
                 let growth = 2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -230,7 +248,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -252,7 +270,7 @@
             buy() {
                 let base = new Decimal(8)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -261,7 +279,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -283,7 +301,7 @@
             buy() {
                 let base = new Decimal(3)
                 let growth = 1.45
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -292,7 +310,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -314,7 +332,7 @@
             buy() {
                 let base = new Decimal(7)
                 let growth = 1.55
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -323,7 +341,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -345,7 +363,7 @@
             buy() {
                 let base = new Decimal(16)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -354,7 +372,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -376,7 +394,7 @@
             buy() {
                 let base = new Decimal(30)
                 let growth = 1.35
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rg.repliGrass = player.rg.repliGrass.sub(buyonecost)
@@ -385,7 +403,7 @@
                 {
                 let max = Decimal.affordGeometricSeries(player.rg.repliGrass, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.rg.repliGrass = player.rg.repliGrass.sub(cost)
+                if (!hasMilestone("s", 16)) player.rg.repliGrass = player.rg.repliGrass.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

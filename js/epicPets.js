@@ -382,6 +382,7 @@ addLayer("ep0", {
         {
             player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(player.ep0.dotknightLevelEffect)
             if (hasUpgrade("ep2", 13)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(upgradeEffect("ep2", 13))
+            if (hasUpgrade("ev8", 21)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(1.4)
         }
 
         for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++)
@@ -623,6 +624,7 @@ addLayer("ep1", {
         {
             player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(player.ep1.dragonLevelEffect)
             if (hasUpgrade("ep0", 13)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep0", 13))
+            if (hasUpgrade("ev8", 21)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(1.4)
         }
 
         for (let i = 0; i < player.ep1.dragonPointButtonTimers.length; i++)
@@ -865,6 +867,7 @@ addLayer("ep2", {
         {
             player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(player.ep2.cookieLevelEffect)
             if (hasUpgrade("ep1", 13)) player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(upgradeEffect("ep1", 13))
+            if (hasUpgrade("ev8", 21)) player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(1.4)
         }
 
         for (let i = 0; i < player.ep2.cookiePointButtonTimers.length; i++)

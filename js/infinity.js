@@ -1,4 +1,4 @@
-﻿var tree = [["ad", "ip", "id"], ["tad", "ta", "bi", "om"], ["ga", "ca"]]
+﻿var tree2 = [["ad", "ip", "id"], ["tad", "ta", "bi", "om"], ["ga", "ca"]]
 addLayer("in", {
     name: "Universe 2", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "2", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -19,6 +19,7 @@ addLayer("in", {
     }
     },
     automate() {
+        
     },
     nodeStyle() {
         return {
@@ -60,7 +61,8 @@ addLayer("in", {
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if (!hasMilestone("ip", 21)) {
+                if (!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)) || player.points.gte(1e308)))
+                {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21)) {
                     layers.bigc.crunch()
@@ -99,6 +101,11 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cb.epicPetEffects[2][1])
+        if (hasMilestone("fa", 11)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fa.milestoneEffect[0])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.sd.singularityPowerEffect)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("s", 12))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("fu", 17))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fu.sadnessEffect2)
 
         player.in.infinitiesToGet = new Decimal(1)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("bi", 11))
@@ -107,6 +114,21 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
     },
     bigCrunch() {
+        if (hasUpgrade("ta", 17))
+            {
+                if (player.d.dicePoints.gt(player.ta.highestDicePoints))
+                {
+                    player.ta.highestDicePoints = player.d.dicePoints
+                }
+                if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel))
+                {
+                    player.ta.highestRocketFuel = player.rf.rocketFuel
+                }
+                if (player.h.hexPoints[0].gt(player.ta.highestHex1Points))
+                {
+                    if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
+                }
+            }
         if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gt(1e300)) {
             completeChallenge("ip", 11)
         }
@@ -125,6 +147,9 @@ addLayer("in", {
         if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gt(1e300)) {
             completeChallenge("ip", 16)
         }
+        if (inChallenge("ip", 18) && !hasChallenge("ip", 18) && player.points.gt(1e300)) {
+            completeChallenge("ip", 18)
+        }
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
@@ -133,7 +158,8 @@ addLayer("in", {
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("s", 15)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 15)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -367,6 +393,8 @@ addLayer("in", {
         }
 
         player.de.antidebuffPoints = new Decimal(0)
+        player.fa.charge = new Decimal(0)
+
     },
     branches: ["branch"],
     clickables: {
@@ -391,6 +419,21 @@ addLayer("in", {
     challenges: {
     },
     infoboxes: {
+        1: {
+            title: "Infinity",
+            body() { return "Tav, the celestial of limits, has placed a barrier on the superphysical value of celestial points. He introduced the magic number: 1.7976931...e308. A constant value that represented the point at which celestial points condensed into an infinity. When celestial points are condensed into an infinity, it also produces infinity points as a byproduct. This process is called a big crunch. Infinities are an ancient power, tracing back to the time of the original seven." },
+            unlocked() { return true },      
+        },
+        2: {
+            title: "Celestial",
+            body() { return "It is safe to condlude the following information about a celestial: Celestials are comprised of a physical aspect, and a superphysical aspect. Both aspects contain immense powers that are incomprehensible by normal life forms. Most of us were once a different life form, humans included. It is unknown what causes us to be celestials. It can be very hard for us to travel between universes, only the most skilled of celestials can. Many unknowns are still present. We don't know who rules the celestials. We don't know why celestials exist. We don't know what our true limits are. It is only a matter of time until I figure everything out." },
+            unlocked() { return hasUpgrade("bi", 18) },      
+        },
+        3: {
+            title: "Otherworldly Features",
+            body() { return "Otherworldly Features were created by a group of celestials called the Novasent. So far, I have only discovered three of them: Dice, Rocket Fuel, and Hex. The superphysical values that are a part of OTFs are artificial. I find dice to be the most intriguing. The entropic value of these OTFs are fascinating. Randomness isn't too common within SPVs, and especially not artificial SPVs. Zar, the celestial that created this OTF, is a very mysterious celestial. I've heard that he is the strongest of all the novasent, since he created his own pocket dimension. Rocket fuel is also very powerful, as it can lead into multiple universes. It was created by Iridite, the Astral Celestial. I've spoken with her once. She is an insanely smart celestial, but she seems to have psychopathic tendencies. Apparently Iridite and Zar don't get along very well... Hex is the last of the main three OTFs.  This SPV is extremely rare, as instead of representing one number, it is a list of numbers. This one was created by Tera, the Celestial of Tiers. Tera is the most mysterious of the three novasent. I don't have any information on this celestial..." },
+            unlocked() { return hasUpgrade("bi", 26) },      
+        },
     },
     microtabs: {
         stuff: {
@@ -400,13 +443,25 @@ addLayer("in", {
                 content:
                 [
                         ["blank", "25px"],
-                        ["tree", tree],
+                        ["tree", tree2],
+                ]
+
+            },
+            "Lore": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return true },
+                content:
+                [
+                        ["blank", "25px"],
+                        ["infobox", "1"],
+                        ["infobox", "2"],
+                        ["infobox", "3"],
                 ]
 
             },
             "Portal": {
                 buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("ad", 13) },
+                unlocked() { return hasUpgrade("ad", 13) || player.s.highestSingularityPoints.gte(0) },
                 content:
                 [
                 ]
@@ -483,25 +538,9 @@ addLayer("bigc", {
         {
             player.ip.hexRuns = player.ip.hexRuns.add(1)
         }
-        if (hasUpgrade("ta", 17))
-        {
-            if (player.d.dicePoints.gt(player.ta.highestDicePoints))
-            {
-                player.ta.highestDicePoints = player.d.dicePoints
-            }
-            if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel))
-            {
-                player.ta.highestRocketFuel = player.rf.rocketFuel
-            }
-            if (player.h.hexPoints[0].gt(player.ta.highestHex1Points))
-            {
-                if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
-            }
-        }
-
         layers.in.bigCrunch()
         player.in.reachedInfinity = false
-        
+
         if (player.rm.halterBoostCheck && player.po.realmMods)
         {
             player.rm.halterBoost = player.po.halterEffects[0]

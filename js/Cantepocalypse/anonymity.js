@@ -11,6 +11,21 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 17) && !inChallenge("fu", 11))
+        {
+            buyUpgrade("an", 11)
+            buyUpgrade("an", 12)
+            buyUpgrade("an", 13)
+            buyUpgrade("an", 14)
+            buyUpgrade("an", 15)
+            buyUpgrade("an", 16)
+            buyUpgrade("an", 17)
+            buyUpgrade("an", 18)
+            buyUpgrade("an", 19)
+            buyUpgrade("an", 21)
+            buyUpgrade("an", 22)
+            buyUpgrade("an", 23)
+        }
     },
     nodeStyle() {
     },
@@ -28,6 +43,10 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.oi.linkingPowerEffect[2])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.evolvedEffects[8][0])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.epicPetEffects[1][1])
+        if (hasMilestone("fa", 18)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fa.milestoneEffect[7])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("fu", 46))
+        if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(0.2)
+        if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fu.jocusEssenceEffect)
 
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },

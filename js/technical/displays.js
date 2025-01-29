@@ -56,6 +56,13 @@ function constructUniButtonStyle(layer){
 			"border-color": "#013851"});
 			uni = 1.5;
 			break;
+		case 'ch':
+			style.push({
+				background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
+				"background-origin": "border-box",
+				"border-color": "#2e0054",});
+			uni = -0.5;
+			break;
 		case 'otherfeat':
 			style.push({
 			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
@@ -179,6 +186,59 @@ function constructMenuButtonStyle(layer){
 			"background-origin": "border-box",
 			"border-color": "#0f354c"});
 			break;
+		case 're':
+			style.push({
+			background: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)",
+			"background-origin": "border-box",
+			"border-color": "white"});
+			break;
+		case 'fa':
+			style.push({
+			background: "gray",
+			"background-origin": "border-box",
+			"border-color": "white"});
+			break;
+		case 'coa':
+			style.push({
+			background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)",
+			"background-origin": "border-box",
+			"border-color": "#260300",
+			"color": "#8c3129",});
+			break;
+		case 'cop':
+			style.push({
+			background: "linear-gradient(120deg, #6b1919 0%, #000000 100%)",
+			"background-origin": "border-box",
+			"border-color": "#260300",
+			"color": "#8c3129",});
+			break;
+	    case 'ra':
+			style.push({
+            background: "linear-gradient(120deg, #0e8a22 0%, #45ff17 100%)",
+            "background-origin": "border-box",
+            "border-color": "#260454",
+            "color": "#260454",});
+			break;
+		case 'sd':
+			style.push({
+            background: "linear-gradient(120deg, #782424 0%, #8c1111 100%)",
+            "background-origin": "border-box",
+            "border-color": "#3d1616",
+            "color": "#3d1616",});
+			break;
+		case 'fu':
+			style.push({
+            background: "linear-gradient(45deg, #fcff04 0%, #befa32 100%)",
+            "background-origin": "border-box",
+            "border-color": "#5e8503",});
+			break;
+		case 'cs':
+			style.push({
+            background: "linear-gradient(120deg, #4f4b45 0%, #2b2522 100%)",
+            "background-origin": "border-box",
+            "border-color": "#ababab",
+            "color": "#ababab",});
+			break;
 		default:
 			style.push({'background-color': tmp[layer].color});
 	}
@@ -231,6 +291,20 @@ function constructCbButtonStyle(layer) {
 			"background-origin": "border-box",
 			"border-color": "#1500bf",
 			"color": "#1500bf"});
+			break;
+		case 'ev9':
+			style.push({
+			background: "linear-gradient(90deg, #e75753, #e1843c, #fff463, #90f32d, #5cd4a6)",
+			"background-origin": "border-box",
+			"border-color": "black",
+			"color": "black"});
+			break;
+		case 'ev10':
+			style.push({
+			background: "linear-gradient(120deg, #121212, #1c1c1c)",
+			"background-origin": "border-box",
+			"border-color": "black",
+			"color": "black"});
 			break;
 		case 'ep0':
 			style.push({"background-color": "#9176af"});

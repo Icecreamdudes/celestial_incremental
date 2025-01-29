@@ -39,6 +39,22 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 16))
+        {
+            buyBuyable("ca", 11)
+            buyBuyable("ca", 12)
+            buyBuyable("ca", 13)
+            buyBuyable("ca", 14)
+            buyBuyable("ca", 15)
+            buyBuyable("ca", 16)
+            buyBuyable("ca", 17)
+            buyBuyable("ca", 18)
+            buyBuyable("ca", 19)
+            buyBuyable("ca", 21)
+            buyBuyable("ca", 22)
+            buyBuyable("ca", 23)
+            buyBuyable("ca", 24)
+        }
     },
     nodeStyle() {
         return {
@@ -72,7 +88,7 @@
         player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 14))
         player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 17))
 
-        if (player.ca.unlockedCante) player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
+        if (player.ca.unlockedCante && hasUpgrade("bi", 24)) player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
 
         if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq))
         {
@@ -97,6 +113,11 @@
 
         player.ca.galaxyDustToGet = player.ca.replicanti.plus(1).log10().pow(0.8)
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.cb.commonPetEffects[7][1])
+        if (hasMilestone("fa", 19)) player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.fa.milestoneEffect[8])
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("fu", 44))
+
+        if (hasUpgrade("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
+
         player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
 
         //rep galax
@@ -280,7 +301,7 @@
             buy() {
                 let base = new Decimal(1e18)
                 let growth = 10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -290,7 +311,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasMilestone("s", 16)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -312,7 +333,7 @@
             buy() {
                 let base = new Decimal(1e19)
                 let growth = 10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -322,7 +343,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasMilestone("s", 16)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -344,7 +365,7 @@
             buy() {
                 let base = new Decimal(1e20)
                 let growth = 100
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -354,7 +375,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasMilestone("s", 16)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -376,7 +397,7 @@
             buy() {
                 let base = new Decimal(1e13)
                 let growth = 10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -386,7 +407,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
+                if (!hasMilestone("s", 16)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -408,7 +429,7 @@
             buy() {
                 let base = new Decimal(1e14)
                 let growth = 10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -418,7 +439,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
+                if (!hasMilestone("s", 16)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -440,7 +461,7 @@
             buy() {
                 let base = new Decimal(1e15)
                 let growth = 100
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -450,7 +471,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
+                if (!hasMilestone("s", 16)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -472,7 +493,7 @@
             buy() {
                 let base = new Decimal(3)
                 let growth = 2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -482,7 +503,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -504,7 +525,7 @@
             buy() {
                 let base = new Decimal(6)
                 let growth = 3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -514,7 +535,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -536,7 +557,7 @@
             buy() {
                 let base = new Decimal(4)
                 let growth = 10
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -546,7 +567,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -568,7 +589,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -578,7 +599,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -600,7 +621,7 @@
             buy() {
                 let base = new Decimal(20)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -610,7 +631,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -632,7 +653,7 @@
             buy() {
                 let base = new Decimal(50)
                 let growth = 3
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -642,7 +663,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -664,7 +685,7 @@
             buy() {
                 let base = new Decimal(150)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
@@ -674,7 +695,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
+                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -807,7 +828,7 @@
         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)) || hasMilestone("s", 19)}
 })
 
 // i came up with this guy's name

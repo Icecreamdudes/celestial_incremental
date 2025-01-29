@@ -9,12 +9,30 @@ addLayer("pol", {
         pollinators: new Decimal(0),
         pollinatorsPerSecond: new Decimal(0),
 
-        pollinatorsEffect: [new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+        pollinatorsEffect: [new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         pollinatorsIndex: 0,
         pollinatorsMax: false
     }
     },
     automate() {
+        if (hasMilestone("s", 16))
+        {
+            buyBuyable("pol", 11)
+            buyBuyable("pol", 12)
+            buyBuyable("pol", 13)
+            buyBuyable("pol", 14)
+        }
+        if (hasMilestone("s", 17))
+        {
+            buyUpgrade("pol", 11)
+            buyUpgrade("pol", 12)
+            buyUpgrade("pol", 13)
+            buyUpgrade("pol", 14)
+            buyUpgrade("pol", 15)
+            buyUpgrade("pol", 16)
+            buyUpgrade("pol", 17)
+            buyUpgrade("pol", 18)
+        }
     },
     nodeStyle() {
     },
@@ -34,69 +52,81 @@ addLayer("pol", {
             if (hasUpgrade("bi", 17)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("bi", 17))
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(0.8)
-            player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
             }
+            if (hasUpgrade("s", 13)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 13))
+
+            player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
+
         }
+    
 
         switch (player.pol.pollinatorsIndex) {
             case 0:
                 break;
             case 1:
                 player.pol.pollinatorsEffect = [
-                    player.pol.pollinators.pow(2.7).div(10).add(1).pow(buyableEffect("pol", 14)), // Celestial Points
-                    player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)), // Factor Base
-                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
+                    player.pol.pollinators.pow(2.7).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Celestial Points
+                    player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Factor Base
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 break;
             case 2:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0),
-                    player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)), // Factor Power
-                    player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Prestige Points
-                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
+                    player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Factor Power
+                    player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Prestige Points
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 break;
             case 3:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Leafs
-                    player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)), // Trees
-                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
+                    player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Leafs
+                    player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Trees
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 break;
             case 4:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Grass Value
-                    player.pol.pollinators.pow(0.45).div(10).add(1).pow(buyableEffect("pol", 14)), // Golden Grass Value
-                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
+                    player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Grass Value
+                    player.pol.pollinators.pow(0.45).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Golden Grass Value
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 break;
             case 5:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(0.7).div(10).add(1).pow(buyableEffect("pol", 14)), // Grasshoppers
-                    player.pol.pollinators.pow(1.3).div(10).add(1).pow(buyableEffect("pol", 14)), // Fertilizer
-                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
+                    player.pol.pollinators.pow(0.7).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Grasshoppers
+                    player.pol.pollinators.pow(1.3).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Fertilizer
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 break;
             case 6:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.pow(2.3).div(10).add(1).pow(buyableEffect("pol", 14)), // Lines of Code
-                    player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)), // Mods
-                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
+                    player.pol.pollinators.pow(2.3).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Lines of Code
+                    player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Mods
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)
                 ];
                 break;
             case 7:
                 player.pol.pollinatorsEffect = [
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
-                    player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)), // Dice Points
-                    player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)), // Rocket Fuel
-                    player.pol.pollinators.add(1).log(100).add(1).pow(buyableEffect("pol", 14)), // All Hex Points
-                    player.pol.pollinators.add(1).log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)) // Realm Mod Energy
+                    player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Dice Points
+                    player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Rocket Fuel
+                    player.pol.pollinators.add(1).log(100).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // All Hex Points
+                    player.pol.pollinators.add(1).log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)), new Decimal(1), new Decimal(1) // Realm Mod Energy
+                ];
+                break;
+            case 8:
+                player.pol.pollinatorsEffect = [
+                    new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
+                    new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), 
+                    player.pol.pollinators.add(1).log(10).pow(1.75).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), //steel
+                    player.pol.pollinators.add(1).log(65).pow(0.75).div(1.5).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) //oil
                 ];
                 break;
         }
@@ -201,6 +231,15 @@ addLayer("pol", {
                 player.pol.pollinatorsIndex = 7
             },
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #8a00a9, #0061ff)", 'border-color': "purple", 'border-width': '4px' },
+        },
+        19: {
+            title() { return "<img src='resources/pollinators/gear.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            canClick() { return true },
+            unlocked() { return hasUpgrade("bi", 114) },
+            onClick() {
+                player.pol.pollinatorsIndex = 8
+            },
+            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #919191, #545454)", 'border-color': "gray", 'border-width': '4px' },
         },
     },
     bars: {
@@ -315,7 +354,7 @@ addLayer("pol", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy() {
-                if (player.pol.pollinatorsMax == false) {
+                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -323,7 +362,7 @@ addLayer("pol", {
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -347,7 +386,7 @@ addLayer("pol", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy() {
-                if (player.pol.pollinatorsMax == false) {
+                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -355,7 +394,7 @@ addLayer("pol", {
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -379,7 +418,7 @@ addLayer("pol", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy() {
-                if (player.pol.pollinatorsMax == false) {
+                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -387,7 +426,7 @@ addLayer("pol", {
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -412,7 +451,7 @@ addLayer("pol", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy() {
-                if (player.pol.pollinatorsMax == false) {
+                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -421,7 +460,7 @@ addLayer("pol", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -474,6 +513,11 @@ addLayer("pol", {
             title: "Ant",
             body() { return "Fun Fact: Ants are not very effective pollinators, but they still do it." },
             unlocked() { return player.pol.pollinatorsIndex == 7},
+        },
+        p8: {
+            title: "Mechanical Pollation",
+            body() { return "Fun Fact: Humans can also contribute to pollination, by utillizing techniques such as using pollen spray systems, air blasters, and also pollinating by hand." },
+            unlocked() { return player.pol.pollinatorsIndex == 8},
         }
     },
     microtabs: {
@@ -491,16 +535,18 @@ addLayer("pol", {
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h1>You are currently selecting Wind.<br><h2>Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br><h2>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h1>You are currently selecting the Bee.<br><h2>Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br><h2>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h1>You are currently selecting the Butterfly.<br><h2>Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br><h2>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "<h1>You are currently selecting the Ant." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "<h1>You are currently selecting the Ant. <h5>(requires an otf selection)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.dice ? "<h2>Dice Points: x" + format(player.pol.pollinatorsEffect[12]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.rocketFuel ? "<h2>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.hex ? "<h2>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
                     ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.realmMods ? "<h2>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
+                    ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "<h1>You are currently selecting the Machine.<br><h2>Steel: x" + format(player.pol.pollinatorsEffect[16]) + "<br><h2>Oil: x" + format(player.pol.pollinatorsEffect[17]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]]],
-                    ["row", [["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
+                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15],]],
+                    ["row", [ ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
                     ["blank", "25px"],
-                    ["row", [["infobox", "p0"], ["infobox", "p1"], ["infobox", "p2"], ["infobox", "p3"], ["infobox", "p4"], ["infobox", "p5"], ["infobox", "p6"], ["infobox", "p7"]]],
+                    ["row", [["infobox", "p0"], ["infobox", "p1"], ["infobox", "p2"], ["infobox", "p3"], ["infobox", "p4"], ["infobox", "p5"], ["infobox", "p6"], ["infobox", "p7"], ["infobox", "p8"]]],
                 ]
             },
             "Upgrades": {

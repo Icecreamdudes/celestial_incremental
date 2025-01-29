@@ -1044,3 +1044,25 @@ button > * {
     transform: translate(100vw, 100vh); /* Move outside the viewport */
   }
 }
+
+.singularityCore {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(-45deg, var(--color1) 50%, var(--color2) 50%);
+    border: 3px solid white; /* White border */
+    display: inline-block;
+    margin: 10px;
+    position: relative;
+  }
+
+  .centerCircle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--centerColor, transparent);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

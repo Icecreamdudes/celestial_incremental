@@ -8,7 +8,9 @@
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
-	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js"],
+	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js", "Singularity/coreProcessor.js",
+	"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
+	"Hall of Celestials/celestialHall.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -27,6 +29,7 @@ let hotkey = `<h1>Hotkeys:</h1><br>
 		Q - Universe 1.<br>
 		W - Universe 2.<br>
 		A - Alt-Universe 1.<br>
+		E - Universe 3.<br>
 		`
 
 let credits = `<h1>Credits:</h1><br>
@@ -40,11 +43,29 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.4 - The Singularity Update Part I: Cores</h3><br>
+			- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+		<br>
+		<br>
+		<br>
+		Content:<br>
+		- Added Singularity, the next large prestige layer.<br>
+		- Added Singularity Cores. (The Core Assember, and the Core Processor)<br>
+		- Added Radiation.<br>
+		- Added Singularity Dimensions.<br>
+		- Added Core Scraps.<br>
+		- Added Realm Essence.<br>
+		- Added the Factory.<br>
+		- Added a new celestial: Jocus, the Celestial of Fun.<br>
+		- Added two new pet evolutions.<br>
+		- Added pet crate automation.<br>
+		- Added a buncha new lore. (check out the lore tabs)<br>
+		- Added some new music.<br>
+		- Added ???. (new universe?)<br>
+		Balancing: Changes to pet shop prices, XPBoost, and Realm Mods.<br>
+		Bugfixes: I lost track again lmao<br>
+		QoL: I lost track again lmao<br><br>
 	<h3>v1.3 - The Layout Update - with QoL</h3><br>
-		- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
-		<br>
-		<br>
-		<br>
 		Content:<br>
 			- Added the Sidebar Layout.<br>
 			- Added the Pollinators Layer.<br><br>
@@ -118,7 +139,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Begun work on buyable code rework, current layers done are: Ranks, Factors, Prestige, Trees, Grasshoppers.<br>
 			- Since of this, all buy max buttons on those layers are subtab specific and not controlled by the main variable.<br>
 			- There was sadly not enough time to get to all layers, so hopefully more work on this can be done later.<br><br>
-	<h3>v1.2 - Epic Pets!!! :)</h3><br>
+	<h3>v1.2 - The Pet Update Part II: Epic Pets!!! :)</h3><br>
 		Content:<br>
 			- Added 3 new epic pets!!! (They are hard to get so good luck)<br>
 			- Added 2 new pet crates.<br>
@@ -171,7 +192,7 @@ let changelog = `<h1>Changelog:</h1><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
-	<h3>v1.1 - The Pet Update Part 1 - With Bugfixes</h3><br>
+	<h3>v1.1 - The Pet Update Part I - With Bugfixes</h3><br>
 		Content:<br>
 		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
 		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
@@ -220,7 +241,9 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
-"commonPetBanner", "uncommonPetBanner", "rarePetBanner", "offlineCooldown"]
+"commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
+ "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", 
+ "startCutscene25", "startCutscene26", "startCutscene27", "scrapCore"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

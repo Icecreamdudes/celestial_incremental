@@ -31,6 +31,17 @@
             buyUpgrade("p", 22)
             buyUpgrade("p", 23)
         }
+        if (hasMilestone("s", 16))
+        {
+            buyBuyable("p", 11)
+            buyBuyable("p", 12)
+            buyBuyable("p", 13)
+            buyBuyable("p", 14)
+            buyBuyable("p", 15)
+            buyBuyable("p", 16)
+            buyBuyable("p", 17)
+            buyBuyable("p", 18)
+        }
     },
     nodeStyle() {
     },
@@ -40,7 +51,11 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.p.prestigePointsToGet = player.points.div(100000).pow(0.5)
+        if (player.points.div(100000).pow(0.5).lte("1e450000")) player.p.prestigePointsToGet = player.points.div(100000).pow(0.5)
+        if (player.points.div(100000).pow(0.5).gte("1e450000"))
+        {
+            player.p.prestigePointsToGet = Decimal.mul("1e450000", player.points.plus(10).log10().pow(2500))
+        }
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.t.treeEffect)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("g", 16))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.r.pentEffect)
@@ -62,10 +77,7 @@
         if (player.pol.pollinatorsIndex == 2) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorsEffect[3])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("rm", 23))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
-
-        player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
-        if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))
-        if (hasMilestone("ip", 12) && !inChallenge("ip", 14)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.05, delta)))
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
 
         if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta)))
         {
@@ -89,6 +101,11 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cb.rarePetEffects[5][1])
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
         if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
+        if (hasUpgrade("s", 13)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 13))
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
+
+        player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))
+
     },
     prestigeReset()
     {
@@ -402,7 +419,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -414,7 +431,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -423,7 +440,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -436,7 +453,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -448,7 +465,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -457,7 +474,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -470,7 +487,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -482,7 +499,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -491,7 +508,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -504,7 +521,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -516,7 +533,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -525,7 +542,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -538,7 +555,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -550,7 +567,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -559,7 +576,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -572,7 +589,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -584,7 +601,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -593,7 +610,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -606,7 +623,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -618,7 +635,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -627,7 +644,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -640,7 +657,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1).pow(buyableEffect("cs", 23)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -652,7 +669,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy() {
-                if (player.p.crystalMax == false) {
+                if (player.p.crystalMax == false && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -661,7 +678,7 @@
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

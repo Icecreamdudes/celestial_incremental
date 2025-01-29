@@ -103,50 +103,50 @@
             "Grass Square cost: " + format(player.ps.rarePetPrices[6]),
         ]
 
-        player.ps.commonPetPrices = [new Decimal(10), new Decimal(10),new Decimal(10),new Decimal(10),new Decimal(10), new Decimal(10),new Decimal(10),new Decimal(10),new Decimal(10)]
+        player.ps.commonPetPrices = [new Decimal(20), new Decimal(20),new Decimal(20),new Decimal(20),new Decimal(20), new Decimal(20),new Decimal(20),new Decimal(20),new Decimal(20)]
         for (let i = 0; i < player.ps.commonPetPrices.length; i++)
         {
-            player.ps.commonPetPrices[i] = player.ps.commonPetPrices[i].add(player.ps.commonPetsBought.mul(2))
+            player.ps.commonPetPrices[i] = player.ps.commonPetPrices[i].add(player.ps.commonPetsBought.mul(10))
         }
 
-        player.ps.uncommonPetPrices = [new Decimal(30),new Decimal(30),new Decimal(30),new Decimal(30),new Decimal(30),new Decimal(30),new Decimal(30),new Decimal(30),new Decimal(30)]
+        player.ps.uncommonPetPrices = [new Decimal(50),new Decimal(50),new Decimal(50),new Decimal(50),new Decimal(50),new Decimal(50),new Decimal(50),new Decimal(50),new Decimal(50)]
         for (let i = 0; i < player.ps.uncommonPetPrices.length; i++)
         {
-            player.ps.uncommonPetPrices[i] = player.ps.uncommonPetPrices[i].add(player.ps.uncommonPetsBought.mul(5))
+            player.ps.uncommonPetPrices[i] = player.ps.uncommonPetPrices[i].add(player.ps.uncommonPetsBought.mul(25))
         }
 
-        player.ps.rarePetPrices = [new Decimal(200),new Decimal(200),new Decimal(200),new Decimal(200),new Decimal(200),new Decimal(200),new Decimal(200),]
+        player.ps.rarePetPrices = [new Decimal(400),new Decimal(400),new Decimal(400),new Decimal(400),new Decimal(400),new Decimal(400),new Decimal(400),]
         for (let i = 0; i < player.ps.rarePetPrices.length; i++)
         {
-            player.ps.rarePetPrices[i] = player.ps.rarePetPrices[i].add(player.ps.rarePetsBought.mul(25))
+            player.ps.rarePetPrices[i] = player.ps.rarePetPrices[i].add(player.ps.rarePetsBought.mul(100))
         }
 
         if (player.cb.highestLevel.gte(65)) player.ps.unlockedMisc = true
         if (player.cb.highestLevel.gte(3000)) player.ps.unlockedMisc2 = true
 
-        player.ps.evoShardsCost = new Decimal(250)
-        player.ps.evoShardsCost = player.ps.evoShardsCost.add(player.ps.evoShardsBought.mul(50))
+        player.ps.evoShardsCost = new Decimal(500)
+        player.ps.evoShardsCost = player.ps.evoShardsCost.add(player.ps.evoShardsBought.mul(500))
 
-        player.ps.paraShardsCost = new Decimal(5000)
-        player.ps.paraShardsCost = player.ps.paraShardsCost.add(player.ps.paraShardsBought.mul(1000))
+        player.ps.paraShardsCost = new Decimal(25000)
+        player.ps.paraShardsCost = player.ps.paraShardsCost.add(player.ps.paraShardsBought.mul(25000))
 
-        player.ps.crate1Cost = new Decimal(6)
-        player.ps.crate1Cost = player.ps.crate1Cost.add(player.ps.crate1Bought.mul(3))
+        player.ps.crate1Cost = new Decimal(16)
+        player.ps.crate1Cost = player.ps.crate1Cost.add(player.ps.crate1Bought.mul(8))
 
-        player.ps.crate2Cost = new Decimal(20)
-        player.ps.crate2Cost = player.ps.crate2Cost.add(player.ps.crate2Bought.mul(5))
+        player.ps.crate2Cost = new Decimal(30)
+        player.ps.crate2Cost = player.ps.crate2Cost.add(player.ps.crate2Bought.mul(15))
 
-        player.ps.crate3Cost = new Decimal(35)
-        player.ps.crate3Cost = player.ps.crate3Cost.add(player.ps.crate3Bought.mul(7))
+        player.ps.crate3Cost = new Decimal(50)
+        player.ps.crate3Cost = player.ps.crate3Cost.add(player.ps.crate3Bought.mul(25))
 
-        player.ps.crate4Cost = new Decimal(150)
-        player.ps.crate4Cost = player.ps.crate4Cost.add(player.ps.crate4Bought.mul(35))
+        player.ps.crate4Cost = new Decimal(200)
+        player.ps.crate4Cost = player.ps.crate4Cost.add(player.ps.crate4Bought.mul(100))
 
-        player.ps.crate5Cost = new Decimal(50)
-        player.ps.crate5Cost = player.ps.crate5Cost.add(player.ps.crate5Bought.mul(15))
+        player.ps.crate5Cost = new Decimal(100)
+        player.ps.crate5Cost = player.ps.crate5Cost.add(player.ps.crate5Bought.mul(50))
 
-        player.ps.crate6Cost = new Decimal(200)
-        player.ps.crate6Cost = player.ps.crate6Cost.add(player.ps.crate6Bought.mul(50))
+        player.ps.crate6Cost = new Decimal(500)
+        player.ps.crate6Cost = player.ps.crate6Cost.add(player.ps.crate6Bought.mul(250))
 
         player.ps.miscDisplay = [
             "Evo shard cost: " + format(player.ps.evoShardsCost),

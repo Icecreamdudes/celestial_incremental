@@ -1,4 +1,4 @@
-﻿var tree = [["i", "in", "s"], ["cp"]]
+﻿var tree = [["i", "in", "s"], ["cp"], ["ch"]]
 addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -55,6 +55,7 @@ addLayer("po", {
 
         player.po.featureSlotsMax = new Decimal(1)
         if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+        if (hasUpgrade("s", 17)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice)
@@ -128,7 +129,7 @@ addLayer("po", {
         {
             if (player.po.halterInput.neq(player.po.halterEffects[player.po.halterIndex]))
             {
-                player.rm.halterBoostCheck = false
+               // player.rm.halterBoostCheck = false
             }
         }
         if (player.po.halterInput.lt(1)) player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
@@ -151,7 +152,7 @@ addLayer("po", {
                 return "You only gain them back once you reach the req.";
             },
             canClick() { return true },
-            unlocked() { return hasMilestone("ip", 18) && !player.po.keepOTFS},
+            unlocked() { return ((hasMilestone("ip", 18)|| player.s.highestSingularityPoints.gt(0)) && !player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = true
             },
@@ -163,7 +164,7 @@ addLayer("po", {
         3: {
             title() { return "Don't keep OTFs on reset. (Currently on)" },
             canClick() { return true },
-            unlocked() { return hasMilestone("ip", 18) && player.po.keepOTFS},
+            unlocked() { return ((hasMilestone("ip", 18)|| player.s.highestSingularityPoints.gt(0)) && player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = false
             },
@@ -333,12 +334,17 @@ addLayer("po", {
             display() {
                 return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.2)<br>On" : "<h2>Feel the realms.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
             },
-            canClick() { return player.po.featureSlots.gte(2) && player.ca.replicanti.gte(1.79e308) && player.ca.canteCores.gte(1)},
+            canClick() { return player.po.featureSlots.gte(2) && (player.ca.replicanti.gte(1.79e308) || hasMilestone("s", 15)) && (player.ca.canteCores.gte(1) || hasMilestone("s", 15))},
             unlocked() { return hasUpgrade("bi", 27) },
             onClick() {
                 player.po.keepOTFS = true
                 player.po.realmMods = true
-                player.ca.canteCores = player.ca.canteCores.sub(1)
+
+                if (!hasMilestone("s", 15))
+                {
+                    player.ca.canteCores = player.ca.canteCores.sub(1)
+                }
+
                 layers.in.bigCrunch();
             },
             style: {

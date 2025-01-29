@@ -21,7 +21,7 @@
     }
     },
     automate() {
-        if (hasMilestone("gs", 16))
+        if (hasMilestone("gs", 16) && !inChallenge("fu", 11))
         {
             buyBuyable("rt", 11)
             buyBuyable("rt", 12)
@@ -45,6 +45,7 @@
         multAdd = buyableEffect("rt", 11)
         multAdd = multAdd.mul(player.rg.repliGrassEffect2)
         multAdd = multAdd.mul(player.cb.epicPetEffects[1][2])
+        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
         player.rt.repliLeavesTimerReq = new Decimal(6)
         if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
@@ -54,6 +55,7 @@
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("rt", 18))
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("rg", 18))
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(player.oi.oilEffect)
+        player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("fu", 47))
 
         player.rt.repliTreeSoftcapEffect = player.rt.repliTrees.sub(player.rt.repliTreeSoftcapStart).pow(1.25).div(10).add(1)
         if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart))
@@ -75,6 +77,7 @@
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("gs", 17))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.oilEffect)
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.linkingPowerEffect[3])
+        if (inChallenge("fu", 11)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(0.2)
 
         if (player.rt.repliLeavesTimer.gte(player.rt.repliLeavesTimerReq))
         {

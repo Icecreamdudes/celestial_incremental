@@ -19,6 +19,25 @@
             buyBuyable("ip", 13)
             buyBuyable("ip", 14)
         }
+        if (hasMilestone("s", 17))
+        {
+            buyUpgrade("ip", 11)
+            buyUpgrade("ip", 12)
+            buyUpgrade("ip", 13)
+            buyUpgrade("ip", 14)
+            buyUpgrade("ip", 21)
+            buyUpgrade("ip", 22)
+            buyUpgrade("ip", 23)
+            buyUpgrade("ip", 24)
+            buyUpgrade("ip", 31)
+            buyUpgrade("ip", 32)
+            buyUpgrade("ip", 33)
+            buyUpgrade("ip", 34)
+            buyUpgrade("ip", 41)
+            buyUpgrade("ip", 42)
+            buyUpgrade("ip", 43)
+            buyUpgrade("ip", 44)
+        }
     },
     nodeStyle() {
         return {
@@ -357,7 +376,7 @@
         },
         12: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 32))},
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -389,7 +408,7 @@
         },
         13: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(1.1).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(1.1).add(1).pow(buyableEffect("cs", 32))},
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -421,7 +440,7 @@
         },
         14: {
             cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(4000) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 32))},
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
@@ -854,5 +873,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}
 })

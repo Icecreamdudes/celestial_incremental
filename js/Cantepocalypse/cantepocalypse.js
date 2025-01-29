@@ -1,4 +1,4 @@
-﻿var tree = [["ar", "pr", "an"], ["rt", "rg", "gs"], ["oi",]]
+﻿var treeA1 = [["ar", "pr", "an"], ["rt", "rg", "gs"], ["oi", "fu"]]
 addLayer("cp", {
     name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "A1", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -23,6 +23,17 @@ addLayer("cp", {
     }
     },
     automate() {
+        if (hasMilestone("s", 17) && !inChallenge("fu", 11))
+        {
+            buyUpgrade("cp", 11)
+            buyUpgrade("cp", 12)
+            buyUpgrade("cp", 13)
+            buyUpgrade("cp", 14)
+            buyUpgrade("cp", 15)
+            buyUpgrade("cp", 16)
+            buyUpgrade("cp", 17)
+            buyUpgrade("cp", 18)
+        }
     },
     nodeStyle() {
         return {
@@ -64,6 +75,8 @@ addLayer("cp", {
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
         multAdd = multAdd.mul(player.cb.epicPetEffects[1][0])
+        if (player.cop.processedCoreFuel.eq(0)) multAdd = multAdd.mul(player.cop.processedCoreInnateEffects[2])
+        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
         player.cp.replicantiPointsTimerReq = new Decimal(3)
         player.cp.replicantiPointsTimerReq = player.cp.replicantiPointsTimerReq.div(buyableEffect("pr", 12))
@@ -73,10 +86,15 @@ addLayer("cp", {
         if (hasUpgrade("an", 14)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(1000)
         if (hasUpgrade("an", 19)) player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(upgradeEffect("an", 19))
         player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("rg", 18))
+        player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("fu", 22))
+        player.cp.replicantiSoftcapStart = player.cp.replicantiSoftcapStart.mul(buyableEffect("fu", 65))
 
         player.cp.replicantiSoftcapEffect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcapStart).pow(0.375)
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("pr", 16))
-        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcapStart))
+        player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 22))
+        player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 66))
+        if (inChallenge("fu", 11)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(2)
+            if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcapStart))
         {
             multAdd = multAdd.div(player.cp.replicantiSoftcapEffect)
         }
@@ -86,14 +104,22 @@ addLayer("cp", {
         player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("rt", 17))
         if (hasUpgrade("an", 19)) player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(upgradeEffect("an", 19))
         player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("rg", 18))
+        player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("fu", 22))
+        player.cp.replicantiSoftcap2Start = player.cp.replicantiSoftcap2Start.mul(buyableEffect("fu", 67))
 
         player.cp.replicantiSoftcap2Effect = player.cp.replicantiPoints.sub(player.cp.replicantiSoftcap2Start).pow(0.25).div(4)
         player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("pr", 16))
         if (hasUpgrade("an", 22)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(upgradeEffect("an", 22))
-        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start))
+        player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 22))
+        player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 68))
+        if (inChallenge("fu", 11)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.pow(2)
+            if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start))
         {
             multAdd = multAdd.div(player.cp.replicantiSoftcap2Effect)
         }
+
+        multAdd = multAdd.mul(buyableEffect("fu", 36))
+        multAdd = multAdd.mul(player.fu.fearEffect2)
 
         player.cp.replicantiPointsMult = multAdd.add(1)
 
@@ -103,6 +129,7 @@ addLayer("cp", {
         {
             layers.cp.replicantiPointMultiply();
         }
+        
     },
     replicantiPointMultiply()
     {
@@ -232,6 +259,16 @@ addLayer("cp", {
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
         },
+        19:
+        {
+            title: "Feature IX",
+            unlocked() { return hasMilestone("s", 17) },
+            description: "Unlocks Funify.",
+            cost: new Decimal(1e125),
+            currencyLocation() { return player.cp },
+            currencyDisplayName: "Replicanti Points",
+            currencyInternalName: "replicantiPoints",
+        },
     },
     buyables: {
     },
@@ -249,7 +286,7 @@ addLayer("cp", {
                 content:
                 [
                         ["blank", "25px"],
-                        ["tree", tree],
+                        ["tree", treeA1],
                 ]
 
             },
@@ -260,7 +297,7 @@ addLayer("cp", {
                 [
                         ["blank", "25px"],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                        ["row", [["upgrade", 17], ["upgrade", 18]]],
+                        ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
                  ]
 
             },
@@ -280,7 +317,7 @@ addLayer("cp", {
             },
             "Portal": {
                 buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("cp", 18) },
+                unlocked() { return hasUpgrade("cp", 18) || hasMilestone("s", 12) },
                 content:
                 [
                 ]
@@ -296,5 +333,5 @@ addLayer("cp", {
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.cap.cantepocalypseUnlock}
+    layerShown() { return player.startedGame == true && ((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)}
 })

@@ -33,7 +33,30 @@
     }
     },
     automate() {
+        if (hasMilestone("s", 16))
+        {
+            buyBuyable("rm", 11)
+            buyBuyable("rm", 12)
+            buyBuyable("rm", 13)
+            buyBuyable("rm", 14)
+            buyBuyable("rm", 15)
+            buyBuyable("rm", 16)
 
+            buyBuyable("rm", 21)
+            buyBuyable("rm", 22)
+            buyBuyable("rm", 23)
+            buyBuyable("rm", 24)
+            buyBuyable("rm", 25)
+            buyBuyable("rm", 26)
+            buyBuyable("rm", 27)
+            buyBuyable("rm", 28)
+
+            buyBuyable("rm", 31)
+            buyBuyable("rm", 32)
+            buyBuyable("rm", 33)
+            buyBuyable("rm", 34)
+
+        }
     },
     nodeStyle() {
         return {
@@ -43,13 +66,15 @@
             "border-color": "#0061ff",
         }
     },
-    tooltip: "Mods",
+    tooltip: "Realm Mods",
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
 
         player.rm.blankModsToGet = player.m.mods.pow(0.01)
         player.rm.blankModsToGet = player.rm.blankModsToGet.mul(player.cb.rarePetEffects[6][0])
+
+        if (hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.add(player.rm.blankModsToGet.mul(Decimal.mul(0.1, delta)))
 
         if (player.rm.blankModsPause.gt(0)) {
             layers.rm.blankModReset();
@@ -136,6 +161,15 @@
         player.rm.realmModsEffect[3] = player.rm.realmMods[3].pow(0.45).add(1)
         player.rm.realmModsEffect[4] = player.rm.realmMods[4].pow(0.25).mul(2).div(2.5).add(1)
         player.rm.realmModsEffect[5] = player.rm.realmMods[5].pow(0.45).mul(3).div(1.5).add(1)
+
+        //gain
+        if (hasMilestone("s", 15))
+        {
+            for (let i = 0; i < player.rm.realmMods.length; i++)
+            {
+                player.rm.realmMods[i] = player.rm.realmMods[i].add(player.rm.realmModsToGet[i].mul(Decimal.mul(0.01, delta)))
+            }
+        }
 
         //energy
         for (let i = 0; i < 6; i++)
@@ -550,10 +584,10 @@
                 player.in.infinities = new Decimal(0)
                 player.bi.brokenInfinities = new Decimal(0)
 
-                player.in.buyables[11] = new Decimal(0)
-                player.in.buyables[12] = new Decimal(0)
-                player.in.buyables[13] = new Decimal(0)
-                player.in.buyables[14] = new Decimal(0)
+                player.ip.buyables[11] = new Decimal(0)
+                player.ip.buyables[12] = new Decimal(0)
+                player.ip.buyables[13] = new Decimal(0)
+                player.ip.buyables[14] = new Decimal(0)
 
                 player.bi.buyables[11] = new Decimal(0)
                 player.bi.buyables[12] = new Decimal(0)
@@ -582,7 +616,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -592,7 +626,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.blankMods = player.rm.blankMods.sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -614,7 +648,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -624,7 +658,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.blankMods = player.rm.blankMods.sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -646,7 +680,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -656,7 +690,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.blankMods = player.rm.blankMods.sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -678,7 +712,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -688,7 +722,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.blankMods = player.rm.blankMods.sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -710,7 +744,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -720,7 +754,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.blankMods = player.rm.blankMods.sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -742,7 +776,7 @@
             buy() {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -752,7 +786,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.blankMods, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.blankMods = player.rm.blankMods.sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -764,19 +798,20 @@
         21: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.0005).pow(0.4).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(0) },
+            purchaseLimit() { return new Decimal(25) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>RANK LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>RANK LAYER BOOST"
             },
             display() {
                 return "which boost ranks, tiers, tetr, and pent effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Creator Realm Energy"
             },
             buy() {
-                let base = new Decimal(50)
+                let base = new Decimal(25)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(buyonecost)
@@ -786,7 +821,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -796,10 +831,11 @@
         22: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(0) },
+            purchaseLimit() { return new Decimal(25) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>FACTOR LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>FACTOR LAYER BOOST"
             },
             display() {
                 return "which multiplies the factor base by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -808,7 +844,7 @@
             buy() {
                 let base = new Decimal(150)
                 let growth = 1.6
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(buyonecost)
@@ -818,7 +854,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[0], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -828,19 +864,20 @@
         23: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.007).pow(0.55).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(1) },
+            purchaseLimit() { return new Decimal(25) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>PRESTIGE LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>PRESTIGE LAYER BOOST"
             },
             display() {
                 return "which boosts prestige point gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Higher Plane Energy"
             },
             buy() {
-                let base = new Decimal(50)
+                let base = new Decimal(25)
                 let growth = 1.7
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(buyonecost)
@@ -850,7 +887,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[1], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -860,10 +897,11 @@
         24: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(275) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.05).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(1) },
+            purchaseLimit() { return new Decimal(25) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>TREE LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>TREE LAYER BOOST"
             },
             display() {
                 return "which boosts tree gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -872,7 +910,7 @@
             buy() {
                 let base = new Decimal(275)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(buyonecost)
@@ -882,7 +920,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[1], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -892,19 +930,20 @@
         25: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.45).mul(0.045).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(2) },
+            purchaseLimit() { return new Decimal(25) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[2].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>GRASS LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>GRASS LAYER BOOST"
             },
             display() {
                 return "which boosts grass gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Death Realm Energy"
             },
             buy() {
-                let base = new Decimal(50)
+                let base = new Decimal(25)
                 let growth = 1.75
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(buyonecost)
@@ -914,7 +953,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[2], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -924,7 +963,7 @@
         26: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(250) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(2) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[2].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>GOLDEN GRASS BOOST"
@@ -936,7 +975,7 @@
             buy() {
                 let base = new Decimal(250)
                 let growth = 1.2
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(buyonecost)
@@ -946,7 +985,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[2], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -956,10 +995,11 @@
         27: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.03).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(3) },
+            unlocked() { return true },
+            purchaseLimit() { return new Decimal(25) },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>GRASSHOP LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>GRASSHOP LAYER BOOST"
             },
             display() {
                 return "which boosts grasshopper gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -968,7 +1008,7 @@
             buy() {
                 let base = new Decimal(80)
                 let growth = 1.6
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(buyonecost)
@@ -978,7 +1018,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -988,10 +1028,11 @@
         28: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.4).mul(0.025).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(3) },
+            purchaseLimit() { return new Decimal(25) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>MOD LAYER BOOST"
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>MOD LAYER BOOST"
             },
             display() {
                 return "which boosts mod gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1000,7 +1041,7 @@
             buy() {
                 let base = new Decimal(200)
                 let growth = 1.5
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(buyonecost)
@@ -1010,7 +1051,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1020,7 +1061,7 @@
         31: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(4).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(4) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[4].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>ANTIMATTER DIMENSIONS LAYER BOOST"
@@ -1032,7 +1073,7 @@
             buy() {
                 let base = new Decimal(40)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(buyonecost)
@@ -1042,7 +1083,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[4], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1052,7 +1093,7 @@
         32: {
             cost(x) { return new Decimal(1.85).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
             effect(x) { return getBuyableAmount(this.layer, this.id).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(4) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[4].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>TAV LAYER BOOST"
@@ -1062,9 +1103,9 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dream Realm Energy"
             },
             buy() {
-                let base = new Decimal(50)
+                let base = new Decimal(25)
                 let growth = 1.85
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(buyonecost)
@@ -1074,7 +1115,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[4], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1084,7 +1125,7 @@
         33: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return player.rm.currentDisplay.eq(5) },
+            unlocked() { return true},
             canAfford() { return player.rm.realmEnergy[5].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>BREAK INFINITY LAYER BOOST"
@@ -1096,7 +1137,7 @@
             buy() {
                 let base = new Decimal(80)
                 let growth = 1.45
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(buyonecost)
@@ -1106,7 +1147,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[5], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1116,7 +1157,7 @@
         34: {
             cost(x) { return new Decimal(1.65).pow(x || getBuyableAmount(this.layer, this.id)).mul(300) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02) },
-            unlocked() { return player.rm.currentDisplay.eq(5) },
+            unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[5].gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>CANTE LAYER BOOST"
@@ -1128,7 +1169,7 @@
             buy() {
                 let base = new Decimal(300)
                 let growth = 1.65
-                if (player.buyMax == false)
+                if (player.buyMax == false && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(buyonecost)
@@ -1138,7 +1179,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[5], base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(cost)
+                if (!hasMilestone("s", 16)) player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1201,12 +1242,9 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 21], ["buyable", 22]]],
-                    ["row", [["buyable", 23], ["buyable", 24]]],
-                    ["row", [["buyable", 25], ["buyable", 26]]],
-                    ["row", [["buyable", 27], ["buyable", 28]]],
-                    ["row", [["buyable", 31], ["buyable", 32]]],
-                    ["row", [["buyable", 33], ["buyable", 34]]],
+                    ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
+                    ["row", [["buyable", 25], ["buyable", 26], ["buyable", 27], ["buyable", 28]]],
+                    ["row", [["buyable", 31], ["buyable", 32], ["buyable", 33], ["buyable", 34]]],
                 ]
             },
             "Halter Boosts": {

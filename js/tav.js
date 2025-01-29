@@ -81,6 +81,19 @@
             buyBuyable("ta", 52)
             buyBuyable("ta", 53)
         }
+        if (hasMilestone("s", 17))
+        {
+            buyUpgrade("ta", 11)
+            buyUpgrade("ta", 12)
+            buyUpgrade("ta", 13)
+            buyUpgrade("ta", 14)
+            buyUpgrade("ta", 15)
+            buyUpgrade("ta", 16)
+            buyUpgrade("ta", 17)
+            buyUpgrade("ta", 18)
+            buyUpgrade("ta", 19)
+            buyUpgrade("ta", 21)
+        }
     },
     nodeStyle() {
         return {
@@ -103,7 +116,7 @@
 
         if (player.ta.reachedNegativeInfinity && !player.ta.unlockedReverseBreak)
         {
-            if (!hasUpgrade("ta", 13) && player.ta.reachedNegativeInfinity)
+            if (!hasUpgrade("ta", 13) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) 
             {
                 player.tab = "revc"
             }
@@ -123,7 +136,7 @@
         }
 
         if (!player.ta.unlockedReverseBreak) player.ta.negativeInfinityPointsToGet = new Decimal(1)
-        if (player.ta.unlockedReverseBreak) player.ta.negativeInfinityPointsToGet = player.ad.antimatter.div(1e308).plus(1).log10().pow(0.75).div(6)
+        if (player.ta.unlockedReverseBreak) player.ta.negativeInfinityPointsToGet = player.ad.antimatter.div(1e308).plus(1).log10().pow(0.75).div(6).add(1)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ip", 12))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 34))
         if (hasUpgrade('ip', 41)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(upgradeEffect("ip", 41))
@@ -144,7 +157,9 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("rm", 32))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.cb.uncommonPetEffects[7][1])
-
+        if (hasMilestone("fa", 15)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.fa.milestoneEffect[4])
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.sd.singularityPowerEffect)
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ra", 16))
 
         player.ta.negativeInfinityPause = player.ta.negativeInfinityPause.sub(1)
         if (player.ta.negativeInfinityPause.gt(0))
@@ -339,7 +354,7 @@
             canClick() { return player.ad.antimatter.gte('1e308') },
             unlocked() { return true },
             onClick() {
-                layers.revc.reverseCrunch()
+                player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
             style: { width: '300px', "min-height": '120px' },
@@ -1272,7 +1287,7 @@
         },
         33: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1304,7 +1319,7 @@
         },
         34: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1336,7 +1351,7 @@
         },
         35: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.4).pow(1.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.4).pow(1.1).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1368,7 +1383,7 @@
         },
         36: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.3).pow(1.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.3).pow(1.05).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1400,7 +1415,7 @@
         },
         37: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(14) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(100).pow(1.2).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(100).pow(1.2).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 14) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
@@ -1435,7 +1450,7 @@
         //OTFS
         41: {
             cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e25) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
@@ -1467,7 +1482,7 @@
         },
         42: {
             cost(x) { return new Decimal(33).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
@@ -1499,7 +1514,7 @@
         },
         43: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
@@ -1531,7 +1546,7 @@
         },
         44: {
             cost(x) { return new Decimal(40).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e25) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
@@ -1563,7 +1578,7 @@
         },
         45: {
             cost(x) { return new Decimal(22).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
@@ -1595,7 +1610,7 @@
         },
         46: {
             cost(x) { return new Decimal(8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
@@ -1627,7 +1642,7 @@
         },
         47: {
             cost(x) { return new Decimal(66).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e25) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
@@ -1659,7 +1674,7 @@
         },
         48: {
             cost(x) { return new Decimal(25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.15).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.15).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
@@ -1691,7 +1706,7 @@
         },
         49: {
             cost(x) { return new Decimal(9).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.125).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.125).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
@@ -1723,7 +1738,7 @@
         },
         51: {
             cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e30) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
@@ -1755,7 +1770,7 @@
         },
         52: {
             cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
@@ -1787,7 +1802,7 @@
         },
         53: {
             cost(x) { return new Decimal(1e5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
@@ -2084,7 +2099,7 @@ addLayer("revc", {
                     ["blank", "150px"],
                     ["row", [["clickable", 11]]],
     ],
-    layerShown() { return player.startedGame == true && hasChallenge("ip", 18)}
+    layerShown() { return (player.startedGame == true && hasChallenge("ip", 18)) || hasMilestone("s", 19)}
 })
 window.addEventListener('load', function() {
     player.bigc.spawnedWisps = false

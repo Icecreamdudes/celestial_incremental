@@ -31,6 +31,40 @@
             buyBuyable("bi", 12)
             buyBuyable("bi", 13)
         }
+        if (hasMilestone("s", 17))
+        {
+            buyUpgrade("bi", 11)
+            buyUpgrade("bi", 12)
+            buyUpgrade("bi", 13)
+            buyUpgrade("bi", 14)
+            buyUpgrade("bi", 15)
+            buyUpgrade("bi", 16)
+            buyUpgrade("bi", 17)
+            buyUpgrade("bi", 18)
+            buyUpgrade("bi", 19)
+            buyUpgrade("bi", 21)
+            buyUpgrade("bi", 22)
+            buyUpgrade("bi", 23)
+            buyUpgrade("bi", 24)
+            buyUpgrade("bi", 25)
+            buyUpgrade("bi", 26)
+            buyUpgrade("bi", 27)
+            buyUpgrade("bi", 28)
+
+            buyUpgrade("bi", 101)
+            buyUpgrade("bi", 102)
+            buyUpgrade("bi", 103)
+            buyUpgrade("bi", 104)
+            buyUpgrade("bi", 105)
+            buyUpgrade("bi", 106)
+            buyUpgrade("bi", 107)
+            buyUpgrade("bi", 108)
+            buyUpgrade("bi", 109)
+            buyUpgrade("bi", 111)
+            buyUpgrade("bi", 112)
+            buyUpgrade("bi", 113)
+            buyUpgrade("bi", 114)
+        }
     },
     nodeStyle() {
         return {
@@ -53,6 +87,7 @@
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("p", 16))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("rm", 33))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.cb.uncommonPetEffects[7][2])
+        if (hasMilestone("fa", 13)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.fa.milestoneEffect[2])
 
         if (hasUpgrade("bi", 25)) player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet.mul(Decimal.mul(0.04, delta)))
 
@@ -129,7 +164,7 @@
 
         // Negative Autocrunch Functionality
         if (player.ta.negativeInfinityPointsToGet.gte(player.bi.NACamount) && player.bi.NACtoggle && !player.bi.NACtype && player.ad.antimatter.gte(1e308)) {
-            layers.revc.reverseCrunch()
+            player.ad.revCrunchPause = new Decimal(6)
             player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
         }
 
@@ -137,7 +172,7 @@
             player.bi.NACtime = player.bi.NACtime.add(onepersec.mul(delta));
             if (player.bi.NACtime.gte(player.bi.NACamount) && player.ad.antimatter.gte(1e308)) {
                 player.bi.NACtime = new Decimal(0)
-                layers.revc.reverseCrunch()
+                player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             }
         }
@@ -608,11 +643,22 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '125px', height: '100px', }
         },
+        114:
+        {
+            title: "BI NIP Upgrade XIII",
+            unlocked() { return hasMilestone("s", 12) },
+            description: "Unlock a new pollinator.",
+            cost: new Decimal(1e20),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
+        },
     },
     buyables: {
         11: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(100) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 32)) },
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
@@ -644,7 +690,7 @@
         },
         12: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(300) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 32)) },
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
@@ -676,7 +722,7 @@
         },
         13: {
             cost(x) { return new Decimal(1.65).pow(x || getBuyableAmount(this.layer, this.id)).mul(700) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.25).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.25).add(1).pow(buyableEffect("cs", 32)) },
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
@@ -745,7 +791,7 @@
                     ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
-                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113]]],
+                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -799,5 +845,5 @@
                         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ta", 21)}
+    layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ta", 21)) || hasMilestone("s", 19)}
 })

@@ -973,7 +973,8 @@
         player.ip.buyables[14] = new Decimal(0)
 
         player.in.infinityPoints = new Decimal(0)
-        player.in.infinities = new Decimal(0)
+        if (!hasMilestone("s", 12)) player.in.infinities = new Decimal(0)
+        if (hasMilestone("s", 12)) player.in.infinities = new Decimal(8)
 
         //inf dimensions
         player.id.infinityPower = new Decimal(0)

@@ -449,7 +449,7 @@
         {
         player.cb.uncommonPetEffects = [
             [player.cb.uncommonPetLevels[0].pow(1.2).div(2).add(1), player.cb.uncommonPetLevels[0].pow(1.25).div(1.5).add(1), player.cb.uncommonPetLevels[0].pow(1.27).add(1),],
-            [player.cb.uncommonPetLevels[1].pow(1.3).div(1.6).add(1).pow(player.cb.evolvedEffects[4][0]), player.cb.uncommonPetLevels[1].pow(1.6).div(1.3).add(1).pow(player.cb.evolvedEffects[4][0]), player.cb.uncommonPetLevels[1].mul(0.01).add(1),], //lines of code, leaves, check back time
+            [player.cb.uncommonPetLevels[1].pow(1.3).div(1.6).add(1).pow(player.cb.evolvedEffects[4][0]), player.cb.uncommonPetLevels[1].pow(1.6).div(1.3).add(1).pow(player.cb.evolvedEffects[4][0]), player.cb.uncommonPetLevels[1].mul(0.01).add(1).pow(player.cb.evolvedEffects[4][0]),], //lines of code, leaves, check back time
             [player.cb.uncommonPetLevels[2].pow(1.7).add(1), player.cb.uncommonPetLevels[2].pow(1.4).add(1), player.cb.uncommonPetLevels[2].mul(0.02).pow(0.95).add(1),], //tree req, mod req, check back level req
             [player.cb.uncommonPetLevels[3].pow(2).mul(5).add(1).pow(player.cb.evolvedEffects[1][0]), player.cb.uncommonPetLevels[3].pow(1.87).mul(3).add(1).pow(player.cb.evolvedEffects[1][0]), player.cb.uncommonPetLevels[3].pow(1.75).mul(2).add(1).pow(player.cb.evolvedEffects[1][0]),], //rank req, tier req, tetr req
             [player.cb.uncommonPetLevels[4].mul(0.05).add(1),], //check back xp

@@ -373,6 +373,17 @@ addLayer("i", {
         if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
 
         player.f.factorPower = player.f.factorPower.add(player.f.factorPowerPerSecond.mul(delta))
+
+        player.t.leaves = player.t.leaves.add(player.t.leavesPerSecond.mul(delta))
+        if (player.t.leaves.gte(player.t.treeReq)) {
+            player.t.trees = player.t.trees.add(player.t.treesToGet)
+            player.t.leaves = new Decimal(0)
+        }
+        player.m.linesOfCode = player.m.linesOfCode.add(player.m.linesOfCodePerSecond.mul(delta))
+        if (player.m.linesOfCode.gte(player.m.modsReq)) {
+            player.m.mods = player.m.mods.add(player.m.modsToGet)
+            player.m.linesOfCode = new Decimal(0)
+        }
     },
     bars: {
     },

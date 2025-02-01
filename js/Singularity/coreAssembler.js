@@ -288,16 +288,16 @@
         }
         if (fuel == 4)
         {
-            if (player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.5))
+            if (player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.2))
             {
-            return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
+            return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"), 
             player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]), 
             player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), 
             player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, grass, golden grass, moonstone
             } else
             {
-                return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
-                Decimal.add(1.5, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(300)), 
+                return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"), 
+                Decimal.add(1.2, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(300)), 
                 player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), 
                 player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, grass, golden grass, moonstone
             }

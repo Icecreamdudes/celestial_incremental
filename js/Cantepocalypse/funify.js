@@ -381,7 +381,7 @@
             style: { width: '100px', "min-height": '50px', }
         },
         14: {
-            title() { return "Unause Production" },
+            title() { return "Unpause Production" },
             canClick() { return player.fu.happinessProduce == false },
             unlocked() { return player.fu.emotionIndex.eq(0) },
             onClick() {

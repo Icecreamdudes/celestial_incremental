@@ -838,6 +838,7 @@
         player.r.buyables[12] = new Decimal(0)
         player.r.buyables[13] = new Decimal(0)
         player.r.buyables[14] = new Decimal(0)
+        player.r.timeReversed = false
 
         player.p.crystals = new Decimal(0)
         player.p.buyables[11] = new Decimal(0)
@@ -1308,6 +1309,11 @@
         for (let i = 0; i < player.sd.dimensionAmounts.length; i++)
         {
             player.sd.dimensionAmounts[i] = getBuyableAmount("sd", i+11)
+        }
+
+        for (let i = 0; i < player.po.halterEffects.length; i++)
+        {
+            player.po.halterEffects[i] = new Decimal(1)
         }
     },
     clickables: {

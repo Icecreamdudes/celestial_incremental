@@ -72,9 +72,9 @@
 
         player.gs.milestone2Effect = player.cp.replicantiPoints.plus(1).log10().pow(1.35).add(1)
         if (player.gs.grassSkip.gte(15)) {
-            player.gs.milestone8Effect = player.gs.grassSkip.sub(10).div(5).pow(0.9).add(1)
+            player.gs.milestone8Effect = player.gs.grassSkip.add(buyableEffect("fu", 24)).sub(10).div(5).pow(0.9).add(1)
         } else {
-            player.gs.milestone8Effect = player.gs.grassSkip.div(15).add(1)
+            player.gs.milestone8Effect = player.gs.grassSkip.add(buyableEffect("fu", 24)).div(15).add(1)
         }
 
         if (player.subtabs["oi"]['stuff'] == 'REMEMBERANCE CORES')

@@ -357,7 +357,7 @@ addLayer("s", {
         19: {
             requirementDescription: "<h3>25 Singularities",
             effectDescription: "Start each singularity with every universe 2 layer unlocked, and hex is kept on singularity reset, and always autobuy tetr, and autoroll cooldown is 10x shorter.",
-            done() { return player.s.singularities.gte(12) },
+            done() { return player.s.singularities.gte(25) },
             style: { width: '800px', "min-height": '75px' },
         },
         //REMINDER: MAKE THE TIME MACHINE at some point

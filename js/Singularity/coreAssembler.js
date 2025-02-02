@@ -194,7 +194,7 @@
 
         if (player.coa.singularityPause.gt(0))
         {
-            layers.coa.singularityReset();
+          layers.coa.singularityReset();
         }
         player.coa.singularityPause = player.coa.singularityPause.sub(onepersec)
 
@@ -752,13 +752,7 @@
             for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
             {
                 player.ad.dimensionAmounts[i] = new Decimal(0)
-                player.ad.dimensionsPurchased[i] = new Decimal(0)
             }
-
-            player.ad.dimensionsUnlocked[4] = false
-            player.ad.dimensionsUnlocked[5] = false
-            player.ad.dimensionsUnlocked[6] = false
-            player.ad.dimensionsUnlocked[7] = false
 
             player.ad.dimBoostAmount = new Decimal(0)
             player.ad.galaxyAmount = new Decimal(0)
@@ -996,7 +990,6 @@
         for (let i = 0; i < player.id.dimensionAmounts.length; i++)
         {
             player.id.dimensionAmounts[i] = new Decimal(0)
-            player.id.dimensionsPurchased[i] = new Decimal(0)
         }
         
         //tav

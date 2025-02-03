@@ -104,6 +104,7 @@
             } else
             {
                 player.cs.canBuyParagonScraps = false
+                break;
             }
         }
 

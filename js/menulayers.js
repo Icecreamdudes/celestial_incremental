@@ -248,7 +248,7 @@ addLayer("u1t", {
     tabFormat: [
         ["layer-proxy", ["i", [
             ["blank", "25px"],
-            ["tree", tree1],
+            ["tree", function () { return player.universe == 1 ? tree1 : null } ],
         ]]]],
     layerShown() { return false }
 })
@@ -308,7 +308,8 @@ addLayer("u2t", {
     tabFormat: [
         ["layer-proxy", ["in", [
             ["blank", "25px"],
-            ["tree", tree2],
+            ["tree", function () { return player.universe == 2 ? tree2 : null } ],
+
         ]]]],
     layerShown() { return false }
 })
@@ -444,7 +445,7 @@ addLayer("u3t", {
     tabFormat: [
         ["layer-proxy", ["s", [
             ["blank", "25px"],
-            ["tree", tree3],
+            ["tree", function () { return player.universe == 3 ? tree3 : null } ],
         ]]]],
     layerShown() { return false }
 })
@@ -577,7 +578,7 @@ addLayer("a1t", {
     tabFormat: [
         ["layer-proxy", ["cp", [
             ["blank", "25px"],
-            ["tree", treeA1],
+            ["tree", function () { return player.universe == 1.5 ? treeA1 : null } ],
         ]]]],
     layerShown() { return false }
 })

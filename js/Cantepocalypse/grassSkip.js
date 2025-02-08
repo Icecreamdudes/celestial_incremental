@@ -503,7 +503,7 @@
         18: {
             requirementDescription: "<h3>Grass-Skip 20",
             effectDescription() { return "Grass-Skips boost pollinator gain. Currently: " + format(player.gs.milestone8Effect)+"x" },
-            done() { return player.gs.grassSkip.gte(15) },
+            done() { return player.gs.grassSkip.gte(20) },
             style: { width: '800px', "min-height": '75px' },
         },
     },

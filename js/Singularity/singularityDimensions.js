@@ -98,19 +98,19 @@
         },
         2: {
             title() { return "Buy Max On" },
-            canClick() { return player.sd.singularityDimMax == false },
+            canClick() { return player.sd.dimMax == false },
             unlocked() { return true },
             onClick() {
-                player.sd.singularityDimMax = true
+                player.sd.dimMax = true
             },
             style: { width: '75px', "min-height": '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
-            canClick() { return player.sd.singularityDimMax == true  },
+            canClick() { return player.sd.dimMax == true  },
             unlocked() { return true },
             onClick() {
-                player.sd.singularityDimMax = false
+                player.sd.dimMax = false
             },
             style: { width: '75px', "min-height": '50px', }
         },

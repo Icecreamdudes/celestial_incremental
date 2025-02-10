@@ -220,7 +220,7 @@ addLayer("s", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
             buy() {
-                if (player.sd.sMax == false) {
+                if (player.s.sMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -254,7 +254,7 @@ addLayer("s", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
             buy() {
-                if (player.sd.sMax == false) {
+                if (player.s.sMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -288,7 +288,7 @@ addLayer("s", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
             buy() {
-                if (player.sd.sMax == false) {
+                if (player.s.sMax == false) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 

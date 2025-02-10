@@ -155,19 +155,19 @@
         },
         4: {
             title() { return "Scrap Core" },
-            canClick() { return player.cs.coreScrapMax == false },
+            canClick() { return player.cs.scrapCoreOnReset == false },
             unlocked() { return true },
             onClick() {
-                player.cs.coreScrapMax = true
+                player.cs.scrapCoreOnReset = true
             },
             style: { width: '100px', "min-height": '50px', }
         },
         5: {
             title() { return "Don't Scrap Core" },
-            canClick() { return player.cs.coreScrapMax == true  },
+            canClick() { return player.cs.scrapCoreOnReset == true  },
             unlocked() { return true },
             onClick() {
-                player.cs.coreScrapMax = false
+                player.cs.scrapCoreOnReset = false
             },
             style: { width: '100px', "min-height": '50px', }
         },

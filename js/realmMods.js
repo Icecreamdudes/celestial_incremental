@@ -1018,7 +1018,7 @@
                 } else
                 {
 
-                    let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], base, growth, getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("s", 16)) player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)
@@ -1051,7 +1051,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
-                    let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let max = Decimal.affordGeometricSeries(player.rm.realmEnergy[3], base, growth, getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 if (!hasMilestone("s", 16)) player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(cost)

@@ -2276,6 +2276,7 @@ function createMoonstone(quantity) {
                 updateHealthBar()
 
                 // Remove small circle upon collision
+                smallCircle.stop = true
                 smallCircle.remove()
 
                 // Remove moonstone if health is zero or less
@@ -2311,6 +2312,7 @@ function shootSmallCircle(event) {
     const centerY = rect.top + (rect.height / 2)
 
     const smallCircle = document.createElement('div')
+    smallCircle.stop = false
     Object.assign(smallCircle.style, {
         width: '20px',
         height: '20px',
@@ -2331,6 +2333,11 @@ function shootSmallCircle(event) {
 
     let last = -1
     function move(timestamp) {
+        if (smallCircle.stop)
+        {
+            return
+        }
+
         if (last < 0) {
             last = timestamp
         }
@@ -2369,6 +2376,7 @@ function shootSmallCircle(event) {
     // Shots only live for so many seconds
     const lifetimeMs = 8000
     setTimeout(() => {
+        smallCircle.stop = true
         smallCircle.remove()
     }, lifetimeMs)
 

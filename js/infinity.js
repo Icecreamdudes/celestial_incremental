@@ -45,7 +45,7 @@ addLayer("in", {
             player.in.unlockedInfinity = true
         }
 
-        if (player.in.reachedInfinity && !inChallenge("ip", 18)) {
+        if (player.in.reachedInfinity) {
             if (!player.in.breakInfinity) {
                 if (inChallenge("tad", 11)) {
                     if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0)) {
@@ -489,6 +489,27 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
+                if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
+                    completeChallenge("ip", 11)
+                }
+                if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
+                    completeChallenge("ip", 12)
+                }
+                if (inChallenge("ip", 13) && !hasChallenge("ip", 13)) {
+                    completeChallenge("ip", 13)
+                }
+                if (inChallenge("ip", 14) && !hasChallenge("ip", 14)) {
+                    completeChallenge("ip", 14)
+                }
+                if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
+                    completeChallenge("ip", 15)
+                }
+                if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
+                    completeChallenge("ip", 16)
+                }
+                if (inChallenge("ip", 18) && !hasChallenge("ip", 18)) {
+                    completeChallenge("ip", 18)
+                }
                 if (options.newMenu) {
                     player.tab = "ip"
                 } else {
@@ -515,27 +536,6 @@ addLayer("bigc", {
         if (player.po.hex)
         {
             player.ip.hexRuns = player.ip.hexRuns.add(1)
-        }
-        if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
-            completeChallenge("ip", 11)
-        }
-        if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
-            completeChallenge("ip", 12)
-        }
-        if (inChallenge("ip", 13) && !hasChallenge("ip", 13)) {
-            completeChallenge("ip", 13)
-        }
-        if (inChallenge("ip", 14) && !hasChallenge("ip", 14)) {
-            completeChallenge("ip", 14)
-        }
-        if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
-            completeChallenge("ip", 15)
-        }
-        if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
-            completeChallenge("ip", 16)
-        }
-        if (inChallenge("ip", 18) && !hasChallenge("ip", 18)) {
-            completeChallenge("ip", 18)
         }
         if (hasUpgrade("ta", 17)) {
             if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {

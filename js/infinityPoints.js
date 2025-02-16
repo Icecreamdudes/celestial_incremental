@@ -768,7 +768,7 @@
         },
         18: {
             name: "Challenge VIII",
-            challengeDescription() { return "<h4>Debuffs so strong they distort the limits of the universe. You'd hate it, but there will still be worse things to come." },
+            challengeDescription() { return "<h4>Debuffs so strong they distort the universe. You'd hate it, but there will still be worse things to come." },
             goalDescription() { return "1.79e308 celestial points" },
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.points.gte(1.79e308) },

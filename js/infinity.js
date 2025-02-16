@@ -61,8 +61,7 @@ addLayer("in", {
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if (!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)) || player.points.gte(1e308)))
-                {
+                if ((!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)) || player.points.gte(1e308))) || inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 18)) {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21)) {
                     layers.bigc.crunch()
@@ -129,27 +128,6 @@ addLayer("in", {
                     if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
                 }
             }
-        if (inChallenge("ip", 11) && !hasChallenge("ip", 11) && player.points.gt(1e300)) {
-            completeChallenge("ip", 11)
-        }
-        if (inChallenge("ip", 12) && !hasChallenge("ip", 12) && player.points.gt(1e300)) {
-            completeChallenge("ip", 12)
-        }
-        if (inChallenge("ip", 13) && !hasChallenge("ip", 13) && player.points.gt(1e300)) {
-            completeChallenge("ip", 13)
-        }
-        if (inChallenge("ip", 14) && !hasChallenge("ip", 14) && player.points.gt(1e300)) {
-            completeChallenge("ip", 14)
-        }
-        if (inChallenge("ip", 15) && !hasChallenge("ip", 15) && player.points.gt(1e300)) {
-            completeChallenge("ip", 15)
-        }
-        if (inChallenge("ip", 16) && !hasChallenge("ip", 16) && player.points.gt(1e300)) {
-            completeChallenge("ip", 16)
-        }
-        if (inChallenge("ip", 18) && !hasChallenge("ip", 18) && player.points.gt(1e300)) {
-            completeChallenge("ip", 18)
-        }
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
@@ -537,6 +515,38 @@ addLayer("bigc", {
         if (player.po.hex)
         {
             player.ip.hexRuns = player.ip.hexRuns.add(1)
+        }
+        if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
+            completeChallenge("ip", 11)
+        }
+        if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
+            completeChallenge("ip", 12)
+        }
+        if (inChallenge("ip", 13) && !hasChallenge("ip", 13)) {
+            completeChallenge("ip", 13)
+        }
+        if (inChallenge("ip", 14) && !hasChallenge("ip", 14)) {
+            completeChallenge("ip", 14)
+        }
+        if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
+            completeChallenge("ip", 15)
+        }
+        if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
+            completeChallenge("ip", 16)
+        }
+        if (inChallenge("ip", 18) && !hasChallenge("ip", 18)) {
+            completeChallenge("ip", 18)
+        }
+        if (hasUpgrade("ta", 17)) {
+            if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {
+                player.ta.highestDicePoints = player.d.dicePoints
+            }
+            if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel)) {
+                player.ta.highestRocketFuel = player.rf.rocketFuel
+            }
+            if (player.h.hexPoints[0].gt(player.ta.highestHex1Points)) {
+                if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
+            }
         }
         layers.in.bigCrunch()
         player.in.reachedInfinity = false

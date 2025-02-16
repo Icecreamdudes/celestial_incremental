@@ -47,6 +47,34 @@ addLayer("in", {
 
         if (player.in.reachedInfinity) {
             if (!player.in.breakInfinity) {
+                if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
+                    player.ip.challenges[11] = 1
+                    completeChallenge("ip", 11)
+                }
+                if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
+                    player.ip.challenges[12] = 1
+                    completeChallenge("ip", 12)
+                }
+                if (inChallenge("ip", 13) && !hasChallenge("ip", 13)) {
+                    player.ip.challenges[13] = 1
+                    completeChallenge("ip", 13)
+                }
+                if (inChallenge("ip", 14) && !hasChallenge("ip", 14)) {
+                    player.ip.challenges[14] = 1
+                    completeChallenge("ip", 14)
+                }
+                if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
+                    player.ip.challenges[15] = 1
+                    completeChallenge("ip", 15)
+                }
+                if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
+                    player.ip.challenges[16] = 1
+                    completeChallenge("ip", 16)
+                }
+                if (inChallenge("ip", 18) && !hasChallenge("ip", 18)) {
+                    player.ip.challenges[18] = 1
+                    completeChallenge("ip", 18)
+                }
                 if (inChallenge("tad", 11)) {
                     if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0)) {
                         player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
@@ -61,7 +89,7 @@ addLayer("in", {
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
                     }
                 }
-                if ((!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)) || player.points.gte(1e308))) || inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 18)) {
+                if (!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)) || player.points.gte(1e308))) {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21)) {
                     layers.bigc.crunch()
@@ -489,27 +517,6 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
-                    completeChallenge("ip", 11)
-                }
-                if (inChallenge("ip", 12) && !hasChallenge("ip", 12)) {
-                    completeChallenge("ip", 12)
-                }
-                if (inChallenge("ip", 13) && !hasChallenge("ip", 13)) {
-                    completeChallenge("ip", 13)
-                }
-                if (inChallenge("ip", 14) && !hasChallenge("ip", 14)) {
-                    completeChallenge("ip", 14)
-                }
-                if (inChallenge("ip", 15) && !hasChallenge("ip", 15)) {
-                    completeChallenge("ip", 15)
-                }
-                if (inChallenge("ip", 16) && !hasChallenge("ip", 16)) {
-                    completeChallenge("ip", 16)
-                }
-                if (inChallenge("ip", 18) && !hasChallenge("ip", 18)) {
-                    completeChallenge("ip", 18)
-                }
                 if (options.newMenu) {
                     player.tab = "ip"
                 } else {

@@ -321,7 +321,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_2/011.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }

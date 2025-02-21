@@ -248,7 +248,7 @@ addLayer("pol", {
         },
         100: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.pol.pollinators.gte(1e100) && player.cb.commonPetLevels[1].gte(16) && player.cb.commonPetLevels[3].gte(16) && player.cb.uncommonPetLevels[1].gte(12) && player.cb.uncommonPetLevels[2].gte(12) && player.cb.rarePetLevels[2].gte(8) && player.cb.rarePetLevels[4].gte(8) && player.cb.epicPetLevels[1].gte(3) },
+            canClick() { return player.pol.pollinators.gte(1e100) && player.cb.commonPetLevels[1].gte(20) && player.cb.commonPetLevels[3].gte(20) && player.cb.uncommonPetLevels[1].gte(15) && player.cb.uncommonPetLevels[2].gte(15) && player.cb.rarePetLevels[2].gte(8) && player.cb.rarePetLevels[4].gte(8) && player.cb.epicPetLevels[1].gte(4) },
             unlocked() { return true},
             onClick() {
                 player.pol.unlockHive = 2
@@ -593,13 +593,13 @@ addLayer("pol", {
                     ["raw-html", function () { return "Unlock ???:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[1]) + "/16 Egg Guy Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[3]) + "/16 Gd Checkpoint Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[1]) + "/12 Star Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[2]) + "/12 Normal Face Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[1]) + "/20 Egg Guy Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[3]) + "/20 Gd Checkpoint Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[1]) + "/15 Star Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[2]) + "/15 Normal Face Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return formatWhole(player.cb.rarePetLevels[2]) + "/8 Drippy Ufo Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return formatWhole(player.cb.rarePetLevels[4]) + "/8 Antimatter Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.epicPetLevels[1]) + "/3 Dragon Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.epicPetLevels[1]) + "/4 Dragon Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", "COMING SOON", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     //["row", [["clickable", 100]]],

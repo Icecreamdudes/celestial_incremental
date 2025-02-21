@@ -10,7 +10,7 @@
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
 	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js", "Singularity/coreProcessor.js",
 	"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
-	"Hall of Celestials/celestialHall.js"],
+	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -40,14 +40,11 @@ let credits = `<h1>Credits:</h1><br>
 		-Testing by Nova and Piterpicher.<br>
 		-Bug Fixes by Tsanth and Forwaken.<br>
 		-Revamped Layout Concept by Seder3214.<br>
+		-Savebank Saves by Maximilian15366.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.4 - The Singularity Update Part I: Cores</h3><br>
-			- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
-		<br>
-		<br>
-		<br>
 		Content:<br>
 		- Added Singularity, the next large prestige layer.<br>
 		- Added Singularity Cores. (The Core Assember, and the Core Processor)<br>
@@ -243,7 +240,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
  "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", 
- "startCutscene25", "startCutscene26", "startCutscene27", "scrapCore"]
+ "startCutscene25", "startCutscene26", "startCutscene27", "scrapCore", "pollenReset"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

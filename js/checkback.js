@@ -689,7 +689,7 @@
             [player.cb.evolvedLevels[0].div(20).add(1), player.cb.evolvedLevels[0].pow(1.15),],
             [player.cb.evolvedLevels[1].div(15).add(1), player.cb.evolvedLevels[1].mul(0.03).add(1),],
             [player.cb.evolvedLevels[2].mul(0.02).add(1), player.cb.evolvedLevels[2].mul(0.03).add(1),],
-            [player.cb.evolvedLevels[3].mul(0.1).add(1), player.cb.evolvedLevels[3].mul(0.1).add(1),], //inf and broken inf
+            [player.cb.evolvedLevels[3].mul(0.2).add(1), player.cb.evolvedLevels[3].mul(0.2).add(1),], //inf and broken inf
             [player.cb.evolvedLevels[4].mul(0.05).add(1), player.cb.evolvedLevels[4].mul(2).pow(1.4).add(1),], //star effect and rocket fuel
             [player.cb.evolvedLevels[5].mul(0.05).add(1), player.cb.evolvedLevels[5].mul(2).pow(1.2).add(1),], //dice effect and challenge dice points
             [player.cb.evolvedLevels[6].mul(3).pow(1.8).add(1), player.cb.evolvedLevels[6].mul(2).pow(1.7).add(1),], //steel and crystal

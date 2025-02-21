@@ -9,13 +9,13 @@ function loadVue() {
 		`
 	})
 
-// data = a function returning the content (actually HTML)
+	// data = a function returning the content (actually HTML)
 	Vue.component('raw-html', {
 			props: ['layer', 'data'],
 			template: `
 				<span class="instant"  v-html="data"></span>
 			`
-		})
+	})
 
 	// Blank space, data = optional height in px or pair with width and height in px
 	Vue.component('blank', {
@@ -110,6 +110,102 @@ function loadVue() {
 					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
 					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('scroll-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgScrollRowTable instant">
+			<div class="upgScrollRow" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('always-scroll-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgScrollRowTable upgAlwaysScrollRow instant">
+			<div class="upgScrollRow" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of Components to be displayed in a column
+	// look = Object that defines style
+	Vue.component('scroll-column', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgScrollColTable instant" >
+			<div class="upgScrollCol" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of Components to be displayed in a column
+	// look = Object that defines style
+	Vue.component('always-scroll-column', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgScrollColTable upgAlwaysScrollCol instant" >
+			<div class="upgScrollCol" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of functions returning the content (actually HTML)
+	// look = Object that defines style
+	Vue.component('stat-row', {
+		props: ['layer', 'data', 'look'],
+		template: `
+		<div class="statRow instant" v-bind:style="look">
+			<div class="statCell1">
+				<span class="instant"  v-html="data[0]"></span>
+			</div>
+			<div class="statCell2">
+				<span class="instant"  v-html="data[1]"></span>
 			</div>
 		</div>
 		`
@@ -406,6 +502,42 @@ function loadVue() {
 		},
 	})
 
+	// data = id of clickable
+	Vue.component('hoverless-clickable', {
+		props: ['layer', 'data'],
+		template: `
+		<button
+			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
+			v-bind:class="{ upg: true, tooltipBox: true, canHoverless: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</button>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
+					this.interval = setInterval((function() {
+						let c = layers[this.layer].clickables[this.data]
+						if(this.time >= 5 && run(c.canClick, c)) {
+							run(c.onHold, c)
+						}
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
 	Vue.component('master-button', {
 		props: ['layer', 'data'],
 		template: `
@@ -478,6 +610,21 @@ function loadVue() {
 			<div class="upgTable instant">
 				<tab-buttons :layer="layer" :data="tmp[layer].microtabs[data]" :name="data" v-bind:style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
 			</div>
+			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
+
+			<column v-else v-bind:style="tmp[layer].microtabs[data][player.subtabs[layer][data]].style" :layer="layer" :data="tmp[layer].microtabs[data][player.subtabs[layer][data]].content"></column>
+		</div>
+		`
+	})
+
+	// data = id of microtab family
+	Vue.component('buttonless-microtabs', {
+		props: ['layer', 'data'],
+		computed: {
+			currentTab() {return player.subtabs[layer][data]}
+		},
+		template: `
+		<div v-if="tmp[layer].microtabs" :style="{'border-style': 'solid'}">
 			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
 
 			<column v-else v-bind:style="tmp[layer].microtabs[data][player.subtabs[layer][data]].style" :layer="layer" :data="tmp[layer].microtabs[data][player.subtabs[layer][data]].content"></column>

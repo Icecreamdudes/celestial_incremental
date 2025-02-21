@@ -5,6 +5,7 @@ addLayer("pol", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        unlockHive: 0, // 0: Nothing Unlocked; 1: Unlocked the Barrier; 2: Unlocked the Universe
 
         pollinators: new Decimal(0),
         pollinatorsPerSecond: new Decimal(0),
@@ -61,6 +62,10 @@ addLayer("pol", {
 
         }
     
+
+        if (player.pol.pollinators.gte(1e50) && player.pol.unlockHive < 1) {
+            player.pol.unlockHive = 1
+        }
 
         switch (player.pol.pollinatorsIndex) {
             case 0:
@@ -241,6 +246,21 @@ addLayer("pol", {
             },
             style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #919191, #545454)", 'border-color': "gray", 'border-width': '4px' },
         },
+        100: {
+            title() { return "<h1>UNLOCK" },
+            canClick() { return player.pol.pollinators.gte(1e100) && player.cb.commonPetLevels[1].gte(16) && player.cb.commonPetLevels[3].gte(16) && player.cb.uncommonPetLevels[1].gte(12) && player.cb.uncommonPetLevels[2].gte(12) && player.cb.rarePetLevels[2].gte(8) && player.cb.rarePetLevels[4].gte(8) && player.cb.epicPetLevels[1].gte(3) },
+            unlocked() { return true},
+            onClick() {
+                player.pol.unlockHive = 2
+                player.subtabs["pol"]['stuff'] = 'Main'
+                //if (options.newMenu) {
+                //    player.tab = 'uh'
+                //} else {
+                //    player.tab = 'uh'
+                //}
+            },
+            style: { width: '400px', "min-height": '160px' },
+        }
     },
     bars: {
     },
@@ -562,6 +582,27 @@ addLayer("pol", {
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12]]],
                     ["row", [["buyable", 13], ["buyable", 14]]]
+                ]
+            },
+            "???": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return player.pol.unlockHive == 1 },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Unlock ???:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[1]) + "/16 Egg Guy Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[3]) + "/16 Gd Checkpoint Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[1]) + "/12 Star Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[2]) + "/12 Normal Face Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.rarePetLevels[2]) + "/8 Drippy Ufo Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.rarePetLevels[4]) + "/8 Antimatter Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(player.cb.epicPetLevels[1]) + "/3 Dragon Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", "COMING SOON", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    //["row", [["clickable", 100]]],
                 ]
             }
         },

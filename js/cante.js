@@ -673,7 +673,7 @@
         24: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).mul(player.ca.galaxyDust.pow(0.3)).add(1) },
-            unlocked() { return hasUpgrade('bi', 27) },
+            unlocked() { return hasUpgrade('bi', 26) },
             canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>INFINITY POINTS"

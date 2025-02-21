@@ -316,7 +316,7 @@
         {
             title: "Upgrade (4, 3)",
             unlocked() { return hasUpgrade("ta", 14) },
-            description: "Boosts antimatter dimensions based on negative infinity points.",
+            description: "Boosts antimatter dimensions (ignoring softcap) based on negative infinity points.",
             cost: new Decimal(80000),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -531,7 +531,7 @@
         19: {
             requirementDescription: "<h3>40 Infinities",
             effectDescription() { return "Autobuy universe 1 upgrades." },
-            done() { return player.in.infinities.gte(40) },
+            done() { return player.in.infinities.gte(40) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
             toggles: [
@@ -541,49 +541,49 @@
         21: {
             requirementDescription: "<h3>80 Infinities",
             effectDescription() { return "Skip the big crunch screen, and automatically reset." },
-            done() { return player.in.infinities.gte(80) },
+            done() { return player.in.infinities.gte(80) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         22: {
             requirementDescription: "<h3>150 Infinities",
             effectDescription() { return "Gain 10% of grasshoppers and code experience per second." },
-            done() { return player.in.infinities.gte(150) },
+            done() { return player.in.infinities.gte(150) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         23: {
             requirementDescription: "<h3>777 Infinities",
             effectDescription() { return "Unlocks the point halter (in portal)." },
-            done() { return player.in.infinities.gte(777) },
+            done() { return player.in.infinities.gte(777) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         24: {
             requirementDescription: "<h3>4000 Infinities",
             effectDescription() { return "Check back pet effects are always active." },
-            done() { return player.in.infinities.gte(4000) },
+            done() { return player.in.infinities.gte(4000) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         25: {
             requirementDescription: "<h3>15000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },
         },
         26: {
             requirementDescription: "<h3>30000 Infinities",
             effectDescription() { return "Tav's domain don't reset infinity milestones." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },
         },
         27: {
             requirementDescription: "<h3>70000 Infinities",
             effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
-            done() { return player.in.infinities.gte(70000) },
+            done() { return player.in.infinities.gte(70000) && player.in.unlockedBreak && player.ev.evolutionsUnlocked[3] },
             unlocked() { return player.in.unlockedBreak && player.ev.evolutionsUnlocked[3]},
             style: { width: '800px', "min-height": '90px' },
         },
@@ -752,7 +752,7 @@
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },
             rewardDescription: "Check back buyables.",
-            unlocked() { return hasChallenge("ip", 16) },
+            unlocked() { return hasChallenge("ip", 16) && player.cb.XPBoostUnlock },
             onEnter() {
                 layers.in.bigCrunch()
 

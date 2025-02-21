@@ -99,6 +99,52 @@ td {
 	margin: 0 auto;
 }
 
+.upgScrollRowTable {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0;
+	overflow-x: auto;
+}
+
+.upgScrollRow {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0;
+}
+
+.upgScrollColTable {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+	overflow-y: auto;
+}
+
+.upgScrollCol {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.upgAlwaysScrollCol {
+	overflow-y: scroll !important;
+}
+
+.upgAlwaysScrollRow {
+	overflow-x: scroll !important;
+}
+
 .upgAlign {
 	vertical-align: 0
 }
@@ -112,7 +158,39 @@ h1, h2, h3, b, input {
 	font-family: "Roboto Mono", monospace;
 }
 
+.statRow {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	width: 666px;
+	height: 25px;
+	border-bottom: 1px solid white;
+	font-size: 16px;
+	font-family: monospace;
+}
 
+.statCell1 {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	width: 298px;
+	height: 100%;
+	border-right: 2px solid white;
+}
+
+.statCell2 {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	width: 366px;
+	height: 100%;
+}
 
 .treeNode {
 	height: 100px;
@@ -176,6 +254,18 @@ h1, h2, h3, b, input {
 
 	.can.buyable:hover {
 		z-index: 2
+	}
+
+.canHoverless {
+	cursor: pointer;
+}
+
+	.canHoverless:before {
+		content:'';display:block;position:absolute;top:0;left:0;width:100%;height:100%;
+	}
+
+	.canHoverless:hover:before {
+		background:rgba(255,255,255,0.2);
 	}
 
 .resetNotify {

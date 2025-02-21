@@ -139,6 +139,7 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("tad", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.cb.evolvedEffects[3][0])
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17))

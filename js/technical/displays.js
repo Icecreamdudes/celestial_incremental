@@ -63,6 +63,13 @@ function constructUniButtonStyle(layer){
 				"border-color": "#2e0054",});
 			uni = -0.5;
 			break;
+		//case 'uh':
+		//	style.push({
+		//	background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",
+		//	"background-origin": "border-box",
+		//	"border-color": "#6b4701"});
+		//	uni = 101;
+		//	break;
 		case 'otherfeat':
 			style.push({
 			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
@@ -239,6 +246,30 @@ function constructMenuButtonStyle(layer){
             "border-color": "#ababab",
             "color": "#ababab",});
 			break;
+		//case 'bb':
+		//	style.push({
+		//		backgroundColor: "#6d3200",
+		//		borderColor: "#361900",
+		//		color: "#d3c1b2"});
+		//	break;
+		//case 'wa':
+		//	style.push({
+		//		backgroundColor: "#f3e3c2",
+		//		borderColor: "#997F4C"});
+		//	break;
+		//case 'hc':
+		//	style.push({
+		//		background: "linear-gradient(45deg, #e5ac3f 0%, #eec33d 100%)",
+		//		backgroundOrigin: "border-box",
+		//		borderColor: "#312f17"});
+		//	break;
+		//case 'al':
+		//	style.push({
+		//	background: "linear-gradient(45deg, #3f003f 0%, #a900a9 100%)",
+		//	backgroundOrigin: "border-box",
+		//	borderColor: "#3f003f",
+		//	color: "#d8ccd8"});
+		//	break;
 		default:
 			style.push({'background-color': tmp[layer].color});
 	}

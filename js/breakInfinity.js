@@ -88,6 +88,7 @@
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("rm", 33))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.cb.uncommonPetEffects[7][2])
         if (hasMilestone("fa", 13)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.fa.milestoneEffect[2])
+        player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.cb.evolvedEffects[3][1])
 
         if (hasUpgrade("bi", 25)) player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet.mul(Decimal.mul(0.04, delta)))
 
@@ -451,7 +452,7 @@
         },
         24:
         {
-            title: "BI IP Upgrade XII",
+            title: "BI IP Upgrade XIII",
             unlocked() { return true },
             description: "...",
             cost: new Decimal(1e22),
@@ -461,7 +462,7 @@
         },
         25:
         {
-            title: "BI IP Upgrade XIII",
+            title: "BI IP Upgrade XIV",
             unlocked() { return true },
             description: "Raise check back effect to the ^5. (only ^2 in dice), and gain 4% of B.I per second.",
             cost: new Decimal(1e24),
@@ -472,7 +473,7 @@
         },
         26:
         {
-            title: "BI IP Upgrade XIV",
+            title: "BI IP Upgrade XV",
             unlocked() { return true },
             description: "Unlock galaxy dust.",
             cost: new Decimal(1e26),
@@ -482,7 +483,7 @@
         },
         27:
         {
-            title: "BI IP Upgrade XV",
+            title: "BI IP Upgrade XVI",
             unlocked() { return true },
             description: "Unlock a new OTF, realm mods.",
             cost: new Decimal(1e29),
@@ -492,7 +493,7 @@
         },
         28:
         {
-            title: "BI IP Upgrade XVI",
+            title: "BI IP Upgrade XVII",
             unlocked() { return player.ca.unlockedCante },
             description: "Unlock the ??? (Check Cante).",
             cost: new Decimal(1e38),

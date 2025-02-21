@@ -13,6 +13,7 @@
 	position: absolute;
 	width: 272px;
 	height: 60px;
+	left: -276px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -27,10 +28,10 @@
 	z-index:1000;
 	width: 200px;
 	top: 62px;
+	left: -200px;
 	justify-content: auto;
 	user-select: none;
 	height:calc(100% - 64px);
-	left:60px;
 	background: #0f0f0f;
 	display: block;
 	overflow-y: scroll;
@@ -62,10 +63,10 @@
 	z-index:1001;
 	width: 77px;
 	top: 62px;
+	left: -270px;
 	justify-content: auto;
 	user-select: none;
 	height:calc(100% - 64px);
-	left:50px;
 	background: #0f0f0f;
 	display: flex;
 	flex-grow:1;
@@ -151,8 +152,8 @@
 .backButton {
 	width: 50px;
 	position: absolute;
-	left:0px;
-	top:0px;
+	left: -54px;
+	top: 0px;
 	height: 50px;
 	justify-content: auto;
 	user-select: none;

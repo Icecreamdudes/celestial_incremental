@@ -636,7 +636,7 @@
         {
             title: "Negative Upgrade IV",
             unlocked() { return hasUpgrade("ta", 13) },
-            description: "Unlock limiters for Dimboost and Galaxy autobuyers.",
+            description: "Unlock limiters for Dimboost and Galaxy autobuyers. Unlock new IP upgrades.",
             cost: new Decimal(20),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
@@ -1416,7 +1416,7 @@
         37: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(14) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(100).pow(1.2).add(1).pow(buyableEffect("cs", 31)) },
-            unlocked() { return hasUpgrade("ta", 14) },
+            unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>AM Buyable"

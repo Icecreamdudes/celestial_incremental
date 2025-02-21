@@ -77,84 +77,6 @@ addLayer("halter", {
         ]]]],
     layerShown() { return false }
 })
-addLayer("settings", {
-    name: "Settings", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "SET", // This appears on the layer's node. Default is the id with the first letter capitalized
-    row: 1,
-    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-    startData() { return {
-        unlocked: true,
-    }
-    },
-    automate() {},
-    nodeStyle() {},
-    tooltip: "Settings",
-    color: "white",
-    branches: ["branch"],
-    clickables: {},
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
-    tabFormat: [
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=hardReset()>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=(toggleOpt('newMenu'));(player.tab='i')>Toggle Layout</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportFile()>Export file</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<label class=opt for='importfile' style='display:flex;align-items:center;justify-content:center;width:92px;height:92px;'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {"color": "white", "font-size": "13.3333px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('musicToggle'); needsCanvasUpdate = true>Toggle Music</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Autosave: " + options.autosave, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Sidebar Layout: " + options.newMenu, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Music Toggle: " + options.musicToggle, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Hotkey Toggle: " + options.toggleHotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => "Playtime: " + formatTime(player.timePlayed), {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>", {"color": "white", "font-size": "36px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => credits, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => changelog, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-    ],
-    layerShown() { return false }
-})
 addLayer("u1u", {
     name: "u1u", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "U1U", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -167,7 +89,7 @@ addLayer("u1u", {
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
-    color: "#eaf6f7",
+    color: "white",
     branches: ["branch"],
     clickables: {},
     bars: {},
@@ -496,7 +418,7 @@ addLayer("a1u", {
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
-    color: "#eaf6f7",
+    color: "white",
     branches: ["branch"],
     clickables: {},
     bars: {},
@@ -529,7 +451,7 @@ addLayer("a1s", {
     automate() {},
     nodeStyle() {},
     tooltip: "Softcap",
-    color: "#eaf6f7",
+    color: "white",
     branches: ["branch"],
     clickables: {},
     bars: {},

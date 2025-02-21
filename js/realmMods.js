@@ -1070,7 +1070,7 @@
                 return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>ANTIMATTER DIMENSIONS LAYER BOOST"
             },
             display() {
-                return "which boosts antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which boosts antimatter dimensions (ignoring softcap) by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dream Realm Energy"
             },
             buy() {

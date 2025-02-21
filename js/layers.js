@@ -101,6 +101,7 @@ addLayer("i", {
             if (options.newMenu == false) player.universe = 1
             player.musuniverse = 1
         }
+
         if (player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "id" || player.tab == "tad" || player.tab == "ta" || player.tab == "bi" || player.tab == "om"
           || player.tab == "ga" || player.tab == "ca" || player.tab == "u2t" || player.tab == "u2l" ) {
             if (options.newMenu == false) player.universe = 2
@@ -122,10 +123,12 @@ addLayer("i", {
         } else {
             //stopRain();
         }
+
         if (player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter") {
             if (options.newMenu == false) player.universe = 0
             player.musuniverse = 0
         }
+
         if (player.tab == "c" || player.tab == "gt") {
             if (options.newMenu == false) player.universe = -1
             player.musuniverse = -1

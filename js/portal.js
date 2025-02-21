@@ -196,7 +196,11 @@ addLayer("po", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.po.halterEffects[player.po.halterIndex] = player.po.halterInput
+                if (player.po.halterInput.gte(1)) {
+                    player.po.halterEffects[player.po.halterIndex] = player.po.halterInput
+                } else {
+                    player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
+                }
             },
             style: { width: '100px', "min-height": '100px' },
         },

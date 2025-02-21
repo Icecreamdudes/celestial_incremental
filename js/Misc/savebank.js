@@ -150,7 +150,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/001.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -167,7 +167,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/002.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -184,7 +184,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/003.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -201,7 +201,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/004.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -218,7 +218,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/005.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -235,7 +235,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/006.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -252,7 +252,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/007.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -269,7 +269,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/008.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -286,7 +286,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/009.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -303,7 +303,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_1/010.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -338,7 +338,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_2/012.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -355,7 +355,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_2/013.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -372,7 +372,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_2/014.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -390,7 +390,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/015.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -407,7 +407,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/016.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -424,7 +424,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/017.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -441,7 +441,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/018.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -458,7 +458,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/019.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -475,7 +475,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/020.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -492,7 +492,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/021.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -509,7 +509,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/022.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -526,7 +526,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/023.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -543,7 +543,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/024.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -560,7 +560,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/025.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -577,7 +577,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_3/026.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -594,7 +594,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/027.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -611,7 +611,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/028.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -628,7 +628,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/029.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -645,7 +645,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/030.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -662,7 +662,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/031.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -679,7 +679,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/032.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -696,7 +696,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/033.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -713,7 +713,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/034.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }
@@ -730,7 +730,7 @@ addLayer("savebank", {
                     xhttp.open("GET", "Savebank/Stage_4/035.txt", true)
                     xhttp.onload = function () {
                         let file = this.responseText
-                        file.then(data => importSave(data))
+                        importSave(file)
                     }
                     xhttp.send()
                 }

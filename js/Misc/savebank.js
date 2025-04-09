@@ -1007,7 +1007,7 @@ addLayer("savebank", {
         ["blank", "50px"],
 
         ["style-column", [
-            ["scroll-row", [["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15], ["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18]], {width: "800px"}],
+            ["scroll-row", [["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15], ["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18]], {width: "800px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)"}],
             ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ], {border: "2px solid white"}],
 

@@ -382,7 +382,7 @@ addLayer("stats", {
                     ["row", [
                         ["always-scroll-column", [
                             ["hoverless-clickable", 201], ["hoverless-clickable", 202]
-                        ], {width: "116px", height: "500px", borderRight: "2px solid white"}],
+                        ], {width: "116px", height: "500px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderRight: "2px solid white"}],
                         ["style-column", [
                             ["buttonless-microtabs", "CB", { 'border-width': '0px' }],
                         ], {width: "682px", height: "500px"}],
@@ -400,7 +400,7 @@ addLayer("stats", {
                             ["hoverless-clickable", 306], ["hoverless-clickable", 307], ["hoverless-clickable", 308], ["hoverless-clickable", 309], ["hoverless-clickable", 310],
                             ["hoverless-clickable", 311], ["hoverless-clickable", 312], ["hoverless-clickable", 313], ["hoverless-clickable", 314], ["hoverless-clickable", 315],
                             ["hoverless-clickable", 316], ["hoverless-clickable", 317], ["hoverless-clickable", 318], ["hoverless-clickable", 319]
-                        ], {width: "116px", height: "500px", borderRight: "2px solid white"}],
+                        ], {width: "116px", height: "500px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderRight: "2px solid white"}],
                         ["style-column", [
                             ["buttonless-microtabs", "Uni2", { 'border-width': '0px' }],
                         ], {width: "682px", height: "500px"}],
@@ -692,8 +692,48 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Cookie Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.epicPetEffects[2][1])}
-                        ], () => { return !(player.cb.epicPetLevels[2].gte(1)) ? {display: "none !important"} : { color: "white" }}],
+                            () => { return "x" + format(levelableEffect("pet", 403)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 403).gte(1)) ? {display: "none !important"} : levelableEffect("pet", 403)[1].eq(1) ? {color: "grey"} : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Charger Milestone 1",
+                            () => { return "x" + format(player.fa.milestoneEffect[0])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 11) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "First Singularity Power Effect",
+                            () => { return "x" + format(player.sd.singularityPowerEffect)}
+                        ], () => { return !(layerShown('sd')) ? {display: "none !important"} : player.sd.singularityPowerEffect.eq(1) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Singularity Buyable 2",
+                            () => { return "x" + format(buyableEffect("s", 12))}
+                        ], () => { return !(layerShown('s') && hasMilestone("s", 15)) ? {display: "none !important"} : getBuyableAmount("s", 12).eq(0) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "SFRGT Buyable 7",
+                            () => { return "x" + format(buyableEffect("fu", 17))}
+                        ], () => { return !(layerShown('fu') && player.fu.jocusCelestialActivate) ? {display: "none !important"} : getBuyableAmount("fu", 17).eq(0) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "SFRGT Buyable 7",
+                            () => { return "x" + format(buyableEffect("fu", 17))}
+                        ], () => { return !(layerShown('fu') && player.fu.jocusCelestialActivate) ? {display: "none !important"} : getBuyableAmount("fu", 17).eq(0) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Second Sadness Effect",
+                            () => { return "x" + format(player.fu.sadnessEffect2)}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : player.fu.sadnessEffect2.eq(1) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Infinity Point Singularity Core<br>First Effect",
+                            () => { return player.cop.processedCoreFuel.eq(10) ? "x" + format(player.cop.processedCoreInnateEffects[0]) : "x" + format(layers.coa.determineEffect(10, player.coa.viewingStrength)[0])}
+                        ], () => { return !(layerShown('cop')) ? {display: "none !important"} : !player.cop.processedCoreFuel.eq(10) ? { color: "grey", height: "40px" } : { color: "white", height: "40px" }}],
+
+                        ["stat-row", [
+                            "Infinity Point Singularity Core<br>Second Effect",
+                            () => { return player.cop.processedCoreFuel.eq(10) ? "^" + format(player.cop.processedCoreInnateEffects[1]) : "^" + format(layers.coa.determineEffect(10, player.coa.viewingStrength)[1])}
+                        ], () => { return !(layerShown('cop')) ? {display: "none !important"} : !player.cop.processedCoreFuel.eq(10) ? { color: "grey", height: "40px" } : { color: "white", height: "40px" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -761,8 +801,13 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Voidgwa Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.evolvedEffects[3][0])}
-                        ], () => { return !(player.cb.evolvedLevels[3].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 1101)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 1101).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Infinity Point Singularity Core<br>Third Effect",
+                            () => { return player.cop.processedCoreFuel.eq(10) ? "x" + format(player.cop.processedCoreInnateEffects[2]) : "x" + format(layers.coa.determineEffect(10, player.coa.viewingStrength)[2])}
+                        ], () => { return !(layerShown('cop')) ? {display: "none !important"} : !player.cop.processedCoreFuel.eq(10) ? { color: "grey", height: "40px" } : { color: "white", height: "40px" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -850,8 +895,8 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Spider Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[5][0])}
-                        ], () => { return !(player.cb.commonPetLevels[5].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 106)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 106).gte(1)) ? {display: "none !important"} : {color: "white"}}],
 
                         ["stat-row", [
                             "1st Dimensional Power Effect",
@@ -943,6 +988,16 @@ addLayer("stats", {
                             () => { return "x" + format(buyableEffect("rm", 31))}
                         ], () => { return !(player.in.unlockedInfinity && hasUpgrade("bi", 27)) ? {display: "none !important"} : getBuyableAmount("rm", 31).eq(0) ? { color: "grey" } : { color: "white" }}],
 
+                        ["stat-row", [
+                            "Charger Milestone 2",
+                            () => { return "x" + format(player.fa.milestoneEffect[1])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 12) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Antimatter Singularity Core<br>First Effect",
+                            () => { return player.cop.processedCoreFuel.eq(9) ? "x" + format(player.cop.processedCoreInnateEffects[0]) : "x" + format(layers.coa.determineEffect(9, player.coa.viewingStrength)[0])}
+                        ], () => { return !(layerShown('cop')) ? {display: "none !important"} : !player.cop.processedCoreFuel.eq(9) ? { color: "grey", height: "40px" } : { color: "white", height: "40px" }}],
+                        
                     ], {width: '682px', height: '393px'}],
 
                     // Total Gain
@@ -1008,8 +1063,8 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Antimatter Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.rarePetEffects[4][0])}
-                        ], () => { return !(player.cb.rarePetLevels[4].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 305)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 305).gte(1)) ? {display: "none !important"} : levelableEffect("pet", 305)[0].eq(1) ? {color: "grey"} : {color: "white"}}],
 
                         ["stat-row", [
                             "[1st Dim.] 2nd Dim. Power",
@@ -1081,39 +1136,49 @@ addLayer("stats", {
                             () => { return "x" + format(buyableEffect("rm", 31))}
                         ], () => { return !(player.in.unlockedInfinity && hasUpgrade("bi", 27)) ? {display: "none !important"} : getBuyableAmount("rm", 31).eq(0) ? { color: "grey" } : { color: "white" }}],
 
+                        ["stat-row", [
+                            "Charger Milestone 2",
+                            () => { return "x" + format(player.fa.milestoneEffect[1])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 12) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Antimatter Singularity Core<br>Second Effect",
+                            () => { return player.cop.processedCoreFuel.eq(9) ? "^" + format(player.cop.processedCoreInnateEffects[1]) : "^" + format(layers.coa.determineEffect(9, player.coa.viewingStrength)[1])}
+                        ], () => { return !(layerShown('cop')) ? {display: "none !important"} : !player.cop.processedCoreFuel.eq(9) ? { color: "grey", height: "40px" } : { color: "white", height: "40px" }}],
+
                         ["style-row", [
                             ["raw-html", "Specific Multipliers", {color: 'white', fontSize: '16px', fontFamily: 'monospace'}]
                         ], {width: "666px", height: "25px", borderBottom: "1px solid white"}],
 
                         ["stat-row", [
                             "[1st Dim.] Clock Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[5][0])}
-                        ], () => { return !(player.cb.uncommonPetLevels[5].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 206)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 206).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                         ["stat-row", [
                             "[2nd Dim.] Trollface Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[6][0])}
-                        ], () => { return !(player.cb.uncommonPetLevels[6].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 207)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 207).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                         ["stat-row", [
                             "[3rd Dim.] Clock Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[5][1])}
-                        ], () => { return !(player.cb.uncommonPetLevels[5].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 206)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 206).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                         ["stat-row", [
                             "[4th Dim.] Trollface Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[6][1])}
-                        ], () => { return !(player.cb.uncommonPetLevels[6].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 207)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 207).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                         ["stat-row", [
                             "[5th Dim.] Clock Pet's 3rd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[5][2])}
-                        ], () => { return !(player.cb.uncommonPetLevels[5].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 206)[2])}
+                        ], () => { return !(getLevelableAmount("pet", 206).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                         ["stat-row", [
                             "[6th Dim.] Trollface Pet's 3rd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[6][2])}
-                        ], () => { return !(player.cb.uncommonPetLevels[6].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 207)[2])}
+                        ], () => { return !(getLevelableAmount("pet", 207).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                         ["stat-row", [
                             "[7th Dim.] IP Upgrade (1, 3)",
@@ -1122,8 +1187,8 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "[7th Dim.] Spider Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[5][1])}
-                        ], () => { return !(player.cb.commonPetLevels[5].gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 106)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 106).gte(1)) ? {display: "none !important"} : {height: "40px", color: "white"}}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1182,13 +1247,18 @@ addLayer("stats", {
                         ["stat-row", [
                             "Dragon Pet Upgrade 2",
                             () => { return "x" + format(upgradeEffect("ep1", 12))}
-                        ], () => { return !(player.cb.epicPetLevels[1].gte(1)) ? {display: "none !important"} : (!hasUpgrade("ep1", 12) || getBuyableAmount("ad", 1).eq(0)) ? { color: "grey" } : { color: "white" }}],
+                        ], () => { return !(getLevelableAmount("pet", 402).gte(1)) ? {display: "none !important"} : (!hasUpgrade("ep1", 12) || getBuyableAmount("ad", 1).eq(0)) ? { color: "grey" } : { color: "white" }}],
 
+                        ["stat-row", [
+                            "Antimatter Singularity Core<br>Third Effect",
+                            () => { return player.cop.processedCoreFuel.eq(9) ? "x" + format(player.cop.processedCoreInnateEffects[2]) : "x" + format(layers.coa.determineEffect(9, player.coa.viewingStrength)[2])}
+                        ], () => { return !(layerShown('cop')) ? {display: "none !important"} : !player.cop.processedCoreFuel.eq(9) ? { color: "grey", height: "40px" } : { color: "white", height: "40px" }}],
+
+                        // ALWAYS LAST
                         ["stat-row", [
                             "Tickspeed Buyable Amount",
                             () => { return "^" + format(getBuyableAmount("ad", 1))}
                         ], () => { return getBuyableAmount("ad", 1).eq(0) ? { color: "grey" } : { color: "white" }}],
-
                     ], {width: '682px', height: '393px'}],
 
                     // Total Gain
@@ -1330,8 +1400,24 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Infinity Breaker Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[7][1])}
-                        ], () => { return !(player.cb.uncommonPetLevels[7].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 208)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 208).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Charger Milestone 5",
+                            () => { return "x" + format(player.fa.milestoneEffect[4])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 15) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "First Singularity Power Effect",
+                            () => { return "x" + format(player.sd.singularityPowerEffect)}
+                        ], () => { return !(layerShown('sd')) ? {display: "none !important"} : player.sd.singularityPowerEffect.eq(1) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Radiation Buyable 6",
+                            () => { return "x" + format(buyableEffect("ra", 16))}
+                        ], () => { return !(layerShown('ra')) ? {display: "none !important"} : getBuyableAmount("ra", 16).eq(0) ? { color: "grey" } : { color: "white" }}],
+
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1409,8 +1495,8 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "John Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[8][0])}
-                        ], () => { return !(player.cb.uncommonPetLevels[8].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 209)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 209).gte(1)) ? {display: "none !important"} : {color: "white"}}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1429,7 +1515,7 @@ addLayer("stats", {
 
             "Alternative Infinities": {
                 buttonStyle() { return { 'color': 'white' } },
-                style: { background: '#001f18', width: '682px', height: '500px' },
+                style: { background: '#b2d8d8', width: '682px', height: '500px' },
                 unlocked() { return layerShown('tad') },
                 content: [
                     ["style-column", [
@@ -1468,8 +1554,8 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "John Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[8][1])}
-                        ], () => { return !(player.cb.uncommonPetLevels[8].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 209)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 209).gte(1)) ? {display: "none !important"} : {color: "white"}}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1542,13 +1628,18 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Infinity Breaker Pet's 3rd Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[7][2])}
-                        ], () => { return !(player.cb.uncommonPetLevels[7].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 208)[2])}
+                        ], () => { return !(getLevelableAmount("pet", 208).gte(1)) ? {display: "none !important"} : {color: "white"}}],
 
                         ["stat-row", [
                             "Voidgwa Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.evolvedEffects[3][1])}
-                        ], () => { return !(player.cb.evolvedLevels[3].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 1101)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 1103).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Charger Milestone 3",
+                            () => { return "x" + format(player.fa.milestoneEffect[2])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 13) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1621,8 +1712,13 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Smoke Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[8][0])}
-                        ], () => { return !(player.cb.commonPetLevels[8].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 109)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 109).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Sad Buyable 3",
+                            () => { return "x" + format(buyableEffect("fu", 43))}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : getBuyableAmount("fu", 43).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1695,8 +1791,13 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Smoke Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[8][0])}
-                        ], () => { return !(player.cb.commonPetLevels[8].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 109)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 109).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Sad Buyable 3",
+                            () => { return "x" + format(buyableEffect("fu", 43))}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : getBuyableAmount("fu", 43).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1769,8 +1870,13 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Smoke Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[8][0])}
-                        ], () => { return !(player.cb.commonPetLevels[8].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 109)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 109).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Sad Buyable 3",
+                            () => { return "x" + format(buyableEffect("fu", 43))}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : getBuyableAmount("fu", 43).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1838,8 +1944,25 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Infinity Breaker Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[7][0])}
-                        ], () => { return !(player.cb.uncommonPetLevels[7].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 208)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 208).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Second Singularity Power Effect",
+                            () => { return "x" + format(player.sd.singularityPowerEffect2)}
+                        ], () => { return !(layerShown('sd')) ? {display: "none !important"} : player.sd.singularityPowerEffect2.eq(1) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Charger Milestone 6",
+                            () => { return "x" + format(player.fa.milestoneEffect[5])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 16) ? { color: "grey" } : { color: "white" }}],
+
+                        // POWER MODIFIERS
+
+                        ["stat-row", [
+                            "Sad Buyable 2",
+                            () => { return "^" + format(buyableEffect("fu", 42))}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : getBuyableAmount("fu", 42).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -1907,8 +2030,25 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Infinity Breaker Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.uncommonPetEffects[7][0])}
-                        ], () => { return !(player.cb.uncommonPetLevels[7].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 208)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 208).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Second Singularity Power Effect",
+                            () => { return "x" + format(player.sd.singularityPowerEffect2)}
+                        ], () => { return !(layerShown('sd')) ? {display: "none !important"} : player.sd.singularityPowerEffect2.eq(1) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Charger Milestone 6",
+                            () => { return "x" + format(player.fa.milestoneEffect[5])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 16) ? { color: "grey" } : { color: "white" }}],
+
+                        // POWER MODIFIERS
+
+                        ["stat-row", [
+                            "Sad Buyable 2",
+                            () => { return "^" + format(buyableEffect("fu", 42))}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : getBuyableAmount("fu", 42).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -2040,13 +2180,13 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Replicator Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[7][0])}
-                        ], () => { return !(player.cb.commonPetLevels[7].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 108)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 108).gte(1)) ? {display: "none !important"} : {color: "white"}}],
 
                         ["stat-row", [
                             "Dotknight Pet Upgrade 1",
                             () => { return "x" + format(upgradeEffect("ep0", 11))}
-                        ], () => { return !(player.cb.epicPetLevels[0].gte(1)) ? {display: "none !important"} : !hasUpgrade("ep0", 11) ? { color: "grey" } : { color: "white" }}],
+                        ], () => { return !(getLevelableAmount("pet", 401).gte(1)) ? {display: "none !important"} : !hasUpgrade("ep0", 11) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -2159,8 +2299,8 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Cookie Pet's 1st Effect",
-                            () => { return "x" + format(player.cb.epicPetEffects[2][0])}
-                        ], () => { return !(player.cb.epicPetLevels[2].gte(1)) ? {display: "none !important"} : { color: "white" }}],
+                            () => { return "x" + format(levelableEffect("pet", 403)[0])}
+                        ], () => { return !(getLevelableAmount("pet", 403).gte(1)) ? {display: "none !important"} : levelableEffect("pet", 403)[0].eq(1) ? {color: "grey"} : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -2208,8 +2348,18 @@ addLayer("stats", {
 
                         ["stat-row", [
                             "Replicator Pet's 2nd Effect",
-                            () => { return "x" + format(player.cb.commonPetEffects[7][1])}
-                        ], () => { return !(player.cb.commonPetLevels[7].gte(1)) ? {display: "none !important"} : {color: "white"}}],
+                            () => { return "x" + format(levelableEffect("pet", 108)[1])}
+                        ], () => { return !(getLevelableAmount("pet", 108).gte(1)) ? {display: "none !important"} : {color: "white"}}],
+
+                        ["stat-row", [
+                            "Charger Milestone 9",
+                            () => { return "x" + format(player.fa.milestoneEffect[8])}
+                        ], () => { return !(player.fa.buyables[13].gte(1)) ? {display: "none !important"} : !hasMilestone("fa", 19) ? { color: "grey" } : { color: "white" }}],
+
+                        ["stat-row", [
+                            "Sad Buyable 4",
+                            () => { return "x" + format(buyableEffect("fu", 44))}
+                        ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : getBuyableAmount("fu", 44).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                     ], {width: '682px', height: '393px'}],
 
@@ -2248,7 +2398,9 @@ addLayer("stats", {
         ["blank", "50px"],
 
         ["style-column", [
-            ["always-scroll-row", [["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15], ["hoverless-clickable", 16], ["hoverless-clickable", 17]], {width: "800px", background: "black", borderBottom: "2px solid white"}],
+            ["always-scroll-row", [
+                ["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15], ["hoverless-clickable", 16], ["hoverless-clickable", 17]
+            ], {width: "800px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderBottom: "2px solid white"}],
             ["buttonless-microtabs", "Tabs", { 'border-width': '0px' }],
         ], {border: "2px solid white"}],
 

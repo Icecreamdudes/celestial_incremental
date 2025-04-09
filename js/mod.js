@@ -4,13 +4,14 @@
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: ["settingsMicrotab.js", "layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
-	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "petShop.js", "evolution.js", "rocketFuel.js", "infinity.js",
+	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js", "infinity.js",
 	"antimatterDimensions.js", "infinityPoints.js", "galaxy.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
 	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js", "Singularity/coreProcessor.js",
 	"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
-	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js"],
+	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
+	"Check Back/pet.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -20,8 +21,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.3",
-	name: "The Layout Update - with QoL",
+	num: 150, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "The Polishing Update",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -44,24 +45,34 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.5 - Visual Revamp</h3><br>
+		Balancing:<br>
+			- <br>
+		Bugfixes:<br>
+			- <br>
+		Qol:<br>
+			- <br><br>
 	<h3>v1.4 - The Singularity Update Part I: Cores</h3><br>
 		Content:<br>
-		- Added Singularity, the next large prestige layer.<br>
-		- Added Singularity Cores. (The Core Assember, and the Core Processor)<br>
-		- Added Radiation.<br>
-		- Added Singularity Dimensions.<br>
-		- Added Core Scraps.<br>
-		- Added Realm Essence.<br>
-		- Added the Factory.<br>
-		- Added a new celestial: Jocus, the Celestial of Fun.<br>
-		- Added two new pet evolutions.<br>
-		- Added pet crate automation.<br>
-		- Added a buncha new lore. (check out the lore tabs)<br>
-		- Added some new music.<br>
-		- Added ???. (new universe?)<br>
-		Balancing: Changes to pet shop prices, XPBoost, and Realm Mods.<br>
-		Bugfixes: I lost track again lmao<br>
-		QoL: I lost track again lmao<br><br>
+			- Added Singularity, the next large prestige layer.<br>
+			- Added Singularity Cores. (The Core Assember, and the Core Processor)<br>
+			- Added Radiation.<br>
+			- Added Singularity Dimensions.<br>
+			- Added Core Scraps.<br>
+			- Added Realm Essence.<br>
+			- Added the Factory.<br>
+			- Added a new celestial: Jocus, the Celestial of Fun.<br>
+			- Added two new pet evolutions.<br>
+			- Added pet crate automation.<br>
+			- Added a buncha new lore. (check out the lore tabs)<br>
+			- Added some new music.<br>
+			- Added ???. (new universe?)<br><br>
+		Balancing:<br>
+			Changes to pet shop prices, XPBoost, and Realm Mods.<br><br>
+		Bugfixes:<br>
+			I lost track again lmao<br><br>
+		QoL:<br>
+			I lost track again lmao<br><br>
 	<h3>v1.3 - The Layout Update - with QoL</h3><br>
 		Content:<br>
 			- Added the Sidebar Layout.<br>
@@ -240,7 +251,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
  "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", 
- "startCutscene25", "startCutscene26", "startCutscene27", "scrapCore", "pollenReset"]
+ "startCutscene25", "startCutscene26", "startCutscene27", "scrapCore", "pollenReset", "ordinalDisplay", "powerBase"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
@@ -355,6 +366,40 @@ function fixOldSave(oldVersion){
 		if (getBuyableAmount("g", 14).gt(1000)) setBuyableAmount("g", 14, 1000)
 		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
 		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)
+	}
+	if (typeof oldVersion === 'string' ) {
+		for (let i = 0; i < player.cb.commonPetAmounts.length; i++) {
+			setLevelableAmount("pet", i+101, player.cb.commonPetLevels[i]);
+			setLevelableXP("pet", i+101, player.cb.commonPetAmounts[i]);
+		}
+		for (let i = 0; i < player.cb.uncommonPetAmounts.length; i++) {
+			setLevelableAmount("pet", i+201, player.cb.uncommonPetLevels[i]);
+			setLevelableXP("pet", i+201, player.cb.uncommonPetAmounts[i]);
+		}
+		for (let i = 0; i < player.cb.rarePetAmounts.length; i++) {
+			setLevelableAmount("pet", i+301, player.cb.rarePetLevels[i]);
+			setLevelableXP("pet", i+301, player.cb.rarePetAmounts[i]);
+		}
+		for (let i = 0; i < player.cb.epicPetFragments.length; i++) {
+			setLevelableAmount("pet", i+401, player.cb.epicPetLevels[i]);
+			setLevelableXP("pet", i+401, player.cb.epicPetFragments[i]);
+		}
+		player.pet.lastDicePetRoll = player.cb.lastDicePetRoll
+		player.pet.highestDicePetCombo = player.cb.highestDicePetCombo
+		player.pet.dicePetCombo = player.cb.dicePetCombo
+		player.pet.dicePetPointsGain = player.cb.dicePetPointsGain
+
+		setLevelableAmount("pet", 1103, player.cb.evolvedLevels[0])
+		setLevelableAmount("pet", 1204, player.cb.evolvedLevels[1])
+		setLevelableAmount("pet", 1203, player.cb.evolvedLevels[2])
+		setLevelableAmount("pet", 1101, player.cb.evolvedLevels[3])
+		setLevelableAmount("pet", 1202, player.cb.evolvedLevels[4])
+		setLevelableAmount("pet", 1302, player.cb.evolvedLevels[5])
+		setLevelableAmount("pet", 1106, player.cb.evolvedLevels[6])
+		setLevelableAmount("pet", 1303, player.cb.evolvedLevels[7])
+		setLevelableAmount("pet", 1206, player.cb.evolvedLevels[8])
+		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
+		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
 	}
 }
 

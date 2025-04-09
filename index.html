@@ -51,6 +51,7 @@
 				<button class="uniButton" v-if="layerShown('cp')" v-bind:style="constructUniButtonStyle('cp') " onclick="player.universe='1.5'"><span class="buttonText">A1</span></button>
 				<button class="uniButton" v-if="layerShown('s') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe='3'"><span class="buttonText">3</span></button>
 				<button class="uniButton" v-if="layerShown('ch') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('ch') " onclick="player.universe='-0.5'"><span class="buttonText">C</span></button>
+				<button class="uniButton" v-if="layerShown('od') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('od') " onclick="player.universe='1337'"><span class="buttonText">?</span></button>
 			</div>
 		<!-- Meta Content -->
 			<div class="metaMenu" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">
@@ -93,8 +94,9 @@
 				<button class="menuButton" v-if="layerShown('cb') && player.universe == 1" v-bind:style="constructMenuButtonStyle('cb') " onclick="showTab('cb')"><span class="buttonText">Check Back</span></button>
 				<button class="menuButton" v-if="layerShown('d') && player.universe == 1" v-bind:style="constructMenuButtonStyle('d') " onclick="showTab('d')"><span class="buttonText">Dice</span></button>
 
-			<div class="menuHeader" v-if="(layerShown('rm') || layerShown('oi')) && player.universe == 1">Row 4</div>
+			<div class="menuHeader" v-if="(layerShown('rm') || layerShown('gem') || layerShown('oi')) && player.universe == 1">Row 4</div>
 				<button class="menuButton" v-if="layerShown('rm') && player.universe == 1" v-bind:style="constructMenuButtonStyle('rm') " onclick="showTab('rm')"><span class="buttonText">Realm Mods</span></button>
+				<button class="menuButton" v-if="layerShown('gem') && player.universe == 1" v-bind:style="constructMenuButtonStyle('gem') " onclick="showTab('pet')"><span class="buttonText">Gems</span></button>
 				<button class="menuButton" v-if="layerShown('oi') && player.universe == 1" v-bind:style="constructMenuButtonStyle('oi') " onclick="showTab('oi')"><span class="buttonText">Oil</span></button>
 
 		<!-- Universe 2 Stuff -->
@@ -143,8 +145,8 @@
 				<button class="menuButton" v-if="player.universe == 3" v-bind:style="constructMenuButtonStyle('u3u') " onclick="showTab('u3u')"><span class="buttonText">Upgrades</span></button>
 				<button class="menuButton" v-if="player.universe == 3" v-bind:style="constructMenuButtonStyle('u3m') " onclick="showTab('u3m')"><span class="buttonText">Milestones</span></button>
 				<button class="menuButton" v-if="player.universe == 3" v-bind:style="constructMenuButtonStyle('u3l') " onclick="showTab('u3l')"><span class="buttonText">Lore</span></button>
-				<button class="menuButton" v-if="player.universe == 3" v-bind:style="constructMenuButtonStyle('u3b') " onclick="showTab('u3b')"><span class="buttonText">Buyables</span></button>
-				<div class="menuHeader" v-if="(layerShown('coa') || layerShown('cop')) && player.universe == 3">Row 1</div>
+				<button class="menuButton" v-if="hasMilestone('s', 15) && player.universe == 3" v-bind:style="constructMenuButtonStyle('u3b') " onclick="showTab('u3b')"><span class="buttonText">Buyables</span></button>
+			<div class="menuHeader" v-if="(layerShown('coa') || layerShown('cop')) && player.universe == 3">Row 1</div>
 				<button class="menuButton" v-if="layerShown('coa') && player.universe == 3" v-bind:style="constructMenuButtonStyle('coa') " onclick="showTab('coa')"><span class="buttonText">Core Assembler</span></button>
 				<button class="menuButton" v-if="layerShown('cop') && player.universe == 3" v-bind:style="constructMenuButtonStyle('cop') " onclick="showTab('cop')"><span class="buttonText">Core Processor</span></button>
 			<div class="menuHeader" v-if="(layerShown('ra')) && player.universe == 3">Row 2</div>
@@ -156,11 +158,16 @@
 			<div class="uniHeader" v-if="player.universe == -0.5"><h5>Universe γ<br>Hall of Celestials</h5></div>
 				<button class="menuButton" v-if="player.universe == -0.5" v-bind:style="constructMenuButtonStyle('cmh') " onclick="showTab('cmh')"><span class="buttonText">Hall</span></button>
 
+		<!-- Ordinal Stuff -->
+		<div class="uniHeader" v-if="player.universe == 1337"><h5>Universe ?<br>Ordinal</h5></div>
+			<button class="menuButton" v-if="player.universe == 1337" v-bind:style="constructMenuButtonStyle('odt') " onclick="showTab('odt')"><span class="buttonText">Tree</span></button>
+		<div class="menuHeader" v-if="(layerShown('mu')) && player.universe == 1337">Row 1</div>
+			<button class="menuButton" v-if="layerShown('mu') && player.universe == 1337" v-bind:style="constructMenuButtonStyle('mu') " onclick="showTab('mu')"><span class="buttonText">Markup</span></button>
+
+
 		<!-- Check Back Stuff -->
 			<div class="uniHeader" v-if="player.universe == 0.5">Check Back</div>
 				<button class="menuButton" v-if="player.universe == 0.5" v-bind:style="constructCbButtonStyle('cb') " onclick="showTab('cb')"><span class="buttonText">Check Back</span></button>
-				<button class="menuButton" v-if="(player.cb.highestLevel.gte(25) || player.cb.XPBoostUnlock) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ps') " onclick="showTab('ps')"><span class="buttonText">Pet Shop</span></button>
-				<button class="menuButton" v-if="player.cb.highestLevel.gte(1500) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('epic') " onclick="showTab('epic')"><span class="buttonText">Epic Fragmentation</span></button>
 
 			<div class="menuHeader" v-if="(player.ev.evolutionsUnlocked[0] || player.ev.evolutionsUnlocked[1] || player.ev.evolutionsUnlocked[2] || player.ev.evolutionsUnlocked[4] || player.ev.evolutionsUnlocked[8]) && player.universe == 0.5">Evo. Features</div>
 				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[0] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev0') " onclick="showTab('ev0')"><span class="buttonText">Goldsmith</span></button>

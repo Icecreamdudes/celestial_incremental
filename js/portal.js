@@ -1,4 +1,4 @@
-﻿var tree = [["i", "in", "s"], ["cp"], ["ch"]]
+﻿var tree = [["i", "in", "s"], ["cp"], ["ch", "od"]]
 addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -16,6 +16,7 @@ addLayer("po", {
         hex: false,
         breakInfinity: false,
         realmMods: false,
+        gem: false,
 
         keepOTFS: false,
 
@@ -55,44 +56,39 @@ addLayer("po", {
 
         player.po.featureSlotsMax = new Decimal(1)
         if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
-        if (hasUpgrade("s", 17)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+        if (hasUpgrade("s", 18)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
-        if (player.po.dice)
-        {
+        if (player.po.dice) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
-        if (player.po.rocketFuel)
-        {
+        if (player.po.rocketFuel) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
-        if (player.po.hex)
-        {
+        if (player.po.hex) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
-        if (player.po.breakInfinity)
-        {
+        if (player.po.breakInfinity) {
             player.in.breakInfinity = true
             player.po.featureSlots = player.po.featureSlots.sub(1)
-        } else
-        {
+        } else {
             player.in.breakInfinity = false
         }
-        if (player.po.realmMods)
-        {
+        if (player.po.realmMods) {
             player.po.featureSlots = player.po.featureSlots.sub(2)
+        }
+        if (player.po.gem) {
+            player.po.featureSlots = player.po.featureSlots.sub(1)
         }
 
         //IF ADDING NEW OTFS - REMEMBER TO EXIT THEM AFTER LEAVING TAVS DOMAIN
 
-        if (player.subtabs["po"]['stuff'] == 'LORE' && player.tab != "lo")
-        {
+        if (player.subtabs["po"]['stuff'] == 'LORE' && player.tab != "lo") {
             player.tab = "lo"
             player.subtabs["po"]['stuff'] = 'Portals'
         }
 
-        if (inChallenge("tad", 11) && player.po.breakInfinity)
-        {
+        if (inChallenge("tad", 11) && player.po.breakInfinity) {
             player.po.breakInfinity = false
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
@@ -125,10 +121,8 @@ addLayer("po", {
             10 - Mods
         */
 
-        if (player.po.halterInput.gte(1))
-        {
-            if (player.po.halterInput.neq(player.po.halterEffects[player.po.halterIndex]))
-            {
+        if (player.po.halterInput.gte(1)) {
+            if (player.po.halterInput.neq(player.po.halterEffects[player.po.halterIndex])) {
                // player.rm.halterBoostCheck = false
             }
         }
@@ -159,6 +153,7 @@ addLayer("po", {
             style: {
                 width: '200px',
                 "min-height": '75px',
+                borderRadius: '10px',
             },
         },
         3: {
@@ -171,6 +166,7 @@ addLayer("po", {
             style: {
                 width: '200px',
                 "min-height": '75px',
+                borderRadius: '10px',
             },
         },
         4: {
@@ -180,7 +176,7 @@ addLayer("po", {
             onClick() {
                 player.po.halterIndex = player.po.halterIndex.sub(1)
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: "10px 0px 0px 10px" },
         },
         5: {
             title() { return "<h3>Increase" },
@@ -189,7 +185,7 @@ addLayer("po", {
             onClick() {
                 player.po.halterIndex = player.po.halterIndex.add(1)
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: "0px" },
         },
         6: {
             title() { return "<h3>Apply Halt" },
@@ -202,7 +198,13 @@ addLayer("po", {
                     player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
                 }
             },
-            style: { width: '100px', "min-height": '100px' },
+            style() {
+                if (player.ev.evolutionsUnlocked[6]) {
+                    return { width: '100px', "min-height": '100px', borderRadius: "0px" }
+                } else {
+                    return { width: '100px', "min-height": '100px', borderRadius: "10px" }
+                }
+            }
         },
         7: {
             title() { return "<h3>Reset Halts" },
@@ -214,7 +216,7 @@ addLayer("po", {
                     player.po.halterEffects[i] = new Decimal(1)
                 }
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: "0px" },
         },
         8: {
             title() { return "<h3>View Halts" },
@@ -235,7 +237,7 @@ addLayer("po", {
                     "Mod gain: /" + format(player.po.halterEffects[10]) + "\n"
                 )
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: "0px 10px 10px 0px" },
         },
         11: {
             title() { return "<h1>Dice" },
@@ -253,6 +255,7 @@ addLayer("po", {
                 background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
                 "background-origin": "border-box",
                 "border-color": "#0061ff",
+                borderRadius: "20px",
             },
         },
         12: {
@@ -293,6 +296,7 @@ addLayer("po", {
                     "background-origin": "border-box",
                     "border-color": "#119B35",
                     color: "#06366e",
+                    borderRadius: "20px",
                 }
             },
         },
@@ -309,9 +313,10 @@ addLayer("po", {
             style: {
                 width: '200px',
                 "min-height": '200px',
-                "background-color": "black",
+                "background": "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(18,18,18,1) 100%)",
                 "background-origin": "border-box",
                 "color": "white",
+                borderRadius: "20px",
             },
         },
         14: {
@@ -328,15 +333,16 @@ addLayer("po", {
                 width: '200px',
                 "min-height": '200px',
                 "border-color": "white",
-                "background-color": "#7c5423",
+                "background": "linear-gradient(315deg, #7c5423 0%, #b87400 100%)",
                 "background-origin": "border-box",
                 "color": "white",
+                borderRadius: "20px",
             },
         },
         15: {
             title() { return "<h1>Realm Mods" },
             display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.2)<br>On" : "<h2>Feel the realms.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
+                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.2)<br>On" : !hasMilestone("s", 15) ? "<h2>Feel the realms.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots" : "<h1>Feel the realms.<br>Off<br><h2>Takes up 2 OTF slots";
             },
             canClick() { return player.po.featureSlots.gte(2) && (player.ca.replicanti.gte(1.79e308) || hasMilestone("s", 15)) && (player.ca.canteCores.gte(1) || hasMilestone("s", 15))},
             unlocked() { return hasUpgrade("bi", 27) },
@@ -358,6 +364,27 @@ addLayer("po", {
                 "background-image": "linear-gradient(0deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
                 "background-origin": "border-box",
                 "color": "white",
+                borderRadius: "20px",
+            },
+        },
+        16: {
+            title() { return "<h1>Gems" },
+            display() {
+                return player.po.gem ? "<h1>Monetize everything.<br>On" : "<h1>Monetize everything.<br>Off<br><h2>Req: ???";
+            },
+            canClick() { return player.po.featureSlots.gte(1)},
+            unlocked() { return false },
+            onClick() {
+                player.po.gem = true
+            },
+            style: {
+                width: '200px',
+                minHeight: '200px',
+                borderColor: "#780af3",
+                backgroundImage: "linear-gradient(0deg, #ab66f9, #c18dfa)",
+                backgroundOrigin: "border-box",
+                color: "white",
+                borderRadius: "20px",
             },
         },
     },
@@ -392,7 +419,7 @@ addLayer("po", {
     microtabs: {
         stuff: {
             "Otherworldly Features": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -402,12 +429,12 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
+                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]]],
                 ]
 
             },
             "Portals": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -419,7 +446,7 @@ addLayer("po", {
 
             },
             "Halter": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("ip", 23)},
                 content:
                 [
@@ -436,6 +463,7 @@ addLayer("po", {
                     }],
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
+                    ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
                     ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)" }],
                     ["blank", "25px"],

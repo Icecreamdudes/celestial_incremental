@@ -52,9 +52,10 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // START OF ROCKET FUEL MODIFIERS
         if (player.rf.rocketFuelToGet.lte(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.20).div(500)
         if (player.rf.rocketFuelToGet.gt(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.01).div(50000).add(1e20)
-        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.rarePetEffects[2][0])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 303)[0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.diceEffects[13])
         if (hasUpgrade("rf", 15)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("rf", 15))
@@ -63,16 +64,27 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 45))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 46))
         if (player.pol.pollinatorsIndex == 7) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorsEffect[13])
-        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.evolvedEffects[4][1])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 1202)[1])
+        if (player.cop.processedCoreFuel.eq(8)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cop.processedCoreInnateEffects[0])
 
+        // POWER MODIFIERS
+        if (player.cop.processedCoreFuel.eq(8)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.cop.processedCoreInnateEffects[1])
+
+        // ROCKET FUEL PER SECOND
+        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) {
+            player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
+        }
+
+        // ROCKET FUEL EFFECT
         player.rf.rocketFuelEffect = player.rf.rocketFuel.mul(30).pow(0.85).add(1)
 
-        if (player.rf.rocketFuelPause.gt(0))
-        {
+        // ROCKET FUEL RESET CODE
+        if (player.rf.rocketFuelPause.gt(0)) {
             layers.rf.rocketFuelReset()
         }
         player.rf.rocketFuelPause = player.rf.rocketFuelPause.sub(1)
 
+        // ROCKET FUEL ABILITY DESCRIPTION
         player.rf.abilityDesc = [
             "RF Point Boost: Gives a x" + format(player.rf.abilityEffects[0]) + " boost to points. (" + formatTime(player.rf.abilityTimers[0]) + " left)",
             "RF Tree Boost: Gives a x" + format(player.rf.abilityEffects[1]) + " boost to trees. (" + formatTime(player.rf.abilityTimers[1]) + " left)",
@@ -84,35 +96,30 @@
             "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)",
         ]
 
-        if (player.rf.rocketFuel.gt(0))
-        {
+        // ABILITY UNLOCK CODE
+        if (player.rf.rocketFuel.gt(0)) {
             player.rf.abilitiesUnlocked[0] = true
         }
-        if (player.rf.rocketFuel.gt(0))
-        {
+        if (player.rf.rocketFuel.gt(0)) {
             player.rf.abilitiesUnlocked[1] = true
         }
-        if (player.rf.rocketFuel.gt(10))
-        {
+        if (player.rf.rocketFuel.gt(10)) {
             player.rf.abilitiesUnlocked[2] = true
         }
-        if (hasUpgrade("rf", 13) && player.rf.abilitiesUnlocked[2])
-        {
+        if (hasUpgrade("rf", 13) && player.rf.abilitiesUnlocked[2]) {
             player.rf.abilitiesUnlocked[3] = true
         }
-        if (hasUpgrade("rf", 14) && player.rf.abilitiesUnlocked[3])
-        {
+        if (hasUpgrade("rf", 14) && player.rf.abilitiesUnlocked[3]) {
             player.rf.abilitiesUnlocked[4] = true
         }
-        if (hasChallenge("ip", 16))
-        {
+        if (hasChallenge("ip", 16)) {
             player.rf.abilitiesUnlocked[5] = true
             player.rf.abilitiesUnlocked[6] = true
             player.rf.abilitiesUnlocked[7] = true
         }
 
-        for (let i = 0; i < player.rf.abilityTimers.length; i++)
-        {
+        // ABILITY TIMER CODE
+        for (let i = 0; i < player.rf.abilityTimers.length; i++) {
             player.rf.abilityTimers[i] = player.rf.abilityTimers[i].sub(onepersec.mul(delta))
         }
         for (let i = 0; i < player.rf.abilityTimers.length; i++)
@@ -124,6 +131,7 @@
             }
         }
 
+        // ABILITY AUTOMATION
         if (hasUpgrade("tad", 12))
         {
             layers.rf.rocketFuelAbility(0, player.rf.rocketFuel)
@@ -175,7 +183,7 @@
                 player.rf.rocketFuelPause = new Decimal(3)
                 player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
             },
-            style: { width: '400px', "min-height": '100px' },
+            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
             title() { return "1" },
@@ -312,7 +320,7 @@
                 let random = getRandomInt(100)
 
                 if (new Decimal(random).lte(prob)) {
-                    player.cb.rarePetAmounts[2] = player.cb.rarePetAmounts[2].add(1);
+                    addLevelableXP("pet", 303, 1);
                     callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
                 }
             break;
@@ -340,7 +348,8 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("rf", 11)) player.r.pent = new Decimal(0)
+        if (!hasUpgrade("rf", 11) && !hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (!hasUpgrade("rf", 11) && hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -451,8 +460,6 @@
         player.gh.buyables[17] = new Decimal(0)
         player.gh.buyables[18] = new Decimal(0)
         player.gh.buyables[19] = new Decimal(0)
-        player.gh.buyables[21] = new Decimal(0)
-        player.gh.buyables[22] = new Decimal(0)
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
@@ -466,8 +473,7 @@
     bars: {
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Rocket Fuel Upgrade I",
             unlocked() { return true },
             description() { return "Keep pent on reset." },
@@ -476,8 +482,7 @@
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
         },
-        12:
-        {
+        12: {
             title: "Rocket Fuel Upgrade II",
             unlocked() { return true },
             description() { return "Gain 20% of prestige points and grass value per second." },
@@ -486,8 +491,7 @@
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
         },
-        13:
-        {
+        13: {
             title: "Rocket Fuel Upgrade III",
             unlocked() { return hasUpgrade("rf", 12) },
             description() { return "Unlocks another ability." },
@@ -496,8 +500,7 @@
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
         },
-        14:
-        {
+        14: {
             title: "Rocket Fuel Upgrade IV",
             unlocked() { return hasUpgrade("rf", 13) },
             description() { return "Unlocks yet another ability." },
@@ -506,8 +509,7 @@
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
         },
-        15:
-        {
+        15: {
             title: "Rocket Fuel Upgrade V",
             unlocked() { return hasUpgrade("rf", 14) && inChallenge("ip", 16)},
             description: "Rocket Fuel boosts itself.",
@@ -520,8 +522,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         },
-        16:
-        {
+        16: {
             title: "Rocket Fuel Upgrade VI",
             unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
             description: "Rocket Fuel boosts points.",
@@ -534,8 +535,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         },
-        17:
-        {
+        17: {
             title: "Rocket Fuel Upgrade VII",
             unlocked() { return hasUpgrade("rf", 16) && inChallenge("ip", 16)},
             description: "Gain 20% of rocket fuel per second.",
@@ -557,10 +557,9 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
@@ -573,8 +572,7 @@
                     ["row", [["clickable", 12], ["clickable", 2], ["clickable", 13], ["clickable", 3],["clickable", 14]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
-    ]
-
+                ]
             },
         },
     },

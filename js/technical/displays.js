@@ -30,60 +30,76 @@ function constructUniButtonStyle(layer){
 	switch (layer) {
 		case 'i':
 			style.push({
-			background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
-			"background-origin": "border-box",
-			"border-color": "#555555"});
+				background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#555555"
+			});
 			uni = 1;
 			break;
 		case 'in':
 			style.push({
-			background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
-			"background-origin": "border-box",
-			"border-color": "#119B35"});
+				background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#119B35"
+			});
 			uni = 2;
 			break;
 		case 's':
 			style.push({
-			background: "linear-gradient(140deg, red 0%, black 125%)",
-			"background-origin": "border-box",
-			"border-color": "#800000"});
+				background: "linear-gradient(140deg, red 0%, black 125%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#800000"
+			});
 			uni = 3;
 			break;
 		case 'cp':
 			style.push({
-			background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
-			"background-origin": "border-box",
-			"border-color": "#013851"});
+				background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#013851"
+			});
 			uni = 1.5;
 			break;
 		case 'ch':
 			style.push({
 				background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
-				"background-origin": "border-box",
-				"border-color": "#2e0054",});
+				backgroundOrigin: "border-box",
+				borderColor: "#2e0054",
+			});
 			uni = -0.5;
+			break;
+		case 'od':
+			style.push({
+				backgroundImage: "linear-gradient(0deg, #256413, #49AE1E)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "black",
+            	color: "black",
+			});
+			uni = 1337;
 			break;
 		//case 'uh':
 		//	style.push({
 		//	background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",
-		//	"background-origin": "border-box",
-		//	"border-color": "#6b4701"});
+		//	backgroundOrigin: "border-box",
+		//	borderColor: "#6b4701"});
 		//	uni = 101;
 		//	break;
 		case 'otherfeat':
 			style.push({
-			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
-			"background-origin": "border-box",
-			"border-color": "purple"});
+				background: "linear-gradient(45deg, #8a00a9, #0061ff)",
+				backgroundOrigin: "border-box",
+				borderColor: "purple"
+			});
 			if (player.tab == layer) {
 				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
 			};
 			break;
 		case 'halter':
 			style.push({
-			"color": "white",
-			"background-color": "black",
-			"border-color": "purple"});
+				color: "white",
+				backgroundColor: "black",
+				borderColor: "purple"
+			});
 			if (player.tab == layer) {
 				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
 			};
@@ -108,143 +124,172 @@ function constructMenuButtonStyle(layer){
 	switch (layer) {
 		case 'h':
 			style.push({
-			"color": "white",
-			"background-color": "black",
-			"border-color": "#0061ff"});
+				color: "white",
+				backgroundColor: "black",
+				borderColor: "#0061ff"
+			});
 			break;
 		case 'pe':
 			style.push({
-			background: "linear-gradient(0deg, #770022 0%, #8D71B4 100%)",
-			"background-origin": "border-box",
-			"border-color": "#770022"});
+				background: "linear-gradient(0deg, #770022 0%, #8D71B4 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#770022"
+			});
 			break;
 		case 'rf':
 			style.push({
-			background: "linear-gradient(to right, hsl(210, 60%, 40%), hsl(210, 40%, 60%))",
-			"background-origin": "border-box",
-			"border-color": "#119B35"});
+				background: "linear-gradient(to right, hsl(210, 60%, 40%), hsl(210, 40%, 60%))",
+				backgroundOrigin: "border-box",
+				borderColor: "#119B35"
+			});
 			break;
 		case 'de':
 			style.push({
-			background: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)",
-			"background-origin": "border-box",
-			"border-color": "#3A2558"});
+				background: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#3A2558"
+			});
 			break;
 		case 'd':
 			style.push({
-			background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
-			"background-origin": "border-box",
-			"border-color": "#0061ff"});
+				background: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#0061ff"
+			});
 			break;
 		case 'rm':
 			style.push({
-			"background-image": "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
-			"background-origin": "border-box",
-			"color": "white",
-			"border-color": "#0061ff"});
+				backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
+				backgroundOrigin: "border-box",
+				color: "white",
+				borderColor: "#0061ff"
+			});
 			break;
 		case 'ad':
 			style.push({
-			background: "linear-gradient(140deg, rgba(0,255,202,1) 0%, rgba(30,181,22,1) 100%)",
-			"background-origin": "border-box",
-			"border-color": "#119B35"});
+				background: "linear-gradient(140deg, rgba(0,255,202,1) 0%, rgba(30,181,22,1) 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#119B35"
+			});
 			break;
 		case 'ip':
 			style.push({
-			background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)",
-			"background-origin": "border-box",
-			"border-color": "#7c5423"});
+				background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#7c5423"
+			});
 			break;
 		case 'id':
 			style.push({
-			background: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)",
-			"background-origin": "border-box",
-			"border-color": "#b87400"});
+				background: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#b87400"
+			});
 			break;
 		case 'tad':
 			style.push({
-			background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
-			"background-origin": "border-box",
-			"border-color": "#b2d8d8",
-			"color": "#b2d8d8"});
+				background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#b2d8d8",
+				color: "#b2d8d8"
+			});
 			break;
 		case 'ta':
 			style.push({
-			background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)",
-			"background-origin": "border-box",
-			"border-color": "#31aeb0",
-			"color": "#008080"});
+				background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#31aeb0",
+				color: "#008080"
+			});
 			break;
 		case 'bi':
 			style.push({
-			background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)",
-			"background-origin": "border-box",
-			"border-color": "#2B7F0A"});
+				background: "linear-gradient(150deg, #889110, 0%, #73A112 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#2B7F0A"
+			});
 			break;
 		case 'om':
 			style.push({
-			background: "linear-gradient(45deg, #8a00a9, #0061ff)",
-			"background-origin": "border-box",
-			"border-color": "purple"});
+				background: "linear-gradient(45deg, #8a00a9, #0061ff)",
+				backgroundOrigin: "border-box",
+				borderColor: "purple"
+			});
 			break;
 		case 'ca':
 			style.push({
-			background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
-			"background-origin": "border-box",
-			"border-color": "#0f354c"});
+				background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#0f354c"
+			});
 			break;
 		case 're':
 			style.push({
-			background: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)",
-			"background-origin": "border-box",
-			"border-color": "white"});
+				background: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)",
+				backgroundOrigin: "border-box",
+				borderColor: "white"
+			});
 			break;
 		case 'fa':
 			style.push({
-			background: "gray",
-			"background-origin": "border-box",
-			"border-color": "white"});
+				background: "gray",
+				backgroundOrigin: "border-box",
+				borderColor: "white"
+			});
 			break;
 		case 'coa':
 			style.push({
-			background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)",
-			"background-origin": "border-box",
-			"border-color": "#260300",
-			"color": "#8c3129",});
+				background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#260300",
+				color: "#8c3129",
+			});
 			break;
 		case 'cop':
 			style.push({
-			background: "linear-gradient(120deg, #6b1919 0%, #000000 100%)",
-			"background-origin": "border-box",
-			"border-color": "#260300",
-			"color": "#8c3129",});
+				background: "linear-gradient(120deg, #6b1919 0%, #000000 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#260300",
+				color: "#8c3129",
+			});
 			break;
 	    case 'ra':
 			style.push({
-            background: "linear-gradient(120deg, #0e8a22 0%, #45ff17 100%)",
-            "background-origin": "border-box",
-            "border-color": "#260454",
-            "color": "#260454",});
+            	background: "linear-gradient(120deg, #0e8a22 0%, #45ff17 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#260454",
+            	color: "#260454",
+			});
 			break;
 		case 'sd':
 			style.push({
-            background: "linear-gradient(120deg, #782424 0%, #8c1111 100%)",
-            "background-origin": "border-box",
-            "border-color": "#3d1616",
-            "color": "#3d1616",});
+            	background: "linear-gradient(120deg, #782424 0%, #8c1111 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#3d1616",
+            	color: "#3d1616",
+			});
 			break;
 		case 'fu':
 			style.push({
-            background: "linear-gradient(45deg, #fcff04 0%, #befa32 100%)",
-            "background-origin": "border-box",
-            "border-color": "#5e8503",});
+            	background: "linear-gradient(45deg, #fcff04 0%, #befa32 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#5e8503",
+			});
 			break;
 		case 'cs':
 			style.push({
-            background: "linear-gradient(120deg, #4f4b45 0%, #2b2522 100%)",
-            "background-origin": "border-box",
-            "border-color": "#ababab",
-            "color": "#ababab",});
+            	background: "linear-gradient(120deg, #4f4b45 0%, #2b2522 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#ababab",
+            	color: "#ababab",
+			});
+			break;
+		case 'gem':
+			style.push({
+				borderColor: "#780af3",
+            	backgroundImage: "linear-gradient(0deg, #ab66f9, #c18dfa)",
+            	backgroundOrigin: "border-box"
+			});
 			break;
 		//case 'bb':
 		//	style.push({
@@ -294,48 +339,48 @@ function constructCbButtonStyle(layer) {
 		case 'ev0':
 			style.push({
 			background: "linear-gradient(90deg, #e7c97c, #fad25a)",
-			"background-origin": "border-box",
-			"border-color": "#655421",
-			"color": "#655421"});
+			backgroundOrigin: "border-box",
+			borderColor: "#655421",
+			color: "#655421"});
 			break;
 		case 'ev1':
 			style.push({
 			background: "linear-gradient(140deg, #b00000 0%, #bda500 50%, #b00000 100%)",
-			"background-origin": "border-box",
-			"border-color": "#750000"});
+			backgroundOrigin: "border-box",
+			borderColor: "#750000"});
 			break;
 		case 'ev2':
 			style.push({
 			background: "#106ccc",
-			"background-origin": "border-box",
-			"border-color": "black"});
+			backgroundOrigin: "border-box",
+			borderColor: "black"});
 			break;
 		case 'ev4':
 			style.push({
 			background: "linear-gradient(-90deg, #f38004, #fc3404)",
-			"background-origin": "border-box",
-			"border-color": "#DC2D03"});
+			backgroundOrigin: "border-box",
+			borderColor: "#DC2D03"});
 			break;
 		case 'ev8':
 			style.push({
 			background: "linear-gradient(90deg, #d487fd, #4b79ff)",
-			"background-origin": "border-box",
-			"border-color": "#1500bf",
-			"color": "#1500bf"});
+			backgroundOrigin: "border-box",
+			borderColor: "#1500bf",
+			color: "#1500bf"});
 			break;
 		case 'ev9':
 			style.push({
 			background: "linear-gradient(90deg, #e75753, #e1843c, #fff463, #90f32d, #5cd4a6)",
-			"background-origin": "border-box",
-			"border-color": "black",
-			"color": "black"});
+			backgroundOrigin: "border-box",
+			borderColor: "black",
+			color: "black"});
 			break;
 		case 'ev10':
 			style.push({
 			background: "linear-gradient(120deg, #121212, #1c1c1c)",
-			"background-origin": "border-box",
-			"border-color": "black",
-			"color": "black"});
+			backgroundOrigin: "border-box",
+			borderColor: "black",
+			color: "black"});
 			break;
 		case 'ep0':
 			style.push({"background-color": "#9176af"});

@@ -58,7 +58,7 @@
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 23))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("p", 17))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(player.cb.commonPetEffects[8][0])
+        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
         if (player.po.rocketFuel && player.rf.rocketFuel.gte(1))
@@ -75,7 +75,7 @@
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 23))
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("p", 17))
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(player.cb.commonPetEffects[8][0])
+        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
         if (player.po.hex && player.h.hexPoints[0].gte(1))
@@ -92,7 +92,7 @@
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 23))
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("p", 17))
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(player.cb.commonPetEffects[8][0])
+        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
         player.om.diceMasteryPointsEffect = player.om.diceMasteryPoints.pow(0.1).div(8).add(1)
@@ -144,16 +144,16 @@
             unlocked() { return true },
             canAfford() { return player.om.diceMasteryPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Mastery Multiplier"
+                return "Infinity Mastery Multiplier"
             },
             display() {
                 return "which are multiplying infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Mastery Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10000)
                 let growth = 1.2
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(buyonecost)
@@ -168,7 +168,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(45deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"}
         },
         12: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000) },
@@ -176,16 +176,16 @@
             unlocked() { return true },
             canAfford() { return player.om.rocketFuelMasteryPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Broken Infinity Mastery Multiplier"
+                return "Broken Infinity Mastery Multiplier"
             },
             display() {
                 return "which are multiplying broken infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel Mastery Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10000)
                 let growth = 1.25
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(buyonecost)
@@ -200,7 +200,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(45deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"}
         },
         13: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(10000) },
@@ -208,16 +208,16 @@
             unlocked() { return true },
             canAfford() { return player.om.hexMasteryPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Alternate Infinity Mastery Multiplier"
+                return "Alternate Infinity Mastery Multiplier"
             },
             display() {
                 return "which are multiplying alternate infinity types by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Mastery Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10000)
                 let growth = 1.4
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(buyonecost)
@@ -232,7 +232,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(45deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"}
         },
         14: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(50000) },
@@ -240,16 +240,16 @@
             unlocked() { return true },
             canAfford() { return player.om.diceMasteryPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Mastery Multiplier"
+                return "Dimension Power Mastery Multiplier"
             },
             display() {
                 return "which are multiplying dimension power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Mastery Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(50000)
                 let growth = 1.3
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.sub(buyonecost)
@@ -264,7 +264,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(45deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"}
         },
         15: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(50000) },
@@ -272,16 +272,16 @@
             unlocked() { return true },
             canAfford() { return player.om.rocketFuelMasteryPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Antimatter Mastery Multiplier"
+                return "Antimatter Mastery Multiplier"
             },
             display() {
                 return "which are multiplying antimatter by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel Mastery Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(50000)
                 let growth = 1.35
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.sub(buyonecost)
@@ -296,7 +296,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(45deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"}
         },
         16: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(50000) },
@@ -304,16 +304,16 @@
             unlocked() { return true },
             canAfford() { return player.om.hexMasteryPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mastery Mastery Multiplier"
+                return "Mastery Mastery Multiplier"
             },
             display() {
                 return "which are multiplying mastery points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Mastery Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(50000)
                 let growth = 1.5
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.sub(buyonecost)
@@ -328,7 +328,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(45deg, #8a00a9, #0061ff)", backgroundOrigin: "border-box", color: "white"}
         },
     },
     milestones: {
@@ -341,7 +341,7 @@
     microtabs: {
         stuff: {
             "Mastery": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -363,7 +363,7 @@
 
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("bi", 15) },
                 content:
                 [
@@ -372,10 +372,8 @@
                         ["raw-html", function () { return "You have <h3>" + format(player.om.rocketFuelMasteryPoints) + "</h3> rocket fuel mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-                        ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
+                        ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                        ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
                 ]
 
             },
@@ -383,8 +381,8 @@
     },
 
     tabFormat: [
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 14)) || hasMilestone("s", 19)}
 })

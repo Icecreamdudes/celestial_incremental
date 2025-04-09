@@ -57,7 +57,7 @@
         let onepersec = new Decimal(1)
 
         player.oi.oilToGet = player.an.anonymity.div(1e25).pow(0.2)
-        player.oi.oilToGet = player.oi.oilToGet.mul(player.cb.evolvedEffects[8][1])
+        player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 1206)[1])
         if (player.pol.pollinatorsIndex == 8) player.oi.oilToGet = player.oi.oilToGet.mul(player.pol.pollinatorsEffect[17])
         if (hasMilestone("fa", 17)) player.oi.oilToGet = player.oi.oilToGet.mul(player.fa.milestoneEffect[6])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("ra", 15))
@@ -116,7 +116,7 @@
         player.oi.linkingPowerEffect[5] = player.oi.linkingPower[5].pow(0.25).add(1)
 
         player.oi.protoMemoriesPerSecond = player.oi.linkingPower[0].mul(player.oi.linkingPower[1].mul(player.oi.linkingPower[2].mul(player.oi.linkingPower[3].mul(player.oi.linkingPower[4].mul(player.oi.linkingPower[5]))))).plus(1).pow(0.55).div(1e7)
-        player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.cb.epicPetEffects[2][2])
+        player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(levelableEffect("pet", 403)[2])
         player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.fu.funEffect3)
 
         player.oi.protoMemorySecondsToGet = player.cp.replicantiPoints.plus(1).log10().mul(8).pow(0.5)
@@ -174,11 +174,12 @@
         player.rg.buyables[17] = new Decimal(0)
         player.rg.buyables[18] = new Decimal(0)
 
-
-        for (let i = 0; i < player.an.upgrades.length; i++) {
-            if (+player.an.upgrades[i] < 24) {
-                player.an.upgrades.splice(i, 1);
-                i--;
+        if (!hasUpgrade("s", 15)) {
+            for (let i = 0; i < player.an.upgrades.length; i++) {
+                if (+player.an.upgrades[i] < 24) {
+                    player.an.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
 
@@ -229,7 +230,7 @@
                 player.oi.oil = player.oi.oil.add(player.oi.oilToGet)
                 player.oi.oilPause = new Decimal(4)
             },
-            style: { width: '600px', "min-height": '100px' },
+            style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
             title() { return "<h3>Previous" },
@@ -264,7 +265,7 @@
                 player.oi.linkingPower[4] = new Decimal(0)
                 player.oi.linkingPower[5] = new Decimal(0)
             },
-            style: { width: '600px', "min-height": '100px' },
+            style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
     },
     bars: {
@@ -293,16 +294,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Point Linker"
+                return "Point Linker"
             },
             display() {
                 return "which are multiplying point linking power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -317,7 +318,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         12: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -325,16 +326,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Factor Power Linker"
+                return "Factor Power Linker"
             },
             display() {
                 return "which are multiplying factor power linking power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -349,7 +350,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         13: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -357,16 +358,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Prestige Point Linker"
+                return "Prestige Point Linker"
             },
             display() {
                 return "which are multiplying prestige point linking power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -381,7 +382,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         14: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -389,16 +390,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tree Linker"
+                return "Tree Linker"
             },
             display() {
                 return "which are multiplying tree linking power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -413,7 +414,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         15: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -421,16 +422,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass Linker"
+                return "Grass Linker"
             },
             display() {
                 return "which are multiplying grass linking power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -445,7 +446,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         16: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -453,16 +454,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.oil.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grasshopper Linker"
+                return "Grasshopper Linker"
             },
             display() {
                 return "which are multiplying grasshopper linking power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.oil = player.oi.oil.sub(buyonecost)
@@ -477,7 +478,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         21: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(20) },
@@ -485,16 +486,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.protoMemories.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Steel Rememberance"
+                return "Steel Rememberance"
             },
             display() {
                 return "which are multiplying steel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(20)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -509,7 +510,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         22: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(35) },
@@ -517,16 +518,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.protoMemories.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Crystal Rememberance"
+                return "Crystal Rememberance"
             },
             display() {
                 return "which are multiplying crystal gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(35)
                 let growth = 1.25
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -541,7 +542,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         23: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -549,16 +550,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.protoMemories.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Cube Rememberance"
+                return "Time Cube Rememberance"
             },
             display() {
                 return "which are multiplying time cube gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(50)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -573,7 +574,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         24: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
@@ -581,16 +582,16 @@
             unlocked() { return true },
             canAfford() { return player.oi.protoMemories.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rage Power Rememberance"
+                return "Rage Power Rememberance"
             },
             display() {
                 return "which are multiplying rage power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(80)
                 let growth = 1.35
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
@@ -605,7 +606,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
     },
     milestones: {
@@ -618,7 +619,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -627,12 +628,11 @@
                     ["raw-html", function () { return "Your oil boosts repli-trees and extends repli-tree softcap by <h3>x" + format(player.oi.oilEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.oi.oilToGet) + "</h3> oil on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],,
                     ["blank", "25px"],
-        ["row", [["clickable", 11]]],
-    ]
-
+                    ["row", [["clickable", 11]]],
+                ]
             },
             "Linkers": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("cp", 18) },
                 content:
                 [
@@ -642,15 +642,12 @@
                     ["raw-html", function () { return player.oi.linkerTexts.join("<br>") }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "(Each linking power is based on it's respective currency)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 3], ["clickable", 4]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-                    ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
-    ]
-
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
+                ]
             },
             "PROTO MEMORIES": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("cp", 18) },
                 content:
                 [
@@ -670,13 +667,11 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 14]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 3], ["clickable", 4]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
+                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
                 ]
             },
             "REMEMBERANCE CORES": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("cp", 18) },
                 content:
                 [

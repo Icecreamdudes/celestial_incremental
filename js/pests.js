@@ -75,7 +75,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -93,7 +93,6 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h2>Grasshops remove 10% of your pests." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ]
-
             },
         },
     },

@@ -29,7 +29,7 @@ addLayer("otherfeat", {
             ["blank", "25px"],
             ["row", [["clickable", 2], ["clickable", 3]]],
             ["blank", "25px"],
-            ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
+            ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]]],
     ]]]],
     layerShown() { return false }
 })
@@ -71,6 +71,7 @@ addLayer("halter", {
             }],
             ["blank", "25px"],
             ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
+            ["blank", "25px"],
             ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
             ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)" }],
             ["blank", "25px"],
@@ -266,7 +267,7 @@ addLayer("u3u", {
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],]],
-            ["row", [["upgrade", 18], ["upgrade", 19]]],
+            ["row", [["upgrade", 18], ["upgrade", 19],["upgrade", 20]]],
         ]]]],
     layerShown() { return false }
 })
@@ -400,9 +401,7 @@ addLayer("u3b", {
             ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
-            ["row", [["clickable", 2],["clickable", 3],]],
-            ["blank", "25px"],
-        ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
+        ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
         ]]]],
     layerShown() { return false }
 })
@@ -543,6 +542,35 @@ addLayer("cmh", {
     ["infobox", 1],
     ["infobox", 2],
     ["infobox", 3],
+        ]]]],
+    layerShown() { return false }
+})
+addLayer("odt", {
+    name: "odt", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "odt", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }
+    },
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#eaf6f7",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["od", [
+            ["blank", "25px"],
+            ["tree", function () { return player.universe == 1337 ? tree : null } ],
         ]]]],
     layerShown() { return false }
 })

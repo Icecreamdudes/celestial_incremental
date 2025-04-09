@@ -121,7 +121,7 @@ addLayer("los", {
     microtabs: {
         stuff: {
             "Story": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [

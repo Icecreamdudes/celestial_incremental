@@ -118,7 +118,7 @@
                     layers.bigc.crunch()
                 }
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },
     bars: {
@@ -348,16 +348,16 @@
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>IP Doubler"
+                return "IP Doubler"
             },
             display() {
                 return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 100
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -372,7 +372,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
         12: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
@@ -380,16 +380,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Negative Infinity Booster"
+                return "Negative Infinity Booster"
             },
             display() {
                 return "which are multiplying negative infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 1.5
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -404,7 +404,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
         13: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500) },
@@ -412,16 +412,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Booster"
+                return "Dimension Power Booster"
             },
             display() {
                 return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2500)
                 let growth = 1.75
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -436,7 +436,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
         14: {
             cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(4000) },
@@ -444,16 +444,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Booster"
+                return "Dimension Booster"
             },
             display() {
                 return "which are multiplying all antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(4000)
                 let growth = 2
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -468,7 +468,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {
@@ -789,7 +789,7 @@
     microtabs: {
         stuff: {
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -802,7 +802,7 @@
 
             },
             "Milestones": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -830,7 +830,7 @@
 
             },
             "Challenges": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("ip", 16) },
                 content:
                 [
@@ -844,19 +844,17 @@
 
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasChallenge("ip", 14) },
                 content:
                 [
                         ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                        ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
 
             },
             "Reset": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.in.breakInfinity },
                 content:
                 [

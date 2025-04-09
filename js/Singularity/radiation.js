@@ -55,7 +55,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 13))
         if (hasUpgrade("ev8", 19)) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(upgradeEffect("ev8", 19))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("fu", 52))
-        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cb.evolvedEffects[10][0])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 1205)[0])
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
 
@@ -132,7 +132,7 @@
             onClick() {
                 player.ra.coreIndex = 0
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         102: {
             title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
@@ -141,7 +141,7 @@
             onClick() {
                 player.ra.coreIndex = 1
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         103: {
             title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
@@ -150,7 +150,7 @@
             onClick() {
                 player.ra.coreIndex = 2
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         104: {
             title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
@@ -159,7 +159,7 @@
             onClick() {
                 player.ra.coreIndex = 3
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         105: {
             title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
@@ -168,7 +168,7 @@
             onClick() {
                 player.ra.coreIndex = 4
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         106: {
             title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
@@ -177,7 +177,7 @@
             onClick() {
                 player.ra.coreIndex = 5
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         107: {
             title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
@@ -186,7 +186,7 @@
             onClick() {
                 player.ra.coreIndex = 6
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         108: {
             title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
@@ -195,7 +195,7 @@
             onClick() {
                 player.ra.coreIndex = 7
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         109: {
             title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
@@ -204,7 +204,7 @@
             onClick() {
                 player.ra.coreIndex = 8
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         111: {
             title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
@@ -213,7 +213,7 @@
             onClick() {
                 player.ra.coreIndex = 9
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
     },
     bars: {
@@ -232,14 +232,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/>Softcap Extender"
+                return "Softcap Extender"
             },
             display() {
                 return 'which are extending the radiation softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
-            buy() {
-                if (player.ra.radiationMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -253,7 +253,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         12: {
             costBase() { return new Decimal(10000) },
@@ -266,14 +266,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/>Softcap Weakener"
+                return "Softcap Weakener"
             },
             display() {
                 return 'which are weakening the radiation softcap by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
-            buy() {
-                if (player.ra.radiationMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -287,7 +287,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         13: {
             costBase() { return new Decimal(10000) },
@@ -300,14 +300,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>Radiation Doubler"
+                return "Radiation Doubler"
             },
             display() {
                 return 'which are boosting radiation gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
-            buy() {
-                if (player.ra.radiationMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -321,7 +321,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         14: {
             costBase() { return new Decimal(1000) },
@@ -334,14 +334,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Crystal Quadrupler"
+                return "Crystal Quadrupler"
             },
             display() {
                 return 'which are boosting crystal gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
-            buy() {
-                if (player.ra.radiationMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -355,7 +355,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         15: {
             costBase() { return new Decimal(4000) },
@@ -368,14 +368,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/>Oil Doubler"
+                return "Oil Doubler"
             },
             display() {
                 return 'which are boosting oil gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
-            buy() {
-                if (player.ra.radiationMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -389,7 +389,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         16: {
             costBase() { return new Decimal(12000) },
@@ -402,14 +402,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/375<br/>NIP Tripler"
+                return "NIP Tripler"
             },
             display() {
                 return 'which are boosting NIP gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Radiation'
             },
-            buy() {
-                if (player.ra.radiationMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -423,7 +423,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
     },
     milestones: {
@@ -436,47 +436,39 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                                ["blank", "25px"],
-        ["raw-html", function () { return "Total Radiation Output: " + format(player.ra.radiationOutput) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-                                ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Radiation Value: " + formatWhole(player.ra.equippedRadiationValue) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Radiation Output: " + format(player.ra.equippedRadiationOutput) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                                ["blank", "25px"],
-                                ["raw-html", function () { return "<div id=radiationCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                                ["blank", "25px"],
-                                ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
-                                ["raw-html", function () { return player.coa.strengths[player.coa.coreStrengths[player.ra.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.ra.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Radiation Value: " + formatWhole(player.ra.unequippedRadiationValue[player.ra.coreIndex]) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Radiation Output: " + format(player.ra.unequippedRadiationOutput[player.ra.coreIndex]) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                                ["blank", "25px"],
-                                ["raw-html", function () { return "Radiation value is determined based on core strength and a random value." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Radiation output is determined based on radiation value and another random value." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Stored cores also produce radiation, but at a slower rate." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-
-    ]
-
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Total Radiation Output: " + format(player.ra.radiationOutput) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Radiation Value: " + formatWhole(player.ra.equippedRadiationValue) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Radiation Output: " + format(player.ra.equippedRadiationOutput) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "<div id=radiationCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
+                    ["raw-html", function () { return player.coa.strengths[player.coa.coreStrengths[player.ra.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.ra.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Radiation Value: " + formatWhole(player.ra.unequippedRadiationValue[player.ra.coreIndex]) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Radiation Output: " + format(player.ra.unequippedRadiationOutput[player.ra.coreIndex]) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Radiation value is determined based on core strength and a random value." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Radiation output is determined based on radiation value and another random value." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Stored cores also produce radiation, but at a slower rate." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                ]
             },
             "Softcap and Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                                ["blank", "25px"],
-                                ["raw-html", function () { return "Softcap starts at " + format(player.ra.radiationSoftcapStart) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                                ["raw-html", function () { return "Softcap divides radiation gain by /" + format(player.ra.radiationSoftcapEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                                ["blank", "25px"],
-                                ["row", [["clickable", 2], ["clickable", 3],]],
-                                ["blank", "25px"],
-                                ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-                                ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
-
-    ]
-
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Softcap starts at " + format(player.ra.radiationSoftcapStart) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Softcap divides radiation gain by /" + format(player.ra.radiationSoftcapEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
+                ]
             },
         },
     }, 

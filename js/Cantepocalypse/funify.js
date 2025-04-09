@@ -81,7 +81,7 @@
         player.fu.funToGet = player.oi.oil.div(1e10).pow(0.4)
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 15))
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 38))
-        player.fu.funToGet = player.fu.funToGet.mul(player.cb.evolvedEffects[10][1])
+        player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 1205)[1])
 
         player.fu.fun = player.fu.fun.add(player.fu.funToGet.mul(buyableEffect("fu", 74)))
 
@@ -182,7 +182,7 @@
         player.rt.buyables[17] = new Decimal(0)
         player.rt.buyables[18] = new Decimal(0)
 
-        if (!hasUpgrade("s", 14) && !inChallenge("fu", 11))
+        if (!hasUpgrade("s", 15) && !inChallenge("fu", 11))
         {
             for (let i = 0; i < player.an.upgrades.length; i++) {
                 if (+player.an.upgrades[i] < 24) {
@@ -297,7 +297,7 @@
                 player.fu.funifyPause = new Decimal(4)
                 player.fu.fun = player.fu.fun.add(player.fu.funToGet)
             },
-            style: { width: '600px', "min-height": '100px' },
+            style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
 
         },
         12: {
@@ -307,7 +307,7 @@
             onClick() {
                 player.fu.jocusCelestialActivate = true
             },
-            style: { width: '300px', "min-height": '100px' },
+            style: { width: '300px', "min-height": '100px', borderRadius: '15px' },
 
         },
         23: {
@@ -317,7 +317,7 @@
             onClick() {
                 player.fu.emotionIndex = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '100px', "background-color": "#fff654" },
+            style: { width: '100px', "min-height": '100px', "background-color": "#fff654", borderRadius: "10px" },
             branches: [24],
 
         },
@@ -328,7 +328,7 @@
             onClick() {
                 player.fu.emotionIndex = new Decimal(1)
             },
-            style: { width: '100px', "min-height": '100px', "background-color": "#322bff"  },
+            style: { width: '100px', "min-height": '100px', "background-color": "#322bff", borderRadius: "10px"  },
             branches: [25],
 
         },
@@ -339,7 +339,7 @@
             onClick() {
                 player.fu.emotionIndex = new Decimal(2)
             },
-            style: { width: '100px', "min-height": '100px', "background-color": "#ff2b3d" },
+            style: { width: '100px', "min-height": '100px', "background-color": "#ff2b3d", borderRadius: "10px" },
             branches() {
                 return inChallenge("fu", 11) ? [26] : [23]
             } 
@@ -352,7 +352,7 @@
             onClick() {
                 player.fu.emotionIndex = new Decimal(3)
             },
-            style: { width: '100px', "min-height": '100px', "background-color": "grey" },
+            style: { width: '100px', "min-height": '100px', "background-color": "grey", borderRadius: "10px" },
             branches: [23],
 
         },
@@ -366,7 +366,14 @@
                 player.fu.anger = new Decimal(0)
                 player.fu.fear = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '50px', }
+            style() {
+                let lookies = {width: '100px', minHeight: '50px', borderRadius: '10px 0px 0px 10px'}
+                if (player.fu.emotionIndex.eq(0)) lookies.backgroundColor = "#fcff04", lookies.color = "black"
+                if (player.fu.emotionIndex.eq(1)) lookies.backgroundColor = "blue", lookies.color = "white"
+                if (player.fu.emotionIndex.eq(2)) lookies.backgroundColor = "red", lookies.color = "white"
+                if (player.fu.emotionIndex.eq(3)) lookies.backgroundColor = "grey", lookies.color = "white"
+                return lookies
+            } 
         },
         5: {
             title() { return "Reset This Emotion" },
@@ -378,7 +385,14 @@
                 if (player.fu.emotionIndex.eq(2)) player.fu.anger = new Decimal(0)
                 if (player.fu.emotionIndex.eq(3)) player.fu.fear = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '50px', }
+            style() {
+                let lookies = {width: '100px', minHeight: '50px'}
+                if (player.fu.emotionIndex.eq(0)) lookies.backgroundColor = "#fcff04", lookies.color = "black", lookies.borderRadius = "0px"
+                if (player.fu.emotionIndex.eq(1)) lookies.backgroundColor = "blue", lookies.color = "white", lookies.borderRadius = "0px"
+                if (player.fu.emotionIndex.eq(2)) lookies.backgroundColor = "red", lookies.color = "white", lookies.borderRadius = "0px"
+                if (player.fu.emotionIndex.eq(3)) lookies.backgroundColor = "grey", lookies.color = "white", lookies.borderRadius = "0px 10px 10px 0px"
+                return lookies
+            }
         },
         14: {
             title() { return "Unpause Production" },
@@ -387,7 +401,7 @@
             onClick() {
                 player.fu.happinessProduce = true
             },
-            style: { width: '150px', "min-height": '50px', }
+            style: { width: '150px', "min-height": '50px', borderRadius: '0px'}
         },
         15: {
             title() { return "Pause Production" },
@@ -396,7 +410,7 @@
             onClick() {
                 player.fu.happinessProduce = false
             },
-            style: { width: '150px', "min-height": '50px', }
+            style: { width: '150px', "min-height": '50px', borderRadius: '0px 10px 10px 0px'}
         },
         16: {
             title() { return "Unpause Production" },
@@ -405,7 +419,7 @@
             onClick() {
                 player.fu.sadnessProduce = true
             },
-            style: { width: '150px', "min-height": '50px', }
+            style: { width: '150px', "min-height": '50px', borderRadius: '0px', backgroundColor: 'blue', color: 'white'}
         },
         17: {
             title() { return "Pause Production" },
@@ -414,7 +428,7 @@
             onClick() {
                 player.fu.sadnessProduce = false
             },
-            style: { width: '150px', "min-height": '50px', }
+            style: { width: '150px', "min-height": '50px', borderRadius: '0px 10px 10px 0px', backgroundColor: 'blue', color: 'white'}
         },
         18: {
             title() { return "Unpause Production" },
@@ -423,7 +437,7 @@
             onClick() {
                 player.fu.angerProduce = true
             },
-            style: { width: '150px', "min-height": '50px', }
+            style: { width: '150px', "min-height": '50px', borderRadius: '0px', backgroundColor: 'red', color: 'white'}
         },
         19: {
             title() { return "Pause Production" },
@@ -432,7 +446,7 @@
             onClick() {
                 player.fu.angerProduce = false
             },
-            style: { width: '150px', "min-height": '50px', }
+            style: { width: '150px', "min-height": '50px', borderRadius: '0px 10px 10px 0px', backgroundColor: 'red', color: 'white'}
         },
         31: {
             title() { return "<h3>Reset all alt-uni 1 content for jocus essence<br>(Based on replicanti points)" },
@@ -454,7 +468,7 @@
                 }
                 player.fu.jocusEssence = player.fu.jocusEssence.add(player.fu.jocusEssenceToGet)
             },
-            style: { width: '400px', "min-height": '75px' },
+            style: { width: '400px', "min-height": '75px', borderRadius: '15px' },
 
         },
     },
@@ -566,16 +580,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fun SFRGT Generation"
+                return "Fun SFRGT Generation"
             },
             display() {
                 return "which are producing +" + format(tmp[this.layer].buyables[this.id].effect) + " SFRGT per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.08
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -590,7 +604,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000)},
@@ -598,16 +612,16 @@
             unlocked() { return true },
             canAfford() { return player.s.singularityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Singularity SFRGT Generation"
+                return "Singularity SFRGT Generation"
             },
             display() {
                 return "which are boosting SFRGT gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100000)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.s.singularityPoints = player.s.singularityPoints.sub(buyonecost)
@@ -622,7 +636,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         13: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e50)},
@@ -630,16 +644,16 @@
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity SFRGT Generation"
+                return "Infinity SFRGT Generation"
             },
             display() {
                 return "which are boosting SFRGT gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e50)
                 let growth = 10
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -654,7 +668,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         14: {
             cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e70)},
@@ -662,16 +676,16 @@
             unlocked() { return true },
             canAfford() { return player.gh.steel.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Steel SFRGT Generation"
+                return "Steel SFRGT Generation"
             },
             display() {
                 return "which are boosting SFRGT gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e70)
                 let growth = 1000
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gh.steel = player.gh.steel.sub(buyonecost)
@@ -686,7 +700,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         15: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100)},
@@ -694,16 +708,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.sfrgt.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>SFRGT Fun Generation"
+                return "SFRGT Fun Generation"
             },
             display() {
                 return "which are boosting fun gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SFRGT."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
@@ -718,7 +732,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         16: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(200)},
@@ -726,16 +740,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.sfrgt.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>SFRGT SP Generation"
+                return "SFRGT SP Generation"
             },
             display() {
                 return "which are boosting SP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SFRGT."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(200)
                 let growth = 1.15
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
@@ -750,7 +764,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         17: {
             cost(x) { return new Decimal(1.05).pow(x || getBuyableAmount(this.layer, this.id)).mul(300)},
@@ -758,16 +772,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.sfrgt.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>SFRGT IP Generation"
+                return "SFRGT IP Generation"
             },
             display() {
                 return "which are boosting IP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SFRGT."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(300)
                 let growth = 1.05
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
@@ -782,7 +796,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         18: {
             cost(x) { return new Decimal(1.04).pow(x || getBuyableAmount(this.layer, this.id)).mul(400)},
@@ -790,16 +804,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.sfrgt.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>SFRGT Steel Generation"
+                return "SFRGT Steel Generation"
             },
             display() {
                 return "which are boosting steel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SFRGT."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(400)
                 let growth = 1.04
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
@@ -814,7 +828,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
 
         21: {
@@ -823,16 +837,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fun Ranks"
+                return "Fun Ranks"
             },
             display() {
                 return "which are boosting rank, tier, and tetr point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(3)
                 let growth = 1.06
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -847,7 +861,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         22: {
             cost(x) { return new Decimal(1.08).pow(x || getBuyableAmount(this.layer, this.id)).mul(5)},
@@ -855,16 +869,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fun Softcap"
+                return "Fun Softcap"
             },
             display() {
                 return "which are extending and weakening both replicanti point softcaps by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.08
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -879,7 +893,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         23: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(7)},
@@ -887,16 +901,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fun Repli-Grass"
+                return "Fun Repli-Grass"
             },
             display() {
                 return "which are boosting repli-grass mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(7)
                 let growth = 1.15
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -911,7 +925,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         24: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(12)},
@@ -919,16 +933,16 @@
             unlocked() { return true },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fun Grass-Skip"
+                return "Fun Grass-Skip"
             },
             display() {
                 return "which are adding " + formatWhole(tmp[this.layer].buyables[this.id].effect) + " additional grass-skips.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(12)
                 let growth = 1.4
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -943,7 +957,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         
 
@@ -954,16 +968,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Happiness Generator"
+                return "Happiness Generator"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect) + " happiness per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100000)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -978,7 +992,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         32: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -986,16 +1000,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Factor Power Exponentiator"
+                return "Factor Power Exponentiator"
             },
             display() {
                 return "which are raising factor power gain to the ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.5
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1010,7 +1024,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         33: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(20)},
@@ -1018,16 +1032,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Prestige Exponentiator"
+                return "Prestige Exponentiator"
             },
             display() {
                 return "which are raising prestige point gain to the ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(20)
                 let growth = 1.4
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1042,7 +1056,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         34: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(50)},
@@ -1050,16 +1064,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grasshop Exponentiator"
+                return "Grasshop Exponentiator"
             },
             display() {
                 return "which are raising grasshopper gain to the ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(50)
                 let growth = 1.6
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1074,7 +1088,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         35: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -1082,16 +1096,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Sadness Boost"
+                return "Sadness Boost"
             },
             display() {
                 return "which are boosting sadness gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.25
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1106,7 +1120,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         36: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
@@ -1114,16 +1128,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Replicanti Pointer"
+                return "Replicanti Pointer"
             },
             display() {
                 return "which are multiplying replicanti point mult post softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(30)
                 let growth = 1.45
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1138,7 +1152,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         37: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(70)},
@@ -1146,16 +1160,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Perk Pointer"
+                return "Perk Pointer"
             },
             display() {
                 return "which are multiplying perk point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(70)
                 let growth = 1.15
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1170,7 +1184,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
         38: {
             cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
@@ -1178,16 +1192,16 @@
             unlocked() { return player.fu.emotionIndex.eq(0) },
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Funner"
+                return "Funner"
             },
             display() {
                 return "which are multiplying fun gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Happiness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 1.8
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.happiness = player.fu.happiness.sub(buyonecost)
@@ -1202,7 +1216,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "#8B8000" }
+            style: { width: '275px', height: '125px', }
         },
 
         //sadness
@@ -1212,16 +1226,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Sadness Generator"
+                return "Sadness Generator"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect) + " sadness per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100000)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -1236,7 +1250,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         42: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(5)},
@@ -1244,16 +1258,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Dimension Exponentiator"
+                return "Infinity Dimension Exponentiator"
             },
             display() {
                 return "which are raising infinity dimension production to the ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.75
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1268,7 +1282,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         43: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(15)},
@@ -1276,16 +1290,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mastery Multiplier"
+                return "Mastery Multiplier"
             },
             display() {
                 return "which boosting all mastery point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(15)
                 let growth = 1.3
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1300,7 +1314,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         44: {
             cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(35)},
@@ -1308,16 +1322,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Galactic Multiplier"
+                return "Galactic Multiplier"
             },
             display() {
                 return "which boosting galaxy dust gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(35)
                 let growth = 1.8
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1332,7 +1346,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         45: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -1340,16 +1354,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Anger Boost"
+                return "Anger Boost"
             },
             display() {
                 return "which are boosting anger gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.25
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1364,7 +1378,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         46: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
@@ -1372,16 +1386,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Anonymiter"
+                return "Anonymiter"
             },
             display() {
                 return "which are boosting anonymity gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(30)
                 let growth = 1.3
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1396,7 +1410,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         47: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(140)},
@@ -1404,16 +1418,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Treer"
+                return "Repli-Treer"
             },
             display() {
                 return "which are extending repli-tree softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(140)
                 let growth = 1.5
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1428,7 +1442,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
         48: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
@@ -1436,16 +1450,16 @@
             unlocked() { return player.fu.emotionIndex.eq(1) },
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>SFRGTer"
+                return "SFRGTer"
             },
             display() {
                 return "which are boosting SFRGT gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Sadness."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 1.5
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.sadness = player.fu.sadness.sub(buyonecost)
@@ -1460,7 +1474,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "blue" }
+            style: { width: '275px', height: '125px', backgroundColor: "blue", color: "white" }
         },
 
         //anger
@@ -1470,16 +1484,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Anger Generator"
+                return "Anger Generator"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect) + " anger per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100000)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -1494,7 +1508,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         52: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(15)},
@@ -1502,16 +1516,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Radiation Multiplier"
+                return "Radiation Multiplier"
             },
             display() {
                 return "which boosting radiation gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(15)
                 let growth = 1.4
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1526,7 +1540,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         53: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
@@ -1534,16 +1548,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Singularity Dimension Multiplier"
+                return "Singularity Dimension Multiplier"
             },
             display() {
                 return "which boosting singularity dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(30)
                 let growth = 1.45
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1558,7 +1572,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         54: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(60)},
@@ -1566,16 +1580,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Radiation Usage Divider"
+                return "Radiation Usage Divider"
             },
             display() {
                 return "which boosting singularity dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(60)
                 let growth = 1.35
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1590,7 +1604,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         55: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -1598,16 +1612,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Happiness Boost"
+                return "Happiness Boost"
             },
             display() {
                 return "which are boosting happiness gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.25
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1622,7 +1636,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         56: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40)},
@@ -1630,16 +1644,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Grassier"
+                return "Repli-Grassier"
             },
             display() {
                 return "which are extending repli-grass softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(40)
                 let growth = 1.4
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1654,7 +1668,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         57: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(180)},
@@ -1662,16 +1676,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass-Skippier"
+                return "Grass-Skippier"
             },
             display() {
                 return "which are boosting grass-skipper gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(180)
                 let growth = 1.2
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1686,7 +1700,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
         58: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
@@ -1694,16 +1708,16 @@
             unlocked() { return player.fu.emotionIndex.eq(2) },
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Mood Triangler"
+                return "Mood Triangler"
             },
             display() {
                 return "which are boosting all 3 emotions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 1.75
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.anger = player.fu.anger.sub(buyonecost)
@@ -1718,7 +1732,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "red" }
+            style: { width: '275px', height: '125px', backgroundColor: "red", color: "white" }
         },
 
         //fear
@@ -1728,16 +1742,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fear Generator"
+                return "Fear Generator"
             },
             display() {
                 return "which are generating " + format(tmp[this.layer].buyables[this.id].effect) + " fear per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100000000)
                 let growth = 1.2
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fun = player.fu.fun.sub(buyonecost)
@@ -1752,7 +1766,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         62: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -1760,16 +1774,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Happier"
+                return "Happier"
             },
             display() {
                 return "which are boosting happiness gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1784,7 +1798,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         63: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -1792,16 +1806,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Sadder"
+                return "Sadder"
             },
             display() {
                 return "which are boosting sadness gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1816,7 +1830,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         64: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -1824,16 +1838,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Angrier"
+                return "Angrier"
             },
             display() {
                 return "which are boosting anger gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1848,7 +1862,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         65: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(2.5)},
@@ -1856,16 +1870,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Extender #1"
+                return "Softcap Extender #1"
             },
             display() {
                 return "which are extending the first replicanti point by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2.5)
                 let growth = 1.15
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1880,7 +1894,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         66: {
             cost(x) { return new Decimal(1.08).pow(x || getBuyableAmount(this.layer, this.id)).mul(2.5)},
@@ -1888,16 +1902,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Weakener #1"
+                return "Softcap Weakener #1"
             },
             display() {
                 return "which are weakening the first replicanti point by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2.5)
                 let growth = 1.08
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1912,7 +1926,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         67: {
             cost(x) { return new Decimal(1.17).pow(x || getBuyableAmount(this.layer, this.id)).mul(6)},
@@ -1920,16 +1934,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Extender #2"
+                return "Softcap Extender #2"
             },
             display() {
                 return "which are extending the second replicanti point by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(6)
                 let growth = 1.17
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1944,7 +1958,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         68: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(6)},
@@ -1952,16 +1966,16 @@
             unlocked() { return player.fu.emotionIndex.eq(3) },
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Weakener #2"
+                return "Softcap Weakener #2"
             },
             display() {
                 return "which are weakening the second replicanti point by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fear."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(6)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.fear = player.fu.fear.sub(buyonecost)
@@ -1976,7 +1990,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
 
 
@@ -1987,16 +2001,16 @@
             unlocked() { return inChallenge("fu", 11) },
             canAfford() { return player.fu.jocusEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fear Multiplier"
+                return "Fear Multiplier"
             },
             display() {
                 return "which are multiplying fear gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Jocus Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2)
                 let growth = 1.1
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.jocusEssence = player.fu.jocusEssence.sub(buyonecost)
@@ -2011,7 +2025,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         72: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(4)},
@@ -2019,16 +2033,16 @@
             unlocked() { return inChallenge("fu", 11) },
             canAfford() { return player.fu.jocusEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Grass-Skip Req Divider"
+                return "Grass-Skip Req Divider"
             },
             display() {
                 return "which are dividing the grass-skip requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Jocus Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(4)
                 let growth = 1.15
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.jocusEssence = player.fu.jocusEssence.sub(buyonecost)
@@ -2043,7 +2057,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         73: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
@@ -2051,16 +2065,16 @@
             unlocked() { return inChallenge("fu", 11) },
             canAfford() { return player.fu.jocusEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Jocus Essence self-boost"
+                return "Jocus Essence self-boost"
             },
             display() {
                 return "which are multiplying jocus essence gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Jocus Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.5
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.jocusEssence = player.fu.jocusEssence.sub(buyonecost)
@@ -2075,7 +2089,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
         74: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(16)},
@@ -2083,16 +2097,16 @@
             unlocked() { return inChallenge("fu", 11) },
             canAfford() { return player.fu.jocusEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Fun Generation"
+                return "Fun Generation"
             },
             display() {
                 return "which are producing " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of fun gain per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Jocus Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(16)
                 let growth = 1.2
-                if (player.fu.fMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.fu.jocusEssence = player.fu.jocusEssence.sub(buyonecost)
@@ -2107,7 +2121,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', "color": "grey" }
+            style: { width: '275px', height: '125px', backgroundColor: "grey", color: "white" }
         },
     },
     milestones: {
@@ -2159,7 +2173,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -2170,9 +2184,7 @@
                         ["blank", "25px"],
                         ["row", [["clickable", 11]]],
                         ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
+                        ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
                         ["blank", "25px"],
                         ["row", [["clickable", 12]]],
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
@@ -2180,7 +2192,7 @@
 
             },
             "SFRGT": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.fu.jocusCelestialActivate },
                 content:
                 [
@@ -2193,16 +2205,14 @@
                         ["raw-html", function () { return "You have <h3>" + format(player.fu.sfrgt) + "</h3> SFRGT (Super fun real good time)."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You are gaining <h3>" + format(player.fu.sfrgtPerSecond) + "</h3> SFRGT per second."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                        ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                        ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                        ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
 
                 ]
 
             },
             "Mood Triangle" : {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("fu", 15) },
                 content:
                 [
@@ -2225,25 +2235,25 @@
                         ["raw-html", function () { return player.fu.emotionIndex.eq(3) ? "You are gaining <h3>" + format(player.fu.fearPerSecond) + "</h3> fear per second." : ""  }, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return player.fu.emotionIndex.eq(3) ? "which divides fear by /<h3>" + format(player.fu.fearEffect) + "</h3>." : ""  }, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                        ["row", [["color-clickable", 4], ["color-clickable", 5], ["clickable", 14], ["clickable", 15], ["color-clickable", 16], ["color-clickable", 17], ["color-clickable", 18], ["color-clickable", 19]]],
                         ["blank", "25px"],
                         ["row", [
-                        ["buyable", 31], ["buyable", 32], ["buyable", 33], ["buyable", 34], 
-                        ["buyable", 41], ["buyable", 42], ["buyable", 43], ["buyable", 44], 
-                        ["buyable", 51], ["buyable", 52], ["buyable", 53], ["buyable", 54],
-                        ["buyable", 61], ["buyable", 62], ["buyable", 63], ["buyable", 64],  
+                        ["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34], 
+                        ["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44], 
+                        ["ex-buyable", 51], ["ex-buyable", 52], ["ex-buyable", 53], ["ex-buyable", 54],
+                        ["ex-buyable", 61], ["ex-buyable", 62], ["ex-buyable", 63], ["ex-buyable", 64],  
                     ]],
                     ["row", [
-                        ["buyable", 35], ["buyable", 36], ["buyable", 37], ["buyable", 38],
-                        ["buyable", 45], ["buyable", 46], ["buyable", 47], ["buyable", 48], 
-                        ["buyable", 55], ["buyable", 56], ["buyable", 57], ["buyable", 58], 
-                        ["buyable", 65], ["buyable", 66], ["buyable", 67], ["buyable", 68],        
+                        ["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38],
+                        ["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 47], ["ex-buyable", 48], 
+                        ["ex-buyable", 55], ["ex-buyable", 56], ["ex-buyable", 57], ["ex-buyable", 58], 
+                        ["ex-buyable", 65], ["ex-buyable", 66], ["ex-buyable", 67], ["ex-buyable", 68],        
                     ]],
                 ]
 
             },
             "Fear": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("fu", 17) },
                 content:
                 [
@@ -2256,11 +2266,9 @@
                         ["row", [["clickable", 31]]],
                         ["blank", "25px"],  
                         ["raw-html", function () { return inChallenge("fu", 11) ? "The Jocus essence effect is only active in challenge." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "25px"],  
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],  
+                        ["blank", "25px"],
                         ["row", [
-                            ["buyable", 71], ["buyable", 72], ["buyable", 73], ["buyable", 74], 
+                            ["ex-buyable", 71], ["ex-buyable", 72], ["ex-buyable", 73], ["ex-buyable", 74], 
                         ]],
                 ]
             },

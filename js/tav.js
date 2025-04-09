@@ -156,7 +156,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("rm", 32))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.cb.uncommonPetEffects[7][1])
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(levelableEffect("pet", 208)[1])
         if (hasMilestone("fa", 15)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.fa.milestoneEffect[4])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.sd.singularityPowerEffect)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ra", 16))
@@ -183,7 +183,7 @@
             if (hasUpgrade('ip', 44)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ip", 44))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("om", 14))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("gh", 36))
-            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(player.cb.uncommonPetEffects[8][0])
+            player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(levelableEffect("pet", 209)[0])
             player.ta.dimensionPower[i] = player.ta.dimensionPower[i].add(player.ta.dimensionPowerPerSecond[i].mul(delta))
         }
 
@@ -302,7 +302,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', "min-height": '50px', borderRadius: '5px 0px 0px 5px' }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -311,7 +311,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', "min-height": '50px', borderRadius: '0px 5px 5px 0px' }
         },
         4: {
             title() { return "<h3>Lower Dimension" },
@@ -357,25 +357,25 @@
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         16: {
             title() { return "<h2>REVERSE BREAK INFINITY" },
             canClick() { return true },
-            unlocked() { return !player.ta.unlockedReverseBreak && player.cb.evolvedLevels[3].gte(1)},
+            unlocked() { return !player.ta.unlockedReverseBreak && getLevelableAmount("pet", 1101).gte(1)},
             onClick() {
                 player.ta.unlockedReverseBreak = true
             },
-            style: { width: '200px', "min-height": '80px' },
+            style: { width: '200px', "min-height": '80px', borderRadius: '15px' },
         },
         17: {
             title() { return "<h2>REVERSE FIX INFINITY" },
             canClick() { return true },
-            unlocked() { return player.ta.unlockedReverseBreak && player.cb.evolvedLevels[3].gte(1) },
+            unlocked() { return player.ta.unlockedReverseBreak && getLevelableAmount("pet", 1101).gte(1) },
             onClick() {
                 player.ta.unlockedReverseBreak = false
             },
-            style: { width: '200px', "min-height": '80px' },
+            style: { width: '200px', "min-height": '80px', borderRadius: '15px' },
         },
         18: {
             title() { return "<h3>Toggle<br>On" },
@@ -384,7 +384,7 @@
             onClick() {
                 player.ta.dimboostToggle = true
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: '15px' },
         },
         19: {
             title() { return "<h3>Toggle<br>Off" },
@@ -393,7 +393,7 @@
             onClick() {
                 player.ta.dimboostToggle = false
             },
-            style: { width: '100px', "min-height": '100px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: '15px' },
         },
         101: {
             title() { return "<h3>On" },
@@ -402,7 +402,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[0] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         102: {
             title() { return "<h3>Off" },
@@ -411,7 +411,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[0] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         103: {
             title() { return "<h3>On" },
@@ -420,7 +420,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[1] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         104: {
             title() { return "<h3>Off" },
@@ -429,7 +429,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[1] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         105: {
             title() { return "<h3>On" },
@@ -438,7 +438,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[2] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         106: {
             title() { return "<h3>Off" },
@@ -447,7 +447,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[2] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         107: {
             title() { return "<h3>On" },
@@ -456,7 +456,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[3] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         108: {
             title() { return "<h3>Off" },
@@ -465,7 +465,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[3] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         109: {
             title() { return "<h3>On" },
@@ -474,7 +474,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[4] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         110: {
             title() { return "<h3>Off" },
@@ -483,7 +483,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[4] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         111: {
             title() { return "<h3>On" },
@@ -492,7 +492,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[5] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         112: {
             title() { return "<h3>Off" },
@@ -501,7 +501,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[5] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         113: {
             title() { return "<h3>On" },
@@ -510,7 +510,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[6] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         114: {
             title() { return "<h3>Off" },
@@ -519,7 +519,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[6] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         115: {
             title() { return "<h3>On" },
@@ -528,7 +528,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[7] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         116: {
             title() { return "<h3>Off" },
@@ -537,7 +537,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[7] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         117: {
             title() { return "<h3>On" },
@@ -546,7 +546,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[8] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         118: {
             title() { return "<h3>Off" },
@@ -555,7 +555,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[8] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         119: {
             title() { return "<h3>On" },
@@ -564,7 +564,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[9] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         120: {
             title() { return "<h3>Off" },
@@ -573,7 +573,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[9] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
         121: {
             title() { return "<h3>On" },
@@ -582,7 +582,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[10] = true
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px' },
         },
         122: {
             title() { return "<h3>Off" },
@@ -591,7 +591,7 @@
             onClick() {
                 player.ta.dimensionAutobuyToggles[10] = false
             },
-            style: { width: '50px', "min-height": '50px' },
+            style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
     },
     bars: {
@@ -735,7 +735,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -763,7 +763,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         13: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -791,7 +791,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         14: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -819,7 +819,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         15: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -847,7 +847,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         16: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -875,7 +875,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         17: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -903,7 +903,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         18: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -931,7 +931,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '175px', height: '60px', }
+            style: { width: '175px', height: '60px', borderRadius: '10px'}
         },
         21: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
@@ -963,7 +963,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         22: {
             cost(x) { return new Decimal(1.16).pow(x || getBuyableAmount(this.layer, this.id)).mul(1.5) },
@@ -995,7 +995,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         23: {
             cost(x) { return new Decimal(1.17).pow(x || getBuyableAmount(this.layer, this.id)).mul(2) },
@@ -1027,7 +1027,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         24: {
             cost(x) { return new Decimal(1.18).pow(x || getBuyableAmount(this.layer, this.id)).mul(2.5) },
@@ -1059,7 +1059,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         25: {
             cost(x) { return new Decimal(1.19).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
@@ -1091,7 +1091,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         26: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(3.5) },
@@ -1123,7 +1123,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         27: {
             cost(x) { return new Decimal(1.21).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
@@ -1155,7 +1155,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         28: {
             cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(4.5) },
@@ -1187,7 +1187,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         29: {
             cost(x) { return new Decimal(1.175).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
@@ -1219,7 +1219,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         31: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
@@ -1251,7 +1251,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         32: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(12) },
@@ -1283,24 +1283,25 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '50px', }
+            style: { width: '275px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
+        // TAV BUYABLES
         33: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>IP Buyable"
+                return "IP Buyable"
             },
             display() {
                 return "which are multiplying infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.1
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -1315,7 +1316,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         34: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
@@ -1323,16 +1324,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>NIP Buyable"
+                return "NIP Buyable"
             },
             display() {
                 return "which are multiplying negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(3)
                 let growth = 1.15
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -1347,7 +1348,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         35: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -1355,16 +1356,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>DIMP Buyable"
+                return "DIMP Buyable"
             },
             display() {
                 return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(5)
                 let growth = 1.2
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -1379,7 +1380,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         36: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
@@ -1387,16 +1388,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>AD Buyable"
+                return "AD Buyable"
             },
             display() {
                 return "which are multiplying all antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(8)
                 let growth = 1.25
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -1411,7 +1412,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         37: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(14) },
@@ -1419,16 +1420,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>AM Buyable"
+                return "AM Buyable"
             },
             display() {
                 return "which are multiplying antimatter (ignoring softcap) by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(14)
                 let growth = 1.3
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
@@ -1443,7 +1444,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
 
 
@@ -1454,16 +1455,16 @@
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dice-Dice Synergy"
+                return "Dice-Dice Synergy"
             },
             display() {
                 return "which are multiplying dice point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e25)
                 let growth = 100
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -1478,7 +1479,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         42: {
             cost(x) { return new Decimal(33).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
@@ -1486,16 +1487,16 @@
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rocket Fuel-Dice Synergy"
+                return "Rocket Fuel-Dice Synergy"
             },
             display() {
                 return "which are multiplying dice point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e18)
                 let growth = 33
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.rf.rocketFuel = player.rf.rocketFuel.sub(buyonecost)
@@ -1510,7 +1511,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         43: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
@@ -1518,16 +1519,16 @@
             unlocked() { return true },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hex-Dice Synergy"
+                return "Hex-Dice Synergy"
             },
             display() {
                 return "which are multiplying dice point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e20)
                 let growth = 10
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
@@ -1542,7 +1543,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         44: {
             cost(x) { return new Decimal(40).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e25) },
@@ -1550,16 +1551,16 @@
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dice-Rocket Fuel Synergy"
+                return "Dice-Rocket Fuel Synergy"
             },
             display() {
                 return "which are multiplying rocket fuel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e25)
                 let growth = 40
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -1574,7 +1575,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         45: {
             cost(x) { return new Decimal(22).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
@@ -1582,16 +1583,16 @@
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rocket Fuel-Rocket Fuel Synergy"
+                return "Rocket Fuel-Rocket Fuel Synergy"
             },
             display() {
                 return "which are multiplying rocket fuel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e18)
                 let growth = 22
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.rf.rocketFuel = player.rf.rocketFuel.sub(buyonecost)
@@ -1606,7 +1607,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         46: {
             cost(x) { return new Decimal(8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
@@ -1614,16 +1615,16 @@
             unlocked() { return true },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hex-Rocket Fuel Synergy"
+                return "Hex-Rocket Fuel Synergy"
             },
             display() {
                 return "which are multiplying rocket fuel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e20)
                 let growth = 8
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
@@ -1638,7 +1639,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         47: {
             cost(x) { return new Decimal(66).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e25) },
@@ -1646,16 +1647,16 @@
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dice-Hex Synergy"
+                return "Dice-Hex Synergy"
             },
             display() {
                 return "which are multiplying all hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e25)
                 let growth = 66
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -1670,7 +1671,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         48: {
             cost(x) { return new Decimal(25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
@@ -1678,16 +1679,16 @@
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rocket Fuel-Hex Synergy"
+                return "Rocket Fuel-Hex Synergy"
             },
             display() {
                 return "which are multiplying all hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e18)
                 let growth = 25
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.rf.dicePoints = player.rf.rocketFuel.sub(buyonecost)
@@ -1702,7 +1703,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         49: {
             cost(x) { return new Decimal(9).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
@@ -1710,16 +1711,16 @@
             unlocked() { return true },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hex-Hex Synergy"
+                return "Hex-Hex Synergy"
             },
             display() {
                 return "which are multiplying all hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e20)
                 let growth = 9
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
@@ -1734,7 +1735,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         51: {
             cost(x) { return new Decimal(1000).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e30) },
@@ -1742,16 +1743,16 @@
             unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dice-NIP Synergy"
+                return "Dice-NIP Synergy"
             },
             display() {
                 return "which are multiplying NIP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e30)
                 let growth = 1000
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
@@ -1766,7 +1767,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         52: {
             cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
@@ -1774,16 +1775,16 @@
             unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rocket Fuel-NIP Synergy"
+                return "Rocket Fuel-NIP Synergy"
             },
             display() {
                 return "which are multiplying NIP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e20)
                 let growth = 100
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.rf.rocketFuel = player.rf.rocketFuel.sub(buyonecost)
@@ -1798,7 +1799,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         53: {
             cost(x) { return new Decimal(1e5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40) },
@@ -1806,16 +1807,16 @@
             unlocked() { return hasUpgrade("ta", 19) },
             canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Hex-NIP Synergy"
+                return "Hex-NIP Synergy"
             },
             display() {
                 return "which are multiplying NIP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e40)
                 let growth = 1e5
-                if (player.buyMax == false && !hasUpgrade("bi", 104))
+                if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
@@ -1830,7 +1831,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
     },
     milestones: {
@@ -1843,107 +1844,106 @@
     microtabs: {
         stuff: {
             "Dimension Power": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "1st Dimensional Power (" + format(buyableEffect("ta", 11)) + "x): " + format(player.ta.dimensionPower[0]) + " (+" + format(player.ta.dimensionPowerPerSecond[0]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts antimatter by x" + format(player.ta.dimensionPowerEffects[0])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "1st Dimensional Power (" + format(buyableEffect("ta", 11)) + "x): " + format(player.ta.dimensionPower[0]) + " (+" + format(player.ta.dimensionPowerPerSecond[0]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts antimatter by x" + format(player.ta.dimensionPowerEffects[0])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 11]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "2nd Dimensional Power (" + format(buyableEffect("ta", 12)) + "x): " + format(player.ta.dimensionPower[1]) + " (+" + format(player.ta.dimensionPowerPerSecond[1]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 1st dimensions by x" + format(player.ta.dimensionPowerEffects[1])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "2nd Dimensional Power (" + format(buyableEffect("ta", 12)) + "x): " + format(player.ta.dimensionPower[1]) + " (+" + format(player.ta.dimensionPowerPerSecond[1]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 1st dimensions by x" + format(player.ta.dimensionPowerEffects[1])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 12]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "3rd Dimensional Power (" + format(buyableEffect("ta", 13)) + "x): " + format(player.ta.dimensionPower[2]) + " (+" + format(player.ta.dimensionPowerPerSecond[2]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 2nd dimensions by x" + format(player.ta.dimensionPowerEffects[2])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "3rd Dimensional Power (" + format(buyableEffect("ta", 13)) + "x): " + format(player.ta.dimensionPower[2]) + " (+" + format(player.ta.dimensionPowerPerSecond[2]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 2nd dimensions by x" + format(player.ta.dimensionPowerEffects[2])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 13]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "4th Dimensional Power (" + format(buyableEffect("ta", 14)) + "x): " + format(player.ta.dimensionPower[3]) + " (+" + format(player.ta.dimensionPowerPerSecond[3]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 3rd dimensions by x" + format(player.ta.dimensionPowerEffects[3])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "4th Dimensional Power (" + format(buyableEffect("ta", 14)) + "x): " + format(player.ta.dimensionPower[3]) + " (+" + format(player.ta.dimensionPowerPerSecond[3]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 3rd dimensions by x" + format(player.ta.dimensionPowerEffects[3])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 14]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "5th Dimensional Power (" + format(buyableEffect("ta", 15)) + "x): " + format(player.ta.dimensionPower[4]) + " (+" + format(player.ta.dimensionPowerPerSecond[4]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 4th dimensions by x" + format(player.ta.dimensionPowerEffects[4])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "5th Dimensional Power (" + format(buyableEffect("ta", 15)) + "x): " + format(player.ta.dimensionPower[4]) + " (+" + format(player.ta.dimensionPowerPerSecond[4]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 4th dimensions by x" + format(player.ta.dimensionPowerEffects[4])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 15]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "6th Dimensional Power (" + format(buyableEffect("ta", 16)) + "x): " + format(player.ta.dimensionPower[5]) + " (+" + format(player.ta.dimensionPowerPerSecond[5]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 5th dimensions by x" + format(player.ta.dimensionPowerEffects[5])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "6th Dimensional Power (" + format(buyableEffect("ta", 16)) + "x): " + format(player.ta.dimensionPower[5]) + " (+" + format(player.ta.dimensionPowerPerSecond[5]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 5th dimensions by x" + format(player.ta.dimensionPowerEffects[5])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 16]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "7th Dimensional Power (" + format(buyableEffect("ta", 17)) + "x): " + format(player.ta.dimensionPower[6]) + " (+" + format(player.ta.dimensionPowerPerSecond[6]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 6th dimensions by x" + format(player.ta.dimensionPowerEffects[6])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "7th Dimensional Power (" + format(buyableEffect("ta", 17)) + "x): " + format(player.ta.dimensionPower[6]) + " (+" + format(player.ta.dimensionPowerPerSecond[6]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 6th dimensions by x" + format(player.ta.dimensionPowerEffects[6])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 17]]],
-                    ["row", [["column", [
-                        ["raw-html", function () { return "8th Dimensional Power (" + format(buyableEffect("ta", 18)) + "x): " + format(player.ta.dimensionPower[7]) + " (+" + format(player.ta.dimensionPowerPerSecond[7]) + "/s)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Boosts 7th dimensions by x" + format(player.ta.dimensionPowerEffects[7])}, { "color": "white", "font-size": "16px", "font-family": "monospace" }]]],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "font-size": "24px"}],
+                    ["row", [
+                        ["style-column", [
+                            ["raw-html", function () { return "8th Dimensional Power (" + format(buyableEffect("ta", 18)) + "x): " + format(player.ta.dimensionPower[7]) + " (+" + format(player.ta.dimensionPowerPerSecond[7]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return "Boosts 7th dimensions by x" + format(player.ta.dimensionPowerEffects[7])}, { color: "white", fontSize: "16px", fontFamily: "monospace" }]
+                        ], {width: "800px"}],
                         ["buyable", 18]]],
                 ]
             },
             "Automation": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["microtabs", "auto", { 'border-width': '0px' }],
                 ]
 
             },
             "Buyables and Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 33], ["buyable", 34], ["buyable", 35]]],
-                    ["row", [["buyable", 36], ["buyable", 37]]],
+                    ["row", [["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35]]],
+                    ["row", [["ex-buyable", 36], ["ex-buyable", 37]]],
                 ]
 
             },
             "OTF Synergizer": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("ta", 17) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.d.dicePoints) + "</h3> dice points. (highest: "  + format(player.ta.highestDicePoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel. (highest: "  + format(player.ta.highestRocketFuel) + ")"}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.po.hex ? "You have <h3>" + format(player.h.hexPoints[0]) + "</h3> hex 1 points. (highest: " + format(player.ta.highestHex1Points) + ")" :""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return !player.po.hex ? "You have <h3><s>" + format(player.h.hexPoints[0]) + "</s></h3> hex 1 points. (highest: " + format(player.ta.highestHex1Points) + ")" : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.d.dicePoints) + "</h3> dice points. (highest: "  + format(player.ta.highestDicePoints) + ")" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel. (highest: "  + format(player.ta.highestRocketFuel) + ")"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return player.po.hex ? "You have <h3>" + format(player.h.hexPoints[0]) + "</h3> hex 1 points. (highest: " + format(player.ta.highestHex1Points) + ")" :""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return !player.po.hex ? "You have <h3><s>" + format(player.h.hexPoints[0]) + "</s></h3> hex 1 points. (highest: " + format(player.ta.highestHex1Points) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Highest values get updated on infinity resets." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Tip: Use the halter for OTF progression." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Highest values get updated on infinity resets." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return "Tip: Use the halter for OTF progression." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 41], ["buyable", 42], ["buyable", 43], ["buyable", 51]]],
-                    ["row", [["buyable", 44], ["buyable", 45], ["buyable", 46], ["buyable", 52]]],
-                    ["row", [["buyable", 47], ["buyable", 48], ["buyable", 49], ["buyable", 53]]],
+                    ["row", [["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 51]]],
+                    ["row", [["ex-buyable", 44], ["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 52]]],
+                    ["row", [["ex-buyable", 47], ["ex-buyable", 48], ["ex-buyable", 49], ["ex-buyable", 53]]],
                     ["blank", "25px"],
                 ]
             },
             "RESET": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("ta", 21) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["blank", "25px"],
@@ -1954,41 +1954,83 @@
         },
         auto: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h4>You need at least 1 of the buyable to start autobuying." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h4>You need at least 1 of the buyable to start autobuying." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 21], ["clickable", 101], ["clickable", 102], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[0].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[0].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 22], ["clickable", 103], ["clickable", 104], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[1].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[1].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 23], ["clickable", 105], ["clickable", 106], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[2].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[2].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 24], ["clickable", 107], ["clickable", 108], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[3].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[3].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 25], ["clickable", 109], ["clickable", 110], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[4].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[4].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 26], ["clickable", 111], ["clickable", 112], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[5].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[5].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 27], ["clickable", 113], ["clickable", 114], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[6].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[6].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 28], ["clickable", 115], ["clickable", 116], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[7].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[7].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 29], ["clickable", 117], ["clickable", 118], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[8].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[8].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 31], ["clickable", 119], ["clickable", 120], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[9].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[9].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
-                    ["row", [["buyable", 32], ["clickable", 121], ["clickable", 122], ["raw-html", function () { return "&nbsp&nbsp" + player.ta.dimensionAutobuyTimer[10].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[10].toStringWithDecimalPlaces(2) + "s" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
+                    ["row", [["buyable", 21], ["clickable", 101], ["clickable", 102], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[0].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[0].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 22], ["clickable", 103], ["clickable", 104], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[1].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[1].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 23], ["clickable", 105], ["clickable", 106], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[2].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[2].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 24], ["clickable", 107], ["clickable", 108], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[3].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[3].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 25], ["clickable", 109], ["clickable", 110], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[4].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[4].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 26], ["clickable", 111], ["clickable", 112], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[5].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[5].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 27], ["clickable", 113], ["clickable", 114], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[6].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[6].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 28], ["clickable", 115], ["clickable", 116], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[7].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[7].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 29], ["clickable", 117], ["clickable", 118], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[8].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[8].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 31], ["clickable", 119], ["clickable", 120], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[9].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[9].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
+                    ["row", [["buyable", 32], ["clickable", 121], ["clickable", 122], 
+                        ["style-row", [
+                            ["raw-html", function () { return player.ta.dimensionAutobuyTimer[10].toStringWithDecimalPlaces(2) + "s/" + player.ta.dimensionAutobuyTimeReq[10].toStringWithDecimalPlaces(2) + "s" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "200px"}],
+                    ]],
                 ]
             },
             "Control Panel": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("ta", 14) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Dimboost Autobuy limit: " + formatWhole(player.ta.dimboostLimit) + "." }],
                     ["text-input", "dimboostLimitInput", {
                         color: "var(--color)",
                         width: "400px",
-                        "font-family": "Calibri",
+                        fontFamily: "Calibri",
                         "text-align": "left",
-                        "font-size": "32px",
+                        fontSize: "32px",
                         border: "2px solid #ffffff17",
                         background: "var(--background)",
                     }],
@@ -2000,9 +2042,9 @@
                     ["text-input", "galaxyLimitInput", {
                         color: "var(--color)",
                         width: "400px",
-                        "font-family": "Calibri",
+                        fontFamily: "Calibri",
                         "text-align": "left",
-                        "font-size": "32px",
+                        fontSize: "32px",
                         border: "2px solid #ffffff17",
                         background: "var(--background)",
                     }],
@@ -2012,13 +2054,13 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.ad.antimatterPerSecond) + "</h3> antimatter per second." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + format(player.ta.negativeInfinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.ad.antimatterPerSecond) + "</h3> antimatter per second." }, { color: "white", fontSize: "12px", fontFamily: "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+        ["raw-html", function () { return "You will gain <h3>" + format(player.ta.negativeInfinityPointsToGet) + "</h3> on reset." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasChallenge("ip", 18)}
 })
 addLayer("revc", {
@@ -2031,12 +2073,9 @@ addLayer("revc", {
         spawnedWisps: false,
 
         minipause: new Decimal(0)
-    }
-    },
-    automate() {
-    },
-    nodeStyle() {
-    },
+    }},
+    automate() {},
+    nodeStyle() {},
     tooltip: "Ranks",
     color: "white",
     update(delta) {
@@ -2074,30 +2113,21 @@ addLayer("revc", {
              },
             style: { width: '300px', "min-height": '120px' },
         },
-
     },
     reverseCrunch(){
         player.ta.reachedNegativeInfinity = false
         player.ta.negativeInfinityPause = new Decimal(5)
     },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
-
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     tabFormat: [
-                    ["raw-html", function () { return "<h2>1e308 antimatter- amazing." }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "150px"],
-                    ["row", [["clickable", 11]]],
+        ["raw-html", function () { return "<h2>1e308 antimatter- amazing." }, { color: "black", fontSize: "16px", fontFamily: "monospace" }],
+        ["blank", "150px"],
+        ["row", [["clickable", 11]]],
     ],
     layerShown() { return (player.startedGame == true && hasChallenge("ip", 18)) || hasMilestone("s", 19)}
 })

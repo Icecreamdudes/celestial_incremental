@@ -131,7 +131,7 @@
             player.rg.buyables[18] = new Decimal(0)
         }
 
-        if (!hasUpgrade("s", 14))
+        if (!hasUpgrade("s", 15))
         {
         for (let i = 0; i < player.an.upgrades.length; i++) {
             if (+player.an.upgrades[i] < 24) {
@@ -177,7 +177,7 @@
                 player.gs.grassSkip = player.gs.grassSkip.add(player.gs.grassSkipToGet)
                 player.gs.grassSkipPause = new Decimal(4)
             },
-            style: { width: '400px', "min-height": '100px' },
+            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },
     bars: {
@@ -212,10 +212,10 @@
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -230,7 +230,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         12: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(25)},
@@ -244,10 +244,10 @@
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(25)
                 let growth = 1.25
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -262,7 +262,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         13: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(40)},
@@ -276,10 +276,10 @@
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(40)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -294,7 +294,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         14: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(100)},
@@ -308,10 +308,10 @@
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100)
                 let growth = 1.35
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -326,7 +326,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         15: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500)},
@@ -340,10 +340,10 @@
                 return "which are boosting perk points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2500)
                 let growth = 1.25
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -358,7 +358,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         16: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6000)},
@@ -372,10 +372,10 @@
                 return "which are boosting anonymity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(6000)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -390,7 +390,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         17: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(15000)},
@@ -404,10 +404,10 @@
                 return "which are boosting repli-trees by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(15000)
                 let growth = 1.35
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -422,7 +422,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
         18: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40000)},
@@ -436,10 +436,10 @@
                 return "which are boosting the repli-grass mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(40000)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
@@ -454,7 +454,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
         },
     },
     milestones: {
@@ -514,13 +514,14 @@
     microtabs: {
         stuff: {
             "Grass-Skip": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.fu.buyables[24].gte(1) ? "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + ". (+" + formatWhole(player.gs.grassSkipToGet) + ")" : "You are at grass-skip <h3>" + formatWhole(player.gs.grassSkip) + " + " +  formatWhole(buyableEffect("fu", 24)) +". (+" + formatWhole(player.gs.grassSkipToGet) + ")"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Your grass-skip boosts multiplies the replicanti point multiplier by x" + format(player.gs.grassSkipEffect) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "10px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Milestones"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -535,7 +536,7 @@
                 ]
             },
             "Grass-Skippers": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("gs", 11) },
                 content:
                 [
@@ -544,10 +545,8 @@
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.gs.grassSkippersPerSecond) + "</h3> grass-skippers per second." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Your grass-skippers are boosting rank, tier, and tetr points by x<h3>" + format(player.gs.grassSkippersEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
                 ]
             },
         },

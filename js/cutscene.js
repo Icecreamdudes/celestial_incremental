@@ -43,7 +43,7 @@
         player.tab == "t" ? "#02172f" : 
         player.tab == "g" ? "#042347" : 
         player.tab == "gh" ? "#073b77" : 
-        player.tab == "cb" || player.tab == "ps" ? "#021124" : 
+        player.tab == "cb" || player.tab == "ps" || player.tab == "pet" ? "#021124" : 
         player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter" ? "linear-gradient(45deg, #8a00a9, #0061ff)" :
         player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
         player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
@@ -60,10 +60,10 @@
         player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || 
         player.tab == "a1u" || player.tab == "a1s" || player.tab == "a1t" || player.tab == "fu" ? "#204387" : 
         player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
-        player.tab == "ev8" ? "#242525" : 
+        player.tab == "ev8" ? "#252525" : 
         player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
         player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd"? "#260300" : 
-        player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" ? "#7d3f98" : 
+        player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" ? "#7d3f98" : 
         player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits" ? "linear-gradient(90deg, #57636d, #2e3d49)" :
         player.tab == "ch" || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
         player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 

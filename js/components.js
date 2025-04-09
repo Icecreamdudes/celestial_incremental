@@ -95,6 +95,46 @@ function loadVue() {
 		`
 	})
 
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('tooltip-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgTable instant">
+			<div class="upgRow tooltipBox" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of Components to be displayed in a row
+	// look = Object that defines style
+	Vue.component('left-row', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgLeftTable instant">
+			<div class="upgScrollRow" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	// data = an array of Components to be displayed in a column
 	// look = Object that defines style
 	Vue.component('style-column', {
@@ -441,6 +481,133 @@ function loadVue() {
 		},
 	})
 
+	Vue.component('ex-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].buyables[data].style]">
+				<div class="exBuyableCol1">
+					<div class="exBuyableBar">
+						<div class="exBuyableBarText">
+							<span v-html="tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? formatWhole(player[layer].buyables[data]) : formatWhole(player[layer].buyables[data])+'/'+formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+						</div>
+						<div class="exBuyableBarProgress" v-bind:style="{'width': toNumber(player[layer].buyables[data].div(tmp[layer].buyables[data].purchaseLimit).mul(100))+'%'}"></div>
+					</div>
+					<div class="exBuyableInfo">
+						<div class="exBuyableInfo2">
+							<span v-if= "tmp[layer].buyables[data].title"><h2 v-html="tmp[layer].buyables[data].title"></h2><br></span>
+							<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+						</div>
+					</div>
+				</div>
+				<div class="exBuyableCol2">
+					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': 'white'} : {}"
+					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					Buy 1</button>
+					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': 'white'} : {}"
+					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
+					Buy Max</button>
+				</div>
+			</div>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	Vue.component('levelable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].levelables && tmp[layer].levelables[data]!== undefined && tmp[layer].levelables[data].unlocked" style="display: grid">
+			<button v-bind:class="{ levelableHolder: true, can: tmp[layer].levelables[data].canClick, locked: !tmp[layer].levelables[data].canClick}"
+			v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].levelables[data].style]"
+			v-on:click="clickLevelable(layer, data)" :id='"levelable-" + layer + "-" + data'>
+				<div class="levelableTop">
+					<img v-bind:src="tmp[layer].levelables[data].image" class="levelableImg"></img>
+					<div v-bind:class="{levelableText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)}">
+						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatWhole(player[layer].levelables[data][0]) : 'Lv ' + formatWhole(player[layer].levelables[data][0])+'/'+formatWhole(tmp[layer].levelables[data].levelLimit)"></span>
+					</div>
+				</div>
+				<div class="levelableBottom">
+					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
+						<span v-html="player[layer].levelables[data][0].eq(tmp[layer].levelables[data].levelLimit) ? formatWhole(tmp[layer].levelables[data].currency) : formatWhole(tmp[layer].levelables[data].currency)+'/'+formatWhole(tmp[layer].levelables[data].xpReq)"></span>
+					</div>
+					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
+				</div>
+			</button>
+		</div>
+		`
+	})
+
+	Vue.component('levelable-display', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="levelableDisplayHolder">
+			<div class="levelableDisplayCol1">
+				<div class="levelableDisplayCard">
+					<div class="levelableDisplayImgHolder">
+						<img v-bind:src="tmp[layer].levelables[layers[layer].levelables.index].image" class="levelableImg"></img>
+						<div v-bind:class="{levelableText: true, hide: layers[layer].levelables.index==0}">
+							<span v-html="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.eq(Infinity) ? 'Lv ' + formatWhole(player[layer].levelables[layers[layer].levelables.index][0]) : 'Lv ' + formatWhole(player[layer].levelables[layers[layer].levelables.index][0])+'/'+formatWhole(tmp[layer].levelables[layers[layer].levelables.index].levelLimit)"></span>
+						</div>
+					</div>
+					<div class="levelableDisplayBarHolder">
+						<div v-bind:class="{levelableBarText: true, hide: layers[layer].levelables.index==0}">
+							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].eq(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
+						</div>
+						<div v-bind:class="{levelableBarProgress: true, hide: layers[layer].levelables.index==0}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[layers[layer].levelables.index].currency.div(tmp[layer].levelables[layers[layer].levelables.index].xpReq).mul(100))+'%'}, tmp[layer].levelables[layers[layer].levelables.index].barStyle]"></div>
+					</div>
+				</div>
+			</div>
+			<div class="levelableDisplayCol2">
+				<div class="levelableDisplayText">
+					<div class="levelableDisplayTitle">
+						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].title"></span>
+					</div>
+					<div class="levelableDisplayButtonHolder">
+						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: layers[layer].levelables.toggle}"
+						v-on:click="(layers[layer].levelables.toggle=true)">Effects</button>
+						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: !layers[layer].levelables.toggle}"
+						v-on:click="(layers[layer].levelables.toggle=false)">Description</button>
+					</div>
+					<div v-bind:class="{levelableDisplayDescription: true, hide: !layers[layer].levelables.toggle}">
+						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].description"></span>
+					</div>
+					<div v-bind:class="{levelableDisplayLore: true, hide: layers[layer].levelables.toggle}">
+						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].lore"></span>
+					</div>
+				</div>
+				<div class="levelableDisplayRow instant">
+					<div v-for="(item, index) in data">
+						<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+						<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+						<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
 	Vue.component('respec-button', {
 		props: ['layer', 'data'],
 		template: `
@@ -475,10 +642,82 @@ function loadVue() {
 			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
 			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
-			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
-			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</button>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
+					this.interval = setInterval((function() {
+						let c = layers[this.layer].clickables[this.data]
+						if(this.time >= 5 && run(c.canClick, c)) {
+							run(c.onHold, c)
+						}
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	// data = id of clickable
+	Vue.component('color-clickable', {
+		props: ['layer', 'data'],
+		template: `
+		<button
+			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
+			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].style.backgroundColor} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+
+		</button>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
+					this.interval = setInterval((function() {
+						let c = layers[this.layer].clickables[this.data]
+						if(this.time >= 5 && run(c.canClick, c)) {
+							run(c.onHold, c)
+						}
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	// data = id of clickable
+	Vue.component('bt-clickable', {
+		props: ['layer', 'data'],
+		template: `
+		<button
+			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
+			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].style.backgroundColor} : {}, tmp[layer].clickables[data].style]"
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+			<div class='bottomTooltip' v-if="tmp[layer].clickables[data].tooltip" v-html="tmp[layer].clickables[data].tooltip"></div>
 
 		</button>
 		`,
@@ -511,8 +750,8 @@ function loadVue() {
 			v-bind:class="{ upg: true, tooltipBox: true, canHoverless: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
 			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
-			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
-			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
+			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
+			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
 

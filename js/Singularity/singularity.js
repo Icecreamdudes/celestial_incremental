@@ -17,27 +17,28 @@ addLayer("s", {
         highestSingularityPoints: new Decimal(0),
 
         sMax: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(140deg, red 0%, black 100%)",
             "background-origin": "border-box",
             "border-color": "#800000",
         }
-      },
-
+    },
     tooltip: "Universe 3 - Domain of Singularity",
     color: "white",
     update(delta) {
 
         let onepersec = new Decimal(1)
-        if (player.subtabs["s"]['stuff'] == 'Portal')
-        {
+        if (player.subtabs["s"]['stuff'] == 'Portal') {
             player.po.lastUniverse = 's'
             player.tab = "po"
+            player.subtabs["s"]['stuff'] = 'Features'
+        }
+        if (player.subtabs["s"]['stuff'] == 'Settings') {
+            player.po.lastUniverse = 's'
+            player.tab = "settings"
             player.subtabs["s"]['stuff'] = 'Features'
         }
 
@@ -56,7 +57,7 @@ addLayer("s", {
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("s", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("fu", 16))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.fu.angerEffect2)
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.evolvedEffects[9][1])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 1104)[1])
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {
@@ -95,8 +96,7 @@ addLayer("s", {
             style: { width: '75px', "min-height": '50px', }
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11:
         {
@@ -123,6 +123,17 @@ addLayer("s", {
         {
             title: "Singularity Upgrade III",
             unlocked() { return true},
+            description: "Unlock a new challenge dice upgrade and keep the last 4 dice effects.",
+            cost: new Decimal("300"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '150px', "min-height": '120px' },
+        },
+        14:
+        {
+            title: "Singularity Upgrade IV",
+            unlocked() { return true},
             description: "Boost pollinators, crystal, and time cubes based on unspent singularity points.",
             cost: new Decimal("3600"),
             currencyLocation() { return player.s },
@@ -134,9 +145,9 @@ addLayer("s", {
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
             style: { width: '175px', "min-height": '120px' },
         },
-        14:
+        15:
         {
-            title: "Singularity Upgrade IV",
+            title: "Singularity Upgrade V",
             unlocked() { return true},
             description: "Keep anonymity upgrades on grass-skip, oil, and proto memory resets.",
             cost: new Decimal("800000"),
@@ -145,23 +156,12 @@ addLayer("s", {
             currencyInternalName: "singularityPoints",
             style: { width: '135px', "min-height": '120px' },
         },
-        15:
-        {
-            title: "Singularity Upgrade V",
-            unlocked() { return true},
-            description: "Stay at pent 30 on all resets.",
-            cost: new Decimal("4e7"),
-            currencyLocation() { return player.s },
-            currencyDisplayName: "Singularity Points",
-            currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
-        },
         16:
         {
             title: "Singularity Upgrade VI",
             unlocked() { return true},
-            description: "Tetrate check back effect to the ^^1.003.",
-            cost: new Decimal("1e10"),
+            description: "Stay at pent 30 on all resets.",
+            cost: new Decimal("4e7"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -171,8 +171,8 @@ addLayer("s", {
         {
             title: "Singularity Upgrade VII",
             unlocked() { return true},
-            description: "Unlock an additional OTF slot.",
-            cost: new Decimal("5e12"),
+            description: "Raises check back effect to the ^5.",
+            cost: new Decimal("1e10"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -182,8 +182,8 @@ addLayer("s", {
         {
             title: "Singularity Upgrade VIII",
             unlocked() { return true},
-            description: "Unlock core scraps, and both check back studies are always at max.",
-            cost: new Decimal("1e23"),
+            description: "Unlock an additional OTF slot.",
+            cost: new Decimal("5e12"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -192,6 +192,17 @@ addLayer("s", {
         19:
         {
             title: "Singularity Upgrade IX",
+            unlocked() { return true},
+            description: "Unlock core scraps, and both check back studies are always at max.",
+            cost: new Decimal("1e23"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        20:
+        {
+            title: "Singularity Upgrade X",
             unlocked() { return true},
             description: "Unlock paragon scraps (in core scraps).",
             cost: new Decimal("1e27"),
@@ -213,14 +224,14 @@ addLayer("s", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>SP Doubler"
+                return "SP Doubler"
             },
             display() {
                 return "which are multiplying singularity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
-            buy() {
-                if (player.s.sMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -234,7 +245,7 @@ addLayer("s", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(140deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
         12: {
             costBase() { return new Decimal(1000) },
@@ -247,14 +258,14 @@ addLayer("s", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>IP Tripler"
+                return "IP Tripler"
             },
             display() {
                 return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
-            buy() {
-                if (player.s.sMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -268,7 +279,7 @@ addLayer("s", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(140deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
         13: {
             costBase() { return new Decimal(1000) },
@@ -281,14 +292,14 @@ addLayer("s", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Steel Centupler"
+                return "Steel Centupler"
             },
             display() {
                 return "which are multiplying steel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " SP"
             },
-            buy() {
-                if (player.s.sMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -302,7 +313,7 @@ addLayer("s", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(140deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {
@@ -314,7 +325,7 @@ addLayer("s", {
         },
         12: {
             requirementDescription: "<h3>2 Singularities",
-            effectDescription: "No more having to unlock portal in cantepocalypse, keep all infinity and grass-skip milestones. Unlock the charger and new pet evolutions.",
+            effectDescription: "Keep all infinity and grass-skip milestones. Unlock the charger, new pet evolutions, and a new break infinity upgrade.",
             done() { return player.s.singularities.gte(2) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -332,7 +343,7 @@ addLayer("s", {
         },
         15: {
             requirementDescription: "<h3>5 Singularities",
-            effectDescription: "Keep check back buyables on singularity resets, realm mods don't cost cante cores on activation and gain 1% of each realm mod per second, keep challenges on reset, and unlock new radiation and singularity point buyables.",
+            effectDescription: "Keep check back buyables on singularity resets, remove realm mod's requirements and gain 1% of each realm mod per second, keep challenges on reset, and unlock singularity point buyables.",
             done() { return player.s.singularities.gte(5) },
             style: { width: '800px', "min-height": '85px' },
         },
@@ -344,26 +355,25 @@ addLayer("s", {
         },
         17: {
             requirementDescription: "<h3>7 Singularities",
-            effectDescription: "Autobuy infinity dimensions, autobuy all pre-singularity upgrades, have one of every antimatter dimensions autobuyer and unlock funify.",
+            effectDescription: "Autobuy infinity dimensions, autobuy all pre-singularity upgrades, no longer reset RBI toggle, have one of every antimatter dimensions autobuyer and unlock a new alt-uni 1 upgrade.",
             done() { return player.s.singularities.gte(7) },
-            style: { width: '800px', "min-height": '75px' },
+            style: { width: '800px', "min-height": '85px' },
         },
         18: {
             requirementDescription: "<h3>12 Singularities",
-            effectDescription: "Start singularity with infinity broken and alt-uni 1 unlocked, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
+            effectDescription: "Start singularity with infinity broken and alt-uni 1 unlocked, keep cante and rememberance cores, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
             done() { return player.s.singularities.gte(12) },
-            style: { width: '800px', "min-height": '75px' },
+            style: { width: '800px', "min-height": '85px' },
         },
         19: {
             requirementDescription: "<h3>25 Singularities",
-            effectDescription: "Start each singularity with every universe 2 layer unlocked, and hex is kept on singularity reset, and always autobuy tetr, and autoroll cooldown is 10x shorter.",
+            effectDescription: "Start each singularity with every universe 2 layer unlocked, and hex is kept on singularity reset, always autobuy tetr, and autoroll cooldown is 10x shorter.",
             done() { return player.s.singularities.gte(25) },
             style: { width: '800px', "min-height": '75px' },
         },
         //REMINDER: MAKE THE TIME MACHINE at some point
     },
-    challenges: {
-    },
+    challenges: {},
     infoboxes: {
         1: {
             title: "Singularity",
@@ -379,81 +389,73 @@ addLayer("s", {
     microtabs: {
         stuff: {
             "Features": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["tree", tree3],
+                content: [
+                    ["blank", "25px"],
+                    ["tree", tree3],
                 ]
-
             },
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-        ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["aupgrade", 15],["aupgrade", 16],["upgrade", 17],]],
-        ["row", [["upgrade", 18],["upgrade", 19],]],
-    ]
-
+                    ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],]],
+                    ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20]]],
+                ]
             },
             "Singularity Milestones": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
-                content:
-                [
-        ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.s.singularities) + "</h3> singularities." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.s.singularitiesToGet) + "</h3> singularities on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["milestone", 11],]],
-        ["row", [["milestone", 12],]],
-        ["row", [["milestone", 13],]],
-        ["row", [["milestone", 14],]],
-        ["row", [["milestone", 15],]],
-        ["row", [["milestone", 16],]],
-        ["row", [["milestone", 17],]],
-        ["row", [["milestone", 18],]],
-        ["row", [["milestone", 19],]],
-    ]
-
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.s.singularities) + "</h3> singularities." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.s.singularitiesToGet) + "</h3> singularities on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["milestone", 11],]],
+                    ["row", [["milestone", 12],]],
+                    ["row", [["milestone", 13],]],
+                    ["row", [["milestone", 14],]],
+                    ["row", [["milestone", 15],]],
+                    ["row", [["milestone", 16],]],
+                    ["row", [["milestone", 17],]],
+                    ["row", [["milestone", 18],]],
+                    ["row", [["milestone", 19],]],
+                ]
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasUpgrade("s", 15) },
-                content:
-                [
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return hasMilestone("s", 15) },
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2],["clickable", 3],]],
-                    ["blank", "25px"],
-                ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
-    ]
-
-            },
-            "Portal": {
-                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("ad", 13) || player.s.highestSingularityPoints.gte(0)},
-                content:
-                [
+                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
                 ]
             },
-            "Settings": settingsMicrotab,
+            "Portal": {
+                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
+                unlocked() { return hasUpgrade("ad", 13) || player.s.highestSingularityPoints.gte(0)},
+                content: [],
+            },
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
         },
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-            ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-            ["microtabs", "stuff", { 'border-width': '0px' }], 
-        ],
+        ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["microtabs", "stuff", { 'border-width': '0px' }], 
+    ],
     layerShown() { return player.startedGame == true && player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)}
 })

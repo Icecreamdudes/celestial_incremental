@@ -79,7 +79,7 @@
                 player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '50px'},
+            style: { width: '400px', "min-height": '50px', borderRadius: '10px'},
         },
         12: {
             title() { return "<h3>Reset replicanti points and rank points for tier points." },
@@ -90,7 +90,7 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '50px'},
+            style: { width: '400px', "min-height": '50px', borderRadius: '10px'},
         },
         13: {
             title() { return "<h3>Reset replicanti points, rank points, and tier points for tetr points." },
@@ -102,7 +102,7 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '50px'},
+            style: { width: '400px', "min-height": '50px', borderRadius: '10px'},
         },
     },
     bars: {
@@ -138,27 +138,28 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + format(player.ar.rankPoints) + "</h3> rank points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + format(player.ar.rankPointsToGet) + "</h3> rank points on reset. (Based on replicanti points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Rank points add <h3>+" + format(player.ar.rankPointsEffect) + "</h3> to the replicanti mult." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 11]]],
-        ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + format(player.ar.tierPoints) + "</h3> tier points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + format(player.ar.tierPointsToGet) + "</h3> tier points on reset. (Based on rank points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Tier boost rank points by <h3>x" + format(player.ar.tierPointsEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 12]]],
-        ["blank", "25px"],
-        ["raw-html", function () { return hasUpgrade("cp", 13) ? "You have <h3>" + format(player.ar.tetrPoints) + "</h3> tetr points." : "" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return hasUpgrade("cp", 13) ? "You will gain <h3>" + format(player.ar.tetrPointsToGet) + "</h3> tetr points on reset. (Based on tier points)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return hasUpgrade("cp", 13) ? "Tetr boost rank and tier points by <h3>x" + format(player.ar.tetrPointsEffect) + "</h3>." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 13]]],
-    ]
-
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.ar.rankPoints) + "</h3> rank points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + format(player.ar.rankPointsToGet) + "</h3> rank points on reset. (Based on replicanti points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Rank points add <h3>+" + format(player.ar.rankPointsEffect) + "</h3> to the replicanti mult." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "10px"],
+                    ["row", [["clickable", 11]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.ar.tierPoints) + "</h3> tier points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + format(player.ar.tierPointsToGet) + "</h3> tier points on reset. (Based on rank points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Tier boost rank points by <h3>x" + format(player.ar.tierPointsEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "10px"],
+                    ["row", [["clickable", 12]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return hasUpgrade("cp", 13) ? "You have <h3>" + format(player.ar.tetrPoints) + "</h3> tetr points." : "" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return hasUpgrade("cp", 13) ? "You will gain <h3>" + format(player.ar.tetrPointsToGet) + "</h3> tetr points on reset. (Based on tier points)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return hasUpgrade("cp", 13) ? "Tetr boost rank and tier points by <h3>x" + format(player.ar.tetrPointsEffect) + "</h3>." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "10px"],
+                    ["row", [["clickable", 13]]],
+                ]
             },
         },
     },

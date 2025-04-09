@@ -41,8 +41,8 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("rg", 17))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("gs", 16))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.oi.linkingPowerEffect[2])
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.evolvedEffects[8][0])
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.epicPetEffects[1][1])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 1206)[0])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 402)[1])
         if (hasMilestone("fa", 18)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fa.milestoneEffect[7])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("fu", 46))
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(0.2)
@@ -72,7 +72,7 @@
                 player.ar.tetrPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '100px'},
+            style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
         },
     },
     bars: {
@@ -260,7 +260,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [

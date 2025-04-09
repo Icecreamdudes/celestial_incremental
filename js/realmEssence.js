@@ -34,7 +34,7 @@
         player.re.realmEssencePerSecond = player.re.halterEssence.pow(1.4)
         player.re.realmEssencePerSecond = player.re.realmEssencePerSecond.mul(buyableEffect("re", 14))
 
-        player.re.realmEssenceEffect = player.re.realmEssence.plus(1).log10().mul(1000).pow(0.2).div(200).add(1)
+        player.re.realmEssenceEffect = player.re.realmEssence.plus(1).log10().mul(1000).pow(0.2).div(235).add(1)
         //WORK ON THE DANG EFFECT
     },
     branches: ["h", "r", "f", "p"],
@@ -42,7 +42,7 @@
         1: {
             title() { return "<h2>Return" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "i"
             },
@@ -78,16 +78,16 @@
             unlocked() { return true },
             canAfford() { return player.re.realmEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Check Back XP Realm Booster"
+                return "Check Back XP Realm Booster"
             },
             display() {
                 return "which are boosting check back xp gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Realm Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(50)
                 let growth = 1.25
-                if (player.buyMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.re.realmEssence = player.re.realmEssence.sub(buyonecost)
@@ -101,7 +101,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)", backgroundOrigin: "border-box"}
         },
         12: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(100)},
@@ -109,16 +109,16 @@
             unlocked() { return true },
             canAfford() { return player.re.realmEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>XP Boost Realm Booster"
+                return "XP Boost Realm Booster"
             },
             display() {
                 return "which are boosting XPBoost gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Realm Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100)
                 let growth = 1.3
-                if (player.buyMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.re.realmEssence = player.re.realmEssence.sub(buyonecost)
@@ -132,7 +132,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)", backgroundOrigin: "border-box"}
         },
         13: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(250)},
@@ -140,16 +140,16 @@
             unlocked() { return true },
             canAfford() { return player.re.realmEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>XP Button Cooldown Realm Booster"
+                return "XP Button Cooldown Realm Booster"
             },
             display() {
                 return "which are dividing XP button cooldowns by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Realm Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(250)
                 let growth = 1.4
-                if (player.buyMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.re.realmEssence = player.re.realmEssence.sub(buyonecost)
@@ -163,7 +163,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)", backgroundOrigin: "border-box"}
         },
         14: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
@@ -171,16 +171,16 @@
             unlocked() { return true },
             canAfford() { return player.re.realmEssence.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Realm Essence Booster"
+                return "Realm Essence Booster"
             },
             display() {
                 return "which are boosting realm essence by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Realm Essence."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 1.15
-                if (player.buyMax == false)
+                if (mult != true)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.re.realmEssence = player.re.realmEssence.sub(buyonecost)
@@ -194,7 +194,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #AA33AA, #5533AA, #3333AA, #336699, #33AAA5, #33AA77, #55AA55, #A1AA55, #AA8855, #AA3333)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {
@@ -207,30 +207,27 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3],]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "You have <h3>" + format(player.re.realmEssence) + "</h3> Realm Essence, which boosts all pre-otf currencies by ^" + format(player.re.realmEssenceEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You are gaining <h3>" + format(player.re.realmEssencePerSecond) + "</h3> Realm Essence per second (based on halter essence)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.re.realmEssence) + "</h3> Realm Essence, which boosts all pre-otf currencies by ^" + format(player.re.realmEssenceEffect, 3) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.re.realmEssencePerSecond) + "</h3> Realm Essence per second (based on halter essence)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
             },
         },
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.re.halterEssence) + "</h3> Halter Essence" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You will gain <h3>" + format(player.rm.halterBoostEffect) + "</h3> Halter Essence on singularity reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "(Based on realm mod halter amount)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.re.halterEssence) + "</h3> Halter Essence" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You will gain <h3>" + format(player.rm.halterBoostEffect) + "</h3> Halter Essence on singularity reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "(Based on realm mod halter amount)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
 
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 20)}
 })
 /*        codeExperience: new Decimal(0),

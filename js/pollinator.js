@@ -56,7 +56,7 @@ addLayer("pol", {
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
             }
-            if (hasUpgrade("s", 13)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 13))
+            if (hasUpgrade("s", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 14))
 
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
 
@@ -248,7 +248,11 @@ addLayer("pol", {
         },
         100: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.pol.pollinators.gte(1e100) && player.cb.commonPetLevels[1].gte(20) && player.cb.commonPetLevels[3].gte(20) && player.cb.uncommonPetLevels[1].gte(15) && player.cb.uncommonPetLevels[2].gte(15) && player.cb.rarePetLevels[2].gte(8) && player.cb.rarePetLevels[4].gte(8) && player.cb.epicPetLevels[1].gte(4) },
+            canClick() {
+                return player.pol.pollinators.gte(1e100) && getLevelableAmount("pet", 102).gte(20) && getLevelableAmount("pet", 104).gte(20)
+                && getLevelableAmount("pet", 202).gte(15) && getLevelableAmount("pet", 203).gte(15) && getLevelableAmount("pet", 303).gte(8)
+                && getLevelableAmount("pet", 305).gte(8) && getLevelableAmount("pet", 402).gte(4)
+            },
             unlocked() { return true},
             onClick() {
                 player.pol.unlockHive = 2
@@ -360,6 +364,7 @@ addLayer("pol", {
         11: {
             costBase() { return new Decimal(5000) },
             costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(5) },
@@ -367,111 +372,14 @@ addLayer("pol", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Promised Pollinators"
+                return "Promised Pollinators"
             },
             display() {
                 return "which guarantees you have at least " + format(tmp[this.layer].buyables[this.id].effect) + " seconds worth of pollinators.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasMilestone("s", 16)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        12: {
-            costBase() { return new Decimal(10000) },
-            costGrowth() { return new Decimal(2.25) },
-            currency() { return player.pol.pollinators},
-            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.75).mul(0.25).add(1) },
-            unlocked() { return hasUpgrade("pol", 13) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Plentiful Pollinators"
-            },
-            display() {
-                return "which boosts pollinator gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
-            },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasMilestone("s", 16)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        13: {
-            costBase() { return new Decimal(50000) },
-            costGrowth() { return new Decimal(2.5) },
-            currency() { return player.pol.pollinators},
-            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03) },
-            unlocked() { return hasUpgrade("pol", 15) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Propagating Pollinators"
-            },
-            display() {
-                return "which improves pollinator upgrade II's scaling by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
-            },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasMilestone("s", 16)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        14: {
-            costBase() { return new Decimal(1000000) },
-            costGrowth() { return new Decimal(10) },
-            purchaseLimit() { return new Decimal(25) },
-            currency() { return player.pol.pollinators},
-            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
-            unlocked() { return hasUpgrade("pol", 15) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>Potent Pollination"
-            },
-            display() {
-                return "which boosts pollinator effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
-            },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -485,7 +393,109 @@ addLayer("pol", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '125px', }
+        },
+        12: {
+            costBase() { return new Decimal(10000) },
+            costGrowth() { return new Decimal(2.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.pol.pollinators},
+            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.75).mul(0.25).add(1) },
+            unlocked() { return hasUpgrade("pol", 13) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Plentiful Pollinators"
+            },
+            display() {
+                return "which boosts pollinator gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
+            },
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '125px', }
+        },
+        13: {
+            costBase() { return new Decimal(50000) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.pol.pollinators},
+            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03) },
+            unlocked() { return hasUpgrade("pol", 15) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Propagating Pollinators"
+            },
+            display() {
+                return "which improves pollinator upgrade II's scaling by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
+            },
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '125px', }
+        },
+        14: {
+            costBase() { return new Decimal(1000000) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.pol.pollinators},
+            pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return hasUpgrade("pol", 15) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Potent Pollination"
+            },
+            display() {
+                return "which boosts pollinator effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
+            },
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '125px', }
         },
     },
     milestones: {
@@ -543,7 +553,7 @@ addLayer("pol", {
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -570,7 +580,7 @@ addLayer("pol", {
                 ]
             },
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -578,14 +588,12 @@ addLayer("pol", {
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                     ["row", [["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12]]],
-                    ["row", [["buyable", 13], ["buyable", 14]]]
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12]]],
+                    ["row", [["ex-buyable", 13], ["ex-buyable", 14]]]
                 ]
             },
             "???": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.pol.unlockHive == 1 },
                 content:
                 [
@@ -593,13 +601,13 @@ addLayer("pol", {
                     ["raw-html", function () { return "Unlock ???:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[1]) + "/20 Egg Guy Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.commonPetLevels[3]) + "/20 Gd Checkpoint Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[1]) + "/15 Star Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.uncommonPetLevels[2]) + "/15 Normal Face Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.rarePetLevels[2]) + "/8 Drippy Ufo Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.rarePetLevels[4]) + "/8 Antimatter Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(player.cb.epicPetLevels[1]) + "/4 Dragon Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 101)) + "/20 Egg Guy Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 104)) + "/20 Gd Checkpoint Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 202)) + "/15 Star Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 203)) + "/15 Normal Face Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 303)) + "/8 Drippy Ufo Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 305)) + "/8 Antimatter Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 402)) + "/4 Dragon Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", "COMING SOON", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     //["row", [["clickable", 100]]],

@@ -240,7 +240,7 @@ addLayer("pol", {
         19: {
             title() { return "<img src='resources/pollinators/gear.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
             canClick() { return true },
-            unlocked() { return hasUpgrade("bi", 114) },
+            unlocked() { return hasUpgrade("bi", 115) },
             onClick() {
                 player.pol.pollinatorsIndex = 8
             },

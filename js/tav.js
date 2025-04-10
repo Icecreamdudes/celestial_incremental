@@ -384,7 +384,7 @@
             onClick() {
                 player.ta.dimboostToggle = true
             },
-            style: { width: '100px', "min-height": '100px', borderRadius: '15px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: '15px 0px 0px 15px' },
         },
         19: {
             title() { return "<h3>Toggle<br>Off" },
@@ -393,7 +393,7 @@
             onClick() {
                 player.ta.dimboostToggle = false
             },
-            style: { width: '100px', "min-height": '100px', borderRadius: '15px' },
+            style: { width: '100px', "min-height": '100px', borderRadius: '0px 15px 15px 0px' },
         },
         101: {
             title() { return "<h3>On" },

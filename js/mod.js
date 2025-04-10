@@ -83,6 +83,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed being able to enter halt values that are less then 1.<br><br>
 		Qol:<br>
 			- Added rigged booster dice.<br>
+			- Added new Break Infinity NIP Upgrade, which replaces the previous arbitrary requirement to improve IP formula.<br>
 			- Added keep cante cores to U3 milestone 8<br>
 			- Added U3 Upgrade 3, which unlocks a Challenge Dice upgrade and keeps T2 dice effects.<br>
 			- Made U3 Milestone 7 keep RBI toggle.<br><br>

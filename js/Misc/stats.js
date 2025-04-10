@@ -556,8 +556,8 @@ addLayer("stats", {
                     
                     ["always-scroll-column", [
                         ["stat-row", [
-                            () => { return !player.in.breakInfinity ? "Base Value" : !hasUpgrade("bi", 111) ? "Base Value<br><h6>(log10((Points/1e308)+1)/10)" : !hasUpgrade("i", 31) ? "Base Value<br><h6>((log10((Points/1e308)+1)/2)^1.25)" : "Base Value<br><h6>(log10((Points/1e308)+1)^1.5)"},
-                            () => { return !player.in.breakInfinity ? "1" : !hasUpgrade("bi", 111) ? formatWhole(player.points.div(1e308).plus(1).log10().div(10)) : !hasUpgrade("i", 31) ? formatWhole(player.points.div(1e308).plus(1).log10().div(2).pow(1.25)) : formatWhole(player.points.div(1e308).plus(1).log10().pow(1.5))}
+                            () => { return !player.in.breakInfinity ? "Base Value" : !hasUpgrade("bi", 111) ? "Base Value<br><h6>(log10((Points/1e308)+1)/10)" : !hasUpgrade("bi", 114) ? "Base Value<br><h6>((log10((Points/1e308)+1)/2)^1.25)" : "Base Value<br><h6>(log10((Points/1e308)+1)^1.5)"},
+                            () => { return !player.in.breakInfinity ? "1" : !hasUpgrade("bi", 111) ? formatWhole(player.points.div(1e308).plus(1).log10().div(10)) : !hasUpgrade("bi", 114) ? formatWhole(player.points.div(1e308).plus(1).log10().div(2).pow(1.25)) : formatWhole(player.points.div(1e308).plus(1).log10().pow(1.5))}
                         ], {color: "white", height: "40px"}],
 
                         ["stat-row", [

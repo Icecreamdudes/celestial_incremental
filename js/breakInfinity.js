@@ -644,12 +644,21 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '125px', height: '100px', }
         },
-        114:
-        {
+        114: {
             title: "BI NIP Upgrade XIII",
+            unlocked() { return true },
+            description: "Improve the infinity point formula again.",
+            cost: new Decimal(1e19),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
+        },
+        115: {
+            title: "BI NIP Upgrade XIV",
             unlocked() { return hasMilestone("s", 12) },
             description: "Unlock a new pollinator.",
-            cost: new Decimal(1e20),
+            cost: new Decimal(1e22),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -790,7 +799,7 @@
                     ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
-                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114]]],
+                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

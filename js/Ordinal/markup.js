@@ -74,7 +74,12 @@ addLayer("mu", {
                 // GAIN POWER
                 player.mu.cp = player.mu.cp.add(player.mu.pg)
             },
-            style: { width: '300px', "min-height": '100px', fontSize: '12px', backgroundColor: 'black', color: 'white', border: '3px solid white', borderRadius: '15px' },
+            style() {
+                let look = {width: "300px", minHeight: "100px", fontSize: '12px', border: '3px solid white', borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         102: {
             title() { return "Base Shift<br>Decrease ordinal base by 1<br>Cost: " + format(baseShiftCost[player.mu.bsr]) },
@@ -93,7 +98,12 @@ addLayer("mu", {
                 player.mu.bsr = player.mu.bsr.add(1)
                 player.od.ob = player.od.ob.sub(1)
             },
-            style: { width: '300px', "min-height": '100px', fontSize: '12px', backgroundColor: 'black', color: 'white', border: '3px solid white', borderRadius: '15px' },
+            style() {
+                let look = {width: "300px", minHeight: "100px", fontSize: '12px', border: '3px solid white', borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
     },
     bars: {},
@@ -111,7 +121,7 @@ addLayer("mu", {
                     ["scroll-column", [
                         ["blank", "25px"],
                         ["row", [
-                            ["color-clickable", 101], ["raw-html", "&nbsp;", {fontSize: "25px"}], ["color-clickable", 102],
+                            ["clickable", 101], ["raw-html", "&nbsp;", {fontSize: "25px"}], ["clickable", 102],
                         ]],
                     ], {width: "800px", height: "550px"}],
                 ]

@@ -345,7 +345,12 @@
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
             },
-            style: { width: '150px', "min-height": '150px', backgroundColor: "black", color: "white", borderRadius: "15px" },
+            style() {
+                let look = {width: "150px", minHeight: "150px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         101: {
             title() { return "Points<br>x" + format(player.d.diceEffects[0]) },
@@ -1042,8 +1047,7 @@
             "Dice": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["clickable", 11]]],
                     ["blank", "25px"],
@@ -1052,14 +1056,12 @@
                     ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]]],
-    ]
-
+                ]
             },
             "Booster Dice": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-row", [
                         ["clickable", 11], 
@@ -1072,7 +1074,7 @@
                     ["style-column", [
                         ["blank", "10px"],
                         ["style-row", [
-                            ["color-clickable", 12],
+                            ["clickable", 12],
                             ["style-column", [
                                 ["raw-html", function () { return player.d.currentBoosterRoll != 12 ? player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" : player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")<br>(MAX IS x10)"  }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                             ], {width: "490px"}]
@@ -1085,9 +1087,9 @@
                         ["blank", "10px"],
                         ["h-line", "650px"],
                         ["blank", "10px"],
-                        ["row", [["color-clickable", 101], ["color-clickable", 102], ["color-clickable", 103], ["color-clickable", 104]]],
-                        ["row", [["color-clickable", 105], ["color-clickable", 106], ["color-clickable", 107], ["color-clickable", 108]]],
-                        ["row", [["color-clickable", 109], ["color-clickable", 110], ["color-clickable", 111]]],
+                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104]]],
+                        ["row", [["clickable", 105], ["clickable", 106], ["clickable", 107], ["clickable", 108]]],
+                        ["row", [["clickable", 109], ["clickable", 110], ["clickable", 111]]],
                         ["blank", "10px"],
                         ["style-column", [
                             ["h-line", "650px"],
@@ -1096,7 +1098,7 @@
                             ["blank", "10px"],
                             ["h-line", "650px"],
                             ["blank", "10px"],
-                            ["row", [["color-clickable", 112], ["color-clickable", 113], ["color-clickable", 114], ["color-clickable", 115]]],
+                            ["row", [["clickable", 112], ["clickable", 113], ["clickable", 114], ["clickable", 115]]],
                             ["blank", "10px"],
                         ], () => { return hasChallenge("ip", 15) ? {} : {display: "none !important"}}],
                     ], {backgroundColor: "#35654d", border: "2px solid white", borderRadius: "15px", width: "650px"}],
@@ -1104,13 +1106,11 @@
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
                 ]
-
             },
             "Challenge Dice": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]},
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.d.challengeDicePoints) + "</h3> challenge dice points, which boost dice point gain by x" + format(player.d.challengeDicePointsEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.d.challengeDicePointsToGet) + "</h3> challenge dice points next booster dice roll." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -1119,13 +1119,11 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
                 ]
-
             },
             "Challenge Debuffs": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("ip", 15) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Challenge V Debuffs:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1134,7 +1132,6 @@
                     ["raw-html", function () { return "^0.65 Code Experience Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "^0.65 Prestige Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
-
             },
         },
     },

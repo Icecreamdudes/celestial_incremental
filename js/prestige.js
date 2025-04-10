@@ -293,7 +293,12 @@
                 player.p.crystalPause = new Decimal(5)
                 player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
             },
-            style: { width: '400px', "min-height": '100px', backgroundColor: '#98245c', color: 'white', borderRadius: '15px'},
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#98245c" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
     },
     bars: {
@@ -735,7 +740,7 @@
                     ["raw-html", function () { return "You will gain <h3>" + format(player.p.crystalsToGet) + "</h3> crystals on reset. (based on tier)"}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
                     ["raw-html", function () { return "Crystals boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["color-clickable", 12]]],
+                    ["row", [["clickable", 12]]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                     ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],

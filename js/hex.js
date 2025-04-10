@@ -243,7 +243,11 @@
                 player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet)
                 player.h.ragePowerPause = new Decimal(6)
             },
-            style: { width: '400px', "min-height": '100px', background: "#ff5555", borderRadius: "15px"},
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#ff5555" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     hexPointReset(layer)
@@ -1091,7 +1095,7 @@
                     ["raw-html", function () { return "You will gain <h3>" + format(player.h.ragePowerToGet) + "</h3> rage power on reset." }, { "color": "#ff5555", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "(Based on hex 1 points)" }, { "color": "#ff5555", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["color-clickable", 16]]],
+                    ["row", [["clickable", 16]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Rage power also boosts hex " + formatWhole(player.h.currentRagePowerEffect.add(1)) + " points by x" + format(player.h.ragePowerCycleEffect) + "." }, { "color": "#ff5555", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Time to increase hex layer: " + formatTime(player.h.ragePowerCycleTimer) + "/" + formatTime(player.h.ragePowerCycleTimerReq) + "." }, { "color": "#ff5555", "font-size": "20px", "font-family": "monospace" }],

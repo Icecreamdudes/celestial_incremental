@@ -2872,7 +2872,7 @@
                 }],
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
-                ["raw-html", "<img src='resources/xpBoost.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", "<img src='resources/XPBoost.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return format(player.cb.XPBoost)}, {width: "93px", height: "50px", color: "#00B229", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
                     if (player.cb.XPBoost.lt(1000)) {

@@ -670,49 +670,13 @@ function loadVue() {
 	})
 
 	// data = id of clickable
-	Vue.component('color-clickable', {
-		props: ['layer', 'data'],
-		template: `
-		<button
-			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
-			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
-			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].style.backgroundColor} : {}, tmp[layer].clickables[data].style]"
-			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
-			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
-			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
-			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
-			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
-
-		</button>
-		`,
-		data() { return { interval: false, time: 0,}},
-		methods: {
-			start() {
-				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
-					this.interval = setInterval((function() {
-						let c = layers[this.layer].clickables[this.data]
-						if(this.time >= 5 && run(c.canClick, c)) {
-							run(c.onHold, c)
-						}
-						this.time = this.time+1
-					}).bind(this), 50)}
-			},
-			stop() {
-				clearInterval(this.interval)
-				this.interval = false
-			  	this.time = 0
-			}
-		},
-	})
-
-	// data = id of clickable
 	Vue.component('bt-clickable', {
 		props: ['layer', 'data'],
 		template: `
 		<button
 			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
 			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
-			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].style.backgroundColor} : {}, tmp[layer].clickables[data].style]"
+			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
 			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
 			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>

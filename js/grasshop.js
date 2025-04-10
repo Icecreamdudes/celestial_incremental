@@ -253,7 +253,11 @@
                 player.gh.steelPause = new Decimal(5)
                 player.gh.steel = player.gh.steel.add(player.gh.steelToGet)
             },
-            style: { width: '400px', "min-height": '100px', backgroundColor: 'grey', borderRadius: '15px' },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     grasshopReset()
@@ -1224,7 +1228,7 @@
                     ["raw-html", function () { return "You will gain <h3>" + format(player.gh.steelToGet) + "</h3> steel on reset."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Steel boosts grasshopper gain by <h3>" + format(player.gh.steelEffect) + "</h3>x."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["color-clickable", 12]]],
+                    ["row", [["clickable", 12]]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
                     ["row", [["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]]],

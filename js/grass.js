@@ -276,7 +276,11 @@
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.sub(1)
             },
-            style: { width: '125px', 'min-height': '75px', backgroundColor: '#047ce4', borderRadius: '5px 0px 0px 5px'},
+            style() {
+                let look = {width: "125px", minHeight: "75px", borderRadius: "5px 0px 0px 5px"}
+                this.canClick() ? look.backgroundColor = "#047ce4" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         7: {
             title() { return '<h3>Increase Level' },
@@ -285,7 +289,11 @@
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.add(1)
             },
-            style: { width: '125px', 'min-height': '75px', backgroundColor: '#047ce4', borderRadius: '0px 5px 5px 0px'},
+            style() {
+                let look = {width: "125px", minHeight: "75px", borderRadius: "0px 5px 5px 0px"}
+                this.canClick() ? look.backgroundColor = "#047ce4" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     bars: {
@@ -1110,7 +1118,7 @@
                     ['row', [['ex-buyable', 25], ['ex-buyable', 26], ['ex-buyable', 27], ['ex-buyable', 28]]],
                     ['blank', '25px'],
                     ['ex-buyable', 29],
-                    ['row', [['color-clickable', 6], ['color-clickable', 7]]],
+                    ['row', [['clickable', 6], ['clickable', 7]]],
                     ['blank', '25px'],
                     ['raw-html', () => '<h3>Level: ' + formatWhole(player.g.moonstoneLevel) + '/' + formatWhole(player.g.moonstoneLevelMax),
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],

@@ -228,7 +228,11 @@ addLayer("pet", {
             onClick() {
                 player.tab = tmp.pet.levelables[layers.pet.levelables.index].shopLayer
             },
-            style: {width: '125px', minHeight: '40px', backgroundColor: "#4e7cff", color: "black", borderRadius: '0px', fontSize: '8px'},
+            style() {
+                let look = {width: '125px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         7: {
             title() { return "<h3>???"},
@@ -236,7 +240,12 @@ addLayer("pet", {
             canClick() { return false },
             unlocked() { return false /*layers.pet.levelables.index >= 100 && layers.pet.levelables.index < 200*/ },
             onClick () {},
-            style: { width: '125px', minHeight: '40px', backgroundColor: "#222222", color: "white", borderRadius: '0px', fontSize: '8px'},
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#222222" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         8: {
             title() { return "<h3>???"},
@@ -244,7 +253,12 @@ addLayer("pet", {
             canClick() { return false },
             unlocked() { return /*layers.pet.levelables.index >= 200 && layers.pet.levelables.index < 300*/ },
             onClick () {},
-            style: { width: '125px', minHeight: '40px', backgroundColor: "#222222", color: "white", borderRadius: '0px', fontSize: '8px'},
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#222222" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         // SUBTAB BUTTONS
         11: {
@@ -314,7 +328,11 @@ addLayer("pet", {
             onClick() {
                 layers.pet.levelables[layers.pet.levelables.index].evoClick()
             },
-            style: { width: '125px', minHeight: '40px', backgroundColor: "#d487fd", borderRadius: '0px', fontSize: '8px' },
+            style() {
+                let look = {width: '125px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         22: {
             title() { return "<h3>???"},
@@ -322,7 +340,12 @@ addLayer("pet", {
             canClick() { return false },
             unlocked() { return false },
             onClick () {},
-            style: { width: '200px', minHeight: '40px', backgroundColor: "#222222", color: "white", borderRadius: '0px', fontSize: '8px'},
+            style() {
+                let look = {width: '200px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#222222" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         
         // START OF FRAGMENTATION CLICKABLES
@@ -353,7 +376,11 @@ addLayer("pet", {
                     layers.pet.rarePetBanner()
                 }
             },
-            style: { width: "200px", minHeight: "50px", borderRadius: "30px / 15px", backgroundColor: "#cb79ed" },
+            style() {
+                let look = {width: '200px', minHeight: '50px', borderRadius: '30px / 15px'}
+                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         101: {
             title() { return "<img src='" + tmp.pet.levelables[player.pet.bannerID[0]].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
@@ -2668,9 +2695,9 @@ addLayer("pet", {
                     ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
-                                ["style-row", [["color-clickable", 2]], {width: '100px', height: '40px'}],
-                                ["style-row", [["color-clickable", 5], ["color-clickable", 6], ["color-clickable", 7], ["color-clickable", 8], ["color-clickable", 21]], {width: '125px', height: '40px'}],
-                                ["style-row", [["color-clickable", 3], ["color-clickable", 4], ["color-clickable", 22]], {width: '200px', height: '40px'}],
+                                ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
+                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
+                                ["style-row", [["clickable", 3], ["clickable", 4], ["clickable", 22]], {width: '200px', height: '40px'}],
                             ]],
                         ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
                         ["always-scroll-column", [
@@ -2723,9 +2750,9 @@ addLayer("pet", {
                     ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
-                                ["style-row", [["color-clickable", 2]], {width: '100px', height: '40px'}],
-                                ["style-row", [["color-clickable", 5], ["color-clickable", 6], ["color-clickable", 7], ["color-clickable", 8], ["color-clickable", 21]], {width: '125px', height: '40px'}],
-                                ["style-row", [["color-clickable", 3], ["color-clickable", 4], ["color-clickable", 22]], {width: '200px', height: '40px'}],
+                                ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
+                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
+                                ["style-row", [["clickable", 3], ["clickable", 4], ["clickable", 22]], {width: '200px', height: '40px'}],
                             ]],
                         ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
                         ["always-scroll-column", [
@@ -2788,7 +2815,7 @@ addLayer("pet", {
                         ["blank", "25px"],
                         ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.bannerID[player.pet.bannerIndex])) + " of this pet."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["blank", "25px"],
-                        ["color-clickable", 100],
+                        ["clickable", 100],
                         ["blank", "25px"],
                     ], {width: "550px", height: "700px", backgroundColor: "#7d3f98"}],
                 ],

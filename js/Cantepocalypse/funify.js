@@ -419,7 +419,12 @@
             onClick() {
                 player.fu.sadnessProduce = true
             },
-            style: { width: '150px', "min-height": '50px', borderRadius: '0px', backgroundColor: 'blue', color: 'white'}
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0px"}
+                this.canClick() ? look.backgroundColor = "blue" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         17: {
             title() { return "Pause Production" },
@@ -428,7 +433,12 @@
             onClick() {
                 player.fu.sadnessProduce = false
             },
-            style: { width: '150px', "min-height": '50px', borderRadius: '0px 10px 10px 0px', backgroundColor: 'blue', color: 'white'}
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0px 10px 10px 0px"}
+                this.canClick() ? look.backgroundColor = "blue" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         18: {
             title() { return "Unpause Production" },
@@ -437,7 +447,12 @@
             onClick() {
                 player.fu.angerProduce = true
             },
-            style: { width: '150px', "min-height": '50px', borderRadius: '0px', backgroundColor: 'red', color: 'white'}
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0px"}
+                this.canClick() ? look.backgroundColor = "red" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         19: {
             title() { return "Pause Production" },
@@ -446,7 +461,12 @@
             onClick() {
                 player.fu.angerProduce = false
             },
-            style: { width: '150px', "min-height": '50px', borderRadius: '0px 10px 10px 0px', backgroundColor: 'red', color: 'white'}
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "0px 10px 10px 0px"}
+                this.canClick() ? look.backgroundColor = "red" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         31: {
             title() { return "<h3>Reset all alt-uni 1 content for jocus essence<br>(Based on replicanti points)" },
@@ -2235,7 +2255,7 @@
                         ["raw-html", function () { return player.fu.emotionIndex.eq(3) ? "You are gaining <h3>" + format(player.fu.fearPerSecond) + "</h3> fear per second." : ""  }, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return player.fu.emotionIndex.eq(3) ? "which divides fear by /<h3>" + format(player.fu.fearEffect) + "</h3>." : ""  }, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["color-clickable", 4], ["color-clickable", 5], ["clickable", 14], ["clickable", 15], ["color-clickable", 16], ["color-clickable", 17], ["color-clickable", 18], ["color-clickable", 19]]],
+                        ["row", [["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
                         ["blank", "25px"],
                         ["row", [
                         ["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34], 

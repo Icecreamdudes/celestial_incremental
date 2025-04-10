@@ -204,7 +204,12 @@
                 player.ca.galaxyDust = player.ca.galaxyDust.add(player.ca.galaxyDustToGet)
                 player.ca.replicanti = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '100px', backgroundColor: '#333c81', color: 'white', border: '3px solid #241c44', borderRadius: '15px' },
+            style() {
+                let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         13: {
             title() { return "<h3>Reset replicanti, but gain a replicanti galaxy. (Req: 1.79e308 replicanti)" },
@@ -214,7 +219,12 @@
                 player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.add(1)
                 player.ca.replicanti = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '100px', backgroundColor: '#333c81', color: 'white', border: '3px solid #241c44', borderRadius: '15px' },
+            style() {
+                let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         14: {
             title() { return "<h2>CONTEMPLATE INFINITY" },
@@ -757,14 +767,14 @@
                     ["raw-html", function () { return "Galaxy dust multiplies antimatter galaxy effect base by <h3>" + format(player.ca.galaxyDustEffect) + "</h3>x." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will <h3>" + format(player.ca.galaxyDustToGet) + "</h3> galaxy dust on reset." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["color-clickable", 12]]],
+                    ["row", [["clickable", 12]]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, { "color": "#979EE8", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "(They just act like regular antimatter galaxies)" }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["color-clickable", 13]]],
+                    ["row", [["clickable", 13]]],
                 ]
             },
             "CELESTIAL": {

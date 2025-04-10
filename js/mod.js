@@ -45,13 +45,80 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.5 - Visual Revamp</h3><br>
+	<h3>v1.5 - The Polishing Update</h3><br>
+		Content:<br>
+			- Added the first 4 parts of the in-game Savebank.<br><br>
 		Balancing:<br>
-			- <br>
+			- Nerfed U3 Upgrade 7. (It also didn't function previously, so actually a buff)<br>
+			- Grass Square Pet's special button effect now scales with level.<br>
+			- Voidgwa pet effects are buffed.<br>
+			- Base Pet Shop prices changed slightly. (Not the scaling though)<br>
+			- Fragmentation slightly buffed (More buttons, longer timers)<br>
+			- Added the ability to sacrifice epic fragments.<br>
+			- Made singularity no longer reset highest Check Back level.<br>
+			- No longer get stuck in Cantepocalypse after singularity.<br>
+			- Made IP Challenge 7 unlock after reaching Check Back level 100.<br>
+			- Slightly nerfed Realm Essence to counteract accidental buff from fixing pre-OTF multiplier order.<br><br>
 		Bugfixes:<br>
-			- <br>
+			- Fixed the sidebar appearing while the game is loading.<br>
+			- Fixed U3 Upgrade 5 not working with Oil layer.<br>
+			- Fixed Repli-Grass Generator not working correctly when Repli-Grass is unfocused.<br>
+			- Fixed incorrect ordering of Pre-OTF multipliers when post singularity.<br>
+			- Fixed Check Back's effect being disabled.<br>
+			- Voidgwa pet effect now works.<br>
+			- Fixed D20 pet's 1st effect.<br>
+			- Fixed some offline Check Back timers.<br>
+			- Fixed singularity not resetting XP properly.<br>
+			- Made singularity properly kick you out of challenges.<br>
+			- Fixed scrap core toggle.<br>
+			- Fixed being able to process a null singularity core.<br>
+			- Fixed Dragon pet upgrade 2 not working.<br>
+			- Fixed U3 Milestone 3 not automating galaxy dust.<br>
+			- Fixed Cantepocalypse trigger.<br>
+			- Fixed Halter and OTF not having the correct background.<br>
+			- Fixed certain dice effects gain formulas being broken.<br>
+			- Fixed U3 Upgrade 6 not working on some resets.<br>
+			- Fixed being able to gain Infinity Milestones without having unlocked them.<br>
+			- Fixed U1 Upgrade order and Realm Essence upgrade not showing.<br>
+			- Fixed being able to enter halt values that are less then 1.<br><br>
 		Qol:<br>
-			- <br><br>
+			- Added rigged booster dice.<br>
+			- Added keep cante cores to U3 milestone 8<br>
+			- Added U3 Upgrade 3, which unlocks a Challenge Dice upgrade and keeps T2 dice effects.<br>
+			- Made U3 Milestone 7 keep RBI toggle.<br><br>
+		Visual Enhancements:<br>
+			- Visually remade almost all buyables.<br>
+			- Visually remade Check Back layer.<br>
+			- Combined Pet Shop and Epic Fragmentation layers into Check Back.<br>
+			- Visually touched up all evolution layers.<br>
+			- Visually remade Dice's Booster Dice tab.<br>
+			- Improved the Settings menu.<br>
+			- Touched up Funify layer.<br>
+			- Touched up Singularity Dimensions layer.<br>
+			- Touched up Antimatter Dimensions layer.<br>
+			- Touched up Infinity Dimensions layer.<br>
+			- Touched up Tav's Dimension Power and Automation tabs.<br>
+			- Touched up Rank's Time Reversal tab.<br>
+			- Made Debuff brighter.<br>
+			- Changed colors of Mod and Check Back layer.<br>
+			- Colored the Factor Layer's tab buttons.<br><br>
+		Typos & Text Changes:<br>
+			- Improved AU1 Upgrade 8s description.<br>
+			- Clarified that Antimatter Singularity Core effects ignore softcap.<br>
+			- Clarified that U3 Milestone 2 unlocks a Break Infinity upgrade.<br>
+			- Clarified that U3 Milestone 5 removes ALL realm mod requirements.<br>
+			- Removed mention of U3 Milestone 5 unlocking radiation milestones. (as it doesn't)<br>
+			- Changed the wording of U3 Milestone 7.<br>
+			- Fixed extra 'and' in U3 Milestone 9.<br>
+			- Fixed Break Infinity upgrade numbering.<br>
+			- Clarified what Break Infinity upgrades 13 and 17 do.<br>
+			- Clarified that Charger Milestone 2 ignores softcaps.<br>
+			- Clarified that IP Upgrade (4, 3) ignores softcaps.<br>
+			- Better clarified current status of OTF options.<br>
+			- Clarified that Dream Realm Mod Buyable 1 ignores softcaps.<br>
+			- Fixed Realm Mod Halter Boost's tab not having updated text.<br>
+			- Clarified that NIP Upgrade 4 unlocks new IP Upgrades.<br><br>
+
 	<h3>v1.4 - The Singularity Update Part I: Cores</h3><br>
 		Content:<br>
 			- Added Singularity, the next large prestige layer.<br>
@@ -73,6 +140,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			I lost track again lmao<br><br>
 		QoL:<br>
 			I lost track again lmao<br><br>
+
 	<h3>v1.3 - The Layout Update - with QoL</h3><br>
 		Content:<br>
 			- Added the Sidebar Layout.<br>
@@ -112,6 +180,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		???:<br>
 			- Continued work on the buyable code rework, layers improved this patch are hex, grass, AD, and ID.<br>
 			- As I said last patch, this also means the buy max buttons on those layers are subtab specific now.<br><br>
+
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
 			- Fixed Oil buy max buttons not loading correctly.<br>
@@ -147,6 +216,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Begun work on buyable code rework, current layers done are: Ranks, Factors, Prestige, Trees, Grasshoppers.<br>
 			- Since of this, all buy max buttons on those layers are subtab specific and not controlled by the main variable.<br>
 			- There was sadly not enough time to get to all layers, so hopefully more work on this can be done later.<br><br>
+
 	<h3>v1.2 - The Pet Update Part II: Epic Pets!!! :)</h3><br>
 		Content:<br>
 			- Added 3 new epic pets!!! (They are hard to get so good luck)<br>
@@ -157,8 +227,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added epic pet fragments.<br>
 			- Added a pet shop expansion.<br>
 			- New song for check back by 150percent!!!<br><br>
-		Bugfixes: I lost track lmao<br><br>
-		QoL: I lost track again lmao<br><br>
+		Bugfixes:<br>
+			- I lost track lmao<br><br>
+		QoL:<br>
+			- I lost track again lmao<br><br>
+
 	<h3>v1.1.2 - Even More Bugfixes</h3><br>
 	 	Bugfixes:<br>
    			- Fixed Cante Quiz Questions breaking if the answer is negative.<br>
@@ -182,47 +255,49 @@ let changelog = `<h1>Changelog:</h1><br>
    			- Decreased the cost scaling of Grasshop Check Back Study II Upgrades to account for the increased cap.<br>
      		- Buffed the Daily XP Reward from the Insane Face evolution. (Decreased base, but now effected by multipliers)<br>
        		- Buffed the chances to gain paragon shards from XPBoosting. (B1 5% -> 10%, B2 20% -> 25%)<br><br>
+
 	<h3>v1.1.1 - Tons of Bugfixes</h3><br>
 	 	Bugfixes:<br>
-   		- Fixed Big Crunch not working properly.<br>
+   			- Fixed Big Crunch not working properly.<br>
      		- Added Galaxy Limit to prevent antimatter inflation bug.<br>
        		- Barred entry on challenge 8 after completion due to inflation bug.<br>
-	 	- Added a minimum value to the XP rocket fuel effect to prevent exploitation.<br>
+	 		- Added a minimum value to the XP rocket fuel effect to prevent exploitation.<br>
      		- Fixed manual Booster Dice not giving challenge points if you own the dice pet evolution.<br>
        		- Fixed hex, rage, and blank mod resets all accidentally resetting the last 4 dice effects.<br>
-	 	- Fixed star pet evolution buyable costs not being rounded.<br>
-   		- Fixed bug where buying dice pet evolution checked for current dice points instead of highest.<br>
+	 		- Fixed star pet evolution buyable costs not being rounded.<br>
+   			- Fixed bug where buying dice pet evolution checked for current dice points instead of highest.<br>
      		- Fixed cutscene 8 also playing cutscene 10.<br>
        		- Fixed challenge 1 not automatically crunching when reaching infinite celestial points.<br><br>
-       		QoL:<br>
-	 	- Added an alert toggle to the pet shop.<br>
-   		- Reworked the leveling system to allow for bulk leveling.<br><br>
+       	QoL:<br>
+	 		- Added an alert toggle to the pet shop.<br>
+   			- Reworked the leveling system to allow for bulk leveling.<br><br>
    		Balancing:<br>
      		- Nerfed the scaling of Nova's second effect.<br>
        		- Changed the Check Back buyable cost to be based on total XP instead of current level.<br><br>
+
 	<h3>v1.1 - The Pet Update Part I - With Bugfixes</h3><br>
 		Content:<br>
-		- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
-		- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
+			- Added 3 new pet evolutions, for spider, clock, and drippy ufo.<br>
+			- Added 3 new features to go with the evolutions: advanced halter, shard buttons and moonstone.<br><br>
 		Bugfixes:<br>
-		- Fixed volume slider not working properly.<br>
-		- Multiple NaN bugs.<br>
-		- Fixed grass spawning incorrectly on tab switches.<br>
-		- Fixed many negative number issues.<br>
-		- Fixed bug where pop-ups would stack over each other.<br>
-		- Fixed big crunch screen bug.<br>
-		- Fixed latin1 character range export bug.<br><br>
+			- Fixed volume slider not working properly.<br>
+			- Multiple NaN bugs.<br>
+			- Fixed grass spawning incorrectly on tab switches.<br>
+			- Fixed many negative number issues.<br>
+			- Fixed bug where pop-ups would stack over each other.<br>
+			- Fixed big crunch screen bug.<br>
+			- Fixed latin1 character range export bug.<br><br>
 		QoL:<br>
-		- Fixed typos.<br>
-		- Added factor and rank total mult text.<br>
-		- Improved pet visuals.<br>
-		- Added a "max all" button for antimatter dimensions.<br>
-		- Made Tav's Domain a separate layer.<br>
+			- Fixed typos.<br>
+			- Added factor and rank total mult text.<br>
+			- Improved pet visuals.<br>
+			- Added a "max all" button for antimatter dimensions.<br>
+			- Made Tav's Domain a separate layer.<br>
 		Balancing:<br>
-		- Rocket Fuel no longer resets pent milestones.<br>
-		- Buffed grass, rocket fuel, and ranks.<br>
-		- Changed some pet evolution requirements.<br>
-		- Made some challenges easier.<br><br>
+			- Rocket Fuel no longer resets pent milestones.<br>
+			- Buffed grass, rocket fuel, and ranks.<br>
+			- Changed some pet evolution requirements.<br>
+			- Made some challenges easier.<br><br>
 	<h3>v1.0</h3><br>
 		- Added Universe 1, Universe 2, and Alternate Universe 1.<br>
 		- Added Ranks, Tiers, Tetrs, Pents, Factors, Prestige, Trees, Grass, Grasshop, and Code Experience.<br>
@@ -235,7 +310,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Added 2 Celestials: Tav and Cante.<br>
 		- Added cutscenes.<br>
 		- Removed Herobrine.
-		`
+`
 
 let winText = `Congratulations! You have completed the entirety of Celestial Incremental for now...`
 

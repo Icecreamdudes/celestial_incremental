@@ -752,7 +752,7 @@
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },
             rewardDescription: "Check back buyables.",
-            unlocked() { return hasChallenge("ip", 16) && player.cb.XPBoostUnlock },
+            unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(100) },
             onEnter() {
                 layers.in.bigCrunch()
 
@@ -764,7 +764,6 @@
                 layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
-
         },
         18: {
             name: "Challenge VIII",
@@ -784,92 +783,83 @@
 
         },
     },
-    infoboxes: {
-    },
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
-                        ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
-                        ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
-                        ["row", [["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]]],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
+                    ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
+                    ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
+                    ["row", [["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]]],
                 ]
-
             },
             "Milestones": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["row", [["milestone", 1]]],
-                        ["row", [["milestone", 11]]],
-                        ["row", [["milestone", 12]]],
-                        ["row", [["milestone", 13]]],
-                        ["row", [["milestone", 14]]],
-                        ["row", [["milestone", 15]]],
-                        ["row", [["milestone", 16]]],
-                        ["row", [["milestone", 17]]],
-                        ["row", [["milestone", 18]]],
-                        ["row", [["milestone", 19]]],
-                        ["row", [["milestone", 21]]],
-                        ["row", [["milestone", 22]]],
-                        ["row", [["milestone", 23]]],
-                        ["row", [["milestone", 24]]],
-                        ["row", [["milestone", 25]]],
-                        ["row", [["milestone", 26]]],
-                        ["row", [["milestone", 27]]],
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["milestone", 1]]],
+                    ["row", [["milestone", 11]]],
+                    ["row", [["milestone", 12]]],
+                    ["row", [["milestone", 13]]],
+                    ["row", [["milestone", 14]]],
+                    ["row", [["milestone", 15]]],
+                    ["row", [["milestone", 16]]],
+                    ["row", [["milestone", 17]]],
+                    ["row", [["milestone", 18]]],
+                    ["row", [["milestone", 19]]],
+                    ["row", [["milestone", 21]]],
+                    ["row", [["milestone", 22]]],
+                    ["row", [["milestone", 23]]],
+                    ["row", [["milestone", 24]]],
+                    ["row", [["milestone", 25]]],
+                    ["row", [["milestone", 26]]],
+                    ["row", [["milestone", 27]]],
                 ]
-
             },
             "Challenges": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("ip", 16) },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
-                        ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
+                    ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(100) ? "Unlock Challenge VII by reaching Check Back Level 100" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                    ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                 ]
-
             },
             "Buyables": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasChallenge("ip", 14) },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
-
             },
             "Reset": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.in.breakInfinity },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["clickable", 11]]],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11]]],
                 ]
-
             },
         },
     },
 
-    tabFormat: [                        ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    tabFormat: [
+        ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}
 })

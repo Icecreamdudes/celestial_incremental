@@ -256,7 +256,7 @@ addLayer("cp", {
         },
         19:
         {
-            title: "Feature VIII",
+            title: "Feature IX",
             unlocked() { return hasMilestone("s", 17) },
             description: "Unlocks Funify.",
             cost: new Decimal(1e125),

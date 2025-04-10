@@ -54,9 +54,9 @@
 				<button class="uniButton" v-if="layerShown('od') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('od') " onclick="player.universe='1337'"><span class="buttonText">?</span></button>
 			</div>
 		<!-- Meta Content -->
-			<div class="metaMenu" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">
-				<div class="contentHeader" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">META</div>
-				<button class="uniButton" v-if="(hasUpgrade('i', 21) || hasUpgrade('ad', 13)) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('otherfeat')" onclick="showTab('otherfeat')"><span class="buttonText">OTF</span></button>
+			<div class="metaMenu" v-if="(hasUpgrade('i', 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">
+				<div class="contentHeader" v-if="(hasUpgrade('i', 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0) || hasMilestone('ip', 23) || layerShown('cb')) && !player.cp.cantepocalypseActive">META</div>
+				<button class="uniButton" v-if="(hasUpgrade('i', 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('otherfeat')" onclick="showTab('otherfeat')"><span class="buttonText">OTF</span></button>
 				<button class="uniButton" v-if="hasMilestone('ip', 23) && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('halter') " onclick="showTab('halter')"><span class="buttonText">HLT</span></button>
 				<button class="uniButton" v-if="layerShown('cb') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('cb') " onclick="player.universe='0.5';showTab('cb')"><span class="buttonText">CB</span></button>
 			</div>

@@ -603,7 +603,7 @@ addLayer("i", {
             },
             "Portal": {
                 buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)" }},
-                unlocked() { return hasUpgrade("i", 21) || hasUpgrade('ad', 13)},
+                unlocked() { return hasUpgrade("i", 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0)},
                 content:  [],
             },
             "Settings": {
@@ -691,21 +691,21 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
     });
 }
 document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
+    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
         if (!options.newMenu) {
             player.tab = "i"
         } else {
             player.universe = 1
         }
     }
-    if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13) && options.toggleHotkey) {
+    if(event.keyCode == 65 && hasUpgrade("cp", 18) && options.toggleHotkey) {
         if (!options.newMenu) {
             player.tab = "cp"
         } else {
             player.universe = 1.5
         }
     }
-    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
+    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
         if (!options.newMenu) {
             player.tab = "in"
         } else {

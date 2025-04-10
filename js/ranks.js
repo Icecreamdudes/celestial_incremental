@@ -68,6 +68,7 @@
         let ranksGainPostS3 = player.points.plus(1).log10().div(10).pow(Decimal.div(1, 50)).floor()
 
         player.r.rankEffect = player.r.rank.mul(0.4).add(1).pow(1.055)
+        if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
         player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("rm", 21))
         player.r.rankReq = layers.r.getRankReq()

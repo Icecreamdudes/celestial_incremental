@@ -482,7 +482,7 @@ addLayer("in", {
             },
             "Portal": {
                 buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)" }},
-                unlocked() { return hasUpgrade("ad", 13) || player.s.highestSingularityPoints.gte(0) },
+                unlocked() { return true },
                 content: []
             },
             "Settings": {

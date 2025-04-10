@@ -6,31 +6,12 @@
     startData() { return {
         unlocked: true,
         factorBase: new Decimal(0.05),
-        factorUnlocks: [true, true, true, false, false, false, false, false],
 
         factorPower: new Decimal(0),
         factorPowerEffect: new Decimal(1),
         factorPowerPerSecond: new Decimal(0),
-        powerFactorUnlocks: [true, true, true, false, false, false, false, false],
 
-        //tree
-        treeFactorUnlocks: [true, true, true, false, false, false, false, false],
-
-        //grass
-        grassFactorUnlocks: [false, false, false, false, false, false, false, false],
-
-        //infinity points
-        infinityFactorUnlocks: [true, true, true, true, true, true, true, true],
-
-        // Buy Max Toggles
-        mfactorMax: false,
-        pfactorMax: false,
-        tfactorMax: false,
-        gfactorMax: false,
-        ifactorMax: false,
-        nfactorMax: false,
-    }
-    },
+    }},
     automate() {
         if (hasUpgrade("p", 15))
         {
@@ -159,63 +140,6 @@
         player.f.factorBase = player.f.factorBase.mul(buyableEffect("rm", 22))
         if (player.cop.processedCoreFuel.eq(1)) player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
 
-        //----------------------------------------
-
-        // UNLOCK CHECKS
-        if (player.r.tier.gte(2)) {
-            player.f.factorUnlocks[3] = true
-        }
-        if (player.r.tier.gte(4)) {
-            player.f.factorUnlocks[4] = true
-        }
-        if (player.r.tetr.gte(2) && player.f.factorUnlocks[4] == true) {
-            player.f.factorUnlocks[5] = true
-        }
-        if (hasUpgrade("p", 13) && player.f.factorUnlocks[5] == true) {
-            player.f.factorUnlocks[6] = true
-        }
-        if (player.r.tetr.gte(4) && player.f.factorUnlocks[6] == true) {
-            player.f.factorUnlocks[7] = true
-        }
-
-        if (player.p.prestigePoints.gte(10000)) {
-            player.f.powerFactorUnlocks[3] = true
-        }
-        if (player.points.gte(1e14) && player.f.powerFactorUnlocks[3] == true) {
-            player.f.powerFactorUnlocks[4] = true
-        }
-        if (player.r.tetr.gte(11) && player.f.powerFactorUnlocks[4] == true) {
-            player.f.powerFactorUnlocks[5] = true
-        }
-        if (player.t.trees.gte(25) && player.f.powerFactorUnlocks[5] == true) {
-            player.f.powerFactorUnlocks[6] = true
-        }
-        if (hasUpgrade("p", 19) && player.f.powerFactorUnlocks[6] == true) {
-            player.f.powerFactorUnlocks[7] = true
-        }
-
-        if (hasUpgrade("p", 23)) {
-            player.f.treeFactorUnlocks[3] = true
-        }
-        if (hasUpgrade("g", 17) && player.f.treeFactorUnlocks[3] == true) {
-            player.f.treeFactorUnlocks[4] = true
-        }
-        if (hasMilestone("r", 13) && player.f.treeFactorUnlocks[4] == true) {
-            player.f.treeFactorUnlocks[5] = true
-        }
-        if (player.m.mods.gte(20) && player.f.treeFactorUnlocks[5] == true) {
-            player.f.treeFactorUnlocks[6] = true
-        }
-        if (hasMilestone("r", 16) && player.f.treeFactorUnlocks[6] == true) {
-            player.f.treeFactorUnlocks[7] = true
-        }
-
-        for (let i = 0; i < player.f.grassFactorUnlocks.length; i++) {
-            if (player.gh.buyables[15].gt(i))
-            {
-                player.f.grassFactorUnlocks[i] = true
-            }
-        }
     },
 
     clickables: {
@@ -350,7 +274,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[0] },
+            unlocked() { return player.gh.buyables[15].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -375,7 +299,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         2: {
             costBase() { return new Decimal(100) },
@@ -384,7 +308,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[1] },
+            unlocked() { return player.gh.buyables[15].gte(2) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -409,7 +333,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         3: {
             costBase() { return new Decimal(180) },
@@ -418,7 +342,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[2] },
+            unlocked() { return player.gh.buyables[15].gte(3) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -443,7 +367,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         4: {
             costBase() { return new Decimal(340) },
@@ -452,7 +376,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[3] },
+            unlocked() { return player.gh.buyables[15].gte(4) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -477,7 +401,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         5: {
             costBase() { return new Decimal(800) },
@@ -486,7 +410,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[4] },
+            unlocked() { return player.gh.buyables[15].gte(5) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -511,7 +435,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         6: {
             costBase() { return new Decimal(2000) },
@@ -520,7 +444,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[5] },
+            unlocked() { return player.gh.buyables[15].gte(6) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -545,7 +469,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         7: {
             costBase() { return new Decimal(5000) },
@@ -554,7 +478,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[6] },
+            unlocked() { return player.gh.buyables[15].gte(7) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -579,7 +503,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         8: {
             costBase() { return new Decimal(14000) },
@@ -588,7 +512,7 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[7] },
+            unlocked() { return player.gh.buyables[15].gte(8) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -613,7 +537,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#119B35" }
         },
         // Main Factors
         11: {
@@ -623,7 +547,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[0] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -648,7 +572,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         12: {
             costBase() { return new Decimal(25) },
@@ -657,7 +581,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[1] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -682,7 +606,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         13: {
             costBase() { return new Decimal(60) },
@@ -691,7 +615,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[2] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -716,7 +640,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         14: {
             costBase() { return new Decimal(200) },
@@ -725,7 +649,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22))},
-            unlocked() { return player.f.factorUnlocks[3] },
+            unlocked() { return player.r.tier.gte(2) || player.r.tetr.gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -750,7 +674,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         15: {
             costBase() { return new Decimal(800) },
@@ -759,7 +683,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[4] },
+            unlocked() { return player.r.tier.gte(4) || player.r.tetr.gte(2) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -784,7 +708,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         16: {
             costBase() { return new Decimal(3000) },
@@ -793,7 +717,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[5] },
+            unlocked() { return player.r.tetr.gte(2) && tmp.f.buyables[15].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -818,7 +742,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         17: {
             costBase() { return new Decimal(10000) },
@@ -827,7 +751,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[6] },
+            unlocked() { return hasUpgrade("p", 13) && tmp.f.buyables[16].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -852,7 +776,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         18: {
             costBase() { return new Decimal(50000) },
@@ -861,7 +785,7 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[7] },
+            unlocked() { return player.r.tetr.gte(4) && tmp.f.buyables[17].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -886,7 +810,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         // Power Factors
         19: {
@@ -921,7 +845,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         21: {
             costBase() { return new Decimal(500) },
@@ -955,7 +879,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         22: {
             costBase() { return new Decimal(1500) },
@@ -989,7 +913,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         23: {
             costBase() { return new Decimal(4000) },
@@ -998,7 +922,7 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[3] },
+            unlocked() { return player.p.prestigePoints.gte(10000) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1023,7 +947,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         24: {
             costBase() { return new Decimal(9000) },
@@ -1032,7 +956,7 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[4] },
+            unlocked() { return player.points.gte(1e14) && tmp.f.buyables[23].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1057,7 +981,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         25: {
             costBase() { return new Decimal(25000) },
@@ -1066,7 +990,7 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[5] },
+            unlocked() { return player.r.tetr.gte(11) && tmp.f.buyables[24].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1091,7 +1015,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         26: {
             costBase() { return new Decimal(75000) },
@@ -1100,7 +1024,7 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[6] },
+            unlocked() { return player.t.trees.gte(25) && tmp.f.buyables[25].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1125,7 +1049,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         27: {
             costBase() { return new Decimal(300000) },
@@ -1134,7 +1058,7 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[7] },
+            unlocked() { return hasUpgrade("p", 19) && tmp.f.buyables[26].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1159,7 +1083,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#83cecf" }
         },
         // Tree Factors
         28: {
@@ -1169,7 +1093,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[0] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1194,7 +1118,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         29: {
             costBase() { return new Decimal(50) },
@@ -1203,7 +1127,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[1] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1228,7 +1152,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         31: {
             costBase() { return new Decimal(80) },
@@ -1237,7 +1161,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[2] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1262,7 +1186,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         32: {
             costBase() { return new Decimal(160) },
@@ -1271,7 +1195,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[3] },
+            unlocked() { return hasUpgrade("p", 23) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1296,7 +1220,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         33: {
             costBase() { return new Decimal(400) },
@@ -1305,7 +1229,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[4] },
+            unlocked() { return hasUpgrade("g", 17) && tmp.f.buyables[32].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1330,7 +1254,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         34: {
             costBase() { return new Decimal(20000) },
@@ -1339,7 +1263,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[5] },
+            unlocked() { return hasMilestone("r", 13) && tmp.f.buyables[33].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1364,7 +1288,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         35: {
             costBase() { return new Decimal(1e6) },
@@ -1373,7 +1297,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[6] },
+            unlocked() { return player.m.mods.gte(20) && tmp.f.buyables[34].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1398,7 +1322,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         36: {
             costBase() { return new Decimal(1e12) },
@@ -1407,7 +1331,7 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[7] },
+            unlocked() { return hasMilestone("r", 16) && tmp.f.buyables[35].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1432,7 +1356,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#3b844e" }
         },
         // Infinity Factors
         41: {
@@ -1442,7 +1366,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[0] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1467,7 +1391,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         42: {
             costBase() { return new Decimal(30) },
@@ -1476,7 +1400,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[1] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1501,7 +1425,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         43: {
             costBase() { return new Decimal(45) },
@@ -1510,7 +1434,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[2] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1535,7 +1459,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         44: {
             costBase() { return new Decimal(80) },
@@ -1544,7 +1468,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[3] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1569,7 +1493,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         45: {
             costBase() { return new Decimal(200) },
@@ -1578,7 +1502,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[4] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1603,7 +1527,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         46: {
             costBase() { return new Decimal(550) },
@@ -1612,7 +1536,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[5] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1637,7 +1561,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         47: {
             costBase() { return new Decimal(1200) },
@@ -1646,7 +1570,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[6] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1671,7 +1595,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         48: {
             costBase() { return new Decimal(2600) },
@@ -1680,7 +1604,7 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[7] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1705,7 +1629,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         // NIP Factors
         51: {
@@ -1740,7 +1664,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         52: {
             costBase() { return new Decimal(18000) },
@@ -1774,7 +1698,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         53: {
             costBase() { return new Decimal(32000) },
@@ -1808,7 +1732,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         54: {
             costBase() { return new Decimal(60000) },
@@ -1842,7 +1766,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         55: {
             costBase() { return new Decimal(110000) },
@@ -1876,7 +1800,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         56: {
             costBase() { return new Decimal(270000) },
@@ -1910,7 +1834,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         57: {
             costBase() { return new Decimal(500000) },
@@ -1944,7 +1868,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
         58: {
             costBase() { return new Decimal(1200000) },
@@ -1978,7 +1902,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '125px', backgroundColor: "#b2d8d8" }
         },
     },
     milestones: {
@@ -1996,11 +1920,11 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.f.factorUnlocks[3] == false ?  "Next factor unlocks at tier 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[3] == true && player.f.factorUnlocks[4] == false ?  "Next factor unlocks at tier 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[4] == true && player.f.factorUnlocks[5] == false ?  "Next factor unlocks at tetr 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[5] == true && player.f.factorUnlocks[6] == false ?  "Next factor unlocks at Prestige Upgrade III." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[6] == true && player.f.factorUnlocks[7] == false ?  "Next factor unlocks at tetr 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !tmp.f.buyables[14].unlocked ?  "Next factor unlocks at tier 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[14].unlocked && !tmp.f.buyables[15].unlocked ?  "Next factor unlocks at tier 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[15].unlocked && !tmp.f.buyables[16].unlocked ?  "Next factor unlocks at tetr 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[16].unlocked && !tmp.f.buyables[17].unlocked ?  "Next factor unlocks at Prestige Upgrade III." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[17].unlocked && !tmp.f.buyables[18].unlocked ?  "Next factor unlocks at tetr 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                     ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
@@ -2020,11 +1944,11 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.p.prestigePoints) + " prestige points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[3] == false ?  "Next factor unlocks at 10,000 prestige points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[3] == true && player.f.powerFactorUnlocks[4] == false ?  "Next factor unlocks at 1e14 celestial points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[4] == true && player.f.powerFactorUnlocks[5] == false ?  "Next factor unlocks at tetr 11." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[5] == true && player.f.powerFactorUnlocks[6] == false ?  "Next factor unlocks at 25 trees." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[6] == true && player.f.powerFactorUnlocks[7] == false ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !tmp.f.buyables[23].unlocked ?  "Next factor unlocks at 10,000 prestige points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[23].unlocked && !tmp.f.buyables[24].unlocked ?  "Next factor unlocks at 1e14 celestial points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[24].unlocked && !tmp.f.buyables[25].unlocked ?  "Next factor unlocks at tetr 11." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[25].unlocked && !tmp.f.buyables[26].unlocked ?  "Next factor unlocks at 25 trees." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[26].unlocked && !tmp.f.buyables[27].unlocked ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["ex-buyable", 19], ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]]],
                     ["row", [["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27]]],
                     ["blank", "25px"],
@@ -2039,11 +1963,11 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.g.grass) + " grass." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[3] == false ?  "Next factor unlocks at Prestige Upgrade XII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[3] == true && player.f.treeFactorUnlocks[4] == false?  "Next factor unlocks at Grass Upgrade VII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[4] == true && player.f.treeFactorUnlocks[5] == false?  "Next factor unlocks at pent 3." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[5] == true && player.f.treeFactorUnlocks[6] == false?  "Next factor unlocks at 20 mods." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[6] == true && player.f.treeFactorUnlocks[7] == false?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !tmp.f.buyables[31].unlocked ?  "Next factor unlocks at Prestige Upgrade XII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[31].unlocked && !tmp.f.buyables[32].unlocked ?  "Next factor unlocks at Grass Upgrade VII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[32].unlocked && !tmp.f.buyables[33].unlocked ?  "Next factor unlocks at pent 3." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[33].unlocked && !tmp.f.buyables[34].unlocked ?  "Next factor unlocks at 20 mods." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[34].unlocked && !tmp.f.buyables[35].unlocked ?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["ex-buyable", 28], ["ex-buyable", 29], ["ex-buyable", 31], ["ex-buyable", 32]]],
                     ["row", [["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35], ["ex-buyable", 36]]],
                     ["blank", "25px"],
@@ -2082,7 +2006,7 @@
                 ]
             },
             "Negative Infinity": {
-                buttonStyle() { return { borderColor: "#008080", color: "white", borderRadius: "5px" } },
+                buttonStyle() { return { borderColor: "#b2d8d8", color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("ta", 16)},
                 content:
                 [

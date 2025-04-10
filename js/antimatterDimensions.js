@@ -321,15 +321,18 @@
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
-        13:
-        {
+        13: {
             title: "AD Upgrade III",
             unlocked() { return true },
-            description: "Unlocks the portal.",
+            description: "Boosts rank effect based on antimatter.",
             cost: new Decimal(1e25),
             currencyLocation() { return player.ad },
             currencyDisplayName: "Antimatter",
             currencyInternalName: "antimatter",
+            effect() {
+                return player.ad.antimatter.plus(1).log10().pow(1.25).add(1)
+            },
+            effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
         },
         14:
         {

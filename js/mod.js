@@ -58,7 +58,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Made singularity no longer reset highest Check Back level.<br>
 			- No longer get stuck in Cantepocalypse after singularity.<br>
 			- Made IP Challenge 7 unlock after reaching Check Back level 100.<br>
-			- Slightly nerfed Realm Essence to counteract accidental buff from fixing pre-OTF multiplier order.<br><br>
+			- Slightly nerfed Realm Essence to counteract accidental buff from fixing pre-OTF multiplier order.<br>
+			- Replaced Antimatter Dimensions Upgrade 3, as it doesn't work, and if it did it would hurt progression speed.<br><br>
 		Bugfixes:<br>
 			- Fixed the sidebar appearing while the game is loading.<br>
 			- Fixed U3 Upgrade 5 not working with Oil layer.<br>

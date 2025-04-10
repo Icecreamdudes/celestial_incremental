@@ -417,7 +417,7 @@
         22:
         {
             title: "Prestige Upgrade XI",
-            unlocked() { return hasUpgrade("p", 19) },
+            unlocked() { return hasUpgrade("p", 21) },
             description: "Automates tetr gain.",
             cost: new Decimal(1162261467),
             currencyLocation() { return player.p },
@@ -427,7 +427,7 @@
         23:
         {
             title: "Prestige Upgrade XII",
-            unlocked() { return hasMilestone("r", 11) },
+            unlocked() { return hasUpgrade("p", 22) && hasMilestone("r", 11) },
             description: "Unlocks Tree Factor IV.",
             cost: new Decimal.pow(5, 25),
             currencyLocation() { return player.p },

@@ -301,7 +301,7 @@
     upgrades: {
         11: {
             title: 'Grass Upgrade I',
-            unlocked() { return true },
+            unlocked() { return hasMilestone('r', 11) },
             description() { return 'Boosts grass value based on prestige points.' },
             cost: new Decimal(250),
             currencyLocation() { return player.g },
@@ -314,7 +314,7 @@
         },
         12: {
             title: 'Grass Upgrade II',
-            unlocked() { return true },
+            unlocked() { return hasMilestone('r', 11) },
             description() { return 'Boost tree gain based on grass.' },
             cost: new Decimal(400),
             currencyLocation() { return player.g },
@@ -327,7 +327,7 @@
         },
         13: {
             title: 'Grass Upgrade III',
-            unlocked() { return true },
+            unlocked() { return hasMilestone('r', 11) },
             description() { return 'Unlocks Golden Grass.' },
             cost: new Decimal(800),
             currencyLocation() { return player.g },
@@ -336,7 +336,7 @@
         },
         14: {
             title: 'Grass Upgrade IV',
-            unlocked() { return hasUpgrade('g', 13) },
+            unlocked() { return hasMilestone('r', 11) && hasUpgrade('g', 13) },
             description() { return 'Unlocks golden grass buyables.' },
             cost: new Decimal(1500),
             currencyLocation() { return player.g },
@@ -345,7 +345,7 @@
         },
         15: {
             title: 'Grass Upgrade V',
-            unlocked() { return hasUpgrade('g', 13) },
+            unlocked() { return hasMilestone('r', 11) && hasUpgrade('g', 13) },
             description() { return 'Unlocks more tree buyables.' },
             cost: new Decimal(3000),
             currencyLocation() { return player.g },
@@ -354,7 +354,7 @@
         },
         16: {
             title: 'Grass Upgrade VI',
-            unlocked() { return hasUpgrade('g', 13) },
+            unlocked() { return hasMilestone('r', 11) && hasUpgrade('g', 13) },
             description() { return 'Divides golden grass spawn time by /1.3.' },
             cost: new Decimal(4500),
             currencyLocation() { return player.g },
@@ -363,7 +363,7 @@
         },
         17: {
             title: 'Grass Upgrade VII',
-            unlocked() { return hasMilestone('r', 12) },
+            unlocked() { return hasMilestone('r', 11) && hasMilestone('r', 12) },
             description() { return 'Unlocks tree factor V.' },
             cost: new Decimal(7777),
             currencyLocation() { return player.g },
@@ -372,7 +372,7 @@
         },
         18: {
             title: 'Grass Upgrade VIII',
-            unlocked() { return hasMilestone('r', 14) },
+            unlocked() { return hasMilestone('r', 11) && hasMilestone('r', 14) },
             description() { return 'Increases grass capacity by +150 and golden grass by +6.' },
             cost: new Decimal(1e7),
             currencyLocation() { return player.g },
@@ -381,7 +381,7 @@
         },
         19: {
             title: 'Grass Upgrade IX',
-            unlocked() { return hasMilestone('r', 14) },
+            unlocked() { return hasMilestone('r', 11) && hasMilestone('r', 14) },
             description() { return 'Increases grass capacity based on pent. (Max: 1000)' },
             cost: new Decimal(1e9),
             currencyLocation() { return player.g },
@@ -394,7 +394,7 @@
         },
         21: {
             title: 'Grass Upgrade X',
-            unlocked() { return hasMilestone('r', 17) },
+            unlocked() { return hasMilestone('r', 11) && hasMilestone('r', 17) },
             description() { return 'Boosts mod gain based on check back level.' },
             cost: new Decimal(1e25),
             currencyLocation() { return player.g },
@@ -407,7 +407,7 @@
         },
         23: {
             title: "Grass Upgrade XI",
-            unlocked() { return hasUpgrade("i", 22) },
+            unlocked() { return hasMilestone('r', 11) && hasUpgrade("i", 22) },
             description() { return "Boost pollinator gain based on golden grass." },
             cost: new Decimal("1e250"),
             currencyLocation() { return player.g },
@@ -420,7 +420,7 @@
         },
         22: {
             title: "Grass Upgrade XII",
-            unlocked() { return player.po.realmMods || hasUpgrade("g", 22) },
+            unlocked() { return hasMilestone('r', 11) && (player.po.realmMods || hasUpgrade("g", 22)) },
             description() { return "Raise golden grass effect by ^6." },
             cost: new Decimal("1e550"),
             currencyLocation() { return player.g },

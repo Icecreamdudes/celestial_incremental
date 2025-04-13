@@ -34,7 +34,7 @@ addLayer("savebank", {
         3: {
             title() { return "Stats" },
             canClick() { return true },
-            unlocked() { return true },
+            unlocked() { return false },
             onClick() {
                 player.tab = "stats"
             },

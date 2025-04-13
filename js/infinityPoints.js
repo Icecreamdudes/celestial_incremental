@@ -554,7 +554,7 @@
         },
         23: {
             requirementDescription: "<h3>777 Infinities",
-            effectDescription() { return "Unlocks the point halter (in portal)." },
+            effectDescription() { return "Unlocks the point halter (Next to OTF)." },
             done() { return player.in.infinities.gte(777) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },

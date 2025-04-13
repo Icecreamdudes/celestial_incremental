@@ -278,7 +278,22 @@ addLayer("i", {
             player.subtabs["i"]['stuff'] = 'Features'
         }
     },
-    bars: {},
+    bars: {
+        infbar: {
+            unlocked() { return hasUpgrade("i", 21), !player.in.unlockedInfinity },
+            direction: RIGHT,
+            width: 700,
+            height: 50,
+            progress() {
+                return player.points.add(1).log10().div("308.25")
+            },
+            fillStyle: { backgroundColor: "#b28500" },
+            borderStyle: { border: "3px solid" },
+            display() {
+                return "<h2>" + format(player.points.add(1).log10().div("308.25").mul(100)) + "%</h2>";
+            },
+        },
+    },
     upgrades: {
         1:
         {
@@ -392,9 +407,9 @@ addLayer("i", {
         },
         21:
         {
-            title: "Portal",
+            title: "OTF",
             unlocked() { return hasUpgrade("i", 19) },
-            description: "Unlocks The Portal.",
+            description: "Unlocks Otherworldly Features.",
             cost: new Decimal(1e150),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",

@@ -594,7 +594,7 @@ addLayer("pol", {
             },
             "???": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return player.pol.unlockHive == 1 },
+                unlocked() { return false /*player.pol.unlockHive == 1*/ },
                 content:
                 [
                     ["blank", "25px"],

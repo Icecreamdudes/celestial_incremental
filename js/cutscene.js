@@ -545,7 +545,9 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23)
         {
             player.c.cutscenes[22] = false
-            player.tab = "ct" 
+            if (!options.newMenu) player.tab = "ch" 
+            if (options.newMenu) player.tab = "cmh" 
+            player.universe = -0.5
             player.c.cutscenes[22] = false
         }
 

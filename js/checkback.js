@@ -2127,7 +2127,7 @@
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
         12: {
             costBase() { return new Decimal(950).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2163,7 +2163,7 @@
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
         13: {
             costBase() { return new Decimal(2750).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2199,7 +2199,7 @@
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
         14: {
             costBase() { return new Decimal(7500).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2235,7 +2235,7 @@
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
         15: {
             costBase() { return new Decimal(1850).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2271,7 +2271,7 @@
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
         16: {
             costBase() { return new Decimal(10000).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]) },
@@ -2307,7 +2307,7 @@
                     layers.cb.levelup()
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#0951a6'}
+            style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
 
         21: {
@@ -2342,7 +2342,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#4C64FF'}
+            style: { width: '275px', height: '150px', backgroundColor: '#4C64FF'}
         },
         22: {
             costBase() { return new Decimal(25) },
@@ -2376,7 +2376,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#4C64FF'}
+            style: { width: '275px', height: '150px', backgroundColor: '#4C64FF'}
         },
         23: {
             costBase() { return new Decimal(10) },
@@ -2410,7 +2410,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#4C64FF'}
+            style: { width: '275px', height: '150px', backgroundColor: '#4C64FF'}
         },
     },
     milestones: {},

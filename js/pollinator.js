@@ -393,7 +393,7 @@ addLayer("pol", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         12: {
             costBase() { return new Decimal(10000) },
@@ -427,7 +427,7 @@ addLayer("pol", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         13: {
             costBase() { return new Decimal(50000) },
@@ -461,7 +461,7 @@ addLayer("pol", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         14: {
             costBase() { return new Decimal(1000000) },
@@ -495,7 +495,7 @@ addLayer("pol", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
     },
     milestones: {

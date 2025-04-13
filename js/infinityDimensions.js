@@ -453,7 +453,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
         },
         22: {
             costBase() { return new Decimal(1000) },
@@ -485,7 +485,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
         },
         23: {
             costBase() { return new Decimal(100000) },
@@ -517,7 +517,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
         },
         24: {
             costBase() { return new Decimal(1e10) },
@@ -549,7 +549,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(315deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {

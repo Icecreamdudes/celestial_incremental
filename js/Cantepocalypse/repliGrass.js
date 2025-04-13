@@ -192,7 +192,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         12: {
             cost(x) { return new Decimal(5).pow(x || getBuyableAmount(this.layer, this.id)).mul(2)},
@@ -223,7 +223,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         13: {
             cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(4)},
@@ -254,7 +254,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         14: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(8)},
@@ -285,7 +285,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         15: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(3)},
@@ -316,7 +316,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         16: {
             cost(x) { return new Decimal(1.55).pow(x || getBuyableAmount(this.layer, this.id)).mul(7)},
@@ -347,7 +347,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         17: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(16)},
@@ -378,7 +378,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         18: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
@@ -409,7 +409,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
     },
     milestones: {

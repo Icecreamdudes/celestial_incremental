@@ -204,37 +204,29 @@ h1, h2, h3, b, input {
 .exBuyableHolder {
 	width: 275px;
 	height: 125px;
+	user-select: none;
 	border: 2px solid rgba(0, 0, 0, 0.5);
 	color: rgb(0, 0, 0);
 	font-size: 10px;
 	position: relative;
-	display: flex;
-	flex-direction: row;
-}
-
-.exBuyableCol1 {
-	width: calc(75% - 4px);
-	pointer-events: none;
-	height: 100%;
-	border-right: 4px solid;
-	border-color: inherit;
 	display: flex;
 	flex-direction: column;
 }
 
 .exBuyableBar {
 	width: 100%;
-	height: 25%;
+	height: 20%;
 	color: white;
 	background-color: black;
+	user-select: none;
 	overflow: hidden;
 	display: table;
 }
 
 .exBuyableBarText {
 	z-index: 3;
-	width: calc(75% - 4px);
-	height: 25%;
+	width: 100%;
+	height: 20%;
 	font-size: 14px;
 	vertical-align: middle;
 	display: flex;
@@ -255,10 +247,11 @@ h1, h2, h3, b, input {
 
 .exBuyableInfo {
 	width: 100%;
-	height: calc(80% - 4px);
+	height: calc(80% - 43px);
 	display: flex;
 	vertical-align: center;
-	border-top: 4px solid;
+	border-top: 3px solid;
+	border-bottom: 3px solid;
 	border-color: inherit;
 }
 
@@ -267,17 +260,17 @@ h1, h2, h3, b, input {
 	padding: 1px 6px 1px 6px;
 }
 
-.exBuyableCol2 {
-	width: 25%;
-	height: 100%;
+.exBuyableRow {
+	width: 100%;
+	height: 40px;
 	background-color: rgba(0, 0, 0, 0.5);
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 }
 
 .exBuyableButton {
-	width: 100%;
-	height: 50%;
+	width: 50%;
+	height: 100%;
 	border: 2px solid rgba(0, 0, 0, 0.125);
 }
 
@@ -566,15 +559,19 @@ h1, h2, h3, b, input {
 	}
 
 	.can.upg:hover {
-		z-index: 2
+		z-index: 10
 	}
 
 	.can.buyable:hover {
-		z-index: 2
+		z-index: 10
+	}
+
+	.can.exBuyableButton:hover {
+		z-index: 10
 	}
 
 	.can.levelable:hover {
-		z-index: 2
+		z-index: 10
 	}
 
 .canHoverless {

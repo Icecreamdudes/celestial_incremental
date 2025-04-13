@@ -636,7 +636,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -668,7 +668,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         13: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -700,7 +700,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         14: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -732,7 +732,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         15: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -764,7 +764,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         16: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -796,7 +796,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
 
         //creator realm
@@ -831,7 +831,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#770000', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#770000', color: 'white'}
         },
         22: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
@@ -865,7 +865,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#770000', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#770000', color: 'white'}
         },
         23: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -899,7 +899,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#775400', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#775400', color: 'white'}
         },
         24: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(275) },
@@ -932,7 +932,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#775400', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#775400', color: 'white'}
         },
         25: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -966,7 +966,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#747700', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#747700', color: 'white'}
         },
         26: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(250) },
@@ -997,7 +997,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#747700', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#747700', color: 'white'}
         },
         27: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
@@ -1031,7 +1031,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#147700', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#147700', color: 'white'}
         },
         28: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
@@ -1064,7 +1064,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#147700', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#147700', color: 'white'}
         },
         31: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40) },
@@ -1096,7 +1096,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#004677', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#004677', color: 'white'}
         },
         32: {
             cost(x) { return new Decimal(1.85).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -1128,7 +1128,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#004677', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#004677', color: 'white'}
         },
         33: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
@@ -1160,7 +1160,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#330077', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#330077', color: 'white'}
         },
         34: {
             cost(x) { return new Decimal(1.65).pow(x || getBuyableAmount(this.layer, this.id)).mul(300) },
@@ -1192,7 +1192,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundColor: '#330077', color: 'white'}
+            style: { width: '275px', height: '150px', backgroundColor: '#330077', color: 'white'}
         },
     },
     milestones: {

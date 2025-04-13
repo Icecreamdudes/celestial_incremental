@@ -664,7 +664,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         12: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(0.25) },
@@ -696,7 +696,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         13: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(0.6) },
@@ -728,7 +728,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         14: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(1.5) },
@@ -760,7 +760,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         15: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6).floor() },
@@ -792,7 +792,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         16: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(2).floor() },
@@ -824,7 +824,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         17: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(500).floor() },
@@ -856,7 +856,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
         18: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(10).floor() },
@@ -888,7 +888,7 @@ addLayer("ev0", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
+            style: { width: '275px', height: '150px', backgroundImage: 'linear-gradient(90deg, #e7c97c, #fad25a)'}
         },
     },
     milestones: {},
@@ -1832,7 +1832,7 @@ addLayer("ev4", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(1).floor() },
@@ -1864,7 +1864,7 @@ addLayer("ev4", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '125px', }
+            style: { width: '275px', height: '150px', }
         },
     },
     milestones: {},

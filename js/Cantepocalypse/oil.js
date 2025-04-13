@@ -224,7 +224,7 @@
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<h2>Reset all content previous content (except grass and grass-skip) for oil. (Based on anonymity)" },
+            title() { return "<h2>Reset all content previous content (except grass-skip) for oil. (Based on anonymity)" },
             canClick() { return player.oi.oilToGet.gte(1) },
             unlocked() { return true },
             onClick() {

@@ -52,6 +52,9 @@
 
         player.sd.singularityPowerPerSecond = player.sd.dimensionAmounts[0]
             .mul(buyableEffect("sd", 11))
+            .mul(player.cop.processedCorePrimedEffects[2])
+            .mul(buyableEffect("sma", 14))
+            .mul(player.cb.rarePetEffects[7][1])
         // Dimension Gain
         for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
             player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
@@ -60,6 +63,8 @@
             player.sd.dimensionsPerSecond[i] = player.sd.dimensionAmounts[i+1]
             .mul(buyableEffect("sd", i+12))
             .mul(buyableEffect("fu", 53))
+            .mul(buyableEffect("sma", 14))
+            .mul(player.cop.processedCorePrimedEffects[2])
         }
 
         player.ra.storedRadiation = player.ra.storedRadiation.sub(player.sd.radiationUsage.mul(delta))

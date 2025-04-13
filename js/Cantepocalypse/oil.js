@@ -64,6 +64,8 @@
         player.oi.oilToGet = player.oi.oilToGet.mul(player.fu.funEffect)
         if (hasUpgrade("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("fu", 12))
         if (inChallenge("fu", 11)) player.oi.oilToGet = player.oi.oilToGet.pow(0.2)
+        player.oi.oilToGet = player.oi.oilToGet.mul(player.le.punchcardsPassiveEffect[4])
+        player.oi.oilToGet = player.oi.oilToGet.mul(player.cb.epicPetEffects[4][1])
 
         if (!inChallenge("fu", 11)) player.oi.oil = player.oi.oil.add(player.oi.oilToGet.mul(Decimal.mul(buyableEffect("fa", 204), delta)))
 

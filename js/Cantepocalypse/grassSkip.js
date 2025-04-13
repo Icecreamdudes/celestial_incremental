@@ -67,6 +67,7 @@
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(player.oi.linkingPowerEffect[5])
         player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("fu", 57))
         if (inChallenge("fu", 11)) player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.pow(0.2)
+        player.gs.grassSkippersPerSecond = player.gs.grassSkippersPerSecond.mul(buyableEffect("ep2", 12))
 
         player.gs.grassSkippersEffect = player.gs.grassSkippers.pow(0.275).add(1)
 

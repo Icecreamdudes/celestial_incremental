@@ -64,6 +64,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 46))
         if (player.pol.pollinatorsIndex == 7) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorsEffect[13])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cb.evolvedEffects[4][1])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.le.punchcardsPassiveEffect[7])
 
         player.rf.rocketFuelEffect = player.rf.rocketFuel.mul(30).pow(0.85).add(1)
 

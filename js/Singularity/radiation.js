@@ -41,7 +41,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.tab == "ra" && (player.subtabs["ra"]["stuff"] == "Main")) setCoreColors(document.getElementById("radiationCore"), player.cop.processedCoreColorFuel, player.cop.processedCoreColorStrength, null); //null for now
+        if (player.tab == "ra" && (player.subtabs["ra"]["stuff"] == "Main")) setCoreColors(document.getElementById("radiationCore"), player.cop.processedCoreColorFuel, player.cop.processedCoreColorStrength, player.cop.processedCorePrime); //null for now
 
         player.ra.radiationOutput = new Decimal(0)
         for (let i = 0; i < player.ra.unequippedRadiationValue.length; i++)
@@ -56,12 +56,15 @@
         if (hasUpgrade("ev8", 19)) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(upgradeEffect("ev8", 19))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("fu", 52))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cb.evolvedEffects[10][0])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cop.processedCorePrimedEffects[1])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cb.rarePetEffects[8][0])
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
 
         player.ra.radiationSoftcapStart = new Decimal(10000)
         player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("ra", 11)) 
         player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("cs", 12)) 
+        player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("sma", 13)) 
 
         player.ra.radiationSoftcapEffect = new Decimal(1)
         if (player.ra.radiation.gte(player.ra.radiationSoftcapStart))

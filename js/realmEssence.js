@@ -33,6 +33,7 @@
 
         player.re.realmEssencePerSecond = player.re.halterEssence.pow(1.4)
         player.re.realmEssencePerSecond = player.re.realmEssencePerSecond.mul(buyableEffect("re", 14))
+        player.re.realmEssencePerSecond = player.re.realmEssencePerSecond.mul(player.le.punchcardsPassiveEffect[9])
 
         player.re.realmEssenceEffect = player.re.realmEssence.plus(1).log10().mul(1000).pow(0.2).div(200).add(1)
         //WORK ON THE DANG EFFECT

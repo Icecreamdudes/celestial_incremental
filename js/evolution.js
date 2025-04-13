@@ -1683,6 +1683,7 @@ addLayer("ev4", {
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ev4", 12))
         if (hasUpgrade("ev8", 14)) player.ev4.offeringsBase = player.ev4.offeringsBase.mul(1.2)
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(player.cb.evolvedEffects[10][2])
+        player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ep0", 12))
 
         if (player.ev4.offerings.gte(player.ev4.offeringReq))
         {

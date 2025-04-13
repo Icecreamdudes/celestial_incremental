@@ -57,6 +57,21 @@
     }
     },
     automate() {
+        if (hasUpgrade("s", 22))
+        {
+            buyBuyable('fu', 11)
+            buyBuyable('fu', 12)
+            buyBuyable('fu', 13)
+            buyBuyable('fu', 14)
+            buyBuyable('fu', 15)
+            buyBuyable('fu', 16)
+            buyBuyable('fu', 17)
+            buyBuyable('fu', 18)
+            buyBuyable('fu', 21)
+            buyBuyable('fu', 22)
+            buyBuyable('fu', 23)
+            buyBuyable('fu', 24)
+        }
     },
     nodeStyle() {
         return {
@@ -82,6 +97,7 @@
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 15))
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 38))
         player.fu.funToGet = player.fu.funToGet.mul(player.cb.evolvedEffects[10][1])
+        player.fu.funToGet = player.fu.funToGet.mul(player.cb.epicPetEffects[4][2])
 
         player.fu.fun = player.fu.fun.add(player.fu.funToGet.mul(buyableEffect("fu", 74)))
 
@@ -106,6 +122,7 @@
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 55))
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 58))
         player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("fu", 62))
+        player.fu.happinessPerSecond = player.fu.happinessPerSecond.mul(buyableEffect("ep1", 12))
         
         player.fu.happinessEffect = player.fu.happiness.pow(0.35).add(1)
         player.fu.happinessEffect2 = player.fu.happiness.pow(2.2).add(1)
@@ -117,6 +134,7 @@
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 35))
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 58))
         player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("fu", 63))
+        player.fu.sadnessPerSecond = player.fu.sadnessPerSecond.mul(buyableEffect("ep1", 12))
 
         player.fu.sadnessEffect = player.fu.sadness.pow(0.35).add(1)
         player.fu.sadnessEffect2 = player.fu.sadness.pow(1.2).add(1)
@@ -128,6 +146,7 @@
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 45))
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 58))
         player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("fu", 64))
+        player.fu.angerPerSecond = player.fu.angerPerSecond.mul(buyableEffect("ep1", 12))
 
         player.fu.angerEffect = player.fu.anger.pow(0.35).add(1)
         player.fu.angerEffect2 = player.fu.anger.pow(0.25).div(15).add(1)
@@ -578,14 +597,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.fun = player.fu.fun.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.fun, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.fun = player.fu.fun.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -610,14 +629,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.s.singularityPoints = player.s.singularityPoints.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.s.singularityPoints = player.s.singularityPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.s.singularityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.s.singularityPoints = player.s.singularityPoints.sub(cost)
+                if (!hasUpgrade("s", 22)) player.s.singularityPoints = player.s.singularityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -642,14 +661,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.in.infinityPoints = player.in.infinityPoints.sub(cost)
+                if (!hasUpgrade("s", 22)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -674,14 +693,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gh.steel = player.gh.steel.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.gh.steel = player.gh.steel.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.gh.steel, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.gh.steel = player.gh.steel.sub(cost)
+                if (!hasUpgrade("s", 22)) player.gh.steel = player.gh.steel.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -706,14 +725,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.sfrgt, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.sfrgt = player.fu.sfrgt.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -738,14 +757,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.sfrgt, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.sfrgt = player.fu.sfrgt.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -770,14 +789,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.sfrgt, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.sfrgt = player.fu.sfrgt.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -802,14 +821,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.sfrgt, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.sfrgt = player.fu.sfrgt.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.sfrgt = player.fu.sfrgt.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -835,14 +854,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.fun = player.fu.fun.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.fun, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.fun = player.fu.fun.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -867,14 +886,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.fun = player.fu.fun.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.fun, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.fun = player.fu.fun.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -899,14 +918,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.fun = player.fu.fun.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.fun, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.fun = player.fu.fun.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -931,14 +950,14 @@
                 if (player.fu.fMax == false)
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.fu.fun = player.fu.fun.sub(buyonecost)
+                    if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.fu.fun, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                player.fu.fun = player.fu.fun.sub(cost)
+                if (!hasUpgrade("s", 22)) player.fu.fun = player.fu.fun.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

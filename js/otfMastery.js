@@ -103,7 +103,7 @@
         if (hasUpgrade("s", 12)) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(Decimal.mul(player.om.rocketFuelMasteryPointsToGet.mul(delta), 0.04))
         if (hasUpgrade("s", 12)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(Decimal.mul(player.om.hexMasteryPointsToGet.mul(delta), 0.04))
         },
-    branches: ["bi", "ip"],
+    branches: ["id", "bi"],
     clickables: {
         1: {
             title() { return "<h2>Return" },

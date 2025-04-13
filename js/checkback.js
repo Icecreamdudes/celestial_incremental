@@ -23,9 +23,9 @@
         petsUnlocked: false,
 
         //petButtons
-        petButtonUnlocks: [false, false, false, false, false, false],
-        petButtonTimersMax: [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600), new Decimal(7200), new Decimal(36000),],
-        petButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        petButtonUnlocks: [false, false, false, false, false, false, false],
+        petButtonTimersMax: [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600), new Decimal(7200), new Decimal(36000), new Decimal(86400),],
+        petButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
 
         //pets
         lockedImg: "<img src='resources/secret.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
@@ -65,30 +65,36 @@
         rarePetDisplayIndex: new Decimal(0),
 
         rarePetUnlocks: [false, false, false, false, false, false, false],
-        rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        rarePetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        rarePetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        rarePetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        rarePetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
         rarePetImage: ["<img src='resources/novaRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/diceRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/ufoRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
         "<img src='resources/goofyAhhThingRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
     ],
-        rarePetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),]],
+        rarePetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),]],
 
         petPoints: new Decimal(0),
-        rarePetPointBase: [new Decimal(1),new Decimal(0.1),new Decimal(12),new Decimal(180),new Decimal(4),new Decimal(25),new Decimal(0.05)],
-        rarePetButtonTimersMax: [new Decimal(40), new Decimal(20), new Decimal(600), new Decimal(18000), new Decimal(180), new Decimal(1000), new Decimal(1)],
-        rarePetButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        rarePetPointBase: [new Decimal(1),new Decimal(0.1),new Decimal(12),new Decimal(180),new Decimal(4),new Decimal(25),new Decimal(0.05), new Decimal(50), new Decimal(90)],
+        rarePetButtonTimersMax: [new Decimal(40), new Decimal(20), new Decimal(600), new Decimal(18000), new Decimal(180), new Decimal(1000), new Decimal(1), new Decimal(4500), new Decimal(8000),],
+        rarePetButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
 
         //epic
-        epicPetUnlocks: [false, false, false,],
-        epicPetFragments: [new Decimal(0), new Decimal(0), new Decimal(0)],
-        epicPetFragmentReq: [new Decimal(50), new Decimal(40), new Decimal(45)],
-        epicPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0)],
-        epicPetEffects: [[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],],
+        epicPetUnlocks: [false, false, false, false, false, false,],
+        epicPetFragments: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), /* index 3 is singularity fragments, which are used for epic pets indices 3-5 */],
+        epicPetFragmentReq: [new Decimal(50), new Decimal(40), new Decimal(45), new Decimal(100), new Decimal(100), new Decimal(100),],
+        epicPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        epicPetEffects: [[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],
+        [new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],],
         epicPetImage: ["", "", "",],
         epicPetDisplay: ["","","",],
         epicPetDisplayIndex: new Decimal(0),
+
+        //legendary
+        legendaryPetsUnlocked: false,
+        legendaryPetGems: [new Decimal(0), new Decimal(0), new Decimal(0)],
+        //reg purple green
 
         //dice pet
         lastDicePetRoll: new Decimal(0),
@@ -213,7 +219,7 @@
         player.cb.levelEffect = player.cb.level.pow(3).pow(player.d.dicePointsEffect)
         if (hasUpgrade("bi", 25) && (!player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         if (hasUpgrade("bi", 25) && (player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(2)
-        if (hasUpgrade("s", 16)) player.cb.levelEffect = player.cb.levelEffect.tetrate(1.003)
+        if (hasUpgrade("s", 16)) player.cb.levelEffect = player.cb.levelEffect.pow(upgradeEffect("s", 16))
 
         if (player.cb.highestLevel.gte(3))
         [
@@ -268,6 +274,10 @@
             player.cb.petButtonUnlocks[4] = true,
             player.cb.petButtonUnlocks[5] = true
         ]
+        if (player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23))
+        [
+            player.cb.petButtonUnlocks[6] = true
+        ]
 
         player.cb.buttonBaseXP = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.06),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),]
 
@@ -292,7 +302,12 @@
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.rm.realmModsEffect[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("g", 25))
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cs.paragonScrapsEffect)
-        }
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cop.processedCorePrimedEffects[3])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.le.punchcardsPassiveEffect[6])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cb.epicPetEffects[5][0])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.leg.gemEffects[0])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("ep3", 12))
+    }
 
 
         player.cb.buttonTimersMax = [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),new Decimal(86400),]
@@ -312,6 +327,7 @@
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cb.commonPetEffects[4][1])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cb.uncommonPetEffects[1][2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("ev0", 12))
+            player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.le.punchcardsPassiveEffect[1])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
         }
@@ -322,7 +338,7 @@
             player.cb.petButtonUnlocks[0] = true
         }
 
-        player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000),]
+        player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000), new Decimal(86400)]
         for (let i = 0; i < player.cb.petButtonTimersMax.length; i++)
         {
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cb.commonPetEffects[4][0])
@@ -482,6 +498,8 @@
             "Antimatter: " + formatWhole(player.cb.rarePetAmounts[4]) + "/" + formatWhole(player.cb.rarePetReq[4]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[4]) + ")",
             "Hex Shadow: " + formatWhole(player.cb.rarePetAmounts[5]) + "/" + formatWhole(player.cb.rarePetReq[5]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[5]) + ")",
             "Grass Square: " + formatWhole(player.cb.rarePetAmounts[6]) + "/" + formatWhole(player.cb.rarePetReq[6]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[6]) + ")",
+            "Impossible Triangle: " + formatWhole(player.cb.rarePetAmounts[7]) + "/" + formatWhole(player.cb.rarePetReq[7]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[7]) + ")",
+            "Forbidden Core: " + formatWhole(player.cb.rarePetAmounts[8]) + "/" + formatWhole(player.cb.rarePetReq[8]) + " to level up. (Currently level " + formatWhole(player.cb.rarePetLevels[8]) + ")",
         ]
 
         player.cb.rarePetImage = [
@@ -492,6 +510,8 @@
             "<img src='resources/antimatterRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
             "<img src='resources/hexShadowRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
             "<img src='resources/grassSquareRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/impossibleTriangleRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/forbiddenCoreRarePet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         ]
 
         player.cb.rarePetReq = [
@@ -502,6 +522,8 @@
             player.cb.rarePetLevels[4].pow(1.25).add(1).floor(),
             player.cb.rarePetLevels[5].pow(1.3).add(1).floor(),
             player.cb.rarePetLevels[6].pow(1.3).add(1).floor(),
+            player.cb.rarePetLevels[7].pow(1.4).add(1).floor(),
+            player.cb.rarePetLevels[8].pow(1.4).add(1).floor(),
         ]
 
         if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
@@ -514,6 +536,8 @@
             [player.in.infinities.pow(0.8).mul(0.4).add(1).pow(player.cb.rarePetLevels[4].pow(0.25)), player.cb.rarePetLevels[4].pow(1.1).add(1)], //Antimatter dimensions based on infinities, golden grass
             [player.h.ragePower.pow(1.2).mul(0.3).add(1).pow(player.cb.rarePetLevels[5].pow(0.4)), player.h.ragePower.pow(1.01).mul(0.2).add(1).pow(player.cb.rarePetLevels[5].pow(0.3))], //steel and crystal based on rage power
             [player.g.goldGrass.pow(0.1).mul(0.01).add(1).pow(player.cb.rarePetLevels[6].pow(0.2)), player.g.goldGrass.pow(0.12).mul(0.015).add(1).pow(player.cb.rarePetLevels[6].pow(0.25))], //Blank mods and rage power based on golden grass
+            [player.cs.coreScraps.pow(0.8).mul(0.4).add(1).pow(player.cb.rarePetLevels[7].pow(0.3)), player.s.singularityPoints.plus(1).log10().pow(1.2).add(1).pow(player.cb.rarePetLevels[7].pow(0.25))], //Singularity Points based on core scraps, singularity dimensions based on singularity points
+            [player.s.singularities.pow(0.5).mul(0.1).add(1).pow(player.cb.rarePetLevels[8].pow(0.2)), player.sma.starmetalAlloy.pow(0.3).mul(0.05).add(1).pow(player.cb.rarePetLevels[8].pow(0.2))], //Radiation based on singularities, All core scraps based on unspent sma
         ]
         }
         else
@@ -527,7 +551,7 @@
             }
         }
 
-        player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1)]
+        player.cb.rarePetButtonTimersMax = [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1), new Decimal(4500), new Decimal(9000)]
         for (let i = 0; i < player.cb.rarePetButtonTimersMax.length; i++)
         {
             player.cb.rarePetButtonTimersMax[i] = player.cb.rarePetButtonTimersMax[i].div(buyableEffect("ev0", 14))
@@ -539,13 +563,16 @@
             player.cb.rarePetButtonTimers[i] = player.cb.rarePetButtonTimers[i].sub(onepersec.mul(delta))
         }
 
-        player.cb.rarePetPointBase = [new Decimal(0.6), new Decimal(0.1), new Decimal(10), new Decimal(60), new Decimal(2), new Decimal(6), new Decimal(0.05)]
+        player.cb.rarePetPointBase = [new Decimal(0.6), new Decimal(0.1), new Decimal(10), new Decimal(60), new Decimal(2), new Decimal(6), new Decimal(0.05), new Decimal(20), new Decimal(35)]
         for (let i = 0; i < player.cb.rarePetPointBase.length; i++)
         {
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.cb.evolvedEffects[1][1])
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(buyableEffect("cb", 14))
             if (hasUpgrade("ev8", 13)) player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(1.2)
             player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.cb.epicPetEffects[0][0])
+            player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.cb.epicPetEffects[5][2])
+            player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(player.leg.gemEffects[1])
+            player.cb.rarePetPointBase[i] = player.cb.rarePetPointBase[i].mul(buyableEffect("ep4", 12))
         }
         player.cb.rarePetPointBase[0] = player.cb.rarePetPointBase[0].mul(player.cb.rarePetLevels[0].mul(0.5))
         player.cb.rarePetPointBase[1] = player.cb.rarePetPointBase[1].mul(player.cb.rarePetLevels[1].mul(0.5))
@@ -554,6 +581,8 @@
         player.cb.rarePetPointBase[4] = player.cb.rarePetPointBase[4].mul(player.cb.rarePetLevels[4].mul(0.6).add(1))
         player.cb.rarePetPointBase[5] = player.cb.rarePetPointBase[5].mul(player.cb.rarePetLevels[5].mul(0.3).add(1))
         player.cb.rarePetPointBase[6] = player.cb.rarePetPointBase[6].mul(player.cb.rarePetLevels[6].mul(0.2).add(1))
+        player.cb.rarePetPointBase[7] = player.cb.rarePetPointBase[7].mul(player.cb.rarePetLevels[6].mul(0.3).add(1))
+        player.cb.rarePetPointBase[8] = player.cb.rarePetPointBase[8].mul(player.cb.rarePetLevels[6].mul(0.35).add(1))
 
         if (player.cb.dicePetCombo > player.cb.highestDicePetCombo)
         {
@@ -566,12 +595,18 @@
             "Dotknight: " + formatWhole(player.cb.epicPetFragments[0]) + "/" + formatWhole(player.cb.epicPetFragmentReq[0]) + " fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[0]) + ")",
             "Dragon: " + formatWhole(player.cb.epicPetFragments[1]) + "/" + formatWhole(player.cb.epicPetFragmentReq[1]) + " fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[1]) + ")",
             "Cookie: " + formatWhole(player.cb.epicPetFragments[2]) + "/" + formatWhole(player.cb.epicPetFragmentReq[2]) + " fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[2]) + ")",
+            "Kres: " + formatWhole(player.cb.epicPetFragments[3]) + "/" + formatWhole(player.cb.epicPetFragmentReq[3]) + " singularity fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[3]) + ")",
+            "Nav: " + formatWhole(player.cb.epicPetFragments[3]) + "/" + formatWhole(player.cb.epicPetFragmentReq[4]) + " singularity fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[4]) + ")",
+            "Sel: " + formatWhole(player.cb.epicPetFragments[3]) + "/" + formatWhole(player.cb.epicPetFragmentReq[5]) + " singularity fragments to level up. (Currently level " + formatWhole(player.cb.epicPetLevels[5]) + ")",
         ]
 
         player.cb.epicPetImage = [
             "<img src='resources/dotknightEpicPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
             "<img src='resources/dragonEpicPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
             "<img src='resources/cookieEpicPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/kresEpicPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/navEpicPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
+            "<img src='resources/selEpicPet.png'style='width:calc(115%);height:calc(115%);margin:-20%'></img>",
         ]
 
         if (player.cb.epicPetLevels[0].eq(0))
@@ -598,12 +633,39 @@
             player.cb.epicPetFragmentReq[2] = player.cb.epicPetLevels[2].pow(1.2).mul(5).add(5).floor()
         }
 
+        if (player.cb.epicPetLevels[3].eq(0))
+        {
+            player.cb.epicPetFragmentReq[3] = new Decimal(100)
+        } else
+        {
+            player.cb.epicPetFragmentReq[3] = player.cb.epicPetLevels[3].pow(1.2).mul(6).add(8).floor()
+        }
+
+        if (player.cb.epicPetLevels[4].eq(0))
+        {
+            player.cb.epicPetFragmentReq[4] = new Decimal(100)
+        } else
+        {
+            player.cb.epicPetFragmentReq[4] = player.cb.epicPetLevels[4].pow(1.2).mul(6).add(8).floor()
+        }
+
+        if (player.cb.epicPetLevels[5].eq(0))
+        {
+            player.cb.epicPetFragmentReq[5] = new Decimal(100)
+        } else
+        {
+            player.cb.epicPetFragmentReq[5] = player.cb.epicPetLevels[5].pow(1.2).mul(6).add(8).floor()
+        }
+
         if (((player.points.gte(1e100) && !inChallenge("ip", 13)) || hasMilestone("ip", 24)) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))
         {
         player.cb.epicPetEffects = [
-            [player.cb.XPBoost.pow(0.3).div(9).add(1).pow(player.cb.epicPetLevels[0].pow(0.3)), player.cb.evolutionShards.pow(0.4).div(25).mul(player.cb.epicPetLevels[0].pow(0.4)).add(1), player.cb.paragonShards.pow(0.5).div(20).mul(player.cb.epicPetLevels[0]).pow(0.4).div(2).add(1),], //Pet points based on xp boost, pet point button cooldown based on evo shards, xp boost cooldown based on paragon shards
+            [player.cb.XPBoost.pow(0.15).div(36).add(1).pow(player.cb.epicPetLevels[0].pow(0.3)), player.cb.evolutionShards.pow(0.4).div(25).mul(player.cb.epicPetLevels[0].pow(0.4)).add(1), player.cb.paragonShards.pow(0.5).div(20).mul(player.cb.epicPetLevels[0]).pow(0.4).div(2).add(1),], //Pet points based on xp boost, pet point button cooldown based on evo shards, xp boost cooldown based on paragon shards
             [player.gs.grassSkip.pow(0.8).add(1).pow(player.cb.epicPetLevels[1].pow(0.65)), player.ca.galaxyDust.pow(0.25).mul(25).mul(player.cb.epicPetLevels[1].pow(1.2)).add(1),  player.rt.repliTrees.pow(0.1).mul(player.cb.epicPetLevels[1].pow(0.6)).add(1),], //replicanti point mult based on grassskip, anonymity based on galaxy dust, repli-leaves based on repli-trees
             [player.ca.canteCores.pow(0.7).mul(0.05).mul(player.cb.epicPetLevels[2].pow(0.55)).add(1), player.ca.canteCores.pow(1.1).mul(20).add(1).pow(player.cb.epicPetLevels[2].pow(0.55)), player.ca.canteCores.pow(1.1).add(1).pow(player.cb.epicPetLevels[2].pow(0.6)), player.cb.XPBoost.pow(0.6).add(1).pow(player.cb.epicPetLevels[2].pow(0.4)), ], //cante energy based on cante cores, infinity points based on cante cores, proto memories based on xpboost
+            [player.cb.level.pow(1.35).add(1).pow(player.cb.epicPetLevels[3].pow(0.5)), player.cb.level.pow(0.4).add(1).pow(player.cb.epicPetLevels[3].pow(0.5)), player.cb.level.pow(0.3).div(100).add(1).pow(player.cb.epicPetLevels[3].pow(0.3))  ], //infinity points, singularity points, starmetal alloy
+            [player.cs.coreScraps.pow(1.5).mul(4).add(1).pow(player.cb.epicPetLevels[4].pow(0.6)), player.cs.coreScraps.pow(1.2).mul(3).add(1).pow(player.cb.epicPetLevels[4].pow(0.55)), player.cs.coreScraps.pow(0.9).mul(2).add(1).pow(player.cb.epicPetLevels[4].pow(0.5))  ], //anonymity, oil, fun
+            [player.sma.starmetalAlloy.div(40).add(1).pow(player.cb.epicPetLevels[5].pow(0.35)), player.sma.starmetalAlloy.pow(0.85).div(80).add(1).pow(player.cb.epicPetLevels[5].pow(0.35)), player.sma.starmetalAlloy.pow(0.7).div(100).add(1).pow(player.cb.epicPetLevels[5].pow(0.35))  ], //check back xp, xpboost, pet points
 
         ]
         }
@@ -617,6 +679,20 @@
                 }
             }
         }
+
+        //legendary
+        if (player.cb.legendaryPetGems[0].gt(0) || player.cb.legendaryPetGems[1].gt(0) || player.cb.legendaryPetGems[2].gt(0))
+        {
+            player.cb.legendaryPetsUnlocked = true
+        }
+
+        if (player.subtabs["cb"]['pets'] == 'Legendary')
+        {
+            player.tab = "leg"
+            player.subtabs["cb"]['pets'] = 'Epic'
+        }
+
+        //evo
 
         if (player.cb.viewingEvolved[1])
         {
@@ -718,6 +794,10 @@
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.commonPetEffects[6][0])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
             if (hasUpgrade("ev8", 16)) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.2)
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cop.processedCorePrimedEffects[4])
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cb.epicPetEffects[5][1])
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.leg.gemEffects[2])
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("ep5", 12))
         }
 
         player.cb.XPBoostReq = [new Decimal(100), new Decimal(500)]
@@ -725,16 +805,17 @@
         for (let i = 0; i < player.cb.XPBoostTimersMax.length; i++)
         {
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(player.cb.epicPetEffects[0][2])
+            player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(buyableEffect("ep5", 13))
         }
         for (let i = 0; i < player.cb.XPBoostTimers.length; i++)
         {
             player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(onepersec.mul(delta))
         }
 
-        if (player.cb.XPBoostEffect.lte(1000))
+        if (player.cb.XPBoost.lte(1000))
         {
         player.cb.XPBoostEffect = player.cb.XPBoost
-        } else
+        } else if (player.cb.XPBoost.gte(1000))
         {
             player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(0.5).mul(10))
         }
@@ -829,9 +910,9 @@
 
         //cante
         player.cb.canteEnergyXPButtonBase = [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ]
-        player.cb.canteEnergyPetButtonBase = [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14),]
+        player.cb.canteEnergyPetButtonBase = [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14), new Decimal(30)]
         player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
-        player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),]
+        player.cb.canteEnergyPetPointButtonBase = [new Decimal(0.12), new Decimal(0.05), new Decimal(0.8), new Decimal(7), new Decimal(0.3),new Decimal(1),new Decimal(0.002),new Decimal(0.3),new Decimal(0.5),]
 
         player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))
 
@@ -1522,6 +1603,40 @@
             },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
+        36: {
+            title() { return player.cb.rarePetButtonTimers[7].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.rarePetButtonTimers[7]) + "." : "<h3>+" + format(player.cb.rarePetPointBase[7]) + " Pet Points."},
+            canClick() { return player.cb.rarePetButtonTimers[7].lt(0) },
+            unlocked() { return player.cb.rarePetDisplayIndex == 7 || player.subtabs["cb"]["buttons"] == "Pet Points" && player.subtabs["cb"]["stuff"] == "Main" && player.cb.rarePetLevels[7].gte(1)},
+            onClick() {
+                player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[7])
+                player.cb.rarePetButtonTimers[7] = player.cb.rarePetButtonTimersMax[7]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[7].mul(player.ca.canteEnergyMult))
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        37: {
+            title() { return player.cb.rarePetButtonTimers[8].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.rarePetButtonTimers[8]) + "." : "<h3>+" + format(player.cb.rarePetPointBase[8]) + " Pet Points."},
+            canClick() { return player.cb.rarePetButtonTimers[8].lt(0) },
+            unlocked() { return player.cb.rarePetDisplayIndex == 8 || player.subtabs["cb"]["buttons"] == "Pet Points" && player.subtabs["cb"]["stuff"] == "Main" && player.cb.rarePetLevels[8].gte(1)},
+            onClick() {
+                player.cb.petPoints = player.cb.petPoints.add(player.cb.rarePetPointBase[8])
+                player.cb.rarePetButtonTimers[8] = player.cb.rarePetButtonTimersMax[8]
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetPointButtonBase[8].mul(player.ca.canteEnergyMult))
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "0%" },
+        },
+        38: {
+            title() { return player.cb.petButtonTimers[6].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.petButtonTimers[6]) + "." : "<h3>Collect a random singularity pet."},
+            canClick() { return player.cb.petButtonTimers[6].lt(0) },
+            unlocked() { return player.cb.petButtonUnlocks[6] },
+            tooltip() { return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>25% - Singularity Fragment<br>5% - Legendary Gems"},
+            onClick() {
+                player.cb.petButtonTimers[6] = player.cb.petButtonTimersMax[6]
+                layers.cb.petButton7();
+                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[6].mul(player.ca.canteEnergyMult))
+            },
+            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+        },
         //PETS
         101: {
             title() { return player.cb.commonPetAmounts[0].gt(0) || player.cb.commonPetLevels[0].gt(0) ? player.cb.commonPetImage[0] : player.cb.lockedImg},
@@ -2130,6 +2245,134 @@
         },
         style: { width: '100px', "min-height": '50px', 'border-radius': "0%",  'background-color': "#cb79ed" },
     },
+    167: {
+        title() { return player.cb.rarePetAmounts[7].gt(0) || player.cb.rarePetLevels[7].gt(0) ? player.cb.rarePetImage[7] : player.cb.lockedImg},
+        canClick() { return player.cb.rarePetAmounts[7].gt(0) || player.cb.rarePetLevels[7].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.rarePetAmounts[7].gt(0) || player.cb.rarePetLevels[7].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[7][0]) + " to singularity points (based on core scraps).<br>x" + format(player.cb.rarePetEffects[7][1]) + " to singularity dimensions (based on singularity points).": ""},
+        onClick() {
+            player.cb.rarePetDisplayIndex = new Decimal(7)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    168: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.rarePetAmounts[7].gte(player.cb.rarePetReq[7]) },
+        unlocked() { return player.cb.rarePetDisplayIndex == 7 },
+        onClick() {
+            player.cb.rarePetAmounts[7] = player.cb.rarePetAmounts[7].sub(player.cb.rarePetReq[7])
+            player.cb.rarePetLevels[7] = player.cb.rarePetLevels[7].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    169: {
+        title() { return player.cb.rarePetAmounts[8].gt(0) || player.cb.rarePetLevels[8].gt(0) ? player.cb.rarePetImage[8] : player.cb.lockedImg},
+        canClick() { return player.cb.rarePetAmounts[8].gt(0) || player.cb.rarePetLevels[8].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.rarePetAmounts[8].gt(0) || player.cb.rarePetLevels[8].gt(0) ? "<h3>x" + format(player.cb.rarePetEffects[8][0]) + " to radiation (based on singularities).<br>x" + format(player.cb.rarePetEffects[8][1]) + " to all core scraps (based on starmetal alloy).": ""},
+        onClick() {
+            player.cb.rarePetDisplayIndex = new Decimal(8)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    171: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.rarePetAmounts[8].gte(player.cb.rarePetReq[8]) },
+        unlocked() { return player.cb.rarePetDisplayIndex == 8 },
+        onClick() {
+            player.cb.rarePetAmounts[8] = player.cb.rarePetAmounts[8].sub(player.cb.rarePetReq[8])
+            player.cb.rarePetLevels[8] = player.cb.rarePetLevels[8].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    172: {
+        title() { return player.cb.epicPetLevels[3].gt(0) ? player.cb.epicPetImage[3] : player.cb.lockedImg},
+        canClick() { return player.cb.epicPetFragments[3].gt(0) || player.cb.epicPetLevels[3].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.epicPetFragments[3].gt(0) || player.cb.epicPetLevels[3].gt(0) ? "<h4>x" + format(player.cb.epicPetEffects[3][0]) + " to infinity points (based on check back level).<br>x" + format(player.cb.epicPetEffects[3][1]) + " to singularity points (based on check back level).<br>x" + format(player.cb.epicPetEffects[3][2]) + " to starmetal alloy (based on check back level).": ""},
+        onClick() {
+            player.cb.epicPetDisplayIndex = new Decimal(3)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    173: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.epicPetFragments[3].gte(player.cb.epicPetFragmentReq[3]) },
+        unlocked() { return player.cb.epicPetDisplayIndex == 3 },
+        onClick() {
+            player.cb.epicPetFragments[3] = player.cb.epicPetFragments[3].sub(player.cb.epicPetFragmentReq[3])
+            player.cb.epicPetLevels[3] = player.cb.epicPetLevels[3].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    174: {
+        title() { return player.cb.epicPetLevels[4].gt(0) ? player.cb.epicPetImage[4] : player.cb.lockedImg},
+        canClick() { return player.cb.epicPetFragments[3].gt(0) || player.cb.epicPetLevels[4].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.epicPetFragments[3].gt(0) || player.cb.epicPetLevels[4].gt(0) ? "<h4>x" + format(player.cb.epicPetEffects[4][0]) + " to anonymity (based on core scraps).<br>x" + format(player.cb.epicPetEffects[4][1]) + " to oil (based on core scraps).<br>x" + format(player.cb.epicPetEffects[4][2]) + " to fun (based on core scraps).": ""},
+        onClick() {
+            player.cb.epicPetDisplayIndex = new Decimal(4)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    175: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.epicPetFragments[3].gte(player.cb.epicPetFragmentReq[4]) },
+        unlocked() { return player.cb.epicPetDisplayIndex == 4 },
+        onClick() {
+            player.cb.epicPetFragments[3] = player.cb.epicPetFragments[3].sub(player.cb.epicPetFragmentReq[4])
+            player.cb.epicPetLevels[4] = player.cb.epicPetLevels[4].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    176: {
+        title() { return player.cb.epicPetLevels[5].gt(0) ? player.cb.epicPetImage[5] : player.cb.lockedImg},
+        canClick() { return player.cb.epicPetFragments[3].gt(0) || player.cb.epicPetLevels[5].gt(0) },
+        unlocked() { return true },
+        tooltip() { return player.cb.epicPetFragments[3].gt(0) || player.cb.epicPetLevels[5].gt(0) ? "<h4>x" + format(player.cb.epicPetEffects[5][0]) + " to check back xp (based on starmetal alloy).<br>x" + format(player.cb.epicPetEffects[5][1]) + " to XPBoost (based on starmetal alloy).<br>x" + format(player.cb.epicPetEffects[5][2]) + " to pet points (based on starmetal alloy).": ""},
+        onClick() {
+            player.cb.epicPetDisplayIndex = new Decimal(5)
+        },
+        style: { width: '100px', "min-height": '100px', 'border-radius': "0%", 'background-color': "#021124" },
+    },
+    177: {
+        title() { return "Level Up"},
+        canClick() { return player.cb.epicPetFragments[3].gte(player.cb.epicPetFragmentReq[5]) },
+        unlocked() { return player.cb.epicPetDisplayIndex == 5 },
+        onClick() {
+            player.cb.epicPetFragments[3] = player.cb.epicPetFragments[3].sub(player.cb.epicPetFragmentReq[5])
+            player.cb.epicPetLevels[5] = player.cb.epicPetLevels[5].add(1)
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
+    },
+    178: {
+        title() { return "View Shop"},
+        canClick() { return player.cb.epicPetLevels[3].gte(1) },
+        unlocked() { return player.cb.epicPetDisplayIndex == 3 },
+        onClick() {
+            player.tab = "ep3"
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%",  'background-color': "#cb79ed" },
+    },
+    179: {
+        title() { return "View Shop"},
+        canClick() { return player.cb.epicPetLevels[4].gte(1) },
+        unlocked() { return player.cb.epicPetDisplayIndex == 4 },
+        onClick() {
+            player.tab = "ep4"
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%",  'background-color': "#cb79ed" },
+    },
+    181: {
+        title() { return "View Shop"},
+        canClick() { return player.cb.epicPetLevels[5].gte(1) },
+        unlocked() { return player.cb.epicPetDisplayIndex == 5 },
+        onClick() {
+            player.tab = "ep5"
+        },
+        style: { width: '100px', "min-height": '50px', 'border-radius': "0%",  'background-color': "#cb79ed" },
+    },
+    
         //evo
         201: {
             title() { return "View Evolved"},
@@ -2544,7 +2787,7 @@
             canClick() { return true },
             unlocked() { return player.cb.uncommonPetDisplayIndex == 4 && player.ev.evolutionsUnlocked[10] == true && player.cb.viewingEvolved[10] == true},
             onClick() {
-               //player.tab = "ev10"
+               player.tab = "ev10"
             },
             style: { width: '100px', "min-height": '50px', 'border-radius': "0%" },
         },
@@ -3057,6 +3300,69 @@
                 }
             }
         }
+        
+    },
+    petButton7() {
+        let rng = Math.random();
+        if (rng > 0.4) {
+            let random =  getRandomInt(2)
+            let gainedPets = getRandomInt(3) + 3
+            if (random == 0)
+            {
+                player.cb.rarePetAmounts[7] = player.cb.rarePetAmounts[7].add(gainedPets);
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Impossible Triangles!", "resources/impossibleTriangleRarePet.png");
+                }
+                player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
+            } else if (random == 1)
+            {
+                player.cb.rarePetAmounts[8] = player.cb.rarePetAmounts[8].add(gainedPets);
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedPets) + " Forbidden Cores!", "resources/forbiddenCoreRarePet.png");
+                }
+                player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
+            }
+        }
+        else if (rng < 0.4 && rng > 0.3)
+        {
+            let gainedShards = getRandomInt(1) + 1
+            player.cb.paragonShards = player.cb.paragonShards.add(gainedShards);
+            callAlert("You gained " + formatWhole(gainedShards) + " Paragon Shards!", "resources/paragonShard.png");
+        }
+        else if (rng < 0.3 && rng > 0.05)
+        {
+            let gainedFragments = getRandomInt(3) + 5
+            player.cb.epicPetFragments[3] = player.cb.epicPetFragments[3].add(gainedFragments);
+            callAlert("You gained " + formatWhole(gainedFragments) + " Singularity Fragments!", "resources/singularityEpicPetFragment.png");
+            player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
+        } else if (rng < 0.05)
+        {
+            //the legendary stuff
+            let random = getRandomInt(3)
+            let gainedGems = getRandomInt(5) + 6
+            if (random == 0)
+            {
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedGems) + " Red Legendary Gems!", "resources/redLegendaryPetGem.png");
+                }
+            }
+            if (random == 1)
+            {
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedGems) + " Purple Legendary Gems!", "resources/purpleLegendaryPetGem.png");
+                }
+            }
+            if (random == 2)
+            {
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
+                if (!(player.ps.togglealert == false && player.tab == "ps")) {
+                    callAlert("You gained " + formatWhole(gainedGems) + " Green Legendary Gems!", "resources/greenLegendaryPetGem.png");
+                }
+            }
+            player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
+        }
     },
     bars: {
         xpbar: {
@@ -3357,6 +3663,17 @@
     challenges: {
     },
     infoboxes: {
+        1: {
+            title: "Check Back",
+            body() { return "Created by Marcel Acoplao, Check Back is a very powerful method for superphysical value extraction, due to it's high time demands. It was developed for celestial hunters in training, as a way to get stronger. However, it fell out of fashion as new methods for superphysical extraction became popular, such as ??? and ?????????." },
+            unlocked() { return hasUpgrade("s", 23) },      
+        },
+        2: {
+            title: "Pets",
+            body() { return "After Check Back fell out of fashion, Marcel started creating pets out of superphysical values. These pets ranged from real creatures to abstract beings. Each of them had a special effect that boosted certain superphysical values. Marcel soon discovered a byproduct of check back, which were evolution and paragon shards. He discovered that pets could be evolved with these shards. However, Marcel noticed that some pets linked to actual beings, such as colleagues from the corporation and other specific beings..." },
+            unlocked() { return hasUpgrade("s", 23) },      
+        },
+        //pet descriptions
         c1: {
             title: "Gwa",
             body() { return "Has a childlike innocence and is very kind. Seems to have immense power but is also very reluctant to use the power." },
@@ -3504,6 +3821,16 @@
             body() { return "It was one ordinary of cutting grass, and one of the grass particles randomly grew a face. This is what we have now." },
             unlocked() { return player.cb.rarePetDisplayIndex == 6},
         },
+        r8: {
+            title: "Impossible Triangle",
+            body() { return "An anomaly of a shape, but is only a mere illusion. Celestials love their illusions." },
+            unlocked() { return player.cb.rarePetDisplayIndex == 7},
+        },
+        r9: {
+            title: "Forbidden Core",
+            body() { return "The first core ever produced by the celestials of the domain of singularity. It has lived for so long it developed a conciousness." },
+            unlocked() { return player.cb.rarePetDisplayIndex == 8},
+        },
         //epic
         e1: {
             title: "Dotknight",
@@ -3521,6 +3848,24 @@
             title: "Cookie",
             body() { return "This cookie is imbued with large amounts of incremental power. Clicking it would be very dangerous." },
             unlocked() { return player.cb.epicPetDisplayIndex == 2 && player.cb.epicPetLevels[2].gte(1)},
+
+        },
+        e4: {
+            title: "Kres",
+            body() { return "Kres a member of the Celestial Hunting Corporation, and was sent out on the mission to the domain of singularity. Originally in the military from one universe's Earth, he joined the corporation when his universe got taken over by celestials." },
+            unlocked() { return player.cb.epicPetDisplayIndex == 3 && player.cb.epicPetLevels[3].gte(1)},
+
+        },
+        e5: {
+            title: "Nav",
+            body() { return "Nav, another member of the corporation, has mastered the art of superphysical magic. She was born from a line of talented superphysical wizards that worked for the corporation. " },
+            unlocked() { return player.cb.epicPetDisplayIndex == 4 && player.cb.epicPetLevels[4].gte(1)},
+
+        },
+        e6: {
+            title: "Sel",
+            body() { return "Sel was originally a rouge hunter travelling between civilizations, fighting celestialites for money. However, he met Kres and realized the greater opportunity of joining the corporation." },
+            unlocked() { return player.cb.epicPetDisplayIndex == 5 && player.cb.epicPetLevels[5].gte(1)},
 
         },
         //evo
@@ -3599,6 +3944,18 @@
                 content:
                 [
                     ["microtabs", "buttons", { 'border-width': '0px' }],
+                ]
+            },
+            "Lore": {
+                buttonStyle() { return { 'color': '#06366e' } },
+                unlocked() { return hasUpgrade("s", 23) },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["infobox", "1"],
+                    ["infobox", "2"],
+                    ["infobox", "3"],
+                    ["infobox", "4"],
                 ]
             },
             "Pets": {
@@ -3701,13 +4058,13 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.cb.petPoints) + "</h3> pet points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.cb.rarePetDisplay[player.cb.rarePetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27],  ["clickable", 154], ["clickable", 32],["clickable", 156], ["clickable", 33], ["clickable", 125], ["clickable", 225], ["clickable", 224], ["clickable", 223], ["clickable", 226], ["clickable", 232], ["clickable", 234], ["clickable", 233], ["clickable", 235], ["clickable", 305], ["clickable", 306], ]],
+                    ["row", [["clickable", 124], ["clickable", 18], ["clickable", 127], ["clickable", 19], ["clickable", 129], ["clickable", 22], ["clickable", 132], ["clickable", 24], ["clickable", 143], ["clickable", 27],  ["clickable", 154], ["clickable", 32],["clickable", 156], ["clickable", 33], ["clickable", 168], ["clickable", 36], ["clickable", 171], ["clickable", 37], ["clickable", 125], ["clickable", 225], ["clickable", 224], ["clickable", 223], ["clickable", 226], ["clickable", 232], ["clickable", 234], ["clickable", 233], ["clickable", 235], ["clickable", 305], ["clickable", 306], ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Rare Pets" }, { "color": "#4e7cff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 123], ["clickable", 126], ["clickable", 128], ["clickable", 131], ["clickable", 142], ["clickable", 153], ["clickable", 155]]],
+                    ["row", [["clickable", 123], ["clickable", 126], ["clickable", 128], ["clickable", 131], ["clickable", 142], ["clickable", 153], ["clickable", 155], ["clickable", 167], ["clickable", 169]]],
                     ["blank", "25px"],
-                    ["row", [["infobox", "ev6"],["infobox", "ev8"],["infobox", "r1"], ["infobox", "r2"], ["infobox", "r3"], ["infobox", "r4"], ["infobox", "r5"], ["infobox", "r6"], ["infobox", "r7"],  ]],
+                    ["row", [["infobox", "ev6"],["infobox", "ev8"],["infobox", "r1"], ["infobox", "r2"], ["infobox", "r3"], ["infobox", "r4"], ["infobox", "r5"], ["infobox", "r6"], ["infobox", "r7"], ["infobox", "r8"], ["infobox", "r9"],  ]],
                 ]
 
             },
@@ -3718,13 +4075,22 @@
                 [
                     ["raw-html", function () { return player.cb.epicPetDisplay[player.cb.epicPetDisplayIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 158], ["clickable", 161], ["clickable", 163], ["clickable", 164],["clickable", 165],["clickable", 166], ["clickable", 5], ]],
+                    ["row", [["clickable", 158], ["clickable", 161], ["clickable", 163],  ["clickable", 173], ["clickable", 175], ["clickable", 177],  ["clickable", 164],["clickable", 165], ["clickable", 166], ["clickable", 178],["clickable", 179], ["clickable", 181], ["clickable", 5], ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Epic Pets" }, { "color": "#cb79ed", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 157], ["clickable", 159], ["clickable", 162]]],
+                    ["row", [["clickable", 157], ["clickable", 159], ["clickable", 162], ["clickable", 172], ["clickable", 174], ["clickable", 176]]],
                     ["blank", "25px"],
-                    ["row", [["infobox", "e1"], ["infobox", "e2"], ["infobox", "e3"],   ]],
+                    ["row", [["infobox", "e1"], ["infobox", "e2"], ["infobox", "e3"], ["infobox", "e4"], ["infobox", "e5"], ["infobox", "e6"],]],
+                ]
+
+            },
+            "Legendary": {
+                buttonStyle() { return { 'color': '#fe6d00', 'border-color': '#fe9400', 'background-color': '#eed200' } },
+                unlocked() { return player.cb.legendaryPetsUnlocked },
+                content:
+                [
+
                 ]
 
             },
@@ -3791,6 +4157,7 @@
                     ["row", [["clickable", 28], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[9] ? "Auto: " + format(player.cb.petAutomationTimers[3]) + "/" +  format(player.cb.petAutomationTimersMax[3]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["row", [["clickable", 34], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[9] ? "Auto: " + format(player.cb.petAutomationTimers[4]) + "/" +  format(player.cb.petAutomationTimersMax[4]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["row", [["clickable", 35], ["blank", "25px"], ["raw-html", function () { return player.ev.evolutionsUnlocked[9] ? "Auto: " + format(player.cb.petAutomationTimers[5]) + "/" +  format(player.cb.petAutomationTimersMax[5]): "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                    ["row", [["clickable", 38],]],
                 ]
 
             },
@@ -3855,6 +4222,8 @@
                     ["row", [["clickable", 27]]],
                     ["row", [["clickable", 32]]],
                     ["row", [["clickable", 33]]],
+                    ["row", [["clickable", 36]]],
+                    ["row", [["clickable", 37]]],
                 ]
 
             },

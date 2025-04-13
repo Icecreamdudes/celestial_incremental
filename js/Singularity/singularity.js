@@ -1,4 +1,4 @@
-﻿var tree3 = [["coa", "cop"], ["ra", "cs", "sd"]]
+﻿var tree3 = [["coa", "cop"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
 addLayer("s", {
     name: "Universe 3", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "3", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -57,6 +57,10 @@ addLayer("s", {
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("fu", 16))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.fu.angerEffect2)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.evolvedEffects[9][1])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cop.processedCorePrimedEffects[0])
+        if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.rarePetEffects[7][0])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.epicPetEffects[3][1])
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {
@@ -160,11 +164,15 @@ addLayer("s", {
         {
             title: "Singularity Upgrade VI",
             unlocked() { return true},
-            description: "Tetrate check back effect to the ^^1.003.",
+            description: "Boost checkback effect based on itself",
             cost: new Decimal("1e10"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
+            effect() {
+                return player.cb.level.pow(0.7).div(20).add(1)
+            },
+            effectDisplay() { return '^'+format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: { width: '125px', "min-height": '120px' },
         },
         17:
@@ -195,6 +203,39 @@ addLayer("s", {
             unlocked() { return true},
             description: "Unlock paragon scraps (in core scraps).",
             cost: new Decimal("1e27"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        21:
+        {
+            title: "Singularity Upgrade X",
+            unlocked() { return hasUpgrade("s", 19)},
+            description: "Unlock starmetal alloy.",
+            cost: new Decimal("1e30"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        22:
+        {
+            title: "Singularity Upgrade XI",
+            unlocked() { return hasUpgrade("s", 21)},
+            description: "Automate fun and sfrgt buyables.",
+            cost: new Decimal("1e38"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        23:
+        {
+            title: "Singularity Upgrade XII",
+            unlocked() { return hasUpgrade("s", 22)},
+            description: "Unlock more check back content.",
+            cost: new Decimal("1e44"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -360,6 +401,12 @@ addLayer("s", {
             done() { return player.s.singularities.gte(25) },
             style: { width: '800px', "min-height": '75px' },
         },
+        21: {
+            requirementDescription: "<h3>100 Singularities",
+            effectDescription: "Keep OTFs on singularity resets.",
+            done() { return player.s.singularities.gte(100) },
+            style: { width: '800px', "min-height": '75px' },
+        },
         //REMINDER: MAKE THE TIME MACHINE at some point
     },
     challenges: {
@@ -374,6 +421,11 @@ addLayer("s", {
             title: "Singularity Core",
             body() { return "Matos, the celestial of machines discovered a way of controlling the power of singularity without being affected by it's negative properties. By extracting the power from singularities and concentrating them into a core. The power is protected by a layer of starmetal, which is a metal extracted from dying stars. However, the singularity core is still unstable. It needs a fuel source in order to be stabilized. With all three of these factors, a the power of singularities can be used through cores. Matos gave his cores to other celestials in order to make them stronger. He eventually started mass producing cores, with using two machines: The core assembler, and the core processor." },
             unlocked() { return hasMilestone("s", 19) },      
+        },
+        3: {
+            title: "Starmetal Alloy",
+            body() { return "Starmetal Alloy is made by harnessing the power of photons into physical matter using superphysical values. However, when in the process of creating starmetal alloy, photons become dormant, which means there is no light. And in the absence of light, there is darkness. In darkness, superphysical values become altered. Values are harder to gain and are more prone to reset. This has made gaining starmetal alloy difficult." },
+            unlocked() { return hasUpgrade("s", 21) },      
         },
     },
     microtabs: {
@@ -395,10 +447,23 @@ addLayer("s", {
                 [
                     ["blank", "25px"],
         ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["aupgrade", 15],["aupgrade", 16],["upgrade", 17],]],
-        ["row", [["upgrade", 18],["upgrade", 19],]],
+        ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 21],["upgrade", 22],["upgrade", 23],]],
     ]
 
-            },
+            },       
+            "Lore": {
+                buttonStyle() { return { 'color': 'white' } },
+                unlocked() { return true },
+                content:
+                [
+                    ["blank", "25px"],
+                    ["infobox", "1"],
+                    ["infobox", "2"],
+                    ["infobox", "3"],
+                    ["infobox", "4"],
+    ]
+
+            },      
             "Singularity Milestones": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
@@ -417,6 +482,7 @@ addLayer("s", {
         ["row", [["milestone", 17],]],
         ["row", [["milestone", 18],]],
         ["row", [["milestone", 19],]],
+        ["row", [["milestone", 21],]],
     ]
 
             },

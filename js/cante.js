@@ -116,7 +116,7 @@
         if (hasMilestone("fa", 19)) player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.fa.milestoneEffect[8])
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("fu", 44))
 
-        if (hasUpgrade("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
+        if (hasMilestone("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
 
         player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
 
@@ -157,7 +157,7 @@
         }
         player.ca.replicantiTimer = new Decimal(0)
     },
-    branches: ["ta", "om"],
+    branches: [ "om"],
     clickables: {
         1: {
             title() { return "<h2>Return" },

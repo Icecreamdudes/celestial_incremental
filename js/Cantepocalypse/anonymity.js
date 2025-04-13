@@ -47,6 +47,8 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("fu", 46))
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(0.2)
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fu.jocusEssenceEffect)
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.le.punchcardsPassiveEffect[3])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.epicPetEffects[4][0])
 
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },

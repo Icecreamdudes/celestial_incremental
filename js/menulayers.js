@@ -344,7 +344,7 @@ addLayer("u3u", {
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],]],
-            ["row", [["upgrade", 18], ["upgrade", 19]]],
+            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21],["upgrade", 22],["upgrade", 23],]],
         ]]]],
     layerShown() { return false }
 })
@@ -385,6 +385,7 @@ addLayer("u3m", {
             ["row", [["milestone", 17],]],
             ["row", [["milestone", 18],]],
             ["row", [["milestone", 19],]],
+        ["row", [["milestone", 21],]],
         ]]]],
     layerShown() { return false }
 })
@@ -621,6 +622,69 @@ addLayer("cmh", {
     ["infobox", 1],
     ["infobox", 2],
     ["infobox", 3],
+        ]]]],
+    layerShown() { return false }
+})
+addLayer("dut", {
+    name: "dut", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "dut", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }
+    },
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#eaf6f7",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["du", [
+            ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+            ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+         ["blank", "25px"],
+            ["tree", function () { return player.universe == -0.1 ? treeD : null } ],
+        ]]]],
+    layerShown() { return false }
+})
+addLayer("duu", {
+    name: "duu", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "duu", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }
+    },
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#eaf6f7",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["du", [
+            ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+            ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+         ["blank", "25px"],
         ]]]],
     layerShown() { return false }
 })

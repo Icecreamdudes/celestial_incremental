@@ -9,7 +9,7 @@
         currentCutscene: 0,
 
         //Cutscenes
-        cutscenes: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
+        cutscenes: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,],
 
         //OTF
         cutsceneDice: true,
@@ -62,10 +62,12 @@
         player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
         player.tab == "ev8" ? "#242525" : 
         player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
-        player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd"? "#260300" : 
-        player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" ? "#7d3f98" : 
+        player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || player.tab == "ma" || player.tab == "sma" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd"? "#260300" : 
+        player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4"  || player.tab == "ep5" ? "#7d3f98" : 
         player.tab == "ch" || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
         player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 
+        player.tab == "leg" ? "#eed200" : 
+        player.sma.inStarmetalChallenge ? "black" : 
         "#161616");
 
         //1
@@ -93,7 +95,7 @@
         if (player.c.cutscenes[1] && hasUpgrade("i", 21))
         {
             player.c.currentCutscene = 2
-        } else if (hasUpgrade("i", 21))
+        } else if (player.tab != "c" && hasUpgrade("i", 21))
         {
             player.c.currentCutscene = 0
         }
@@ -114,7 +116,7 @@
         if (player.c.cutscenes[2] && player.in.infinities.gt(0))
         {
             player.c.currentCutscene = 3
-        } else if (player.in.infinities.gt(0))
+        } else if (player.tab != "c" && player.in.infinities.gt(0))
         {
             player.c.currentCutscene = 0
         }
@@ -135,7 +137,7 @@
         if (player.c.cutscenes[3] && player.ta.negativeInfinityPoints.gt(0))
         {
             player.c.currentCutscene = 4
-        } else if (player.ta.negativeInfinityPoints.gt(0))
+        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(0))
         {
             player.c.currentCutscene = 0
         }
@@ -158,7 +160,7 @@
         if (player.c.cutscenes[4] && player.ta.negativeInfinityPoints.gt(1000))
         {
             player.c.currentCutscene = 5
-        } else if (player.ta.negativeInfinityPoints.gt(1000))
+        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(1000))
         {
             player.c.currentCutscene = 0
         }
@@ -180,7 +182,7 @@
         if (player.c.cutscenes[5] && inChallenge("tad", 11))
         {
             player.c.currentCutscene = 6
-        } else if (inChallenge("tad", 11) && player.tab != "c")
+        } else if (player.tab != "c" && inChallenge("tad", 11) && player.tab != "c")
         {
             player.c.currentCutscene = 0
         }
@@ -202,7 +204,7 @@
         if (player.c.cutscenes[6] && player.in.unlockedBreak)
         {
             player.c.currentCutscene = 7
-        } else if (player.in.unlockedBreak)
+        } else if (player.tab != "c" && player.in.unlockedBreak)
         {
             player.c.currentCutscene = 0
         }
@@ -223,7 +225,7 @@
         if (player.c.cutscenes[7] && hasUpgrade("bi", 24))
         {
             player.c.currentCutscene = 8
-        } else if (hasUpgrade("bi", 24))
+        } else if (player.tab != "c" && hasUpgrade("bi", 24))
         {
             player.c.currentCutscene = 0
         }
@@ -244,7 +246,7 @@
         if (player.c.cutscenes[8] && player.ca.galaxyDust.gt(0))
         {
             player.c.currentCutscene = 9
-        } else if (player.ca.galaxyDust.gt(0))
+        } else if (player.tab != "c" && player.ca.galaxyDust.gt(0))
         {
             player.c.currentCutscene = 0
         }
@@ -265,7 +267,7 @@
         if (player.c.cutscenes[9] && hasUpgrade("bi", 28))
         {
             player.c.currentCutscene = 10
-        } else if (hasUpgrade("bi", 28))
+        } else if (player.tab != "c" && hasUpgrade("bi", 28))
         {
             player.c.currentCutscene = 0
         }
@@ -286,7 +288,7 @@
         if (player.c.cutscenes[10] && (player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock)))
         {
             player.c.currentCutscene = 11
-        } else if (player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock))
+        } else if (player.tab != "c" && player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock))
         {
             player.c.currentCutscene = 0
         }
@@ -307,7 +309,7 @@
         if (player.c.cutscenes[11] && hasUpgrade("cp", 18))
         {
             player.c.currentCutscene = 12
-        } else if (hasUpgrade("cp", 18))
+        } else if (player.tab != "c" && hasUpgrade("cp", 18))
         {
             player.c.currentCutscene = 0
         }
@@ -328,7 +330,7 @@
         if (player.c.cutscenes[12] && player.ca.defeatedCante)
         {
             player.c.currentCutscene = 13
-        } else if (player.ca.defeatedCante)
+        } else if (player.tab != "c" && player.ca.defeatedCante)
         {
             player.c.currentCutscene = 0
         }
@@ -349,7 +351,7 @@
         if (player.c.cutscenes[13] && player.s.highestSingularityPoints.gt(0))
         {
             player.c.currentCutscene = 14
-        } else if (player.s.highestSingularityPoints.gt(0))
+        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0))
         {
             player.c.currentCutscene = 0
         }
@@ -369,7 +371,7 @@
         if (player.c.cutscenes[14] && player.cop.processingCore)
         {
             player.c.currentCutscene = 15
-        } else if (player.cop.processingCore)
+        } else if (player.tab != "c" && player.cop.processingCore)
         {
             player.c.currentCutscene = 0
         }
@@ -389,7 +391,7 @@
         if (player.c.cutscenes[15] && hasMilestone("s", 12))
         {
             player.c.currentCutscene = 16
-        } else if (hasMilestone("s", 12))
+        } else if (player.tab != "c" && hasMilestone("s", 12))
         {
             player.c.currentCutscene = 0
         }
@@ -409,7 +411,7 @@
         if (player.c.cutscenes[16] && hasMilestone("s", 13))
         {
             player.c.currentCutscene = 17
-        } else if (hasMilestone("s", 13))
+        } else if (player.tab != "c" && hasMilestone("s", 13))
         {
             player.c.currentCutscene = 0
         }
@@ -431,7 +433,7 @@
         if (player.c.cutscenes[17] && hasMilestone("s", 14))
         {
             player.c.currentCutscene = 18
-        } else if (hasMilestone("s", 14))
+        } else if (player.tab != "c" && hasMilestone("s", 14))
         {
             player.c.currentCutscene = 0
         }
@@ -451,7 +453,7 @@
         if (player.c.cutscenes[18] && hasUpgrade("cp", 19))
         {
             player.c.currentCutscene = 19
-        } else if (hasUpgrade("cp", 19))
+        } else if (player.tab != "c" && hasUpgrade("cp", 19))
         {
             player.c.currentCutscene = 0
         }
@@ -471,7 +473,7 @@
         if (player.c.cutscenes[19] && player.fu.jocusCelestialActivate)
         {
             player.c.currentCutscene = 20
-        } else if (player.fu.jocusCelestialActivate)
+        } else if (player.tab != "c" && player.fu.jocusCelestialActivate)
         {
             player.c.currentCutscene = 0
         }
@@ -491,7 +493,7 @@
         if (player.c.cutscenes[20] && hasUpgrade("fu", 15))
         {
             player.c.currentCutscene = 21
-        } else if (hasUpgrade("fu", 15))
+        } else if (player.tab != "c" && hasUpgrade("fu", 15))
         {
             player.c.currentCutscene = 0
         }
@@ -511,7 +513,7 @@
         if (player.c.cutscenes[21] && hasUpgrade("fu", 17))
         {
             player.c.currentCutscene = 22
-        } else if (hasUpgrade("fu", 17))
+        } else if (player.tab != "c" && hasUpgrade("fu", 17))
         {
             player.c.currentCutscene = 0
         }
@@ -531,7 +533,7 @@
         if (player.c.cutscenes[22] && hasChallenge("fu", 11))
         {
             player.c.currentCutscene = 23
-        } else if (hasChallenge("fu", 11))
+        } else if (player.tab != "c" && hasChallenge("fu", 11))
         {
             player.c.currentCutscene = 0
         }
@@ -551,7 +553,7 @@
         if (player.c.cutscenes[23] && hasUpgrade("s", 18))
         {
             player.c.currentCutscene = 24
-        } else if (hasUpgrade("s", 18))
+        } else if (player.tab != "c" && hasUpgrade("s", 18))
         {
             player.c.currentCutscene = 0
         }
@@ -567,11 +569,71 @@
             player.c.cutscenes[23] = false
         }
 
+        //25
+        if (player.c.cutscenes[24] && hasUpgrade("s", 21))
+        {
+            player.c.currentCutscene = 25
+        } else if (player.tab != "c" && hasUpgrade("s", 21))
+        {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 25)
+        {
+            player.tab = "c"
+            layers.c.startCutscene25();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 25)
+        {
+            player.c.cutscenes[24] = false
+            player.tab = "s" 
+            player.c.cutscenes[24] = false
+        }
+
+        //26
+        if (player.c.cutscenes[25] && player.sma.starmetalAlloy.gte(1))
+        {
+            player.c.currentCutscene = 26
+        } else if (player.tab != "c" && player.sma.starmetalAlloy.gte(1))
+        {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 26)
+        {
+            player.tab = "c"
+            layers.c.startCutscene26();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 26)
+        {
+            player.c.cutscenes[25] = false
+            player.tab = "s" 
+            player.c.cutscenes[25] = false
+        }
+
+        //27
+        if (player.c.cutscenes[26] && player.le.punchcardsUnlocked[15])
+        {
+            player.c.currentCutscene = 27
+        } else if (player.tab != "c" && player.le.punchcardsUnlocked[15])
+        {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 27)
+        {
+            player.tab = "c"
+            layers.c.startCutscene27();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 27)
+        {
+            player.c.cutscenes[26] = false
+            player.tab = "du" 
+            player.c.cutscenes[26] = false
+        }
+
         //d
         if (player.c.cutsceneDice && player.po.dice)
         {
             player.c.currentCutscene = -1
-        } else if (player.po.dice)
+        } else if (player.tab != "c" && player.po.dice)
         {
             player.c.currentCutscene = 0
         }
@@ -592,7 +654,7 @@
         if (player.c.cutsceneRocketFuel && player.po.rocketFuel)
         {
             player.c.currentCutscene = -2
-        } else if (player.po.rocketFuel)
+        } else if (player.tab != "c" && player.po.rocketFuel)
         {
             player.c.currentCutscene = 0
         }
@@ -613,7 +675,7 @@
         if (player.c.cutsceneHex && player.h.hex.gte(1))
         {
             player.c.currentCutscene = -3
-        } else if (player.h.hex.gte(1) && hasChallenge("ip", 13))
+        } else if (player.tab != "c" && player.h.hex.gte(1) && hasChallenge("ip", 13))
         {
             player.c.currentCutscene = 0
         }
@@ -1010,6 +1072,53 @@ startCutscene24()
         'The lightning kept on striking at a fixed interval. It was strange.',
         'Sel snaps into realization. "I know what this is... this is morse code!"',
 
+    ]
+},
+startCutscene25()
+{
+    player.c.cutsceneText = [
+        "As the lightning strikes, Sel deciphers the morse code.",
+        '"It says... "Five Cores. Five Primes. At the highest potential."", Sel says with a worried tone.', 
+        '"What does that mean?" Kres asks.',
+        '"Honestly, I have no idea."',
+        '"Is that what we need to do in order to defeat Matos?", you ask.',
+        '"I\'m not sure, but it\'s certainly worth a shot.", Sel replies.',
+        '"Well, what does it mean by "Five Primes?", Nav asks.',
+        'Eclipse points at the sun, which is red, and vibrant.',
+        '"I think I know what it means. We need to find starmetal alloy. Then we can \"prime\" the core, by infusing the starmetal alloy into it.", Kres responds.',
+        '"These cores seem pretty ancient, so it would make sense for Matos to want them rejuvenated with fresh materials."',
+        '"How do we even get to the sun? We don\'t have anything.", Nav asks.',
+        '"We must extract the sun\'s energy and give it physical form to create starmetal alloy.", Kres replies.',
+        '"I think I know how exactly I would do that...", you say.',
+        "You have an idea. Using superphysical power from universe 1, you can use it to funnel the sun's energy into the core assembler, which woill produce starmetal alloy.",
+        "You tell the group your plan, and they agree to it.",
+    ]
+},
+startCutscene26()
+{
+    player.c.cutsceneText = [
+        "You return to the Domain of Singularity, with starmetal alloy. The group is waiting for you.",
+        '"So... this is what we need?" Kres asks.',
+        '"Yup. Seems like we can also try improving the core assembler with this alloy.", you reply.',
+        '"Guys... what if making all of these cores for Matos is a bad idea?" Nav asks.',
+        '"If he wants five of the strongest cores, wouldn\'t that just make him more powerful?"',
+        '"Hmm... I mean how else would we be able to escape?" Kres replies.',
+        '"And if we defeat this celestial using it\'s own creation, that would be a good look as celestial hunters." Sel adds.',
+        '"We have been here for years. Boss probably thinks we are dead. We must restore the hope of celestial hunters! We must make it alive!" Kres exclaims.',
+        'Kres points at you. "And you especially. You have been blessed with a godly ability. Traversing through universes using the power of superphysical values!"',
+        '"You could have celestial hunting abilities as powerful as the infinity keeper himself!"',
+        '"Even if Matos is manipulating us, he must show his presence in order to stop us."',
+        '"And once he does show his presence, we will use the power of our cores to defeat him."',
+    ]
+},
+startCutscene27()
+{
+    player.c.cutsceneText = [
+        "You pull out a card from the light extractor, and you notice a symbol you have never seen.",
+        'A voice whispers in your head. "Matos is waiting. Matos is waiting..."',
+        "An altar appears in front of you, with five slots for five cores.",
+        "This is it. Putting the cores in each of the slots will summon Matos.",
+        "You just need some time to prepare.",
     ]
 },
 

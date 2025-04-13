@@ -134,6 +134,8 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("fu", 18))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
 
+        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))
+
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
 
         if (player.gh.steelPause.gt(0)) {

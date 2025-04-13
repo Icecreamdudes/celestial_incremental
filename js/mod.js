@@ -10,7 +10,8 @@
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
 	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "Gwa Temple/gwaTemple.js", "epicPets.js", "menulayers.js", "pollinator.js", "Singularity/coreProcessor.js",
 	"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
-	"Hall of Celestials/celestialHall.js"],
+	"Hall of Celestials/celestialHall.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
+	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "legendaryPets.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -43,8 +44,30 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.4 - The Singularity Update Part I: Cores</h3><br>
+	<h3>v1.5 - The Singularity Update Part II: Starmetal and Darkness</h3><br>
 			- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+		<br>
+		<br>
+		<br>
+		Content:<br>
+		- Added Starmetal Alloy.<br>
+		- Added Core Priming, a feature that allows cores to be upgraded.<br>
+		- Added Dark Universe 1.<br>
+		- Added The Light Extractor.<br>
+		- Added Dark Ranks.<br>
+		- Added Dark Prestige.<br>
+		- Added Dark Generators.<br>
+		- Added Dark Grass.<br>
+		- Added Normality.<br>
+		- Added 15 new punchcards.<br>
+		- Added 2 new rare pets.<br>
+		- Added 3 new epic pets.<br>
+		- Added Legendary Gems.<br>
+		- Added a lot of lore.<br>
+		Balancing: Balanced some singularity core stuff.<br>
+		Bugfixes: Lost track yet again<br>
+		QoL: Lost track yet again<br><br>
+	<h3>v1.4 - The Singularity Update Part I: Cores</h3><br>
 		<br>
 		<br>
 		<br>
@@ -242,8 +265,9 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
- "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", 
- "startCutscene25", "startCutscene26", "startCutscene27", "scrapCore"]
+ "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset",
+ "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
+"petButton7", "evoBanner", "paragonBanner", "gemReset"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

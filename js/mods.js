@@ -76,12 +76,6 @@
 
         player.m.modEffect = player.m.mods.div(6).pow(1.2).add(1)
 
-        player.m.linesOfCode = player.m.linesOfCode.add(player.m.linesOfCodePerSecond.mul(delta))
-        if (player.m.linesOfCode.gte(player.m.modsReq)) {
-            player.m.mods = player.m.mods.add(player.m.modsToGet)
-            player.m.linesOfCode = new Decimal(0)
-        }
-
         if (inChallenge("ip", 18) && player.m.mods.gt(player.m.mods.mul(0.3 * delta)))
         {
             player.m.mods = player.m.mods.sub(player.m.mods.mul(0.3 * delta))

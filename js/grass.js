@@ -1770,6 +1770,7 @@ const updateGoldGrass = (delta) => {
         .mul(player.cb.rarePetEffects[4][1])
         .mul(buyableEffect('r', 11))
         .mul(buyableEffect('rm', 26))
+        .mul(player.le.punchcardsPassiveEffect[11])
 
     // =================================================================
     // Spawn-time logic
@@ -1891,6 +1892,8 @@ const updateMoonstone = (delta) => {
         .mul(buyableEffect('g', 21))
         .mul(player.g.moonstoneLevelEffects[2])
         .mul(player.cb.evolvedEffects[9][0])
+        .mul(player.le.punchcardsPassiveEffect[12])
+        .mul(buyableEffect("ep2", 11))
 
     if (hasUpgrade('ev8', 17)) {
         player.g.moonstoneVal = player.g.moonstoneVal

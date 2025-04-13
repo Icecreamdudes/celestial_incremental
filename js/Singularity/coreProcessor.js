@@ -51,7 +51,7 @@
             player.cop.processedCorePrimedEffects = layers.coa.determinePrimedEffect(player.cop.processedCorePrime, player.cop.processedCoreStrength)
         } else
         {
-            player.cop.processedCorePrimedEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+            player.cop.processedCorePrimedEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
         }
         player.cop.processedCorePrimedEffectsText = layers.coa.determinePrimedText(player.cop.processedCorePrime, player.cop.processedCoreStrength)
 

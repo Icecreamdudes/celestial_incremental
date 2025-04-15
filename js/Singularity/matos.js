@@ -7,6 +7,8 @@
         unlocked: true,
 
         mMax: false,
+
+        matosUnlock: false,
     }
     },
     automate() {

@@ -89,12 +89,6 @@
 
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
 
-        player.t.leaves = player.t.leaves.add(player.t.leavesPerSecond.mul(delta))
-        if (player.t.leaves.gte(player.t.treeReq)) {
-            player.t.trees = player.t.trees.add(player.t.treesToGet)
-            player.t.leaves = new Decimal(0)
-        }
-
         if (inChallenge("ip", 18) && player.t.trees.gt(player.t.trees.mul(0.3 * delta)))
         {
             player.t.trees = player.t.trees.sub(player.t.trees.mul(0.3 * delta))

@@ -332,9 +332,9 @@ addLayer("po", {
         15: {
             title() { return "<h1>Realm Mods" },
             display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.2)<br>On" : "<h2>Feel the realms.<br>Off<br><h3>Req: 1.79e308 replicanti and a cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
+                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.35)<br>On" : "<h2>Feel the realms.<br>Off<br><h3>Req: 1 cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots";
             },
-            canClick() { return player.po.featureSlots.gte(2) && (player.ca.replicanti.gte(1.79e308) || hasMilestone("s", 15)) && (player.ca.canteCores.gte(1) || hasMilestone("s", 15))},
+            canClick() { return player.po.featureSlots.gte(2) && (player.ca.canteCores.gte(1) || hasMilestone("s", 15))},
             unlocked() { return hasUpgrade("bi", 27) },
             onClick() {
                 player.po.keepOTFS = true

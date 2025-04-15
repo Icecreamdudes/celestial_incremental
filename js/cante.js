@@ -157,7 +157,7 @@
         }
         player.ca.replicantiTimer = new Decimal(0)
     },
-    branches: [ "om"],
+    branches: ["om"],
     clickables: {
         1: {
             title() { return "<h2>Return" },

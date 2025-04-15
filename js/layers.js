@@ -253,7 +253,7 @@ addLayer("i", {
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
 
-        if (player.po.realmMods) player.gain = player.gain.pow(0.2)
+        if (player.po.realmMods) player.gain = player.gain.pow(0.35)
 
         let preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) preOTFMult = preOTFMult.mul(10)

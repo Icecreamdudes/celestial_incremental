@@ -428,19 +428,19 @@
                 player.d.addDiceEffect = sum.mul(0.0006).pow(0.7).pow(buyableEffect("cs", 28))
                 player.d.diceEffects[10] = player.d.diceEffects[10].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 11) {
-            player.d.addDiceEffect = sum.pow(0.1).mul(0.0003).pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = sum.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0003)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[11] = player.d.diceEffects[11].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 12) {
-            player.d.addDiceEffect = sum.pow(0.1).mul(0.0001).div(player.d.diceEffects[12].pow(5)).pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = sum.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0001).div(player.d.diceEffects[12].pow(5))
             player.d.diceEffects[12] = player.d.diceEffects[12].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 13) {
-            player.d.addDiceEffect = sum.mul(0.00001)
-            if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100).pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = sum.pow(buyableEffect("cs", 28)).mul(0.00001)
+            if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
-            player.d.addDiceEffect = sum.mul(0.00005)
-            if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100).pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = sum.pow(buyableEffect("cs", 28)).mul(0.00005)
+            if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         }
     },

@@ -26,6 +26,7 @@ function updateMusicVolume() {
     const input = document.getElementById("volume");
     options.musicVolume = parseInt(input.value);
 }
+
 function toggleOpt(name) {
 	if (name == "oldStyle" && styleCooldown > 0)
 		return;

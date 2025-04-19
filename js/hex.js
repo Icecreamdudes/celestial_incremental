@@ -92,6 +92,7 @@
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 48))
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 49))
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.rm.realmModsEffect[2])
+            player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.le.punchcardsPassiveEffect[8])
         }
         player.h.hexPointsToGet[player.h.currentRagePowerEffect] = player.h.hexPointsToGet[player.h.currentRagePowerEffect].mul(player.h.ragePowerCycleEffect)
 

@@ -217,6 +217,7 @@
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
         if (player.cop.processedCoreFuel.eq(7)) player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.le.punchcardsPassiveEffect[7])
 
         // CHALLENGE DICE PER SECOND
         if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
@@ -614,22 +615,18 @@
             player.d.diceEffects[10] = player.d.diceEffects[10].add(player.d.addDiceEffect)
         // TIER 2 EFFECTS
         } else if (player.d.currentBoosterRoll == 11) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).mul(0.0003)
-            if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0003)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[11] = player.d.diceEffects[11].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 12) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).mul(0.0001).div(player.d.diceEffects[12].pow(5))
-            if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0001).div(player.d.diceEffects[12].pow(5))
             player.d.diceEffects[12] = player.d.diceEffects[12].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 13) {
-            player.d.addDiceEffect = player.d.diceScore.mul(0.00001)
-            if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00001)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
-            player.d.addDiceEffect = player.d.diceScore.mul(0.00005)
-            if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
+            player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00005)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         }

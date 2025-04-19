@@ -17,16 +17,30 @@
 
         coreStrengths: [new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),],
         coreFuelSources: [new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),],
+        corePrimes: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        coreStarmetalValue: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         coreOccupied: [false,false,false,false,false,false,false,false,false,false,],
         coreStrengthText: ["None", "None", "None", "None", "None", "None", "None", "None","None", "None",],
         coreFuelSourceText: ["None", "None", "None", "None", "None", "None", "None", "None","None", "None",],
+        corePrimeText: ["None", "None", "None", "None", "None", "None", "None", "None","None", "None",],
         coreStrengthColor: ["","","","","","","","","","",],
         coreFuelSourceColor: ["","","","","","","","","","",],
+        corePrimeColor: ["","","","","","","","","","",],
         coreIndex: new Decimal(0),
         coreCount: new Decimal(0),
 
         coreInnateEffects: [[],[],[],[],[],[],[],[],[],[],],
         coreInnateEffectText: ["","","","","","","","","","",],
+
+        corePrimedEffects: [[],[],[],[],[],[],[],[],[],[],],
+        /*
+        0 - Singularity Points
+        1 - Radiation
+        2 - Singularity Dimensions
+        3 - Checkback XP
+        4 - XPBoost
+        */
+        corePrimedEffectText: ["","","","","","","","","","",],
 
         nextCoreStrength: new Decimal(0),
         nextCoreFuel: new Decimal(0),
@@ -48,6 +62,7 @@
 
         viewingStrength: new Decimal(0),
         luckLevel: new Decimal(1),
+        luckLevelUpgradeCost: new Decimal(1),
 
         singularityPause: new Decimal(0),
 
@@ -111,7 +126,7 @@
             "#FFBF00",
         ]
         player.coa.primeColors = [
-            "#58d4ed",
+            null,
             "#359edb",
             "#204db0",
             "#060d91",
@@ -143,7 +158,7 @@
         ]
         player.coa.primes = 
         [
-            null,
+            "",
             "1st Prime",
             "2nd Prime",
             "3rd Prime",
@@ -166,27 +181,64 @@
             new Decimal(1.4),
         ]
 
-        player.coa.coreStrengthOdds = 
-        [
-            70,
-            25,
-            5,
-            0,
-            0,
-        ]
+        if (player.coa.luckLevel.eq(1)) {
+            player.coa.coreStrengthOdds = [ 70, 25, 5, 0, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(1)
+        }
+        if (player.coa.luckLevel.eq(2)) {
+            player.coa.coreStrengthOdds = [ 50, 35, 15, 0, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(4)
+        }
+        if (player.coa.luckLevel.eq(3)) {
+            player.coa.coreStrengthOdds = [ 40, 40, 20, 0, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(9)
+        }
+        if (player.coa.luckLevel.eq(4)) {
+            player.coa.coreStrengthOdds = [ 30, 35, 35, 0, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(25)
+        }
+        if (player.coa.luckLevel.eq(5)) {
+            player.coa.coreStrengthOdds = [ 30, 30, 35, 5, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(49)
+        }
+        if (player.coa.luckLevel.eq(6)) {
+            player.coa.coreStrengthOdds = [ 25, 30, 30, 15, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(81)
+        }
+        if (player.coa.luckLevel.eq(7)) {
+            player.coa.coreStrengthOdds = [ 20, 25, 30, 25, 0, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(169)
+        }
+        if (player.coa.luckLevel.eq(8)) {
+            player.coa.coreStrengthOdds = [ 20, 20, 25, 30, 5, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(324)
+        }
+        if (player.coa.luckLevel.eq(9)) {
+            player.coa.coreStrengthOdds = [ 20, 20, 20, 30, 10, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(1000)
+        }
+        if (player.coa.luckLevel.eq(10)) {
+            player.coa.coreStrengthOdds = [ 20, 20, 20, 20, 20, ]
+            player.coa.luckLevelUpgradeCost = new Decimal(1e308)
+        }
 
         for (let i = 0; i < player.coa.coreFuelSourceText.length; i++)
         {
             player.coa.coreFuelSourceText[i] = player.coa.fuels[player.coa.coreFuelSources[i]]
             player.coa.coreStrengthText[i] = player.coa.strengths[player.coa.coreStrengths[i]]
+            player.coa.corePrimeText[i] = player.coa.primes[player.coa.corePrimes[i]]
 
             player.coa.coreFuelSourceColor[i] = player.coa.fuelColors[player.coa.coreFuelSources[i]]
             player.coa.coreStrengthColor[i] = player.coa.strengthColors[player.coa.coreStrengths[i]]
+            player.coa.corePrimeColor[i] = player.coa.primeColors[player.coa.corePrimes[i]]
 
             player.coa.coreInnateEffects[i] = layers.coa.determineEffect(player.coa.coreFuelSources[i], player.coa.coreStrengths[i])
             player.coa.coreInnateEffectText[i] = layers.coa.determineText(player.coa.coreFuelSources[i], player.coa.coreStrengths[i])
 
-            if ((player.tab == "coa" && (player.subtabs["coa"]["stuff"] == "Inventory")) || (player.tab == "cop" && (player.subtabs["cop"]["stuff"] == "Processor")) || (player.tab == "ra" && (player.subtabs["ra"]["stuff"] == "Main"))  || (player.tab == "ev9" && player.subtabs["ev9"]["stuff"] == "Core Sacrifice")) setCoreColors(document.getElementById("core"+i), player.coa.coreFuelSourceColor[i], player.coa.coreStrengthColor[i], null);
+            player.coa.corePrimedEffects[i] = layers.coa.determinePrimedEffect(player.coa.corePrimes[i], player.coa.coreStrengths[i])
+            player.coa.corePrimedEffectText[i] = layers.coa.determinePrimedText(player.coa.corePrimes[i], player.coa.coreStrengths[i])
+
+            if ((player.tab == "coa" && (player.subtabs["coa"]["stuff"] == "Inventory")) || (player.tab == "cop" && (player.subtabs["cop"]["stuff"] == "Processor")) || (player.tab == "ra" && (player.subtabs["ra"]["stuff"] == "Main"))  || (player.tab == "ev9" && player.subtabs["ev9"]["stuff"] == "Core Sacrifice") || (player.tab == "sma" && player.subtabs["sma"]["stuff"] == "Prime Cores")) setCoreColors(document.getElementById("core"+i), player.coa.coreFuelSourceColor[i], player.coa.coreStrengthColor[i], player.coa.corePrimeColor[i]);
         }
 
         player.coa.nextCoreInnateEffects = layers.coa.determineEffect(player.coa.nextCoreFuel, player.coa.viewingStrength)
@@ -477,6 +529,67 @@
             + "<br>Boosts infinities based on time spent in singularity: x" + format(layers.coa.determineEffect(10, strength)[2]) 
         }
     },
+    determinePrimedEffect(prime, strength) {
+        /*
+        0 - Singularity Points
+        1 - Radiation
+        2 - Singularity Dimensions
+        3 - Checkback XP
+        4 - ??? (new thingy)
+        */
+        if (prime == 0) {
+            return [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+        }
+        if (prime == 1) {
+            return [player.s.singularityTime.pow(0.8).div(5).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+        }
+        if (prime == 2) {
+            return [player.s.singularityTime.pow(0.9).div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1), new Decimal(1), new Decimal(1)]
+        }
+        if (prime == 3) {
+            return [player.s.singularityTime.div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.2).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.4).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1), new Decimal(1)]
+        }
+        if (prime == 4) {
+            return [player.s.singularityTime.pow(1.1).div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.45).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.div(1000).pow(0.2).div(2).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1)]
+        }
+        if (prime == 5) {
+            return [player.s.singularityTime.pow(1.2).div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.25).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.div(1000).pow(0.225).div(2).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.div(6666).pow(0.1).div(3).add(1).pow(player.coa.strengthBuffs[strength])]
+        }
+    },
+    determinePrimedText(prime, strength) {
+        /*
+        0 - Singularity Points
+        1 - Radiation
+        2 - Singularity Dimensions
+        3 - Checkback XP
+        4 - ??? (new thingy)
+        */
+        if (prime == 1) {
+            return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(1, strength)[0]) 
+        }
+        if (prime == 2) {
+            return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(2, strength)[0]) 
+            + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(2, strength)[1])
+        }
+        if (prime == 3) {
+            return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(3, strength)[0]) 
+            + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(3, strength)[1])
+            + "<br>Singularity Dimensions: x" + format(layers.coa.determinePrimedEffect(3, strength)[2])
+        }
+        if (prime == 4) {
+            return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(4, strength)[0]) 
+            + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(4, strength)[1])
+            + "<br>Singularity Dimensions: x" + format(layers.coa.determinePrimedEffect(4, strength)[2])
+            +  "<br>Checkback XP: x" + format(layers.coa.determinePrimedEffect(4, strength)[3])
+        }
+        if (prime == 5) {
+            return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(5, strength)[0]) 
+            + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(5, strength)[1])
+            + "<br>Singularity Dimensions: x" + format(layers.coa.determinePrimedEffect(5, strength)[2])
+            +  "<br>Checkback XP: x" + format(layers.coa.determinePrimedEffect(5, strength)[3])
+            +  "<br>XPBoost: x" + format(layers.coa.determinePrimedEffect(5, strength)[4])
+        }
+    },
     generateCoreStrength()
     {
         let random = getRandomInt(100);
@@ -512,6 +625,7 @@
                 {
                     player.coa.coreOccupied[i] = true
                     player.coa.coreFuelSources[i] = player.coa.nextCoreFuel
+                    player.coa.corePrimes[i] = new Decimal(0)
 
                     let strength = layers.coa.generateCoreStrength()
                     player.coa.coreStrengths[i] = strength
@@ -653,10 +767,12 @@
             }
         }
 
-        for (let i = 0; i < player.r.milestones.length; i++) {
-            if (+player.r.milestones[i] < 20) {
-                player.r.milestones.splice(i, 1);
-                i--;
+        if (!hasUpgrade("sma", 104)) {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if (+player.r.milestones[i] < 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
             }
         }
 
@@ -669,8 +785,6 @@
         player.g.savedGoldGrass = new Decimal(0)
         player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
-        
-        player.subtabs["g"]['stuff'] = 'Grass'
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
@@ -742,6 +856,7 @@
             }
         }
 
+        if (!hasMilestone("s", 21)) {
             player.po.dice = false
             player.po.rocketFuel = false
             player.po.hex = false
@@ -749,6 +864,7 @@
             if (hasMilestone("s", 18)) player.po.breakInfinity = true
             player.po.realmMods = false
             player.po.featureSlots = player.po.featureSlotsMax
+        }
 
 
         //reset antimatter stuff
@@ -1296,10 +1412,12 @@
 
         player.fa.charge = new Decimal(0)
         player.fa.bestCharge = new Decimal(0)
-        for (let i = 0; i < player.fa.milestones.length; i++) {
-            if (+player.fa.milestones[i] < 100) {
-                player.fa.milestones.splice(i, 1);
-                i--;
+        if (!hasUpgrade("sma", 104)) {
+            for (let i = 0; i < player.fa.milestones.length; i++) {
+                if (+player.fa.milestones[i] < 100) {
+                    player.fa.milestones.splice(i, 1);
+                    i--;
+                }
             }
         }
 
@@ -1372,6 +1490,16 @@
                 player.coa.viewingStrength = new Decimal(4)
             },
             style: { width: '75px', "min-height": '75px', 'background-color': '#4a1616', borderRadius: '5px' },
+        },
+        7: {
+            title() { return "<h5>Upgrade Luck Level" },
+            canClick() { return player.sma.starmetalAlloy.gte(player.coa.luckLevelUpgradeCost) },
+            unlocked() { return hasUpgrade("s", 21) },
+            onClick() {
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(player.coa.luckLevelUpgradeCost)
+                player.coa.luckLevel = player.coa.luckLevel.add(1)
+            },
+            style: { width: '100px', "min-height": '35px', "height": '30px'  },
         },
         11: {
             title() { return "Points" },
@@ -1572,6 +1700,9 @@
             canClick() { return true },
             unlocked() { return true },
             onClick() {
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.coa.coreStarmetalValue[player.coa.coreIndex])
+                player.coa.coreStarmetalValue[player.coa.coreIndex] = new Decimal(0)
+
                 if (player.ev.evolutionsUnlocked[9]) player.ev4.offerings = player.ev4.offerings.add(player.ev9.offeringsOnSacrifice[player.coa.coreIndex])
                     
                 if (player.coa.coreOccupied[player.coa.coreIndex])
@@ -1580,6 +1711,7 @@
                 }
                 player.coa.coreFuelSources[player.coa.coreIndex] = new Decimal(-1)
                 player.coa.coreStrengths[player.coa.coreIndex] = new Decimal(-1)
+                player.coa.corePrimes[player.coa.coreIndex] = new Decimal(0)
                 player.coa.coreOccupied[player.coa.coreIndex] = false
             },
             style: { width: '140px', "min-height": '70px', borderRadius: '10px' },
@@ -1643,6 +1775,8 @@
                             ["raw-html", function () { return "Average: " + formatWhole(player.coa.coreStrengthOdds[2]) + "%" }, { "color": "#cf7429", "font-size": "16px", "font-family": "monospace" }],
                             ["raw-html", function () { return "Strong: " + formatWhole(player.coa.coreStrengthOdds[3]) + "%" }, { "color": "#cf3a29", "font-size": "16px", "font-family": "monospace" }],
                             ["raw-html", function () { return "Pinnacle: " + formatWhole(player.coa.coreStrengthOdds[4]) + "%" }, { "color": "#4a1616", "font-size": "16px", "font-family": "monospace" }],
+                            ["row", [["clickable", 7]]],
+                            ["raw-html", function () { return hasUpgrade("s", 21) ? "Upgrade Cost: " + formatWhole(player.coa.luckLevelUpgradeCost) + " Starmetal Alloy" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ]],
                         ["raw-html", function () { return " <div id=nextCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["column", [
@@ -1678,9 +1812,11 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return hasUpgrade("s", 21) ? "Primed Effects (All based on singularity time):<br>" + player.coa.corePrimedEffectText[player.coa.coreIndex] : ""}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], ["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 111]]],
                     ["blank", "25px"],

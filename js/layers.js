@@ -109,13 +109,17 @@ addLayer("i", {
             if (options.newMenu == false) player.universe = 2
             player.musuniverse = 2
         }
-        if (player.tab == "coa" || player.tab == "cop" || player.tab == "ra" || player.tab == "cs" || player.tab == "sd" || player.tab == "u3t" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3b") {
+        if (player.tab == "coa" || player.tab == "cop" || player.tab == "ra" || player.tab == "cs" || player.tab == "sd" || player.tab == "u3t" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3b" || player.tab == "sma"|| player.tab == "ma") {
             if (options.newMenu == false) player.universe = 3
             player.musuniverse = 3
         }
         if (player.tab == "ch" || player.tab == "cmh" ) {
             if (options.newMenu == false) player.universe = -0.5
             player.musuniverse = -0.5
+        }
+        if (player.tab == "dut" || player.tab == "du" || player.tab == "dg" || player.tab == "dgr" || player.tab == "dn" || player.tab == "dp" || player.tab == "dr" || player.tab == "le"  ) {
+            if (options.newMenu == false) player.universe = -0.1
+            player.musuniverse = -0.1
         }
         if (player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi"
           || player.tab == "a1u" || player.tab == "a1t" || player.tab == "a1s"|| player.tab == "fu") {
@@ -156,21 +160,21 @@ addLayer("i", {
             playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
         } else if (player.musuniverse == -0.5 && options.musicToggle) {
             playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -1 && options.musicToggle) {
+        } else if (player.musuniverse == -0.1 && options.musicToggle) {
+            playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10);
+        } else if (player.musuniverse == -1 && options.musicToggle && player.tab == "c") {
             if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12) {
                playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13) {
                 playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 14 || player.c.currentCutscene == 15 ) {
                 playAndLoopAudio("music/singularityCutscene.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 16 || player.c.currentCutscene == 17 || player.c.currentCutscene == 18 || player.c.currentCutscene == 24) {
+            } else if (player.c.currentCutscene == 16 || player.c.currentCutscene == 17 || player.c.currentCutscene == 18 || player.c.currentCutscene == 24 || player.c.currentCutscene == 25 || player.c.currentCutscene == 26 || player.c.currentCutscene == 27) {
                 playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 19 || player.c.currentCutscene == 20 || player.c.currentCutscene == 21 || player.c.currentCutscene == 22 || player.c.currentCutscene == 23) {
                 playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
             }
-            
-        }
-        else if (player.musuniverse == 1.5 && options.musicToggle) {
+        } else if (player.musuniverse == 1.5 && options.musicToggle) {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
         } else {
             stopAudio();
@@ -190,6 +194,7 @@ addLayer("i", {
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
 
         //----------------------------------------
 
@@ -260,7 +265,7 @@ addLayer("i", {
             player.gain = player.gain.mul(0)
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        if (player.po.realmMods) player.gain = player.gain.pow(0.2)
+        if (player.po.realmMods) player.gain = player.gain.pow(0.35)
         player.gain = player.gain.div(player.po.halterEffects[0])
 
         // CELESTIAL POINT PER SECOND

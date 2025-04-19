@@ -66,6 +66,7 @@
         if (player.pol.pollinatorsIndex == 7) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorsEffect[13])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 1202)[1])
         if (player.cop.processedCoreFuel.eq(8)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.le.punchcardsPassiveEffect[7])
 
         // POWER MODIFIERS
         if (player.cop.processedCoreFuel.eq(8)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.cop.processedCoreInnateEffects[1])

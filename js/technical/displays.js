@@ -68,6 +68,14 @@ function constructUniButtonStyle(layer){
 			});
 			uni = -0.5;
 			break;
+		case 'du':
+			style.push({
+				background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
+				backgroundOrigin: "border-box",
+				color: "#ffffff",
+				borderColor: "#555555",});
+			uni = -0.1;
+			break;
 		case 'od':
 			style.push({
 				backgroundImage: "linear-gradient(0deg, #256413, #49AE1E)",
@@ -284,6 +292,78 @@ function constructMenuButtonStyle(layer){
             	color: "#ababab",
 			});
 			break;
+		case 'sma':
+			style.push({
+            	background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#282363",
+            	color: "#282363",
+			});
+			break;
+		case 'dut':
+			style.push({
+            	background: "linear-gradient(120deg, #1a0230 0%, #3f0773 25%,#571594 50%, #3f0773, 75%,  #1a0230 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#4f0694",
+            	color: "white",
+			});
+			break;
+		case 'le':
+			style.push({
+			    background: "linear-gradient(15deg, #4cc1c7 0%, #2a79ad 50%, #1a2f78 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#8ca3ff",
+				color: "#f5f7ff",
+			});
+			break;
+		case 'dr':
+			style.push({
+				background: "linear-gradient(15deg, #175f69 0%, #0d385e 50%, #041440 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "#1ba2b5",
+            	color: "#eaf6f7",
+			});
+			break;
+		case 'dp':
+			style.push({
+				background: "linear-gradient(15deg, #181c4f 0%, #1607ba 50%, #530fdb 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#215dcf",
+				color: "#eaf6f7",
+			});
+			break;
+		case 'dg':
+			style.push({
+				background: "linear-gradient(120deg, #a8dca4 0%, #53bd96 50%, #147363 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#0a593c",
+				color: "#eaf6f7",
+			});
+			break;
+		case 'dgr':
+			style.push({
+				background: "linear-gradient(15deg, #147363 0%,rgb(29, 72, 83) 50%,rgb(30, 75, 100) 100%)",
+				backgroundOrigin: "border-box",
+				borderColor: "#008556",
+				color: "#eaf6f7",
+			});
+			break;
+		case 'dn':
+			style.push({
+				background: "linear-gradient(150deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "rgb(128, 255, 111)",
+            	color: "#eaf6f7",
+			});
+			break;
+		case 'ma':
+			style.push({
+				background: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)",
+            	backgroundOrigin: "border-box",
+            	borderColor: "rgb(53, 8, 19)",
+            	color: "rgb(0, 0, 0)",
+			});
+			break;
 		case 'gem':
 			style.push({
 				borderColor: "#780af3",
@@ -390,6 +470,15 @@ function constructCbButtonStyle(layer) {
 			break;
 		case 'ep2':
 			style.push({"background-color": "#b9966d"});
+			break;
+		case 'ep3':
+			style.push({"background-color": "#910a27"});
+			break;
+		case 'ep4':
+			style.push({"background-color": "#710a91"});
+			break;
+		case 'ep5':
+			style.push({"background-color": "#065c19"});
 			break;
 		default:
 			style.push({'background-color': tmp[layer].color});

@@ -1353,6 +1353,7 @@ const updateGoldGrass = (delta) => {
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('rm', 26))
     if (player.cop.processedCoreFuel.eq(4)) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[2])
+    player.g.goldGrassVal = player.g.goldGrassVal.mul(player.le.punchcardsPassiveEffect[11])
 
     // GOLDEN GRASS PER SECOND
     player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))
@@ -1437,6 +1438,8 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneVal = player.g.moonstoneVal.mul(levelableEffect("pet", 1104)[0])
     if (hasUpgrade('ev8', 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
     if (player.cop.processedCoreFuel.eq(4)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[3])
+    player.g.moonstoneVal = player.g.moonstoneVal.mul(player.le.punchcardsPassiveEffect[12])
+    player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
 
     // MOONSTONE REQUIREMENT
     player.g.moonstoneReq = new Decimal(15)

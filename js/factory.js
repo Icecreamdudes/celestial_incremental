@@ -71,6 +71,7 @@
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 206))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 207))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 208))
+        player.fa.chargeRate = player.fa.chargeRate.mul(player.le.punchcardsPassiveEffect[5])
 
         if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
 

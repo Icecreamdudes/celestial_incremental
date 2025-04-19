@@ -8,8 +8,12 @@
 
         processedCoreStrength: new Decimal(-1),
         processedCoreFuel: new Decimal(-1),
+        processedCorePrime: new Decimal(0),
+        processedCoreStarmetalValue: new Decimal(0),
         processedCoreInnateEffects: [],
         processedCoreInnateEffectsText: "",
+        processedCorePrimedEffects: [],
+        processedCorePrimedEffectsText: "",
 
         processedCoreColorFuel: "",
         processedCoreColorStrength: "",
@@ -38,11 +42,19 @@
 
         player.cop.processedCoreColorStrength = player.coa.strengthColors[player.cop.processedCoreStrength]
         player.cop.processedCoreColorFuel = player.coa.fuelColors[player.cop.processedCoreFuel]
+        player.cop.processedCoreColorPrime = player.coa.primeColors[player.cop.processedCorePrime]
 
         player.cop.processedCoreInnateEffects = layers.coa.determineEffect(player.cop.processedCoreFuel, player.cop.processedCoreStrength)
         player.cop.processedCoreInnateEffectsText = layers.coa.determineText(player.cop.processedCoreFuel, player.cop.processedCoreStrength)
 
-        if ((player.tab == "cop" && player.subtabs["cop"]["stuff"] == "Processor") || (player.tab == "cs" && player.subtabs["cs"]["stuff"] == "Main")) setCoreColors(document.getElementById("processedCore"), player.cop.processedCoreColorFuel, player.cop.processedCoreColorStrength, null); //null for now
+        if (player.cop.processedCorePrime.gte(1)) { 
+            player.cop.processedCorePrimedEffects = layers.coa.determinePrimedEffect(player.cop.processedCorePrime, player.cop.processedCoreStrength)
+        } else {
+            player.cop.processedCorePrimedEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+        }
+        player.cop.processedCorePrimedEffectsText = layers.coa.determinePrimedText(player.cop.processedCorePrime, player.cop.processedCoreStrength)
+
+        if ((player.tab == "cop" && player.subtabs["cop"]["stuff"] == "Processor") || (player.tab == "cs" && player.subtabs["cs"]["stuff"] == "Main")) setCoreColors(document.getElementById("processedCore"), player.cop.processedCoreColorFuel, player.cop.processedCoreColorStrength, player.cop.processedCoreColorPrime); //null for now
     },
     unprocessCore()
     {
@@ -55,6 +67,8 @@
                     player.coa.coreOccupied[i] = true
                     player.coa.coreFuelSources[i] = player.cop.processedCoreFuel
                     player.coa.coreStrengths[i] = player.cop.processedCoreStrength
+                    player.coa.corePrimes[i] = player.cop.processedCorePrime
+                    player.coa.coreStarmetalValue[i] = player.cop.processedCoreStarmetalValue
 
                     player.ra.unequippedRadiationValue[i] = player.ra.equippedRadiationValue
                     player.ra.unequippedRadiationOutput[i] = player.ra.equippedRadiationValue.mul(Decimal.mul(Decimal.add(2, Math.random()), 0.1))
@@ -68,6 +82,7 @@
         player.cop.processingCore = false
         player.cop.processedCoreStrength = new Decimal(-1)
         player.cop.processedCoreFuel = new Decimal(-1)
+        player.cop.processedCorePrime = new Decimal(0)
 
         player.ra.equippedRadiationValue = new Decimal(0)
         player.ra.equippedRadiationOutput = new Decimal(0)
@@ -75,6 +90,7 @@
         player.cop.processedCoreInnateEffects = []
         player.cop.processedCoreInnateEffectsText = ""
 
+        player.cop.processedCoreStarmetalValue = new Decimal(0)
         
     },
     clickables: {
@@ -186,15 +202,20 @@
 
                 player.cop.processedCoreStrength = player.coa.coreStrengths[player.coa.coreIndex]
                 player.cop.processedCoreFuel = player.coa.coreFuelSources[player.coa.coreIndex]
+                player.cop.processedCorePrime = player.coa.corePrimes[player.coa.coreIndex]
                 player.cop.processingCore = true
                 
                 player.coa.coreFuelSources[player.coa.coreIndex] = new Decimal(-1)
                 player.coa.coreStrengths[player.coa.coreIndex] = new Decimal(-1)
+                player.coa.corePrimes[player.coa.coreIndex] = new Decimal(-1)
                 player.coa.coreOccupied[player.coa.coreIndex] = false
                 player.coa.coreCount = player.coa.coreCount.sub(1)
 
                 player.ra.equippedRadiationValue = player.ra.unequippedRadiationValue[player.coa.coreIndex]
                 player.ra.equippedRadiationOutput = player.ra.equippedRadiationValue.mul(Decimal.add(2, Math.random()))
+
+                player.cop.processedCoreStarmetalValue = player.cop.processedCoreStarmetalValue.add(player.coa.coreStarmetalValue[player.coa.coreIndex])
+                player.coa.coreStarmetalValue[player.coa.coreIndex] = new Decimal(0)
 
                 player.ra.unequippedRadiationOutput[player.coa.coreIndex] = new Decimal(0)
                 player.ra.unequippedRadiationValue[player.coa.coreIndex] = new Decimal(0)
@@ -241,7 +262,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current core being processed: " + player.coa.primes[player.cop.processedCorePrime] + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", function () { return " <div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -258,6 +279,9 @@
                     ["raw-html", function () { return player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return hasUpgrade("s", 21) ? "Current Prime: " + formatWhole(player.cop.processedCorePrime) : ""}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return hasUpgrade("s", 21) ? "Primed Effects (All based on singularity time):<br>" + player.cop.processedCorePrimedEffectsText : ""}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                 ]
             },

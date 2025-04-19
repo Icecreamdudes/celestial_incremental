@@ -23,6 +23,20 @@
 	background: linear-gradient(45deg, #8a00a9, #0061ff);
 	border: 2px solid #7a7a7a;
 }
+.titleHeader2 {
+	position: absolute;
+	width: 272px;
+	height: 60px;
+	left: -276px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.75);
+	font-size:20px;
+	z-index:10000;
+	background: linear-gradient(45deg, #000000, #1c0136);
+	border: 2px solid #7a7a7a;
+}
 .layerMenu {
 	position: absolute;
 	z-index:1000;
@@ -182,6 +196,20 @@
 	margin-bottom: 10px;
 	transition: all 0s;
 }
+.contentHeader2 {
+	width: 60px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.9);
+	font-size:18px;
+	z-index:10000;
+	background: linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%);
+	border-bottom: 2px solid #252525;
+	margin-bottom: 10px;
+	transition: all 0s;
+}
 .menuHeader {
 	width: 185px;
 	height: 36px;
@@ -199,6 +227,23 @@
 	margin-bottom: 10px;
 	transition: all 0s;
 }
+.menuHeader2 {
+	width: 185px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.9);
+	font-size:18px;
+	z-index:10000;
+	background: linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%);
+	border-top: 2px solid #252525;
+	border-bottom: 2px solid #252525;
+	border-left: 0px solid rgb(31, 31, 31);
+	border-right: 0px solid rgb(31, 31, 31);
+	margin-bottom: 10px;
+	transition: all 0s;
+}
 .uniHeader {
 	width: 185px;
 	height: 36px;
@@ -210,6 +255,24 @@
 	line-height:1;
 	z-index:10000;
 	background: linear-gradient(90deg, #555555 0%, #3e3e3e 50%, #555555 100%);
+	border-top: 2px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+	border-left: 0px solid #3e3e3e;
+	border-right: 0px solid #3e3e3e;
+	margin-bottom: 10px;
+	transition: all 0s;
+}
+.uniHeader2 {
+	width: 185px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.9);
+	font-size:18px;
+	line-height:1;
+	z-index:10000;
+	background: linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%);
 	border-top: 2px solid #7a7a7a;
 	border-bottom: 2px solid #7a7a7a;
 	border-left: 0px solid #3e3e3e;

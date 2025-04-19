@@ -10,13 +10,15 @@ addLayer("pet", {
 
         petCooldownDiv: new Decimal(1),
         petPointMult: new Decimal(1),
-        petButtonTimer: [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1)],
+        petButtonTimer: [new Decimal(40), new Decimal(20), new Decimal(900), new Decimal(18000), new Decimal(180), new Decimal(1500), new Decimal(1), new Decimal(4500), new Decimal(8000)],
 
         lastDicePetRoll: new Decimal(0),
         dicePetRoll: new Decimal(0),
         highestDicePetCombo: new Decimal(0),
         dicePetCombo: new Decimal(0),
         dicePetPointsGain: new Decimal(0),
+
+        singularityFragments: new Decimal(0),
 
         // FRAGMENTATION
         bannerID: [101, 101, 201, 201, 301],
@@ -27,6 +29,10 @@ addLayer("pet", {
         bannerButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         bannerButtonTimersMax: [new Decimal(900), new Decimal(900), new Decimal(2700), new Decimal(2700), new Decimal(7200)],
         
+        //singularity
+        singularityButtonTimers: [new Decimal(0), new Decimal(0),],
+        singularityButtonTimersMax: [new Decimal(600), new Decimal(3600),],
+
         // PET SHOP
         shopResetTimer: new Decimal(0),
         shopResetTimerMax: new Decimal(21600),
@@ -40,7 +46,7 @@ addLayer("pet", {
 
         rarePrices: [new Decimal(200), new Decimal(200), new Decimal(200), new Decimal(200), new Decimal(200), new Decimal(400), new Decimal(400)],
         rareBought: [0, 0, 0, 0, 0, 0, 0],
-
+        
         shardPrices: [new Decimal(500), new Decimal(25000)],
         shardBought: [0, 0],
 
@@ -68,6 +74,9 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("cb", 14))
         if (hasUpgrade("ev8", 13)) player.pet.petPointMult = player.pet.petPointMult.mul(1.2)
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 401)[0])
+        player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 406)[2])
+        player.pet.petPointMult = player.pet.petPointMult.mul(player.leg.gemEffects[1])
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("ep4", 12))
 
         // PET BUTTON COOLDOWN CALC
         for (let i = 0; i < player.pet.petButtonTimer.length; i++) {
@@ -88,7 +97,16 @@ addLayer("pet", {
         player.pet.bannerResetTimerMax = new Decimal(21600)
         player.pet.bannerButtonTimersMax = [new Decimal(1800), new Decimal(1800), new Decimal(3600), new Decimal(3600), new Decimal(7200)]
         for (let i = 0; i < player.pet.bannerButtonTimersMax.length; i++) {
+            player.pet.bannerButtonTimersMax[i] = player.pet.bannerButtonTimersMax[i].div(buyableEffect("ep3", 13))
+
             player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(ops.mul(delta))
+        }
+
+        player.pet.singularityButtonTimersMax = [new Decimal(1800), new Decimal(10800),]
+        for (let i = 0; i < player.pet.singularityButtonTimersMax.length; i++) {
+            player.pet.singularityButtonTimersMax[i] = player.pet.singularityButtonTimersMax[i].div(buyableEffect("ep4", 13))
+ 
+            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(ops.mul(delta))
         }
 
         // =- PET SHOP START -=
@@ -298,14 +316,13 @@ addLayer("pet", {
             style: {width: "125px", minHeight: "60px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
         },
         15: {
-            title() { return "???" },
-            tooltip() { return "Coming in<br>future update"},
+            title() { return "Legendary Pets" },
             canClick() { return true },
-            unlocked() { return false },
+            unlocked() { return player.cb.legendaryPetGems[0].gt(0) || player.cb.legendaryPetGems[1].gt(0) || player.cb.legendaryPetGems[2].gt(0) },
             onClick() {
-                player.subtabs["pet"]["content"] = "???"
+                player.tab = "leg"
             },
-            style: {width: "125px", minHeight: "60px", backgroundColor: "#222222", color: "white", borderRadius: "0px", color: "white", border: "0px"}, 
+            style: {width: "125px", minHeight: "60px", backgroundColor: "#eed200", color: "#fe6d00", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"}, 
         },
         // EVOLVED PET BUTTONS
         21: {
@@ -451,6 +468,52 @@ addLayer("pet", {
                 player.pet.bannerButtonTimers[4].lt(0) ? look.filter = "brightness(1)" : look.filter = "brightness(0.5)"
                 return look
             },
+        },
+        // FRAGMENT TABS
+        111: {
+            title() { return "Epic"},
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.subtabs["pet"]["fragTabs"] = "Epic"
+            },
+            style: {width: "100px", minHeight: "47px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+        },
+        112: {
+            title() { return "Singularity"},
+            canClick() { return true },
+            unlocked() { return hasUpgrade("s", 23) },
+            onClick() {
+                player.subtabs["pet"]["fragTabs"] = "Singularity"
+            },
+            style: {width: "100px", minHeight: "47px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+        },
+        // SINGULARITY FRAGMENTATION
+        121: {
+            title() { return player.pet.singularityButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.singularityButtonTimers[0]) + "." : "<h3>Sacrifice 3 evo shards for rewards!"},
+            canClick() { return player.pet.singularityButtonTimers[0].lt(0) && player.cb.evolutionShards.gte(3)},
+            unlocked() { return true },
+            tooltip() { return "<h5>25% - Common Crate<br>25% - Rare Crate<br>50% - Singularity Fragments"},
+            onClick() {
+                player.pet.singularityButtonTimers[0] = player.pet.singularityButtonTimersMax[0]
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(3)
+
+                layers.pet.evoBanner();
+            },
+            style: { width: "225px", minHeight: "50px", borderRadius: "30px / 15px" },
+        },
+        122: {
+            title() { return player.pet.singularityButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.singularityButtonTimers[1]) + "." : "<h3>Sacrifice 3 paragon shards for rewards!"},
+            canClick() { return player.pet.singularityButtonTimers[1].lt(0) && player.cb.paragonShards.gte(3)},
+            unlocked() { return true },
+            tooltip() { return "<h5>12% - Rare Crate<br>16% - Singularity Crate<br>2% - Legendary Gems<br>70% - Singularity Fragments"},
+            onClick() {
+                player.pet.singularityButtonTimers[1] = player.pet.singularityButtonTimersMax[1]
+                player.cb.paragonShards = player.cb.paragonShards.sub(3)
+
+                layers.pet.paragonBanner();
+            },
+            style: { width: "225px", minHeight: "50px", borderRadius: "30px / 15px" },
         },
         // PET SHOP
         1001: {
@@ -1922,6 +1985,98 @@ addLayer("pet", {
                 return look
             }  
         },
+        308: {
+            image() { return this.canClick() ? "resources/impossibleTriangleRarePet.png" : "resources/secret.png"},
+            title() { return "Impossible Triangle" },
+            lore() { return "An anomaly of a shape, but is only a mere illusion. Celestials love their illusions." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to singularity points <small>(based on core scraps)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to singularity dimensions <small>(based on singularity points)</small>."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.cs.coreScraps.pow(0.8).mul(0.4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Singularity Points (Based on Core Scraps)
+                    player.s.singularityPoints.plus(1).log10().pow(1.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)) // Singularity Dimenstions (Based on Singularity Points)
+                ]
+            },
+            sacValue() { return new Decimal(10)},
+            // PET POINT CODE
+            pointValue() { return new Decimal(20).mul(player.pet.petPointMult).mul(getLevelableAmount(this.layer, this.id).mul(0.3).add(1))},
+            pointCooldown() { return new Decimal(4500).div(player.pet.petCooldownDiv)},
+            canteBase() { return new Decimal(0.3)},
+            pointTooltip() { return "" },
+            pointClick() {
+                return this.pointValue()
+            },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.4).add(1).floor() },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#0031BF" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
+        309: {
+            image() { return this.canClick() ? "resources/forbiddenCoreRarePet.png" : "resources/secret.png"},
+            title() { return "Forbidden Core" },
+            lore() { return "The first core ever produced by the celestials of the domain of singularity. It has lived for so long it developed a conciousness." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to radiation <small>(based on singularities)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to resource core scraps <small>(based on starmetal alloys)</small>."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.s.singularities.pow(0.5).mul(0.1).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Radiation (Based on Singularities)
+                    player.sma.starmetalAlloy.pow(0.3).mul(0.05).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)) // Core Scraps (Based on Starmetal Alloys)
+                ]
+            },
+            sacValue() { return new Decimal(10)},
+            // PET POINT CODE
+            pointValue() { return new Decimal(35).mul(player.pet.petPointMult).mul(getLevelableAmount(this.layer, this.id).mul(0.35).add(1))},
+            pointCooldown() { return new Decimal(8000).div(player.pet.petCooldownDiv)},
+            canteBase() { return new Decimal(0.5)},
+            pointTooltip() { return "" },
+            pointClick() {
+                return this.pointValue()
+            },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.4).add(1).floor() },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#0031BF" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
         // EPIC PETS
         401: {
             image() { return this.canClick() ? "resources/dotknightEpicPet.png" : "resources/secret.png"},
@@ -1935,7 +2090,7 @@ addLayer("pet", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.cb.XPBoost.pow(0.3).div(9).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Pet Points (Based on XPBoost)
+                    player.cb.XPBoost.pow(0.15).div(36).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Pet Points (Based on XPBoost)
                     player.cb.evolutionShards.pow(0.4).div(25).mul(getLevelableAmount(this.layer, this.id).pow(0.4)).add(1), // Pet Point Button Cooldown (Based on Evolution Shards)
                     player.cb.paragonShards.pow(0.5).div(20).mul(getLevelableAmount(this.layer, this.id)).pow(0.4).div(2).add(1), // XPBoost Button Cooldown (Based on Paragon Shards)
                 ]
@@ -2064,6 +2219,148 @@ addLayer("pet", {
                 return look
             } 
         },
+        404: {
+            image() { return this.canClick() ? "resources/kresEpicPet.png" : "resources/secret.png"},
+            title() { return "Kres" },
+            lore() { return "Kres a member of the Celestial Hunting Corporation, and was sent out on the mission to the domain of singularity. Originally in the military from one universe's Earth, he joined the corporation when his universe got taken over by celestials." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to infinity points <small>(based on check back level)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to singularity points <small>(based on check back level)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to starmetal alloy <small>(based on check back level)</small>."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.cb.level.pow(1.35).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Infinity Points (Based on Check Back Level)
+                    player.cb.level.pow(0.4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Singularity Points (Based on Check Back Level)
+                    player.cb.level.pow(0.3).div(100).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Starmetal Alloy (Based on Check Back Level)
+                ]
+            },
+            sacValue() { return new Decimal(25)},
+            shopLayer() { return "ep3" },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
+            canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).eq(0)) {
+                    return new Decimal(100)
+                } else {
+                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
+                }
+            },
+            currency() { return player.pet.singularityFragments },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
+        405: {
+            image() { return this.canClick() ? "resources/navEpicPet.png" : "resources/secret.png"},
+            title() { return "Nav" },
+            lore() { return "Nav, another member of the corporation, has mastered the art of superphysical magic. She was born from a line of talented superphysical wizards that worked for the corporation." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to anonymity <small>(based on core scraps)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to oil <small>(based on core scraps)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to fun <small>(based on core scraps)</small>."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.cs.coreScraps.pow(1.5).mul(4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.6)), // Anonymity (Based on Core Scraps)
+                    player.cs.coreScraps.pow(1.2).mul(3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.55)), // Oil (Based on Core Scraps)
+                    player.cs.coreScraps.pow(0.9).mul(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Fun (Based on Core Scraps)
+                ]
+            },
+            sacValue() { return new Decimal(25)},
+            shopLayer() { return "ep4" },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
+            canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).eq(0)) {
+                    return new Decimal(100)
+                } else {
+                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
+                }
+            },
+            currency() { return player.pet.singularityFragments },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
+        406: {
+            image() { return this.canClick() ? "resources/selEpicPet.png" : "resources/secret.png"},
+            title() { return "Sel" },
+            lore() { return "Sel was originally a rouge hunter travelling between civilizations, fighting celestialites for money. However, he met Kres and realized the greater opportunity of joining the corporation." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to check back xp <small>(based on starmetal alloy)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to XPBoost <small>(based on starmetal alloy)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to pet points <small>(based on starmetal alloy)</small>."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.sma.starmetalAlloy.div(40).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // Check Back XP (Based on Starmetal Alloy)
+                    player.sma.starmetalAlloy.pow(0.85).div(80).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // XPBoost (Based on Starmetal Alloy)
+                    player.sma.starmetalAlloy.pow(0.7).div(100).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // Pet Points (Based on Starmetal Alloy)
+                ]
+            },
+            sacValue() { return new Decimal(25)},
+            shopLayer() { return "ep5" },
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
+            canClick() { return player.pet.singularityFragments.gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.pet.singularityFragments = player.pet.singularityFragments.sub(amt) },
+            canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).eq(0)) {
+                    return new Decimal(100)
+                } else {
+                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
+                }
+            },
+            currency() { return player.pet.singularityFragments },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#6600A6" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
+
         // START OF EVOLVED PETS
         1101: {
             image() { return this.canClick() ? "resources/voidGwaEvoPet.png" : "resources/secret.png"},
@@ -2673,6 +2970,45 @@ addLayer("pet", {
             }
         }
     },
+    evoBanner() {
+        let rng = Math.random()
+        if (rng > 0.3) {
+            let gainedFragments = getRandomInt(2) + 2
+            player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
+            callAlert("You gained " + formatWhole(gainedFragments) + " Singularity Fragments!", "resources/singularityEpicPetFragment.png");
+        } else if (rng > 0.15) {
+            layers.cb.petButton1()
+        } else if (rng < 0.15) {
+            layers.cb.petButton3()
+        }
+    },
+    paragonBanner() {
+        let rng = Math.random()
+        if (rng > 0.3) {
+            let gainedFragments = getRandomInt(3) + 4
+            player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
+            callAlert("You gained " + formatWhole(gainedFragments) + " Singularity Fragments!", "resources/singularityEpicPetFragment.png");
+        } else if (rng > 0.18) {
+            layers.cb.petButton6()
+        } else if (rng > 0.02) {
+            layers.cb.petButton7()
+        } else if (rng < 0.02) {
+            let random = getRandomInt(3)
+            let gainedGems = getRandomInt(5) + 6
+            if (random == 0) {
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
+                callAlert("You gained " + formatWhole(gainedGems) + " Red Legendary Gems!", "resources/redLegendaryPetGem.png");
+            }
+            if (random == 1) {
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
+                callAlert("You gained " + formatWhole(gainedGems) + " Purple Legendary Gems!", "resources/purpleLegendaryPetGem.png");
+            }
+            if (random == 2) {
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
+                callAlert("You gained " + formatWhole(gainedGems) + " Green Legendary Gems!", "resources/greenLegendaryPetGem.png");
+            }
+        }
+    },
     resetPrices() {
         player.pet.commonBought = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         player.pet.uncommonBought = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -2722,22 +3058,23 @@ addLayer("pet", {
                             ], () => { return player.cb.highestLevel.gte(25) ? {width: "535px", height: "40px", backgroundColor: "#0f1833", borderTop: "3px solid #4e7cff", borderBottom: "3px solid #4e7cff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304], ["levelable", 305]]],
-                                ["row", [["levelable", 306], ["levelable", 307]]],
+                                ["row", [["levelable", 306], ["levelable", 307], ["levelable", 308], ["levelable", 309]]],
                             ], () => { return player.cb.highestLevel.gte(25) ? {width: "525px", backgroundColor: "#070c19", padding: "5px"} : {display: "none !important"}}],
             
                             ["style-column", [
                                 ["raw-html", "Epic", {color: "#cb79ed", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(1500) ? {width: "535px", height: "40px", backgroundColor: "#28182f", borderTop: "3px solid #cb79ed", borderBottom: "3px solid #cb79ed", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 401], ["levelable", 402], ["levelable", 403]]],
+                                ["row", [["levelable", 401], ["levelable", 402], ["levelable", 403], ["levelable", 404], ["levelable", 405]]],
+                                ["row", [["levelable", 406]]],
                             ], () => { return player.cb.highestLevel.gte(1500) ? {width: "525px", backgroundColor: "#140c17", padding: "5px"} : {display: "none !important"}}],
 
                             ["style-column", [
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
+                            ], () => { return player.cb.highestLevel.gte(1000000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", []],
-                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
+                            ], () => { return player.cb.highestLevel.gte(1000000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
 
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616"}],
@@ -2806,18 +3143,10 @@ addLayer("pet", {
                 buttonStyle() { return {color: "#cb79ed"}},
                 unlocked() { return true },
                 content: [
-                    ["scroll-column", [
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "Pets re-roll in " + formatTime(player.pet.bannerResetTimer) + "."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "Currently selecting: " + tmp.pet.levelables[player.pet.bannerID[player.pet.bannerIndex]].title}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105]]],
-                        ["blank", "25px"],
-                        ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.bannerID[player.pet.bannerIndex])) + " of this pet."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
-                        ["clickable", 100],
-                        ["blank", "25px"],
-                    ], {width: "550px", height: "700px", backgroundColor: "#7d3f98"}],
+                    ["left-row", [
+                        ["hoverless-clickable", 111], ["hoverless-clickable", 112]
+                    ], {width: "550px", height: "47px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderBottom: "3px solid white"}],
+                    ["buttonless-microtabs", "fragTabs", { 'border-width': '0px' }],
                 ],
             },
             "???": {
@@ -2900,6 +3229,42 @@ addLayer("pet", {
                     ["scroll-column", [
 
                     ], {width: "550px", height: "525px", backgroundColor: "#161616"}],
+                ],
+            },
+        },
+        fragTabs: {
+            "Epic": {
+                buttonStyle() { return { color: "black" } },
+                unlocked() { return true },
+                content: [
+                    ["scroll-column", [
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "Pets re-roll in " + formatTime(player.pet.bannerResetTimer) + "."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "Currently selecting: " + tmp.pet.levelables[player.pet.bannerID[player.pet.bannerIndex]].title}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
+                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105]]],
+                        ["blank", "25px"],
+                        ["raw-html", () => { return "You have " + formatWhole(getLevelableXP("pet", player.pet.bannerID[player.pet.bannerIndex])) + " of this pet."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["blank", "25px"],
+                        ["clickable", 100],
+                        ["blank", "25px"],
+                    ], {width: "550px", height: "650px", backgroundColor: "#7d3f98"}],
+                ],
+            },
+            "Singularity": {
+                buttonStyle() { return { color: "black" } },
+                unlocked() { return hasUpgrade("s", 23) },
+                content: [
+                    ["scroll-column", [
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.pet.singularityFragments) + "</h3> singularity fragments." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["clickable", 21],
+                        ["clickable", 22],
+                    ], {width: "550px", height: "650px", backgroundColor: "#7d3f98"}],
                 ],
             },
         },

@@ -42,6 +42,10 @@
         if (player.cop.processedCoreFuel.neq(-1))
         {
             player.cs.coreScrapsToGet = player.cop.processedCoreStrength.pow(1.4).add(1).mul(10).add(20).floor()
+            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(player.le.punchcardsPassiveEffect[10]).floor()
+            if (hasUpgrade("sma", 102)) player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
+            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(buyableEffect("ep0", 11)).floor()
+            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
         } else
         {
             player.cs.coreScrapsToGet = new Decimal(0)
@@ -95,6 +99,8 @@
         {
             player.cs.resourceCoreScrapsToGet = new Decimal(0)
         }
+        if (hasUpgrade("sma", 102)) player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
+        player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
 
         for (let i = 0; i < player.cs.resourceCoreScraps.length; i++)
         {
@@ -112,12 +118,16 @@
     },
     scrapCore()
     {
+        player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.cop.processedCoreStarmetalValue)
+        player.cop.processedCoreStarmetalValue = new Decimal(0)
+
         player.cs.coreScraps = player.cs.coreScraps.add(player.cs.coreScrapsToGet)
         player.cs.resourceCoreScraps[player.cop.processedCoreFuel] = player.cs.resourceCoreScraps[player.cop.processedCoreFuel].add(player.cs.resourceCoreScrapsToGet)
 
         player.cop.processingCore = false
         player.cop.processedCoreStrength = new Decimal(-1)
         player.cop.processedCoreFuel = new Decimal(-1)
+        player.cop.processedCorePrime = new Decimal(0)
 
         player.ra.equippedRadiationValue = new Decimal(0)
         player.ra.equippedRadiationOutput = new Decimal(0)

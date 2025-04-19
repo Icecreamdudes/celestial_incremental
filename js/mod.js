@@ -81,19 +81,23 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed U3 Upgrade 6 not working on some resets.<br>
 			- Fixed being able to gain Infinity Milestones without having unlocked them.<br>
 			- Fixed U1 Upgrade order and Realm Essence upgrade not showing.<br>
+			- Fixed Funify's Fear challenge not working properly.<br>
 			- Fixed being able to enter halt values that are less then 1.<br><br>
 		Qol:<br>
 			- Added rigged booster dice.<br>
 			- Added new Break Infinity NIP Upgrade, which replaces the previous arbitrary requirement to improve IP formula.<br>
 			- Added keep cante cores to U3 milestone 8<br>
 			- Added U3 Upgrade 3, which unlocks a Challenge Dice upgrade and keeps T2 dice effects.<br>
-			- Made U3 Milestone 7 keep RBI toggle.<br><br>
+			- Made U3 Milestone 7 keep RBI toggle.<br>
+			- Added a U1 upgrade that improves Pent automation.<br>
+			- Added a Funify upgrade that unlocks bulk grass-skip.<br><br>
 		Visual Enhancements:<br>
 			- Visually remade almost all buyables.<br>
 			- Visually remade Check Back layer.<br>
 			- Combined Pet Shop and Epic Fragmentation layers into Check Back.<br>
 			- Visually touched up all evolution layers.<br>
 			- Visually remade Dice's Booster Dice tab.<br>
+			- Visually remade Rocket Fuel.<br>
 			- Improved the Settings menu.<br>
 			- Touched up Funify layer.<br>
 			- Touched up Singularity Dimensions layer.<br>

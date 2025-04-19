@@ -44,11 +44,9 @@ addLayer("s", {
 
         player.s.singularitiesToGet = new Decimal(1)
 
-        if (player.in.infinityPoints.pow(0.125).div(15000).lt(1e20)) 
-        {
+        if (player.in.infinityPoints.pow(0.125).div(15000).lt(1e20)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
-        } else
-        {
+        } else {
             player.s.singularityPointsToGet = Decimal.mul(1e20, player.in.infinityPoints.pow(0.02).div(55000))
         }
 

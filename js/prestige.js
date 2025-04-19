@@ -343,7 +343,7 @@
         {
             title: "Prestige Upgrade IV",
             unlocked() { return true },
-            description: "You can buy max ranks, tiers, tetr, etc.",
+            description: "You can buy max ranks, tiers, and tetr",
             cost: new Decimal(16),
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",

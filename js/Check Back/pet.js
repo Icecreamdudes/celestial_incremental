@@ -945,7 +945,7 @@ addLayer("pet", {
                 this.canClick() ? look.backgroundColor = "#45BDD7" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
-            }  
+            }
         },
         103: {
             image() { return this.canClick() ? "resources/unsmithCommonPet.png" : "resources/secret.png"},

@@ -808,7 +808,7 @@
             },
             "Autocruncher(s)": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasMilestone("ip", 27) },
+                unlocked() { return hasMilestone("ip", 27) || (player.s.highestSingularityPoints.gt(0) && player.ev.evolutionsUnlocked[3]) },
                 content:
                 [
                     ["blank", "25px"],

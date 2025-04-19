@@ -86,14 +86,14 @@
 
         // ROCKET FUEL ABILITY DESCRIPTION
         player.rf.abilityDesc = [
-            "RF Point Boost: Gives a x" + format(player.rf.abilityEffects[0]) + " boost to points. (" + formatTime(player.rf.abilityTimers[0]) + " left)",
-            "RF Tree Boost: Gives a x" + format(player.rf.abilityEffects[1]) + " boost to trees. (" + formatTime(player.rf.abilityTimers[1]) + " left)",
-            "RF Grass Boost: Gives a x" + format(player.rf.abilityEffects[2]) + " boost to grass. (" + formatTime(player.rf.abilityTimers[2]) + " left)",
-            "RF Fertilizer Boost: Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer. (" + formatTime(player.rf.abilityTimers[3]) + " left)",
-            "RF XP Button: Gives +" + format(player.rf.abilityEffects[4]) + " check back xp. (" + formatTime(player.rf.abilityTimers[4]) + " cooldown)<br><h6>(Based on first XP Button)",
-            "RF Infinity Point Boost: Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points. (" + formatTime(player.rf.abilityTimers[5]) + " left)",
-            "RF Button Cooldown: Divides XP button cooldown by /1.2. (" + formatTime(player.rf.abilityTimers[6]) + " left)",
-            "RF Hex Boost: Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points. (" + formatTime(player.rf.abilityTimers[7]) + " left)",
+            ["Point Boost", "Gives a x" + format(player.rf.abilityEffects[0]) + " boost to points.", player.rf.abilityTimers[0].lt(3.2e7) ? formatTime(player.rf.abilityTimers[0]) + " left" : "Multiple years left"],
+            ["Tree Boost", "Gives a x" + format(player.rf.abilityEffects[1]) + " boost to trees.", player.rf.abilityTimers[1].lt(3.2e7) ? formatTime(player.rf.abilityTimers[1]) + " left" : "Multiple years left"],
+            ["Grass Boost", "Gives a x" + format(player.rf.abilityEffects[2]) + " boost to grass.", player.rf.abilityTimers[2].lt(3.2e7) ? formatTime(player.rf.abilityTimers[2]) + " left" : "Multiple years left"],
+            ["Fertilizer Boost", "Gives a x" + format(player.rf.abilityEffects[3]) + " boost to fertilizer.", player.rf.abilityTimers[3].lt(3.2e7) ? formatTime(player.rf.abilityTimers[3]) + " left" : "Multiple years left"],
+            ["XP Boost", "Gives +" + format(player.rf.abilityEffects[4]) + " check back XP.", player.rf.abilityTimers[4].lt(3.2e7) ? formatTime(player.rf.abilityTimers[4]) + " cooldown<br><h6>(Based on first XP Button)" : "Multiple years left<br><h6>(Based on first XP Button)"],
+            ["Infinity Point Boost", "Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points.", player.rf.abilityTimers[5].lt(3.2e7) ? formatTime(player.rf.abilityTimers[5]) + " left" : "Multiple years left"],
+            ["Button Cooldown", "Divides XP button cooldown by /1.2.", player.rf.abilityTimers[6].lt(3.2e7) ? formatTime(player.rf.abilityTimers[6]) + " left" : "Multiple years left"],
+            ["Hex Boost", "Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points.", player.rf.abilityTimers[7].lt(3.2e7) ? formatTime(player.rf.abilityTimers[7]) + " left" : "Multiple years left"],
         ]
 
         // ABILITY UNLOCK CODE
@@ -154,38 +154,21 @@
             style: { width: '100px', "min-height": '50px' },
         },
         2: {
-            title() { return "1%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
-            onClick() {
-                layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
-                player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.01))
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
-        },
-        3: {
-            title() { return "30%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
-            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.3).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
-            onClick() {
-                layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.3))
-                player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.3))
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
-        },
-        11: {
-            title() { return "<h3>Gain rocket fuel, but reset everything before unlocking check back. (except pent milestones) (Based on grasshoppers) (~1e15 grasshoppers)" },
+            title() { return "Gain rocket fuel, but reset everything before check back, excluding milestones.<br><small>Req: 1e15 Grasshoppers</small>" },
             canClick() { return player.rf.rocketFuelToGet.gte(1)},
             unlocked() { return true },
             onClick() {
                 player.rf.rocketFuelPause = new Decimal(3)
                 player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
             },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
+            style() {
+                let look = {width: "200px", minHeight: "150px", borderRadius: "12px 0px 0px 0px", fontSize: "11px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
-        12: {
+        3: {
             title() { return "1" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(1) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
@@ -194,9 +177,30 @@
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), new Decimal(1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(1)
             },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "75px", minHeight: "50px", borderRadius: "0px", fontSize: "12px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
-        13: {
+        4: {
+            title() { return "1%" },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
+            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            onClick() {
+                layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
+                player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.01))
+            },
+            style() {
+                let look = {width: "75px", minHeight: "50px", borderRadius: "0px", fontSize: "12px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
+        },
+        5: {
             title() { return "10%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
             unlocked() { return player.rf.abilitiesUnlocked[0]  },
@@ -205,9 +209,30 @@
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.1))
             },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "75px", minHeight: "50px", borderRadius: "0px", fontSize: "12px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
-        14: {
+        6: {
+            title() { return "25%" },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
+            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.25).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
+            onClick() {
+                layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.25))
+                player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel.mul(0.25))
+            },
+            style() {
+                let look = {width: "75px", minHeight: "50px", borderRadius: "0px", fontSize: "12px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
+        },
+        7: {
             title() { return "100%" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
@@ -216,85 +241,120 @@
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(player.rf.rocketFuel)
             },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "75px", minHeight: "50px", borderRadius: "0px 0px 12px 0px", fontSize: "12px"}
+                this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
-        15: {
-            title() { return "RF Point Boost" },
+        11: {
+            title() { return "Point<br>Boost" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[0] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(0)
+                player.rf.abilityIndex = 0
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 0 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        16: {
-            title() { return "RF Tree Boost" },
+        12: {
+            title() { return "Tree<br>Boost" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[1] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(1)
+                player.rf.abilityIndex = 1
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 1 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        17: {
-            title() { return "RF Grass Boost" },
+        13: {
+            title() { return "Grass<br>Boost" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[2] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(2)
+                player.rf.abilityIndex = 2
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 2 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        18: {
-            title() { return "RF Fertilizer Boost" },
+        14: {
+            title() { return "Fertilizer<br>Boost" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[3] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(3)
+                player.rf.abilityIndex = 3
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 3 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        19: {
-            title() { return "RF XP Button" },
+        15: {
+            title() { return "XP<br>Button" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[4] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(4)
+                player.rf.abilityIndex = 4
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 4 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        21: {
-            title() { return "RF Infinity Points Boost" },
+        16: {
+            title() { return "Infinity Points<br>Boost" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[5] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(5)
+                player.rf.abilityIndex = 5
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 5 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        22: {
-            title() { return "RF Button Cooldown" },
+        17: {
+            title() { return "Button<br>Cooldown" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[6] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(6)
+                player.rf.abilityIndex = 6
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 6 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
-        23: {
-            title() { return "RF Hex Boost" },
+        18: {
+            title() { return "Hex<br>Boost" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[7] },
             onClick() {
-                player.rf.abilityIndex = new Decimal(7)
+                player.rf.abilityIndex = 7
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style() {
+                let look = {width: "125px", minHeight: "125px", margin: "5px", borderRadius: "10px", fontSize: "12px", color: "white", border: "3px solid white"}
+                player.rf.abilityIndex == 7 ? look.backgroundColor = "#666666" : look.backgroundColor = "#333333"
+                return look
+            },
         },
     },
-    rocketFuelAbility(type, amount = new Decimal(0))
-    {
-        switch (type)
-        {
+    rocketFuelAbility(type, amount = new Decimal(0)) {
+        switch (type) {
             case 0:
                 player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1).pow(buyableEffect("cs", 29))
                 player.rf.abilityTimers[0] = amount.pow(0.14).mul(100)
@@ -337,8 +397,7 @@
             break;
         }
     },
-    rocketFuelReset()
-    {
+    rocketFuelReset() {
         player.pe.pests = new Decimal(0)
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
@@ -394,15 +453,14 @@
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
-        {
-        for (let i = 0; i < player.p.upgrades.length; i++) {
-            if (+player.p.upgrades[i] < 24) {
-                player.p.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11)) {
+            for (let i = 0; i < player.p.upgrades.length; i++) {
+                if (+player.p.upgrades[i] < 24) {
+                    player.p.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-     }
 
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
@@ -427,15 +485,14 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 22) {
-                player.g.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11)) {
+            for (let i = 0; i < player.g.upgrades.length; i++) {
+                if (+player.g.upgrades[i] < 22) {
+                    player.g.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
 
 
         player.g.grass = new Decimal(0)
@@ -470,8 +527,7 @@
         player.m.buyables[13] = new Decimal(0)
         player.m.buyables[14] = new Decimal(0)
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11: {
             title: "Rocket Fuel Upgrade I",
@@ -545,45 +601,48 @@
             currencyInternalName: "rocketFuel",
         },
     },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
-    microtabs: {
-        stuff: {
-            "Main": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>Abilities" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19], ["clickable", 21], ["clickable", 22], ["clickable", 23]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Choose an amount to allocate into the ability." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["row", [["clickable", 12], ["clickable", 2], ["clickable", 13], ["clickable", 3],["clickable", 14]]],
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
-                ]
-            },
-        },
-    },
-
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel, which boost grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, { "color": "#949494", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.rf.rocketFuel.lt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset." : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.rf.rocketFuel.gt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset. (softcapped)" : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
-         ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["raw-html", function () { return player.rf.rocketFuel.lt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset." : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.rf.rocketFuel.gt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset. (softcapped)" : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["blank", "25px"],
+        ["style-column", [
+            ["style-row", [
+                ["clickable", 2],
+                ["style-column", [
+                    ["style-row", [
+                        ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][0] }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {width: "397px", height: "38px", borderBottom: "2px solid white"}],
+                    ["style-row", [
+                        ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][1] }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "397px", height: "60px"}],
+                    ["style-row", [
+                        ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][2] }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "397px", height: "48px", borderTop: "2px solid white"}],
+                ], {width: "397px", height: "150px", backgroundColor: "#282828", borderLeft: "3px solid white", borderRadius: "0px 12px 0px 0px"}],
+            ], {width: "600px", height: "150px", borderBottom: "3px solid white"}],
+            ["style-column", [
+                ["blank", "5px"],
+                ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]]],
+                ["row", [["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
+                ["blank", "5px"],
+            ], {width: "600px", borderBottom: "3px solid white"}],
+            ["style-column", [
+                ["row", [
+                    ["style-row", [["raw-html", "Choose an amount<br>to allocate", {color: "white", fontSize: "18px", fontFamily: "monospace"}]], {width: "223px", height: "50px", borderRight: "2px solid white"}],
+                    ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7],
+                ]],
+            ], {width: "600px", height: "50px", backgroundColor: "#282828", userSelect: "none", borderRadius: "0px 0px 12px 12px"}],
+        ], {backgroundColor: "#161616", border: "3px solid white", borderRadius: "15px", width: "600px"}],
+        ["blank", "25px"],
+        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+    ],
     layerShown() { return player.startedGame == true && (player.po.rocketFuel || inChallenge("ip", 16)) }
 })

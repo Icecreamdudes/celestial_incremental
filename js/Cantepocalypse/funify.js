@@ -182,8 +182,7 @@
         player.rt.buyables[17] = new Decimal(0)
         player.rt.buyables[18] = new Decimal(0)
 
-        if (!hasUpgrade("s", 15) && !inChallenge("fu", 11))
-        {
+        if (!hasUpgrade("s", 15) || inChallenge("fu", 11)) {
             for (let i = 0; i < player.an.upgrades.length; i++) {
                 if (+player.an.upgrades[i] < 24) {
                     player.an.upgrades.splice(i, 1);
@@ -203,13 +202,11 @@
         player.rg.buyables[17] = new Decimal(0)
         player.rg.buyables[18] = new Decimal(0)
 
-        if (!hasUpgrade("fu", 13) && !inChallenge("fu", 11))
-        {
-        player.gs.grassSkip = new Decimal(0)
+        if (!hasUpgrade("fu", 13) || inChallenge("fu", 11)) {
+            player.gs.grassSkip = new Decimal(0)
         }
         player.gs.grassSkippers = new Decimal(0)
-        if (!hasMilestone("s", 12) && !inChallenge("fu", 11))
-        {
+        if (!hasMilestone("s", 12) || inChallenge("fu", 11)) {
         for (let i = 0; i < player.gs.milestones.length; i++) {
             if (+player.gs.milestones[i] < 100) {
                 player.gs.milestones.splice(i, 1);
@@ -245,8 +242,7 @@
         player.oi.buyables[18] = new Decimal(0)
         player.oi.buyables[19] = new Decimal(0)
 
-        if (!hasUpgrade("fu", 13) && !inChallenge("fu", 11))
-        {
+        if (!hasUpgrade("fu", 13) || inChallenge("fu", 11)) {
         player.oi.buyables[21] = new Decimal(0)
         player.oi.buyables[22] = new Decimal(0)
         player.oi.buyables[23] = new Decimal(0)
@@ -510,8 +506,7 @@
         },
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Fun Upgrade I",
             unlocked() { return player.fu.jocusCelestialActivate },
             description: "Boost perk point gain based on anonymity.",
@@ -524,8 +519,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         },
-        12:
-        {
+        12: {
             title: "Fun Upgrade II",
             unlocked() { return hasUpgrade("fu", 11) },
             description: "Boost oil gain based on perk point chance.",
@@ -538,8 +532,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         },
-        13:
-        {
+        13: {
             title: "Fun Upgrade III",
             unlocked() { return hasUpgrade("fu", 12) },
             description: "Keep grass-skip and proto memory buyables on funify reset.",
@@ -548,8 +541,7 @@
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
         },
-        14:
-        {
+        14: {
             title: "Fun Upgrade IV",
             unlocked() { return hasUpgrade("fu", 13) },
             description: "Boost proto memory production seconds based on time played.",
@@ -562,8 +554,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
         },
-        15:
-        {
+        15: {
             title: "Fun Upgrade V",
             unlocked() { return hasUpgrade("fu", 14) },
             description: "Unlock the mood triangle.",
@@ -572,8 +563,7 @@
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
         },
-        16:
-        {
+        16: {
             title: "Fun Upgrade VI",
             unlocked() { return hasUpgrade("fu", 15) },
             description: "Keep grass-skip and proto memory buyables on singularity reset.",
@@ -582,12 +572,20 @@
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
         },
-        17:
-        {
+        17: {
             title: "Fun Upgrade VII",
             unlocked() { return hasUpgrade("fu", 16) },
-            description: "...",
+            description() { return hasUpgrade("fu", 17) ? "Unlock Fear." : "..." },
             cost: new Decimal(300000000),
+            currencyLocation() { return player.fu },
+            currencyDisplayName: "Fun",
+            currencyInternalName: "fun",
+        },
+        18: {
+            title: "Fun Upgrade VIII",
+            unlocked() { return hasUpgrade("fu", 17) },
+            description: "You can buy max grass-skip.",
+            cost: new Decimal(1e10),
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
@@ -1603,7 +1601,7 @@
                 return "Radiation Usage Divider"
             },
             display() {
-                return "which boosting singularity dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which divides radiation usage by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anger."
             },
             buy(mult) {
@@ -2154,7 +2152,7 @@
             goal() { return new Decimal("10") },
             canComplete: function () { return player.gs.grassSkip.gte(10) },
             goalDescription() { return "10 Grass-Skip" },
-            rewardDescription: ".",
+            rewardDescription: "Kill Jocus.",
             onEnter() {
                 player.fu.funifyPause = new Decimal(12)
                 for (let i = 0; i < player.an.upgrades.length; i++) {
@@ -2170,22 +2168,18 @@
                     }
                 }
 
-                if (player.fu.emotionIndex.eq(3))
-                {
+                if (player.fu.emotionIndex.eq(3)) {
                     player.fu.emotionIndex = new Decimal(0)
                 }
             },
             onExit() {
                 player.fu.funifyPause = new Decimal(12)
 
-                if (player.fu.emotionIndex.eq(3))
-                {
+                if (player.fu.emotionIndex.eq(3)) {
                     player.fu.emotionIndex = new Decimal(0)
                 }
             },
-            
             style: { width: '350px', height: '275px', }
-
         },
     },
     infoboxes: {
@@ -2207,7 +2201,7 @@
                         ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
                         ["blank", "25px"],
                         ["row", [["clickable", 12]]],
-                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
                 ]
 
             },

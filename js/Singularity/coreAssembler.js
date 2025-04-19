@@ -653,12 +653,12 @@
             }
         }
 
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
+        for (let i = 0; i < player.r.milestones.length; i++) {
+            if (+player.r.milestones[i] < 20) {
+                player.r.milestones.splice(i, 1);
+                i--;
             }
+        }
 
         player.g.grass = new Decimal(0)
         player.g.savedGrass = new Decimal(0)
@@ -669,6 +669,8 @@
         player.g.savedGoldGrass = new Decimal(0)
         player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
+        
+        player.subtabs["g"]['stuff'] = 'Grass'
 
         player.gh.grasshoppers = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)

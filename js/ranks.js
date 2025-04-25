@@ -62,17 +62,16 @@
 
         //Rank and Tier effects/costs
 
-        let ranksGainPreS = player.points.div(10).pow(Decimal.div(20, 29)).floor()
-        let ranksGainPostS = player.points.div(10).pow(0.25).floor()
-        let ranksGainPostS2 = player.points.div(10).pow(Decimal.div(1, 10)).floor()
-        let ranksGainPostS3 = player.points.plus(1).log10().div(10).pow(Decimal.div(1, 50)).floor()
+        let ranksGainPreS = player.points.div(10).mul(levelableEffect("pet", 204)[0]).pow(Decimal.div(20, 29)).floor()
+        let ranksGainPostS = player.points.div(10).mul(levelableEffect("pet", 204)[0]).pow(0.25).floor()
+        let ranksGainPostS2 = player.points.div(10).mul(levelableEffect("pet", 204)[0]).pow(Decimal.div(1, 10)).floor()
+        let ranksGainPostS3 = player.points.plus(1).mul(levelableEffect("pet", 204)[0]).log10().div(10).pow(Decimal.div(1, 50)).floor()
 
         player.r.rankEffect = player.r.rank.mul(0.4).add(1).pow(1.055)
         if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
         player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("rm", 21))
         player.r.rankReq = layers.r.getRankReq()
-        if (getLevelableAmount("pet", 204).gt(0) && player.r.rank.gt(100)) player.r.rankReq = player.r.rankReq.div(levelableEffect("pet", 204)[0])
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)
         }
@@ -93,12 +92,12 @@
             player.r.rank = player.r.rank.add(player.r.ranksToGet)
         }
 
-        let tiersGain = player.r.rank.div(3).pow(Decimal.div(10, 11)).floor()
+        let tiersGain = player.r.rank.div(3).mul(levelableEffect("pet", 204)[1]).pow(Decimal.div(10, 11)).floor()
 
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
         player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("rm", 21))
-        player.r.tierReq = layers.r.getTierReq().div(levelableEffect("pet", 204)[1])
+        player.r.tierReq = layers.r.getTierReq()
         if (player.r.rank.gte(player.r.tierReq) && hasUpgrade("p", 14)) {
              player.r.tiersToGet = tiersGain.sub(player.r.tier)
         }
@@ -110,12 +109,12 @@
             player.r.tier = player.r.tier.add(player.r.tiersToGet)
         }
 
-        let tetrGain = player.r.tier.div(2).pow(Decimal.div(25, 27)).floor()
+        let tetrGain = player.r.tier.div(2).mul(levelableEffect("pet", 204)[2]).pow(Decimal.div(25, 27)).floor()
 
         player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
         player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("rm", 21))
-        player.r.tetrReq = layers.r.getTetrReq().div(levelableEffect("pet", 204)[2])
+        player.r.tetrReq = layers.r.getTetrReq()
         if (player.r.tier.gte(player.r.tetr.add(player.r.tetrsToGet).add(1).mul(2).pow(1.08).floor().add(1)) && hasUpgrade("p", 14)) {
             player.r.tetrsToGet = tetrGain.sub(player.r.tetr)
         }
@@ -195,20 +194,20 @@
     },
     getRankReq() {
         if (player.r.rank.lte(20)) {
-            return player.r.rank.add(1).pow(1.45).mul(10)
+            return player.r.rank.add(1).pow(1.45).div(levelableEffect("pet", 204)[0]).mul(10)
         } else if (player.r.rank.gt(20) && player.r.rank.lte(100)) {
-            return (player.r.rank.sub(17)).pow(4).mul(10)
+            return (player.r.rank.sub(17)).pow(4).div(levelableEffect("pet", 204)[0]).mul(10)
         } else if (player.r.rank.gt(100) && player.r.rank.lt("1e4000")) {
-            return (player.r.rank.sub(97)).pow(10).mul(10)
+            return (player.r.rank.sub(97)).pow(10).div(levelableEffect("pet", 204)[0]).mul(10)
         } else if (player.r.rank.gte("1e4000")) {
-            return Decimal.pow(10, player.r.rank.add(1).mul(10).pow(50))
+            return Decimal.pow(10, player.r.rank.pow(50).mul(10)).div(levelableEffect("pet", 204)[0]).sub(1)
         }
     },
     getTierReq() {
-        return player.r.tier.add(1).mul(3).pow(1.1).floor()
+        return player.r.tier.add(1).pow(1.1).div(levelableEffect("pet", 204)[1]).mul(3).ceil()
     },
     getTetrReq() {
-        return player.r.tetr.add(1).mul(2).pow(1.08).floor().add(1)
+        return player.r.tetr.add(1).pow(1.08).div(levelableEffect("pet", 204)[2]).mul(2).ceil()
     },
     rankReset() {
         player.points = new Decimal(0)
@@ -321,13 +320,13 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "404px", minHeight: "103.7px", borderRadius: "0px 15px 0px 0px", color: "black", border: "2px solid white", margin: "-2px"}
+                let look = {width: "404px", minHeight: "78.7px", borderRadius: "0px 15px 0px 0px", color: "black", border: "2px solid white", margin: "-2px", fontSize: "8px"}
                 this.canClick() ? look.backgroundColor = "#bbbbbb" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
         12: {
-            title() { return "<h2>Reset celestial points and ranks, but tier up.<br>Req: " + formatWhole(player.r.tierReq) + " Rank" },
+            title() { return "<h2>Reset celestial points and ranks, but tier up.</h2><br><h3>Req: " + formatWhole(player.r.tierReq) + " Rank</h3>" },
             canClick() { return player.r.rank.gte(player.r.tierReq) && !hasUpgrade("p", 18) },
             unlocked() { return true },
             onClick() {
@@ -336,13 +335,13 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "404px", minHeight: "103.7px", borderRadius: "0px", color: "black", border: "2px solid white", margin: "-2px"}
+                let look = {width: "404px", minHeight: "78.7px", borderRadius: "0px", color: "black", border: "2px solid white", margin: "-2px", fontSize: "8px"}
                 this.canClick() ? look.backgroundColor = "#bbbbbb" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
         13: {
-            title() { return "<h2>Reset celestial points, ranks, and tiers, but tetr up.<br>Req: " + formatWhole(player.r.tetrReq) + " Tier" },
+            title() { return "<h2>Reset celestial points, ranks, and tiers, but tetr up.</h2><br><h3>Req: " + formatWhole(player.r.tetrReq) + " Tier</h3>" },
             canClick() { return player.r.tier.gte(player.r.tetrReq) && !hasUpgrade("p", 22) && !hasMilestone("s", 19)},
             unlocked() { return hasUpgrade("i", 13) },
             onClick() {
@@ -351,7 +350,7 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "404px", minHeight: "103.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "2px solid white", margin: "-2px"}
+                let look = {width: "404px", minHeight: "78.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "2px solid white", margin: "-2px", fontSize: "8px"}
                 this.canClick() ? look.backgroundColor = "#bbbbbb" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -374,7 +373,7 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "404px", minHeight: "103.7px", borderRadius: "0px 15px 15px 0px", color: "black", border: "2px solid white", margin: "-2px"}
+                let look = {width: "404px", minHeight: "103.7px", borderRadius: "0px 15px 15px 0px", color: "black", border: "2px solid white", margin: "-2px", fontSize: "8px"}
                 this.canClick() ? look.backgroundColor = "#bbbbbb" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -618,23 +617,23 @@
                         ["style-column", [
                             ["raw-html", function () { return "Rank " + formatWhole(player.r.rank) + " (+" + formatWhole(player.r.ranksToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.r.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "400px", height: "100px"}],
+                        ], {width: "400px", height: "75px"}],
                         ["clickable", 11],
-                    ], {width: "800px", height: "100px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "15px 15px 0px 0px"}],
+                    ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-row", [
                         ["style-column", [
                             ["raw-html", function () { return "Tier " + formatWhole(player.r.tier) + " (+" + formatWhole(player.r.tiersToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.r.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "400px", height: "100px"}],
+                        ], {width: "400px", height: "75px"}],
                         ["clickable", 12],
-                    ], {width: "800px", height: "100px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "0px"}],
+                    ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "0px"}],
                     ["style-row", [
                         ["style-column", [
                             ["raw-html", function () { return "Tetr " + formatWhole(player.r.tetr) + " (+" + formatWhole(player.r.tetrsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.r.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ], {width: "400px", height: "100px"}],
+                        ], {width: "400px", height: "75px"}],
                         ["clickable", 13],
-                    ], {width: "800px", height: "100px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"}],
+                    ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"}],
                     ["style-column", [
                         ["raw-html", function () { return "Total Mult: x" + format(player.r.rankEffect.mul(player.r.tierEffect.mul(player.r.tetrEffect))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ], {width: "400px", height: "50px", backgroundColor: "#333333", border: "2px solid white", borderTop: "0px", borderRadius: "0px 0px 15px 15px"}],

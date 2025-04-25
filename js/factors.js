@@ -796,7 +796,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
             buy(mult) {
-                if (mult != true == false && !hasUpgrade("p", 15)) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 

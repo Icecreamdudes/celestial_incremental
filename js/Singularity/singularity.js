@@ -209,7 +209,7 @@ addLayer("s", {
         },
         21: {
             title: "Singularity Upgrade X",
-            unlocked() { return hasUpgrade("s", 19)},
+            unlocked() { return hasUpgrade("s", 20)},
             description: "Unlock starmetal alloy.",
             cost: new Decimal("1e30"),
             currencyLocation() { return player.s },

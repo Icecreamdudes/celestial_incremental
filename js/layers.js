@@ -285,7 +285,7 @@ addLayer("i", {
     },
     bars: {
         infbar: {
-            unlocked() { return hasUpgrade("i", 21), !player.in.unlockedInfinity },
+            unlocked() { return hasUpgrade("i", 21) && !player.in.unlockedInfinity },
             direction: RIGHT,
             width: 700,
             height: 50,

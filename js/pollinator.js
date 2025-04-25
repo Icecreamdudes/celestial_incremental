@@ -169,85 +169,85 @@ addLayer("pol", {
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<img src='resources/pollinators/cross.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/cross.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 0
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#28242c", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#28242c", borderWidth: '4px' },
         },
         12: {
-            title() { return "<img src='resources/pollinators/beetle.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/beetle.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 1
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#eaf6f7", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#eaf6f7", borderWidth: '4px' },
         },
         13: {
-            title() { return "<img src='resources/pollinators/fly.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/fly.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 2
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#31aeb0", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#31aeb0", borderWidth: '4px' },
         },
         14: {
-            title() { return "<img src='resources/pollinators/bat.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/bat.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 3
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#0B6623", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#0B6623", borderWidth: '4px' },
         },
         15: {
-            title() { return "<img src='resources/pollinators/wind.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/wind.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 11) },
             onClick() {
                 player.pol.pollinatorsIndex = 4
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#119B35", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#119B35", borderWidth: '4px' },
         },
         16: {
-            title() { return "<img src='resources/pollinators/bee.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/bee.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 14) },
             onClick() {
                 player.pol.pollinatorsIndex = 5
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#19e04d", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0px 0px 0px 13px", background: "#19e04d", borderWidth: '4px' },
         },
         17: {
-            title() { return "<img src='resources/pollinators/butterfly.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/butterfly.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 16) },
             onClick() {
                 player.pol.pollinatorsIndex = 6
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#0951a6", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#0951a6", borderWidth: '4px' },
         },
         18: {
-            title() { return "<img src='resources/pollinators/ant.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/ant.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 18) },
             onClick() {
                 player.pol.pollinatorsIndex = 7
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #8a00a9, #0061ff)", 'border-color': "purple", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "linear-gradient(45deg, #8a00a9, #0061ff)", 'border-color': "purple", borderWidth: '4px' },
         },
         19: {
-            title() { return "<img src='resources/pollinators/gear.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/gear.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("bi", 115) },
             onClick() {
                 player.pol.pollinatorsIndex = 8
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #919191, #545454)", 'border-color': "gray", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "linear-gradient(45deg, #919191, #545454)", 'border-color': "gray", borderWidth: '4px' },
         },
         100: {
             title() { return "<h1>UNLOCK" },
@@ -561,23 +561,34 @@ addLayer("pol", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 0 ? "<h1>You are currently selecting nothing." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "<h1>You are currently selecting the Beetle.<br><h2>Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) + "<br><h2>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "<h1>You are currently selecting the Fly.<br><h2>Factor Power: x" + format(player.pol.pollinatorsEffect[2]) + "<br><h2>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h1>You are currently selecting the Bat.<br><h2>Leaves: x" + format(player.pol.pollinatorsEffect[4]) + "<br><h2>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h1>You are currently selecting Wind.<br><h2>Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br><h2>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h1>You are currently selecting the Bee.<br><h2>Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br><h2>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h1>You are currently selecting the Butterfly.<br><h2>Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br><h2>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "<h1>You are currently selecting the Ant. <h5>(requires an otf selection)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.dice ? "<h2>Dice Points: x" + format(player.pol.pollinatorsEffect[12]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.rocketFuel ? "<h2>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.hex ? "<h2>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.realmMods ? "<h2>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "<h1>You are currently selecting the Machine.<br><h2>Steel: x" + format(player.pol.pollinatorsEffect[16]) + "<br><h2>Oil: x" + format(player.pol.pollinatorsEffect[17]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15],]],
-                    ["row", [ ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["style-column", [
+                        ["style-column", [
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 0 ? "Nothing" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "Beetle" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "Fly" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "Bat" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "Wind" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "Bee" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "Butterfly" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "Ant" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "Machine" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],    
+                        ], {width: "500px", height: "40px", borderBottom: "3px solid #cb8e00"}],
+                        ["style-column", [
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) + "<br>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "Factor Power: x" + format(player.pol.pollinatorsEffect[2]) + "<br>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "Leaves: x" + format(player.pol.pollinatorsEffect[4]) + "<br>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex != 7 ? "" : hasUpgrade("bi", 27) ? "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) + "<br>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15])
+                                : "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) }, { color: "white", fontSize: "18px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "Steel: x" + format(player.pol.pollinatorsEffect[16]) + "<br>Oil: x" + format(player.pol.pollinatorsEffect[17]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],        
+                        ], {width: "500px", height: "100px", borderBottom: "3px solid #cb8e00"}],
+                        ["style-column", [
+                            ["left-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
+                            ["left-row", [["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                        ], {width: "500px", height: "200px", backgroundColor: "#281c00", borderRadius: "0px 0px 13px 13px"}],
+                    ], {width: "500px", backgroundColor: "#654700", border: "3px solid #cb8e00", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["row", [["infobox", "p0"], ["infobox", "p1"], ["infobox", "p2"], ["infobox", "p3"], ["infobox", "p4"], ["infobox", "p5"], ["infobox", "p6"], ["infobox", "p7"], ["infobox", "p8"]]],
                 ]
@@ -601,18 +612,18 @@ addLayer("pol", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Unlock ???:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Unlock ???:" }, { color: "white", fontSize: "36px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 101)) + "/20 Egg Guy Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 104)) + "/20 Gd Checkpoint Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 202)) + "/15 Star Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 203)) + "/15 Normal Face Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 303)) + "/8 Drippy Ufo Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 305)) + "/8 Antimatter Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 402)) + "/4 Dragon Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 101)) + "/20 Egg Guy Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 104)) + "/20 Gd Checkpoint Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 202)) + "/15 Star Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 203)) + "/15 Normal Face Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 303)) + "/8 Drippy Ufo Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 305)) + "/8 Antimatter Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 402)) + "/4 Dragon Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", "COMING SOON", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "COMING SOON", { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     //["row", [["clickable", 100]]],
                 ]
             }
@@ -620,11 +631,11 @@ addLayer("pol", {
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { "color": "#cb8e00", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { "color": "#cb8e00", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { color: "#cb8e00", fontSize: "24px", fontFamily: "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { color: "#cb8e00", fontSize: "16px", fontFamily: "monospace" }],
+        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
         ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+                        ["microtabs", "stuff", { borderWidth: '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !(inChallenge("ip", 12) || inChallenge("ip", 18)) }
 })

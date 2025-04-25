@@ -477,12 +477,12 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["bar", "treebar"]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>You are making " + format(player.t.leavesPerSecond) + "<h2> leaves per second. " }],
                     ["raw-html", function () { return "<h2>You have " + formatWhole(player.t.trees) + "<h2> trees, which boost prestige point gain by x" + format(player.t.treeEffect) + "."}],
                     ["raw-html", function () { return "<h2>You will gain " + format(player.t.treesToGet, 1) + "<h2> trees." }],
+                    ["raw-html", function () { return "<h2>You are making " + format(player.t.leavesPerSecond) + "<h2> leaves per second. " }],
                     ["raw-html", function () { return player.t.trees.gte(player.t.treeSoftcapStart) ? "After " + formatWhole(player.t.treeSoftcapStart) + " trees, leaf gain is divided by " + format(player.t.treeSoftcap) + " (Based on trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["bar", "treebar"]]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                     ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
@@ -494,8 +494,8 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 16)}
 })

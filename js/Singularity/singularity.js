@@ -271,7 +271,7 @@ addLayer("s", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#aa0000", backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
         12: {
             costBase() { return new Decimal(1000) },
@@ -305,7 +305,7 @@ addLayer("s", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#aa0000", backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
         13: {
             costBase() { return new Decimal(1000) },
@@ -339,7 +339,7 @@ addLayer("s", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#aa0000", backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {

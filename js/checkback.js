@@ -90,7 +90,7 @@
 
         //legendary
         legendaryPetGems: [new Decimal(0), new Decimal(0), new Decimal(0)],
-        //reg purple green
+        //red purple green
 
         //dice pet
         lastDicePetRoll: new Decimal(0),
@@ -150,7 +150,7 @@
 
         //cante?
         canteEnergyXPButtonBase: [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ],
-        canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(13), new Decimal(30)],
+        canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14), new Decimal(30)],
         canteEnergyXPBoostButtonBase: [new Decimal(10), new Decimal(30)],
 
         time: new Decimal(0) // Offline Time
@@ -2287,9 +2287,9 @@
                 if (player.cb.level.lt(10000)) {
                     return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.</h5>"
                 } else if (player.cb.level.lt(100000)) {
-                    return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b>[SOFTCAPPED]</b></h6>"
+                    return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED]</b></h6>"
                 } else {
-                    return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b>[SOFTCAPPED<sup>2</sup>]</b></h6>"
+                    return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED<sup>2</sup>]</b></h6>"
                 }
             },
         },

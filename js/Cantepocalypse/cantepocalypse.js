@@ -160,13 +160,19 @@ addLayer("cp", {
             width: 400,
             height: 25,
             progress() {
-                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                } else {
+                    return new Decimal(1)
+                }
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
-                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                } else {
+                    return "<p style='color:red'>[HARDCAPPED]</p>"
+                }
             },
         },
     },

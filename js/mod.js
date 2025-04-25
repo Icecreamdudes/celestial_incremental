@@ -48,7 +48,8 @@ let credits = `<h1>Credits:</h1><br>
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.6 - The Polishing Update</h3><br>
 		Content:<br>
-			- Added the first 4 parts of the in-game Savebank.<br><br>
+			- Added the first 4 parts of the in-game Savebank.<br>
+			- Added 4 new Grass-Skip milestones.<br><br>
 		Balancing:<br>
 			- Nerfed U3 Upgrade 7. (It also didn't function previously, so actually a buff)<br>
 			- Grass Square Pet's special button effect now scales with level.<br>
@@ -60,7 +61,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- No longer get stuck in Cantepocalypse after singularity.<br>
 			- Made IP Challenge 7 unlock after reaching Check Back level 100.<br>
 			- Slightly nerfed Realm Essence to counteract accidental buff from fixing pre-OTF multiplier order.<br>
-			- Replaced Antimatter Dimensions Upgrade 3, as it doesn't work, and if it did it would hurt progression speed.<br><br>
+			- Replaced Antimatter Dimensions Upgrade 3, as it creates massive amounts of confusion, and slows down progression.<br><br>
 		Bugfixes:<br>
 			- Fixed the sidebar appearing while the game is loading.<br>
 			- Fixed U3 Upgrade 5 not working with Oil layer.<br>
@@ -100,15 +101,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Visually remade Dice's Booster Dice tab.<br>
 			- Visually remade Rocket Fuel.<br>
 			- Improved the Settings menu.<br>
-			- Touched up Funify layer.<br>
-			- Touched up Singularity Dimensions layer.<br>
-			- Touched up Antimatter Dimensions layer.<br>
-			- Touched up Infinity Dimensions layer.<br>
-			- Touched up Tav's Dimension Power and Automation tabs.<br>
-			- Touched up Rank's Time Reversal tab.<br>
-			- Made Debuff brighter.<br>
-			- Changed colors of Mod and Check Back layer.<br>
-			- Colored the Factor Layer's tab buttons.<br><br>
+			- Touched up most other layers..<br>
 		Typos & Text Changes:<br>
 			- Improved AU1 Upgrade 8s description.<br>
 			- Clarified that Antimatter Singularity Core effects ignore softcap.<br>

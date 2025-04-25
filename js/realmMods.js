@@ -636,7 +636,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -668,7 +668,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         13: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -700,7 +700,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         14: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -732,7 +732,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         15: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -764,7 +764,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         16: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -796,7 +796,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
 
         //creator realm

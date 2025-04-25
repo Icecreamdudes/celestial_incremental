@@ -64,6 +64,7 @@
             buyUpgrade("bi", 112)
             buyUpgrade("bi", 113)
             buyUpgrade("bi", 114)
+            buyUpgrade("bi", 115)
         }
     },
     nodeStyle() {
@@ -300,7 +301,7 @@
             onClick() {
                 player.bi.NACtype = false
             },
-            style: { width: '150px', "min-height": '40px', borderRadius: '15px 0px 0px 0px' },
+            style: { width: '150px', minHeight: '40px', borderRadius: '15px 0px 0px 0px' },
         },
         22: {
             title() { return "Time" },
@@ -309,7 +310,7 @@
             onClick() {
                 player.bi.NACtype = true
             },
-            style: { width: '150px', "min-height": '40px', borderRadius: '0px 15px 0px 0px' },
+            style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
         },
     },
     bars: {

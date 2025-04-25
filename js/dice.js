@@ -1052,7 +1052,7 @@
                         ["raw-html", function () { return "You are rolling a " + formatWhole(player.d.diceSides) + ' sided dice.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Current rolls: " + player.d.rollText + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],    
-                    ], {width: "60%", border: "3px solid white", padding: "5px", borderRadius: "15px"}],
+                    ], {width: "60%", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]]],
                 ]
@@ -1068,7 +1068,7 @@
                             ["raw-html", function () { return "Current roll score: " + formatWhole(player.d.diceScore) + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                             ["raw-html", function () { return "+" + format(player.d.addDiceEffect) + 'x to the effect.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ], {width: "400px"}],
-                    ], {width: "500px", border: "3px solid white", padding: "5px", borderRadius: "10px"}],
+                    ], {width: "500px", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "10px"}],
                     ["blank", "25px"],
                     ["style-column", [
                         ["blank", "10px"],

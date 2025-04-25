@@ -1259,7 +1259,6 @@ const updateGrass = (delta) => {
     // POWER MODIFIERS
     player.g.grassVal = player.g.grassVal.pow(buyableEffect('rm', 25))
     player.g.grassVal = player.g.grassVal.pow(player.re.realmEssenceEffect)
-    if (player.cop.processedCoreFuel.eq(4)) player.g.grassVal = player.g.grassVal.pow(player.cop.processedCoreInnateEffects[1])
 
     // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
     player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
@@ -1352,7 +1351,7 @@ const updateGoldGrass = (delta) => {
     player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 305)[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('rm', 26))
-    if (player.cop.processedCoreFuel.eq(4)) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[2])
+    if (player.cop.processedCoreFuel.eq(4)) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.le.punchcardsPassiveEffect[11])
 
     // GOLDEN GRASS PER SECOND
@@ -1437,7 +1436,7 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.g.moonstoneLevelEffects[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(levelableEffect("pet", 1104)[0])
     if (hasUpgrade('ev8', 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
-    if (player.cop.processedCoreFuel.eq(4)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[3])
+    if (player.cop.processedCoreFuel.eq(4)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.le.punchcardsPassiveEffect[12])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
 

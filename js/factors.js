@@ -1391,7 +1391,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         42: {
             costBase() { return new Decimal(30) },
@@ -1425,7 +1425,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         43: {
             costBase() { return new Decimal(45) },
@@ -1459,7 +1459,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         44: {
             costBase() { return new Decimal(80) },
@@ -1493,7 +1493,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         45: {
             costBase() { return new Decimal(200) },
@@ -1527,7 +1527,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         46: {
             costBase() { return new Decimal(550) },
@@ -1561,7 +1561,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         47: {
             costBase() { return new Decimal(1200) },
@@ -1595,7 +1595,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         48: {
             costBase() { return new Decimal(2600) },
@@ -1629,7 +1629,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         // NIP Factors
         51: {

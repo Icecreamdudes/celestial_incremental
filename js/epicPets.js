@@ -209,7 +209,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Dotknight Scraps'
+                return "Dotknight Scraps"
             },
             display() {
                 return 'which are boosting main core scrap gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -243,7 +243,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Dotknight Offerings'
+                return "Dotknight Offerings"
             },
             display() {
                 return 'which are boosting offering gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -277,7 +277,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Dotknight Cookies'
+                return "Dotknight Cookies"
             },
             display() {
                 return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -343,7 +343,7 @@
         ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 401).gte(1) }
 })
 addLayer("ep1", {
     name: "Ep1", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -557,7 +557,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Dragon Starmetal'
+                return "Dragon Starmetal"
             },
             display() {
                 return 'which are boosting starmetal alloy gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -591,7 +591,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Dragon Emotions'
+                return "Dragon Emotions"
             },
             display() {
                 return 'which are boosting happiness, sadness, anger, and fear gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -625,7 +625,7 @@ addLayer("ep1", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Dragon Dotknights'
+                return "Dragon Dotknights"
             },
             display() {
                 return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -691,7 +691,7 @@ addLayer("ep1", {
         ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 402).gte(1) }
 })
 addLayer("ep2", {
     name: "Ep2", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -931,7 +931,7 @@ addLayer("ep2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Cookie Moonstone'
+                return "Cookie Moonstone"
             },
             display() {
                 return 'which are boosting moonstone gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -965,7 +965,7 @@ addLayer("ep2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Cookie Grass-Skippers'
+                return "Cookie Grass-Skippers"
             },
             display() {
                 return 'which are boosting grass-skipper gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -999,7 +999,7 @@ addLayer("ep2", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Cookie Dragons'
+                return "Cookie Dragons"
             },
             display() {
                 return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
@@ -1061,7 +1061,7 @@ addLayer("ep2", {
         ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 403).gte(1) }
 })
 addLayer("ep3", {
     name: "Ep3", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1075,8 +1075,6 @@ addLayer("ep3", {
         kresPointsMax: new Decimal(100),
         kresPointsPerSecond: new Decimal(0),
 
-        max: false,
-
         kresStats: [new Decimal(7), new Decimal(8), new Decimal(5)]
     }},
     automate() {},
@@ -1089,7 +1087,7 @@ addLayer("ep3", {
         player.ep3.kresPointsMax = new Decimal(100)
         player.ep3.kresPointsMax = player.ep3.kresPointsMax.add(buyableEffect("ep3", 11))
 
-        player.ep3.kresPointsPerSecond = player.cb.epicPetLevels[3].pow(1.1).div(10)
+        player.ep3.kresPointsPerSecond = getLevelableAmount("pet", 404).pow(1.1).div(10)
         player.ep3.kresPoints = player.ep3.kresPoints.add(player.ep3.kresPointsPerSecond.mul(delta))
 
         if (player.ep3.kresPoints.gte(player.ep3.kresPointsMax)) {
@@ -1113,8 +1111,8 @@ addLayer("ep3", {
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
         },
         2: {
-            title() { return player.cb.epicPetLevels[2].gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return player.cb.epicPetLevels[2].gt(0) },
+            title() { return getLevelableAmount("pet", 403).gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return getLevelableAmount("pet", 403).gt(0) },
             unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "ep2"
@@ -1122,8 +1120,8 @@ addLayer("ep3", {
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         3: {
-            title() { return player.cb.epicPetLevels[4].gt(0) ? "<img src='resources/navknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return player.cb.epicPetLevels[4].gt(0) },
+            title() { return getLevelableAmount("pet", 405).gt(0) ? "<img src='resources/navknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return getLevelableAmount("pet", 405).gt(0) },
             unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "ep4"
@@ -1145,13 +1143,13 @@ addLayer("ep3", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Strength'
+                return "Strength"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
-            buy() {
-                if (player.ep3.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1178,13 +1176,13 @@ addLayer("ep3", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Defense'
+                return "Defense"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
-            buy() {
-                if (player.ep3.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1211,13 +1209,13 @@ addLayer("ep3", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Agility'
+                return "Agility"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
-            buy() {
-                if (player.ep3.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1243,13 +1241,13 @@ addLayer("ep3", {
             cost(x) { return player.ep3.kresPointsMax },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/990<br/>Capacity Increaser'
+                return "Capacity Increaser"
             },
             display() {
                 return 'which are boosting kres point capacity by +' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: Max Kres Points'
             },
-            buy() {
+            buy(mult) {
                 this.pay()
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
@@ -1266,14 +1264,14 @@ addLayer("ep3", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Kres XP'
+                return "Kres XP"
             },
             display() {
                 return 'which are boosting check back XP gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
-            buy() {
-                if (player.ep3.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
     
@@ -1300,14 +1298,14 @@ addLayer("ep3", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Kres Epic Pets'
+                return "Kres Epic Pets"
             },
             display() {
                 return 'which are dividing epic pet fragmentation cooldown by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Kres Points'
             },
-            buy() {
-                if (player.ep3.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
     
@@ -1337,7 +1335,7 @@ addLayer("ep3", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
+                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
 
                 ]
             },
@@ -1355,7 +1353,7 @@ addLayer("ep3", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 1],["buyable", 2],["buyable", 3],]],
+                    ["row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3],]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These stats will be helpful for the future!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1369,7 +1367,7 @@ addLayer("ep3", {
         ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 404).gte(1) }
 })
 addLayer("ep4", {
     name: "Ep4", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1396,7 +1394,7 @@ addLayer("ep4", {
         player.ep4.navPointsMax = new Decimal(100)
         player.ep4.navPointsMax = player.ep4.navPointsMax.add(buyableEffect("ep4", 11))
 
-        player.ep4.navPointsPerSecond = player.cb.epicPetLevels[4].pow(1.1).div(10)
+        player.ep4.navPointsPerSecond = getLevelableAmount("pet", 405).pow(1.1).div(10)
         player.ep4.navPoints = player.ep4.navPoints.add(player.ep4.navPointsPerSecond.mul(delta))
 
         if (player.ep4.navPoints.gte(player.ep4.navPointsMax)) {
@@ -1420,8 +1418,8 @@ addLayer("ep4", {
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
         },
         2: {
-            title() { return player.cb.epicPetLevels[3].gt(0) ? "<img src='resources/kresEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return player.cb.epicPetLevels[3].gt(0) },
+            title() { return getLevelableAmount("pet", 404).gt(0) ? "<img src='resources/kresEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return getLevelableAmount("pet", 404).gt(0) },
             unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "ep3"
@@ -1429,8 +1427,8 @@ addLayer("ep4", {
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         3: {
-            title() { return player.cb.epicPetLevels[5].gt(0) ? "<img src='resources/selknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return player.cb.epicPetLevels[5].gt(0) },
+            title() { return getLevelableAmount("pet", 406).gt(0) ? "<img src='resources/selknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return getLevelableAmount("pet", 406).gt(0) },
             unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "ep5"
@@ -1452,13 +1450,13 @@ addLayer("ep4", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Strength'
+                return "Strength"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
-            buy() {
-                if (player.ep4.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1485,13 +1483,13 @@ addLayer("ep4", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Defense'
+                return "Defense"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
-            buy() {
-                if (player.ep4.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1518,13 +1516,13 @@ addLayer("ep4", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Agility'
+                return "Agility"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
-            buy() {
-                if (player.ep4.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1549,13 +1547,13 @@ addLayer("ep4", {
             cost(x) { return player.ep4.navPointsMax },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/990<br/>Capacity Increaser'
+                return "Capacity Increaser"
             },
             display() {
                 return 'which are boosting nav point capacity by +' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: Max Nav Points'
             },
-            buy() {
+            buy(mult) {
                 this.pay()
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
@@ -1572,14 +1570,14 @@ addLayer("ep4", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Nav Pet Points'
+                return "Nav Pet Points"
             },
             display() {
                 return 'which are boosting pet point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
-            buy() {
-                if (player.ep4.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
     
@@ -1606,14 +1604,14 @@ addLayer("ep4", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Nav Singularity Fragments'
+                return "Nav Singularity Fragments"
             },
             display() {
                 return 'which are dividing singularity fragmentation cooldown by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Nav Points'
             },
-            buy() {
-                if (player.ep4.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
     
@@ -1643,7 +1641,7 @@ addLayer("ep4", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
+                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
                 ]
             },
             "Stats": {
@@ -1660,7 +1658,7 @@ addLayer("ep4", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 1],["buyable", 2],["buyable", 3],]],
+                    ["row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3],]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These stats will be helpful for the future!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1674,7 +1672,7 @@ addLayer("ep4", {
         ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 405).gte(1) }
 })
 addLayer("ep5", {
     name: "Ep5", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -1701,7 +1699,7 @@ addLayer("ep5", {
         player.ep5.selPointsMax = new Decimal(100)
         player.ep5.selPointsMax = player.ep5.selPointsMax.add(buyableEffect("ep5", 11))
 
-        player.ep5.selPointsPerSecond = player.cb.epicPetLevels[5].pow(1.1).div(10)
+        player.ep5.selPointsPerSecond = getLevelableAmount("pet", 406).pow(1.1).div(10)
         player.ep5.selPoints = player.ep5.selPoints.add(player.ep5.selPointsPerSecond.mul(delta))
 
         if (player.ep5.selPoints.gte(player.ep5.selPointsMax)) {
@@ -1725,8 +1723,8 @@ addLayer("ep5", {
             style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
         },
         2: {
-            title() { return player.cb.epicPetLevels[4].gt(0) ? "<img src='resources/navEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return player.cb.epicPetLevels[4].gt(0) },
+            title() { return getLevelableAmount("pet", 405).gt(0) ? "<img src='resources/navEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return getLevelableAmount("pet", 405).gt(0) },
             unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "ep3"
@@ -1734,8 +1732,8 @@ addLayer("ep5", {
             style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
         },
         3: {
-            title() { return player.cb.epicPetLevels[0].gt(0) ? "<img src='resources/dotknightknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return player.cb.epicPetLevels[0].gt(0) },
+            title() { return getLevelableAmount("pet", 401).gt(0) ? "<img src='resources/dotknightknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
+            canClick() { return getLevelableAmount("pet", 401).gt(0) },
             unlocked() { return options.newMenu == false },
             onClick() {
                 player.tab = "ep0"
@@ -1759,13 +1757,13 @@ addLayer("ep5", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Strength'
+                return "Strength"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
-            buy() {
-                if (player.ep5.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1792,13 +1790,13 @@ addLayer("ep5", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Defense'
+                return "Defense"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
-            buy() {
-                if (player.ep5.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1825,13 +1823,13 @@ addLayer("ep5", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/1,000 Agility'
+                return "Agility"
             },
             display() {
                 return 'Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
-            buy() {
-                if (player.ep5.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1856,13 +1854,13 @@ addLayer("ep5", {
             cost(x) { return player.ep5.selPointsMax },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/990<br/>Capacity Increaser'
+                return "Capacity Increaser"
             },
             display() {
                 return 'which are boosting sel point capacity by +' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: Max Sel Points'
             },
-            buy() {
+            buy(mult) {
                 this.pay()
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
@@ -1879,14 +1877,14 @@ addLayer("ep5", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Sel XPBoost'
+                return "Sel XPBoost"
             },
             display() {
                 return 'which are boosting XPBoost gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
-            buy() {
-                if (player.ep5.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
     
@@ -1913,14 +1911,14 @@ addLayer("ep5", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + '/100<br/>Sel XPBoost Cooldown'
+                return "Sel XPBoost Cooldown"
             },
             display() {
                 return 'which are dividing XPBoost button cooldown by /' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Sel Points'
             },
-            buy() {
-                if (player.ep5.max == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
     
@@ -1950,7 +1948,7 @@ addLayer("ep5", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
+                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
                 ]
             },
             "Stats": {
@@ -1967,7 +1965,7 @@ addLayer("ep5", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["buyable", 1],["buyable", 2],["buyable", 3],]],
+                    ["row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3],]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These stats will be helpful for the future!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1980,5 +1978,5 @@ addLayer("ep5", {
         ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 406).gte(1) }
 })

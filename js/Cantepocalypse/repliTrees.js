@@ -143,14 +143,13 @@
             progress() {
                 return player.rt.repliLeaves.div(player.rt.repliTreeReq)
             },
-            fillStyle: {
-                "background-color": "#7734eb",
-            },
+            fillStyle: {backgroundColor: "#7734eb"},
+            borderStyle: {borderBottom: "0px", borderRadius: "10px 10px 0px 0px"},
             display() {
                 return "<h5>" + format(player.rt.repliLeaves) + "/" + format(player.rt.repliTreeReq) + "<h5> Repli-Leaves to gain a Repli-Tree.";
             },
         },
-        replileafBar: {
+        repliLeafBar: {
             unlocked() { return true },
             direction: RIGHT,
             width: 476,
@@ -158,9 +157,8 @@
             progress() {
                 return player.rt.repliLeavesTimer.div(player.rt.repliLeavesTimerReq)
             },
-            fillStyle: {
-                "background-color": "#7734eb",
-            },
+            fillStyle: {backgroundColor: "#7734eb"},
+            borderStyle: {borderRadius: "0px 0px 10px 10px"},
             display() {
                 return "Time: " + formatTime(player.rt.repliLeavesTimer) + "/" + formatTime(player.rt.repliLeavesTimerReq);
             },
@@ -426,13 +424,9 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -447,7 +441,7 @@
                     ["raw-html", function () { return player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) + " (Based on repli-trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["bar", "repliTreeBar"]]],
-                    ["row", [["bar", "replileafBar"]]],
+                    ["row", [["bar", "repliLeafBar"]]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                     ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
@@ -455,11 +449,10 @@
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.an.anonymity) + "</h3> anonymity." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 15) }
 })

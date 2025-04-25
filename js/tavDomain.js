@@ -7,8 +7,8 @@
         unlocked: true,
         domainResetPause: new Decimal(0),
 
-        currentConversion: new Decimal(0),
-        //1 - Shattered 2 - Disfigured 3 - Corrupted
+        currentConversion: new Decimal(-1),
+        //0 - Shattered 1 - Disfigured 2 - Corrupted
 
         shatteredInfinities: new Decimal(0),
         shatteredInfinitiesToGet: new Decimal(0),
@@ -112,43 +112,59 @@
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<h3>Convert broken infinities to shattered infinities" },
-            canClick() { return player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && !player.tad.currentConversion.eq(0) },
+            title() { return "Broken Infinities<br>to<br>Shattered Infinities<br><small>(REQUIRES HEX)</small>" },
+            canClick() { return !player.tad.currentConversion.eq(0) },
             unlocked() { return true },
             onClick() {
                 player.tad.currentConversion = new Decimal(0)
             },
-            style: { width: '200px', "min-height": '100px', borderRadius: '15px 0px 0px 15px'},
+            style() {
+                let look = {width: "248px", minHeight: "100px", borderRadius: "0px", fontSize: "13px"}
+                this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         12: {
-            title() { return "<h3>Convert broken infinities to disfigured infinities" },
-            canClick() { return !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && !player.tad.currentConversion.eq(1)},
+            title() { return "Broken Infinities<br>to<br>Disfigured Infinities<br><small>(REQUIRES ROCKET FUEL)</small>" },
+            canClick() { return !player.tad.currentConversion.eq(1)},
             unlocked() { return true },
             onClick() {
                 player.tad.currentConversion = new Decimal(1)
             },
-            style: { width: '200px', "min-height": '100px', borderRadius: '15px 0px 0px 15px'},
+            style() {
+                let look = {width: "248px", minHeight: "100px", borderRadius: "0px", fontSize: "13px"}
+                this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
-            title() { return "<h3>Convert broken infinities to corrupted infinities" },
-            canClick() { return !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && !player.tad.currentConversion.eq(2)},
+            title() { return "Broken Infinities<br>to<br>Corrupted Infinities<br><small>(REQUIRES DICE)</small>" },
+            canClick() { return !player.tad.currentConversion.eq(2)},
             unlocked() { return true },
             onClick() {
                 player.tad.currentConversion = new Decimal(2)
             },
-            style: { width: '200px', "min-height": '100px', borderRadius: '15px 0px 0px 15px'},
+            style() {
+                let look = {width: "250px", minHeight: "100px", borderRadius: "0px", fontSize: "13px"}
+                this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         14: {
-            title() { return "<h3>Stop Conversions" },
-            canClick() { return true},
+            title() { return "Stop<br>Conversions" },
+            canClick() { return !player.tad.currentConversion.eq(-1)},
             unlocked() { return true },
             onClick() {
                 player.tad.currentConversion = new Decimal(-1)
             },
-            style: { width: '200px', "min-height": '100px', borderRadius: '0px 15px 15px 0px'},
+            style() {
+                let look = {width: "200px", minHeight: "75px", border: "2px solid #122727", borderRadius: "15px", fontSize: "16px"}
+                this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         15: {
-            title() { return "<h3>BREAK THE BARRIER. KILL TAV.<br>1,000 of each alternate broken infinity type." },
+            title() { return "<h2>BREAK THE BARRIER. KILL TAV.</h2><br><h3>1,000 of each alternate broken infinity type.</h3>" },
             canClick() { return player.tad.shatteredInfinities.gt(1000) && player.tad.corruptedInfinities.gt(1000) && player.tad.disfiguredInfinities.gt(1000) },
             unlocked() { return true },
             onClick() {
@@ -260,7 +276,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         12: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
@@ -292,7 +308,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         13: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(2) },
@@ -324,7 +340,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         14: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(6) },
@@ -356,7 +372,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         15: {
             cost(x) { return new Decimal(1.24).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
@@ -388,7 +404,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         16: {
             cost(x) { return new Decimal(1.16).pow(x || getBuyableAmount(this.layer, this.id)).mul(8) },
@@ -420,7 +436,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         17: {
             cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(15) },
@@ -452,7 +468,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         18: {
             cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(15) },
@@ -484,7 +500,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         19: {
             cost(x) { return new Decimal(1.22).pow(x || getBuyableAmount(this.layer, this.id)).mul(15) },
@@ -516,7 +532,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         21: {
             cost(x) { return new Decimal(1.26).pow(x || getBuyableAmount(this.layer, this.id)).mul(30) },
@@ -548,7 +564,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         22: {
             cost(x) { return new Decimal(1.28).pow(x || getBuyableAmount(this.layer, this.id)).mul(45) },
@@ -580,7 +596,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
         23: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(60) },
@@ -612,7 +628,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#5E8D8D", backgroundImage: "linear-gradient(0deg, #b2d8d8, 50%, #094242 100%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {
@@ -644,13 +660,11 @@
 
         },
     },
-    domainReset()
-    {
+    domainReset() {
         player.ta.negativeInfinityPause = new Decimal(5)
         player.in.infinities = new Decimal(0)
         player.bi.brokenInfinities = new Decimal(0)
-        if (!hasMilestone("ip", 26) && player.in.unlockedBreak)
-        {
+        if (!hasMilestone("ip", 26) && player.in.unlockedBreak) {
             for (let i = 0; i < player.ip.milestones.length; i++) {
                 if (+player.ip.milestones[i] < 25) {
                     player.ip.milestones.splice(i, 1);
@@ -659,134 +673,104 @@
             }
         }
     },
-    infoboxes: {
-    },
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "black", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
+                content: [
+                    ["blank", "10px"],
                     ["row", [["challenge", 11]]],
                 ]
-
             },
             "Infinities": {
                 buttonStyle() { return { color: "black", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["microtabs", "infinities", { 'border-width': '0px' }],
-                    ["raw-html", function () { return "(You must be in Tav's domain to produce the alternate broken infinity types)" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(You must be in ONLY ONE otherworldy feature to be able to produce as well.)" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Infinity types are produced on infinity reset.)" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
-
-        ]
-
+                content: [
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", function () { return "Infinity Conversions" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ], {width: "750px", border: "3px solid #122727", borderBottom: "0px", backgroundColor: "#385555", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["clickable", 11],
+                        ], {width: "248px", borderRight: "2px solid #122727"}],
+                        ["style-column", [
+                            ["clickable", 12],
+                        ], {width: "248px", borderRight: "2px solid #122727"}],
+                        ["style-column", [
+                            ["clickable", 13],
+                        ], {width: "250px"}],
+                    ], {width: "750px", border: "3px solid #122727", backgroundColor: "#7AA6A6"}],
+                    ["style-column", [
+                        ["raw-html", function () { return "(You must be in Tav's domain to produce the alternate broken infinity types)" }, { "color": "white", "font-size": "17px", "font-family": "monospace", lineHeight: "1.5"}],
+                        ["raw-html", function () { return "(You must be in ONLY ONE otherworldy feature to be able to produce as well.)" }, { "color": "white", "font-size": "17px", "font-family": "monospace", lineHeight: "1.5"}],
+                        ["raw-html", function () { return "(Infinity types are produced on infinity reset.)" }, { "color": "white", "font-size": "17px", "font-family": "monospace", lineHeight: "1.5"}],    
+                    ], {width: "750px", border: "3px solid #122727", borderTop: "0px", backgroundColor: "#385555", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}],
+                    ["blank", "25px"],
+                    ["clickable", 14],
+                ]
             },
             "Buyables and Upgrades": {
                 buttonStyle() { return { color: "black", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.shatteredInfinities) + "</h3> shattered infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.disfiguredInfinities) + "</h3> disfigured infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.corruptedInfinities) + "</h3> corrupted infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                content: [
+                    ["blank", "10px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
                     ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
                     ["row", [["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19]]],
                     ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]]],
-
                 ]
-
             },
             "THE BARRIER": {
                 buttonStyle() { return { color: "black", borderRadius: "5px" } },
                 unlocked() { return !player.in.unlockedBreak },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.shatteredInfinities) + "</h3> shattered infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.disfiguredInfinities) + "</h3> disfigured infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.corruptedInfinities) + "</h3> corrupted infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                content: [
+                    ["blank", "10px"],
                     ["row", [["clickable", 15]]],
                 ]
-
-            },
-        },
-        infinities: {
-            "Shattered": {
-                buttonStyle() { return { color: "black", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["raw-html", function () { return player.tad.currentConversion.eq(0) ? "You are producing shattered infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(1) ? "You are producing disfigured infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(2) ? "You are producing corrupted infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(-1) ? "You are not producing an alternate broken infinity type." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.shatteredInfinities) + "</h3> shattered infinities. (REQUIRES HEX)" }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.tad.shatteredInfinitiesToGet) + "</h3> shattered infinities per conversion." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 14]]],
-                    ["blank", "25px"],
-                ]
-
-            },
-            "Disfigured": {
-                buttonStyle() { return { color: "black", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["raw-html", function () { return player.tad.currentConversion.eq(0) ? "You are producing shattered infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(1) ? "You are producing disfigured infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(2) ? "You are producing corrupted infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(-1) ? "You are not producing an alternate broken infinity type." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.disfiguredInfinities) + "</h3> disfigured infinities. (REQUIRES ROCKET FUEL)" }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.tad.disfiguredInfinitiesToGet) + "</h3> disfigured infinities per conversion." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 14]]],
-                    ["blank", "25px"],
-                ]
-
-            },
-            "Corrupted": {
-                buttonStyle() { return { color: "black", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["raw-html", function () { return player.tad.currentConversion.eq(0) ? "You are producing shattered infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(1) ? "You are producing disfigured infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(2) ? "You are producing corrupted infinities." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.tad.currentConversion.eq(-1) ? "You are not producing an alternate broken infinity type." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.tad.corruptedInfinities) + "</h3> corrupted infinities. (REQUIRES DICE)" }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.tad.corruptedInfinitiesToGet) + "</h3> corrupted infinities per conversion." }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 13], ["clickable", 14]]],
-                    ["blank", "25px"],
-                ]
-
             },
         },
     },
-
     tabFormat: [
-         ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You will gain <h3>" + format(player.ta.negativeInfinityPointsToGet) + "</h3> on reset." }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["style-column", [
+            ["raw-html", function () { return "Broken Infinities: " + formatWhole(player.bi.brokenInfinities) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ], {width: "750px", border: "3px solid #122727", borderBottom: "0px", backgroundColor: "#385555", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+        ["style-row", [
+            ["style-column", [
+                ["style-column", [
+                    ["raw-html", function () { return "Shattered Infinities" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                ], {width: "248px", height: "40px", borderBottom: "2px solid #122727"}],
+                ["style-column", [
+                    ["raw-html", function () { return formatWhole(player.tad.shatteredInfinities) }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(+" + formatWhole(player.tad.shatteredInfinitiesToGet) + ")" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],    
+                ], {width: "248px", height: "60px"}],
+            ], {width: "248px", borderRight: "2px solid #122727"}],
+            ["style-column", [
+                ["style-row", [
+                    ["raw-html", function () { return "Disfigured Infinities" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                ], {width: "248px", height: "40px", borderBottom: "2px solid #122727"}],
+                ["style-column", [
+                    ["raw-html", function () { return formatWhole(player.tad.disfiguredInfinities) }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(+" + formatWhole(player.tad.disfiguredInfinitiesToGet) + ")" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],    
+                ], {width: "248px", height: "60px"}],
+            ], {width: "248px", borderRight: "2px solid #122727"}],
+            ["style-column", [
+                ["style-row", [
+                    ["raw-html", function () { return "Corrupted Infinities" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                ], {width: "250px", height: "40px", borderBottom: "2px solid #122727"}],
+                ["style-column", [
+                    ["raw-html", function () { return formatWhole(player.tad.corruptedInfinities) }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(+" + formatWhole(player.tad.corruptedInfinitiesToGet) + ")" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],    
+                ], {width: "250px", height: "60px"}],
+            ], {width: "250px"}],
+        ], {width: "750px", border: "3px solid #122727", backgroundColor: "#7AA6A6", borderRadius: "0px 0px 15px 15px"}],
+        ["blank", "10px"],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)}
 })

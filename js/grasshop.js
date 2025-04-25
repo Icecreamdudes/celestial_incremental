@@ -237,7 +237,7 @@
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<h3>Grasshop, but reset everything except pent. <br>(Req: 10,000 Grass and 1e35 Celestial Points)" },
+            title() { return "<h2>Grasshop, but reset everything except pent.</h2><br><h3><small>Req: 10,000 Grass and 1e35 Celestial Points</small></h3>" },
             canClick() { return player.gh.grasshoppersToGet.gte(1) && player.points.gte(1e35) },
             unlocked() { return true },
             onClick() {
@@ -249,7 +249,7 @@
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
-            title() { return "<h3>Steelie, but reset everything before unlocking OTFs. (based on code experience)" },
+            title() { return "<h2>Steelie, but reset everything before unlocking OTFs.</h2><br><h3>(based on code experience)</h3>" },
             canClick() { return player.gh.steelToGet.gte(1) },
             unlocked() { return true },
             onClick() {
@@ -1194,12 +1194,17 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h1>Effects" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Celestial Points: x" + format(player.gh.grasshopperEffects[0]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Factor Power: x" + format(player.gh.grasshopperEffects[1]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Prestige Points: x" + format(player.gh.grasshopperEffects[2]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Leaf Gain: x" + format(player.gh.grasshopperEffects[3]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Grass Value: x" + format(player.gh.grasshopperEffects[4]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["raw-html", function () { return "<h1>Effects" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["blank", "5px"],
+                        ["h-line", "450px"],
+                        ["blank", "5px"],
+                        ["raw-html", function () { return "<h2>Celestial Points: x" + format(player.gh.grasshopperEffects[0]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Factor Power: x" + format(player.gh.grasshopperEffects[1]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Prestige Points: x" + format(player.gh.grasshopperEffects[2]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Leaf Gain: x" + format(player.gh.grasshopperEffects[3]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Grass Value: x" + format(player.gh.grasshopperEffects[4]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],    
+                    ], {width: "500px", height: "210px", backgroundColor: "#074317", border: "3px solid #19e04d", borderRadius: "15px"}],
                 ]
 
             },

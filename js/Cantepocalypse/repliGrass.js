@@ -100,9 +100,12 @@
         multAdd = multAdd.add(buyableEffect("fu", 23))
         if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
-        player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
-        if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart))
-        {
+        if (!hasMilestone("gs", 21)) {
+            player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
+        } else {
+            player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.2)
+        }
+        if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart)) {
             multAdd = multAdd.div(player.rg.repliGrassSoftcapEffect)
         }
 

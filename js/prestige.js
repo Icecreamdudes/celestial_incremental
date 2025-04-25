@@ -276,7 +276,7 @@
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<h3>Prestige, but reset all ranks and factors. <br>(Req: 100,000 Celestial Points)" },
+            title() { return "<h2>Prestige, but reset all ranks and factors.</h2><br><h3>Req: 100,000 Celestial Points</h3>" },
             canClick() { return player.p.prestigePointsToGet.gte(1) && player.points.gte(100000)},
             unlocked() { return true },
             onClick() {
@@ -286,7 +286,7 @@
             style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
         },
         12: {
-            title() { return "<h3>Crystallize, but reset everything before unlocking OTFs." },
+            title() { return "<h2>Crystallize, but reset everything before unlocking OTFs.</h2>" },
             canClick() { return player.p.crystalsToGet.gte(1)},
             unlocked() { return true },
             onClick() {

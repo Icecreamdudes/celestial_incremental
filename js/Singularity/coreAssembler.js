@@ -330,28 +330,28 @@
             {
             return [player.t.trees.pow(0.065).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
             player.s.highestSingularityPoints.pow(0.12).div(35).add(1).pow(player.coa.strengthBuffs[strength]), 
-            player.t.leaves.pow(0.05).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])] //trees, trees, leaves, repli-leaves
+            player.t.leaves.pow(0.05).add(1).pow(player.coa.strengthBuffs[strength]),
+            player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])] //trees, trees, leaves, repli-leaves
             } else
             {
                 return [player.p.prestigePoints.pow(0.065).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
-                Decimal.add(1.65, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(350)), 
-                player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])] //prestige points, prestige points, crystal 
+                Decimal.add(1.65, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(350)),
+                player.t.leaves.pow(0.05).add(1).pow(player.coa.strengthBuffs[strength]),
+                player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])]
             }
         }
         if (fuel == 4)
         {
             if (player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.2))
             {
-            return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"), 
-            player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]), 
-            player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), 
-            player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, grass, golden grass, moonstone
+            return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"),
+            player.s.singularityTime.add(1).pow(player.coa.strengthBuffs[strength]), 
+            player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, golden grass, moonstone
             } else
             {
-                return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"), 
-                Decimal.add(1.2, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(300)), 
-                player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), 
-                player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, grass, golden grass, moonstone
+                return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"),
+                player.s.singularityTime.add(1).pow(player.coa.strengthBuffs[strength]), 
+                player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, golden grass, moonstone
             }
         }
         if (fuel == 5)
@@ -485,10 +485,9 @@
         }
         if (fuel == 4)
         {
-            return "Boosts grass based on itself: x" + format(layers.coa.determineEffect(4, strength)[0]) 
-            + "<br>Boosts grass based on highest singularity points: ^" + format(layers.coa.determineEffect(4, strength)[1]) 
-            + "<br>Boosts golden grass based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[2]) 
-            + "<br>Boosts moonstone based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[3]) 
+            return "Boosts grass based on itself: x" + format(layers.coa.determineEffect(4, strength)[0])
+            + "<br>Boosts golden grass based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[1]) 
+            + "<br>Boosts moonstone based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[2]) 
         }
         if (fuel == 5)
         {
@@ -1499,7 +1498,7 @@
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(player.coa.luckLevelUpgradeCost)
                 player.coa.luckLevel = player.coa.luckLevel.add(1)
             },
-            style: { width: '100px', "min-height": '35px', "height": '30px'  },
+            style: { width: "100px", minHeight: "35px", height: "30px", borderRadius: "5px" },
         },
         11: {
             title() { return "Points" },

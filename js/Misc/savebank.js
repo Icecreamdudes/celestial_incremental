@@ -92,7 +92,7 @@ addLayer("savebank", {
             onClick() {
                 player.subtabs["savebank"]["stuff"] = "Checkback-Infinity"
             },
-            style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: '#06366e', borderRadius: '0px', border: '2px solid white'},
+            style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: '#094599', borderRadius: '0px', border: '2px solid white'},
         },
         14: {
             title() { return "Infinity<br>Tav" },
@@ -131,13 +131,31 @@ addLayer("savebank", {
             style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: 'linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)', borderRadius: '0px', border: '2px solid white'},
         },
         18: {
-            title() { return "Singularity<br>End" },
+            title() { return "Singularity<br>Starmetal" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.subtabs["savebank"]["stuff"] = "Singularity-End"
+                player.subtabs["savebank"]["stuff"] = "Singularity-Starmetal"
             },
-            style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: 'linear-gradient(140deg, red 0%, black 100%)', borderRadius: '0px', border: '2px solid white'},
+            style: { width: '125px', minHeight: '50px', color: 'rgba(0,0,0,0.8)', background: 'linear-gradient(140deg, red 0%, black 120%)', borderRadius: '0px', border: '2px solid white'},
+        },
+        19: {
+            title() { return "Starmetal<br>Matos" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.subtabs["savebank"]["stuff"] = "Starmetal-Matos"
+            },
+            style: { width: '125px', minHeight: '50px', color: '#282363', background: 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%, #60cfeb 100%)', borderRadius: '0px', border: '2px solid white'},
+        },
+        21: {
+            title() { return "Matos<br>End" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.subtabs["savebank"]["stuff"] = "Matos-End"
+            },
+            style: { width: '125px', minHeight: '50px', color: 'black', background: 'linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)', borderRadius: '0px', border: '2px solid white'},
         },
         // Start-Checkback
         101: {
@@ -984,7 +1002,27 @@ addLayer("savebank", {
                     ["blank", "25px"],
                 ]
             },
-            "Singularity-End": {
+            "Singularity-Starmetal": {
+                buttonStyle() { return { 'color': 'white' } },
+                style: { background: '#2D0000' },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", "WIP"],
+                    ["blank", "25px"],
+                ]
+            },
+            "Starmetal-Matos": {
+                buttonStyle() { return { 'color': 'white' } },
+                style: { background: '#2D0000' },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", "WIP"],
+                    ["blank", "25px"],
+                ]
+            },
+            "Matos-End": {
                 buttonStyle() { return { 'color': 'white' } },
                 style: { background: '#2D0000' },
                 unlocked() { return true },
@@ -1007,7 +1045,10 @@ addLayer("savebank", {
         ["blank", "50px"],
 
         ["style-column", [
-            ["scroll-row", [["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15], ["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18]], {width: "800px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)"}],
+            ["scroll-row", [
+                ["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15],
+                ["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18], ["hoverless-clickable", 19], ["hoverless-clickable", 21],
+            ], {width: "800px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)"}],
             ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ], {border: "2px solid white"}],
 

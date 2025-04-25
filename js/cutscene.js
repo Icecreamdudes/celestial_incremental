@@ -64,7 +64,8 @@
         player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
         player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || player.tab == "ma" || player.tab == "sma" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd"? "#260300" : 
         player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4"  || player.tab == "ep5" ? "#7d3f98" : 
-        player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits" ? "linear-gradient(90deg, #57636d, #2e3d49)" :
+        !player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
+        player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
         player.tab == "ch" || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
         player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 
         player.tab == "leg" ? "#eed200" : 

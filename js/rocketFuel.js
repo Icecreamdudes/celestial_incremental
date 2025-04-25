@@ -155,7 +155,7 @@
             style: { width: '100px', "min-height": '50px' },
         },
         2: {
-            title() { return "Gain rocket fuel, but reset everything before check back, excluding milestones.<br><small>Req: 1e15 Grasshoppers</small>" },
+            title() { return "<h3>Gain rocket fuel, but reset everything before check back, excluding milestones.<br><small>Req: 1e15 Grasshoppers</small></h3>" },
             canClick() { return player.rf.rocketFuelToGet.gte(1)},
             unlocked() { return true },
             onClick() {
@@ -163,7 +163,7 @@
                 player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
             },
             style() {
-                let look = {width: "200px", minHeight: "150px", borderRadius: "12px 0px 0px 0px", fontSize: "11px"}
+                let look = {width: "225px", minHeight: "150px", borderRadius: "12px 0px 0px 0px"}
                 this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
                 this.canClick() ? look.color = "white" : look.color = "black"
                 return look
@@ -620,14 +620,14 @@
                 ["style-column", [
                     ["style-row", [
                         ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][0] }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ], {width: "397px", height: "38px", borderBottom: "2px solid white"}],
+                    ], {width: "372px", height: "38px", borderBottom: "2px solid white"}],
                     ["style-row", [
                         ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][1] }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "397px", height: "60px"}],
+                    ], {width: "362px", height: "60px", paddingLeft: "5px", paddingRight: "5px"}],
                     ["style-row", [
                         ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][2] }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "397px", height: "48px", borderTop: "2px solid white"}],
-                ], {width: "397px", height: "150px", backgroundColor: "#282828", borderLeft: "3px solid white", borderRadius: "0px 12px 0px 0px"}],
+                    ], {width: "372px", height: "48px", borderTop: "2px solid white"}],
+                ], {width: "372px", height: "150px", backgroundColor: "#282828", borderLeft: "3px solid white", borderRadius: "0px 12px 0px 0px"}],
             ], {width: "600px", height: "150px", borderBottom: "3px solid white"}],
             ["style-column", [
                 ["blank", "5px"],

@@ -8,14 +8,17 @@
 
         rankPoints: new Decimal(0),
         rankPointsToGet: new Decimal(0),
+        rankPointsPerSec: new Decimal(0),
         rankPointsEffect: new Decimal(0),
 
         tierPoints: new Decimal(0),
         tierPointsToGet: new Decimal(0),
+        tierPointsPerSec: new Decimal(0),
         tierPointsEffect: new Decimal(1),
 
         tetrPoints: new Decimal(0),
         tetrPointsToGet: new Decimal(0),
+        tetrPointsPerSec: new Decimal(0),
         tetrPointsEffect: new Decimal(1),
     }
     },
@@ -37,9 +40,13 @@
         player.ar.rankPointsToGet = player.ar.rankPointsToGet.mul(buyableEffect("fu", 21))
         if (inChallenge("fu", 11)) player.ar.rankPointsToGet = player.ar.rankPointsToGet.pow(0.2)
 
-        if (hasUpgrade("an", 13)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, 0.05)))
-        if (hasUpgrade("an", 15)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, 0.25)))
-        if (hasUpgrade("an", 18)) player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(delta))
+        player.ar.rankPointsPerSec = new Decimal(0)
+        if (hasUpgrade("an", 13)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(0.05)
+        if (hasUpgrade("an", 15)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(0.25)
+        if (hasUpgrade("an", 18)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(1)
+        if (hasMilestone("gs", 19)) player.ar.rankPointsPerSec = player.ar.rankPointsPerSec.add(5)
+        player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet.mul(Decimal.mul(delta, player.ar.rankPointsPerSec)))
+
 
         player.ar.tierPointsToGet = player.ar.rankPoints.mul(0.1).pow(0.4)
         player.ar.tierPointsEffect = player.ar.tierPoints.pow(0.65).add(1)
@@ -49,8 +56,12 @@
         player.ar.tierPointsToGet = player.ar.tierPointsToGet.mul(buyableEffect("fu", 21))
         if (inChallenge("fu", 11)) player.ar.tierPointsToGet = player.ar.tierPointsToGet.pow(0.2)
 
-        if (hasUpgrade("an", 15)) player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, 0.05)))
-        if (hasUpgrade("an", 18)) player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, 0.25)))
+        player.ar.tierPointsPerSec = new Decimal(0)
+        if (hasUpgrade("an", 15)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(0.05)
+        if (hasUpgrade("an", 18)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(0.25)
+        if (hasMilestone("gs", 19)) player.ar.tierPointsPerSec = player.ar.tierPointsPerSec.add(5)
+        player.ar.tierPoints = player.ar.tierPoints.add(player.ar.tierPointsToGet.mul(Decimal.mul(delta, player.ar.tierPointsPerSec)))
+
 
         player.ar.tetrPointsToGet = player.ar.tierPoints.mul(0.1).pow(0.4)
         player.ar.tetrPointsEffect = player.ar.tetrPoints.pow(0.5).add(1)
@@ -59,7 +70,11 @@
         player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.mul(buyableEffect("fu", 21))
         if (inChallenge("fu", 11)) player.ar.tetrPointsToGet = player.ar.tetrPointsToGet.pow(0.2)
 
-            if (hasUpgrade("an", 18)) player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, 0.05)))
+        player.ar.tetrPointsPerSec = new Decimal(0)
+        if (hasUpgrade("an", 18)) player.ar.tetrPointsPerSec = player.ar.tetrPointsPerSec.add(0.05)
+        if (hasMilestone("gs", 19)) player.ar.tetrPointsPerSec = player.ar.tetrPointsPerSec.add(5)
+        player.ar.tetrPoints = player.ar.tetrPoints.add(player.ar.tetrPointsToGet.mul(Decimal.mul(delta, player.ar.tetrPointsPerSec)))
+
     },
     clickables: {
         1: {
@@ -72,17 +87,17 @@
             style: { width: '100px', "min-height": '50px' },
         },
         11: {
-            title() { return "<h3>Reset replicanti points for rank points." },
+            title() { return "<h2>Gain " + format(player.ar.rankPointsToGet) + " rank points</h2><br><h3>But reset replicanti points<br><small>(Based on Replicanti Points)</small></h3>" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '50px', borderRadius: '10px'},
+            style: {width: "406px", minHeight: "80.7px", borderRadius: "0px 15px 0px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
         12: {
-            title() { return "<h3>Reset replicanti points and rank points for tier points." },
+            title() { return "<h2>Gain " + format(player.ar.tierPointsToGet) + " tier points</h2><br><h3>But reset <small>replicanti points and rank points</small><br><small>(Based on Rank Points)</small></h3>" },
             canClick() { return player.ar.tierPointsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
@@ -90,10 +105,10 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '50px', borderRadius: '10px'},
+            style: {width: "406px", minHeight: "80.7px", borderRadius: "0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
         13: {
-            title() { return "<h3>Reset replicanti points, rank points, and tier points for tetr points." },
+            title() { return "<h2>Gain " + format(player.ar.tetrPointsToGet) + " tetr points</h2><br><h3>But reset <small>replicanti rank and tier points</small><br><small>(Based on Tier Points)</small></h3>" },
             canClick() { return player.ar.tetrPointsToGet.gte(1) },
             unlocked() { return hasUpgrade("cp", 13) },
             onClick() {
@@ -102,7 +117,7 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '50px', borderRadius: '10px'},
+            style: {width: "406px", minHeight: "80.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
     },
     bars: {
@@ -112,13 +127,19 @@
             width: 400,
             height: 25,
             progress() {
-                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                } else {
+                    return new Decimal(1)
+                }
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
-                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                } else {
+                    return "<p style='color:red'>[HARDCAPPED]</p>"
+                }
             },
         },
     },
@@ -142,31 +163,37 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ar.rankPoints) + "</h3> rank points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.ar.rankPointsToGet) + "</h3> rank points on reset. (Based on replicanti points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Rank points add <h3>+" + format(player.ar.rankPointsEffect) + "</h3> to the replicanti mult." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["row", [["clickable", 11]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ar.tierPoints) + "</h3> tier points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.ar.tierPointsToGet) + "</h3> tier points on reset. (Based on rank points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Tier boost rank points by <h3>x" + format(player.ar.tierPointsEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["row", [["clickable", 12]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return hasUpgrade("cp", 13) ? "You have <h3>" + format(player.ar.tetrPoints) + "</h3> tetr points." : "" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return hasUpgrade("cp", 13) ? "You will gain <h3>" + format(player.ar.tetrPointsToGet) + "</h3> tetr points on reset. (Based on tier points)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return hasUpgrade("cp", 13) ? "Tetr boost rank and tier points by <h3>x" + format(player.ar.tetrPointsEffect) + "</h3>." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["row", [["clickable", 13]]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", function () { return format(player.ar.rankPoints) + " Rank Points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return player.ar.rankPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.rankPointsToGet.mul(player.ar.rankPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return "+" + format(player.ar.rankPointsEffect) + "x Replicanti Point Mult" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
+                        ], {width: "400px", height: "75px"}],
+                        ["clickable", 11],
+                    ], {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderBottom: "0px", borderRadius: "15px 15px 0px 0px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", function () { return format(player.ar.tierPoints) + " Tier Points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return player.ar.tierPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.tierPointsToGet.mul(player.ar.tierPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return "x" + format(player.ar.tierPointsEffect) + " Rank Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
+                        ], {width: "400px", height: "75px"}],
+                        ["clickable", 12],
+                    ], {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderBottom: "0px", borderRadius: "0px"}],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", function () { return format(player.ar.tetrPoints) + " Tetr Points (+" + format(player.ar.tetrPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return player.ar.tetrPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.tetrPointsToGet.mul(player.ar.tetrPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", function () { return "x" + format(player.ar.tetrPointsEffect) + " Rank and Tier Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
+                        ], {width: "400px", height: "75px", borderRadius: "0px 0px 0px 13px"}],
+                        ["clickable", 13],
+                    ], {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderRadius: "0px 0px 15px 15px"}],
                 ]
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti points Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],

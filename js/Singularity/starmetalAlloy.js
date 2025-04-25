@@ -114,7 +114,7 @@
             onClick() {
                 player.tab = "s"
             },
-            style: { width: '100px', "min-height": '50px' },
+            style: { width: '100px', "min-height": '50px', borderRadius: "5px" },
         },
         2: {
             title() { return "Buy Max On" },
@@ -144,7 +144,7 @@
                 player.tab = "dut"
                 layers.le.generateSelection();
             },
-            style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)' },
+            style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)', borderRadius: "15px" },
         },
         12: {
             title() { return "<h2>Prime this singularity core." },
@@ -155,7 +155,7 @@
                 player.coa.coreStarmetalValue[player.sma.coreIndex] = player.coa.coreStarmetalValue[player.sma.coreIndex].add(player.sma.primePrice)
                 player.coa.corePrimes[player.sma.coreIndex] = player.coa.corePrimes[player.sma.coreIndex].add(1)
             },
-            style: { width: '400px', "min-height": '100px' },
+            style: { width: '400px', "min-height": '100px', borderRadius: "15px" },
         },
         13: {
             title() { return "<h2>Auto Singularity Toggle: On" },
@@ -164,7 +164,7 @@
             onClick() {
                 player.sma.toggle = false
             },
-            style: { width: '300px', "min-height": '80px' },
+            style: { width: '300px', minHeight: '80px', borderRadius: '0px 0px 15px 15px' },
         },
         14: {
             title() { return "<h2>Auto Singularity Toggle: Off" },
@@ -173,7 +173,7 @@
             onClick() {
                 player.sma.toggle = true
             },
-            style: { width: '300px', "min-height": '80px' },
+            style: { width: '300px', minHeight: '80px', borderRadius: '0px 0px 15px 15px' },
         },
         15: {
             title() { return "Amount" },
@@ -182,7 +182,7 @@
             onClick() {
                 player.sma.type = false
             },
-            style: { width: '150px', "min-height": '40px' },
+            style: { width: '150px', minHeight: '40px', borderRadius: '15px 0px 0px 0px' },
         },
         16: {
             title() { return "Time" },
@@ -191,7 +191,7 @@
             onClick() {
                 player.sma.type = true
             },
-            style: { width: '150px', "min-height": '40px' },
+            style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
         },
         101: {
             title() { return "<div id=core0 class=singularityCore><div class=centerCircle></div>" },
@@ -200,7 +200,7 @@
             onClick() {
                 player.sma.coreIndex = 0
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         102: {
             title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
@@ -209,7 +209,7 @@
             onClick() {
                 player.sma.coreIndex = 1
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         103: {
             title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
@@ -218,7 +218,7 @@
             onClick() {
                 player.sma.coreIndex = 2
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         104: {
             title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
@@ -227,7 +227,7 @@
             onClick() {
                 player.sma.coreIndex = 3
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         105: {
             title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
@@ -236,7 +236,7 @@
             onClick() {
                 player.sma.coreIndex = 4
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         106: {
             title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
@@ -245,7 +245,7 @@
             onClick() {
                 player.sma.coreIndex = 5
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         107: {
             title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
@@ -254,7 +254,7 @@
             onClick() {
                 player.sma.coreIndex = 6
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         108: {
             title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
@@ -263,7 +263,7 @@
             onClick() {
                 player.sma.coreIndex = 7
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         109: {
             title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
@@ -272,7 +272,7 @@
             onClick() {
                 player.sma.coreIndex = 8
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         111: {
             title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
@@ -281,7 +281,7 @@
             onClick() {
                 player.sma.coreIndex = 9
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         
     },
@@ -297,6 +297,17 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
         12:
         {
@@ -307,6 +318,17 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
         13:
         {
@@ -321,7 +343,17 @@
                 return player.dp.prestigePoints.pow(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {width: "150px", borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {width: "150px", borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
         14:
         {
@@ -332,6 +364,17 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
         15:
         {
@@ -342,6 +385,17 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
         16:
         {
@@ -352,6 +406,17 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
         17:
         {
@@ -362,12 +427,23 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            style() {
+                if (!player.sma.inStarmetalChallenge) {
+                    let look = {borderRadius: "10px"}
+                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
+                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                    return look
+                } 
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
         },
 
         //other
         101:
         {
-            title: "Starmetal Upgrade I",
+            title: "Secondary Starmetal Upgrade I",
             unlocked() { return true},
             description: "Unspent starmetal alloy boosts singularity point gain.",
             cost: new Decimal("6"),
@@ -378,7 +454,12 @@
                 return player.sma.starmetalAlloy.pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
         },
         102:
         {
@@ -393,7 +474,12 @@
                 return player.sma.starmetalAlloy.mul(0.02).add(1).pow(0.5)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
         },
         103:
         {
@@ -404,7 +490,12 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
-            style: { width: '150px', height: '100px', }
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
         },
         104:
         {
@@ -415,7 +506,12 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
-            style: { width: '150px', height: '100px', }
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
         },
         105:
         {
@@ -426,7 +522,12 @@
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
-            style: { width: '150px', height: '100px', }
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
         },
     },
     buyables: {
@@ -582,8 +683,7 @@
                 content:
                 [
                     ["blank", "25px"],
-        ["row", [["clickable", 11]]],
-                    
+                    ["clickable", 11],
                 ]
             },
             "Prime Cores": {
@@ -595,15 +695,14 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "Primed Effects (All based on singularity time):<br>" + player.coa.corePrimedEffectText[player.sma.coreIndex]}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                                ["raw-html", function () { return "<div id=starmetalCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<div id=starmetalCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-        ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
-        ["blank", "25px"],
-        ["raw-html", function () { return "Cost: <h3>" + formatWhole(player.sma.primePrice) + "</h3> starmetal alloy." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["clickable", 12]]],
-        ["raw-html", function () { return "Note: Starmetal alloy will be returned when a core is destroyed." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
-                    
+                    ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Cost: <h3>" + formatWhole(player.sma.primePrice) + "</h3> starmetal alloy." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 12]]],
+                    ["raw-html", function () { return "Note: Starmetal alloy will be returned when a core is destroyed." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
                 ]
             },
             "Starmetal Upgrades": {
@@ -637,9 +736,8 @@
                         background: "var(--background)",
                     }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 13], ["clickable", 14]]],
                     ["row", [["clickable", 15], ["clickable", 16]]],
-                    
+                    ["row", [["clickable", 13], ["clickable", 14]]],
                 ]
             },
             "Buyables": {
@@ -651,7 +749,6 @@
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                    
                 ]
             },
         },

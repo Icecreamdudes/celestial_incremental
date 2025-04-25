@@ -29,7 +29,11 @@ addLayer("du", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-
+        if (player.subtabs["du"]['stuff'] == 'Settings') {
+            player.po.lastUniverse = 'du'
+            player.tab = "settings"
+            player.subtabs["du"]['stuff'] = 'Features'
+        }
 
         if (player.sma.inStarmetalChallenge && (player.tab == "i" || player.tab == "in" || player.tab == "s" || player.tab == "cp")) {
             player.tab = "du"
@@ -89,7 +93,11 @@ addLayer("du", {
                 ]
 
             },
-            "Settings": settingsMicrotab,
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
         },
     },
 

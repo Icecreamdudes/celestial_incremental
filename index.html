@@ -42,7 +42,7 @@
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
 		<div class="titleHeader" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == false" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
- 		<div class="titleHeader2" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == true">Celestial<br>Incremental</div>
+ 		<div class="titleHeader2" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == true" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
 		<div class="contentMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-270px'}:{'left':'0px'}">
 		<!-- Universes -->
 			<div class="uniMenu">
@@ -203,13 +203,13 @@
 				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[9] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev9') " onclick="showTab('ev9')"><span class="buttonText">Paragon Checkpoint</span></button>
 				<button class="menuButton" v-if="player.ev.evolutionsUnlocked[10] && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ev10') " onclick="showTab('ev10')"><span class="buttonText">Eye</span></button>
 
-			<div class="menuHeader" v-if="(player.cb.epicPetLevels[0].gte(1) || player.cb.epicPetLevels[1].gte(1) || player.cb.epicPetLevels[2].gte(1)) && player.universe == 0.5">Epic Shops</div>
-				<button class="menuButton" v-if="player.cb.epicPetLevels[0].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep0') " onclick="showTab('ep0')"><span class="buttonText">Dotknight</span></button>
-				<button class="menuButton" v-if="player.cb.epicPetLevels[1].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep1') " onclick="showTab('ep1')"><span class="buttonText">Dragon</span></button>
-				<button class="menuButton" v-if="player.cb.epicPetLevels[2].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep2') " onclick="showTab('ep2')"><span class="buttonText">Cookie</span></button>
-				<button class="menuButton" v-if="player.cb.epicPetLevels[3].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep3') " onclick="showTab('ep3')"><span class="buttonText">Kres</span></button>
- 				<button class="menuButton" v-if="player.cb.epicPetLevels[4].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep4') " onclick="showTab('ep4')"><span class="buttonText">Nav</span></button>
- 				<button class="menuButton" v-if="player.cb.epicPetLevels[5].gte(1) && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep5') " onclick="showTab('ep5')"><span class="buttonText">Sel</span></button>
+			<div class="menuHeader" v-if="(layerShown('ep0') || layerShown('ep1') || layerShown('ep2')) && player.universe == 0.5">Epic Shops</div>
+				<button class="menuButton" v-if="layerShown('ep0') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep0') " onclick="showTab('ep0')"><span class="buttonText">Dotknight</span></button>
+				<button class="menuButton" v-if="layerShown('ep1') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep1') " onclick="showTab('ep1')"><span class="buttonText">Dragon</span></button>
+				<button class="menuButton" v-if="layerShown('ep2') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep2') " onclick="showTab('ep2')"><span class="buttonText">Cookie</span></button>
+				<button class="menuButton" v-if="layerShown('ep3') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep3') " onclick="showTab('ep3')"><span class="buttonText">Kres</span></button>
+ 				<button class="menuButton" v-if="layerShown('ep4') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep4') " onclick="showTab('ep4')"><span class="buttonText">Nav</span></button>
+ 				<button class="menuButton" v-if="layerShown('ep5') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep5') " onclick="showTab('ep5')"><span class="buttonText">Sel</span></button>
 		</div>
 		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'274px'}">{{options.menuShown==true?'<':'>'}}</button>
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>

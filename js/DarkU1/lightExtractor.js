@@ -110,7 +110,7 @@ addLayer("le", {
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("dn", 11))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("sma", 11))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ep1", 11))
-        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.cb.epicPetEffects[3][2])
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pet", 404)[2])
 
         //punchcards
         player.le.lockedPunchcard = "<img src='resources/Punchcards/lockedPunchcard.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>"
@@ -351,7 +351,7 @@ addLayer("le", {
             onClick() {
                 player.tab = "du"
             },
-            style: { width: '100px', "min-height": '50px', color: "white"  },
+            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #384166"  },
         },
         11: {
             title() { return "<h2>Reset everything in this universe for starmetal alloy.<br>Req: " + format(player.le.starmetalAlloyReq) + " Points" },
@@ -365,12 +365,16 @@ addLayer("le", {
 
                 player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
             },
-            style: { width: '400px', "min-height": '100px', color: "white" },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
         12: {
             title() { return "<h2>Return back to the domain of singularity." },
-            canClick() { return true },
-            unlocked() { return player.le.starmetalAlloyToGet.gte(1) },
+            canClick() { return player.le.starmetalAlloyToGet.gte(1) },
+            unlocked() { return true },
             onClick() {
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
@@ -401,7 +405,11 @@ addLayer("le", {
         
                     layers.le.generateSelection();
             },
-            style: { width: '400px', "min-height": '100px', color: "white" },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
 
         //Selection
@@ -417,7 +425,7 @@ addLayer("le", {
 
                 layers.le.generateSelection();
             },
-            style: { width: '200px', "min-height": '50px', color: "white" },
+            style: { width: "200px", minHeight: "50px", color: "white", border: "2px solid #384166", borderRadius: "10px" },
         },
         21: {
             title() { return player.le.punchcardImages[player.le.selectedPunchcards[0]] },
@@ -453,7 +461,11 @@ addLayer("le", {
             onClick() {
                 player.le.activePunchcardIndex = player.le.activePunchcardIndex.sub(1)
             },
-            style: { width: '100px', "min-height": '100px', color: "white" },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", border: "2px solid #384166", borderRight: "1px solid #384166", borderRadius: "15px 0px 0px 15px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
         },
         25: {
             title() { return "<h3>Increase" },
@@ -462,7 +474,11 @@ addLayer("le", {
             onClick() {
                 player.le.activePunchcardIndex = player.le.activePunchcardIndex.add(1)
             },
-            style: { width: '100px', "min-height": '100px', color: "white" },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", border: "2px solid #384166", borderLeft: "1px solid #384166", borderRadius: "0px 15px 15px 0px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
         },
         26: { //this is just an image lmao
             title() { return player.le.punchcardImages[player.le.activePunchcards[player.le.activePunchcardIndex]] },
@@ -627,7 +643,11 @@ addLayer("le", {
                 player.le.punchcardsLevels[player.le.punchcardIndex] = player.le.punchcardsLevels[player.le.punchcardIndex].add(1)
                 player.le.punchcardsXP[player.le.punchcardIndex] = player.le.punchcardsXP[player.le.punchcardIndex].sub(player.le.punchcardsXPReq[player.le.punchcardIndex])
             },
-            style: { width: '150px', "min-height": '50px', color: "white" },
+            style() {
+                let look = {width: "150px", minHeight: "50px", borderRadius: "10px", color: "white", border: "2px solid #384166"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
     },
     starmetalReset() {
@@ -660,11 +680,14 @@ addLayer("le", {
         player.dg.buyables[13] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
-        for (let i = 0; i < player.dgr.grassPlots.length; i++)
-        {
-            for (let j = 0; j < player.dgr.grassPlots[i].length; j++)
-            {
-                player.dgr.grassPlots[i][j] = new Decimal(0)
+        for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
+            setGridData("dgr", i, new Decimal(0))
+
+            // Increase i value
+            if (i % tmp.dgr.grid.rows == 0) {
+                i = i+(101-tmp.dgr.grid.rows)
+            } else {
+                i++
             }
         }
 
@@ -705,11 +728,14 @@ addLayer("le", {
         player.dg.buyables[13] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
-        for (let i = 0; i < player.dgr.grassPlots.length; i++)
-        {
-            for (let j = 0; j < player.dgr.grassPlots[i].length; j++)
-            {
-                player.dgr.grassPlots[i][j] = new Decimal(0)
+        for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
+            setGridData("dgr", i, new Decimal(0))
+
+            // Increase i value
+            if (i % tmp.dgr.grid.rows == 0) {
+                i = i+(101-tmp.dgr.grid.rows)
+            } else {
+                i++
             }
         }
 
@@ -726,8 +752,7 @@ addLayer("le", {
         player.dn.buyables[13] = new Decimal(0)
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Ranked Darkness",
             unlocked() { return true },
             description: "Unlocks Ranks.",
@@ -735,12 +760,13 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
-        12:
-        {
+        12: {
             title: "Darked Rankness",
             unlocked() { return true },
             description: "Divides rank requirements by /50.",
@@ -748,8 +774,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         13:
@@ -761,8 +789,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         14:
@@ -774,8 +804,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         15:
@@ -787,8 +819,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         16:
@@ -800,8 +834,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         17:
@@ -813,8 +849,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         18:
@@ -826,8 +864,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         19:
@@ -839,8 +879,10 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         21:
@@ -852,34 +894,40 @@ addLayer("le", {
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         22:
         {
-            title: "Dark Auto III",
+            title: "Dark Grass",
             unlocked() { return hasUpgrade("sma", 16) },
             description: "Unlock Dark Grass.",
             cost: new Decimal(1e36),
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
         23:
         {
-            title: "Dark Auto III",
+            title: "Normality",
             unlocked() { return hasUpgrade("sma", 17) },
             description: "Unlock Normality.",
             cost: new Decimal(1e48),
             currencyLocation() { return player.du },
             currencyDisplayName: "Dark Celestial Points",
             currencyInternalName: "points",
-            style: { 
-                color: "white",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
             }
         },
     },
@@ -895,143 +943,160 @@ addLayer("le", {
             title: "Log 1",
             body() { return "Log 1: My team and I were on an expedition to enter the Celestial Kingdom. It was going decently until one night, I had a very strange dream. All I could remember from that dream was hearing maniacal laughter. However, when we woke up, we were transported to a new dimension. I am going to keep track of the information I find in this new dimension here." },
             unlocked() { return player.le.punchcardIndex.eq(0) },
+            style: {border: "2px solid #384166"},
         },
         2: {
             title: "Log 2",
             body() { return "Log 2: We have stumbled upon a peculiar planet. It reminds me of Earth, but something is off. All the trees and grass are red. The river flows with a viscous crimson liquid. Not a single animal in sight. Something about this place puts me off." },
-            unlocked() { return player.le.punchcardIndex.eq(1) },      
+            unlocked() { return player.le.punchcardIndex.eq(1) },
+            style: {border: "2px solid #384166"},
         },
         3: {
             title: "Log 3",
             body() { return "Log 3: We see ancient ruins of what appears to have been built by a civilization that was once here. They seemed to be quite advanced. A lot of the infrastructure held up pretty well. Our carbon dating suggests that the structures are over twenty thousand years old. I wonder what could have ever happened to this civilization." },
-            unlocked() { return player.le.punchcardIndex.eq(2) },      
+            unlocked() { return player.le.punchcardIndex.eq(2) },
+            style: {border: "2px solid #384166"},
         },
         4: {
             title: "Log 4",
             body() { return "Log 4: One of my colleagues has found strange spherical devices that emit high levels of radiation. We don't have the protective gear to go near them, but that is something to keep in mind. I don't think we can find a way home any time soon, so we have to call this strange dimension home for the time being. We must stay calm and collected." },
-            unlocked() { return player.le.punchcardIndex.eq(3) },      
+            unlocked() { return player.le.punchcardIndex.eq(3) },
+            style: {border: "2px solid #384166"},
         },
         5: {
             title: "Log 5",
             body() { return "Log 5: It has been over a week of staying in this dimension. We have made a couple of observations. Days are exactly 24 hours long, and the water in rivers and oceans seems to be corrosive, but we have been able to find a plethora of fruits and vegetables that could sustain us with safe water and nutrients. We will live. We will make it out of here alive. We will find the celestial that has trapped us here, and we will defeat it. I have defeated a celestial before, so I will either win or die trying!" },
-            unlocked() { return player.le.punchcardIndex.eq(4) },      
+            unlocked() { return player.le.punchcardIndex.eq(4) },
+            style: {border: "2px solid #384166"},
         },
         6: {
             title: "Log 6",
             body() { return "Log 6: We found more strange spherical devices, but these don't emit radiation. It emits a strange celestial energy to boost superphysical values. Strange… These devices must have been made by celestials to make them stronger. We don't see any celestial hunter brand markings on it, so it must have been made by celestials. We must do more investigations." },
-            unlocked() { return player.le.punchcardIndex.eq(5) },      
+            unlocked() { return player.le.punchcardIndex.eq(5) },
+            style: {border: "2px solid #384166"},
         },
         7: {
             title: "Log 7",
             body() { return "Log 7: We have seen what these devices are capable of. My colleagues and I have tested them out. It emits a strange superphysical power that none of us have ever been aware of. This power seems to be condensed in what appears to be a singularity. Each device is capable of holding a unique fuel source, or a superphysical value that it can boost." },
-            unlocked() { return player.le.punchcardIndex.eq(6) },      
+            unlocked() { return player.le.punchcardIndex.eq(6) },
+            style: {border: "2px solid #384166"},
         },
         8: {
             title: "Log 8",
             body() { return "Log 8: It has been three weeks now, and we have set up a couple of camps and started farming as well. I don't know why but I can feel a great sense of unease, but that is probably just my homesickness. Tomorrow we will check out one of the largest ruined buildings that we have found. Maybe we can find secrets to this civilization there." },
-            unlocked() { return player.le.punchcardIndex.eq(7) },      
+            unlocked() { return player.le.punchcardIndex.eq(7) },
+            style: {border: "2px solid #384166"},
         },
         9: {
             title: "Log 9",
             body() { return "Log 9: This ruined building is a temple that must have been used by whoever lived here. Many strange symbols are present, and we speculate that they are celestial symbols. Did this civilization worship celestials? Did celestials destroy this civilization?" },
-            unlocked() { return player.le.punchcardIndex.eq(8) },      
+            unlocked() { return player.le.punchcardIndex.eq(8) },
+            style: {border: "2px solid #384166"},
         },
         10: {
             title: "Log 10",
             body() { return "Log 10: Further in the temple, we found strange engravings on the floor. There were symbols of dice, stars, rockets, and staircases. In the center, there seemed to be eight torches, with what appeared to be different celestial symbols carved into them. All eight torches surround what appears to be a circle with a dot in the center. Could this be a way out?" },
-            unlocked() { return player.le.punchcardIndex.eq(9) },      
+            unlocked() { return player.le.punchcardIndex.eq(9) },
+            style: {border: "2px solid #384166"},
         },
         11: {
             title: "Log 11",
             body() { return "Log 11: Good news. We have finally detected something. It appears that another group was sent out to save us, and they had sent us a signal. Thank goodness the corporation finally figured out that we were missing, and that they didn't presume us dead. They somehow managed to track us, but I am unsure of how. I am just glad that we are getting saved." },
-            unlocked() { return player.le.punchcardIndex.eq(10) },      
+            unlocked() { return player.le.punchcardIndex.eq(10) },
+            style: {border: "2px solid #384166"},
         },
         12: {
             title: "Log 12",
             body() { return "Log 12: They are here. My good friends Kres, Sel, and Nav are here. They came with a lot of supplies and materials that can help us stay here longer, as well as find out more about this place. The bad news is that they are also stuck here with us. None of the superphysical transportation devices are working. The only way we can figure out if we can ever get out of here is by summoning a celestial." },
-            unlocked() { return player.le.punchcardIndex.eq(11) },      
+            unlocked() { return player.le.punchcardIndex.eq(11) },
+            style: {border: "2px solid #384166"},
         },
         13: {
             title: "Log 13",
             body() { return "Log 13: On a recent expedition, we found three logs that have supposedly been written by the final leader of the civilization that has perished. We found it in a tall building on the top of a mountain. This is a massive breakthrough. We know how this civilization fell. They were defeated by a celestial named Matos. But one thing stands out. Matos has the power to destroy superphysical barriers, so summoning him would give us a way to get out of here. Plus, we are a pretty strong team. Our powers combined can defeat Matos, or at least resist his power well enough. Let's see what the others think." },
-            unlocked() { return player.le.punchcardIndex.eq(12) },      
+            unlocked() { return player.le.punchcardIndex.eq(12) },
+            style: {border: "2px solid #384166"},
         },
         14: {
             title: "Log 14",
             body() { return "Log 14: They agreed. On the base of the tower, there is an input for the five singularity cores, and the five fully powered singularity cores are there as well. It's as if they were preparing us to summon Matos. Thankfully, Kres and his group brought superphysical fighting gear with them, so we should be able to fight Matos. Turns out the singularity cores were the devices that we had found earlier, and the ones that are prepared here are the strongest variant of singularity cores. We slowly lodge them in, and wait for something to happen. If whoever wrote the logs I found in the building is reading this, I'm sorry for not listening to your warning, but this is for the greater good." },
-            unlocked() { return player.le.punchcardIndex.eq(13) },      
+            unlocked() { return player.le.punchcardIndex.eq(13) },
+            style: {border: "2px solid #384166"},
         },
         15: {
             title: "Log 15",
             body() { return "Log 15: Help. Matos has murdered four teammates. Me and Kres are hiding right now. When we summoned Matos, the sun instantly turned into a strange eclipse. I have been severely wounded. I don't think I'm going to make it. A strange smoke being has emerged from the center of the mountain and started attacking Matos. It seems to be friendly. If I die, I won't have any regrets. I lived a long and powerful life. I have defeated a celestial before. That is something most people in my line of field can only dream of doing. Well, that's it. Hope Kres and the others make it out. Goodbye." },
-            unlocked() { return player.le.punchcardIndex.eq(14) },      
+            unlocked() { return player.le.punchcardIndex.eq(14) },
+            style: {border: "2px solid #384166"},
         },
         16: {
             title: "Log X1",
             body() { return "Log X1: It's the end. All of our attempts to please the celestials have failed. No temple is big enough to satisfy their needs. Our cities have grown so large yet so dormant. People are dying. People are suffering.  Every day, large powerful cores of energy strike us down every second. We did everything we could. I don't see a point in continuing." },
-            unlocked() { return player.le.punchcardIndex.eq(15) },      
+            unlocked() { return player.le.punchcardIndex.eq(15) },
+            style: {border: "2px solid #384166"},
         },
         17: {
             title: "Log X2",
             body() { return "Log X2: It has a name. Its name is Matos. They are responsible for all our torment and tragedy. I was there. I witnessed its true physical form. He is made out of starmetal alloy, like the ones we use in our technology, but much more powerful and concentrated. I understand what is happening. Our civilization has created a celestial. The poor conditions and quality of life throughout these years have led to anger, suffering, despair, and pain, and all of these harsh emotions and conflicts have led to the creation of one, angry, beast of a celestial. Our creator celestials have forgotten about us. We are a failure of a civilization." },
-            unlocked() { return player.le.punchcardIndex.eq(15) },      
+            unlocked() { return player.le.punchcardIndex.eq(15) },
+            style: {border: "2px solid #384166"},
         },
         18: {
             title: "Log X3",
             body() { return "Log X3: This is it. My final message. As a leader of this civilization, I must put out a message. I don't know who will be reading this. Shoot, I don't know if anyone will ever be reading this. But I have things to say, and I better say them now. If you are reading this, this civilization is long gone. However, the threat of Matos remains. He has the power to destroy full civilizations, manipulate technology, and break superphysical barriers. I've somehow managed to seal him away using all of my remaining power, but he will inevitably return when you fully power up five singularity cores. No matter what happens, don't let him escape. It's for the best that he remains in here." },
-            unlocked() { return player.le.punchcardIndex.eq(15) },      
+            unlocked() { return player.le.punchcardIndex.eq(15) },
+            style: {border: "2px solid #384166"},
         },
     },
     microtabs: {
         stuff: {
             "Lore": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Long before the time of Matos, a civilization of humans lived in the domain of singularity.<br> They extracted the power of the sun using superphysical values.<br> They built giant machines that absorbed all of the suns light.<br> Eventually, their machines grew so large that it obstructed the sky, and polluted the atmosphere.<br> This caused the whole world to be a gloomy, dark, and dystopian wasteland.<br> In the pursuit of light, one must follow through with darkness." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["infobox", 1]]],
-                    ["row", [["infobox", 2]]],
-                    ["row", [["infobox", 3]]],
-                    ["row", [["infobox", 4]]],
-                    ["row", [["infobox", 5]]],
-                    ["row", [["infobox", 6]]],
-                    ["row", [["infobox", 7]]],
-                    ["row", [["infobox", 8]]],
-                    ["row", [["infobox", 9]]],
-                    ["row", [["infobox", 10]]],
-                    ["row", [["infobox", 11]]],
-                    ["row", [["infobox", 12]]],
-                    ["row", [["infobox", 13]]],
-                    ["row", [["infobox", 14]]],
-                    ["row", [["infobox", 15]]],
-                    ["row", [["infobox", 16]]],
-                    ["row", [["infobox", 17]]],
-                    ["row", [["infobox", 18]]],
-
+                    ["infobox", 1],
+                    ["infobox", 2],
+                    ["infobox", 3],
+                    ["infobox", 4],
+                    ["infobox", 5],
+                    ["infobox", 6],
+                    ["infobox", 7],
+                    ["infobox", 8],
+                    ["infobox", 9],
+                    ["infobox", 10],
+                    ["infobox", 11],
+                    ["infobox", 12],
+                    ["infobox", 13],
+                    ["infobox", 14],
+                    ["infobox", 15],
+                    ["infobox", 16],
+                    ["infobox", 17],
+                    ["infobox", 18],
                 ]
 
             },
             "Main": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
-         ["raw-html", function () { return "You will gain +" + formatWhole(player.le.starmetalAlloyToGetTrue) + " starmetal alloy when you leave." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You will gain +" + formatWhole(player.le.starmetalAlloyToGetToGet) + " starmetal alloy to get on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["blank", "25px"],
+                    ["raw-html", function () { return "You will gain +" + formatWhole(player.le.starmetalAlloyToGetTrue) + " starmetal alloy when you leave." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain +" + formatWhole(player.le.starmetalAlloyToGetToGet) + " starmetal alloy to get on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                     ["row", [["clickable", 11]]],
+                    ["blank", "25px"],
                     ["row", [["clickable", 12]]],
-
-         ["blank", "25px"],
+                    ["blank", "25px"],
                 ]
 
             },
             "Upgrades": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -1045,30 +1110,29 @@ addLayer("le", {
                         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                         ["row", [["upgrade", 17],]],
                     ]]],
-
                 ]
 
             },
             "Punchcard Selection": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return hasUpgrade("sma", 14) },
                 content:
                 [
-                    ["blank", "25px"],            
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You will gain punchcard selections every time you reset for starmetal alloy." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],            
+                    ["blank", "25px"],
                     ["raw-html", function () { return player.le.storedSelections.gt(0) ? "Selected Card: " + player.le.punchcardNames[player.le.selectedPunchcards[player.le.selectionIndex]] : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.le.storedSelections.gt(0) ? player.le.punchcardsEffectText[player.le.selectedPunchcards[player.le.selectionIndex]] + format(player.le.punchcardsEffect[player.le.selectedPunchcards[player.le.selectionIndex]]) +  player.le.punchcardsEffectText2[player.le.selectedPunchcards[player.le.selectionIndex]] : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],            
+                    ["blank", "25px"],
                     ["row", [["clickable", 21], ["clickable", 22], ["clickable", 23],]],   
-                    ["blank", "25px"],            
+                    ["blank", "25px"],
                     ["raw-html", function () { return "You have " + formatWhole(player.le.storedSelections) + " punchcard selections." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],     
-                    ["blank", "25px"],            
+                    ["blank", "25px"],
                     ["row", [["clickable", 20]]],   
                 ]
             },
             "Punchcard Collection": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return hasUpgrade("sma", 14) },
                 content:
                 [
@@ -1082,7 +1146,7 @@ addLayer("le", {
                 ]
             },
             "All Punchcards": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { border: "2px solid #384166", borderRadius: "10px" } },
                 unlocked() { return hasUpgrade("sma", 14) },
                 content:
                 [
@@ -1103,7 +1167,7 @@ addLayer("le", {
         },
         cards: {
             "Common": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #646464", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -1113,7 +1177,7 @@ addLayer("le", {
 
             },
             "Rare": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #644B00", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -1124,7 +1188,7 @@ addLayer("le", {
 
             },
             "Epic": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #02345C", borderRadius: "10px" } },
                 unlocked() { return hasUpgrade("sma", 17) },
                 content:
                 [

@@ -65,7 +65,7 @@
             style: { width: '100px', "min-height": '50px' },
         },
         11: {
-            title() { return "<h3>Reset previous content except perks for anonymity. (based on replicanti points)" },
+            title() { return "<h2>Reset previous content except perks for anonymity.</h2><br><h3>(based on replicanti points)</h3>" },
             canClick() { return player.an.anonymityToGet.gte(1) },
             unlocked() { return true },
             onClick() {
@@ -76,7 +76,7 @@
                 player.ar.tetrPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
+            style: { width: "400px", minHeight: "100px", borderRadius: "15px"},
         },
     },
     bars: {
@@ -86,13 +86,19 @@
             width: 400,
             height: 25,
             progress() {
-                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                } else {
+                    return new Decimal(1)
+                }
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
-                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                } else {
+                    return "<p style='color:red'>[HARDCAPPED]</p>"
+                }
             },
         },
     },
@@ -251,16 +257,10 @@
             style: { width: '150px', hesight: '100px', },
         },
     },
-    buyables: {
-
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -277,7 +277,6 @@
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                 ]
-
             },
         },
     },
@@ -288,6 +287,6 @@
         ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 14) }
 })

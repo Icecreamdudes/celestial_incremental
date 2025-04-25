@@ -300,6 +300,7 @@
             onClick() {
                 layers.d.diceRoll();
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '100px', "min-height": '100px', borderRadius: "10px" },
         },
         12: {
@@ -309,7 +310,7 @@
             unlocked() { return true },
             onClick() {
                 let riggy = false
-                if (getRandomInt(3) == 0) {
+                if (getRandomInt(2) == 0) {
                     player.d.previousBoosterRoll = player.d.currentBoosterRoll
                     player.d.currentBoosterRoll = player.d.rigIndex
                     riggy = true
@@ -346,6 +347,7 @@
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "150px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
@@ -1048,7 +1050,7 @@
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["clickable", 11]]],
                     ["blank", "25px"],
-                    ["style-row", [
+                    ["style-column", [
                         ["raw-html", function () { return "You are rolling a " + formatWhole(player.d.diceSides) + ' sided dice.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Current rolls: " + player.d.rollText + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],    

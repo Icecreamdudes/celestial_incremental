@@ -606,6 +606,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[0].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -635,6 +636,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[1].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -664,6 +666,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[2].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -693,6 +696,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[3].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -722,6 +726,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[4].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -751,6 +756,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[5].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -780,6 +786,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[6].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -810,6 +817,7 @@
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[7].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#094599" : look.backgroundColor = "#bf8f8f"
@@ -828,6 +836,7 @@
                 layers.cb.petButton1();
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[0].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -844,6 +853,7 @@
                 layers.cb.petButton2();
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[1].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -860,6 +870,7 @@
                 layers.cb.petButton3();
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[2].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -878,6 +889,7 @@
                 player.cb.XPBoost = player.cb.XPBoost.sub(0.04)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[3].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -896,6 +908,7 @@
                 player.cb.XPBoost = player.cb.XPBoost.sub(0.2)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[4].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -914,6 +927,7 @@
                 player.cb.XPBoost = player.cb.XPBoost.sub(2)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[5].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -930,6 +944,7 @@
                 layers.cb.petButton7();
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyPetButtonBase[6].mul(player.ca.canteEnergyMult))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -956,6 +971,7 @@
                 player.pet.petButtonTimer[0] = tmp.pet.levelables[301].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[301].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -980,6 +996,7 @@
                 player.pet.petButtonTimer[1] = tmp.pet.levelables[302].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[302].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1004,6 +1021,7 @@
                 player.pet.petButtonTimer[2] = tmp.pet.levelables[303].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[303].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1028,6 +1046,7 @@
                 player.pet.petButtonTimer[3] = tmp.pet.levelables[304].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[304].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1052,6 +1071,7 @@
                 player.pet.petButtonTimer[4] = tmp.pet.levelables[305].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[305].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1076,6 +1096,7 @@
                 player.pet.petButtonTimer[5] = tmp.pet.levelables[306].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[306].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1100,6 +1121,7 @@
                 player.pet.petButtonTimer[6] = tmp.pet.levelables[307].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[307].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1124,6 +1146,7 @@
                 player.pet.petButtonTimer[7] = tmp.pet.levelables[308].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[308].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1148,6 +1171,7 @@
                 player.pet.petButtonTimer[8] = tmp.pet.levelables[309].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[309].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#A2D800" : look.backgroundColor = "#bf8f8f"
@@ -1303,6 +1327,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1344,6 +1369,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1385,6 +1411,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1426,6 +1453,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1467,6 +1495,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1508,6 +1537,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1549,6 +1579,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1590,6 +1621,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1631,6 +1663,7 @@
                 }
                 player.cb.automationShards = player.cb.automationShards.add(amt)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1659,6 +1692,7 @@
                     player.cb.pointAutomationAllocation[0] = player.cb.pointAutomationAllocation[0].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1686,6 +1720,7 @@
                     player.cb.pointAutomationAllocation[1] = player.cb.pointAutomationAllocation[1].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1713,6 +1748,7 @@
                     player.cb.pointAutomationAllocation[2] = player.cb.pointAutomationAllocation[2].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1740,6 +1776,7 @@
                     player.cb.pointAutomationAllocation[3] = player.cb.pointAutomationAllocation[3].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1767,6 +1804,7 @@
                     player.cb.pointAutomationAllocation[4] = player.cb.pointAutomationAllocation[4].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1794,6 +1832,7 @@
                     player.cb.pointAutomationAllocation[5] = player.cb.pointAutomationAllocation[5].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1821,6 +1860,7 @@
                     player.cb.pointAutomationAllocation[6] = player.cb.pointAutomationAllocation[6].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1848,6 +1888,7 @@
                     player.cb.pointAutomationAllocation[7] = player.cb.pointAutomationAllocation[7].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -1855,7 +1896,7 @@
                 return look
             },
         },
-        1108: {
+        1109: {
             title() { return "+" },
             canClick() { return player.cb.automationShards.gte(1) },
             unlocked() { return true },
@@ -1875,6 +1916,7 @@
                     player.cb.pointAutomationAllocation[8] = player.cb.pointAutomationAllocation[8].add(amt)
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
                 this.canClick() ? look.color = "white" : look.color = "gray"
@@ -2560,7 +2602,7 @@
             currency() { return player.cb.paragonShards},
             pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id)},
-            unlocked() { return player.ev.evolutionsUnlocked[9] },
+            unlocked() { return false },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -2594,7 +2636,7 @@
             currency() { return player.cb.paragonShards},
             pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id)},
-            unlocked() { return player.ev.evolutionsUnlocked[9] },
+            unlocked() { return false },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

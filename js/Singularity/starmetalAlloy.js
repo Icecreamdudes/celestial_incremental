@@ -155,6 +155,7 @@
                 player.coa.coreStarmetalValue[player.sma.coreIndex] = player.coa.coreStarmetalValue[player.sma.coreIndex].add(player.sma.primePrice)
                 player.coa.corePrimes[player.sma.coreIndex] = player.coa.corePrimes[player.sma.coreIndex].add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: "15px" },
         },
         13: {
@@ -538,18 +539,18 @@
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Starmetal Booster I"
+                return "Starmetal Booster I"
             },
             display() {
                 return "which are boosting starmetal alloy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " SMA"
             },
-            buy() {
-                if (player.sma.smaMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -572,18 +573,18 @@
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/20<br/>Starmetal Booster II"
+                return "Starmetal Booster II"
             },
             display() {
                 return "which are boosting starmetal alloy growth rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " SMA"
             },
-            buy() {
-                if (player.sma.smaMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -606,18 +607,18 @@
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(2).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Radiation Softcap Extender"
+                return "Radiation Softcap Extender"
             },
             display() {
                 return "which are extending the radiation softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " SMA"
             },
-            buy() {
-                if (player.sma.smaMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -640,18 +641,18 @@
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(3).add(1) },
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Singularity Dimension Booster"
+                return "Singularity Dimension Booster"
             },
             display() {
                 return "which are boosting all singularity dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " SMA"
             },
-            buy() {
-                if (player.sma.smaMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -668,13 +669,9 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "ENTER": {
@@ -715,7 +712,8 @@
                     ["row", [["upgrade", 17],]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],]],
-                    
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
             },
             "Auto Singularity": {
@@ -738,17 +736,6 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 15], ["clickable", 16]]],
                     ["row", [["clickable", 13], ["clickable", 14]]],
-                ]
-            },
-            "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasUpgrade("sma", 105) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
                 ]
             },
         },

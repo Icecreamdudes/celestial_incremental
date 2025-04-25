@@ -164,6 +164,7 @@ addLayer("pet", {
             onClick() {
                 buyLevelable("pet", layers.pet.levelables.index)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "100px", minHeight: "40px", borderRadius: "0px", fontSize: '8px'}
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.pet.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
@@ -178,6 +179,7 @@ addLayer("pet", {
                 setLevelableXP("pet", layers.pet.levelables.index, getLevelableXP("pet", layers.pet.levelables.index).sub(1))
                 player.ev4.offerings = player.ev4.offerings.add(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: '100px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -193,6 +195,7 @@ addLayer("pet", {
                 setLevelableXP("pet", layers.pet.levelables.index, new Decimal(0))
                 player.ev4.offerings = player.ev4.offerings.add(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(amount.mul(player.ev4.offeringsBase)))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: '100px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -233,6 +236,7 @@ addLayer("pet", {
                 player.pet.petButtonTimer[layers.pet.levelables.index - 301] = tmp.pet.levelables[layers.pet.levelables.index].pointCooldown
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[layers.pet.levelables.index].canteBase.mul(player.ca.canteEnergyMult))    
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: '125px', minHeight: '40px', color: "black", borderRadius: '0px', fontSize: '8px'}
                 this.canClick() ? look.backgroundColor = "#4e7cff" : look.backgroundColor = "#bf8f8f"
@@ -393,6 +397,7 @@ addLayer("pet", {
                     layers.pet.rarePetBanner()
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: '200px', minHeight: '50px', borderRadius: '30px / 15px'}
                 this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
@@ -500,6 +505,7 @@ addLayer("pet", {
 
                 layers.pet.evoBanner();
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "225px", minHeight: "50px", borderRadius: "30px / 15px" },
         },
         122: {
@@ -513,6 +519,7 @@ addLayer("pet", {
 
                 layers.pet.paragonBanner();
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "225px", minHeight: "50px", borderRadius: "30px / 15px" },
         },
         // PET SHOP
@@ -524,6 +531,7 @@ addLayer("pet", {
                 layers.pet.resetPrices();
                 player.pet.shopResetTimer = player.pet.shopResetTimerMax
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "97px", minHeight: "122px", borderRadius: "0px", border: "0px"},
         },
         1002: {
@@ -551,6 +559,7 @@ addLayer("pet", {
                 }
                 addLevelableXP("pet", player.pet.shopIndex, 1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "97px", minHeight: "122px", borderRadius: "0px", border: "0px"},
         },
         1003: {
@@ -582,6 +591,7 @@ addLayer("pet", {
                     if (player.pet.shopIndex == 16) layers.cb.petButton6();
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "97px", minHeight: "122px", borderRadius: "0px", border: "0px"},
         },
         1004: {

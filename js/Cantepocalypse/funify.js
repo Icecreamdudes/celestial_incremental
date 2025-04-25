@@ -299,7 +299,6 @@
             },
             style: { width: '75px', "min-height": '50px', }
         },
-        
         11: {
             title() { return "<h2>Reset all alt-uni 1 content for fun</h2><br><h3>(Based on oil)</h3>" },
             canClick() { return player.fu.funToGet.gte(1) },
@@ -308,8 +307,8 @@
                 player.fu.funifyPause = new Decimal(4)
                 player.fu.fun = player.fu.fun.add(player.fu.funToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
-
         },
         12: {
             title() { return "<h3>LETS HAVE SOME FUN :)<br>(Req: 100 fun)" },
@@ -509,6 +508,7 @@
                 }
                 player.fu.jocusEssence = player.fu.jocusEssence.add(player.fu.jocusEssenceToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '75px', borderRadius: '15px' },
 
         },

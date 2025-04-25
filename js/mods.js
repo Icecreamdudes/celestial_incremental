@@ -198,6 +198,7 @@
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },

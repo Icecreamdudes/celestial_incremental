@@ -220,6 +220,7 @@
                 layers.bi.breakInfinities()
                 player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         12: {

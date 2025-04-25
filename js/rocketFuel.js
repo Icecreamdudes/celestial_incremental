@@ -162,6 +162,7 @@
                 player.rf.rocketFuelPause = new Decimal(3)
                 player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "225px", minHeight: "150px", borderRadius: "12px 0px 0px 0px"}
                 this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"

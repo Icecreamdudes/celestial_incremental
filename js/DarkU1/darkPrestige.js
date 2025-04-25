@@ -67,6 +67,7 @@ addLayer("dp", {
                 player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet)
                 player.dp.prestigePause = new Decimal(10)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #102e67", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"

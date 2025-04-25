@@ -55,6 +55,7 @@ addLayer("dn", {
                 player.dn.normality = player.dn.normality.add(player.dn.normalityToGet)
                 player.dn.normalityPause = new Decimal(10)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #33662c", margin: "1px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"

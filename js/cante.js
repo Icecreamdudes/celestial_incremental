@@ -204,6 +204,7 @@
                 player.ca.galaxyDust = player.ca.galaxyDust.add(player.ca.galaxyDustToGet)
                 player.ca.replicanti = new Decimal(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
@@ -219,6 +220,7 @@
                 player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.add(1)
                 player.ca.replicanti = new Decimal(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
@@ -242,6 +244,7 @@
             onClick() {
                 layers.ca.convertRememberanceCore();
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         16: {

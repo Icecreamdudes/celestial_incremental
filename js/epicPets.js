@@ -105,6 +105,7 @@
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
@@ -125,6 +126,7 @@
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
@@ -145,6 +147,7 @@
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(4)
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
     },
@@ -453,6 +456,7 @@ addLayer("ep1", {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.04);
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
@@ -473,6 +477,7 @@ addLayer("ep1", {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.1);
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
@@ -493,6 +498,7 @@ addLayer("ep1", {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.2);
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
     },
@@ -809,6 +815,7 @@ addLayer("ep2", {
                     player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(1);
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
@@ -838,6 +845,7 @@ addLayer("ep2", {
                     player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(2.5);
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
@@ -867,6 +875,7 @@ addLayer("ep2", {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(4);
                     }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
     },

@@ -276,6 +276,7 @@
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.sub(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "125px", minHeight: "60px", borderRadius: "0px 0px 0px 10px"}
                 this.canClick() ? look.backgroundColor = "#047ce4" : look.backgroundColor = "#bf8f8f"
@@ -289,6 +290,7 @@
             onClick() {
                 player.g.moonstoneLevel = player.g.moonstoneLevel.add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "125px", minHeight: "60px", borderRadius: "0px 0px 10px 0px"}
                 this.canClick() ? look.backgroundColor = "#047ce4" : look.backgroundColor = "#bf8f8f"

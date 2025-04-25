@@ -260,6 +260,7 @@
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },

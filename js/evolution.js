@@ -1621,6 +1621,7 @@ addLayer("ev2", {
                     player.ev2.petDay = false
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
     },
@@ -1976,6 +1977,7 @@ addLayer("ev8", {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[0])
                 player.ev8.evoButtonTimers[0] = player.ev8.evoButtonTimersMax[0]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
@@ -1986,6 +1988,7 @@ addLayer("ev8", {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[1])
                 player.ev8.evoButtonTimers[1] = player.ev8.evoButtonTimersMax[1]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
@@ -1996,6 +1999,7 @@ addLayer("ev8", {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[2])
                 player.ev8.evoButtonTimers[2] = player.ev8.evoButtonTimersMax[2]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         14: {
@@ -2006,6 +2010,7 @@ addLayer("ev8", {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[3])
                 player.ev8.evoButtonTimers[3] = player.ev8.evoButtonTimersMax[3]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
 
@@ -2018,6 +2023,7 @@ addLayer("ev8", {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[0])
                 player.ev8.paragonButtonTimers[0] = player.ev8.paragonButtonTimersMax[0]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         102: {
@@ -2028,6 +2034,7 @@ addLayer("ev8", {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[1])
                 player.ev8.paragonButtonTimers[1] = player.ev8.paragonButtonTimersMax[1]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         103: {
@@ -2038,6 +2045,7 @@ addLayer("ev8", {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[2])
                 player.ev8.paragonButtonTimers[2] = player.ev8.paragonButtonTimersMax[2]
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
     },
@@ -2282,6 +2290,7 @@ addLayer("ev9", {
                 player.coa.coreStrengths[player.ev9.coreIndex] = new Decimal(-1)
                 player.coa.coreOccupied[player.ev9.coreIndex] = false
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "140px", minHeight: "70px", borderRadius: "10px" },
         },
         101: {
@@ -2499,6 +2508,7 @@ addLayer("ev10", {
                 player.ev10.evoSacrificeCooldownTimer = player.ev10.evoSacrificeCooldownTimerMax
                 player.ev10.activeBoost = new Decimal(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "150px", minHeight: "75px", borderRadius: "10px 0px 0px 10px" },
         },
         12: {
@@ -2513,6 +2523,7 @@ addLayer("ev10", {
                 player.ev10.paragonSacrificeCooldownTimer = player.ev10.paragonSacrificeCooldownTimerMax
                 player.ev10.activeBoost = new Decimal(2)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "150px", minHeight: "75px", borderRadius: "0px 10px 10px 0px" },
         },
     },

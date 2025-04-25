@@ -365,6 +365,7 @@ addLayer("le", {
 
                 player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -461,6 +462,7 @@ addLayer("le", {
             onClick() {
                 player.le.activePunchcardIndex = player.le.activePunchcardIndex.sub(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", border: "2px solid #384166", borderRight: "1px solid #384166", borderRadius: "15px 0px 0px 15px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -474,6 +476,7 @@ addLayer("le", {
             onClick() {
                 player.le.activePunchcardIndex = player.le.activePunchcardIndex.add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", border: "2px solid #384166", borderLeft: "1px solid #384166", borderRadius: "0px 15px 15px 0px"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
@@ -643,6 +646,7 @@ addLayer("le", {
                 player.le.punchcardsLevels[player.le.punchcardIndex] = player.le.punchcardsLevels[player.le.punchcardIndex].add(1)
                 player.le.punchcardsXP[player.le.punchcardIndex] = player.le.punchcardsXP[player.le.punchcardIndex].sub(player.le.punchcardsXPReq[player.le.punchcardIndex])
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "50px", borderRadius: "10px", color: "white", border: "2px solid #384166"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"

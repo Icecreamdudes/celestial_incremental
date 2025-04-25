@@ -190,6 +190,7 @@
                 player.h.hexPointsToGet.push(new Decimal(0))
                 player.h.hexPointsEffect.push(new Decimal(1))
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
@@ -199,6 +200,7 @@
             onClick() {
                 player.h.hexResetIndex = player.h.hexResetIndex.sub(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '100px', "min-height": '100px', borderRadius: '10px 0px 0px 10px' },
         },
         13: {
@@ -208,6 +210,7 @@
             onClick() {
                 player.h.hexResetIndex = player.h.hexResetIndex.add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '100px', "min-height": '100px', borderRadius: '0px 10px 10px 0px' },
         },
         14: {
@@ -217,6 +220,7 @@
             onClick() {
                 layers.h.hexPointReset(player.h.hexResetIndex)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '0px' },
         },
         15: {
@@ -234,6 +238,7 @@
                 player.h.hexPointsEffect.push(new Decimal(1))
                 player.h.automationTier = player.h.automationTier.add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: "15px" },
         },
         16: {
@@ -244,6 +249,7 @@
                 player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet)
                 player.h.ragePowerPause = new Decimal(6)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#ff5555" : look.backgroundColor = "#bf8f8f"

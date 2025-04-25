@@ -187,6 +187,7 @@
                 player.gs.grassSkip = player.gs.grassSkip.add(player.gs.grassSkipToGet)
                 player.gs.grassSkipPause = new Decimal(4)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "406px", minHeight: "105.7px", borderRadius: "0px 15px 15px 0px", border: "3px solid #0c1a36", margin: "-3px"},
         },
     },

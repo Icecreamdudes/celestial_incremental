@@ -116,8 +116,7 @@
 
         player.cs.paragonScrapsEffect = player.cs.paragonScraps.mul(0.6).pow(0.3).add(1)
     },
-    scrapCore()
-    {
+    scrapCore() {
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.cop.processedCoreStarmetalValue)
         player.cop.processedCoreStarmetalValue = new Decimal(0)
 
@@ -194,6 +193,7 @@
 
                 player.cs.paragonScraps = player.cs.paragonScraps.add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '150px', borderRadius: "15px"}
         },
     },

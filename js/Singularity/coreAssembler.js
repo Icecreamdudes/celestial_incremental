@@ -1498,6 +1498,7 @@
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(player.coa.luckLevelUpgradeCost)
                 player.coa.luckLevel = player.coa.luckLevel.add(1)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "100px", minHeight: "35px", height: "30px", borderRadius: "5px" },
         },
         11: {
@@ -1713,6 +1714,7 @@
                 player.coa.corePrimes[player.coa.coreIndex] = new Decimal(0)
                 player.coa.coreOccupied[player.coa.coreIndex] = false
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '140px', "min-height": '70px', borderRadius: '10px' },
         },
 
@@ -1736,8 +1738,8 @@
                 {
                     player.in.infinities = new Decimal(8)
                 }
-
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)', borderRadius: "25px" },
         },
     },

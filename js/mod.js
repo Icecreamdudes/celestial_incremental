@@ -92,7 +92,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added U3 Upgrade 3, which unlocks a Challenge Dice upgrade and keeps T2 dice effects.<br>
 			- Made U3 Milestone 7 keep RBI toggle.<br>
 			- Added a U1 upgrade that improves Pent automation.<br>
-			- Added a Funify upgrade that unlocks bulk grass-skip.<br><br>
+			- Added a Funify upgrade that unlocks bulk grass-skip.<br>
+			- Made many clickables able to be auto-clicked if you hold down left click.<br>
 		Visual Enhancements:<br>
 			- Visually remade almost all buyables.<br>
 			- Visually remade Check Back layer.<br>

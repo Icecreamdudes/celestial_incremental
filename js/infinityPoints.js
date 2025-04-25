@@ -118,6 +118,7 @@
                     layers.bigc.crunch()
                 }
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },

@@ -246,6 +246,7 @@
 
                 player.pe.pests = player.pe.pests.mul(0.9)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
@@ -256,6 +257,7 @@
                 player.gh.steelPause = new Decimal(5)
                 player.gh.steel = player.gh.steel.add(player.gh.steelToGet)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"

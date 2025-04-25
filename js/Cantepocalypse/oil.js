@@ -212,6 +212,7 @@
                 player.oi.oil = player.oi.oil.add(player.oi.oilToGet)
                 player.oi.oilPause = new Decimal(4)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
         14: {
@@ -235,6 +236,7 @@
                 player.oi.linkingPower[4] = new Decimal(0)
                 player.oi.linkingPower[5] = new Decimal(0)
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
     },

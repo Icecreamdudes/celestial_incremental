@@ -716,11 +716,6 @@ addLayer("stats", {
                         ], () => { return !(layerShown('fu') && player.fu.jocusCelestialActivate) ? {display: "none !important"} : getBuyableAmount("fu", 17).eq(0) ? { color: "grey" } : { color: "white" }}],
 
                         ["stat-row", [
-                            "SFRGT Buyable 7",
-                            () => { return "x" + format(buyableEffect("fu", 17))}
-                        ], () => { return !(layerShown('fu') && player.fu.jocusCelestialActivate) ? {display: "none !important"} : getBuyableAmount("fu", 17).eq(0) ? { color: "grey" } : { color: "white" }}],
-
-                        ["stat-row", [
                             "Second Sadness Effect",
                             () => { return "x" + format(player.fu.sadnessEffect2)}
                         ], () => { return !(layerShown('fu') && hasUpgrade("fu", 15)) ? {display: "none !important"} : player.fu.sadnessEffect2.eq(1) ? { color: "grey" } : { color: "white" }}],

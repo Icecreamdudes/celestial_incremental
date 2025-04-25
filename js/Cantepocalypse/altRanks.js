@@ -143,19 +143,11 @@
             },
         },
     },
-    upgrades: {
-
-    },
-    buyables: {
-
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {

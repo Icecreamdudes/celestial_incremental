@@ -309,7 +309,7 @@
             unlocked() { return true },
             onClick() {
                 let riggy = false
-                if (getRandomInt(4) == 0) {
+                if (getRandomInt(3) == 0) {
                     player.d.previousBoosterRoll = player.d.currentBoosterRoll
                     player.d.currentBoosterRoll = player.d.rigIndex
                     riggy = true

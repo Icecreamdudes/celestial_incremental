@@ -26,11 +26,79 @@
         petButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
 
         //pets
+        lockedImg: "<img src='resources/secret.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        petDisplay: ["","","","","","","","",""],
+        petDisplayIndex: new Decimal(0),
+
+        commonPetUnlocks: [false, false, false, false, false, false, false, false, false],
+        commonPetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        commonPetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        commonPetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        commonPetImage: ["<img src='resources/gwaCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        "<img src='resources/eggCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        "<img src='resources/unsmithCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        "<img src='resources/checkpointCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        "<img src='resources/slaxCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        "<img src='resources/spiderCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        "<img src='resources/blobCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>"],
+        commonPetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),],
+            [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),],
+            [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]
+        ],
+
+        uncommonPetDisplay: ["","","","","","","","","",],
+        uncommonPetDisplayIndex: new Decimal(0),
+
+        uncommonPetUnlocks: [false, false, false, false, false, false, false, false, false],
+        uncommonPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
+        uncommonPetAmounts: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
+        uncommonPetReq: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        uncommonPetImage: ["<img src='resources/testeUncommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        ],
+        uncommonPetEffects: [[new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),],
+        [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]
+        , [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]],
+
+        rarePetDisplay: ["","","","","","","",],
+        rarePetDisplayIndex: new Decimal(0),
+
+        rarePetUnlocks: [false, false, false, false, false, false, false],
+        rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        rarePetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        rarePetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
+        rarePetImage: ["<img src='resources/novaRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+            "<img src='resources/diceRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+            "<img src='resources/ufoRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+            "<img src='resources/goofyAhhThingRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
+        ],
+        rarePetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),]],
+
         petPoints: new Decimal(0),
+        rarePetPointBase: [new Decimal(1),new Decimal(0.1),new Decimal(12),new Decimal(180),new Decimal(4),new Decimal(25),new Decimal(0.05), new Decimal(50), new Decimal(90)],
+        rarePetButtonTimersMax: [new Decimal(40), new Decimal(20), new Decimal(600), new Decimal(18000), new Decimal(180), new Decimal(1000), new Decimal(1), new Decimal(4500), new Decimal(8000),],
+        rarePetButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+
+        //epic
+        epicPetUnlocks: [false, false, false, false, false, false,],
+        epicPetFragments: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), /* index 3 is singularity fragments, which are used for epic pets indices 3-5 */],
+        epicPetFragmentReq: [new Decimal(50), new Decimal(40), new Decimal(45), new Decimal(100), new Decimal(100), new Decimal(100),],
+        epicPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
+        epicPetEffects: [[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],
+        [new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],],
+        epicPetImage: ["", "", "",],
+        epicPetDisplay: ["","","",],
+        epicPetDisplayIndex: new Decimal(0),
 
         //legendary
         legendaryPetGems: [new Decimal(0), new Decimal(0), new Decimal(0)],
         //red purple green
+
+        //dice pet
+        lastDicePetRoll: new Decimal(0),
+        dicePetRoll: new Decimal(0),
+        highestDicePetCombo: new Decimal(0),
+        dicePetCombo: new Decimal(0),
+        dicePetPointsGain: new Decimal(0),
 
         evolutionShards: new Decimal(0),
         viewingEvolved: [false, false, false, false, false, false, false, false, false, false, false,],

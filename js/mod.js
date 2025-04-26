@@ -104,7 +104,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Visually remade Dice's Booster Dice tab.<br>
 			- Visually remade Rocket Fuel.<br>
 			- Improved the Settings menu.<br>
-			- Touched up most other layers..<br>
+			- Touched up most other layers.<br><br>
 		Typos & Text Changes:<br>
 			- Improved AU1 Upgrade 8s description.<br>
 			- Clarified that Antimatter Singularity Core effects ignore softcap.<br>

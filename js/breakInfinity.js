@@ -64,6 +64,7 @@
             buyUpgrade("bi", 112)
             buyUpgrade("bi", 113)
             buyUpgrade("bi", 114)
+            buyUpgrade("bi", 115)
         }
     },
     nodeStyle() {
@@ -86,7 +87,8 @@
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("om", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("p", 16))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("rm", 33))
-        player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.cb.uncommonPetEffects[7][2])
+        player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(levelableEffect("pet", 208)[2])
+        player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(levelableEffect("pet", 1101)[1])
         if (hasMilestone("fa", 13)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.fa.milestoneEffect[2])
 
         if (hasUpgrade("bi", 25)) player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet.mul(Decimal.mul(0.04, delta)))
@@ -103,6 +105,64 @@
         if (player.bi.NACinput.gte(0) && player.bi.NACtype) player.bi.NACamount = player.bi.NACinput
         if (player.bi.NACinput.lt(0) && player.bi.NACtype) player.bi.NACamount = new Decimal(1)
 
+        // Autocrunch Functionality
+        if (player.in.infinityPointsToGet.gte(player.bi.IACamount) && player.bi.IACtoggle && !player.bi.IACtype && player.points.gte(1e308)) {
+            if (inChallenge("tad", 11)) {
+                if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
+                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                }
+                if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
+                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                }
+                if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
+                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                }
+            }
+            if (hasUpgrade("bi", 14)) {
+                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+            }
+            if (!hasMilestone("ip", 21)) {
+                player.tab = "bigc"
+            } else {
+                layers.bigc.crunch()
+            }
+        }
+
+        if (player.bi.IACtoggle && player.bi.IACtype) {
+            player.bi.IACtime = player.bi.IACtime.add(onepersec.mul(delta));
+            if (player.bi.IACtime.gte(player.bi.IACamount) && player.points.gte(1e308)) {
+                player.bi.IACtime = new Decimal(0)
+                if (inChallenge("tad", 11)) {
+                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
+                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
+                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                    }
+                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
+                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                    }
+                }
+                if (hasUpgrade("bi", 14)) {
+                        if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                        if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                        if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
+                if (!hasMilestone("ip", 21)) {
+                    player.tab = "bigc"
+                } else {
+                    layers.bigc.crunch()
+                }
+            }
+        }
 
         // Negative Autocrunch Functionality
         if (player.ta.negativeInfinityPointsToGet.gte(player.bi.NACamount) && player.bi.NACtoggle && !player.bi.NACtype && player.ad.antimatter.gte(1e308)) {
@@ -160,7 +220,8 @@
                 layers.bi.breakInfinities()
                 player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet)
             },
-            style: { width: '300px', "min-height": '120px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         12: {
             title() { return "<h2>Break Infinity" },
@@ -169,7 +230,7 @@
             onClick() {
                 player.in.breakInfinity = true
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         13: {
             title() { return "<h2>Fix Infinity" },
@@ -178,7 +239,7 @@
             onClick() {
                 player.in.breakInfinity = false
             },
-            style: { width: '300px', "min-height": '120px' },
+            style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         14: {
             title() { return "<h2>Autocrunch Toggle: On" },
@@ -187,7 +248,7 @@
             onClick() {
                 player.bi.IACtoggle = false
             },
-            style: { width: '300px', "min-height": '80px' },
+            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
         },
         15: {
             title() { return "<h2>Autocrunch Toggle: Off" },
@@ -196,7 +257,7 @@
             onClick() {
                 player.bi.IACtoggle = true
             },
-            style: { width: '300px', "min-height": '80px' },
+            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
         },
         16: {
             title() { return "<h2>Auto Reverse Crunch Toggle: On" },
@@ -205,7 +266,7 @@
             onClick() {
                 player.bi.NACtoggle = false
             },
-            style: { width: '300px', "min-height": '80px' },
+            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
         },
         17: {
             title() { return "<h2>Auto Reverse Crunch Toggle: Off" },
@@ -214,7 +275,7 @@
             onClick() {
                 player.bi.NACtoggle = true
             },
-            style: { width: '300px', "min-height": '80px' },
+            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
         },
         18: {
             title() { return "Amount" },
@@ -223,7 +284,7 @@
             onClick() {
                 player.bi.IACtype = false
             },
-            style: { width: '150px', "min-height": '40px' },
+            style: { width: '150px', "min-height": '40px', borderRadius: '15px 0px 0px 0px' },
         },
         19: {
             title() { return "Time" },
@@ -232,7 +293,7 @@
             onClick() {
                 player.bi.IACtype = true
             },
-            style: { width: '150px', "min-height": '40px' },
+            style: { width: '150px', "min-height": '40px', borderRadius: '0px 15px 0px 0px' },
         },
         21: {
             title() { return "Amount" },
@@ -241,7 +302,7 @@
             onClick() {
                 player.bi.NACtype = false
             },
-            style: { width: '150px', "min-height": '40px' },
+            style: { width: '150px', minHeight: '40px', borderRadius: '15px 0px 0px 0px' },
         },
         22: {
             title() { return "Time" },
@@ -250,7 +311,7 @@
             onClick() {
                 player.bi.NACtype = true
             },
-            style: { width: '150px', "min-height": '40px' },
+            style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
         },
     },
     bars: {
@@ -393,9 +454,9 @@
         },
         24:
         {
-            title: "BI IP Upgrade XII",
+            title: "BI IP Upgrade XIII",
             unlocked() { return true },
-            description: "...",
+            description() { return !hasUpgrade("bi", 24) ? "..." : "Unlocks Cante and new pet evolutions." },
             cost: new Decimal(1e22),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -403,7 +464,7 @@
         },
         25:
         {
-            title: "BI IP Upgrade XIII",
+            title: "BI IP Upgrade XIV",
             unlocked() { return true },
             description: "Raise check back effect to the ^5. (only ^2 in dice), and gain 4% of B.I per second.",
             cost: new Decimal(1e24),
@@ -414,7 +475,7 @@
         },
         26:
         {
-            title: "BI IP Upgrade XIV",
+            title: "BI IP Upgrade XV",
             unlocked() { return true },
             description: "Unlock galaxy dust.",
             cost: new Decimal(1e26),
@@ -424,7 +485,7 @@
         },
         27:
         {
-            title: "BI IP Upgrade XV",
+            title: "BI IP Upgrade XVI",
             unlocked() { return true },
             description: "Unlock a new OTF, realm mods.",
             cost: new Decimal(1e29),
@@ -434,9 +495,9 @@
         },
         28:
         {
-            title: "BI IP Upgrade XVI",
+            title: "BI IP Upgrade XVII",
             unlocked() { return player.ca.unlockedCante },
-            description: "Unlock the ??? (Check Cante).",
+            description() { return !hasUpgrade("bi", 24) ? "Unlock ??? (Check ???)." : !hasUpgrade("bi", 28) ? "Unlock ??? (Check Cante)." : "Unlock Cante's Trials (Check Cante)." },
             cost: new Decimal(1e38),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -585,12 +646,21 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '125px', height: '100px', }
         },
-        114:
-        {
+        114: {
             title: "BI NIP Upgrade XIII",
+            unlocked() { return true },
+            description: "Improve the infinity point formula again.",
+            cost: new Decimal(1e19),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
+        },
+        115: {
+            title: "BI NIP Upgrade XIV",
             unlocked() { return hasMilestone("s", 12) },
             description: "Unlock a new pollinator.",
-            cost: new Decimal(1e20),
+            cost: new Decimal(1e22),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -604,16 +674,16 @@
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Infinity Multiplier"
+                return "Infinity Multiplier"
             },
             display() {
                 return "which are multiplying infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Broken Infinities"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100)
                 let growth = 1.5
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
@@ -636,16 +706,16 @@
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Broken Infinity Multiplier"
+                return "Broken Infinity Multiplier"
             },
             display() {
                 return "which are multiplying broken infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Broken Infinities"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(300)
                 let growth = 1.6
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
@@ -668,16 +738,16 @@
             unlocked() { return true },
             canAfford() { return player.bi.brokenInfinities.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Multiplier"
+                return "Dimension Multiplier"
             },
             display() {
                 return "which are multiplying all antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Broken Infinities"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(700)
                 let growth = 1.65
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.bi.brokenInfinities = player.bi.brokenInfinities.sub(buyonecost)
@@ -705,7 +775,7 @@
     microtabs: {
         stuff: {
             "Broken Infinities": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -714,14 +784,12 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
                 ]
 
             },
             "Break Infinity Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.in.unlockedBreak },
                 content:
                 [
@@ -733,7 +801,7 @@
                     ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
-                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114]]],
+                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -741,8 +809,8 @@
 
             },
             "Autocruncher(s)": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasMilestone("ip", 27) },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return hasMilestone("ip", 27) || (player.s.highestSingularityPoints.gt(0) && player.ev.evolutionsUnlocked[3]) },
                 content:
                 [
                     ["blank", "25px"],

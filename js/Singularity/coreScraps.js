@@ -45,8 +45,8 @@
             player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(player.le.punchcardsPassiveEffect[10]).floor()
             if (hasUpgrade("sma", 102)) player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
             player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(buyableEffect("ep0", 11)).floor()
-            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(player.cb.rarePetEffects[8][1]).floor()
-    } else
+            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
+        } else
         {
             player.cs.coreScrapsToGet = new Decimal(0)
         }
@@ -100,7 +100,7 @@
             player.cs.resourceCoreScrapsToGet = new Decimal(0)
         }
         if (hasUpgrade("sma", 102)) player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
-        player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(player.cb.rarePetEffects[8][1]).floor()
+        player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
 
         for (let i = 0; i < player.cs.resourceCoreScraps.length; i++)
         {
@@ -116,8 +116,7 @@
 
         player.cs.paragonScrapsEffect = player.cs.paragonScraps.mul(0.6).pow(0.3).add(1)
     },
-    scrapCore()
-    {
+    scrapCore() {
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.cop.processedCoreStarmetalValue)
         player.cop.processedCoreStarmetalValue = new Decimal(0)
 
@@ -170,7 +169,7 @@
             onClick() {
                 player.cs.scrapCoreOnReset = true
             },
-            style: { width: '100px', "min-height": '50px', }
+            style: { width: '100px', "min-height": '50px', borderRadius: "10px 0px 0px 10px"}
         },
         5: {
             title() { return "Don't Scrap Core" },
@@ -179,7 +178,7 @@
             onClick() {
                 player.cs.scrapCoreOnReset = false
             },
-            style: { width: '100px', "min-height": '50px', }
+            style: { width: '100px', "min-height": '50px', borderRadius: "0px 10px 10px 0px"}
         },
         6: {
             title() { return "Convert Existing Scraps to Paragon Scraps<br>(Req: 25 core scraps, 2 of each resource specific scraps)" },
@@ -194,7 +193,8 @@
 
                 player.cs.paragonScraps = player.cs.paragonScraps.add(1)
             },
-            style: { width: '300px', "min-height": '150px', }
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '300px', "min-height": '150px', borderRadius: "15px"}
         },
     },
     bars: {
@@ -214,14 +214,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Radiation Output Increaser"
+                return "Radiation Output Increaser"
             },
             display() {
                 return 'which are increasing the radiation output of new cores by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -248,14 +248,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,500<br/>Radiation Increaser"
+                return "Radiation Increaser"
             },
             display() {
                 return 'which are dividing and extending the radiation softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -282,14 +282,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Radiation Value Increaser"
+                return "Radiation Value Increaser"
             },
             display() {
                 return 'which are increasing the radiation value of new cores by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -317,14 +317,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Point Scrap Buyable Booster"
+                return "Point Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising time cube buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rank Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -351,14 +351,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Factor Power Scrap Buyable Booster"
+                return "Factor Power Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising factor buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Factor Power Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -385,14 +385,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Prestige Point Scrap Buyable Booster"
+                return "Prestige Point Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising crystal buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Prestige Point Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -419,14 +419,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Tree Scrap Buyable Booster"
+                return "Tree Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising tree buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Tree Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -453,14 +453,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Grass Scrap Buyable Booster"
+                return "Grass Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising grass and golden grass buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -487,14 +487,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Grasshopper Scrap Buyable Booster"
+                return "Grasshopper Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising SOME grass study and steel buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grasshopper Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -521,14 +521,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Code Experience Scrap Buyable Booster"
+                return "Code Experience Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising mod buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Code Experience Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -555,14 +555,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Dice Point Scrap Buyable Booster"
+                return "Dice Point Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising booster dice and pollinator effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dice Point Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -589,14 +589,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Rocket Fuel Scrap Buyable Booster"
+                return "Rocket Fuel Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising rocket fuel effects and OTF mastery buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rocket Fuel Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -623,14 +623,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Antimatter Scrap Buyable Booster"
+                return "Antimatter Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising the antimatter effect and OTF synergizer and NIP buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Antimatter Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -657,14 +657,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gt(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Infinity Point Scrap Buyable Booster"
+                return "Infinity Point Scrap Buyable Booster"
             },
             display() {
                 return 'which are raising the IP buyable (except doubler) and broken infinity buyables by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Infinity Point Core Scraps'
             },
-            buy() {
-                if (player.cs.coreScrapMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
@@ -691,74 +691,64 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "<div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["clickable", 4], ["clickable", 5]]],
-        ["blank", "25px"],
-        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cs.coreScrapsToGet) + "</h3> core scraps on singularity reset. (Based on strength)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cs.resourceCoreScrapsToGet) + "</h3> resource specific core scraps on singularity reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "(Type is determined from fuel type, and based on amount of said fuel source and strength.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-    ]
-
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cs.coreScrapsToGet) + "</h3> core scraps on singularity reset. (Based on strength)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cs.resourceCoreScrapsToGet) + "</h3> resource specific core scraps on singularity reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Type is determined from fuel type, and based on amount of said fuel source and strength.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                ]
             },
             "Resource Specific Core Scraps": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[0]) + "</h3> point core scraps." }, { "color": "#5c5c5c", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[1]) + "</h3> factor power core scraps." }, { "color": "#83cecf", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[2]) + "</h3> prestige point core scraps." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[3]) + "</h3> tree core scraps." }, { "color": "#0B6623", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[4]) + "</h3> grass core scraps." }, { "color": "#119B35", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[5]) + "</h3> grasshopper core scraps." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[6]) + "</h3> code experience core scraps." }, { "color": "#0951a6", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[7]) + "</h3> dice point core scraps." }, { "color": "#363636", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[8]) + "</h3> rocket fuel core scraps." }, { "color": "#2f4f57", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[9]) + "</h3> antimatter core scraps." }, { "color": "#0FFFCA", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[10]) + "</h3> infinity point core scraps." }, { "color": "#FFBF00", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[0]) + "</h3> point core scraps." }, { "color": "#5c5c5c", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[1]) + "</h3> factor power core scraps." }, { "color": "#83cecf", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[2]) + "</h3> prestige point core scraps." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[3]) + "</h3> tree core scraps." }, { "color": "#0B6623", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[4]) + "</h3> grass core scraps." }, { "color": "#119B35", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[5]) + "</h3> grasshopper core scraps." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[6]) + "</h3> code experience core scraps." }, { "color": "#0951a6", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[7]) + "</h3> dice point core scraps." }, { "color": "#363636", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[8]) + "</h3> rocket fuel core scraps." }, { "color": "#2f4f57", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[9]) + "</h3> antimatter core scraps." }, { "color": "#0FFFCA", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[10]) + "</h3> infinity point core scraps." }, { "color": "#FFBF00", "font-size": "24px", "font-family": "monospace" }],
                 ]
-
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["clickable", 2],["clickable", 3],]],
-        ["blank", "25px"],
-        ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
-        ["row", [["buyable", 21],["buyable", 22],["buyable", 23],["buyable", 24],]],
-        ["row", [["buyable", 25],["buyable", 26],["buyable", 27],["buyable", 28],]],
-        ["row", [["buyable", 29],["buyable", 31],["buyable", 32],]],
-    ]
-
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
+                    ["row", [["ex-buyable", 21],["ex-buyable", 22],["ex-buyable", 23],["ex-buyable", 24],]],
+                    ["row", [["ex-buyable", 25],["ex-buyable", 26],["ex-buyable", 27],["ex-buyable", 28],]],
+                    ["row", [["ex-buyable", 29],["ex-buyable", 31],["ex-buyable", 32],]],
+                ]
             },
             "Paragon Scraps": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return hasUpgrade("s", 19) },
-                content:
-                [
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return hasUpgrade("s", 20) },
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.paragonScraps) + "</h3> paragon scraps, which boosts check back xp gain by x" + format(player.cs.paragonScrapsEffect) + "." }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 6],]],
-    ]
-
+                ]
             },
         },
     }, 
@@ -768,5 +758,5 @@
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return player.startedGame == true && hasUpgrade("s", 18)  }
+    layerShown() { return player.startedGame == true && hasUpgrade("s", 19)  }
 })

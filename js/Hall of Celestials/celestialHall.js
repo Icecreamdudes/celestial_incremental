@@ -9,28 +9,29 @@ addLayer("ch", {
 
         celestialIndex: new Decimal(0),
         celestialTexts: ["", "", "",],
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
             "background-origin": "border-box",
             "border-color": "#2e0054",
         }
-      },
-
+    },
     tooltip: "Hall of Celestials",
     color: "#0260fe",
     branches: ["cp"],
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.subtabs["ch"]['stuff'] == 'Portal')
-        {
+        if (player.subtabs["ch"]['stuff'] == 'Portal') {
             player.po.lastUniverse = 'ch'
             player.tab = "po"
+            player.subtabs["ch"]['stuff'] = 'Hall'
+        }
+        if (player.subtabs["ch"]['stuff'] == 'Settings') {
+            player.po.lastUniverse = 'ch'
+            player.tab = "settings"
             player.subtabs["ch"]['stuff'] = 'Hall'
         }
         
@@ -136,18 +137,12 @@ addLayer("ch", {
             },
             style: { width: '75px', "min-height": '75px' }, //nova
         },
-
     },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-    },
-    challenges: {
-    },
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
     infoboxes: {
         1: {
             title: "Tav, the Celestial of Limits",
@@ -168,42 +163,41 @@ addLayer("ch", {
     microtabs: {
         stuff: {
             "Hall": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["row", [["raw-html", function () { return "Celestial Constellation #1 - ????, the Celestial of ???????????" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 12], ]],
-            ["blank", "12.5px"],
-            ["row", [["clickable", 13], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 14],]],
-            ["blank", "6.125px"],
-            ["row", [["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "0px", "font-family": "monospace" }],  ["clickable", 19],]],
-            ["blank", "6.125px"],
-            ["row", [["clickable", 15], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 16],]],
-            ["blank", "12.5px"],
-            ["row", [["clickable", 17], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 18], ]],
-            ["blank", "25px"],
-            ["infobox", 1],
-            ["infobox", 2],
-            ["infobox", 3],
-            //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
-        ]
-            },
-            "Portal": {
-                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return true },
-                content:
-                [
+                    ["blank", "12.5px"],
+                    ["row", [["clickable", 13], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 14],]],
+                    ["blank", "6.125px"],
+                    ["row", [["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "0px", "font-family": "monospace" }],  ["clickable", 19],]],
+                    ["blank", "6.125px"],
+                    ["row", [["clickable", 15], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 16],]],
+                    ["blank", "12.5px"],
+                    ["row", [["clickable", 17], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 18], ]],
+                    ["blank", "25px"],
+                    ["infobox", 1],
+                    ["infobox", 2],
+                    ["infobox", 3],
+                    //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
                 ]
             },
-            "Settings": settingsMicrotab,
+            "Portal": {
+                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
+                unlocked() { return true },
+                content: [],
+            },
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
         },
     },
-
     tabFormat: [
-
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && player.fu.defeatedJocus}
 })

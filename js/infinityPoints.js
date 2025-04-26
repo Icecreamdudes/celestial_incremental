@@ -118,7 +118,8 @@
                     layers.bigc.crunch()
                 }
             },
-            style: { width: '300px', "min-height": '120px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },
     bars: {
@@ -316,7 +317,7 @@
         {
             title: "Upgrade (4, 3)",
             unlocked() { return hasUpgrade("ta", 14) },
-            description: "Boosts antimatter dimensions based on negative infinity points.",
+            description: "Boosts antimatter dimensions (ignoring softcap) based on negative infinity points.",
             cost: new Decimal(80000),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -348,16 +349,16 @@
             unlocked() { return true },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>IP Doubler"
+                return "IP Doubler"
             },
             display() {
                 return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 100
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -372,7 +373,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
         12: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
@@ -380,16 +381,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Negative Infinity Booster"
+                return "Negative Infinity Booster"
             },
             display() {
                 return "which are multiplying negative infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 1.5
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -404,7 +405,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
         13: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500) },
@@ -412,16 +413,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Power Booster"
+                return "Dimension Power Booster"
             },
             display() {
                 return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2500)
                 let growth = 1.75
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -436,7 +437,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
         14: {
             cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(4000) },
@@ -444,16 +445,16 @@
             unlocked() { return hasUpgrade("ta", 11) },
             canAfford() { return player.in.infinityPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Dimension Booster"
+                return "Dimension Booster"
             },
             display() {
                 return "which are multiplying all antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " IP"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(4000)
                 let growth = 2
-                if (player.buyMax == false && !hasUpgrade("bi", 109))
+                if (mult != true && !hasUpgrade("bi", 109))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     if (!hasUpgrade("bi", 109)) player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
@@ -468,7 +469,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", backgroundImage: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {
@@ -531,7 +532,7 @@
         19: {
             requirementDescription: "<h3>40 Infinities",
             effectDescription() { return "Autobuy universe 1 upgrades." },
-            done() { return player.in.infinities.gte(40) },
+            done() { return player.in.infinities.gte(40) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
             toggles: [
@@ -541,49 +542,49 @@
         21: {
             requirementDescription: "<h3>80 Infinities",
             effectDescription() { return "Skip the big crunch screen, and automatically reset." },
-            done() { return player.in.infinities.gte(80) },
+            done() { return player.in.infinities.gte(80) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         22: {
             requirementDescription: "<h3>150 Infinities",
             effectDescription() { return "Gain 10% of grasshoppers and code experience per second." },
-            done() { return player.in.infinities.gte(150) },
+            done() { return player.in.infinities.gte(150) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         23: {
             requirementDescription: "<h3>777 Infinities",
-            effectDescription() { return "Unlocks the point halter (in portal)." },
-            done() { return player.in.infinities.gte(777) },
+            effectDescription() { return "Unlocks the point halter (Next to OTF)." },
+            done() { return player.in.infinities.gte(777) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         24: {
             requirementDescription: "<h3>4000 Infinities",
             effectDescription() { return "Check back pet effects are always active." },
-            done() { return player.in.infinities.gte(4000) },
+            done() { return player.in.infinities.gte(4000) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '90px' },
         },
         25: {
             requirementDescription: "<h3>15000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },
         },
         26: {
             requirementDescription: "<h3>30000 Infinities",
             effectDescription() { return "Tav's domain don't reset infinity milestones." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },
         },
         27: {
             requirementDescription: "<h3>70000 Infinities",
             effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
-            done() { return player.in.infinities.gte(70000) },
+            done() { return player.in.infinities.gte(70000) && player.in.unlockedBreak && player.ev.evolutionsUnlocked[3] },
             unlocked() { return player.in.unlockedBreak && player.ev.evolutionsUnlocked[3]},
             style: { width: '800px', "min-height": '90px' },
         },
@@ -752,7 +753,7 @@
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },
             rewardDescription: "Check back buyables.",
-            unlocked() { return hasChallenge("ip", 16) },
+            unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(100) },
             onEnter() {
                 layers.in.bigCrunch()
 
@@ -764,7 +765,6 @@
                 layers.in.bigCrunch()
             },
             style: { width: '350px', height: '275px', }
-
         },
         18: {
             name: "Challenge VIII",
@@ -784,94 +784,83 @@
 
         },
     },
-    infoboxes: {
-    },
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
-                        ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
-                        ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
-                        ["row", [["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]]],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
+                    ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
+                    ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
+                    ["row", [["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]]],
                 ]
-
             },
             "Milestones": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["row", [["milestone", 1]]],
-                        ["row", [["milestone", 11]]],
-                        ["row", [["milestone", 12]]],
-                        ["row", [["milestone", 13]]],
-                        ["row", [["milestone", 14]]],
-                        ["row", [["milestone", 15]]],
-                        ["row", [["milestone", 16]]],
-                        ["row", [["milestone", 17]]],
-                        ["row", [["milestone", 18]]],
-                        ["row", [["milestone", 19]]],
-                        ["row", [["milestone", 21]]],
-                        ["row", [["milestone", 22]]],
-                        ["row", [["milestone", 23]]],
-                        ["row", [["milestone", 24]]],
-                        ["row", [["milestone", 25]]],
-                        ["row", [["milestone", 26]]],
-                        ["row", [["milestone", 27]]],
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["milestone", 1]]],
+                    ["row", [["milestone", 11]]],
+                    ["row", [["milestone", 12]]],
+                    ["row", [["milestone", 13]]],
+                    ["row", [["milestone", 14]]],
+                    ["row", [["milestone", 15]]],
+                    ["row", [["milestone", 16]]],
+                    ["row", [["milestone", 17]]],
+                    ["row", [["milestone", 18]]],
+                    ["row", [["milestone", 19]]],
+                    ["row", [["milestone", 21]]],
+                    ["row", [["milestone", 22]]],
+                    ["row", [["milestone", 23]]],
+                    ["row", [["milestone", 24]]],
+                    ["row", [["milestone", 25]]],
+                    ["row", [["milestone", 26]]],
+                    ["row", [["milestone", 27]]],
                 ]
-
             },
             "Challenges": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("ip", 16) },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
-                        ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
+                    ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(100) ? "Unlock Challenge VII by reaching Check Back Level 100" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                    ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                 ]
-
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasChallenge("ip", 14) },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["clickable", 2], ["clickable", 3]]],
-                        ["blank", "25px"],
-                        ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
-
             },
             "Reset": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.in.breakInfinity },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["clickable", 11]]],
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11]]],
                 ]
-
             },
         },
     },
 
-    tabFormat: [                        ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    tabFormat: [
+        ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}
 })

@@ -5,6 +5,7 @@ addLayer("pol", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        unlockHive: 0, // 0: Nothing Unlocked; 1: Unlocked the Barrier; 2: Unlocked the Universe
 
         pollinators: new Decimal(0),
         pollinatorsPerSecond: new Decimal(0),
@@ -43,6 +44,7 @@ addLayer("pol", {
         let onepersec = new Decimal(1)
 
         if (hasUpgrade("i", 22)) {
+            // START OF POLLINATORS
             player.pol.pollinatorsPerSecond = player.g.grass.add(1).log(10).pow(0.75).div(3)
             if (hasUpgrade("pol", 12)) { player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("pol", 12)) }
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 12))
@@ -52,16 +54,25 @@ addLayer("pol", {
             if (hasUpgrade("bi", 17)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("bi", 17))
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.le.punchcardsPassiveEffect[13])
+
+            // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(0.8)
+
+            // POST-SOFTCAP MULTIPLIERS
+            if (hasUpgrade("s", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 14))
+
+            // GAIN FUNCTIONS
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
             }
-            if (hasUpgrade("s", 13)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 13))
-
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
 
         }
     
+
+        if (player.pol.pollinators.gte(1e50) && player.pol.unlockHive < 1) {
+            player.pol.unlockHive = 1
+        }
 
         switch (player.pol.pollinatorsIndex) {
             case 0:
@@ -162,86 +173,105 @@ addLayer("pol", {
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<img src='resources/pollinators/cross.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/cross.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 0
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#28242c", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#28242c", borderWidth: '4px' },
         },
         12: {
-            title() { return "<img src='resources/pollinators/beetle.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/beetle.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 1
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#eaf6f7", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#eaf6f7", borderWidth: '4px' },
         },
         13: {
-            title() { return "<img src='resources/pollinators/fly.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/fly.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 2
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#31aeb0", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#31aeb0", borderWidth: '4px' },
         },
         14: {
-            title() { return "<img src='resources/pollinators/bat.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/bat.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.pol.pollinatorsIndex = 3
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#0B6623", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#0B6623", borderWidth: '4px' },
         },
         15: {
-            title() { return "<img src='resources/pollinators/wind.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/wind.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 11) },
             onClick() {
                 player.pol.pollinatorsIndex = 4
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#119B35", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#119B35", borderWidth: '4px' },
         },
         16: {
-            title() { return "<img src='resources/pollinators/bee.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/bee.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 14) },
             onClick() {
                 player.pol.pollinatorsIndex = 5
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#19e04d", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0px 0px 0px 13px", background: "#19e04d", borderWidth: '4px' },
         },
         17: {
-            title() { return "<img src='resources/pollinators/butterfly.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/butterfly.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 16) },
             onClick() {
                 player.pol.pollinatorsIndex = 6
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "#0951a6", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#0951a6", borderWidth: '4px' },
         },
         18: {
-            title() { return "<img src='resources/pollinators/ant.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/ant.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
             unlocked() { return hasUpgrade("pol", 18) },
             onClick() {
                 player.pol.pollinatorsIndex = 7
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #8a00a9, #0061ff)", 'border-color': "purple", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "linear-gradient(45deg, #8a00a9, #0061ff)", 'border-color': "purple", borderWidth: '4px' },
         },
         19: {
-            title() { return "<img src='resources/pollinators/gear.png' style='width:calc(80%);height:calc(80%);padding-top:20%'></img>"},
+            title() { return "<img src='resources/pollinators/gear.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
             canClick() { return true },
-            unlocked() { return hasUpgrade("bi", 114) },
+            unlocked() { return hasUpgrade("bi", 115) },
             onClick() {
                 player.pol.pollinatorsIndex = 8
             },
-            style: { width: '100px', 'min-height': '100px', 'font-size': '30px', 'border-radius': "0%", background: "linear-gradient(45deg, #919191, #545454)", 'border-color': "gray", 'border-width': '4px' },
+            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "linear-gradient(45deg, #919191, #545454)", 'border-color': "gray", borderWidth: '4px' },
         },
+        100: {
+            title() { return "<h1>UNLOCK" },
+            canClick() {
+                return player.pol.pollinators.gte(1e100) && getLevelableAmount("pet", 102).gte(20) && getLevelableAmount("pet", 104).gte(20)
+                && getLevelableAmount("pet", 202).gte(15) && getLevelableAmount("pet", 203).gte(15) && getLevelableAmount("pet", 303).gte(8)
+                && getLevelableAmount("pet", 305).gte(8) && getLevelableAmount("pet", 402).gte(4)
+            },
+            unlocked() { return true},
+            onClick() {
+                player.pol.unlockHive = 2
+                player.subtabs["pol"]['stuff'] = 'Main'
+                //if (options.newMenu) {
+                //    player.tab = 'uh'
+                //} else {
+                //    player.tab = 'uh'
+                //}
+            },
+            style: { width: '400px', "min-height": '160px' },
+        }
     },
     bars: {
     },
@@ -341,6 +371,7 @@ addLayer("pol", {
         11: {
             costBase() { return new Decimal(5000) },
             costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(5) },
@@ -348,20 +379,21 @@ addLayer("pol", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Promised Pollinators"
+                return "Promised Pollinators"
             },
             display() {
                 return "which guarantees you have at least " + format(tmp[this.layer].buyables[this.id].effect) + " seconds worth of pollinators.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 16)) this.pay(cost)
 
@@ -373,6 +405,7 @@ addLayer("pol", {
         12: {
             costBase() { return new Decimal(10000) },
             costGrowth() { return new Decimal(2.25) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.75).mul(0.25).add(1) },
@@ -380,20 +413,21 @@ addLayer("pol", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Plentiful Pollinators"
+                return "Plentiful Pollinators"
             },
             display() {
                 return "which boosts pollinator gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 16)) this.pay(cost)
 
@@ -405,6 +439,7 @@ addLayer("pol", {
         13: {
             costBase() { return new Decimal(50000) },
             costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03) },
@@ -412,20 +447,21 @@ addLayer("pol", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Propagating Pollinators"
+                return "Propagating Pollinators"
             },
             display() {
                 return "which improves pollinator upgrade II's scaling by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 16)) this.pay(cost)
 
@@ -445,14 +481,14 @@ addLayer("pol", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>Potent Pollination"
+                return "Potent Pollination"
             },
             display() {
                 return "which boosts pollinator effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
-            buy() {
-                if (player.pol.pollinatorsMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -524,34 +560,45 @@ addLayer("pol", {
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 0 ? "<h1>You are currently selecting nothing." : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "<h1>You are currently selecting the Beetle.<br><h2>Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) + "<br><h2>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "<h1>You are currently selecting the Fly.<br><h2>Factor Power: x" + format(player.pol.pollinatorsEffect[2]) + "<br><h2>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "<h1>You are currently selecting the Bat.<br><h2>Leaves: x" + format(player.pol.pollinatorsEffect[4]) + "<br><h2>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "<h1>You are currently selecting Wind.<br><h2>Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br><h2>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "<h1>You are currently selecting the Bee.<br><h2>Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br><h2>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "<h1>You are currently selecting the Butterfly.<br><h2>Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br><h2>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "<h1>You are currently selecting the Ant. <h5>(requires an otf selection)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.dice ? "<h2>Dice Points: x" + format(player.pol.pollinatorsEffect[12]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.rocketFuel ? "<h2>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.hex ? "<h2>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 7 && player.po.realmMods ? "<h2>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace", "line-height": "1.8" }],
-                    ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "<h1>You are currently selecting the Machine.<br><h2>Steel: x" + format(player.pol.pollinatorsEffect[16]) + "<br><h2>Oil: x" + format(player.pol.pollinatorsEffect[17]) : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15],]],
-                    ["row", [ ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["style-column", [
+                        ["style-column", [
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 0 ? "Nothing" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "Beetle" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "Fly" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "Bat" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "Wind" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "Bee" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "Butterfly" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 7 ? "Ant" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "Machine" : "" }, { color: "white", fontSize: "26px", fontFamily: "monospace" }],    
+                        ], {width: "500px", height: "40px", borderBottom: "3px solid #cb8e00"}],
+                        ["style-column", [
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 1 ? "Celestial Points: x" + format(player.pol.pollinatorsEffect[0]) + "<br>Factor Base: x" + format(player.pol.pollinatorsEffect[1]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 2 ? "Factor Power: x" + format(player.pol.pollinatorsEffect[2]) + "<br>Prestige Points: x" + format(player.pol.pollinatorsEffect[3]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 3 ? "Leaves: x" + format(player.pol.pollinatorsEffect[4]) + "<br>Trees: x" + format(player.pol.pollinatorsEffect[5]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex != 7 ? "" : hasUpgrade("bi", 27) ? "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) + "<br>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15])
+                                : "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) }, { color: "white", fontSize: "18px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "Steel: x" + format(player.pol.pollinatorsEffect[16]) + "<br>Oil: x" + format(player.pol.pollinatorsEffect[17]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],        
+                        ], {width: "500px", height: "100px", borderBottom: "3px solid #cb8e00"}],
+                        ["style-column", [
+                            ["left-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
+                            ["left-row", [["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                        ], {width: "500px", height: "200px", backgroundColor: "#281c00", borderRadius: "0px 0px 13px 13px"}],
+                    ], {width: "500px", backgroundColor: "#654700", border: "3px solid #cb8e00", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["row", [["infobox", "p0"], ["infobox", "p1"], ["infobox", "p2"], ["infobox", "p3"], ["infobox", "p4"], ["infobox", "p5"], ["infobox", "p6"], ["infobox", "p7"], ["infobox", "p8"]]],
                 ]
             },
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -559,21 +606,40 @@ addLayer("pol", {
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                     ["row", [["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12]]],
+                    ["row", [["ex-buyable", 13], ["ex-buyable", 14]]]
+                ]
+            },
+            "???": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return false /*player.pol.unlockHive == 1*/ },
+                content:
+                [
                     ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12]]],
-                    ["row", [["buyable", 13], ["buyable", 14]]]
+                    ["raw-html", function () { return "Unlock ???:" }, { color: "white", fontSize: "36px", fontFamily: "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 101)) + "/20 Egg Guy Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 104)) + "/20 Gd Checkpoint Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 202)) + "/15 Star Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 203)) + "/15 Normal Face Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 303)) + "/8 Drippy Ufo Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 305)) + "/8 Antimatter Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 402)) + "/4 Dragon Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", "COMING SOON", { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    //["row", [["clickable", 100]]],
                 ]
             }
         },
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { "color": "#cb8e00", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { "color": "#cb8e00", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { color: "#cb8e00", fontSize: "24px", fontFamily: "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { color: "#cb8e00", fontSize: "16px", fontFamily: "monospace" }],
+        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
         ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+                        ["microtabs", "stuff", { borderWidth: '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !(inChallenge("ip", 12) || inChallenge("ip", 18)) }
 })

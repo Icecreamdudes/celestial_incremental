@@ -146,6 +146,7 @@ function layerDataReset(layer, keep = []) {
 	}
 
 	Vue.set(player[layer], "buyables", getStartBuyables(layer))
+	Vue.set(player[layer], "levelables", getStartLevelables(layer))
 	Vue.set(player[layer], "clickables", getStartClickables(layer))
 	Vue.set(player[layer], "challenges", getStartChallenges(layer))
 	Vue.set(player[layer], "grid", getStartGrid(layer))

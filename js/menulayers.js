@@ -5,8 +5,7 @@ addLayer("otherfeat", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Otherworldly Features",
@@ -29,8 +28,9 @@ addLayer("otherfeat", {
             ["blank", "25px"],
             ["row", [["clickable", 2], ["clickable", 3]]],
             ["blank", "25px"],
-            ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
-    ]]]],
+            ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]]],
+    ]]]
+],
     layerShown() { return false }
 })
 addLayer("halter", {
@@ -40,8 +40,7 @@ addLayer("halter", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Halter",
@@ -71,87 +70,11 @@ addLayer("halter", {
             }],
             ["blank", "25px"],
             ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
+            ["blank", "25px"],
             ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
             ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)" }],
             ["blank", "25px"],
-        ]]]],
-    layerShown() { return false }
-})
-addLayer("settings", {
-    name: "Settings", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "SET", // This appears on the layer's node. Default is the id with the first letter capitalized
-    row: 1,
-    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-    startData() { return {
-        unlocked: true,
-    }
-    },
-    automate() {},
-    nodeStyle() {},
-    tooltip: "Settings",
-    color: "white",
-    branches: ["branch"],
-    clickables: {},
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
-    tabFormat: [
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=hardReset()>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=(toggleOpt('newMenu'));(player.tab='i')>Toggle Layout</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportFile()>Export file</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<label class=opt for='importfile' style='display:flex;align-items:center;justify-content:center;width:92px;height:92px;'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {"color": "white", "font-size": "13.3333px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('musicToggle'); needsCanvasUpdate = true>Toggle Music</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Autosave: " + options.autosave, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Sidebar Layout: " + options.newMenu, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Music Toggle: " + options.musicToggle, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ["raw-html", () => "Hotkey Toggle: " + options.toggleHotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => "Playtime: " + formatTime(player.timePlayed), {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>", {"color": "white", "font-size": "36px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => credits, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
-        ["blank", "25px"],
-
-        ["raw-html", () => changelog, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ]]]
     ],
     layerShown() { return false }
 })
@@ -162,12 +85,11 @@ addLayer("u1u", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
-    color: "#eaf6f7",
+    color: "white",
     branches: ["branch"],
     clickables: {},
     bars: {},
@@ -181,25 +103,26 @@ addLayer("u1u", {
         ["layer-proxy", ["i", [
             ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
             ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-            ["blank", "25px"],
+            ["blank", "10px"],
+            ["bar", "infbar"],
+            ["blank", "10px"],
             ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
             ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-            ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
-            ["row", [["upgrade", 31]]],
+            ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32]]],
+            ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
             ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
-            ["row", [["upgrade", 101]]],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u1l", {
     name: "u1l", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "U1l", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "U1L", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -220,18 +143,18 @@ addLayer("u1l", {
             ["infobox", "2"],
             ["infobox", "3"],
             ["infobox", "4"],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u1t", {
     name: "u1t", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "U1t", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "U1T", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -249,7 +172,8 @@ addLayer("u1t", {
         ["layer-proxy", ["i", [
             ["blank", "25px"],
             ["tree", function () { return player.universe == 1 ? tree1 : null } ],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u2l", {
@@ -259,8 +183,7 @@ addLayer("u2l", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -280,7 +203,8 @@ addLayer("u2l", {
             ["infobox", "1"],
             ["infobox", "2"],
             ["infobox", "3"],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u2t", {
@@ -290,8 +214,7 @@ addLayer("u2t", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -310,7 +233,8 @@ addLayer("u2t", {
             ["blank", "25px"],
             ["tree", function () { return player.universe == 2 ? tree2 : null } ],
 
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u3u", {
@@ -320,8 +244,7 @@ addLayer("u3u", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -343,9 +266,10 @@ addLayer("u3u", {
             ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
-            ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],]],
-            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 21],["upgrade", 22],["upgrade", 23],]],
-        ]]]],
+            ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u3m", {
@@ -355,8 +279,7 @@ addLayer("u3m", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -376,17 +299,18 @@ addLayer("u3m", {
             ["raw-html", function () { return "You have <h3>" + formatWhole(player.s.singularities) + "</h3> singularities." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.s.singularitiesToGet) + "</h3> singularities on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
-            ["row", [["milestone", 11],]],
-            ["row", [["milestone", 12],]],
-            ["row", [["milestone", 13],]],
-            ["row", [["milestone", 14],]],
-            ["row", [["milestone", 15],]],
-            ["row", [["milestone", 16],]],
-            ["row", [["milestone", 17],]],
-            ["row", [["milestone", 18],]],
-            ["row", [["milestone", 19],]],
-        ["row", [["milestone", 21],]],
-        ]]]],
+            ["milestone", 11],
+            ["milestone", 12],
+            ["milestone", 13],
+            ["milestone", 14],
+            ["milestone", 15],
+            ["milestone", 16],
+            ["milestone", 17],
+            ["milestone", 18],
+            ["milestone", 19],
+            ["milestone", 21],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u3l", {
@@ -396,8 +320,7 @@ addLayer("u3l", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -418,7 +341,8 @@ addLayer("u3l", {
             ["infobox", "2"],
             ["infobox", "3"],
             ["infobox", "4"],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u3t", {
@@ -428,8 +352,7 @@ addLayer("u3t", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -447,7 +370,8 @@ addLayer("u3t", {
         ["layer-proxy", ["s", [
             ["blank", "25px"],
             ["tree", function () { return player.universe == 3 ? tree3 : null } ],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("u3b", {
@@ -457,8 +381,7 @@ addLayer("u3b", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -479,10 +402,9 @@ addLayer("u3b", {
             ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
-            ["row", [["clickable", 2],["clickable", 3],]],
-            ["blank", "25px"],
-        ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
-        ]]]],
+        ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("a1u", {
@@ -492,12 +414,11 @@ addLayer("a1u", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
-    color: "#eaf6f7",
+    color: "white",
     branches: ["branch"],
     clickables: {},
     bars: {},
@@ -515,7 +436,8 @@ addLayer("a1u", {
             ["blank", "25px"],
             ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
             ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("a1s", {
@@ -525,12 +447,11 @@ addLayer("a1s", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Softcap",
-    color: "#eaf6f7",
+    color: "white",
     branches: ["branch"],
     clickables: {},
     bars: {},
@@ -551,7 +472,8 @@ addLayer("a1s", {
             ["blank", "25px"],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("a1t", {
@@ -561,8 +483,7 @@ addLayer("a1t", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -580,7 +501,8 @@ addLayer("a1t", {
         ["layer-proxy", ["cp", [
             ["blank", "25px"],
             ["tree", function () { return player.universe == 1.5 ? treeA1 : null } ],
-        ]]]],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("cmh", {
@@ -590,8 +512,7 @@ addLayer("cmh", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -610,19 +531,20 @@ addLayer("cmh", {
             ["row", [["raw-html", function () { return "Celestial Constellation #1 - ????, the Celestial of ???????????" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
             ["blank", "25px"],
             ["row", [["clickable", 11], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 12], ]],
-    ["blank", "12.5px"],
-    ["row", [["clickable", 13], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 14],]],
-    ["blank", "6.125px"],
-    ["row", [["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "0px", "font-family": "monospace" }],  ["clickable", 19],]],
-    ["blank", "6.125px"],
-    ["row", [["clickable", 15], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 16],]],
-    ["blank", "12.5px"],
-    ["row", [["clickable", 17], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 18], ]],
-    ["blank", "25px"],
-    ["infobox", 1],
-    ["infobox", 2],
-    ["infobox", 3],
-        ]]]],
+            ["blank", "12.5px"],
+            ["row", [["clickable", 13], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 14],]],
+            ["blank", "6.125px"],
+            ["row", [["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "0px", "font-family": "monospace" }],  ["clickable", 19],]],
+            ["blank", "6.125px"],
+            ["row", [["clickable", 15], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "50px", "font-family": "monospace" }], ["clickable", 16],]],
+            ["blank", "12.5px"],
+            ["row", [["clickable", 17], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 18], ]],
+            ["blank", "25px"],
+            ["infobox", 1],
+            ["infobox", 2],
+            ["infobox", 3],
+        ]]]
+    ],
     layerShown() { return false }
 })
 addLayer("dut", {
@@ -632,8 +554,7 @@ addLayer("dut", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -664,8 +585,7 @@ addLayer("duu", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-    }
-    },
+    }},
     automate() {},
     nodeStyle() {},
     tooltip: "Upgrades",
@@ -686,5 +606,34 @@ addLayer("duu", {
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
          ["blank", "25px"],
         ]]]],
+    layerShown() { return false }
+})
+addLayer("odt", {
+    name: "odt", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "odt", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }},
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#eaf6f7",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["od", [
+            ["blank", "25px"],
+            ["tree", function () { return player.universe == 1337 ? tree : null } ],
+        ]]]
+    ],
     layerShown() { return false }
 })

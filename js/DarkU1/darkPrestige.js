@@ -11,8 +11,6 @@ addLayer("dp", {
         prestigePointsEffect: new Decimal(0),
         prestigePointsToGet: new Decimal(0),
         prestigePause: new Decimal(0),
-
-        pMax: false,
     }
     },
     automate() {
@@ -26,7 +24,7 @@ addLayer("dp", {
         };
     },
     tooltip: "Prestige",
-    branches: ["dr"],
+    branches: [["dr", "#4f0694"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -59,25 +57,7 @@ addLayer("dp", {
             onClick() {
                 player.tab = "du"
             },
-            style: { width: '100px', "min-height": '50px', color: "white" },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.dp.pMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.dp.pMax = true
-            },
-            style: { width: '75px', "min-height": '50px', color: "white" }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.dp.pMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.dp.pMax = false
-            },
-            style: { width: '75px', "min-height": '50px', color: "white" }
+            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #102e67" },
         },
         11: {
             title() { return "<h2>Reset previous content for prestige points." },
@@ -87,7 +67,12 @@ addLayer("dp", {
                 player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet)
                 player.dp.prestigePause = new Decimal(10)
             },
-            style: { width: '400px', "min-height": '100px', color: "white" },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #102e67", margin: "1px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
     },
     prestigeReset()
@@ -116,14 +101,14 @@ addLayer("dp", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Rank Req Divider"
+                return "Rank Req Divider"
             },
             display() {
                 return "which are diving rank requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.dp.pMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -137,7 +122,7 @@ addLayer("dp", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
         },
         12: {
             costBase() { return new Decimal(2) },
@@ -150,14 +135,14 @@ addLayer("dp", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Tier Req Divider"
+                return "Tier Req Divider"
             },
             display() {
                 return "which are diving tier requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.dp.pMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -171,7 +156,7 @@ addLayer("dp", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
         },
         13: {
             costBase() { return new Decimal(4) },
@@ -184,14 +169,14 @@ addLayer("dp", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Tetr Req Divider"
+                return "Tetr Req Divider"
             },
             display() {
                 return "which are diving tetr requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.dp.pMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -205,7 +190,7 @@ addLayer("dp", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
         },
     },
     milestones: {
@@ -219,22 +204,19 @@ addLayer("dp", {
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #102e67", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
-         ["raw-html", function () { return "You have <h3>" + format(player.dp.prestigePoints) + "</h3> prestige points, which boosts rank, tier, and tetr point gain by x" + format(player.dp.prestigePointsEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.dp.prestigePointsToGet.lte(1e10) ? "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.dp.prestigePointsToGet.gt(1e10) ? "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset. (Softcapped)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.dp.prestigePoints) + "</h3> prestige points, which boosts rank, tier, and tetr point gain by x" + format(player.dp.prestigePointsEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.dp.prestigePointsToGet.lte(1e10) ? "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.dp.prestigePointsToGet.gt(1e10) ? "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset. (Softcapped)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-        ]
-
+                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]]],
+                ]
             },
         },
     },

@@ -41,14 +41,16 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("rg", 17))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("gs", 16))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.oi.linkingPowerEffect[2])
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.evolvedEffects[8][0])
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.epicPetEffects[1][1])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 1206)[0])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 402)[1])
         if (hasMilestone("fa", 18)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fa.milestoneEffect[7])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("fu", 46))
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.le.punchcardsPassiveEffect[3])
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 405)[0])
+        
+        // ALWAYS AFTER
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(0.2)
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fu.jocusEssenceEffect)
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.le.punchcardsPassiveEffect[3])
-        player.an.anonymityToGet = player.an.anonymityToGet.mul(player.cb.epicPetEffects[4][0])
 
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },
@@ -63,7 +65,7 @@
             style: { width: '100px', "min-height": '50px' },
         },
         11: {
-            title() { return "<h3>Reset previous content except perks for anonymity. (based on replicanti points)" },
+            title() { return "<h2>Reset previous content except perks for anonymity.</h2><br><h3>(based on replicanti points)</h3>" },
             canClick() { return player.an.anonymityToGet.gte(1) },
             unlocked() { return true },
             onClick() {
@@ -74,7 +76,8 @@
                 player.ar.tetrPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            style: { width: '400px', "min-height": '100px'},
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: "400px", minHeight: "100px", borderRadius: "15px"},
         },
     },
     bars: {
@@ -84,13 +87,19 @@
             width: 400,
             height: 25,
             progress() {
-                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                } else {
+                    return new Decimal(1)
+                }
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
-                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                } else {
+                    return "<p style='color:red'>[HARDCAPPED]</p>"
+                }
             },
         },
     },
@@ -249,20 +258,14 @@
             style: { width: '150px', hesight: '100px', },
         },
     },
-    buyables: {
-
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -275,7 +278,6 @@
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                 ]
-
             },
         },
     },
@@ -286,6 +288,6 @@
         ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 14) }
 })

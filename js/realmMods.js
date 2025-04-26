@@ -72,7 +72,7 @@
         let onepersec = new Decimal(1)
 
         player.rm.blankModsToGet = player.m.mods.pow(0.01)
-        player.rm.blankModsToGet = player.rm.blankModsToGet.mul(player.cb.rarePetEffects[6][0])
+        player.rm.blankModsToGet = player.rm.blankModsToGet.mul(levelableEffect("pet", 307)[0])
 
         if (hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.add(player.rm.blankModsToGet.mul(Decimal.mul(0.1, delta)))
 
@@ -192,7 +192,8 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -312,8 +313,6 @@
         player.gh.buyables[17] = new Decimal(0)
         player.gh.buyables[18] = new Decimal(0)
         player.gh.buyables[19] = new Decimal(0)
-        player.gh.buyables[21] = new Decimal(0)
-        player.gh.buyables[22] = new Decimal(0)
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
@@ -402,7 +401,8 @@
                 player.rm.blankModsPause = new Decimal(5)
                 player.rm.blankMods = player.rm.blankMods.add(player.rm.blankModsToGet)
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
             title() { return "<img src='resources/symbolCreator.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -410,6 +410,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(0) //Each number is assinged to its corresponding realm
             },
+            style: { borderRadius: '10px' },
         },
         13: {
             title() { return "<img src='resources/symbolHigh.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -417,6 +418,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(1)
             },
+            style: { borderRadius: '10px' },
         },
         14: {
             title() { return "<img src='resources/symbolDeath.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -424,6 +426,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(2)
             },
+            style: { borderRadius: '10px' },
         },
         15: {
             title() { return "<img src='resources/symbolDimension.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -431,6 +434,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(3)
             },
+            style: { borderRadius: '10px' },
         },
         16: {
             title() { return "<img src='resources/symbolBackrooms.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -438,6 +442,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(4)
             },
+            style: { borderRadius: '10px' },
         },
         17: {
             title() { return "<img src='resources/symbolVoid.png' style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -445,6 +450,7 @@
             onClick() {
                 player.rm.currentDisplay = new Decimal(5)
             },
+            style: { borderRadius: '10px' },
         },
         21: {
             title() { return "<h3>Convert Creator Realm Mods (Req: Check Back Level 150)" },
@@ -457,7 +463,8 @@
                 player.cb.xp = new Decimal(0)
                 player.cb.totalxp = new Decimal(5.1)
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         22: {
             title() { return "<h3>Convert Higher Plane Mods (Req: 1e15 steel)" },
@@ -492,7 +499,8 @@
                 player.gh.buyables[37] = new Decimal(0)
                 player.gh.buyables[38] = new Decimal(0)
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         23: {
             title() { return "<h3>Convert Death Realm Mods (Req: hex 21)" },
@@ -509,7 +517,8 @@
                     player.h.hexPoints[i] = new Decimal(0)
                 }
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         24: {
             title() { return "<h3>Convert Dimensional Realm Mods (Req: 1.79e308 replicanti)" },
@@ -525,7 +534,8 @@
                     if (player.id.dimensionsUnlocked[i]) player.id.dimensionAmounts[i] = new Decimal(1)
                 }
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         25: {
             title() { return "<h3>Convert Dream Realm Mods (Req: 1e18 negative infinity points)" },
@@ -570,9 +580,9 @@
                 player.om.buyables[14] = new Decimal(0)
                 player.om.buyables[15] = new Decimal(0)
                 player.om.buyables[16] = new Decimal(0)
-
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         26: {
             title() { return "<h3>Convert Void Mods (Req: 5,000,000 infinities)" },
@@ -593,7 +603,8 @@
                 player.bi.buyables[12] = new Decimal(0)
                 player.bi.buyables[13] = new Decimal(0)
             },
-            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },
     bars: {
@@ -607,16 +618,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>CREATOR REALM BOOST"
+                return "CREATOR REALM BOOST"
             },
             display() {
                 return "which are multiplying creator realm mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -631,7 +642,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         12: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -639,16 +650,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>HIGHER PLANE BOOST"
+                return "HIGHER PLANE BOOST"
             },
             display() {
                 return "which are multiplying higher plane mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -663,7 +674,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         13: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -671,16 +682,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>DEATH REALM BOOST"
+                return "DEATH REALM BOOST"
             },
             display() {
                 return "which are multiplying death realm mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -695,7 +706,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         14: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -703,16 +714,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>DIMENSIONAL REALM BOOST"
+                return "DIMENSIONAL REALM BOOST"
             },
             display() {
                 return "which are multiplying dimensional realm mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -727,7 +738,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         15: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -735,16 +746,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>DREAM REALM BOOST"
+                return "DREAM REALM BOOST"
             },
             display() {
                 return "which are multiplying dream realm mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -759,7 +770,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
         16: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
@@ -767,16 +778,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.blankMods.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>VOID BOOST"
+                return "VOID BOOST"
             },
             display() {
                 return "which are multiplying void mod conversion rate by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Blank Mods"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.1
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.blankMods = player.rm.blankMods.sub(buyonecost)
@@ -791,7 +802,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#775400", backgroundImage: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", backgroundOrigin: "border-box", color: "white"}
         },
 
         //creator realm
@@ -802,16 +813,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>RANK LAYER BOOST"
+                return "RANK LAYER BOOST"
             },
             display() {
                 return "which boost ranks, tiers, tetr, and pent effect by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Creator Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(25)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(buyonecost)
@@ -826,7 +837,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#770000', color: 'white'}
         },
         22: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
@@ -835,16 +846,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[0].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>FACTOR LAYER BOOST"
+                return "FACTOR LAYER BOOST"
             },
             display() {
                 return "which multiplies the factor base by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Creator Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(150)
                 let growth = 1.6
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[0] = player.rm.realmEnergy[0].sub(buyonecost)
@@ -860,7 +871,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#770000', color: 'white'}
         },
         23: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -869,16 +880,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>PRESTIGE LAYER BOOST"
+                return "PRESTIGE LAYER BOOST"
             },
             display() {
                 return "which boosts prestige point gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Higher Plane Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(25)
                 let growth = 1.7
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(buyonecost)
@@ -894,7 +905,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#775400', color: 'white'}
         },
         24: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(275) },
@@ -903,16 +914,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[1].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>TREE LAYER BOOST"
+                return "TREE LAYER BOOST"
             },
             display() {
                 return "which boosts tree gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Higher Plane Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(275)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[1] = player.rm.realmEnergy[1].sub(buyonecost)
@@ -927,7 +938,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#775400', color: 'white'}
         },
         25: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -936,16 +947,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[2].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>GRASS LAYER BOOST"
+                return "GRASS LAYER BOOST"
             },
             display() {
                 return "which boosts grass gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Death Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(25)
                 let growth = 1.75
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(buyonecost)
@@ -961,7 +972,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#747700', color: 'white'}
         },
         26: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(250) },
@@ -969,16 +980,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[2].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>GOLDEN GRASS BOOST"
+                return "GOLDEN GRASS BOOST"
             },
             display() {
                 return "which boosts golden grass gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Death Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(250)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[2] = player.rm.realmEnergy[2].sub(buyonecost)
@@ -992,7 +1003,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#747700', color: 'white'}
         },
         27: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
@@ -1001,16 +1012,16 @@
             purchaseLimit() { return new Decimal(25) },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>GRASSHOP LAYER BOOST"
+                return "GRASSHOP LAYER BOOST"
             },
             display() {
                 return "which boosts grasshopper gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dimensional Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(80)
                 let growth = 1.6
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(buyonecost)
@@ -1026,7 +1037,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#147700', color: 'white'}
         },
         28: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
@@ -1035,16 +1046,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[3].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/25<br/>MOD LAYER BOOST"
+                return "MOD LAYER BOOST"
             },
             display() {
                 return "which boosts mod gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dimensional Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(200)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[3] = player.rm.realmEnergy[3].sub(buyonecost)
@@ -1059,7 +1070,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#147700', color: 'white'}
         },
         31: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40) },
@@ -1067,16 +1078,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[4].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>ANTIMATTER DIMENSIONS LAYER BOOST"
+                return "ANTIMATTER DIMENSIONS LAYER BOOST"
             },
             display() {
-                return "which boosts antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which boosts antimatter dimensions (ignoring softcap) by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dream Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(40)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(buyonecost)
@@ -1091,7 +1102,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#004677', color: 'white'}
         },
         32: {
             cost(x) { return new Decimal(1.85).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
@@ -1099,16 +1110,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[4].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>TAV LAYER BOOST"
+                return "TAV LAYER BOOST"
             },
             display() {
                 return "which boosts negative infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dream Realm Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(25)
                 let growth = 1.85
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[4] = player.rm.realmEnergy[4].sub(buyonecost)
@@ -1123,7 +1134,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#004677', color: 'white'}
         },
         33: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
@@ -1131,16 +1142,16 @@
             unlocked() { return true},
             canAfford() { return player.rm.realmEnergy[5].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>BREAK INFINITY LAYER BOOST"
+                return "BREAK INFINITY LAYER BOOST"
             },
             display() {
                 return "which boosts broken infinities by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Void Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(80)
                 let growth = 1.45
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(buyonecost)
@@ -1155,7 +1166,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#330077', color: 'white'}
         },
         34: {
             cost(x) { return new Decimal(1.65).pow(x || getBuyableAmount(this.layer, this.id)).mul(300) },
@@ -1163,16 +1174,16 @@
             unlocked() { return true },
             canAfford() { return player.rm.realmEnergy[5].gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>CANTE LAYER BOOST"
+                return "CANTE LAYER BOOST"
             },
             display() {
                 return "which are increasing replicanti mult by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Void Energy"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(300)
                 let growth = 1.65
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rm.realmEnergy[5] = player.rm.realmEnergy[5].sub(buyonecost)
@@ -1187,7 +1198,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#330077', color: 'white'}
         },
     },
     milestones: {
@@ -1200,26 +1211,23 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-                    ["row", [["buyable", 14], ["buyable", 15], ["buyable", 16]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
                 ]
             },
             "Realms": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return player.rm.realmModTitleText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "10px"],
                     ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.rm.realmModCountText }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
@@ -1233,28 +1241,25 @@
                 ]
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return player.rm.realmModCountText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "10px"],
                     ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.rm.realmEnergyText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
-                    ["row", [["buyable", 25], ["buyable", 26], ["buyable", 27], ["buyable", 28]]],
-                    ["row", [["buyable", 31], ["buyable", 32], ["buyable", 33], ["buyable", 34]]],
+                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["row", [["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27], ["ex-buyable", 28]]],
+                    ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
                 ]
             },
             "Halter Boosts": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Current halt: /" + format(player.po.pointHalt) + "." }],
                     ["raw-html", function () { return "<h3>Eligibility to gain boost: " + player.rm.halterBoostCheck + "." }],
@@ -1262,20 +1267,20 @@
                     ["raw-html", function () { return "<h1>Highest Halt: " + format(player.rm.halterBoost) + "."}],
                     ["raw-html", function () { return "<h3>The value doesn't update if you change the halt amount."}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Your current highest halt gives <h3>" + format(player.rm.halterBoostEffect) + "</h3> ???" }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Ooh cryptic something for the next update)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.s.highestSingularityPoints.gt(0) ? "Your current highest halt gives <h3>" + format(player.rm.halterBoostEffect) + "</h3> Halter Essence" : "Your current highest halt gives <h3>" + format(player.rm.halterBoostEffect) + "</h3> ???" }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.s.highestSingularityPoints.gt(0) ? "(Gives Halter Essence on next Singularity)" : "(Ooh cryptic something for the next update)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ]
             },
         },
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.rm.blankMods) + "</h3> Blank Mods" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "You will gain <h3>" + format(player.rm.blankModsToGet) + "</h3> blank mods on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.rm.blankMods) + "</h3> Blank Mods" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You will gain <h3>" + format(player.rm.blankModsToGet) + "</h3> blank mods on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
 
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && player.po.realmMods}
 })
 /*        codeExperience: new Decimal(0),

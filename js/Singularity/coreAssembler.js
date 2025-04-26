@@ -159,11 +159,11 @@
         player.coa.primes = 
         [
             "",
-            "1st Prime ",
-            "2nd Prime ",
-            "3rd Prime ",
-            "4th Prime ",
-            "5th Prime ",
+            "1st Prime",
+            "2nd Prime",
+            "3rd Prime",
+            "4th Prime",
+            "5th Prime",
         ]
 
         player.coa.nextCoreColorStrength = player.coa.strengthColors[player.coa.viewingStrength]
@@ -181,127 +181,47 @@
             new Decimal(1.4),
         ]
 
-
-        if (player.coa.luckLevel.eq(1))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                70,
-                25,
-                5,
-                0,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(1)) {
+            player.coa.coreStrengthOdds = [ 70, 25, 5, 0, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(1)
         }
-        if (player.coa.luckLevel.eq(2))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                50,
-                35,
-                15,
-                0,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(2)) {
+            player.coa.coreStrengthOdds = [ 50, 35, 15, 0, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(4)
         }
-        if (player.coa.luckLevel.eq(3))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                40,
-                40,
-                20,
-                0,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(3)) {
+            player.coa.coreStrengthOdds = [ 40, 40, 20, 0, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(9)
         }
-        if (player.coa.luckLevel.eq(4))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                30,
-                35,
-                35,
-                0,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(4)) {
+            player.coa.coreStrengthOdds = [ 30, 35, 35, 0, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(25)
         }
-        if (player.coa.luckLevel.eq(5))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                30,
-                30,
-                35,
-                5,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(5)) {
+            player.coa.coreStrengthOdds = [ 30, 30, 35, 5, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(49)
         }
-        if (player.coa.luckLevel.eq(6))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                25,
-                30,
-                30,
-                15,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(6)) {
+            player.coa.coreStrengthOdds = [ 25, 30, 30, 15, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(81)
         }
-        if (player.coa.luckLevel.eq(7))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                20,
-                25,
-                30,
-                25,
-                0,
-            ]
+        if (player.coa.luckLevel.eq(7)) {
+            player.coa.coreStrengthOdds = [ 20, 25, 30, 25, 0, ]
             player.coa.luckLevelUpgradeCost = new Decimal(169)
         }
-        if (player.coa.luckLevel.eq(8))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                20,
-                20,
-                25,
-                30,
-                5,
-            ]
+        if (player.coa.luckLevel.eq(8)) {
+            player.coa.coreStrengthOdds = [ 20, 20, 25, 30, 5, ]
             player.coa.luckLevelUpgradeCost = new Decimal(324)
         }
-        if (player.coa.luckLevel.eq(9))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                20,
-                20,
-                20,
-                30,
-                10,
-            ]
+        if (player.coa.luckLevel.eq(9)) {
+            player.coa.coreStrengthOdds = [ 20, 20, 20, 30, 10, ]
             player.coa.luckLevelUpgradeCost = new Decimal(1000)
         }
-        if (player.coa.luckLevel.eq(10))
-        {
-            player.coa.coreStrengthOdds = 
-            [
-                20,
-                20,
-                20,
-                20,
-                20,
-            ]
+        if (player.coa.luckLevel.eq(10)) {
+            player.coa.coreStrengthOdds = [ 20, 20, 20, 20, 20, ]
             player.coa.luckLevelUpgradeCost = new Decimal(1e308)
         }
+
         for (let i = 0; i < player.coa.coreFuelSourceText.length; i++)
         {
             player.coa.coreFuelSourceText[i] = player.coa.fuels[player.coa.coreFuelSources[i]]
@@ -317,7 +237,6 @@
 
             player.coa.corePrimedEffects[i] = layers.coa.determinePrimedEffect(player.coa.corePrimes[i], player.coa.coreStrengths[i])
             player.coa.corePrimedEffectText[i] = layers.coa.determinePrimedText(player.coa.corePrimes[i], player.coa.coreStrengths[i])
-
 
             if ((player.tab == "coa" && (player.subtabs["coa"]["stuff"] == "Inventory")) || (player.tab == "cop" && (player.subtabs["cop"]["stuff"] == "Processor")) || (player.tab == "ra" && (player.subtabs["ra"]["stuff"] == "Main"))  || (player.tab == "ev9" && player.subtabs["ev9"]["stuff"] == "Core Sacrifice") || (player.tab == "sma" && player.subtabs["sma"]["stuff"] == "Prime Cores")) setCoreColors(document.getElementById("core"+i), player.coa.coreFuelSourceColor[i], player.coa.coreStrengthColor[i], player.coa.corePrimeColor[i]);
         }
@@ -411,28 +330,28 @@
             {
             return [player.t.trees.pow(0.065).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
             player.s.highestSingularityPoints.pow(0.12).div(35).add(1).pow(player.coa.strengthBuffs[strength]), 
-            player.t.leaves.pow(0.05).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])] //trees, trees, leaves, repli-leaves
+            player.t.leaves.pow(0.05).add(1).pow(player.coa.strengthBuffs[strength]),
+            player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])] //trees, trees, leaves, repli-leaves
             } else
             {
                 return [player.p.prestigePoints.pow(0.065).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
-                Decimal.add(1.65, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(350)), 
-                player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])] //prestige points, prestige points, crystal 
+                Decimal.add(1.65, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(350)),
+                player.t.leaves.pow(0.05).add(1).pow(player.coa.strengthBuffs[strength]),
+                player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength])]
             }
         }
         if (fuel == 4)
         {
             if (player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.2))
             {
-            return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"), 
-            player.s.highestSingularityPoints.pow(0.09).div(35).add(1).pow(player.coa.strengthBuffs[strength]), 
-            player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), 
-            player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, grass, golden grass, moonstone
+            return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"),
+            player.s.singularityTime.add(1).pow(player.coa.strengthBuffs[strength]), 
+            player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, golden grass, moonstone
             } else
             {
-                return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"), 
-                Decimal.add(1.2, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(300)), 
-                player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), 
-                player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, grass, golden grass, moonstone
+                return [player.g.grass.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e20000"),
+                player.s.singularityTime.add(1).pow(player.coa.strengthBuffs[strength]), 
+                player.s.singularityTime.pow(0.08).div(2).add(1).pow(player.coa.strengthBuffs[strength])] //grass, golden grass, moonstone
             }
         }
         if (fuel == 5)
@@ -566,10 +485,9 @@
         }
         if (fuel == 4)
         {
-            return "Boosts grass based on itself: x" + format(layers.coa.determineEffect(4, strength)[0]) 
-            + "<br>Boosts grass based on highest singularity points: ^" + format(layers.coa.determineEffect(4, strength)[1]) 
-            + "<br>Boosts golden grass based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[2]) 
-            + "<br>Boosts moonstone based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[3]) 
+            return "Boosts grass based on itself: x" + format(layers.coa.determineEffect(4, strength)[0])
+            + "<br>Boosts golden grass based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[1]) 
+            + "<br>Boosts moonstone based on time spent in singularity: x" + format(layers.coa.determineEffect(4, strength)[2]) 
         }
         if (fuel == 5)
         {
@@ -599,8 +517,8 @@
         }
         if (fuel == 9)
         {
-            return "Boosts antimatter based on itself: x" + format(layers.coa.determineEffect(9, strength)[0]) 
-            + "<br>Boosts antimatter dimensions based on highest singularity points: ^" + format(layers.coa.determineEffect(9, strength)[1]) 
+            return "Boosts antimatter (ignoring softcaps) based on itself: x" + format(layers.coa.determineEffect(9, strength)[0]) 
+            + "<br>Boosts antimatter dimensions (ignoring softcaps) based on highest singularity points: ^" + format(layers.coa.determineEffect(9, strength)[1]) 
             + "<br>Boosts tickspeed based on time spent in singularity: x" + format(layers.coa.determineEffect(9, strength)[2]) 
         }
         if (fuel == 10)
@@ -610,8 +528,7 @@
             + "<br>Boosts infinities based on time spent in singularity: x" + format(layers.coa.determineEffect(10, strength)[2]) 
         }
     },
-    determinePrimedEffect(prime, strength)
-    {
+    determinePrimedEffect(prime, strength) {
         /*
         0 - Singularity Points
         1 - Radiation
@@ -619,33 +536,26 @@
         3 - Checkback XP
         4 - ??? (new thingy)
         */
-        if (prime == 0)
-        {
+        if (prime == 0) {
             return [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
         }
-        if (prime == 1)
-        {
+        if (prime == 1) {
             return [player.s.singularityTime.pow(0.8).div(5).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
         }
-        if (prime == 2)
-        {
+        if (prime == 2) {
             return [player.s.singularityTime.pow(0.9).div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.175).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1), new Decimal(1), new Decimal(1)]
         }
-        if (prime == 3)
-        {
+        if (prime == 3) {
             return [player.s.singularityTime.div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.2).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.4).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1), new Decimal(1)]
         }
-        if (prime == 4)
-        {
+        if (prime == 4) {
             return [player.s.singularityTime.pow(1.1).div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.225).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.45).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.div(1000).pow(0.2).div(2).add(1).pow(player.coa.strengthBuffs[strength]), new Decimal(1)]
         }
-        if (prime == 5)
-        {
+        if (prime == 5) {
             return [player.s.singularityTime.pow(1.2).div(5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.25).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.pow(0.5).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.div(1000).pow(0.225).div(2).add(1).pow(player.coa.strengthBuffs[strength]), player.s.singularityTime.div(6666).pow(0.1).div(3).add(1).pow(player.coa.strengthBuffs[strength])]
         }
     },
-    determinePrimedText(prime, strength)
-    {
+    determinePrimedText(prime, strength) {
         /*
         0 - Singularity Points
         1 - Radiation
@@ -653,30 +563,25 @@
         3 - Checkback XP
         4 - ??? (new thingy)
         */
-        if (prime == 1)
-        {
+        if (prime == 1) {
             return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(1, strength)[0]) 
         }
-        if (prime == 2)
-        {
+        if (prime == 2) {
             return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(2, strength)[0]) 
             + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(2, strength)[1])
         }
-        if (prime == 3)
-        {
+        if (prime == 3) {
             return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(3, strength)[0]) 
             + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(3, strength)[1])
             + "<br>Singularity Dimensions: x" + format(layers.coa.determinePrimedEffect(3, strength)[2])
         }
-        if (prime == 4)
-        {
+        if (prime == 4) {
             return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(4, strength)[0]) 
             + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(4, strength)[1])
             + "<br>Singularity Dimensions: x" + format(layers.coa.determinePrimedEffect(4, strength)[2])
             +  "<br>Checkback XP: x" + format(layers.coa.determinePrimedEffect(4, strength)[3])
         }
-        if (prime == 5)
-        {
+        if (prime == 5) {
             return "Singularity Points: x" + format(layers.coa.determinePrimedEffect(5, strength)[0]) 
             + "<br>Radiation: x" + format(layers.coa.determinePrimedEffect(5, strength)[1])
             + "<br>Singularity Dimensions: x" + format(layers.coa.determinePrimedEffect(5, strength)[2])
@@ -758,8 +663,8 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("s", 15)) player.r.pent = new Decimal(0)
-        if (hasUpgrade("s", 15)) player.r.pent = new Decimal(30)
+        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -861,8 +766,7 @@
             }
         }
 
-        if (!hasUpgrade("sma", 104))
-        {
+        if (!hasUpgrade("sma", 104)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
@@ -916,9 +820,14 @@
         player.d.buyables[14] = new Decimal(0)
         player.d.buyables[15] = new Decimal(0)
 
-        for (let i = 0; i < 18; i++)
-        {
-            player.d.diceEffects[i] = new Decimal(1)
+        if (!hasUpgrade("s", 13)) {
+            for (let i = 0; i < 14; i++) {
+                player.d.diceEffects[i] = new Decimal(1)
+            }
+        } else {
+            for (let i = 0; i < 10; i++) {
+                player.d.diceEffects[i] = new Decimal(1)
+            }
         }
 
         //rf
@@ -946,16 +855,15 @@
             }
         }
 
-            if (!hasMilestone("s", 21))
-            {
-                player.po.dice = false
-                player.po.rocketFuel = false
-                player.po.hex = false
-                if (!hasMilestone("s", 18)) player.po.breakInfinity = false
-                if (hasMilestone("s", 18)) player.po.breakInfinity = true
-                player.po.realmMods = false
-                player.po.featureSlots = player.po.featureSlotsMax
-            }
+        if (!hasMilestone("s", 21)) {
+            player.po.dice = false
+            player.po.rocketFuel = false
+            player.po.hex = false
+            if (!hasMilestone("s", 18)) player.po.breakInfinity = false
+            if (hasMilestone("s", 18)) player.po.breakInfinity = true
+            player.po.realmMods = false
+            player.po.featureSlots = player.po.featureSlotsMax
+        }
 
 
         //reset antimatter stuff
@@ -978,7 +886,7 @@
                 }
             }
 
-        if (!hasMilestone("s", 16))
+        if (!hasMilestone("s", 17))
         {
             player.ta.unlockedReverseBreak = false
         }
@@ -1018,8 +926,8 @@
 
         //check back
         player.cb.xp = new Decimal(0)
+        player.cb.totalxp = new Decimal(0)
         player.cb.level = new Decimal(1)
-        player.cb.highestLevel = new Decimal(1)
         if (!hasMilestone("s", 14)) player.cb.XPBoost = new Decimal(1)
 
         if (!hasMilestone("s", 15))
@@ -1149,6 +1057,7 @@
         player.de.tavPoints = new Decimal(0)
 
         //UNI 2 STUFF?
+        player.ip.activeChallenge = null
         for (let i = 0; i < player.ip.upgrades.length; i++) {
             if (+player.ip.upgrades[i] < 100) {
                 player.ip.upgrades.splice(i, 1);
@@ -1182,8 +1091,8 @@
         player.ip.buyables[14] = new Decimal(0)
 
         player.in.infinityPoints = new Decimal(0)
-        if (!hasMilestone("s", 12)) player.in.infinities = new Decimal(0)
-        if (hasMilestone("s", 12)) player.in.infinities = new Decimal(8)
+        if (!hasMilestone("s", 11)) player.in.infinities = new Decimal(0)
+        if (hasMilestone("s", 11)) player.in.infinities = new Decimal(8)
 
         //inf dimensions
         player.id.infinityPower = new Decimal(0)
@@ -1314,6 +1223,7 @@
 
 
         //domain
+        player.tad.activeChallenge = null
         player.tad.currentConversion = new Decimal(0)
         player.tad.shatteredInfinities = new Decimal(0)
         player.tad.disfiguredInfinities = new Decimal(0)
@@ -1341,10 +1251,10 @@
         player.ca.replicanti = new Decimal(1)
 
         player.ca.galaxyDust = new Decimal(0)
-        player.ca.canteCores = new Decimal(0)
-        player.ca.canteEnergy = new Decimal(0)
+        if (!hasMilestone("s", 18)) player.ca.canteCores = new Decimal(0)
+        if (!hasMilestone("s", 18)) player.ca.canteEnergy = new Decimal(0)
         player.ca.replicantiGalaxies = new Decimal(0)
-        player.ca.rememberanceCores = new Decimal(0)
+        if (!hasMilestone("s", 18)) player.ca.rememberanceCores = new Decimal(0)
         player.ca.defeatedCante = false
         
         player.ca.buyables[11] = new Decimal(0)
@@ -1501,15 +1411,14 @@
 
         player.fa.charge = new Decimal(0)
         player.fa.bestCharge = new Decimal(0)
-        if (!hasUpgrade("sma", 104))
-        {
-        for (let i = 0; i < player.fa.milestones.length; i++) {
-            if (+player.fa.milestones[i] < 100) {
-                player.fa.milestones.splice(i, 1);
-                i--;
+        if (!hasUpgrade("sma", 104)) {
+            for (let i = 0; i < player.fa.milestones.length; i++) {
+                if (+player.fa.milestones[i] < 100) {
+                    player.fa.milestones.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
 
         player.ra.radiation = new Decimal(0)
 
@@ -1543,7 +1452,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(0)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#b5b5b5' },
+            style: { width: '75px', "min-height": '75px', 'background-color': '#b5b5b5', borderRadius: '5px' },
         },
         3: {
             title() { return "Weak" },
@@ -1552,7 +1461,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(1)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#ebcc6e' },
+            style: { width: '75px', "min-height": '75px', 'background-color': '#ebcc6e', borderRadius: '5px' },
         },
         4: {
             title() { return "Average" },
@@ -1561,7 +1470,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(2)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#cf7429' },
+            style: { width: '75px', "min-height": '75px', 'background-color': '#cf7429', borderRadius: '5px' },
         },
         5: {
             title() { return "Strong" },
@@ -1570,7 +1479,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(3)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#cf3a29'},
+            style: { width: '75px', "min-height": '75px', 'background-color': '#cf3a29', borderRadius: '5px' },
         },
         6: {
             title() { return "Pinnacle" },
@@ -1579,7 +1488,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(4)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#4a1616' },
+            style: { width: '75px', "min-height": '75px', 'background-color': '#4a1616', borderRadius: '5px' },
         },
         7: {
             title() { return "<h5>Upgrade Luck Level" },
@@ -1589,7 +1498,8 @@
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(player.coa.luckLevelUpgradeCost)
                 player.coa.luckLevel = player.coa.luckLevel.add(1)
             },
-            style: { width: '100px', "min-height": '35px', "height": '30px'  },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: "100px", minHeight: "35px", height: "30px", borderRadius: "5px" },
         },
         11: {
             title() { return "Points" },
@@ -1598,7 +1508,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#eaf6f7' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#eaf6f7', borderRadius: '10px' },
         },
         12: {
             title() { return "Factor Power" },
@@ -1607,7 +1517,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(1)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#83cecf' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#83cecf', borderRadius: '10px' },
         },
         13: {
             title() { return "Prestige Points" },
@@ -1616,7 +1526,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(2)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#31aeb0' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#31aeb0', borderRadius: '10px' },
         },
         14: {
             title() { return "Trees" },
@@ -1625,7 +1535,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(3)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#0b6623' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#0b6623', borderRadius: '10px' },
         },
         15: {
             title() { return "Grass" },
@@ -1634,7 +1544,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(4)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#119b35' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#119b35', borderRadius: '10px' },
         },
         16: {
             title() { return "Grasshoppers" },
@@ -1643,7 +1553,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(5)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#19e04d' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#19e04d', borderRadius: '10px' },
         },
         17: {
             title() { return "Code Experience" },
@@ -1652,7 +1562,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(6)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#0951a6' },
+            style: { width: '100px', "min-height": '100px', 'background-color': '#0951a6', borderRadius: '10px' },
         },
         18: {
             title() { return "Dice Points" },
@@ -1661,7 +1571,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(7)
             },
-            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)' , 'border-color': '#0061ff'  },
+            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)' , 'border-color': '#0061ff', borderRadius: '10px'  },
         },
         19: {
             title() { return "Rocket Fuel" },
@@ -1670,7 +1580,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(8)
             },
-            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(90deg, #21599e 0%, #87bdff 100%)' , 'border-color': '#119B35' },
+            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(90deg, #21599e 0%, #87bdff 100%)' , 'border-color': '#119B35', borderRadius: '10px' },
         },
         21: {
             title() { return "Antimatter" },
@@ -1679,7 +1589,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(9)
             },
-            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(140deg, rgba(0,255,202,1) 0%, rgba(30,181,22,1) 100%)' , 'border-color': '#119B35' },
+            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(140deg, rgba(0,255,202,1) 0%, rgba(30,181,22,1) 100%)' , 'border-color': '#119B35', borderRadius: '10px' },
         },
         22: {
             title() { return "Infinity Points" },
@@ -1688,7 +1598,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(10)
             },
-            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)' , 'border-color': '#7c5423' },
+            style: { width: '100px', "min-height": '100px', 'background-image': 'linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)' , 'border-color': '#7c5423', borderRadius: '10px' },
         },
 
 
@@ -1702,7 +1612,7 @@
             onClick() {
                 player.coa.coreIndex = 0
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         102: {
             title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
@@ -1711,7 +1621,7 @@
             onClick() {
                 player.coa.coreIndex = 1
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         103: {
             title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
@@ -1720,7 +1630,7 @@
             onClick() {
                 player.coa.coreIndex = 2
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         104: {
             title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
@@ -1729,7 +1639,7 @@
             onClick() {
                 player.coa.coreIndex = 3
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         105: {
             title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
@@ -1738,7 +1648,7 @@
             onClick() {
                 player.coa.coreIndex = 4
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         106: {
             title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
@@ -1747,7 +1657,7 @@
             onClick() {
                 player.coa.coreIndex = 5
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         107: {
             title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
@@ -1756,7 +1666,7 @@
             onClick() {
                 player.coa.coreIndex = 6
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         108: {
             title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
@@ -1765,7 +1675,7 @@
             onClick() {
                 player.coa.coreIndex = 7
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         109: {
             title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
@@ -1774,7 +1684,7 @@
             onClick() {
                 player.coa.coreIndex = 8
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         111: {
             title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
@@ -1783,7 +1693,7 @@
             onClick() {
                 player.coa.coreIndex = 9
             },
-            style: { width: '140px', "min-height": '140px' },
+            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
         },
         112: {
             title() { return "Remove this core." },
@@ -1792,6 +1702,7 @@
             onClick() {
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.coa.coreStarmetalValue[player.coa.coreIndex])
                 player.coa.coreStarmetalValue[player.coa.coreIndex] = new Decimal(0)
+
                 if (player.ev.evolutionsUnlocked[9]) player.ev4.offerings = player.ev4.offerings.add(player.ev9.offeringsOnSacrifice[player.coa.coreIndex])
                     
                 if (player.coa.coreOccupied[player.coa.coreIndex])
@@ -1801,10 +1712,10 @@
                 player.coa.coreFuelSources[player.coa.coreIndex] = new Decimal(-1)
                 player.coa.coreStrengths[player.coa.coreIndex] = new Decimal(-1)
                 player.coa.corePrimes[player.coa.coreIndex] = new Decimal(0)
-            
                 player.coa.coreOccupied[player.coa.coreIndex] = false
             },
-            style: { width: '140px', "min-height": '70px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '140px', "min-height": '70px', borderRadius: '10px' },
         },
 
         //RESET
@@ -1813,12 +1724,12 @@
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked() { return true },
             onClick() {
-                if (player.cop.processedCoreFuel.neq(-1) && player.cs.scrapCoreOnReset) layers.cs.scrapCore();
+                if (player.cs.scrapCoreOnReset && player.cop.processedCoreFuel.neq(-1)) layers.cs.scrapCore();
                 layers.coa.generateCore();
                 player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
                 player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
                 player.re.halterEssence = player.re.halterEssence.add(player.rm.halterBoostEffect)
-                player.ra.storedRadiation = player.ra.radiation
+                player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
 
                 player.coa.singularityPause = new Decimal(12)
                 if (!hasMilestone("s", 18)) player.tab = "i"
@@ -1827,9 +1738,9 @@
                 {
                     player.in.infinities = new Decimal(8)
                 }
-
             },
-            style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)', borderRadius: "25px" },
         },
     },
     bars: {
@@ -1849,12 +1760,12 @@
     microtabs: {
         stuff: {
             "Assembly": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
-        ["raw-html", function () { return "Next Core: " + player.coa.strengths[player.coa.viewingStrength] + " " + player.coa.fuels[player.coa.nextCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Next Core: " + player.coa.strengths[player.coa.viewingStrength] + " " + player.coa.fuels[player.coa.nextCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [
                         ["column", [
@@ -1865,77 +1776,74 @@
                             ["raw-html", function () { return "Average: " + formatWhole(player.coa.coreStrengthOdds[2]) + "%" }, { "color": "#cf7429", "font-size": "16px", "font-family": "monospace" }],
                             ["raw-html", function () { return "Strong: " + formatWhole(player.coa.coreStrengthOdds[3]) + "%" }, { "color": "#cf3a29", "font-size": "16px", "font-family": "monospace" }],
                             ["raw-html", function () { return "Pinnacle: " + formatWhole(player.coa.coreStrengthOdds[4]) + "%" }, { "color": "#4a1616", "font-size": "16px", "font-family": "monospace" }],
-                    ["row", [["clickable", 7]]],
-                    ["raw-html", function () { return "Upgrade Cost: " + formatWhole(player.coa.luckLevelUpgradeCost) + " Starmetal Alloy" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                ]],
-                    ["raw-html", function () { return " <div id=nextCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["column", [
-                        ["raw-html", function () { return "Current Fuel Source: " + player.coa.fuels[player.coa.nextCoreFuel] }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Innate Effects:<br>" + player.coa.nextCoreInnateEffectsText }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
-                    ]], ]],
+                            ["row", [["clickable", 7]]],
+                            ["raw-html", function () { return hasUpgrade("s", 21) ? "Upgrade Cost: " + formatWhole(player.coa.luckLevelUpgradeCost) + " Starmetal Alloy" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ]],
+                        ["raw-html", function () { return " <div id=nextCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["column", [
+                            ["raw-html", function () { return "Current Fuel Source: " + player.coa.fuels[player.coa.nextCoreFuel] }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                            ["blank", "25px"],
+                            ["raw-html", function () { return "Innate Effects:<br>" + player.coa.nextCoreInnateEffectsText }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
+                        ]], 
+                    ]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "View strength:" }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
                     ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
                     ["raw-html", function () { return "Note: This does not choose the next strength, strength is determined by the odds." }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 201]]],
-    ]
-
+                ]
             },
             "Fuel Selection": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.s.highestSingularityPoints.gt(0) }, //remove the e
                 content:
                 [
                     ["blank", "25px"],
-        ["raw-html", function () { return "Select a fuel source." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Current fuel source: " + player.coa.fuels[player.coa.nextCoreFuel] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "<div id=nextCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Select a fuel source." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current fuel source: " + player.coa.fuels[player.coa.nextCoreFuel] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<div id=nextCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19], ["clickable", 21], ["clickable", 22]]],
                 ]
-
             },
             "Inventory": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["raw-html", function () { return hasUpgrade("s", 21) ? "Primed Effects (All based on singularity time):<br>" + player.coa.corePrimedEffectText[player.coa.coreIndex] : ""}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return hasUpgrade("s", 21) ? "Primed Effects (All based on singularity time):<br>" + player.coa.corePrimedEffectText[player.coa.coreIndex] : ""}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                     ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], ["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 111]]],
                     ["blank", "25px"],
                     ["row", [["clickable", 112]]],
                 ]
-
             },
             "Reset Details": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
-        ["blank", "25px"],
-        ["raw-html", function () { return "Singularity is a BIG reset layer. It will reset basically everything leading up to this point." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Do not be afraid. You would rather be set back but progress than be stuck forever." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Now if you are willing to proceed, here are the features that will be reset:" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["raw-html", function () { return "All universe 1 content - Including steel, crystal, time cubes, and rage power." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "All universe 2 content - Including tav's domain, infinity dimensions, mastery, and replicanti." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "All alternate universe 1 content - Including oil and grass-skip." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Performs an XPBoost equivalent reset, and also resets XPBoost, check back buyables, and highest check back level." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["raw-html", function () { return "Only thing that you get to keep are pets, evolutions, pet shop, epic pet stuff, automation shards, and evolution special features." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You may keep them for now, but be prepared to lose them in the next layer :)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "100px"],
-        ["raw-html", function () { return "One more word of advice: Good luck." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-    ]
-
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Singularity is a BIG reset layer. It will reset basically everything leading up to this point." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Do not be afraid. You would rather be set back but progress than be stuck forever." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Now if you are willing to proceed, here are the features that will be reset:" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "All universe 1 content - Including steel, crystal, time cubes, and rage power." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "All universe 2 content - Including tav's domain, infinity dimensions, mastery, and replicanti." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "All alternate universe 1 content - Including oil and grass-skip." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Performs an XPBoost equivalent reset, and also resets XPBoost, check back buyables, and highest check back level." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Only thing that you get to keep are pets, evolutions, pet shop, epic pet stuff, automation shards, and evolution special features." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You may keep them for now, but be prepared to lose them in the next layer :)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "100px"],
+                    ["raw-html", function () { return "One more word of advice: Good luck." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                ]
             },
         },
     }, 
@@ -1946,7 +1854,7 @@
         ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true  }
 })
 

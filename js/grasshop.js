@@ -60,92 +60,128 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
+        // START OF GRASSHOPPER MODIFIERS
         if (player.gh.grasshoppersToGet.lt(50000))  player.gh.grasshoppersToGet = player.g.grass.div(10000).pow(0.55)
         if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45).add(10000)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.uncommonPetEffects[0][1])
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 201)[1])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
         if (player.po.rocketFuel) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cb.rarePetEffects[3][0])
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
         if (inChallenge("ip", 13) || player.po.hex) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(buyableEffect("h", 15))
         if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
+
+        // CHALLENGE MODIFIERS
         if (inChallenge("ip", 15)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.85)
         if (hasUpgrade("d", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("d", 14))
         if (inChallenge("ip", 18)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.6)
         if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.35)
         if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
         if (hasUpgrade("de", 11) && inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
+
+        // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorsIndex == 5) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorsEffect[8])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27))
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
+        if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cop.processedCoreInnateEffects[0])
 
-        
-        if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1))
-        {
+        // POWER MODIFIERS
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27))
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.re.realmEssenceEffect)
+        if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.cop.processedCoreInnateEffects[1])
+
+        // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
+        if (inChallenge("ip", 12) && player.gh.grasshoppers.gt(1)) {
             player.gh.grasshoppers = player.gh.grasshoppers.sub(player.gh.grasshoppers.mul(player.pe.pestEffect[7] * delta))
         }
+        if (player.r.timeReversed) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(0)
 
+        // GRASSHOPPERS PER SECOND
+        if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.mul(Decimal.mul(delta, 0.1)))
+
+        // GRASSHOPPER RESET CODE
         if (player.gh.grasshopPause.gt(0)) {
             layers.gh.grasshopReset();
         }
         player.gh.grasshopPause = player.gh.grasshopPause.sub(1)
 
+        // GRASSHOPPER EFFECTS
         player.gh.grasshopperEffects[0] = player.gh.grasshoppers.pow(1.1).pow(1.25).add(1)
         player.gh.grasshopperEffects[1] = player.gh.grasshoppers.div(1.2).pow(1.2).add(1)
         player.gh.grasshopperEffects[2] = player.gh.grasshoppers.div(1.7).pow(1.15).add(1)
         player.gh.grasshopperEffects[3] = player.gh.grasshoppers.div(2).pow(1.1).add(1)
         player.gh.grasshopperEffects[4] = player.gh.grasshoppers.div(4).pow(0.5).add(1)
 
-        player.gh.fertilizerEffect = player.gh.fertilizer.pow(0.4).div(10).add(1)
+        //----------------------------------------
+
+        // START OF FERTILIZER MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.grasshoppers.pow(1.4).div(10)
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.cb.uncommonPetEffects[0][2])
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.cb.rarePetEffects[0][0])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 201)[2])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 301)[0])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.diceEffects[7])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
+
+        // CHALLENGE MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.pe.pestEffect[6])
+
+        // CONTINUED REGULAR MODIFIERS
         if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
         if (player.pol.pollinatorsIndex == 5) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorsEffect[9])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.i.preOTFMult)
 
+        // POWER MODIFIERS
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.re.realmEssenceEffect)
+        if (player.cop.processedCoreFuel.eq(5)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.cop.processedCoreInnateEffects[2])
+
+        // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
+        if (player.r.timeReversed) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
+
+        // FERTILIZER PER SECOND
         player.gh.fertilizer = player.gh.fertilizer.add(player.gh.fertilizerPerSecond.mul(delta))
 
-        //steel
+        // FERTILIZER EFFECT
+        player.gh.fertilizerEffect = player.gh.fertilizer.pow(0.4).div(10).add(1)
+
+        //----------------------------------------
+
+        // START OF STEEL MODIFIERS
         if (player.m.codeExperience.pow(0.08).lt("1e500")) player.gh.steelToGet = player.m.codeExperience.pow(0.08)
-        if (player.m.codeExperience.pow(0.08).gte("1e500"))
-        {
-            player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
-        }
+        if (player.m.codeExperience.pow(0.08).gte("1e500")) player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.rm.realmModsEffect[1])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.cb.evolvedEffects[6][0])
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.cb.rarePetEffects[5][0])
+        player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 1106)[0])
+        player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 306)[0])
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.foundryEffect)
         if (player.pol.pollinatorsIndex == 8) player.gh.steelToGet = player.gh.steelToGet.mul(player.pol.pollinatorsEffect[16])
         if (hasMilestone("fa", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.milestoneEffect[3])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("s", 13))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("fu", 18))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
+        if (player.cop.processedCoreFuel.eq(5)) player.gh.steelToGet = player.gh.steelToGet.mul(player.cop.processedCoreInnateEffects[3])
 
+        // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))
 
+        // STEEL EFFECT
         player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
 
+        // STEEL RESET CODE
         if (player.gh.steelPause.gt(0)) {
             layers.gh.steelieReset();
         }
-
         player.gh.steelPause = player.gh.steelPause.sub(1)
 
-        if (hasUpgrade("s", 18))
-        {
+        // SINGULARITY UPGRADE 19 PERK
+        if (hasUpgrade("s", 19)) {
             player.gh.buyables[21] = new Decimal(200)
             player.gh.buyables[22] = new Decimal(50)
         }
@@ -171,7 +207,7 @@
             onClick() {
                 player.gh.studyMax = true
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px'}
         },
         3: {
             title() { return "Buy Max Off" },
@@ -180,7 +216,7 @@
             onClick() {
                 player.gh.studyMax = false
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', "min-height": '50px', borderRadius: '0px 10px 10px 0px'}
         },
         4: {
             title() { return "Buy Max On" },
@@ -201,7 +237,7 @@
             style: { width: '75px', "min-height": '50px', }
         },
         11: {
-            title() { return "<h3>Grasshop, but reset everything except pent. <br>(Req: 10,000 Grass and 1e35 Celestial Points)" },
+            title() { return "<h2>Grasshop, but reset everything except pent.</h2><br><h3><small>Req: 10,000 Grass and 1e35 Celestial Points</small></h3>" },
             canClick() { return player.gh.grasshoppersToGet.gte(1) && player.points.gte(1e35) },
             unlocked() { return true },
             onClick() {
@@ -210,17 +246,23 @@
 
                 player.pe.pests = player.pe.pests.mul(0.9)
             },
-            style: { width: '400px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
-            title() { return "<h3>Steelie, but reset everything before unlocking OTFs. (based on code experience)" },
+            title() { return "<h2>Steelie, but reset everything before unlocking OTFs.</h2><br><h3>(based on code experience)</h3>" },
             canClick() { return player.gh.steelToGet.gte(1) },
             unlocked() { return true },
             onClick() {
                 player.gh.steelPause = new Decimal(5)
                 player.gh.steel = player.gh.steel.add(player.gh.steelToGet)
             },
-            style: { width: '400px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     grasshopReset()
@@ -305,7 +347,8 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -874,14 +917,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Point Reinforcer"
+                return "Point Reinforcer"
             },
             display() {
                 return "which are multiplying point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -895,7 +938,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         32: {
             costBase() { return new Decimal(100) },
@@ -908,14 +951,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Leaf and Tree Reinforcer"
+                return "Leaf and Tree Reinforcer"
             },
             display() {
                 return "which are multiplying leaf and tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -929,7 +972,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         33: {
             costBase() { return new Decimal(200) },
@@ -942,14 +985,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Grass Reinforcer"
+                return "Grass Reinforcer"
             },
             display() {
                 return "which are multiplying grass gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -963,7 +1006,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         34: {
             costBase() { return new Decimal(350) },
@@ -976,14 +1019,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/5,000<br/>Fertilizer Reinforcer"
+                return "Fertilizer Reinforcer"
             },
             display() {
                 return "which are multiplying fertilizer gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -997,7 +1040,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         35: {
             costBase() { return new Decimal(1000) },
@@ -1010,14 +1053,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Antimatter Reinforcer"
+                return "Antimatter Reinforcer"
             },
             display() {
                 return "which are multiplying antimatter gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1031,7 +1074,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         36: {
             costBase() { return new Decimal(1500) },
@@ -1044,14 +1087,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Dimension Power Reinforcer"
+                return "Dimension Power Reinforcer"
             },
             display() {
                 return "which are multiplying all dimension power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1065,7 +1108,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         37: {
             costBase() { return new Decimal(2500) },
@@ -1078,14 +1121,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Antimatter Dimension Reinforcer"
+                return "Antimatter Dimension Reinforcer"
             },
             display() {
                 return "which are multiplying all antimatter dimension production by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1099,7 +1142,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
         38: {
             costBase() { return new Decimal(4000) },
@@ -1112,14 +1155,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/>Infinity Point Reinforcer"
+                return "Infinity Point Reinforcer"
             },
             display() {
                 return "which are multiplying infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Steel"
             },
-            buy() {
-                if (player.gh.steelMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1133,7 +1176,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
     },
     milestones: {
@@ -1146,24 +1189,29 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h1>Effects" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Celestial Points: x" + format(player.gh.grasshopperEffects[0]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Factor Power: x" + format(player.gh.grasshopperEffects[1]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Prestige Points: x" + format(player.gh.grasshopperEffects[2]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Leaf Gain: x" + format(player.gh.grasshopperEffects[3]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Grass Value: x" + format(player.gh.grasshopperEffects[4]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["raw-html", function () { return "<h1>Effects" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["blank", "5px"],
+                        ["h-line", "450px"],
+                        ["blank", "5px"],
+                        ["raw-html", function () { return "<h2>Celestial Points: x" + format(player.gh.grasshopperEffects[0]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Factor Power: x" + format(player.gh.grasshopperEffects[1]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Prestige Points: x" + format(player.gh.grasshopperEffects[2]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Leaf Gain: x" + format(player.gh.grasshopperEffects[3]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "<h2>Grass Value: x" + format(player.gh.grasshopperEffects[4]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],    
+                    ], {width: "500px", height: "210px", backgroundColor: "#074317", border: "3px solid #19e04d", borderRadius: "15px"}],
                 ]
 
             },
             "Upgrade Tree": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -1181,7 +1229,7 @@
 
             },
             "Steelie": {
-                buttonStyle() { return { 'color': 'white', 'border-color': "black", 'background': 'grey', } },
+                buttonStyle() { return { color: "white", borderColor: "black", backgroundColor: "grey", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("i", 23) },
                 content:
                 [
@@ -1192,10 +1240,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 31], ["buyable", 32], ["buyable", 33], ["buyable", 34]]],
-                    ["row", [["buyable", 35], ["buyable", 36], ["buyable", 37], ["buyable", 38]]],
+                    ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
+                    ["row", [["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]]],
                 ]
 
             },

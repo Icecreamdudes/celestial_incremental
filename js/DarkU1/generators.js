@@ -15,12 +15,8 @@ addLayer("dg", {
         generatorPower: new Decimal(0),
         generatorPowerEffect: new Decimal(1),
         generatorPowerPerSecond: new Decimal(0),
-
-        gMax: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #a8dca4 0%, #53bd96 50%, #147363 100%)",
@@ -30,7 +26,7 @@ addLayer("dg", {
         };
     },
     tooltip: "Generators",
-    branches: ["le"],
+    branches: [["le", "#4f0694"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -57,8 +53,7 @@ addLayer("dg", {
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
     },
-    bars: {
-    },
+    bars: {},
     generatorReset()
     {
         player.du.points = new Decimal(0)
@@ -85,25 +80,7 @@ addLayer("dg", {
             onClick() {
                 player.tab = "du"
             },
-            style: { width: '100px', "min-height": '50px', color: "white" },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.dg.gMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.dg.gMax = true
-            },
-            style: { width: '75px', "min-height": '50px', color: "white" }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.dg.gMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.dg.gMax = false
-            },
-            style: { width: '75px', "min-height": '50px', color: "white" }
+            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #0a593c" },
         },
         11: {
             title() { return "<h2>Reset previous content for generators." },
@@ -113,13 +90,15 @@ addLayer("dg", {
                 player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet)
                 player.dg.generatorPause = new Decimal(10)
             },
-            style: { width: '400px', "min-height": '100px', color: "white" },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #0a593c", margin: "1px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
     },
-
-    upgrades: {
-
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(1) },
@@ -132,14 +111,14 @@ addLayer("dg", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Point Gen Booster"
+                return "Point Gen Booster"
             },
             display() {
                 return "which are boosting point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
-            buy() {
-                if (player.dg.gMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -153,7 +132,7 @@ addLayer("dg", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
         },
         12: {
             costBase() { return new Decimal(10) },
@@ -166,14 +145,14 @@ addLayer("dg", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Rank-Tier-Tetr Gen Booster"
+                return "Rank-Tier-Tetr Gen Booster"
             },
             display() {
                 return "which are boosting rank/tier/tetr point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
-            buy() {
-                if (player.dg.gMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -187,7 +166,7 @@ addLayer("dg", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
         },
         13: {
             costBase() { return new Decimal(100) },
@@ -200,14 +179,14 @@ addLayer("dg", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Prestige Gen Booster"
+                return "Prestige Gen Booster"
             },
             display() {
                 return "which are boosting prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
-            buy() {
-                if (player.dg.gMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -221,7 +200,7 @@ addLayer("dg", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
         },
     },
     milestones: {
@@ -235,27 +214,22 @@ addLayer("dg", {
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #0a593c", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
-         ["raw-html", function () { return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.dg.generatorsToGet) + "</h3> generators on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Generators provide a base generator power gain of <h3>" + format(player.dg.generatorEffect) + "</h3>." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["blank", "25px"],
-         ["raw-html", function () { return "You have <h3>" + format(player.dg.generatorPower) + "</h3> generator power." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are generating <h3>" + format(player.dg.generatorPowerPerSecond) + "</h3> generator power per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Generator power boosts point gain by x<h3>" + format(player.dg.generatorPowerEffect) + "</h3>." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["blank", "25px"],
-         ["row", [["clickable", 11]]],
-         ["blank", "25px"],
-         ["row", [["clickable", 2], ["clickable", 3]]],
-         ["blank", "25px"],
-         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13]]],
-
-
-        ]
-
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.dg.generatorsToGet) + "</h3> generators on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Generators provide a base generator power gain of <h3>" + format(player.dg.generatorEffect) + "</h3>." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.dg.generatorPower) + "</h3> generator power." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are generating <h3>" + format(player.dg.generatorPowerPerSecond) + "</h3> generator power per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Generator power boosts point gain by x<h3>" + format(player.dg.generatorPowerEffect) + "</h3>." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 11]]],
+                    ["blank", "25px"],
+                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]]],
+                ]
             },
         },
     },

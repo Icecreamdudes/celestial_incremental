@@ -7,37 +7,17 @@ addLayer("dgr", {
     startData() { return {
         unlocked: true,
 
-
-        grMax: false,
-
         //NOTE: MAKE ALL OF THIS STUFF RESET ON STARMETAL RESET
         grass: new Decimal(0),
         grassEffect: new Decimal(1),
         grassValue: new Decimal(1),
         
-        grassPlots: [
-            [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-            [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-            [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-            [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-            [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-        ],
         maxGrass: new Decimal(1),
 
         grassTimer: new Decimal(0),
         grassTimerReq: new Decimal(10),
         lastPickedText: "",
-
-        clickableColors: [
-            ["", "", "", "", "",],
-            ["", "", "", "", "",],
-            ["", "", "", "", "",],
-            ["", "", "", "", "",],
-            ["", "", "", "", "",],
-            ["", "", "", "", "",],
-        ],
-    }
-    },
+    }},
     automate() {
     },
     nodeStyle() {
@@ -49,35 +29,15 @@ addLayer("dgr", {
         };
     },
     tooltip: "Dark Grass",
-    branches: ["dg"],
+    branches: [["dg", "#4f0694"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
-        for (let i = 0; i < player.dgr.grassPlots.length; i++)
-        {
-            for (let j = 0; j < player.dgr.grassPlots[i].length; j++)
-            {
-                if (player.dgr.grassPlots[i][j].gte(player.dgr.maxGrass))
-                {
-                    player.dgr.grassPlots[i][j] = player.dgr.maxGrass
-                }
-            }
-        }
-        for (let i = 0; i < player.dgr.grassPlots.length; i++)
-        {
-            for (let j = 0; j < player.dgr.grassPlots[i].length; j++)
-            {
-                if (player.dgr.grassPlots[i][j].eq(0))
-                {
-                    player.dgr.clickableColors[i][j] = "#021c00"
-                }
-                if (player.dgr.grassPlots[i][j].gt(0) && player.dgr.grassPlots[i][j].lt(player.dgr.maxGrass))
-                {
-                    player.dgr.clickableColors[i][j] = "#289120"
-                }
-                if (player.dgr.grassPlots[i][j].eq(player.dgr.maxGrass))
-                {
-                    player.dgr.clickableColors[i][j] = "#57e64c"
+        for (let i = 1; i <= tmp.dgr.grid.cols; i++) {
+            for (let j = 1; j <= tmp.dgr.grid.rows; j++) {
+                let val = i + "0" + j
+                if (getGridData("dgr", val).gte(player.dgr.maxGrass)) {
+                    setGridData("dgr", val, player.dgr.maxGrass)
                 }
             }
         }
@@ -108,23 +68,33 @@ addLayer("dgr", {
         player.dgr.grassEffect = player.dgr.grass.pow(0.4).div(10).add(1)
     },
     addGrass(){
-        let row = getRandomInt(5)
-        let column = getRandomInt(5)
+        let row = getRandomInt(5) + 1
+        let column = getRandomInt(5) + 1
+        let val = column + "0" + row
 
-        player.dgr.grassPlots[row][column] = player.dgr.grassPlots[row][column].add(player.dgr.grassValue)
-        player.dgr.lastPickedText = "Last grown plot: (" + formatWhole(row) + ", " + formatWhole(column) + ")"
+        setGridData("dgr", val, getGridData("dgr", val).add(player.dgr.grassValue))
+        player.dgr.lastPickedText = "Last grown plot: (" + formatWhole(row - 1) + ", " + formatWhole(column - 1) + ")"
     },
     bars: {
         grassBar: {
             unlocked() { return true },
             direction: RIGHT,
-            width: 400,
+            width: 375,
             height: 25,
             progress() {
                 return player.dgr.grassTimer.div(player.dgr.grassTimerReq)
             },
+            baseStyle: {
+                backgroundColor: "black",
+            },
             fillStyle: {
-                "background-color": "#147363",
+                backgroundColor: "#006a44",
+            },
+            borderStyle: {
+                border: "0px solid",
+                borderTop: "2px solid #006a44",
+                borderBottom: "2px solid #006a44",
+                borderRadius: "0px",
             },
             display() {
                 return "Time: " + formatTime(player.dgr.grassTimer) + "/" + formatTime(player.dgr.grassTimerReq);
@@ -139,305 +109,33 @@ addLayer("dgr", {
             onClick() {
                 player.tab = "du"
             },
-            style: { width: '100px', "min-height": '50px', color: "white" },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.dgr.grMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grMax = true
-            },
-            style: { width: '75px', "min-height": '50px', color: "white" }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.dgr.grMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grMax = false
-            },
-            style: { width: '75px', "min-height": '50px', color: "white" }
-        },
-        
-        //grass plots
-        100: {
-            title() { return format(player.dgr.grassPlots[0][0]); },
-            canClick() { return player.dgr.grassPlots[0][0].gt(0); },
-            unlocked() { return true; },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[0][0]);
-                player.dgr.grassPlots[0][0] = new Decimal(0);
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[0][0], color: "black", "font-size": "10px" }; },
-        },
-        101: {
-            title() { return format(player.dgr.grassPlots[0][1]) },
-            canClick() { return player.dgr.grassPlots[0][1].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[0][1])
-                player.dgr.grassPlots[0][1] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[0][1], color: "black", "font-size": "10px" }; },
-        },
-        102: {
-            title() { return format(player.dgr.grassPlots[0][2]) },
-            canClick() { return player.dgr.grassPlots[0][2].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[0][2])
-                player.dgr.grassPlots[0][2] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[0][2], color: "black", "font-size": "10px" }; },
-        },
-        103: {
-            title() { return format(player.dgr.grassPlots[0][3]) },
-            canClick() { return player.dgr.grassPlots[0][3].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[0][3])
-                player.dgr.grassPlots[0][3] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[0][3], color: "black", "font-size": "10px" }; },
-
-        },
-        104: {
-            title() { return format(player.dgr.grassPlots[0][4]) },
-            canClick() { return player.dgr.grassPlots[0][4].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[0][4])
-                player.dgr.grassPlots[0][4] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[0][4], color: "black", "font-size": "10px" }; },
-
-        },
-        110: {
-            title() { return format(player.dgr.grassPlots[1][0]) },
-            canClick() { return player.dgr.grassPlots[1][0].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[1][0])
-                player.dgr.grassPlots[1][0] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[1][0], color: "black", "font-size": "10px" }; },
-
-        },
-        111: {
-            title() { return format(player.dgr.grassPlots[1][1]) },
-            canClick() { return player.dgr.grassPlots[1][1].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[1][1])
-                player.dgr.grassPlots[1][1] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[1][1], color: "black", "font-size": "10px" }; },
-
-        },
-        112: {
-            title() { return format(player.dgr.grassPlots[1][2]) },
-            canClick() { return player.dgr.grassPlots[1][2].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[1][2])
-                player.dgr.grassPlots[1][2] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[1][2], color: "black", "font-size": "10px" }; },
-
-        },
-        113: {
-            title() { return format(player.dgr.grassPlots[1][3]) },
-            canClick() { return player.dgr.grassPlots[1][3].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[1][3])
-                player.dgr.grassPlots[1][3] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[1][3], color: "black", "font-size": "10px" }; },
-
-        },
-        114: {
-            title() { return format(player.dgr.grassPlots[1][4]) },
-            canClick() { return player.dgr.grassPlots[1][4].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[1][4])
-                player.dgr.grassPlots[1][4] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[1][4], color: "black", "font-size": "10px" }; },
-
-        },
-        120: {
-            title() { return format(player.dgr.grassPlots[2][0]) },
-            canClick() { return player.dgr.grassPlots[2][0].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[2][0])
-                player.dgr.grassPlots[2][0] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[2][0], color: "black", "font-size": "10px" }; },
-
-        },
-        121: {
-            title() { return format(player.dgr.grassPlots[2][1]) },
-            canClick() { return player.dgr.grassPlots[2][1].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[2][1])
-                player.dgr.grassPlots[2][1] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[2][1], color: "black", "font-size": "10px" }; },
-
-        },
-        122: {
-            title() { return format(player.dgr.grassPlots[2][2]) },
-            canClick() { return player.dgr.grassPlots[2][2].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[2][2])
-                player.dgr.grassPlots[2][2] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[2][2], color: "black", "font-size": "10px" }; },
-
-        },
-        123: {
-            title() { return format(player.dgr.grassPlots[2][3]) },
-            canClick() { return player.dgr.grassPlots[2][3].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[2][3])
-                player.dgr.grassPlots[2][3] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[2][3], color: "black", "font-size": "10px" }; },
-
-        },
-        124: {
-            title() { return format(player.dgr.grassPlots[2][4]) },
-            canClick() { return player.dgr.grassPlots[2][4].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[2][4])
-                player.dgr.grassPlots[2][4] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[2][4], color: "black", "font-size": "10px" }; },
-
-        },
-        130: {
-            title() { return format(player.dgr.grassPlots[3][0]) },
-            canClick() { return player.dgr.grassPlots[3][0].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[3][0])
-                player.dgr.grassPlots[3][0] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[3][0], color: "black", "font-size": "10px" }; },
-
-        },
-        131: {
-            title() { return format(player.dgr.grassPlots[3][1]) },
-            canClick() { return player.dgr.grassPlots[3][1].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[3][1])
-                player.dgr.grassPlots[3][1] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[3][1], color: "black", "font-size": "10px" }; },
-
-        },
-        132: {
-            title() { return format(player.dgr.grassPlots[3][2]) },
-            canClick() { return player.dgr.grassPlots[3][2].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[3][2])
-                player.dgr.grassPlots[3][2] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[3][2], color: "black", "font-size": "10px" }; },
-
-        },
-        133: {
-            title() { return format(player.dgr.grassPlots[3][3]) },
-            canClick() { return player.dgr.grassPlots[3][3].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[3][3])
-                player.dgr.grassPlots[3][3] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[3][3], color: "black", "font-size": "10px" }; },
-
-        },
-        134: {
-            title() { return format(player.dgr.grassPlots[3][4]) },
-            canClick() { return player.dgr.grassPlots[3][4].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[3][4])
-                player.dgr.grassPlots[3][4] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[3][4], color: "black", "font-size": "10px" }; },
-
-        },
-        140: {
-            title() { return format(player.dgr.grassPlots[4][0]) },
-            canClick() { return player.dgr.grassPlots[4][0].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[4][0])
-                player.dgr.grassPlots[4][0] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[4][0], color: "black", "font-size": "10px" }; },
-
-        },
-        141: {
-            title() { return format(player.dgr.grassPlots[4][1]) },
-            canClick() { return player.dgr.grassPlots[4][1].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[4][1])
-                player.dgr.grassPlots[4][1] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[4][1], color: "black", "font-size": "10px" }; },
-
-        },
-        142: {
-            title() { return format(player.dgr.grassPlots[4][2]) },
-            canClick() { return player.dgr.grassPlots[4][2].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[4][2])
-                player.dgr.grassPlots[4][2] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[4][2], color: "black", "font-size": "10px" }; },
-
-        },
-        143: {
-            title() { return format(player.dgr.grassPlots[4][3]) },
-            canClick() { return player.dgr.grassPlots[4][3].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[4][3])
-                player.dgr.grassPlots[4][3] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[4][3], color: "black", "font-size": "10px" }; },
-
-        },
-        144: {
-            title() { return format(player.dgr.grassPlots[4][4]) },
-            canClick() { return player.dgr.grassPlots[4][4].gt(0)  },
-            unlocked() { return true },
-            onClick() {
-                player.dgr.grass = player.dgr.grass.add(player.dgr.grassPlots[4][4])
-                player.dgr.grassPlots[4][4] = new Decimal(0)
-            },
-            style() { return { width: '75px', "min-height": '75px', "background-color": player.dgr.clickableColors[4][4], color: "black", "font-size": "10px" }; },
-
+            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #006a44" },
         },
     },
-
-    upgrades: {
-
+    grid: {
+        rows: 5,
+        cols: 5,
+        getStartData(id) {
+            return new Decimal(0)
+        },
+        getTitle(data, id) {
+            return format(getGridData("dgr", id))
+        },
+        getCanClick(data, id) {
+            return getGridData("dgr", id).gt(0)
+        },
+        onClick(data, id) {
+            player.dgr.grass = player.dgr.grass.add(getGridData("dgr", id))
+            setGridData("dgr", id, new Decimal(0))
+        },
+        getStyle(data, id) {
+            let look = {width: "75px", height: "75px", fontSize: "10px", borderRadius: "0px"}
+            getGridData("dgr", id).eq(0) ? look.backgroundColor = "#081707" : getGridData("dgr", id).lt(player.dgr.maxGrass) ? look.backgroundColor = "#1a4516" : look.backgroundColor = "#2b7326"
+            getGridData("dgr", id).eq(0) ? look.color = "dimgray" : look.color = "white"
+            return look
+        }
     },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(4) },
@@ -450,14 +148,14 @@ addLayer("dgr", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,500<br/>Grass Capacity Increaser"
+                return "Grass Capacity Increaser"
             },
             display() {
                 return "which are multiplying max grass per plot by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
-            buy() {
-                if (player.dgr.grMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -471,7 +169,7 @@ addLayer("dgr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         12: {
             costBase() { return new Decimal(6) },
@@ -484,14 +182,14 @@ addLayer("dgr", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,500<br/>Grass Value Multiplier"
+                return "Grass Value Multiplier"
             },
             display() {
                 return "which are boosting dark grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
-            buy() {
-                if (player.dgr.grMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -505,7 +203,7 @@ addLayer("dgr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         13: {
             costBase() { return new Decimal(10) },
@@ -518,14 +216,14 @@ addLayer("dgr", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Grass Speed-Upper"
+                return "Grass Speed-Upper"
             },
             display() {
                 return "which are reducing time required to grow grass by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
-            buy() {
-                if (player.dgr.grMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -539,7 +237,7 @@ addLayer("dgr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         14: {
             costBase() { return new Decimal(20) },
@@ -552,14 +250,14 @@ addLayer("dgr", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Point Grasser"
+                return "Point Grasser"
             },
             display() {
                 return "which are boosting point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
-            buy() {
-                if (player.dgr.grMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -573,7 +271,7 @@ addLayer("dgr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         15: {
             costBase() { return new Decimal(35) },
@@ -586,14 +284,14 @@ addLayer("dgr", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Rank-Tier-Tetr Grasser"
+                return "Rank-Tier-Tetr Grasser"
             },
             display() {
                 return "which are boosting rank/tier/tetr point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
-            buy() {
-                if (player.dgr.grMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -607,7 +305,7 @@ addLayer("dgr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         16: {
             costBase() { return new Decimal(50) },
@@ -620,14 +318,14 @@ addLayer("dgr", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Prestige Grasser"
+                return "Prestige Grasser"
             },
             display() {
                 return "which are boosting prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
-            buy() {
-                if (player.dgr.grMax == false) {
+            buy(mult) {
+                if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -641,62 +339,66 @@ addLayer("dgr", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "white" }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #006a44", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.dgr.lastPickedText }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Max grass per plot: <h3>" + format(player.dgr.maxGrass) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["bar", "grassBar"],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 100], ["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104]]],
-                    ["row", [["clickable", 110], ["clickable", 111], ["clickable", 112], ["clickable", 113], ["clickable", 114]]],
-                    ["row", [["clickable", 120], ["clickable", 121], ["clickable", 122], ["clickable", 123], ["clickable", 124]]],
-                    ["row", [["clickable", 130], ["clickable", 131], ["clickable", 132], ["clickable", 133], ["clickable", 134]]],
-                    ["row", [["clickable", 140], ["clickable", 141], ["clickable", 142], ["clickable", 143], ["clickable", 144]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Click on a plot to collect the grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
+                    ["style-column", [
+                        ["style-row", [
+                            ["raw-html", function () { return player.dgr.lastPickedText }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ], {width: "375px", borderRadius: "0px", paddingTop: "5px", paddingBottom: "5px"}],
+                        ["style-row", [
+                            ["style-column", [
+                                ["style-row", [
+                                    ["raw-html", function () { return "Grass Value" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "185px", borderBottom: "2px solid #006a44", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
+                                ["style-row", [
+                                    ["raw-html", function () { return format(player.dgr.grassValue) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "185px", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
+                            ], {width: "185px", borderRight: "2px solid #006a44", borderRadius: "0px"}],
+                            ["style-column", [
+                                ["style-row", [
+                                    ["raw-html", function () { return "Max Grass/Plot" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "188px", borderBottom: "2px solid #006a44", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
+                                ["style-row", [
+                                    ["raw-html", function () { return format(player.dgr.maxGrass) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "188px", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
+                            ], {width: "188px", borderRadius: "0px"}],
+                        ], {width: "375px", backgroundColor: "#002a1b", borderTop: "2px solid #006a44", borderRadius: "0px"}],
+                        ["bar", "grassBar"],
+                        "grid",
+                        ["style-column", [
+                            ["raw-html", function () { return "Click on a plot to collect the grass." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ], {width: "375px", borderTop: "2px solid #006a44", borderRadius: "0px", paddingTop: "5px", paddingBottom: "5px"}],
+                    ], {width: "375px", backgroundColor: "#003522", border: "2px solid #006a44", borderRadius: "0px"}],
                 ]
-
             },
             "Buyables": {
-                buttonStyle() { return { 'border-color': 'black' } },
+                buttonStyle() { return { border: "2px solid #006a44", borderRadius: "10px" } },
                 unlocked() { return true },
                 content:
                 [
-        ["blank", "25px"],
-        ["row", [["clickable", 2], ["clickable", 3]]],
-        ["blank", "25px"],
-        ["row", [["buyable", 11],["buyable", 12],["buyable", 13],]],
-        ["row", [["buyable", 14],["buyable", 15],["buyable", 16],]],
-
+                    ["blank", "25px"],
+                    ["row", [["dark-buyable", 11],["dark-buyable", 12],["dark-buyable", 13],]],
+                    ["row", [["dark-buyable", 14],["dark-buyable", 15],["dark-buyable", 16],]],
                 ]
-
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass, which boosts generator gain by x" + format(player.dgr.grassEffect) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Grass value: <h3>" + format(player.dgr.grassValue) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass, which boosts generator gain by x" + format(player.dgr.grassEffect) }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return hasUpgrade("le", 22) }
 })

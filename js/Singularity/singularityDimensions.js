@@ -54,7 +54,7 @@
             .mul(buyableEffect("sd", 11))
             .mul(player.cop.processedCorePrimedEffects[2])
             .mul(buyableEffect("sma", 14))
-            .mul(player.cb.rarePetEffects[7][1])
+            .mul(levelableEffect("pet", 308)[1])
         // Dimension Gain
         for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
             player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
@@ -108,7 +108,13 @@
             onClick() {
                 player.sd.dimMax = true
             },
-            style: { width: '75px', "min-height": '50px', }
+            style() {
+                if (getBuyableAmount('sd', 1).lt(8)) {
+                    return { width: '75px', "min-height": '50px', borderRadius: '0px' }
+                } else {
+                    return { width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
+                }
+            } 
         },
         3: {
             title() { return "Buy Max Off" },
@@ -117,7 +123,7 @@
             onClick() {
                 player.sd.dimMax = false
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', "min-height": '50px', borderRadius: '0px' }
         },
         4: {
             title() { return "Unpause Dimension Production" },
@@ -126,7 +132,7 @@
             onClick() {
                 player.sd.pausedDimensions = true
             },
-            style: { width: '200px', "min-height": '50px', }
+            style: { width: '200px', "min-height": '50px', borderRadius: '0px' }
         },
         5: {
             title() { return "Pause Dimension Production" },
@@ -135,7 +141,7 @@
             onClick() {
                 player.sd.pausedDimensions = false
             },
-            style: { width: '200px', "min-height": '50px', }
+            style: { width: '200px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
         },
 
     },
@@ -174,7 +180,7 @@
             buy() {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
-            style: { width: '250px', height: '50px', }
+            style: { width: '250px', height: '50px', borderRadius: '10px 0px 0px 10px' }
         },
         11: {
             costBase() { return new Decimal(10) },
@@ -204,7 +210,7 @@
                     player.sd.dimensionAmounts[0] = player.sd.dimensionAmounts[0].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         12: {
             costBase() { return new Decimal(100) },
@@ -234,7 +240,7 @@
                     player.sd.dimensionAmounts[1] = player.sd.dimensionAmounts[1].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         13: {
             costBase() { return new Decimal(1000) },
@@ -264,7 +270,7 @@
                     player.sd.dimensionAmounts[2] = player.sd.dimensionAmounts[2].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         14: {
             costBase() { return new Decimal(100000) },
@@ -294,7 +300,7 @@
                     player.sd.dimensionAmounts[3] = player.sd.dimensionAmounts[3].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         15: {
             costBase() { return new Decimal(1e7) },
@@ -324,7 +330,7 @@
                     player.sd.dimensionAmounts[4] = player.sd.dimensionAmounts[4].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         16: {
             costBase() { return new Decimal(1e10) },
@@ -354,7 +360,7 @@
                     player.sd.dimensionAmounts[5] = player.sd.dimensionAmounts[5].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         17: {
             costBase() { return new Decimal(1e14) },
@@ -384,7 +390,7 @@
                     player.sd.dimensionAmounts[6] = player.sd.dimensionAmounts[6].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
         18: {
             costBase() { return new Decimal(1e18) },
@@ -414,7 +420,7 @@
                     player.sd.dimensionAmounts[7] = player.sd.dimensionAmounts[7].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', }
+            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
     },
     milestones: {
@@ -427,10 +433,9 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Stored radiation: " + format(player.ra.storedRadiation) + "" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
@@ -441,17 +446,56 @@
                     ["row", [["raw-html", function () { return !player.sd.pausedDimensions && player.sd.producingDimensions ? "PRODUCTION PAUSED" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
                     ["row", [["raw-html", function () { return !player.sd.producingDimensions ? "PRODUCTION HALTED - NO STORED RADIATION" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }]]],
                     ["blank", "25px"],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(1) ? "1st dimension (" + format(buyableEffect("sd", "11")) + "x): " + format(player.sd.dimensionAmounts[0]) + " (+" + format(player.sd.dimensionsPerSecond[0]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 11]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(2) ? "2nd dimension (" + format(buyableEffect("sd", "12")) + "x): " + format(player.sd.dimensionAmounts[1]) + " (+" + format(player.sd.dimensionsPerSecond[1]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 12]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(3) ? "3rd dimension (" + format(buyableEffect("sd", "13")) + "x): " + format(player.sd.dimensionAmounts[2]) + " (+" + format(player.sd.dimensionsPerSecond[2]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 13]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(4) ? "4th dimension (" + format(buyableEffect("sd", "14")) + "x): " + format(player.sd.dimensionAmounts[3]) + " (+" + format(player.sd.dimensionsPerSecond[3]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 14]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(5) ? "5th dimension (" + format(buyableEffect("sd", "15")) + "x): " + format(player.sd.dimensionAmounts[4]) + " (+" + format(player.sd.dimensionsPerSecond[4]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 15]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(6) ? "6th dimension (" + format(buyableEffect("sd", "16")) + "x): " + format(player.sd.dimensionAmounts[5]) + " (+" + format(player.sd.dimensionsPerSecond[5]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 16]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(7) ? "7th dimension (" + format(buyableEffect("sd", "17")) + "x): " + format(player.sd.dimensionAmounts[6]) + " (+" + format(player.sd.dimensionsPerSecond[6]) + "/s)&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 17]]],
-                    ["row", [["raw-html", function () { return getBuyableAmount("sd", 1).gte(8) ? "8th dimension (" + format(buyableEffect("sd", "18")) + "x): " + format(player.sd.dimensionAmounts[7]) + "&nbsp&nbsp&nbsp&nbsp" : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }], ["buyable", 18]]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(1) ? "1st dimension (" + format(buyableEffect("sd", "11")) + "x): " + format(player.sd.dimensionAmounts[0]) + " (+" + format(player.sd.dimensionsPerSecond[0]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 11],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(2) ? "2nd dimension (" + format(buyableEffect("sd", "12")) + "x): " + format(player.sd.dimensionAmounts[1]) + " (+" + format(player.sd.dimensionsPerSecond[1]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 12],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(3) ? "3rd dimension (" + format(buyableEffect("sd", "13")) + "x): " + format(player.sd.dimensionAmounts[2]) + " (+" + format(player.sd.dimensionsPerSecond[2]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 13],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(4) ? "4th dimension (" + format(buyableEffect("sd", "14")) + "x): " + format(player.sd.dimensionAmounts[3]) + " (+" + format(player.sd.dimensionsPerSecond[3]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 14],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(5) ? "5th dimension (" + format(buyableEffect("sd", "15")) + "x): " + format(player.sd.dimensionAmounts[4]) + " (+" + format(player.sd.dimensionsPerSecond[4]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 15],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(6) ? "6th dimension (" + format(buyableEffect("sd", "16")) + "x): " + format(player.sd.dimensionAmounts[5]) + " (+" + format(player.sd.dimensionsPerSecond[5]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 16],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(7) ? "7th dimension (" + format(buyableEffect("sd", "17")) + "x): " + format(player.sd.dimensionAmounts[6]) + " (+" + format(player.sd.dimensionsPerSecond[6]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 17],
+                    ]],
+                    ["row", [
+                        ["style-row", [
+                            ["raw-html", function () { return getBuyableAmount("sd", 1).gte(8) ? "8th dimension (" + format(buyableEffect("sd", "18")) + "x): " + format(player.sd.dimensionAmounts[7]) : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                        ], {width: "700px"}], 
+                        ["buyable", 18],
+                    ]],
                     ["blank", "25px"],
                 ]
-
             },
         },
     }, 

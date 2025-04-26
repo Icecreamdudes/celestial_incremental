@@ -93,7 +93,7 @@
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(buyableEffect("ta", 49))
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.rm.realmModsEffect[2])
             player.h.hexPointsToGet[i] = player.h.hexPointsToGet[i].mul(player.le.punchcardsPassiveEffect[8])
-    }
+        }
         player.h.hexPointsToGet[player.h.currentRagePowerEffect] = player.h.hexPointsToGet[player.h.currentRagePowerEffect].mul(player.h.ragePowerCycleEffect)
 
         player.h.hexPointsToGet[0] = player.h.hex.pow(2).mul(player.h.hexPointsEffect[1])
@@ -117,7 +117,7 @@
 
         player.h.ragePowerToGet = player.h.hexPoints[0].plus(1).log10().pow(2).div(1000)
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(buyableEffect("oi", 24))
-        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(player.cb.rarePetEffects[6][1])
+        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(levelableEffect("pet", 307)[1])
 
         player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
 
@@ -190,7 +190,8 @@
                 player.h.hexPointsToGet.push(new Decimal(0))
                 player.h.hexPointsEffect.push(new Decimal(1))
             },
-            style: { width: '400px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
             title() { return "<h3>Lower Hex" },
@@ -199,7 +200,8 @@
             onClick() {
                 player.h.hexResetIndex = player.h.hexResetIndex.sub(1)
             },
-            style: { width: '100px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '100px', "min-height": '100px', borderRadius: '10px 0px 0px 10px' },
         },
         13: {
             title() { return "<h3>Increase Hex" },
@@ -208,7 +210,8 @@
             onClick() {
                 player.h.hexResetIndex = player.h.hexResetIndex.add(1)
             },
-            style: { width: '100px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '100px', "min-height": '100px', borderRadius: '0px 10px 10px 0px' },
         },
         14: {
             title() { return "<h2>Reset lower hex layers for hex " + formatWhole(player.h.hexResetIndex.add(1)) + " points." },
@@ -217,7 +220,8 @@
             onClick() {
                 layers.h.hexPointReset(player.h.hexResetIndex)
             },
-            style: { width: '400px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '400px', "min-height": '100px', borderRadius: '0px' },
         },
         15: {
             title() { return "<h2>Reset all hex layers to automation tier up.<br>Req: " + format(player.h.automationTierReq) + " hex " + formatWhole(player.h.automationTier.add(3)) + " points." },
@@ -234,7 +238,8 @@
                 player.h.hexPointsEffect.push(new Decimal(1))
                 player.h.automationTier = player.h.automationTier.add(1)
             },
-            style: { width: '400px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '400px', "min-height": '100px', borderRadius: "15px" },
         },
         16: {
             title() { return "<h3>Do the equivalent of a big crunch, and automation tier reset, but reset for rage power.<br>Req: 1e100 Hex 1 Points" },
@@ -244,7 +249,12 @@
                 player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet)
                 player.h.ragePowerPause = new Decimal(6)
             },
-            style: { width: '400px', "min-height": '100px', background: "#ff5555", },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#ff5555" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     hexPointReset(layer)
@@ -272,7 +282,8 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -392,8 +403,6 @@
         player.gh.buyables[17] = new Decimal(0)
         player.gh.buyables[18] = new Decimal(0)
         player.gh.buyables[19] = new Decimal(0)
-        player.gh.buyables[21] = new Decimal(0)
-        player.gh.buyables[22] = new Decimal(0)
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
@@ -455,7 +464,8 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -575,8 +585,6 @@
         player.gh.buyables[17] = new Decimal(0)
         player.gh.buyables[18] = new Decimal(0)
         player.gh.buyables[19] = new Decimal(0)
-        player.gh.buyables[21] = new Decimal(0)
-        player.gh.buyables[22] = new Decimal(0)
 
         player.m.codeExperience = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
@@ -652,14 +660,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Factor Power Multiplier"
+                return "Factor Power Multiplier"
             },
             display() {
                 return "which are boosting factor power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -673,7 +681,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         12: {
             costBase() { return new Decimal(10) },
@@ -686,14 +694,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Prestige Point Multiplier"
+                return "Prestige Point Multiplier"
             },
             display() {
                 return "which are boosting prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -707,7 +715,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         13: {
             costBase() { return new Decimal(25) },
@@ -720,14 +728,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Tree and Leaf Multiplier"
+                return "Tree and Leaf Multiplier"
             },
             display() {
                 return "which are boosting tree and leaf gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -741,7 +749,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         14: {
             costBase() { return new Decimal(65) },
@@ -754,14 +762,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Grass Multiplier"
+                return "Grass Multiplier"
             },
             display() {
                 return "which are boosting grass gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -775,7 +783,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         15: {
             costBase() { return new Decimal(200) },
@@ -788,14 +796,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Grasshoper Multiplier"
+                return "Grasshoper Multiplier"
             },
             display() {
                 return "which are boosting grasshopper gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -809,7 +817,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         16: {
             costBase() { return new Decimal(500) },
@@ -822,14 +830,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Fertilizer Multiplier"
+                return "Fertilizer Multiplier"
             },
             display() {
                 return "which are boosting fertilizer gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -843,7 +851,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         17: {
             costBase() { return new Decimal(1500) },
@@ -856,14 +864,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Code Experience Multiplier"
+                return "Code Experience Multiplier"
             },
             display() {
                 return "which are boosting code experience gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -877,7 +885,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         18: {
             costBase() { return new Decimal(2500) },
@@ -890,14 +898,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,000<br/>Lines of Code and Mod Multiplier"
+                return "Lines of Code and Mod Multiplier"
             },
             display() {
                 return "which are boosting lines of code and mod gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasUpgrade("tad", 11)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("tad", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -911,7 +919,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "black", borderColor: "#0061ff"}
         },
         21: {
             costBase() { return new Decimal(1000) },
@@ -924,14 +932,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Infinity Point Blessing I"
+                return "Infinity Point Blessing I"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 6 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -945,7 +953,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#FFBF00'}
         },
         22: {
             costBase() { return new Decimal(100) },
@@ -958,14 +966,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/500<br/>Infinity Point Blessing II"
+                return "Infinity Point Blessing II"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 12 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -979,7 +987,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#FFBF00'}
         },
         23: {
             costBase() { return new Decimal(1e6) },
@@ -992,14 +1000,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/>Infinity Point Blessing III"
+                return "Infinity Point Blessing III"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 20 Points"
             },
-            buy() {
-                if (player.h.hexMax == false && !hasMilestone("s", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("s", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1013,7 +1021,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: '#FFBF00'}
         },
 
         //RAGE POWER
@@ -1028,7 +1036,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -1048,7 +1056,7 @@
                 ],
             },
             "Buyables": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -1056,39 +1064,36 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoints[0]) + "</h3> hex 1 points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.h.hexPointsToGet[0]) + "</h3> hex 1 points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
                 ],
             },
             "Automation": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasChallenge("ip", 13) },
                 content:
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You are at automation tier <h3>" + formatWhole(player.h.automationTier) + "."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You are gaining <h3>" + formatWhole(player.h.automationTierEffect.mul(100)) + "%</h3> hex points per second up to hex " + formatWhole(player.h.automationTier.add(1)) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ],
             },
             "THE BLESSING": {
-                buttonStyle() { return { 'background-color': '#FFBF00', "color": "white" } },
+                buttonStyle() { return { backgroundColor: "#FFBF00", color: "white", borderRadius: "5px" } },
                 unlocked() { return hasChallenge("ip", 13) },
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 21], ["buyable", 22],["buyable", 23],]],
+                    ["row", [["ex-buyable", 21], ["ex-buyable", 22],["ex-buyable", 23],]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These effects are always active."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ],
             },
             "RAGE POWER": {
-                buttonStyle() { return { 'border-color': '#5e0000', 'background-color': '#ff5555', "color": "red" } },
+                buttonStyle() { return { borderColor: "#5e0000", backgroundColor: "#ff5555", color: "red", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("i", 29) },
                 content:
                 [
@@ -1117,11 +1122,11 @@
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && inChallenge("ip", 13) || player.po.hex}
 })
 window.addEventListener('load', function() {

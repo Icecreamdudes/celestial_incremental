@@ -11,8 +11,9 @@
 }
 .titleHeader {
 	position: absolute;
-	width: 272px;
+	width: 272.5px;
 	height: 60px;
+	left: -276px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -24,8 +25,9 @@
 }
 .titleHeader2 {
 	position: absolute;
-	width: 272px;
+	width: 272.5px;
 	height: 60px;
+	left: -276px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -33,17 +35,17 @@
 	font-size:20px;
 	z-index:10000;
 	background: linear-gradient(45deg, #000000, #1c0136);
-	border: 2px solid #212121;
+	border: 2px solid #7a7a7a;
 }
 .layerMenu {
 	position: absolute;
 	z-index:1000;
 	width: 200px;
 	top: 62px;
+	left: -200px;
 	justify-content: auto;
 	user-select: none;
 	height:calc(100% - 64px);
-	left:60px;
 	background: #0f0f0f;
 	display: block;
 	overflow-y: scroll;
@@ -75,10 +77,10 @@
 	z-index:1001;
 	width: 77px;
 	top: 62px;
+	left: -270px;
 	justify-content: auto;
 	user-select: none;
 	height:calc(100% - 64px);
-	left:50px;
 	background: #0f0f0f;
 	display: flex;
 	flex-grow:1;
@@ -164,8 +166,8 @@
 .backButton {
 	width: 50px;
 	position: absolute;
-	left:0px;
-	top:0px;
+	left: -54px;
+	top: 0px;
 	height: 50px;
 	justify-content: auto;
 	user-select: none;
@@ -190,7 +192,7 @@
 	font-size:18px;
 	z-index:10000;
 	background: linear-gradient(90deg, #555555 0%, #454545 50%, #555555 100%);
-	border-bottom: 2px solid #252525;
+	border-bottom: 2px solid #7a7a7a;
 	margin-bottom: 10px;
 	transition: all 0s;
 }
@@ -218,10 +220,10 @@
 	font-size:18px;
 	z-index:10000;
 	background: linear-gradient(90deg, #3e3e3e 0%, #262626 50%, #3e3e3e 100%);
-	border-top: 2px solid #252525;
-	border-bottom: 2px solid #252525;
-	border-left: 0px solid #252525;
-	border-right: 0px solid #252525;
+	border-top: 2px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+	border-left: 0px solid #3e3e3e;
+	border-right: 0px solid #3e3e3e;
 	margin-bottom: 10px;
 	transition: all 0s;
 }
@@ -278,6 +280,7 @@
 	margin-bottom: 10px;
 	transition: all 0s;
 }
+
 *:focus {
 	outline: none;
 	webkit-outline: none;

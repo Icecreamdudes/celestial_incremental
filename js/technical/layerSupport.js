@@ -131,6 +131,24 @@ function setupLayer(layer){
         }
     }
 
+    if (layers[layer].levelables){
+        layers[layer].levelables.layer = layer
+        if (layers[layer].levelables.index === undefined) layers[layer].levelables.index = 0
+        if (layers[layer].levelables.toggle === undefined) layers[layer].levelables.toggle = true
+        setRowCol(layers[layer].levelables)
+        for (thing in layers[layer].levelables){
+            if (isPlainObject(layers[layer].levelables[thing])){
+                layers[layer].levelables[thing].id = thing
+                layers[layer].levelables[thing].layer = layer
+                if (layers[layer].levelables[thing].unlocked === undefined) layers[layer].levelables[thing].unlocked = true
+                layers[layer].levelables[thing].canBuy = function() {return canBuyLevelable(this.layer, this.id)}
+                if (layers[layer].levelables[thing].xpReq === undefined) layers[layer].levelables[thing].xpReq = new Decimal(Infinity)
+                if (layers[layer].levelables[thing].levelLimit === undefined) layers[layer].levelables[thing].levelLimit = new Decimal(Infinity)
+                if (layers[layer].levelables[thing].barShown === undefined) layers[layer].levelables[thing].barShown = true
+            }  
+        }
+    }
+
     if (layers[layer].clickables){
         layers[layer].clickables.layer = layer
         setRowCol(layers[layer].clickables)

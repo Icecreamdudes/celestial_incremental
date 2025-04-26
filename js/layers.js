@@ -1,4 +1,4 @@
-﻿var tree1 = [["h", "r", "f", "p", "re"], ["t", "g", "pe", "pol", "gh", "rf"], ["fa", "de", "m", "cb", "d"], ["rm", "oi"]]
+﻿var tree1 = [["h", "r", "f", "p", "re"], ["t", "g", "pe", "pol", "gh", "rf"], ["fa", "de", "m", "cb", "d"], ["rm", "gem", "oi"]]
 var gwa = [["gt"]]
 
 addLayer("i", {
@@ -8,6 +8,8 @@ addLayer("i", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+
+        PreOTFMult: new Decimal(1),
     }
     },
     automate() {
@@ -90,8 +92,8 @@ addLayer("i", {
             player.gain = new Decimal(1)
         }
 
-        if (player.tab == "cb" || player.tab == "ps" || player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ev" || player.tab == "ev0"
-          || player.tab == "ev1" || player.tab == "ev2" || player.tab == "ev4" || player.tab == "ev8" ) {
+        if (player.tab == "cb" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ev" || player.tab == "ev0"
+          || player.tab == "ev1" || player.tab == "ev2" || player.tab == "ev4" || player.tab == "ev8" || player.tab == "ev9" || player.tab == "ev10") {
             if (options.newMenu == false) player.universe = 0.5
             player.musuniverse = 0.5
         }
@@ -101,6 +103,7 @@ addLayer("i", {
             if (options.newMenu == false) player.universe = 1
             player.musuniverse = 1
         }
+
         if (player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "id" || player.tab == "tad" || player.tab == "ta" || player.tab == "bi" || player.tab == "om"
           || player.tab == "ga" || player.tab == "ca" || player.tab == "u2t" || player.tab == "u2l" ) {
             if (options.newMenu == false) player.universe = 2
@@ -126,13 +129,20 @@ addLayer("i", {
         } else {
             //stopRain();
         }
+
         if (player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter") {
             if (options.newMenu == false) player.universe = 0
             player.musuniverse = 0
         }
+
         if (player.tab == "c" || player.tab == "gt") {
             if (options.newMenu == false) player.universe = -1
             player.musuniverse = -1
+        }
+
+        if (player.tab == "od" || player.tab == "mu") {
+            if (options.newMenu == false) player.universe = 1337
+            player.musuniverse = 1337
         }
 
         //music control
@@ -159,14 +169,12 @@ addLayer("i", {
                 playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 14 || player.c.currentCutscene == 15 ) {
                 playAndLoopAudio("music/singularityCutscene.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 16 || player.c.currentCutscene == 17 || player.c.currentCutscene == 18 || player.c.currentCutscene == 24|| player.c.currentCutscene == 25|| player.c.currentCutscene == 26 || player.c.currentCutscene == 27) {
+            } else if (player.c.currentCutscene == 16 || player.c.currentCutscene == 17 || player.c.currentCutscene == 18 || player.c.currentCutscene == 24 || player.c.currentCutscene == 25 || player.c.currentCutscene == 26 || player.c.currentCutscene == 27) {
                 playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 19 || player.c.currentCutscene == 20 || player.c.currentCutscene == 21 || player.c.currentCutscene == 22 || player.c.currentCutscene == 23) {
                 playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
             }
-            
-        }
-        else if (player.musuniverse == 1.5 && options.musicToggle) {
+        } else if (player.musuniverse == 1.5 && options.musicToggle) {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
         } else {
             stopAudio();
@@ -183,7 +191,14 @@ addLayer("i", {
             stopRain();
         } */
 
-        //Celestial Point boosts
+        // START OF PRE-OTF-MULT MODIFIERS
+        player.i.preOTFMult = new Decimal(1)
+        if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
+
+        //----------------------------------------
+
+        // START OF CELESTIAL POINT MODIFIERS
         player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
         player.gain = player.gain.mul(player.r.tierEffect)
@@ -206,10 +221,12 @@ addLayer("i", {
         if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.r.pentMilestone3Effect)
         player.gain = player.gain.mul(buyableEffect("m", 14))
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
-        player.gain = player.gain.mul(player.cb.commonPetEffects[0][0])
+        player.gain = player.gain.mul(levelableEffect("pet", 101)[0])
         player.gain = player.gain.mul(player.d.diceEffects[0])
         if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
+
+        // CHALLENGE CONTENT
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
         if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
@@ -226,173 +243,61 @@ addLayer("i", {
         if (inChallenge("tad", 11)) player.gain = player.gain.pow(buyableEffect("de", 11))
         if (inChallenge("tad", 11)) player.gain = player.gain.mul(player.de.tavPointsEffect)
         if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
+
+        // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorsIndex == 1) player.gain = player.gain.mul(player.pol.pollinatorsEffect[0])
-        if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.mul(buyableEffect("gh", 31))
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
         player.gain = player.gain.mul(player.r.timeCubeEffects[0])
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
-        player.gain = player.gain.div(player.po.halterEffects[0])
-        if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta)))
-        {
-            player.points = player.points.sub(player.points.mul(0.9 * delta))
-        }
+        player.gain = player.gain.mul(player.i.preOTFMult)
+        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.mul(player.cop.processedCoreInnateEffects[0])
 
-        if (player.r.timeReversed)
-        {
+        // POWER MODIFIERS
+        if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
+        player.gain = player.gain.pow(player.re.realmEssenceEffect)
+        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
+        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
+
+        // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
+        if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
+        if (player.r.timeReversed) {
             player.gain = player.gain.mul(0)
-            player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(0)
-            player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(0)
-            player.t.leavesPerSecond = player.t.leavesPerSecond.mul(0)
-            player.g.grassVal = player.g.grassVal.mul(0)
-            player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(0)
-            player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(0)
-            player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(0)
-            player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(0)
-
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-
         if (player.po.realmMods) player.gain = player.gain.pow(0.35)
-
-        let preOTFMult = new Decimal(1)
-        if (hasUpgrade("s", 11)) preOTFMult = preOTFMult.mul(10)
-        preOTFMult = preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
-
-        player.gain = player.gain.mul(preOTFMult)
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(preOTFMult)
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(preOTFMult)
-        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(preOTFMult)
-        player.t.treesToGet = player.t.treesToGet.mul(preOTFMult)
-        player.g.grassVal = player.g.grassVal.mul(preOTFMult)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(preOTFMult)
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(preOTFMult)
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(preOTFMult)
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(preOTFMult)
-
-        player.gain = player.gain.pow(player.re.realmEssenceEffect)
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.re.realmEssenceEffect)
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.re.realmEssenceEffect)
-        player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.re.realmEssenceEffect)
-        player.t.treesToGet = player.t.treesToGet.pow(player.re.realmEssenceEffect)
-        player.g.grassVal = player.g.grassVal.pow(player.re.realmEssenceEffect)
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.re.realmEssenceEffect)
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.re.realmEssenceEffect)
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.re.realmEssenceEffect)
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.pow(player.re.realmEssenceEffect)
-
         player.gain = player.gain.div(player.po.halterEffects[0])
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
-        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
-        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
-        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
 
-        //effects
-
-        if (player.cop.processedCoreFuel.eq(0))
-        {
-            player.gain = player.gain.mul(player.cop.processedCoreInnateEffects[0])
-            player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
-        }
-        if (player.cop.processedCoreFuel.eq(1))
-        {
-            player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.cop.processedCoreInnateEffects[0])
-            player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.cop.processedCoreInnateEffects[1])
-            player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
-        }
-        if (player.cop.processedCoreFuel.eq(2))
-        {
-            player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.cop.processedCoreInnateEffects[0])
-            player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.cop.processedCoreInnateEffects[1])
-            player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cop.processedCoreInnateEffects[2])
-        }
-        if (player.cop.processedCoreFuel.eq(3))
-        {
-            player.t.treesToGet = player.t.treesToGet.mul(player.cop.processedCoreInnateEffects[0])
-            player.t.treesToGet = player.t.treesToGet.pow(player.cop.processedCoreInnateEffects[1])
-            player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.cop.processedCoreInnateEffects[2])
-            player.rt.repliLeavesMult = player.rt.repliLeavesMult.mul(player.cop.processedCoreInnateEffects[3])
-        }
-        if (player.cop.processedCoreFuel.eq(4))
-        {
-            player.g.grassVal = player.g.grassVal.mul(player.cop.processedCoreInnateEffects[0])
-            player.g.grassVal = player.g.grassVal.pow(player.cop.processedCoreInnateEffects[1])
-            player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[2])
-            player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[3])
-        }
-        if (player.cop.processedCoreFuel.eq(5))
-        {
-            player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cop.processedCoreInnateEffects[0])
-            player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.cop.processedCoreInnateEffects[1])
-            player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.cop.processedCoreInnateEffects[2])
-            player.gh.steelToGet = player.gh.steelToGet.mul(player.cop.processedCoreInnateEffects[3])
-        }
-        if (player.cop.processedCoreFuel.eq(6))
-        {
-            player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cop.processedCoreInnateEffects[0])
-            player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.cop.processedCoreInnateEffects[1])
-            player.m.modsToGet = player.m.modsToGet.mul(player.cop.processedCoreInnateEffects[2])
-            player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cop.processedCoreInnateEffects[3])
-        }
-        if (player.cop.processedCoreFuel.eq(7))
-        {
-            player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cop.processedCoreInnateEffects[0])
-            player.d.dicePointsMult = player.d.dicePointsMult.pow(player.cop.processedCoreInnateEffects[1])
-            player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.cop.processedCoreInnateEffects[2])
-        }
-        if (player.cop.processedCoreFuel.eq(8))
-        {
-            player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cop.processedCoreInnateEffects[0])
-            player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.cop.processedCoreInnateEffects[1])
-        }
-        if (player.cop.processedCoreFuel.eq(9))
-        {
-            player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cop.processedCoreInnateEffects[0])
-            player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.cop.processedCoreInnateEffects[2])
-        }
-        if (player.cop.processedCoreFuel.eq(10))
-        {
-            player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cop.processedCoreInnateEffects[0])
-            player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])
-            player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.cop.processedCoreInnateEffects[2])
-        }
-
-        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
-
+        // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
 
-        if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in")
-        {
+        // MAKE TAB WORK
+        if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in") {
             player.po.lastUniverse = 'i'
             player.tab = "po"
             player.subtabs["i"]['stuff'] = 'Features'
         }
-
-        //passive generation
-        player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(buyableEffect("gh", 14).mul(delta)))
-        if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))
-        if (hasMilestone("ip", 12) && !inChallenge("ip", 14)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.05, delta)))
-
-        if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.mul(Decimal.mul(delta, 0.1)))
-
-        if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
-        
-        if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) player.rf.rocketFuel = player.rf.rocketFuel.add(Decimal.mul(player.rf.rocketFuelToGet.mul(0.2), delta))
-
-        player.f.factorPower = player.f.factorPower.add(player.f.factorPowerPerSecond.mul(delta))
-
-        player.t.leaves = player.t.leaves.add(player.t.leavesPerSecond.mul(delta))
-        if (player.t.leaves.gte(player.t.treeReq)) {
-            player.t.trees = player.t.trees.add(player.t.treesToGet)
-            player.t.leaves = new Decimal(0)
-        }
-        player.m.linesOfCode = player.m.linesOfCode.add(player.m.linesOfCodePerSecond.mul(delta))
-        if (player.m.linesOfCode.gte(player.m.modsReq)) {
-            player.m.mods = player.m.mods.add(player.m.modsToGet)
-            player.m.linesOfCode = new Decimal(0)
+        if (player.subtabs["i"]['stuff'] == 'Settings' && player.tab != "in") {
+            player.po.lastUniverse = 'i'
+            player.tab = "settings"
+            player.subtabs["i"]['stuff'] = 'Features'
         }
     },
     bars: {
+        infbar: {
+            unlocked() { return hasUpgrade("i", 21) && !player.in.unlockedInfinity },
+            direction: RIGHT,
+            width: 700,
+            height: 50,
+            progress() {
+                return player.points.add(1).log10().div("308.25")
+            },
+            fillStyle: { backgroundColor: "#b28500" },
+            borderStyle: { border: "3px solid" },
+            display() {
+                return "<h2>" + format(player.points.add(1).log10().div("308.25").mul(100)) + "%</h2>";
+            },
+        },
     },
     upgrades: {
         1:
@@ -488,7 +393,7 @@ addLayer("i", {
         20:
         {
             title: "Realm Essence",
-            unlocked() { return hasUpgrade("i", 18) },
+            unlocked() { return hasUpgrade("i", 18) && hasMilestone("s", 11) },
             description: "Unlocks Realm Essence.",
             cost: new Decimal(1e50),
             currencyLocation() { return player },
@@ -507,9 +412,9 @@ addLayer("i", {
         },
         21:
         {
-            title: "Portal",
+            title: "OTF",
             unlocked() { return hasUpgrade("i", 19) },
-            description: "Unlocks The Portal.",
+            description: "Unlocks Otherworldly Features.",
             cost: new Decimal(1e150),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
@@ -595,12 +500,20 @@ addLayer("i", {
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
         },
-        31:
-        {
+        31: {
             title: "Auto CDPs",
             unlocked() { return (hasUpgrade("i", 28) && hasUpgrade("bi", 106) && player.po.dice && player.ca.unlockedCante && player.ev.evolutionsUnlocked[5]) || hasUpgrade("i", 31)},
             description: "Gain 5% challenge dice points per second.",
             cost: new Decimal("1e4600"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        32: {
+            title: "Completely Pentomated",
+            unlocked() { return hasUpgrade("i", 28) && hasUpgrade("bi", 106)},
+            description: "You can now buy max pent.",
+            cost: new Decimal("1e2000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -656,13 +569,9 @@ addLayer("i", {
             currencyInternalName: "points",
         },
     },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
+    buyables: {},
+    milestones: {},
+    challenges: {},
     infoboxes: {
         1: {
             title: "Superphysical Values",
@@ -688,60 +597,48 @@ addLayer("i", {
     microtabs: {
         stuff: {
             "Features": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("i", 11) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["tree", tree1],
-                ]
-
+                ],
             },
             "Lore": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true},
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["infobox", "1"],
                     ["infobox", "2"],
                     ["infobox", "3"],
                     ["infobox", "4"],
-                ]
-
+                ],
             },
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-                    ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
-                    ["row", [["upgrade", 31]]],
+                    ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32]]],
+                    ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
                     ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
-                        ["row", [["upgrade", 101]]],
                     ["blank", "25px"],
                     ["tree", gwa],
-                ]
+                ],
             },
             "Portal": {
-                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("i", 21) || hasUpgrade('ad', 13)},
-                content: 
-                    [
-                        ["blank", "25px"],
-                        ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                        ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 20],  ["upgrade", 19],["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-                        ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29]]],
-                        ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34], ["upgrade", 35]]],
-                        ["row", [["upgrade", 101]]],
-                        ["blank", "25px"],
-                        ["tree", gwa],
-                    ]
+                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)" }},
+                unlocked() { return hasUpgrade("i", 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0)},
+                content:  [],
             },
-            "Settings": settingsMicrotab,
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
         },
     },
 
@@ -750,7 +647,7 @@ addLayer("i", {
          ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return (hasUpgrade('ad', 13) || !player.in.unlockedInfinity) || player.s.singularities.gt(0) }
+    layerShown() { return true }
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {
@@ -806,6 +703,7 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         modalContainer.style.display = 'flex';
         modalContainer.style.alignItems = 'center';
         modalContainer.style.justifyContent = 'center';
+        modalContainer.style.zIndex = '5';
 
         // Apply background color and increase width
         modalContent.style.background = '#ccc'; // Grey background
@@ -821,21 +719,21 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
     });
 }
 document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
+    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
         if (!options.newMenu) {
             player.tab = "i"
         } else {
             player.universe = 1
         }
     }
-    if(event.keyCode == 65 && hasUpgrade("cp", 18) && hasUpgrade("ad", 13) && options.toggleHotkey) {
+    if(event.keyCode == 65 && hasUpgrade("cp", 18) && options.toggleHotkey) {
         if (!options.newMenu) {
             player.tab = "cp"
         } else {
             player.universe = 1.5
         }
     }
-    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && hasUpgrade("ad", 13) && options.toggleHotkey) {
+    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
         if (!options.newMenu) {
             player.tab = "in"
         } else {

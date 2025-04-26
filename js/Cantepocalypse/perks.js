@@ -81,13 +81,19 @@
             width: 400,
             height: 25,
             progress() {
-                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                } else {
+                    return new Decimal(1)
+                }
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
-                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                } else {
+                    return "<p style='color:red'>[HARDCAPPED]</p>"
+                }
             },
         },
     },
@@ -101,26 +107,26 @@
             unlocked() { return true },
             canAfford() { return player.pr.perkPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Multiplier Perk."
+                return "Multiplier Perk."
             },
             display() {
                 return "which are multiplying the added replicanti point multiplier by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Perk Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
+                    player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -133,26 +139,26 @@
             unlocked() { return true },
             canAfford() { return player.pr.perkPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Cooldown Perk."
+                return "Cooldown Perk."
             },
             display() {
                 return "which are dividing the replicanti cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Perk Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1)
                 let growth = 2
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
+                    player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13))  player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11))  player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -165,26 +171,26 @@
             unlocked() { return true },
             canAfford() { return player.pr.perkPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Rank Points Perk."
+                return "Rank Points Perk."
             },
             display() {
                 return "which are multiplying rank points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Perk Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
+                    player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -197,26 +203,26 @@
             unlocked() { return true },
             canAfford() { return player.pr.perkPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tier Points Perk."
+                return "Tier Points Perk."
             },
             display() {
                 return "which are multiplying tier points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Perk Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
+                    player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -229,26 +235,26 @@
             unlocked() { return true },
             canAfford() { return player.pr.perkPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Perk."
+                return "Softcap Perk."
             },
             display() {
                 return "which are extending the softcap start by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Perk Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
+                    player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -261,26 +267,26 @@
             unlocked() { return true },
             canAfford() { return player.pr.perkPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Softcap Effect Perk."
+                return "Softcap Effect Perk."
             },
             display() {
                 return "which are divding the softcap effect by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Perk Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(2)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
+                    player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -293,26 +299,26 @@
             unlocked() { return true },
             canAfford() { return player.cp.replicantiPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Perk Boost."
+                return "Perk Boost."
             },
             display() {
                 return "which are multiplying perk points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Replicanti Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(500)
                 let growth = 1.7
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(buyonecost)
+                    player.cp.replicantiPoints = player.cp.replicantiPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.cp.replicantiPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -325,26 +331,26 @@
             unlocked() { return true },
             canAfford() { return player.cp.replicantiPoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Perk Chance Boost."
+                return "Perk Chance Boost."
             },
             display() {
                 return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + " to the perk point chance.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Replicanti Points."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 10
-                if (player.buyMax == false && !hasMilestone("gs", 13))
+                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 13)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(buyonecost)
+                    player.cp.replicantiPoints = player.cp.replicantiPoints.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.cp.replicantiPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
+                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -362,7 +368,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -371,12 +377,9 @@
                     ["raw-html", function () { return "You will gain <h3>" + format(player.pr.perkPointsToGet) + "</h3> perk points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Chance to gain perk points: <h3>" + format(player.pr.perkPointsChance.mul(100)) + "</h3>%" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
-    ]
-
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                ]
             },
         },
     },
@@ -387,6 +390,6 @@
         ["row", [["bar", "replicantiBar"]]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 12) }
 })

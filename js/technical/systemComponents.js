@@ -64,8 +64,8 @@ var systemComponents = {
 
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
-template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {},
-                 options.newMenu==true && options.menuShown==true && player.startedGame && player.tab!='c' && player.tab!='bigc' && player.tab!='revc' ? {'margin-left':'250px'}:{'margin-left':'0px'}]" class="noBackground">
+		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {},
+				options.newMenu==true && options.menuShown==true && player.startedGame && player.tab!='c' && player.tab!='bigc' && player.tab!='revc' && !embedded ? {'margin-left':'250px'}:{'margin-left':'0px'}]" class="noBackground">
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
 			<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></infobox>
@@ -101,14 +101,9 @@ template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[la
 	},
 
 	'overlay-head': {
-		template: `			
-
+		template: `
 	`
 	},
-
-	//	<div class="big-title-text">Celestial Incremental</p>
-	//	<div class="big-title-text2">By Icecreamdude</p><br></br>
-
 
 	'info-tab': {
 		template: `
@@ -118,7 +113,7 @@ template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[la
         <h3>{{VERSION.withName}}</h3>
         <span v-if="modInfo.author">
             <br>
-            Made by {{modInfo.author}}	
+            Made by {{modInfo.author}}
         </span>
         <br>
         The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
@@ -169,14 +164,14 @@ template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[la
                 <td><button class="opt" onclick="toggleOpt('hideChallenges')">Completed Challenges: {{ options.hideChallenges?"HIDDEN":"SHOWN" }}</button></td>
                 <td><button class="opt" onclick="toggleOpt('forceOneTab'); needsCanvasUpdate = true">Single-Tab Mode: {{ options.forceOneTab?"ALWAYS":"AUTO" }}</button></td>
 				<td><button class="opt" onclick="toggleOpt('forceTooltips'); needsCanvasUpdate = true">Shift-Click to Toggle Tooltips: {{ options.forceTooltips?"ON":"OFF" }}</button></td>
-				</tr> 
+				</tr>
             <tr>
 			<td><button class="opt" onclick="toggleOpt('musicToggle'); needsCanvasUpdate = true">Toggle Music: {{ options.musicToggle?"Unmute":"Mute" }}</button></td>
 				<td><button class="opt" onclick="toggleOpt('toggleHotkey'); needsCanvasUpdate = true">Toggle Hotkeys: {{ options.toggleHotkey?"On":"Off" }}</button></td>
 				<td><button class="opt" onclick="toggleOpt('toggleParticle'); needsCanvasUpdate = true">Toggle Particles: {{ options.toggleParticle?"On":"Off" }}</button></td>
 				</tr>
 
-\t\t\t</tr> 
+\t\t\t</tr>
         </table>`
 	},
 
@@ -204,7 +199,7 @@ template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[la
 
 	'particle': {
 		props: ['data', 'index'],
-		template: `<div><div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" 
+		template: `<div><div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]"
 			v-on:click="run(data.onClick, data)"  v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)" ><span v-html="data.text"></span>
 		</div>
 		<svg version="2" v-if="data.color">

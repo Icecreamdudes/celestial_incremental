@@ -29,9 +29,9 @@
         lowestRoll: new Decimal(1),
 
         //Booster
-        previousBoosterRoll: new Decimal(-1),
+        previousBoosterRoll: -1,
         currentBoosterText: "",
-        currentBoosterRoll: new Decimal(-1),
+        currentBoosterRoll: -1,
         /*
         0 - Points
         1 - Factor Power
@@ -46,6 +46,8 @@
         10 - Code Experience
         */
         boosterDiceCooldown: new Decimal(0),
+        diceScore: new Decimal(0),
+        rigIndex: 0,
 
         diceEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
@@ -98,23 +100,15 @@
             "border-color": "#0061ff",
         };
     },
+    color: "white",
     tooltip: "Dice",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.d.rollText = player.d.diceRolls.join(", ")
-
-        player.d.diceCooldown = player.d.diceCooldown.sub(onepersec.mul(delta))
-
-        player.d.gainedDicePoints = new Decimal(1)
-
-        player.d.diceSides = new Decimal(6)
-        player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
-        player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
-
+        // START OF DICE POINT MODIFIERS
         player.d.dicePointsMult = new Decimal(1)
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("d", 15))
-        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cb.rarePetEffects[1][0])
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pet", 302)[0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("ip", 34))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.d.challengeDicePointsEffect)
         if (hasUpgrade("d", 12)) player.d.dicePointsMult = player.d.dicePointsMult.mul(upgradeEffect("d", 12))
@@ -125,20 +119,45 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
         if (player.pol.pollinatorsIndex == 7) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorsEffect[12])
+        if (player.cop.processedCoreFuel.eq(7)) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cop.processedCoreInnateEffects[0])
 
-        if (player.d.autoRollCooldown.lt(0))
-        {
+        // POWER MODIFIERS
+        if (player.cop.processedCoreFuel.eq(7)) player.d.dicePointsMult = player.d.dicePointsMult.pow(player.cop.processedCoreInnateEffects[1])
+
+        // DICE POINT EFFECT
+        player.d.dicePointsEffect = player.d.dicePoints.plus(1).log10().mul(0.1).add(1)
+
+        //----------------------------------------
+
+        // AUTO ROLL COOLDOWN CODE
+        if (player.po.dice || inChallenge("ip", 15)) player.d.autoRollCooldown = player.d.autoRollCooldown.sub(onepersec.mul(delta))
+        if (player.d.autoRollCooldown.lt(0)) {
             layers.d.diceRoll()
         }
-        if (player.po.dice || inChallenge("ip", 15)) player.d.autoRollCooldown = player.d.autoRollCooldown.sub(onepersec.mul(delta))
-
+    
+        // AUTO ROLL TIME
         player.d.autoRollTime = buyableEffect("d", 13)
         if (hasMilestone("s", 19)) player.d.autoRollTime = player.d.autoRollTime.div(10)
+
+        // ROLL TEXT STUFF
+        player.d.rollText = player.d.diceRolls.join(", ")
+
+        // CURRENT MANUAL DICE COOLDOWN VALUE
+        player.d.diceCooldown = player.d.diceCooldown.sub(onepersec.mul(delta))
+
+        // bro idk man, it is used for dice roll
+        player.d.gainedDicePoints = new Decimal(1)
+
+        // DICE SIDES
+        player.d.diceSides = new Decimal(6)
+        player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
+        player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
+
+        // LOWEST ROLL
         player.d.lowestRoll = buyableEffect("d", 14)
         player.d.lowestRoll = player.d.lowestRoll.add(buyableEffect("d", 22))
 
-        player.d.dicePointsEffect = player.d.dicePoints.plus(1).log10().mul(0.1).add(1)
-
+        // CURRENT BOOSTER TEXT
         player.d.currentBoosterText = [
             "Currently boosting points.",
             "Currently boosting factor power.",
@@ -157,50 +176,55 @@
             "Currently boosting hex 1 points.",
         ]
 
+        // BOOSTER DICE COOLDOWN DECREMENTOR
         player.d.boosterDiceCooldown = player.d.boosterDiceCooldown.sub(onepersec.mul(delta))
 
+        // DICE COST CODE
         player.d.diceCost = Decimal.pow(player.d.dice.add(1), 8)
         if (player.d.dice > 6) player.d.diceCost = Decimal.pow(player.d.dice.add(1), 18).div(20)
         if (player.d.dice > 12) player.d.diceCost = Decimal.pow(30, player.d.dice.pow(2)).div(10)
 
-        if (player.d.boosterDiceCooldown.lt(0) && (inChallenge("ip", 15) || player.d.boosterDiceAutomation))
-        {
-            if (inChallenge("ip", 15))
-            {
-                layers.in.bigCrunch();
-            }
+        // AUTO BOOSTER DICE CODE
+        if (player.d.boosterDiceCooldown.lt(0) && (inChallenge("ip", 15) || player.d.boosterDiceAutomation)) {
+            if (inChallenge("ip", 15)) layers.in.bigCrunch()
             if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
             if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
             player.d.boosterDiceCooldown = new Decimal(120)
 
-
             if (inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
         }
 
-        player.d.challengeDicePointsToGet = player.d.dicePoints.pow(0.2).div(3)
-        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
-        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
-        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.le.punchcardsPassiveEffect[7])
-        player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
-        if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
-
-        if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
-
+        // BOOSTER DICE EFFECT PER SECOND
         player.d.boosterDiceStatsPerSecond = buyableEffect("d", 21).pow(buyableEffect("cs", 28))
-        for (let i = 0; i < 11; i++)
-        {
+        for (let i = 0; i < 11; i++) {
             player.d.diceEffects[i] = player.d.diceEffects[i].add(player.d.boosterDiceStatsPerSecond.mul(delta))
         }
 
+        // MANUAL DICE COOLDOWN
         player.d.manualCooldown = new Decimal(1)
         player.d.manualCooldown = player.d.manualCooldown.div(buyableEffect("d", 23))
 
+        // MAKE SURE CAPS WORK CORRECTLY
         if (player.d.diceEffects[12].gt(100)) player.d.diceEffects[12] = new Decimal(100)
-
-        if (player.d.buyables[14].gt(player.d.diceSides.sub(player.d.buyables[22].mul(2))))
-        {
+        if (player.d.buyables[14].gt(player.d.diceSides.sub(player.d.buyables[22].mul(2)))) {
             player.d.buyables[14] = player.d.diceSides.sub(player.d.buyables[22].mul(2))
         }
+
+        //----------------------------------------
+
+        // START OF CHALLENGE DICE MODIFIERS
+        player.d.challengeDicePointsToGet = player.d.dicePoints.pow(0.2).div(3)
+        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
+        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
+        if (player.cop.processedCoreFuel.eq(7)) player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.le.punchcardsPassiveEffect[7])
+
+        // CHALLENGE DICE PER SECOND
+        if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
+
+        // CHALLENGE DICE EFFECT
+        player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
+        if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
     },
     diceRoll()
     {
@@ -235,30 +259,20 @@
             style: { width: '100px', "min-height": '50px' },
         },
         2: {
-            title() { return "Turn booster dice automation on. (Currently off)" },
-            tooltip() { return "<h3>You won't gain any pets from automation." },
+            title() { return "Turn booster dice automation on.<br>(Currently off)" },
             canClick() { return true },
+            tooltip() { return "<h3>You won't gain any pets from automation." },
             unlocked() { return hasChallenge("ip", 15) && !player.d.boosterDiceAutomation},
-            onClick() {
-                player.d.boosterDiceAutomation = true
-            },
-            style: {
-                width: '200px',
-                "min-height": '75px',
-            },
+            onClick() { player.d.boosterDiceAutomation = true },
+            style: { width: '150px', "min-height": '75px', fontSize: "9px", borderRadius: "10px"},
         },
         3: {
-            title() { return "Turn booster dice automation off. (Currently on)" },
+            title() { return "Turn booster dice automation off.<br>(Currently on)" },
             canClick() { return true },
             tooltip() { return "<h3>You won't gain any pets from automation." },
             unlocked() { return hasChallenge("ip", 15) && player.d.boosterDiceAutomation},
-            onClick() {
-                player.d.boosterDiceAutomation = false
-            },
-            style: {
-                width: '200px',
-                "min-height": '75px',
-            },
+            onClick() { player.d.boosterDiceAutomation = false },
+            style: { width: '150px', "min-height": '75px', fontSize: "9px", borderRadius: "10px"},
         },
         4: {
             title() { return "Buy Max On" },
@@ -286,7 +300,8 @@
             onClick() {
                 layers.d.diceRoll();
             },
-            style: { width: '100px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style: { width: '100px', "min-height": '100px', borderRadius: "10px" },
         },
         12: {
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
@@ -294,16 +309,20 @@
             tooltip() { return "<h3>" + player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(5).floor() + "% chance for a pet???" },
             unlocked() { return true },
             onClick() {
-                if (!hasChallenge("ip", 15))
-                {
+                let riggy = false
+                if (getRandomInt(2) == 0) {
+                    player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                    player.d.currentBoosterRoll = player.d.rigIndex
+                    riggy = true
+                }
+                if (!hasChallenge("ip", 15) && riggy == false) {
                     do {
                       player.d.previousBoosterRoll = player.d.currentBoosterRoll
                       player.d.currentBoosterRoll = getRandomInt(11)
                     }
                     while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
                 }
-                if (hasChallenge("ip", 15))
-                {
+                if (hasChallenge("ip", 15) && riggy == false) {
                     do {
                       player.d.previousBoosterRoll = player.d.currentBoosterRoll
                       player.d.currentBoosterRoll = getRandomInt(15)
@@ -317,7 +336,7 @@
 
                 if (new Decimal(random).lte(prob))
                 {
-                    player.cb.rarePetAmounts[1] = player.cb.rarePetAmounts[1].add(1);
+                    addLevelableXP("pet", 402, 1);
                     callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/diceRarePet.png");
                 }
 
@@ -328,118 +347,288 @@
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
             },
-            style: { width: '200px', "min-height": '100px' },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "150px", minHeight: "150px", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
-        /*
-        0 - Points
-        1 - Factor Power
-        2 - Prestige Points
-        3 - Trees
-        4 - Leaves
-        5 - Grass Value
-        6 - Grasshoppers
-        7 - Fertilizer
-        8 - Mods
-        9 - Lines of Code
-        10 - Code Experience
-        */
-        13: {
-            title() { return "<h3>View Effects"},
+        101: {
+            title() { return "Points<br>x" + format(player.d.diceEffects[0]) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                if (!hasChallenge("ip", 15))
-                {
-                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" +
-                    "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
-                    "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
-                    "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
-                    "Leaves: x" + format(player.d.diceEffects[4]) + "\n" +
-                    "Grass Value: x" + format(player.d.diceEffects[5]) + "\n" +
-                    "Grasshoppers: x" + format(player.d.diceEffects[6]) + "\n" +
-                    "Fertilizer: x" + format(player.d.diceEffects[7]) + "\n" +
-                    "Mods: x" + format(player.d.diceEffects[8]) + "\n" +
-                    "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
-                    "Code Experience: x" + format(player.d.diceEffects[10]) + "\n"
-                    )
-                } else
-                {
-                    callAlert("Points: x" + format(player.d.diceEffects[0]) + "\n" +
-                    "Factor Power: x" + format(player.d.diceEffects[1]) + "\n" +
-                    "Prestige Points: x" + format(player.d.diceEffects[2]) + "\n" +
-                    "Trees: x" + format(player.d.diceEffects[3]) + "\n" +
-                    "Leaves: x" + format(player.d.diceEffects[4]) + "\n" +
-                    "Grass Value: x" + format(player.d.diceEffects[5]) + "\n" +
-                    "Grasshoppers: x" + format(player.d.diceEffects[6]) + "\n" +
-                    "Fertilizer: x" + format(player.d.diceEffects[7]) + "\n" +
-                    "Mods: x" + format(player.d.diceEffects[8]) + "\n" +
-                    "Lines of Code: x" + format(player.d.diceEffects[9]) + "\n" +
-                    "Code Experience: x" + format(player.d.diceEffects[10]) + "\n" +
-                    "Infinity Points: x" + format(player.d.diceEffects[11]) + "\n" +
-                    "Check Back XP: x" + format(player.d.diceEffects[12]) + "\n" +
-                    "Rocket Fuel: x" + format(player.d.diceEffects[13]) + "\n" +
-                    "Hex 1 Points: x" + format(player.d.diceEffects[14]) + "\n"
-                    )
-                }
+                player.d.rigIndex = 0
             },
-            style: { width: '100px', "min-height": '100px' },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 0 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 0 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        102: {
+            title() { return "Factor Power<br>x" + format(player.d.diceEffects[1]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 1
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 1 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 1 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        103: {
+            title() { return "Prestige Points<br>x" + format(player.d.diceEffects[2]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 2
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 2 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 2 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        104: {
+            title() { return "Trees<br>x" + format(player.d.diceEffects[3]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 3
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 3 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 3 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        105: {
+            title() { return "Leaves<br>x" + format(player.d.diceEffects[4]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 4
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 4 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 4 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        106: {
+            title() { return "Grass Value<br>x" + format(player.d.diceEffects[5]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 5
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 5 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 5 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        107: {
+            title() { return "Grasshoppers<br>x" + format(player.d.diceEffects[6]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 6
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 6 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 6 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        108: {
+            title() { return "Fertilizer<br>x" + format(player.d.diceEffects[7]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 7
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 7 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 7 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        109: {
+            title() { return "Mods<br>x" + format(player.d.diceEffects[8]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 8
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 8 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 8 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        110: {
+            title() { return "Lines of Code<br>x" + format(player.d.diceEffects[9]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 9
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 9 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 9 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        111: {
+            title() { return "Code Experience<br>x" + format(player.d.diceEffects[10]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 10
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 10 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 10 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        112: {
+            title() { return "Infinity Points<br>x" + format(player.d.diceEffects[11]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 11
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 11 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 11 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        113: {
+            title() { return "Check Back XP<br>x" + format(player.d.diceEffects[12]) + "<br>(MAX IS x10)" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 12
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 12 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 12 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        114: {
+            title() { return "Rocket Fuel<br>x" + format(player.d.diceEffects[13]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 13
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 13 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 13 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
+        },
+        115: {
+            title() { return "Hex 1 Points<br>x" + format(player.d.diceEffects[14]) },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.d.rigIndex = 14
+            },
+            style() {
+                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
+                player.d.currentBoosterRoll == 14 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
+                player.d.rigIndex == 14 ? look.border = "3px solid red" : look.border = "3px solid white"
+                return look
+            },
         },
     },
-    addDiceEffect()
-    {
-        let sum = new Decimal(0)
-        for (let i = 0; i < player.d.diceRolls.length; i++)
-        {
-            sum = sum.add(player.d.diceRolls[i])
+    addDiceEffect() {
+        player.d.diceScore = new Decimal(0)
+        for (let i = 0; i < player.d.diceRolls.length; i++) {
+            player.d.diceScore = player.d.diceScore.add(player.d.diceRolls[i])
         }
 
-        if (player.d.currentBoosterRoll == 0)
-        {
-                player.d.addDiceEffect = sum.mul(0.0025).pow(1.1).pow(buyableEffect("cs", 28))
+        if (player.d.currentBoosterRoll == 0) {
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0025).pow(1.1)
                 player.d.diceEffects[0] = player.d.diceEffects[0].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll  == 1) {
-                player.d.addDiceEffect = sum.mul(0.002).pow(0.95).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.002).pow(0.95)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[1] = player.d.diceEffects[1].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 2) {
-                player.d.addDiceEffect = sum.mul(0.0016).pow(0.92).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0016).pow(0.92)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[2] = player.d.diceEffects[2].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 3) {
-                player.d.addDiceEffect = sum.mul(0.0008).pow(0.8).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0008).pow(0.8)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[3] = player.d.diceEffects[3].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 4) {
-                player.d.addDiceEffect = sum.mul(0.0012).pow(0.8).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0012).pow(0.8)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[4] = player.d.diceEffects[4].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 5) {
-                player.d.addDiceEffect = sum.mul(0.0008).pow(0.75).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0008).pow(0.75)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[5] = player.d.diceEffects[5].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 6) {
-                player.d.addDiceEffect = sum.mul(0.0007).pow(0.7).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0007).pow(0.7)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[6] = player.d.diceEffects[6].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 7) {
-                player.d.addDiceEffect = sum.mul(0.0008).pow(0.7).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0008).pow(0.7)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[7] = player.d.diceEffects[7].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 8) {
-                player.d.addDiceEffect = sum.mul(0.0005).pow(0.7).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0005).pow(0.7)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[8] = player.d.diceEffects[8].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 9) {
-                player.d.addDiceEffect = sum.mul(0.0007).pow(0.7).pow(buyableEffect("cs", 28))
+                player.d.addDiceEffect = player.d.diceScore.mul(0.0007).pow(0.7)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
                 player.d.diceEffects[9] = player.d.diceEffects[9].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 10) {
-                player.d.addDiceEffect = sum.mul(0.0006).pow(0.7).pow(buyableEffect("cs", 28))
-                player.d.diceEffects[10] = player.d.diceEffects[10].add(player.d.addDiceEffect)
+            player.d.addDiceEffect = player.d.diceScore.mul(0.0006).pow(0.7)
+            if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(buyableEffect("cs", 28))
+            player.d.diceEffects[10] = player.d.diceEffects[10].add(player.d.addDiceEffect)
+        // TIER 2 EFFECTS
         } else if (player.d.currentBoosterRoll == 11) {
-            player.d.addDiceEffect = sum.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0003)
+            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0003)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[11] = player.d.diceEffects[11].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 12) {
-            player.d.addDiceEffect = sum.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0001).div(player.d.diceEffects[12].pow(5))
+            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0001).div(player.d.diceEffects[12].pow(5))
             player.d.diceEffects[12] = player.d.diceEffects[12].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 13) {
-            player.d.addDiceEffect = sum.pow(buyableEffect("cs", 28)).mul(0.00001)
+            player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00001)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
-            player.d.addDiceEffect = sum.pow(buyableEffect("cs", 28)).mul(0.00005)
+            player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00005)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         }
@@ -547,7 +736,7 @@
         18:
         {
             title: "Dicey Dicey Dicey Dicey.",
-            unlocked() { return hasMilestone("s", 13) },
+            unlocked() { return hasUpgrade("s", 13) },
             description: "Infinity points, rocket fuel, and hex booster dice effects are gained x100 more.",
             cost: new Decimal(1e32),
             currencyLocation() { return player.d },
@@ -576,135 +765,143 @@
                     new Decimal(1)
                 )
             },
-            style: { width: '175px', height: '100px', }
+            style: { width: '175px', height: '100px', borderRadius: "10px" }
         },
         12: {
-            cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(250) },
+            costBase() { return new Decimal(250) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(2500) },
+            currency() { return player.d.dicePoints},
+            pay(amt) { player.d.dicePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
             unlocked() { return true },
-            canAfford() { return player.d.dicePoints.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/> Dice Side Boost"
+                return "Dice Side Boost"
             },
             display() {
                 return "which are increasing sides on dice by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
-                let base = new Decimal(250)
-                let growth = 2
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+            buy(mult) {
+                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11)) player.d.dicePoints = player.d.dicePoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '175px', height: '100px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
         13: {
-            cost(x) { return new Decimal(4).pow(x || getBuyableAmount(this.layer, this.id)).mul(500) },
+            costBase() { return new Decimal(500) },
+            costGrowth() { return new Decimal(4) },
+            purchaseLimit() { return new Decimal(1250) },
+            currency() { return player.d.dicePoints},
+            pay(amt) { player.d.dicePoints = this.currency().sub(amt) },
             effect(x) { return new Decimal(5).div(getBuyableAmount(this.layer, this.id).mul(0.02).add(1)) },
             unlocked() { return true },
-            canAfford() { return player.d.dicePoints.gte(this.cost()) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/> Autoroll"
+                return "Autoroll"
             },
             display() {
                 return "Automatically rolls the dice every " + format(tmp[this.layer].buyables[this.id].effect) + " seconds.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
-                let base = new Decimal(500)
-                let growth = 4
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+            buy(mult) {
+                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '175px', height: '100px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
         14: {
-            cost(x) { return new Decimal(2.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(2.5) },
+            purchaseLimit() { return player.d.diceSides.sub(player.d.buyables[22].mul(2)) },
+            currency() { return player.d.dicePoints},
+            pay(amt) { player.d.dicePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
             unlocked() { return true },
-            canAfford() { return player.d.dicePoints.gte(this.cost()) && player.d.buyables[14].lt(player.d.diceSides.sub(player.d.buyables[22].mul(2)))},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/" + formatWhole(player.d.diceSides.sub(player.d.buyables[22].mul(2))) + "<br/>Low Roll Removal"
+                return "Low Roll Removal"
             },
             display() {
                 return "which are removing " + formatWhole(tmp[this.layer].buyables[this.id].effect.sub(1)) + " of the lowest rolls.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
-                let base = new Decimal(1000)
-                let growth = 2.5
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+            buy(mult) {
+                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '175px', height: '100px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
         15: {
-            cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(2000) },
+            costBase() { return new Decimal(2000) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(2500) },
+            currency() { return player.d.dicePoints},
+            pay(amt) { player.d.dicePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
             unlocked() { return true },
-            canAfford() { return player.d.dicePoints.gte(this.cost())},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>DP Multiplier"
+                return "DP Multiplier"
             },
             display() {
                 return "which are boosting dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
-            buy() {
-                let base = new Decimal(2000)
-                let growth = 2
-                if (player.buyMax == false && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(buyonecost)
+            buy(mult) {
+                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.d.dicePoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 12)) player.d.dicePoints = player.d.dicePoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '175px', height: '100px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
 
         //challenge dice
@@ -714,16 +911,16 @@
             unlocked() { return true },
             canAfford() { return player.d.challengeDicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Booster Dice Producer!"
+                return "Booster Dice Producer!"
             },
             display() {
                 return "which are producing +" + format(tmp[this.layer].buyables[this.id].effect) + " of all booster dice effects per second.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Challenge Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.d.challengeDicePoints = player.d.challengeDicePoints.sub(buyonecost)
@@ -738,7 +935,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
         22: {
             cost(x) { return new Decimal(2.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000) },
@@ -746,16 +943,16 @@
             unlocked() { return true },
             canAfford() { return player.d.challengeDicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Multipurpose Dice Upgade Thing!"
+                return "Multipurpose Dice Upgade Thing!"
             },
             display() {
                 return "which are increasing sides and removing lowest rolls by +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Challenge Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 2.5
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.d.challengeDicePoints = player.d.challengeDicePoints.sub(buyonecost)
@@ -770,7 +967,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
         23: {
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000) },
@@ -778,16 +975,16 @@
             unlocked() { return true },
             canAfford() { return player.d.challengeDicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Manual Dice Cooldown!"
+                return "Manual Dice Cooldown!"
             },
             display() {
                 return "which are dividing the manual dice cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Challenge Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(100000)
                 let growth = 10
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.d.challengeDicePoints = player.d.challengeDicePoints.sub(buyonecost)
@@ -802,7 +999,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
         24: {
             cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e7) },
@@ -810,16 +1007,16 @@
             unlocked() { return true },
             canAfford() { return player.d.challengeDicePoints.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Challenge Dice Boosty!!! :D"
+                return "Challenge Dice Boosty!!! :D"
             },
             display() {
                 return "which are boosting challenge dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Challenge Dice Points"
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(1e7)
                 let growth = 1.8
-                if (player.buyMax == false && !hasMilestone("s", 16))
+                if (mult != true && !hasMilestone("s", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.d.challengeDicePoints = player.d.challengeDicePoints.sub(buyonecost)
@@ -834,7 +1031,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(83,83,83,1) 100%)", backgroundOrigin: "border-box"}
         },
     },
     milestones: {
@@ -847,65 +1044,87 @@
     microtabs: {
         stuff: {
             "Dice": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["buyable", 11], ["clickable", 11]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You are rolling a " + formatWhole(player.d.diceSides) + ' sided dice.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Current rolls: " + player.d.rollText + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["raw-html", function () { return "You are rolling a " + formatWhole(player.d.diceSides) + ' sided dice.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "Current rolls: " + player.d.rollText + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],    
+                    ], {width: "60%", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 12], ["buyable", 13], ["buyable", 14], ["buyable", 15]]],
-    ]
-
+                    ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]]],
+                ]
             },
             "Booster Dice": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.d.currentBoosterRoll != 12 ? player.d.currentBoosterText[player.d.currentBoosterRoll] + " (Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" : player.d.currentBoosterText[player.d.currentBoosterRoll] + " (Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ") (MAX IS x10)"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["style-row", [
+                        ["clickable", 11], 
+                        ["style-column", [
+                            ["raw-html", function () { return "Current roll score: " + formatWhole(player.d.diceScore) + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                            ["raw-html", function () { return "+" + format(player.d.addDiceEffect) + 'x to the effect.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                        ], {width: "400px"}],
+                    ], {width: "500px", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "10px"}],
                     ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 13]]],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                    ["raw-html", function () { return "Current rolls: " + player.d.rollText + '.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "+" + format(player.d.addDiceEffect) + 'x to the effect.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return hasChallenge("ip", 15) ? "Some effects are kept on infinity." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["blank", "10px"],
+                        ["style-row", [
+                            ["clickable", 12],
+                            ["style-column", [
+                                ["raw-html", function () { return player.d.currentBoosterRoll != 12 ? player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" : player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")<br>(MAX IS x10)"  }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ], {width: "490px"}]
+                        ]],
+                        ["blank", "10px"],
+                        ["h-line", "650px"],
+                        ["blank", "10px"],
+                        ["raw-html", "Click a side to rig that side of the die in your favor.", { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", "Current rigged side is shown by a red border.", { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["blank", "10px"],
+                        ["h-line", "650px"],
+                        ["blank", "10px"],
+                        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104]]],
+                        ["row", [["clickable", 105], ["clickable", 106], ["clickable", 107], ["clickable", 108]]],
+                        ["row", [["clickable", 109], ["clickable", 110], ["clickable", 111]]],
+                        ["blank", "10px"],
+                        ["style-column", [
+                            ["h-line", "650px"],
+                            ["blank", "10px"],
+                            ["raw-html", () => { return hasUpgrade('s', 13) ? "Kept on singularity" : "Kept on infinity" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                            ["blank", "10px"],
+                            ["h-line", "650px"],
+                            ["blank", "10px"],
+                            ["row", [["clickable", 112], ["clickable", 113], ["clickable", 114], ["clickable", 115]]],
+                            ["blank", "10px"],
+                        ], () => { return hasChallenge("ip", 15) ? {} : {display: "none !important"}}],
+                    ], {backgroundColor: "#35654d", border: "3px solid white", borderRadius: "15px", width: "650px"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["blank", "25px"],
                 ]
-
             },
             "Challenge Dice": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]},
-                content:
-                [
-        ["blank", "25px"],
-        ["raw-html", function () { return "You have <h3>" + format(player.d.challengeDicePoints) + "</h3> challenge dice points, which boost dice point gain by x" + format(player.d.challengeDicePointsEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + format(player.d.challengeDicePointsToGet) + "</h3> challenge dice points next booster dice roll." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["clickable", 4], ["clickable", 5]]],
-        ["blank", "25px"],
-        ["row", [["buyable", 21], ["buyable", 22], ["buyable", 23], ["buyable", 24]]],
-        ["blank", "25px"],
-        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
-    ]
-
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "You have <h3>" + format(player.d.challengeDicePoints) + "</h3> challenge dice points, which boost dice point gain by x" + format(player.d.challengeDicePointsEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + format(player.d.challengeDicePointsToGet) + "</h3> challenge dice points next booster dice roll." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                ]
             },
             "Challenge Debuffs": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("ip", 15) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Challenge V Debuffs:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -914,7 +1133,6 @@
                     ["raw-html", function () { return "^0.65 Code Experience Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "^0.65 Prestige Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
-
             },
         },
     },

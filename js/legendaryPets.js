@@ -65,6 +65,7 @@
                 layers.leg.gemReset();
 
             },
+            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
         },
     },

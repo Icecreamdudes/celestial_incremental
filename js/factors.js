@@ -6,31 +6,12 @@
     startData() { return {
         unlocked: true,
         factorBase: new Decimal(0.05),
-        factorUnlocks: [true, true, true, false, false, false, false, false],
 
         factorPower: new Decimal(0),
         factorPowerEffect: new Decimal(1),
         factorPowerPerSecond: new Decimal(0),
-        powerFactorUnlocks: [true, true, true, false, false, false, false, false],
 
-        //tree
-        treeFactorUnlocks: [true, true, true, false, false, false, false, false],
-
-        //grass
-        grassFactorUnlocks: [false, false, false, false, false, false, false, false],
-
-        //infinity points
-        infinityFactorUnlocks: [true, true, true, true, true, true, true, true],
-
-        // Buy Max Toggles
-        mfactorMax: false,
-        pfactorMax: false,
-        tfactorMax: false,
-        gfactorMax: false,
-        ifactorMax: false,
-        nfactorMax: false,
-    }
-    },
+    }},
     automate() {
         if (hasUpgrade("p", 15))
         {
@@ -104,28 +85,7 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.r.tier.gte(2))
-        [
-            player.f.factorUnlocks[3] = true
-        ]
-        if (player.r.tier.gte(4))
-        [
-            player.f.factorUnlocks[4] = true
-        ]
-        if (player.r.tetr.gte(2) && player.f.factorUnlocks[4] == true)
-        [
-            player.f.factorUnlocks[5] = true
-        ]
-        if (hasUpgrade("p", 13) && player.f.factorUnlocks[5] == true)
-        [
-            player.f.factorUnlocks[6] = true
-        ]
-        if (player.r.tetr.gte(4) && player.f.factorUnlocks[6] == true)
-        [
-            player.f.factorUnlocks[7] = true
-        ]
-
-        //Power
+        // START OF FACTOR POWER MODIFIERS
         if (hasUpgrade("i", 15)) player.f.factorPowerPerSecond = onepersec
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 19))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 21))
@@ -139,76 +99,46 @@
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("g", 15))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.gh.grasshopperEffects[1])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("m", 14))
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.cb.commonPetEffects[2][0])
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(levelableEffect("pet", 103)[0])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.d.diceEffects[1])
         if (hasUpgrade("p", 16)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("p", 16))
         if (hasUpgrade("ip", 14) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 14))
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 21))
+        
+        // CHALLENGE MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.pe.pestEffect[1])
         if (inChallenge("ip", 13)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(0.7)
+
+        // CONTINUED REGULAR MODIFIERS
         if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("h", 11))
         if (player.pol.pollinatorsIndex == 2) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.pol.pollinatorsEffect[2])
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halterEffects[1])
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.i.preOTFMult)
+        if (player.cop.processedCoreFuel.eq(1)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+
+        // POWER MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(buyableEffect("fu", 32))
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.re.realmEssenceEffect)
+        if (player.cop.processedCoreFuel.eq(1)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.cop.processedCoreInnateEffects[1])
+
+        // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halterEffects[1])
+        if (player.r.timeReversed) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(0)
+        
+        // FACTOR POWER PER SECOND
+        player.f.factorPower = player.f.factorPower.add(player.f.factorPowerPerSecond.mul(delta))
+
+        // FACTOR POWER EFFECT
         player.f.factorPowerEffect = player.f.factorPower.pow(0.5).div(3).add(1)
 
-        if (player.p.prestigePoints.gte(10000))
-        {
-            player.f.powerFactorUnlocks[3] = true
-        }
-        if (player.points.gte(1e14) && player.f.powerFactorUnlocks[3] == true)
-        {
-            player.f.powerFactorUnlocks[4] = true
-        }
-        if (player.r.tetr.gte(11) && player.f.powerFactorUnlocks[4] == true)
-        {
-            player.f.powerFactorUnlocks[5] = true
-        }
-        if (player.t.trees.gte(25) && player.f.powerFactorUnlocks[5] == true)
-        {
-            player.f.powerFactorUnlocks[6] = true
-        }
-        if (hasUpgrade("p", 19) && player.f.powerFactorUnlocks[6] == true)
-        {
-            player.f.powerFactorUnlocks[7] = true
-        }
+        //----------------------------------------
 
-        if (hasUpgrade("p", 23))
-        {
-            player.f.treeFactorUnlocks[3] = true
-        }
-        if (hasUpgrade("g", 17) && player.f.treeFactorUnlocks[3] == true)
-        {
-            player.f.treeFactorUnlocks[4] = true
-        }
-        if (hasMilestone("r", 13) && player.f.treeFactorUnlocks[4] == true)
-        {
-            player.f.treeFactorUnlocks[5] = true
-        }
-        if (player.m.mods.gte(20) && player.f.treeFactorUnlocks[5] == true)
-        {
-            player.f.treeFactorUnlocks[6] = true
-        }
-        if (hasMilestone("r", 16) && player.f.treeFactorUnlocks[6] == true)
-        {
-            player.f.treeFactorUnlocks[7] = true
-        }
-
-        for (let i = 0; i < player.f.grassFactorUnlocks.length; i++)
-        {
-            if (player.gh.buyables[15].gt(i))
-            {
-                player.f.grassFactorUnlocks[i] = true
-            }
-        }
-
+        // FACTOR BASE MODIFIERS
         player.f.factorBase = new Decimal(0.05)
         player.f.factorBase = player.f.factorBase.add(buyableEffect("gh", 16))
         if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
         if (player.pol.pollinatorsIndex == 1) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorsEffect[1])
         player.f.factorBase = player.f.factorBase.mul(buyableEffect("rm", 22))
-        //INF
-
+        if (player.cop.processedCoreFuel.eq(1)) player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
 
     },
 
@@ -344,18 +274,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[0] },
+            unlocked() { return player.gh.buyables[15].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor I"
+                return "Grass Factor I"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -369,7 +299,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         2: {
             costBase() { return new Decimal(100) },
@@ -378,18 +308,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[1] },
+            unlocked() { return player.gh.buyables[15].gte(2) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor II"
+                return "Grass Factor II"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -403,7 +333,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         3: {
             costBase() { return new Decimal(180) },
@@ -412,18 +342,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[2] },
+            unlocked() { return player.gh.buyables[15].gte(3) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor III"
+                return "Grass Factor III"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -437,7 +367,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         4: {
             costBase() { return new Decimal(340) },
@@ -446,18 +376,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[3] },
+            unlocked() { return player.gh.buyables[15].gte(4) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor IV"
+                return "Grass Factor IV"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -471,7 +401,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         5: {
             costBase() { return new Decimal(800) },
@@ -480,18 +410,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[4] },
+            unlocked() { return player.gh.buyables[15].gte(5) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor V"
+                return "Grass Factor V"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -505,7 +435,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         6: {
             costBase() { return new Decimal(2000) },
@@ -514,18 +444,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[5] },
+            unlocked() { return player.gh.buyables[15].gte(6) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor VI"
+                return "Grass Factor VI"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -539,7 +469,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         7: {
             costBase() { return new Decimal(5000) },
@@ -548,18 +478,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[6] },
+            unlocked() { return player.gh.buyables[15].gte(7) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor VII"
+                return "Grass Factor VII"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -573,7 +503,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         8: {
             costBase() { return new Decimal(14000) },
@@ -582,18 +512,18 @@
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.grassFactorUnlocks[7] },
+            unlocked() { return player.gh.buyables[15].gte(8) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Grass Factor VIII"
+                return "Grass Factor VIII"
             },
             display() {
                 return "which are boosting grass value by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            buy() {
-                if (player.f.gfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -607,7 +537,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#119B35" }
         },
         // Main Factors
         11: {
@@ -617,18 +547,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[0] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor I"
+                return "Factor I"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -642,7 +572,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         12: {
             costBase() { return new Decimal(25) },
@@ -651,18 +581,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[1] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor II"
+                return "Factor II"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -676,7 +606,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         13: {
             costBase() { return new Decimal(60) },
@@ -685,18 +615,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[2] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor III"
+                return "Factor III"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -710,7 +640,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         14: {
             costBase() { return new Decimal(200) },
@@ -719,18 +649,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22))},
-            unlocked() { return player.f.factorUnlocks[3] },
+            unlocked() { return player.r.tier.gte(2) || player.r.tetr.gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor IV"
+                return "Factor IV"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -744,7 +674,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         15: {
             costBase() { return new Decimal(800) },
@@ -753,18 +683,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[4] },
+            unlocked() { return player.r.tier.gte(4) || player.r.tetr.gte(2) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor V"
+                return "Factor V"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -778,7 +708,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         16: {
             costBase() { return new Decimal(3000) },
@@ -787,18 +717,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[5] },
+            unlocked() { return player.r.tetr.gte(2) && tmp.f.buyables[15].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor VI"
+                return "Factor VI"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -812,7 +742,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         17: {
             costBase() { return new Decimal(10000) },
@@ -821,18 +751,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[6] },
+            unlocked() { return hasUpgrade("p", 13) && tmp.f.buyables[16].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor VII"
+                return "Factor VII"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -846,7 +776,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         18: {
             costBase() { return new Decimal(50000) },
@@ -855,18 +785,18 @@
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(player.f.factorBase).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.factorUnlocks[7] },
+            unlocked() { return player.r.tetr.gte(4) && tmp.f.buyables[17].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Factor VIII"
+                return "Factor VIII"
             },
             display() {
                 return "which are boosting celestial points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
-            buy() {
-                if (player.f.mfactorMax == false && !hasUpgrade("p", 15)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -880,7 +810,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         // Power Factors
         19: {
@@ -894,14 +824,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor I"
+                return "Power Factor I"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -915,7 +845,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         21: {
             costBase() { return new Decimal(500) },
@@ -928,14 +858,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor II"
+                return "Power Factor II"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -949,7 +879,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         22: {
             costBase() { return new Decimal(1500) },
@@ -962,14 +892,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor III"
+                return "Power Factor III"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -983,7 +913,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         23: {
             costBase() { return new Decimal(4000) },
@@ -992,18 +922,18 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[3] },
+            unlocked() { return player.p.prestigePoints.gte(10000) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor IV"
+                return "Power Factor IV"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1017,7 +947,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         24: {
             costBase() { return new Decimal(9000) },
@@ -1026,18 +956,18 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[4] },
+            unlocked() { return player.points.gte(1e14) && tmp.f.buyables[23].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor V"
+                return "Power Factor V"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1051,7 +981,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         25: {
             costBase() { return new Decimal(25000) },
@@ -1060,18 +990,18 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[5] },
+            unlocked() { return player.r.tetr.gte(11) && tmp.f.buyables[24].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor VI"
+                return "Power Factor VI"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1085,7 +1015,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         26: {
             costBase() { return new Decimal(75000) },
@@ -1094,18 +1024,18 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[6] },
+            unlocked() { return player.t.trees.gte(25) && tmp.f.buyables[25].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor VII"
+                return "Power Factor VII"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1119,7 +1049,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         27: {
             costBase() { return new Decimal(300000) },
@@ -1128,18 +1058,18 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.powerFactorUnlocks[7] },
+            unlocked() { return hasUpgrade("p", 19) && tmp.f.buyables[26].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Power Factor VIII"
+                return "Power Factor VIII"
             },
             display() {
                 return "which are boosting factor power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
-            buy() {
-                if (player.f.pfactorMax == false && !hasUpgrade("p", 21)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1153,7 +1083,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#83cecf" }
         },
         // Tree Factors
         28: {
@@ -1163,18 +1093,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[0] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor I"
+                return "Tree Factor I"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1188,7 +1118,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         29: {
             costBase() { return new Decimal(50) },
@@ -1197,18 +1127,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[1] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor II"
+                return "Tree Factor II"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1222,7 +1152,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         31: {
             costBase() { return new Decimal(80) },
@@ -1231,18 +1161,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[2] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor III"
+                return "Tree Factor III"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1256,7 +1186,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         32: {
             costBase() { return new Decimal(160) },
@@ -1265,18 +1195,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[3] },
+            unlocked() { return hasUpgrade("p", 23) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor IV"
+                return "Tree Factor IV"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1290,7 +1220,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         33: {
             costBase() { return new Decimal(400) },
@@ -1299,18 +1229,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[4] },
+            unlocked() { return hasUpgrade("g", 17) && tmp.f.buyables[32].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor V"
+                return "Tree Factor V"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1324,7 +1254,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         34: {
             costBase() { return new Decimal(20000) },
@@ -1333,18 +1263,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[5] },
+            unlocked() { return hasMilestone("r", 13) && tmp.f.buyables[33].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor VI"
+                return "Tree Factor VI"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1358,7 +1288,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         35: {
             costBase() { return new Decimal(1e6) },
@@ -1367,18 +1297,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[6] },
+            unlocked() { return player.m.mods.gte(20) && tmp.f.buyables[34].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor VII"
+                return "Tree Factor VII"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1392,7 +1322,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         36: {
             costBase() { return new Decimal(1e12) },
@@ -1401,18 +1331,18 @@
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.treeFactorUnlocks[7] },
+            unlocked() { return hasMilestone("r", 16) && tmp.f.buyables[35].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/2,500<br/> Tree Factor VIII"
+                return "Tree Factor VIII"
             },
             display() {
                 return "which are boosting tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass"
             },
-            buy() {
-                if (player.f.tfactorMax == false && !hasMilestone("r", 16)) {
+            buy(mult) {
+                if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1426,7 +1356,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
         // Infinity Factors
         41: {
@@ -1436,18 +1366,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[0] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor I"
+                return "Infinity Factor I"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1461,7 +1391,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         42: {
             costBase() { return new Decimal(30) },
@@ -1470,18 +1400,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[1] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor II"
+                return "Infinity Factor II"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1495,7 +1425,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         43: {
             costBase() { return new Decimal(45) },
@@ -1504,18 +1434,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[2] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor III"
+                return "Infinity Factor III"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1529,7 +1459,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         44: {
             costBase() { return new Decimal(80) },
@@ -1538,18 +1468,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[3] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor IV"
+                return "Infinity Factor IV"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1563,7 +1493,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         45: {
             costBase() { return new Decimal(200) },
@@ -1572,18 +1502,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[4] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor V"
+                return "Infinity Factor V"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1597,7 +1527,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         46: {
             costBase() { return new Decimal(550) },
@@ -1606,18 +1536,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[5] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor VI"
+                return "Infinity Factor VI"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1631,7 +1561,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         47: {
             costBase() { return new Decimal(1200) },
@@ -1640,18 +1570,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[6] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor VII"
+                return "Infinity Factor VII"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1665,7 +1595,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         48: {
             costBase() { return new Decimal(2600) },
@@ -1674,18 +1604,18 @@
             currency() { return player.ta.negativeInfinityPoints},
             pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.f.infinityFactorUnlocks[7] },
+            unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/250<br/> Infinity Factor VIII"
+                return "Infinity Factor VIII"
             },
             display() {
                 return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
-            buy() {
-                if (player.f.ifactorMax == false && !hasUpgrade("bi", 103)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 103)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1699,7 +1629,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
         },
         // NIP Factors
         51: {
@@ -1713,14 +1643,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor I"
+                return "Negative Infinity Factor I"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1734,7 +1664,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         52: {
             costBase() { return new Decimal(18000) },
@@ -1747,14 +1677,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor II"
+                return "Negative Infinity Factor II"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1768,7 +1698,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         53: {
             costBase() { return new Decimal(32000) },
@@ -1781,14 +1711,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor III"
+                return "Negative Infinity Factor III"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1802,7 +1732,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         54: {
             costBase() { return new Decimal(60000) },
@@ -1815,14 +1745,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor IV"
+                return "Negative Infinity Factor IV"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1836,7 +1766,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         55: {
             costBase() { return new Decimal(110000) },
@@ -1849,14 +1779,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor V"
+                return "Negative Infinity Factor V"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1870,7 +1800,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         56: {
             costBase() { return new Decimal(270000) },
@@ -1883,14 +1813,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor VI"
+                return "Negative Infinity Factor VI"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1904,7 +1834,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         57: {
             costBase() { return new Decimal(500000) },
@@ -1917,14 +1847,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor VII"
+                return "Negative Infinity Factor VII"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1938,7 +1868,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
         58: {
             costBase() { return new Decimal(1200000) },
@@ -1951,14 +1881,14 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/> Negative Infinity Factor VIII"
+                return "Negative Infinity Factor VIII"
             },
             display() {
                 return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
-            buy() {
-                if (player.f.nfactorMax == false && !hasUpgrade("bi", 13)) {
+            buy(mult) {
+                if (mult != true && !hasUpgrade("bi", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -1972,7 +1902,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
         },
     },
     milestones: {
@@ -1985,26 +1915,25 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { borderColor: "white", color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.f.factorUnlocks[3] == false ?  "Next factor unlocks at tier 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[3] == true && player.f.factorUnlocks[4] == false ?  "Next factor unlocks at tier 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[4] == true && player.f.factorUnlocks[5] == false ?  "Next factor unlocks at tetr 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[5] == true && player.f.factorUnlocks[6] == false ?  "Next factor unlocks at Prestige Upgrade III." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.factorUnlocks[6] == true && player.f.factorUnlocks[7] == false ?  "Next factor unlocks at tetr 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
+                    ["raw-html", function () { return !tmp.f.buyables[14].unlocked ?  "Next factor unlocks at tier 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[14].unlocked && !tmp.f.buyables[15].unlocked ?  "Next factor unlocks at tier 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[15].unlocked && !tmp.f.buyables[16].unlocked ?  "Next factor unlocks at tetr 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[16].unlocked && !tmp.f.buyables[17].unlocked ?  "Next factor unlocks at Prestige Upgrade III." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[17].unlocked && !tmp.f.buyables[18].unlocked ?  "Next factor unlocks at tetr 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 11).mul(buyableEffect("f", 12).mul(buyableEffect("f", 13)).mul(buyableEffect("f", 14)).mul(buyableEffect("f", 15)).mul(buyableEffect("f", 16)).mul(buyableEffect("f", 17)).mul(buyableEffect("f", 18)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Power": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("i", 15) },
                 content:
                 [
@@ -2015,42 +1944,38 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.p.prestigePoints) + " prestige points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[3] == false ?  "Next factor unlocks at 10,000 prestige points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[3] == true && player.f.powerFactorUnlocks[4] == false ?  "Next factor unlocks at 1e14 celestial points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[4] == true && player.f.powerFactorUnlocks[5] == false ?  "Next factor unlocks at tetr 11." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[5] == true && player.f.powerFactorUnlocks[6] == false ?  "Next factor unlocks at 25 trees." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.powerFactorUnlocks[6] == true && player.f.powerFactorUnlocks[7] == false ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 19], ["buyable", 21], ["buyable", 22], ["buyable", 23]]],
-                    ["row", [["buyable", 24], ["buyable", 25], ["buyable", 26], ["buyable", 27]]],
+                    ["raw-html", function () { return !tmp.f.buyables[23].unlocked ?  "Next factor unlocks at 10,000 prestige points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[23].unlocked && !tmp.f.buyables[24].unlocked ?  "Next factor unlocks at 1e14 celestial points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[24].unlocked && !tmp.f.buyables[25].unlocked ?  "Next factor unlocks at tetr 11." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[25].unlocked && !tmp.f.buyables[26].unlocked ?  "Next factor unlocks at 25 trees." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[26].unlocked && !tmp.f.buyables[27].unlocked ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["ex-buyable", 19], ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]]],
+                    ["row", [["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 19).mul(buyableEffect("f", 21).mul(buyableEffect("f", 22)).mul(buyableEffect("f", 23)).mul(buyableEffect("f", 24)).mul(buyableEffect("f", 25)).mul(buyableEffect("f", 26)).mul(buyableEffect("f", 27)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Tree": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { borderColor: "#0B6623", color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("r", 11) },
                 content:
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.g.grass) + " grass." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[3] == false ?  "Next factor unlocks at Prestige Upgrade XII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[3] == true && player.f.treeFactorUnlocks[4] == false?  "Next factor unlocks at Grass Upgrade VII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[4] == true && player.f.treeFactorUnlocks[5] == false?  "Next factor unlocks at pent 3." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[5] == true && player.f.treeFactorUnlocks[6] == false?  "Next factor unlocks at 20 mods." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.f.treeFactorUnlocks[6] == true && player.f.treeFactorUnlocks[7] == false?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["clickable", 6], ["clickable", 7]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 28], ["buyable", 29], ["buyable", 31], ["buyable", 32]]],
-                    ["row", [["buyable", 33], ["buyable", 34], ["buyable", 35], ["buyable", 36]]],
+                    ["raw-html", function () { return !tmp.f.buyables[31].unlocked ?  "Next factor unlocks at Prestige Upgrade XII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[31].unlocked && !tmp.f.buyables[32].unlocked ?  "Next factor unlocks at Grass Upgrade VII." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[32].unlocked && !tmp.f.buyables[33].unlocked ?  "Next factor unlocks at pent 3." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[33].unlocked && !tmp.f.buyables[34].unlocked ?  "Next factor unlocks at 20 mods." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return tmp.f.buyables[34].unlocked && !tmp.f.buyables[35].unlocked ?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["ex-buyable", 28], ["ex-buyable", 29], ["ex-buyable", 31], ["ex-buyable", 32]]],
+                    ["row", [["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35], ["ex-buyable", 36]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 28).mul(buyableEffect("f", 29).mul(buyableEffect("f", 31)).mul(buyableEffect("f", 32)).mul(buyableEffect("f", 33)).mul(buyableEffect("f", 34)).mul(buyableEffect("f", 35)).mul(buyableEffect("f", 36)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Grass": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { borderColor: "#119B35", color: "white", borderRadius: "5px" } },
                 unlocked() { return player.gh.buyables[15].gt(0) },
                 content:
                 [
@@ -2058,16 +1983,14 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.gh.fertilizer) + " fertilizer." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return (getBuyableAmount("gh", 15).lt(8)) ? "Factors unlock with Grass Study III.<br>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["clickable", 8], ["clickable", 9]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 1], ["buyable", 2], ["buyable", 3], ["buyable", 4]]],
-                    ["row", [["buyable", 5], ["buyable", 6], ["buyable", 7], ["buyable", 8]]],
+                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3], ["ex-buyable", 4]]],
+                    ["row", [["ex-buyable", 5], ["ex-buyable", 6], ["ex-buyable", 7], ["ex-buyable", 8]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 1).mul(buyableEffect("f", 2).mul(buyableEffect("f", 3)).mul(buyableEffect("f", 4)).mul(buyableEffect("f", 5)).mul(buyableEffect("f", 6)).mul(buyableEffect("f", 7)).mul(buyableEffect("f", 8)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Infinity": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { borderColor: "#FFBF00", color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("ta", 15)},
                 content:
                 [
@@ -2075,17 +1998,15 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.ta.negativeInfinityPoints) + " negative infinity points. (+" + format(player.ta.negativeInfinityPointsToGet) + ")"  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>You have " + format(player.in.infinityPoints) + " infinity points. (+" + format(player.in.infinityPointsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 41], ["buyable", 42], ["buyable", 43], ["buyable", 44]]],
-                    ["row", [["buyable", 45], ["buyable", 46], ["buyable", 47], ["buyable", 48]]],
+                    ["row", [["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44]]],
+                    ["row", [["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 47], ["ex-buyable", 48]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 41).mul(buyableEffect("f", 42).mul(buyableEffect("f", 43)).mul(buyableEffect("f", 44)).mul(buyableEffect("f", 45)).mul(buyableEffect("f", 46)).mul(buyableEffect("f", 47)).mul(buyableEffect("f", 48)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
 
                 ]
             },
             "Negative Infinity": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { borderColor: "#b2d8d8", color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("ta", 16)},
                 content:
                 [
@@ -2093,10 +2014,8 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.ta.negativeInfinityPoints) + " negative infinity points. (+" + format(player.ta.negativeInfinityPointsToGet) + ")"  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>You have " + format(player.in.infinityPoints) + " infinity points. (+" + format(player.in.infinityPointsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 13], ["clickable", 14]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 51], ["buyable", 52], ["buyable", 53], ["buyable", 54]]],
-                    ["row", [["buyable", 55], ["buyable", 56], ["buyable", 57], ["buyable", 58]]],
+                    ["row", [["ex-buyable", 51], ["ex-buyable", 52], ["ex-buyable", 53], ["ex-buyable", 54]]],
+                    ["row", [["ex-buyable", 55], ["ex-buyable", 56], ["ex-buyable", 57], ["ex-buyable", 58]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 51).mul(buyableEffect("f", 52).mul(buyableEffect("f", 53)).mul(buyableEffect("f", 54)).mul(buyableEffect("f", 55)).mul(buyableEffect("f", 56)).mul(buyableEffect("f", 57)).mul(buyableEffect("f", 58)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -2105,10 +2024,10 @@
     },
 
     tabFormat: [
-                        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 12)}
 })

@@ -20,8 +20,7 @@ addLayer("cp", {
 
         replicantiSoftcap2Effect: new Decimal(1),
         replicantiSoftcap2Start: new Decimal(1e10),
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("s", 17) && !inChallenge("fu", 11))
         {
@@ -41,8 +40,7 @@ addLayer("cp", {
             "background-origin": "border-box",
             "border-color": "#012738",
         }
-      },
-
+    },
     tooltip: "Alt-Universe 1: Cantepocalypse",
     color: "white",
     branches: ["i"],
@@ -55,10 +53,14 @@ addLayer("cp", {
             if (options.newMenu == true) showTab("a1u")
         }
 
-        if (player.subtabs["cp"]['stuff'] == 'Portal')
-        {
+        if (player.subtabs["cp"]['stuff'] == 'Portal') {
             player.po.lastUniverse = 'cp'
             player.tab = "po"
+            player.subtabs["cp"]['stuff'] = 'Features'
+        }
+        if (player.subtabs["cp"]['stuff'] == 'Settings') {
+            player.po.lastUniverse = 'cp'
+            player.tab = "settings"
             player.subtabs["cp"]['stuff'] = 'Features'
         }
 
@@ -74,7 +76,7 @@ addLayer("cp", {
         if (hasUpgrade("an", 23)) multAdd = multAdd.mul(upgradeEffect("an", 23))
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
-        multAdd = multAdd.mul(player.cb.epicPetEffects[1][0])
+        multAdd = multAdd.mul(levelableEffect("pet", 402)[0])
         if (player.cop.processedCoreFuel.eq(0)) multAdd = multAdd.mul(player.cop.processedCoreInnateEffects[2])
         if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
@@ -94,8 +96,7 @@ addLayer("cp", {
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 22))
         player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.div(buyableEffect("fu", 66))
         if (inChallenge("fu", 11)) player.cp.replicantiSoftcapEffect = player.cp.replicantiSoftcapEffect.pow(2)
-            if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcapStart))
-        {
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcapStart)) {
             multAdd = multAdd.div(player.cp.replicantiSoftcapEffect)
         }
 
@@ -113,8 +114,7 @@ addLayer("cp", {
         player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 22))
         player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.div(buyableEffect("fu", 68))
         if (inChallenge("fu", 11)) player.cp.replicantiSoftcap2Effect = player.cp.replicantiSoftcap2Effect.pow(2)
-            if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start))
-        {
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start)) {
             multAdd = multAdd.div(player.cp.replicantiSoftcap2Effect)
         }
 
@@ -125,27 +125,22 @@ addLayer("cp", {
 
         if (player.cap.cantepocalypseUnlock) player.cp.replicantiPointsTimer = player.cp.replicantiPointsTimer.add(onepersec.mul(delta))
 
-        if (player.cp.replicantiPointsTimer.gte(player.cp.replicantiPointsTimerReq))
-        {
+        if (player.cp.replicantiPointsTimer.gte(player.cp.replicantiPointsTimerReq)) {
             layers.cp.replicantiPointMultiply();
         }
-        
     },
-    replicantiPointMultiply()
-    {
-        if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap))
-            {
+    replicantiPointMultiply() {
+        if (player.cp.replicantiPoints.gte(player.cp.replicantiPointCap)) {
                 player.cp.replicantiPoints = player.cp.replicantiPointCap
-            } else {
-                player.cp.replicantiPoints = player.cp.replicantiPoints.mul(player.cp.replicantiPointsMult)
-                let random = new Decimal(0)
-                random = Math.random()
-                if (random < player.pr.perkPointsChance)
-                {
-                    if (hasUpgrade("cp", 11)) player.pr.perkPoints = player.pr.perkPoints.add(player.pr.perkPointsToGet)
-                }
-                player.cp.replicantiPointsTimer = new Decimal(0)
+        } else {
+            player.cp.replicantiPoints = player.cp.replicantiPoints.mul(player.cp.replicantiPointsMult)
+            let random = new Decimal(0)
+            random = Math.random()
+            if (random < player.pr.perkPointsChance) {
+                if (hasUpgrade("cp", 11)) player.pr.perkPoints = player.pr.perkPoints.add(player.pr.perkPointsToGet)
             }
+            player.cp.replicantiPointsTimer = new Decimal(0)
+        }
     },
     clickables: {
         1: {
@@ -165,13 +160,19 @@ addLayer("cp", {
             width: 400,
             height: 25,
             progress() {
-                return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return player.cp.replicantiPointsTimer.div(player.cp.replicantiPointsTimerReq)
+                } else {
+                    return new Decimal(1)
+                }
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
-                return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
+                    return "Time: " + formatTime(player.cp.replicantiPointsTimer) + "/" + formatTime(player.cp.replicantiPointsTimerReq);
+                } else {
+                    return "<p style='color:red'>[HARDCAPPED]</p>"
+                }
             },
         },
     },
@@ -250,7 +251,7 @@ addLayer("cp", {
         {
             title: "Feature VIII",
             unlocked() { return true },
-            description: "Unlocks THE PORTAL.",
+            description: "Unlocks THE PORTAL, and more oil content.",
             cost: new Decimal(1e90),
             onPurchase() {
                 player.cp.cantepocalypseActive = false
@@ -270,68 +271,58 @@ addLayer("cp", {
             currencyInternalName: "replicantiPoints",
         },
     },
-    buyables: {
-    },
-    milestones: {
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Features": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["tree", treeA1],
+                content: [
+                    ["blank", "25px"],
+                    ["tree", treeA1],
                 ]
-
             },
             "Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                        ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
-                 ]
-
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                ]
             },
             "Softcap": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                        ["blank", "25px"],
-                        ["raw-html", function () { return "Softcap starts at <h3>" + format(player.cp.replicantiSoftcapStart) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                        ["blank", "25px"],
-                        ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
-                        ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Softcap starts at <h3>" + format(player.cp.replicantiSoftcapStart) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcapEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap starts at <h3>" + format(player.cp.replicantiSoftcap2Start) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
                 ]
-
             },
             "Portal": {
-                buttonStyle() { return { 'color': 'black', 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return hasUpgrade("cp", 18) || hasMilestone("s", 12) },
-                content:
-                [
-                ]
+                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
+                unlocked() { return hasUpgrade("cp", 18) || player.s.highestSingularityPoints.gt(0) },
+                content: [],
             },
-            "Settings": settingsMicrotab,
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
         },
     },
-
     tabFormat: [
-
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti point Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && ((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)}
 })

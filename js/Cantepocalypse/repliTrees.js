@@ -41,58 +41,69 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        multAdd = new Decimal(0)
-        multAdd = buyableEffect("rt", 11)
-        multAdd = multAdd.mul(player.rg.repliGrassEffect2)
-        multAdd = multAdd.mul(player.cb.epicPetEffects[1][2])
-        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
+        // START OF REPLI-LEAVES MODIFIERS
+        let preLeavesMult = buyableEffect("rt", 11)
+        preLeavesMult = preLeavesMult.mul(player.rg.repliGrassEffect2)
+        preLeavesMult = preLeavesMult.mul(levelableEffect("pet", 402)[2])
 
-        player.rt.repliLeavesTimerReq = new Decimal(6)
-        if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
-        player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.div(buyableEffect("rt", 12))
-
+        // REPLI-TREE SOFTCAP START (NEEDED FOR NERFS)
         player.rt.repliTreeSoftcapStart = new Decimal(10)
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("rt", 18))
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("rg", 18))
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(player.oi.oilEffect)
         player.rt.repliTreeSoftcapStart = player.rt.repliTreeSoftcapStart.mul(buyableEffect("fu", 47))
 
+        // REPLI-LEAVES NERFS
+        if (inChallenge("fu", 11)) preLeavesMult = preLeavesMult.pow(0.2)
         player.rt.repliTreeSoftcapEffect = player.rt.repliTrees.sub(player.rt.repliTreeSoftcapStart).pow(1.25).div(10).add(1)
-        if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart))
-        {
-            multAdd = multAdd.div(player.rt.repliTreeSoftcapEffect)
+        if (player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart)) {
+            preLeavesMult = preLeavesMult.div(player.rt.repliTreeSoftcapEffect)
         }
 
-        player.rt.repliLeavesMult = multAdd.add(1)
+        // CONVERT TO PROPER MULTIPLIER
+        player.rt.repliLeavesMult = preLeavesMult.add(1)
 
+        // POST CONVERSION MODIFIERS
+        if (player.cop.processedCoreFuel.eq(3)) player.rt.repliLeavesMult = player.rt.repliLeavesMult.mul(player.cop.processedCoreInnateEffects[3])
+
+        // REPLI-LEAVES PER SECOND
         player.rt.repliLeavesTimer = player.rt.repliLeavesTimer.add(onepersec.mul(delta))
 
+        // REPLI-TREE EFFECT
         player.rt.repliTreesEffect = player.rt.repliTrees.pow(0.7).add(1)
 
-        player.rt.repliTreeReq = player.rt.repliTrees.mul(0.5).add(1).pow(1.2).mul(10)
-        player.rt.repliTreeReq = player.rt.repliTreeReq.div(buyableEffect("rt", 13))
+        // REPLI-LEAVES REQUIREMENT
+        player.rt.repliLeavesTimerReq = new Decimal(6)
+        if (hasUpgrade("an", 21)) player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.sub(1.5)
+        player.rt.repliLeavesTimerReq = player.rt.repliLeavesTimerReq.div(buyableEffect("rt", 12))
 
+        // REPLI-LEAVES TIMER CODE
+        if (player.rt.repliLeavesTimer.gte(player.rt.repliLeavesTimerReq)) {
+            player.rt.repliLeaves = player.rt.repliLeaves.mul(player.rt.repliLeavesMult)
+            player.rt.repliLeavesTimer = new Decimal(0)
+        }
+
+        //----------------------------------------
+
+        // START OF REPLI-TREE MODIFIERS
         player.rt.repliTreesToGet = new Decimal(1)
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("rt", 14))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("gs", 17))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.oilEffect)
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.linkingPowerEffect[3])
+
+        // REPLI-TREE NERFS
         if (inChallenge("fu", 11)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(0.2)
 
-        if (player.rt.repliLeavesTimer.gte(player.rt.repliLeavesTimerReq))
-        {
-            layers.rt.repliLeavesMultiply();
-            player.rt.repliLeavesTimer = new Decimal(0)
-        }
+        // REPLI-TREE REQUIREMENT
+        player.rt.repliTreeReq = player.rt.repliTrees.mul(0.5).add(1).pow(1.2).mul(10)
+        player.rt.repliTreeReq = player.rt.repliTreeReq.div(buyableEffect("rt", 13))
 
+        // REPLI-TREE GAIN CODE
         if (player.rt.repliLeaves.gte(player.rt.repliTreeReq)) {
             player.rt.repliTrees = player.rt.repliTrees.add(player.rt.repliTreesToGet)
             player.rt.repliLeaves = new Decimal(1)
         }
-    },
-    repliLeavesMultiply()
-    {
-        player.rt.repliLeaves = player.rt.repliLeaves.mul(player.rt.repliLeavesMult)
     },
     clickables: {
         1: {
@@ -132,14 +143,13 @@
             progress() {
                 return player.rt.repliLeaves.div(player.rt.repliTreeReq)
             },
-            fillStyle: {
-                "background-color": "#7734eb",
-            },
+            fillStyle: {backgroundColor: "#7734eb"},
+            borderStyle: {borderBottom: "0px", borderRadius: "10px 10px 0px 0px"},
             display() {
                 return "<h5>" + format(player.rt.repliLeaves) + "/" + format(player.rt.repliTreeReq) + "<h5> Repli-Leaves to gain a Repli-Tree.";
             },
         },
-        replileafBar: {
+        repliLeafBar: {
             unlocked() { return true },
             direction: RIGHT,
             width: 476,
@@ -147,9 +157,8 @@
             progress() {
                 return player.rt.repliLeavesTimer.div(player.rt.repliLeavesTimerReq)
             },
-            fillStyle: {
-                "background-color": "#7734eb",
-            },
+            fillStyle: {backgroundColor: "#7734eb"},
+            borderStyle: {borderRadius: "0px 0px 10px 10px"},
             display() {
                 return "Time: " + formatTime(player.rt.repliLeavesTimer) + "/" + formatTime(player.rt.repliLeavesTimerReq);
             },
@@ -164,26 +173,26 @@
             unlocked() { return true },
             canAfford() { return player.an.anonymity.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Leaf Mult."
+                return "Repli-Leaf Mult."
             },
             display() {
                 return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " to the repli-leaf multiplier.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anonymity."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10000)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(buyonecost)
+                    player.an.anonymity = player.an.anonymity.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -196,26 +205,26 @@
             unlocked() { return true },
             canAfford() { return player.an.anonymity.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Leaf Cooldown."
+                return "Repli-Leaf Cooldown."
             },
             display() {
                 return "which are dividing the repli-leaf cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anonymity."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(20000)
                 let growth = 3
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(buyonecost)
+                    player.an.anonymity = player.an.anonymity.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -228,26 +237,26 @@
             unlocked() { return true },
             canAfford() { return player.an.anonymity.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Tree Req."
+                return "Repli-Tree Req."
             },
             display() {
                 return "which are dividing the repli-tree req by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anonymity."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(40000)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(buyonecost)
+                    player.an.anonymity = player.an.anonymity.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -260,26 +269,26 @@
             unlocked() { return true },
             canAfford() { return player.an.anonymity.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Repli-Trees."
+                return "Repli-Trees."
             },
             display() {
                 return "which are boosting repli-tree gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Anonymity."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(70000)
                 let growth = 1.5
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(buyonecost)
+                    player.an.anonymity = player.an.anonymity.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -292,26 +301,26 @@
             unlocked() { return true },
             canAfford() { return player.rt.repliTrees.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Replicanti Point Booster."
+                return "Replicanti Point Booster."
             },
             display() {
                 return "which are boosting replicanti point mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Trees."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(4)
                 let growth = 1.25
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
+                    player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -324,26 +333,26 @@
             unlocked() { return true },
             canAfford() { return player.rt.repliTrees.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Perk Point Booster."
+                return "Perk Point Booster."
             },
             display() {
                 return "which are boosting perk points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Trees."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(6)
                 let growth = 1.4
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
+                    player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -356,26 +365,26 @@
             unlocked() { return true },
             canAfford() { return player.rt.repliTrees.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Replicanti Softcap Extender."
+                return "Replicanti Softcap Extender."
             },
             display() {
                 return "which are extending the second replicanti point softcap start by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Trees."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(8)
                 let growth = 1.2
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
+                    player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -388,26 +397,26 @@
             unlocked() { return true },
             canAfford() { return player.rt.repliTrees.gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Tree Softcap Extender."
+                return "Tree Softcap Extender."
             },
             display() {
                 return "which are extending repli-tree softcap start by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Trees."
             },
-            buy() {
+            buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.3
-                if (player.buyMax == false && !hasMilestone("gs", 16))
+                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
+                    player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -415,17 +424,13 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content:
                 [
@@ -436,21 +441,18 @@
                     ["raw-html", function () { return player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) + " (Based on repli-trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["bar", "repliTreeBar"]]],
-                    ["row", [["bar", "replileafBar"]]],
+                    ["row", [["bar", "repliLeafBar"]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["buyable", 14]]],
-                    ["row", [["buyable", 15], ["buyable", 16], ["buyable", 17], ["buyable", 18]]],
+                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
                 ]
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.an.anonymity) + "</h3> anonymity." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 15) }
 })

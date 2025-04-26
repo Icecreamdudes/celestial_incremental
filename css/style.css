@@ -99,6 +99,61 @@ td {
 	margin: 0 auto;
 }
 
+.upgLeftTable {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.upgScrollRowTable {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0;
+	overflow-x: auto;
+}
+
+.upgScrollRow {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0;
+}
+
+.upgScrollColTable {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+	overflow-y: auto;
+}
+
+.upgScrollCol {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: start;
+	align-items: center;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.upgAlwaysScrollCol {
+	overflow-y: scroll !important;
+}
+
+.upgAlwaysScrollRow {
+	overflow-x: scroll !important;
+}
+
 .upgAlign {
 	vertical-align: 0
 }
@@ -112,7 +167,370 @@ h1, h2, h3, b, input {
 	font-family: "Roboto Mono", monospace;
 }
 
+.statRow {
+	display: flex !important;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	width: 666px;
+	height: 25px;
+	border-bottom: 1px solid white;
+	font-size: 16px;
+	font-family: monospace;
+}
 
+.statCell1 {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	width: 298px;
+	height: 100%;
+	border-right: 2px solid white;
+}
+
+.statCell2 {
+	display: flex !important;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	width: 366px;
+	height: 100%;
+}
+
+.exBuyableHolder {
+	width: 275px;
+	height: 125px;
+	user-select: none;
+	border: 2px solid rgba(0, 0, 0, 0.6);
+	color: rgb(0, 0, 0);
+	font-size: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.exBuyableBar {
+	width: 100%;
+	height: 20%;
+	color: white;
+	background-color: black;
+	user-select: none;
+	overflow: hidden;
+	display: table;
+}
+
+.exBuyableBarText {
+	z-index: 3;
+	width: 100%;
+	height: 20%;
+	font-size: 14px;
+	vertical-align: middle;
+	display: flex;
+	justify-content: center;
+	align-items: left;
+	position: absolute;
+}
+
+.exBuyableBarProgress {
+	z-index: 2;
+	overflow: hidden;
+	width: 100%;
+	margin: 0%;
+	height: 100%;
+	background-color: #0B6623;
+	opacity: 0.6;
+	transition-duration: 0.2s;
+}
+
+.exBuyableInfo {
+	width: 100%;
+	height: calc(80% - 43px);
+	display: flex;
+	vertical-align: center;
+	border-top: 3px solid;
+	border-bottom: 3px solid;
+	border-color: inherit;
+}
+
+.exBuyableInfo2 {
+	margin: auto;
+	padding: 1px 6px 1px 6px;
+}
+
+.exBuyableRow {
+	width: 100%;
+	height: 40px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 0px;
+	border-color: inherit;
+	display: flex;
+	flex-direction: row;
+}
+
+.exBuyableButton {
+	width: 50%;
+	height: 100%;
+	border: 2px solid rgba(0, 0, 0, 0.125);
+}
+
+.darkBuyableBarProgress {
+	z-index: 2;
+	overflow: hidden;
+	width: 100%;
+	margin: 0%;
+	height: 100%;
+	background-color: #053311;
+	opacity: 0.7;
+	transition-duration: 0.2s;
+}
+
+.darkBuyableButton1 {
+	width: calc(50% - 2px);
+	height: 100%;
+	border: 0px;
+	border-right: 2px solid;
+	border-color: inherit;
+	color: white;
+}
+
+.darkBuyableButton2 {
+	width: 50%;
+	height: 100%;
+	border: 0px;
+	color: white;
+}
+
+.levelableHolder {
+	width: 100px;
+	height: 125px;
+	padding: 0px;
+	border: 2px solid rgba(0, 0, 0, 0.5);
+	margin: 2.5px;
+	color: white;
+	font-size: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.levelableTop {
+	width: 90%;
+	border: inherit;
+	margin-top: 4%;
+	margin-bottom: 4%;
+	display: flex;
+	flex-direction: column;
+}
+
+.levelableImg {
+	width: 108%;
+	height: 108%;
+	margin: -4%;
+	clip-path: inset(4%);
+}
+
+.levelableText {
+	position: absolute;
+	width: 90%;
+	height: 20%;
+	color: gold;
+	font-size: 14px;
+	padding-left: 2.5%;
+	text-shadow:
+    1px 1px 1px black,
+    -1px 1px 1px black,
+    -1px -1px 1px black,
+    1px -1px 1px black;
+	text-align: left;
+}
+
+.levelableBottom {
+	width: 90%;
+	height: 20%;
+	color: white;
+	background-color: black;
+	margin-bottom: 4%;
+	border: inherit;
+	overflow: hidden;
+	display: table;
+}
+
+.levelableBarText {
+	z-index: 3;
+	width: 90%;
+	height: calc(15% - 4px);
+	font-size: 14px;
+	vertical-align: middle;
+	display: flex;
+	justify-content: center;
+	align-items: left;
+	position: absolute;
+}
+
+.levelableBarProgress {
+	z-index: 2;
+	overflow: hidden;
+	width: 100%;
+	margin: 0%;
+	height: 100%;
+	background-color: #0B6623;
+	transition-duration: 0.2s;
+}
+
+.levelableDisplayHolder {
+	width: 550px;
+	height: 175px;
+	padding: 0px;
+	margin: 0px;
+	color: white;
+	font-size: 10px;
+	position: relative;
+	display: flex;
+	flex-direction: row;
+}
+
+.levelableDisplayCol1 {
+	width: 123px;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	border-right: 2px solid white;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.levelableDisplayCard {
+	width: 100px;
+	height: 125px;
+	user-select: none;
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.levelableDisplayImgHolder {
+	width: 90%;
+	border: 2px solid white;
+	margin-top: 4%;
+	margin-bottom: 4%;
+	display: flex;
+	flex-direction: column;
+}
+
+.levelableDisplayBarHolder {
+	width: 90%;
+	height: 20%;
+	color: white;
+	background-color: black;
+	margin-bottom: 4%;
+	border: 2px solid white;
+	overflow: hidden;
+	display: table;
+}
+
+.levelableDisplayCol2 {
+	width: calc(100% - 125px);
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.levelableDisplayText {
+	width: 100%;
+	height: 135px;
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.levelableDisplayTitle {
+	width: 90%;
+	height: 35px;
+	border-bottom: 2px solid white;
+	color: white;
+	font-size: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.levelableDisplayButtonHolder {
+	height: 17px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.levelableDisplayButton {
+	width: 75px;
+	height: 15px;
+	margin-top: 2px;
+	margin-right: 4px;
+	border: 1px solid white;
+	color: white;
+	background-color: black;
+	cursor: pointer;
+	font-size: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+	.levelableDisplayButton:hover {
+		background-color: #444444;
+	}
+
+.levelableDisplayButtonSelect {
+	box-shadow: 0 0 5px var(--points);
+}
+
+.levelableDisplayLore {
+	width: 100%;
+	height: 79px;
+	color: white;
+	font-size: 14px;
+	font-style: italic;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.levelableDisplayDescription {
+	width: 100%;
+	height: 79px;
+	color: white;
+	font-size: 14px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.levelableDisplayRow {
+	display: flex !important;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background: repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px);
+	border-top: 2px solid white;
+	width: 100%;
+	height: 40px;
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+}
 
 .treeNode {
 	height: 100px;
@@ -171,12 +589,36 @@ h1, h2, h3, b, input {
 	}
 
 	.can.upg:hover {
-		z-index: 2
+		z-index: 10
 	}
 
 	.can.buyable:hover {
-		z-index: 2
+		z-index: 10
 	}
+
+	.can.exBuyableButton:hover {
+		z-index: 10
+	}
+
+	.can.levelable:hover {
+		z-index: 10
+	}
+
+.canHoverless {
+	cursor: pointer;
+}
+
+	.canHoverless:before {
+		content:'';display:block;position:absolute;top:0;left:0;width:100%;height:100%;
+	}
+
+	.canHoverless:hover:before {
+		background:rgba(255,255,255,0.2);
+	}
+
+.hide {
+	display: none !important
+}
 
 .resetNotify {
 	box-shadow: var(--hqProperty2a), 0 0 8px #ffffff;
@@ -626,6 +1068,10 @@ ul {
 		opacity: 1;
 	}
 
+	.tooltipBox:hover .bottomTooltip {
+		opacity: 1;
+	}
+
 .forceTooltip .tooltip {
 	opacity: 1;
 }
@@ -641,6 +1087,67 @@ ul {
 		border-style: solid;
 		border-color: var(--background_tooltip) transparent transparent transparent;
 	}
+
+.bottomTooltip { 
+	pointer-events: none;
+	text-align: center;
+	min-width: 100px;
+	width: auto;
+	white-space: nowrap;
+	font-size: 16px;
+	line-height: 1.1;
+	top: 100%;
+	left: 50%;
+	margin-top: 5px;
+	transform: translateX(-50%);
+	padding: 7px;
+	font-family: "Lucida Console", "Courier New", monospace;
+	border: 1px solid white; 
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	opacity: 0;
+	transition: opacity 0.5s;
+  
+	position: absolute;
+	z-index: 20000;
+  
+	background-color: black;
+	color: var(--points);
+	content: attr(tooltip);
+	font-size:14px;
+}
+
+.bottomTooltip:after {
+	content: "";
+	position: absolute;
+	pointer-events: none;
+	border: solid transparent;
+	bottom: 100%;
+	left: 50%;
+	height: 0;
+	width: 0;
+
+	border-color: rgba(0, 0, 0, 0);
+	border-bottom-color: black;
+	border-width: 5px;
+	margin-left: -5px;
+}
+.bottomTooltip:before {
+	content: "";
+	position: absolute;
+	pointer-events: none;
+	border: solid transparent;
+	bottom: 100%;
+	left: 50%;
+	height: 0;
+	width: 0;
+
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #ffffff;
+	border-width: 6px;
+	margin-left: -6px;
+}
 
 #loadingSection {
 	display: flex;
@@ -695,7 +1202,7 @@ button > * {
 	cursor: pointer;
 	border: none;
 	padding: 2px;
-	border-radius: 2px 2px 0 0;
+	border-radius: 8px 8px 0 0;
 }
 
 .story-toggle {
@@ -714,6 +1221,7 @@ button > * {
 	border-color: inherit;
 	border-radius: inherit;
 	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 	margin-bottom: -2px;
 }
 

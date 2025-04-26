@@ -86,8 +86,8 @@ addLayer("cap", {
             player.subtabs["cap"]['stuff'] = 'CANTEPOCALYPSE'
         }
 
-        if (player.subtab = 'CANTEPOCALYPSE') {
-            cantepocalypsePrep: true
+        if (player.subtab = 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
+            player.cap.cantepocalypsePrep = true
         }
 
         player.cap.quizAnswers =
@@ -110,22 +110,16 @@ addLayer("cap", {
             player.cap.cantepocalypseUnlock = true
         }
     },
-    checkPetReq()
-    {
-        let petList = [];
-        petList = player.cb.commonPetAmounts.concat(player.cb.uncommonPetAmounts.concat(player.cb.rarePetAmounts))
-
+    checkPetReq() {
         let total = new Decimal(0)
-        for (let i = 0; i < petList.length; i++)
-        {
-            total = total.add(petList[i])
+        for (let i = 101; i < 308; i++) {
+            total = total.add(getLevelableXP("pet", i))
+            if (i == 109 || i == 209) i = i+91
         }
 
-        if (total.eq(0))
-        {
+        if (total.eq(0)) {
             return true
-        } else
-        {
+        } else {
             return false
         }
     },
@@ -147,7 +141,7 @@ addLayer("cap", {
             onClick() {
                 player.cap.reqDisplayIndex = new Decimal(0)
             },
-            style: { width: '75px', "min-height": '75px' },
+            style: { width: '75px', "min-height": '75px', borderRadius: "5px" },
         },
         12: {
             title() { return "<h1>II" },
@@ -155,9 +149,9 @@ addLayer("cap", {
             unlocked() { return !player.cap.reqsPassed[1] },
             onClick() {
                 player.cap.reqDisplayIndex = new Decimal(1)
-        player.cap.passingReqs[1] = layers.cap.checkPetReq()
-    },
-            style: { width: '75px', "min-height": '75px' },
+                player.cap.passingReqs[1] = layers.cap.checkPetReq()
+            },
+            style: { width: '75px', "min-height": '75px', borderRadius: "5px" },
         },
         13: {
             title() { return "<h1>III" },
@@ -166,7 +160,7 @@ addLayer("cap", {
             onClick() {
                 player.cap.reqDisplayIndex = new Decimal(2)
             },
-            style: { width: '75px', "min-height": '75px' },
+            style: { width: '75px', "min-height": '75px', borderRadius: "5px" },
         },
         14: {
             title() { return "<h1>IV" },
@@ -175,7 +169,7 @@ addLayer("cap", {
             onClick() {
                 player.cap.reqDisplayIndex = new Decimal(3)
             },
-            style: { width: '75px', "min-height": '75px' },
+            style: { width: '75px', "min-height": '75px', borderRadius: "5px" },
         },
         15: {
             title() { return "Select this requirement" },
@@ -184,7 +178,7 @@ addLayer("cap", {
             onClick() {
                 player.cap.reqSelect = player.cap.reqDisplayIndex
             },
-            style: { width: '200px', "min-height": '75px' },
+            style: { width: '200px', "min-height": '75px', borderRadius: "10px" },
         },
         16: {
             title() { return "Pass this requirement" },
@@ -193,7 +187,7 @@ addLayer("cap", {
             onClick() {
                 player.cap.reqsPassed[player.cap.reqSelect] = true
             },
-            style: { width: '200px', "min-height": '75px' },
+            style: { width: '200px', "min-height": '75px', borderRadius: "10px" },
         },
         17: {
             title() { return "Check Answer" },
@@ -211,7 +205,7 @@ addLayer("cap", {
                     player.cap.quizText = "You got the question wrong >:( go back to the beginning..."
                 }
             },
-            style: { width: '200px', "min-height": '75px' },
+            style: { width: '200px', "min-height": '75px', borderRadius: "10px" },
         },
     },
     bars: {
@@ -230,7 +224,7 @@ addLayer("cap", {
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.ca.unlockedCante && !player.cap.cantepocalypseUnlock },
                 content:
                 [
@@ -249,7 +243,7 @@ addLayer("cap", {
                 ]
             },
             "QUIZ": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.cap.reqSelect.eq(3) && !player.cap.passingReqs[3] },
                 content:
                 [
@@ -275,7 +269,7 @@ addLayer("cap", {
                 ]
             },
             "CANTEPOCALYPSE": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.cap.cantepocalypseUnlock },
                 content:
                 [

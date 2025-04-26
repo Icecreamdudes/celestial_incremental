@@ -688,6 +688,7 @@
                 unlocked() { return true },
                 content:
                 [
+                    ["blank", "25px"],
                     ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.sma.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.sma.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.sma.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Primed Effects (All based on singularity time):<br>" + player.coa.corePrimedEffectText[player.sma.coreIndex]}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],

@@ -67,6 +67,7 @@ addLayer("pet", {
         player.pet.petCooldownDiv = player.pet.petCooldownDiv.mul(buyableEffect("ev0", 14))
         player.pet.petCooldownDiv = player.pet.petCooldownDiv.mul(levelableEffect("pet", 1203)[0])
         player.pet.petCooldownDiv = player.pet.petCooldownDiv.mul(levelableEffect("pet", 401)[1])
+        if (player.cop.processedCoreFuel.eq(8)) player.pet.petCooldownDiv = player.pet.petCooldownDiv.div(player.cop.processedCoreInnateEffects[2])
 
         // PET POINT MULTIPLIER
         player.pet.petPointMult = new Decimal(1)

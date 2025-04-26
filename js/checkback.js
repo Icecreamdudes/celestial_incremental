@@ -267,6 +267,7 @@
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.le.punchcardsPassiveEffect[1])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
+            if (player.cop.processedCoreFuel.eq(8)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
         }
 
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000), new Decimal(86400)]
@@ -277,6 +278,7 @@
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(buyableEffect("ev0", 13))
             if (hasUpgrade("ev8", 12)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(1.1)
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(levelableEffect("pet", 1104)[2])
+            if (player.cop.processedCoreFuel.eq(8)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
         }
 
         for (let i = 0; i < player.cb.petButtonTimers.length; i++) {
@@ -312,6 +314,7 @@
         for (let i = 0; i < player.cb.XPBoostTimersMax.length; i++) {
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(levelableEffect("pet", 401)[2])
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(buyableEffect("ep5", 13))
+            if (player.cop.processedCoreFuel.eq(8)) player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
         }
         for (let i = 0; i < player.cb.XPBoostTimers.length; i++) {
             player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(onepersec.mul(delta))

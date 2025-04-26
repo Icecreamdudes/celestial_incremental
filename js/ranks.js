@@ -140,7 +140,7 @@
         player.r.pentPause = player.r.pentPause.sub(1)
 
         player.r.pentToGet = new Decimal(1)
-        if (hasUpgrade("i", 32)) {
+        if (hasUpgrade("i", 32) && !inChallenge("ip", 14)) {
             if (player.points.lt(new Decimal(6e57).div(buyableEffect("g", 19)))) {
                 player.r.pentToGet = player.points.mul(buyableEffect("g", 19)).div(1e28).pow(1/42.5).floor().sub(player.r.pent)
             } else if (player.points.gte(new Decimal(6e57).div(buyableEffect("g", 19))) && player.points.lt(new Decimal(4e152).div(buyableEffect("g", 19)))) {
@@ -160,7 +160,7 @@
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
-        if (hasUpgrade("i", 32) && player.points.gte(player.r.pentReq)) {
+        if (hasUpgrade("i", 32) && !inChallenge("ip", 14) && player.points.gte(player.r.pentReq)) {
             player.r.pent = player.r.pent.add(player.r.pentToGet)
         } else if (hasUpgrade("i", 27) && player.points.gte(player.r.pentReq)) {
             player.r.pent = player.r.pent.add(1)

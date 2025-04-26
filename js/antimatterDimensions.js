@@ -235,22 +235,22 @@
             style: { width: '125px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
         },
         13: {
-            title() { return "<h1>REVERSE BREAK INFINITY" },
+            title() { return "<h2>REVERSE BREAK INFINITY" },
             canClick() { return true },
             unlocked() { return !player.ta.unlockedReverseBreak },
             onClick() {
                 player.ta.unlockedReverseBreak = true
             },
-            style: { width: '400px', "min-height": '160px', borderRadius: '15px' },
+            style: { width: '200px', "min-height": '80px', borderRadius: '15px' },
         },
         14: {
-            title() { return "<h1>REVERSE FIX INFINITY" },
+            title() { return "<h2>REVERSE FIX INFINITY" },
             canClick() { return true },
             unlocked() { return player.ta.unlockedReverseBreak },
             onClick() {
                 player.ta.unlockedReverseBreak = false
             },
-            style: { width: '400px', "min-height": '160px', borderRadius: '15px' },
+            style: { width: '200px', "min-height": '80px', borderRadius: '15px' },
         },
         15: {
             title() { return "<h2>REVERSE CRUNCH" },
@@ -877,12 +877,12 @@
                 content:
                 [
                     ["blank", "25px"],
+                    ["row", [["clickable", 15]]],
+                    ["blank", "25px"],
                     ["row", [["clickable", 13], ["clickable", 14]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 15]]],
                     ["raw-html", function () { return "(+" + format(player.ta.negativeInfinityPointsToGet) + " NIP)" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                 ]
-
             },
         },
     },

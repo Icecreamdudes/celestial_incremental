@@ -114,13 +114,12 @@
             player.ta.reachedNegativeInfinity = true
         }
 
-        if (player.ta.reachedNegativeInfinity && !player.ta.unlockedReverseBreak)
-        {
-            if (!hasUpgrade("ta", 13) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) 
+        if (player.ta.reachedNegativeInfinity && !player.ta.unlockedReverseBreak) {
+            if ((!hasUpgrade("ta", 13) && player.ta.negativeInfinityPoints.lt(1000)) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) 
             {
                 player.tab = "revc"
             }
-            else if (hasUpgrade("ta", 13))
+            else if (hasUpgrade("ta", 13) || player.ta.negativeInfinityPoints.gte(1000))
             {
                 layers.revc.reverseCrunch()
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
@@ -163,8 +162,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.le.punchcardsPassiveEffect[2])
 
         player.ta.negativeInfinityPause = player.ta.negativeInfinityPause.sub(1)
-        if (player.ta.negativeInfinityPause.gt(0))
-        {
+        if (player.ta.negativeInfinityPause.gt(0)) {
             layers.ta.negativeInfinityReset();
         }
 
@@ -364,7 +362,7 @@
         16: {
             title() { return "<h2>REVERSE BREAK INFINITY" },
             canClick() { return true },
-            unlocked() { return !player.ta.unlockedReverseBreak && getLevelableAmount("pet", 1101).gte(1)},
+            unlocked() { return !player.ta.unlockedReverseBreak},
             onClick() {
                 player.ta.unlockedReverseBreak = true
             },
@@ -373,7 +371,7 @@
         17: {
             title() { return "<h2>REVERSE FIX INFINITY" },
             canClick() { return true },
-            unlocked() { return player.ta.unlockedReverseBreak && getLevelableAmount("pet", 1101).gte(1) },
+            unlocked() { return player.ta.unlockedReverseBreak},
             onClick() {
                 player.ta.unlockedReverseBreak = false
             },

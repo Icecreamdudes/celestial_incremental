@@ -486,7 +486,11 @@ function fixOldSave(oldVersion){
 			setLevelableAmount("pet", i+401, player.cb.epicPetLevels[i]);
 			setLevelableXP("pet", i+401, player.cb.epicPetFragments[i]);
 		}
+		setLevelableAmount("pet", 404, player.cb.epicPetLevels[3])
+		setLevelableAmount("pet", 405, player.cb.epicPetLevels[4])
+		setLevelableAmount("pet", 406, player.cb.epicPetLevels[5])
 		player.pet.singularityFragments = player.cb.epicPetFragments[3]
+		
 		player.pet.lastDicePetRoll = player.cb.lastDicePetRoll
 		player.pet.highestDicePetCombo = player.cb.highestDicePetCombo
 		player.pet.dicePetCombo = player.cb.dicePetCombo

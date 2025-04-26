@@ -368,7 +368,7 @@
                 player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
             break;
             case 4:
-                player.rf.abilityEffects[4] = player.cb.buttonBaseXP[0].mul(amount.log10().pow(0.8).div(10).add(1))
+                player.rf.abilityEffects[4] = player.cb.buttonBaseXP[0].mul(amount.log10().pow(0.7).div(10).add(1))
                 player.cb.xp = player.cb.xp.add(player.rf.abilityEffects[4])
                 player.cb.totalxp = player.cb.totalxp.add(player.rf.abilityEffects[4])
                 player.rf.abilityTimers[4] = player.cb.buttonTimersMax[0].mul(amount.log10().pow(0.8).div(10).add(1.7))

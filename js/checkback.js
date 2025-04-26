@@ -585,7 +585,7 @@
         2: {
             title() { return "Alerts<br>On" },
             canClick() { return !player.cb.alertToggle },
-            unlocked() { return true },
+            unlocked() { return player.cb.highestLevel.gte(200) },
             onClick() {
                 player.cb.alertToggle = true
             },
@@ -602,7 +602,7 @@
         3: {
             title() { return "Alerts<br>Off" },
             canClick() { return player.cb.alertToggle  },
-            unlocked() { return true },
+            unlocked() { return player.cb.highestLevel.gte(200) },
             onClick() {
                 player.cb.alertToggle = false
             },
@@ -863,7 +863,7 @@
             canClick() {return tmp.cb.clickables[11].canClick || tmp.cb.clickables[12].canClick || tmp.cb.clickables[13].canClick
                 || tmp.cb.clickables[14].canClick || tmp.cb.clickables[15].canClick || tmp.cb.clickables[16].canClick
                 || tmp.cb.clickables[17].canClick || tmp.cb.clickables[18].canClick},
-            unlocked() {return true},
+            unlocked() {return player.cb.highestLevel.gte(200)},
             onClick() {
                 clickClickable("cb", 11)
                 clickClickable("cb", 12)
@@ -1013,7 +1013,7 @@
             canClick() {return tmp.cb.clickables[101].canClick || tmp.cb.clickables[102].canClick || tmp.cb.clickables[103].canClick
                 || tmp.cb.clickables[104].canClick || tmp.cb.clickables[105].canClick || tmp.cb.clickables[106].canClick
                 || tmp.cb.clickables[107].canClick},
-            unlocked() {return true},
+            unlocked() {return player.cb.highestLevel.gte(200)},
             onClick() {
                 clickClickable("cb", 101)
                 clickClickable("cb", 102)
@@ -1262,7 +1262,7 @@
             canClick() {return tmp.cb.clickables[201].canClick || tmp.cb.clickables[202].canClick || tmp.cb.clickables[203].canClick
                 || tmp.cb.clickables[204].canClick || tmp.cb.clickables[205].canClick || tmp.cb.clickables[206].canClick
                 || tmp.cb.clickables[207].canClick || tmp.cb.clickables[208].canClick || tmp.cb.clickables[209].canClick},
-            unlocked() {return true},
+            unlocked() {return player.cb.highestLevel.gte(200)},
             onClick() {
                 clickClickable("cb", 201)
                 clickClickable("cb", 202)
@@ -3345,7 +3345,8 @@
         ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cb.highestLevel.lt(200) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 200! <small>[MOST MAIN TABS]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(200) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(666) && player.cb.highestLevel.gte(250) ?  "You will unlock something at level 666! <small>[XPBOOST TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1,500! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(3000) && player.cb.highestLevel.gte(1500) ?  "You will unlock something at level 3,000! <small>[PET SHOP]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

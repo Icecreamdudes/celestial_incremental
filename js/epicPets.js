@@ -154,7 +154,7 @@
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep0.clickables[11].canClick || tmp.ep0.clickables[12].canClick || tmp.ep0.clickables[13].canClick},
-            unlocked() {return true},
+            unlocked() {return player.ep0.dotknightPointButtonUnlocks[1]},
             onClick() {
                 clickClickable("ep0", 11)
                 clickClickable("ep0", 12)
@@ -523,7 +523,7 @@ addLayer("ep1", {
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep1.clickables[11].canClick || tmp.ep1.clickables[12].canClick || tmp.ep1.clickables[13].canClick},
-            unlocked() {return true},
+            unlocked() {return player.ep1.dragonPointButtonUnlocks[1]},
             onClick() {
                 clickClickable("ep1", 11)
                 clickClickable("ep1", 12)
@@ -918,7 +918,7 @@ addLayer("ep2", {
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep2.clickables[11].canClick || tmp.ep2.clickables[12].canClick || tmp.ep2.clickables[13].canClick},
-            unlocked() {return true},
+            unlocked() {return player.ep2.cookiePointButtonUnlocks[1] },
             onClick() {
                 clickClickable("ep2", 11)
                 clickClickable("ep2", 12)

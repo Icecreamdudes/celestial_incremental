@@ -2020,7 +2020,7 @@ addLayer("ev8", {
             title() {return "Claim All"},
             canClick() {return tmp.ev8.clickables[11].canClick || tmp.ev8.clickables[12].canClick || tmp.ev8.clickables[13].canClick
                 || tmp.ev8.clickables[14].canClick},
-            unlocked() {return true},
+            unlocked() {return hasMilestone("s", 14)},
             onClick() {
                 clickClickable("ev8", 11)
                 clickClickable("ev8", 12)
@@ -2072,7 +2072,7 @@ addLayer("ev8", {
         199: {
             title() {return "Claim All"},
             canClick() {return tmp.ev8.clickables[101].canClick || tmp.ev8.clickables[102].canClick || tmp.ev8.clickables[103].canClick},
-            unlocked() {return true},
+            unlocked() {return hasMilestone("s", 14)},
             onClick() {
                 clickClickable("ev8", 101)
                 clickClickable("ev8", 102)

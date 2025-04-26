@@ -11,7 +11,7 @@
         rocketFuelPause: new Decimal(0),
 
         //abilities
-        abilitiesUnlocked: [false, false, false, false, false, false, false, false],
+        abilitiesUnlocked: [true, true, false, false, false, false, false, false],
         abilityTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
         abilityEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         abilityIndex: -1,
@@ -98,12 +98,6 @@
         ]
 
         // ABILITY UNLOCK CODE
-        if (player.rf.rocketFuel.gt(0)) {
-            player.rf.abilitiesUnlocked[0] = true
-        }
-        if (player.rf.rocketFuel.gt(0)) {
-            player.rf.abilitiesUnlocked[1] = true
-        }
         if (player.rf.rocketFuel.gt(10)) {
             player.rf.abilitiesUnlocked[2] = true
         }
@@ -253,7 +247,7 @@
         11: {
             title() { return "Point<br>Boost" },
             canClick() { return true },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            unlocked() { return true },
             onClick() {
                 player.rf.abilityIndex = 0
             },
@@ -266,7 +260,7 @@
         12: {
             title() { return "Tree<br>Boost" },
             canClick() { return true },
-            unlocked() { return player.rf.abilitiesUnlocked[1] },
+            unlocked() { return true },
             onClick() {
                 player.rf.abilityIndex = 1
             },

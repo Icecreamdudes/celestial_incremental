@@ -89,7 +89,7 @@
         },
         11: {
             title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[0].lt(0) },
+            canClick() { return player.ep0.dotknightPointButtonTimers[0].lt(0) && this.unlocked() },
             unlocked() { return player.ep0.dotknightPointButtonUnlocks[0] },
             tooltip() { return "Evo Shard Rarity: 1%"},
             onClick() {
@@ -110,7 +110,7 @@
         },
         12: {
             title() { return player.ep0.dotknightPointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[1]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[1]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[1].lt(0) },
+            canClick() { return player.ep0.dotknightPointButtonTimers[1].lt(0) && this.unlocked() },
             unlocked() { return player.ep0.dotknightPointButtonUnlocks[1] },
             tooltip() { return "Evo Shard Rarity: 2%"},
             onClick() {
@@ -131,7 +131,7 @@
         },
         13: {
             title() { return player.ep0.dotknightPointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[2]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[2]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[2].lt(0) },
+            canClick() { return player.ep0.dotknightPointButtonTimers[2].lt(0) && this.unlocked() },
             unlocked() { return player.ep0.dotknightPointButtonUnlocks[2] },
             tooltip() { return "DOUBLE Evo Shard Rarity: 2%"},
             onClick() {
@@ -149,6 +149,23 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+        },
+
+        99: {
+            title() {return "Claim All"},
+            canClick() {return tmp.ep0.clickables[11].canClick || tmp.ep0.clickables[12].canClick || tmp.ep0.clickables[13].canClick},
+            unlocked() {return true},
+            onClick() {
+                clickClickable("ep0", 11)
+                clickClickable("ep0", 12)
+                clickClickable("ep0", 13)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
+                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     bars: {
@@ -318,13 +335,14 @@
                 unlocked() { return true },
                 content:
                 [
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["raw-html", function () { return player.ep0.dotknightUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Dotknight Level: x<h3>" + format(player.ep0.dotknightLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                    ["row", [["clickable", 12]]],
-                    ["row", [["clickable", 13]]],
+                    ["blank", "10px"],
+                    ["clickable", 11],
+                    ["clickable", 12],
+                    ["clickable", 13],
+                    ["clickable", 99],
                 ]
             },
             "Buyables and Upgrades": {
@@ -439,7 +457,7 @@ addLayer("ep1", {
         },
         11: {
             title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[0].lt(0) },
+            canClick() { return player.ep1.dragonPointButtonTimers[0].lt(0) && this.unlocked() },
             unlocked() { return player.ep1.dragonPointButtonUnlocks[0] },
             tooltip() { return "Paragon Shard Rarity: 0.04%"},
             onClick() {
@@ -461,7 +479,7 @@ addLayer("ep1", {
         },
         12: {
             title() { return player.ep1.dragonPointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[1]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[1]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[1].lt(0) },
+            canClick() { return player.ep1.dragonPointButtonTimers[1].lt(0) && this.unlocked() },
             unlocked() { return player.ep1.dragonPointButtonUnlocks[1] },
             tooltip() { return "Paragon Shard Rarity: 0.1%"},
             onClick() {
@@ -482,7 +500,7 @@ addLayer("ep1", {
         },
         13: {
             title() { return player.ep1.dragonPointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[2]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[2]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[2].lt(0) },
+            canClick() { return player.ep1.dragonPointButtonTimers[2].lt(0) && this.unlocked() },
             unlocked() { return player.ep1.dragonPointButtonUnlocks[2] },
             tooltip() { return "Paragon Shard Rarity: 0.2%"},
             onClick() {
@@ -500,6 +518,23 @@ addLayer("ep1", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+        },
+
+        99: {
+            title() {return "Claim All"},
+            canClick() {return tmp.ep1.clickables[11].canClick || tmp.ep1.clickables[12].canClick || tmp.ep1.clickables[13].canClick},
+            unlocked() {return true},
+            onClick() {
+                clickClickable("ep1", 11)
+                clickClickable("ep1", 12)
+                clickClickable("ep1", 13)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
+                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     bars: {
@@ -669,13 +704,14 @@ addLayer("ep1", {
                 unlocked() { return true },
                 content:
                 [
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["raw-html", function () { return player.ep1.dragonUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Dragon Level: x<h3>" + format(player.ep1.dragonLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                    ["row", [["clickable", 12]]],
-                    ["row", [["clickable", 13]]],
+                    ["blank", "10px"],
+                    ["clickable", 11],
+                    ["clickable", 12],
+                    ["clickable", 13],
+                    ["clickable", 99],
                 ]
             },
             "Buyables and Upgrades": {
@@ -790,7 +826,7 @@ addLayer("ep2", {
         },
         11: {
             title() { return player.ep2.cookiePointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[0]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[0]) + " Cookie Points."},
-            canClick() { return player.ep2.cookiePointButtonTimers[0].lt(0) },
+            canClick() { return player.ep2.cookiePointButtonTimers[0].lt(0) && this.unlocked() },
             unlocked() { return player.ep2.cookiePointButtonUnlocks[0] },
             tooltip() { return "Evolution Shard Rarity: 10%<br>Paragon Shard Rarity: 1%"},
             onClick() {
@@ -820,7 +856,7 @@ addLayer("ep2", {
         },
         12: {
             title() { return player.ep2.cookiePointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[1]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[1]) + " Cookie Points."},
-            canClick() { return player.ep2.cookiePointButtonTimers[1].lt(0) },
+            canClick() { return player.ep2.cookiePointButtonTimers[1].lt(0) && this.unlocked() },
             unlocked() { return player.ep2.cookiePointButtonUnlocks[1] },
             tooltip() { return "Evolution Shard Rarity: 20%<br>Paragon Shard Rarity: 2.5%"},
             onClick() {
@@ -850,7 +886,7 @@ addLayer("ep2", {
         },
         13: {
             title() { return player.ep2.cookiePointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[2]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[2]) + " Cookie Points."},
-            canClick() { return player.ep2.cookiePointButtonTimers[2].lt(0) },
+            canClick() { return player.ep2.cookiePointButtonTimers[2].lt(0) && this.unlocked() },
             unlocked() { return player.ep2.cookiePointButtonUnlocks[2] },
             tooltip() { return "Evolution Shard Rarity: 33%<br>Paragon Shard Rarity: 4%"},
             onClick() {
@@ -877,6 +913,23 @@ addLayer("ep2", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+        },
+
+        99: {
+            title() {return "Claim All"},
+            canClick() {return tmp.ep2.clickables[11].canClick || tmp.ep2.clickables[12].canClick || tmp.ep2.clickables[13].canClick},
+            unlocked() {return true},
+            onClick() {
+                clickClickable("ep2", 11)
+                clickClickable("ep2", 12)
+                clickClickable("ep2", 13)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
+                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     bars: {
@@ -1042,13 +1095,14 @@ addLayer("ep2", {
                 unlocked() { return true },
                 content:
                 [
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["raw-html", function () { return player.ep2.cookieUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Cookie Level: x<h3>" + format(player.ep2.cookieLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                    ["row", [["clickable", 12]]],
-                    ["row", [["clickable", 13]]],
+                    ["blank", "10px"],
+                    ["clickable", 11],
+                    ["clickable", 12],
+                    ["clickable", 13],
+                    ["clickable", 99],
                 ]
             },
             "Buyables and Upgrades": {

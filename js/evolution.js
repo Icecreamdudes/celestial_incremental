@@ -1921,6 +1921,8 @@ addLayer("ev8", {
         paragonButtonTimersMax: [new Decimal(180000),new Decimal(450000),new Decimal(864000),],
         paragonButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),],
         paragonButtonBase: [new Decimal(1),new Decimal(3),new Decimal(5),],
+
+        alertToggle: true,
     }},
     automate() {},
     nodeStyle() {},
@@ -1971,7 +1973,7 @@ addLayer("ev8", {
         //evo
         11: {
             title() { return player.ev8.evoButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[0]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[0].lt(0) },
+            canClick() { return player.ev8.evoButtonTimers[0].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.evoButtonUnlocks[0] },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[0])
@@ -1982,7 +1984,7 @@ addLayer("ev8", {
         },
         12: {
             title() { return player.ev8.evoButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[1]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[1].lt(0) },
+            canClick() { return player.ev8.evoButtonTimers[1].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.evoButtonUnlocks[1] },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[1])
@@ -1993,7 +1995,7 @@ addLayer("ev8", {
         },
         13: {
             title() { return player.ev8.evoButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[2]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[2].lt(0) },
+            canClick() { return player.ev8.evoButtonTimers[2].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.evoButtonUnlocks[2] },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[2])
@@ -2004,7 +2006,7 @@ addLayer("ev8", {
         },
         14: {
             title() { return player.ev8.evoButtonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[3]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[3]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[3].lt(0) },
+            canClick() { return player.ev8.evoButtonTimers[3].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.evoButtonUnlocks[3] },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[3])
@@ -2014,10 +2016,28 @@ addLayer("ev8", {
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
 
+        99: {
+            title() {return "Claim All"},
+            canClick() {return tmp.ev8.clickables[11].canClick || tmp.ev8.clickables[12].canClick || tmp.ev8.clickables[13].canClick
+                || tmp.ev8.clickables[14].canClick},
+            unlocked() {return true},
+            onClick() {
+                clickClickable("ev8", 11)
+                clickClickable("ev8", 12)
+                clickClickable("ev8", 13)
+                clickClickable("ev8", 14)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
+                this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
         //paragon
         101: {
             title() { return player.ev8.paragonButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[0]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[0].lt(0) },
+            canClick() { return player.ev8.paragonButtonTimers[0].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.paragonButtonUnlocks[0] },
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[0])
@@ -2028,7 +2048,7 @@ addLayer("ev8", {
         },
         102: {
             title() { return player.ev8.paragonButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[1]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[1].lt(0) },
+            canClick() { return player.ev8.paragonButtonTimers[1].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.paragonButtonUnlocks[1] },
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[1])
@@ -2039,7 +2059,7 @@ addLayer("ev8", {
         },
         103: {
             title() { return player.ev8.paragonButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[2]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[2].lt(0) },
+            canClick() { return player.ev8.paragonButtonTimers[2].lt(0) && this.unlocked() },
             unlocked() { return player.ev8.paragonButtonUnlocks[2] },
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[2])
@@ -2047,6 +2067,23 @@ addLayer("ev8", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
+        },
+
+        199: {
+            title() {return "Claim All"},
+            canClick() {return tmp.ev8.clickables[101].canClick || tmp.ev8.clickables[102].canClick || tmp.ev8.clickables[103].canClick},
+            unlocked() {return true},
+            onClick() {
+                clickClickable("ev8", 101)
+                clickClickable("ev8", 102)
+                clickClickable("ev8", 103)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
+                this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
     },
     bars: {},
@@ -2187,21 +2224,23 @@ addLayer("ev8", {
                 buttonStyle() { return {color: "black", borderColor: "black", backgroundColor: "#d487fd", borderRadius: "5px"} },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                    ["row", [["clickable", 12]]],
-                    ["row", [["clickable", 13]]],
-                    ["row", [["clickable", 14]]],
+                    ["blank", "10px"],
+                    ["clickable", 11],
+                    ["clickable", 12],
+                    ["clickable", 13],
+                    ["clickable", 14],
+                    ["clickable", 99],
                 ]
             },
             "Paragon": {
                 buttonStyle() { return {color: "black", borderColor: "black", backgroundColor: "#4b79ff", borderRadius: "5px"} },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
-                    ["row", [["clickable", 101]]],
-                    ["row", [["clickable", 102]]],
-                    ["row", [["clickable", 103]]],
+                    ["blank", "10px"],
+                    ["clickable", 101],
+                    ["clickable", 102],
+                    ["clickable", 103],
+                    ["clickable", 199],
                 ]
             },
             "Research": {

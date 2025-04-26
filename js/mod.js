@@ -94,6 +94,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a U1 upgrade that improves Pent automation.<br>
 			- Added a Funify upgrade that unlocks bulk grass-skip.<br>
 			- Made many clickables able to be auto-clicked if you hold down left click.<br>
+			- Added claim all buttons to applicable check back pages.<br>
+			- Added toggle alert buttons to applicable check back pages.<br><br>
 		Visual Enhancements:<br>
 			- Visually remade almost all buyables.<br>
 			- Visually remade Check Back layer.<br>

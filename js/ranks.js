@@ -365,7 +365,7 @@
                     return "<h2>Reset all content before grass, but pent.</h2><br><h3>Req: " + formatWhole(player.r.pentReq) + " Points<br><small style='color:darkred'>[SOFTCAPPED<sup>2</sup>]</small></h3>"
                 }
             },
-            canClick() { return player.points.gte(player.r.pentReq) && !hasUpgrade("i", 32) },
+            canClick() { return player.r.pentToGet.gt(0) && !hasUpgrade("i", 32) },
             unlocked() { return true },
             onClick() {
                 player.r.pent = player.r.pent.add(player.r.pentToGet)

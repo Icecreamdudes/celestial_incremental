@@ -66,7 +66,7 @@
 
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30%" },
+            style: {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"},
         },
     },
     gemReset()
@@ -106,7 +106,7 @@
                     ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.leg.legendaryGemsToGetMin) + " to " + formatWhole(player.leg.legendaryGemsToGetMax) + "</h3> of each gem on reset. (based on XPBoost)" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
-    ]
+                ]
             },
             "Pets": {
                 buttonStyle() { return { 'color': 'black', 'border-color': "black", 'background-color': '#fe9400',} },
@@ -114,7 +114,7 @@
                 content:
                 [
                     ["raw-html", function () { return "COMING SOON" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-    ]
+                ]
             },
         },
     },

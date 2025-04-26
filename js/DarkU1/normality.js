@@ -29,6 +29,8 @@ addLayer("dn", {
         let onepersec = new Decimal(1)
 
         player.dn.normalityToGet = player.du.points.div(1e30).pow(0.1).div(10)
+        player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ma", 24))
+
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
         player.dn.normalityPause = player.dn.normalityPause.sub(1)

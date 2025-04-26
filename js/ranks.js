@@ -172,7 +172,7 @@
 
         //Time reversal
 
-        if (!player.r.timeReversed)
+        if (!player.r.timeReversed && !hasUpgrade("ma", 14))
         {
             player.r.timeCubesPerSecond = new Decimal(0)
         } else
@@ -184,8 +184,6 @@
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
             if (hasUpgrade("s", 13)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("s", 13))
         }
-
-        player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
 
         if (player.points.gte("1e1000"))
         {
@@ -199,6 +197,7 @@
         player.r.timeCubeEffects[1] = player.r.timeCubesEffect.pow(1.1).mul(10).add(1)
         player.r.timeCubeEffects[2] = player.r.timeCubesEffect.pow(0.9).mul(6).add(1)
         player.r.timeCubeEffects[3] = player.r.timeCubesEffect.pow(0.7).mul(3).add(1)
+        
     },
     getRankReq()
     {

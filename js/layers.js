@@ -155,7 +155,21 @@ addLayer("i", {
         } else if (player.musuniverse == 2 && options.musicToggle) {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
         } else if (player.musuniverse == 3 && options.musicToggle) {
-            playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+            if (player.ma.inBlackHeart == false)
+            {
+                 playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+            } else
+            {
+                if (!player.ma.fightingCelestialites)
+                {
+                playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
+                } else
+                {
+                    if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
+                    if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
+                    if (player.ma.currentDepth.eq(3)) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
+                } //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
+            }
         } else if (player.musuniverse == 0.5 && options.musicToggle) {
             playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
         } else if (player.musuniverse == -0.5 && options.musicToggle) {
@@ -173,6 +187,8 @@ addLayer("i", {
                 playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 19 || player.c.currentCutscene == 20 || player.c.currentCutscene == 21 || player.c.currentCutscene == 22 || player.c.currentCutscene == 23) {
                 playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+            } else if (player.c.currentCutscene == 28 || player.c.currentCutscene == 29) {
+                playAndLoopAudio("music/confrontation.mp3", options.musicVolume/10);
             }
         } else if (player.musuniverse == 1.5 && options.musicToggle) {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
@@ -267,6 +283,91 @@ addLayer("i", {
         }
         if (player.po.realmMods) player.gain = player.gain.pow(0.35)
         player.gain = player.gain.div(player.po.halterEffects[0])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
+        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
+        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
+
+        //post otf
+        let postOTFMult = new Decimal(1)
+        postOTFMult = postOTFMult.mul(buyableEffect("ma", 22))
+
+        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(postOTFMult)
+        player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(postOTFMult)
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(postOTFMult)
+        player.gh.steelToGet = player.gh.steelToGet.mul(postOTFMult)
+        player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(postOTFMult)
+        player.fa.chargeRate = player.fa.chargeRate.mul(postOTFMult)
+
+        if (player.cop.processedCoreFuel.eq(0))
+        {
+            player.gain = player.gain.mul(player.cop.processedCoreInnateEffects[0])
+            player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
+        }
+        if (player.cop.processedCoreFuel.eq(1))
+        {
+            player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+            player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.cop.processedCoreInnateEffects[1])
+            player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
+        }
+        if (player.cop.processedCoreFuel.eq(2))
+        {
+            player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.cop.processedCoreInnateEffects[0])
+            player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.cop.processedCoreInnateEffects[1])
+            player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        }
+        if (player.cop.processedCoreFuel.eq(3))
+        {
+            player.t.treesToGet = player.t.treesToGet.mul(player.cop.processedCoreInnateEffects[0])
+            player.t.treesToGet = player.t.treesToGet.pow(player.cop.processedCoreInnateEffects[1])
+            player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.cop.processedCoreInnateEffects[2])
+            player.rt.repliLeavesMult = player.rt.repliLeavesMult.mul(player.cop.processedCoreInnateEffects[3])
+        }
+        if (player.cop.processedCoreFuel.eq(4))
+        {
+            player.g.grassVal = player.g.grassVal.mul(player.cop.processedCoreInnateEffects[0])
+            player.g.grassVal = player.g.grassVal.pow(player.cop.processedCoreInnateEffects[1])
+            player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[2])
+            player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[3])
+        }
+        if (player.cop.processedCoreFuel.eq(5))
+        {
+            player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cop.processedCoreInnateEffects[0])
+            player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.cop.processedCoreInnateEffects[1])
+            player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.cop.processedCoreInnateEffects[2])
+            player.gh.steelToGet = player.gh.steelToGet.mul(player.cop.processedCoreInnateEffects[3])
+        }
+        if (player.cop.processedCoreFuel.eq(6))
+        {
+            player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cop.processedCoreInnateEffects[0])
+            player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.cop.processedCoreInnateEffects[1])
+            player.m.modsToGet = player.m.modsToGet.mul(player.cop.processedCoreInnateEffects[2])
+            player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cop.processedCoreInnateEffects[3])
+        }
+        if (player.cop.processedCoreFuel.eq(7))
+        {
+            player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cop.processedCoreInnateEffects[0])
+            player.d.dicePointsMult = player.d.dicePointsMult.pow(player.cop.processedCoreInnateEffects[1])
+            player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        }
+        if (player.cop.processedCoreFuel.eq(8))
+        {
+            player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cop.processedCoreInnateEffects[0])
+            player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.cop.processedCoreInnateEffects[1])
+        }
+        if (player.cop.processedCoreFuel.eq(9))
+        {
+            player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+            player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.cop.processedCoreInnateEffects[2])
+        }
+        if (player.cop.processedCoreFuel.eq(10))
+        {
+            player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cop.processedCoreInnateEffects[0])
+            player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])
+            player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.cop.processedCoreInnateEffects[2])
+        }
+
+        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
@@ -282,6 +383,15 @@ addLayer("i", {
             player.tab = "settings"
             player.subtabs["i"]['stuff'] = 'Features'
         }
+
+        player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
+        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
+        player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))
+        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))
+        player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
+        if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
+
+        if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
     },
     bars: {
         infbar: {

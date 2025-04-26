@@ -119,8 +119,6 @@
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(buyableEffect("oi", 24))
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(levelableEffect("pet", 307)[1])
 
-        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
-
         if (player.h.ragePowerPause.gt(0)) {
             layers.h.ragePowerReset();
         }

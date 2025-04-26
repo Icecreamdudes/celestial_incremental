@@ -2790,7 +2790,7 @@
                 ]
             },
             "Lore": {
-                buttonStyle() { return { 'color': '#06366e' } },
+                buttonStyle() { return { 'color': '#094599' } },
                 unlocked() { return hasUpgrade("s", 23) },
                 content: [
                     ["blank", "25px"],

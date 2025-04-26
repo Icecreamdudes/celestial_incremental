@@ -60,6 +60,9 @@ addLayer("s", {
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.rarePetEffects[7][0])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.epicPetEffects[3][1])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {
@@ -232,6 +235,16 @@ addLayer("s", {
             unlocked() { return hasUpgrade("s", 22)},
             description: "Unlock more check back content.",
             cost: new Decimal("1e44"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        24: {
+            title: "Singularity Upgrade XIII",
+            unlocked() { return hasUpgrade("s", 23)},
+            description: "Gain 100% of IP per second.",  
+            cost: new Decimal("1e90"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -439,7 +452,7 @@ addLayer("s", {
                 content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17]]],
-                    ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23]]],
+                    ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],["upgrade", 24]]],
                 ]
             },
             "Lore": {

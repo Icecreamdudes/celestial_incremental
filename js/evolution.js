@@ -53,11 +53,7 @@
         2: {
             title() { return "EVOLVE" },
             canClick() {
-                if (layers.ev.evos[player.ev.evolutionDisplayIndex] == undefined ) {
-                    return false
-                } else {
-                    return tmp.ev.evos[player.ev.evolutionDisplayIndex].canClick
-                }
+                return true
             },
             unlocked() { return true },
             onClick() {

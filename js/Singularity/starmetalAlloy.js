@@ -530,6 +530,26 @@
                 return look
             }
         },
+        106:
+        {
+            title: "Secondary Starmetal Upgrade VI",
+            unlocked() { return hasUpgrade("sma", 105) && player.ma.matosUnlock},
+            description: "Increase # of sides on the die based on highest depth 1 combo.",
+            cost: new Decimal("111"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            effect() {
+                return player.ma.bestComboDepth1.div(10).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
+        },
     },
     buyables: {
         11: {
@@ -712,7 +732,7 @@
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17],]],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],]],
+                    ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]
@@ -723,8 +743,8 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return !player.sma.type ? "Autocrunch amount: " + formatWhole(player.sma.amount) + " singularity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.sma.type ? "Autocrunch time: " + formatTime(player.sma.time) + "/" + formatTime(player.sma.amount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !player.sma.type ? "Auto-singularity amount: " + formatWhole(player.sma.amount) + " singularity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.sma.type ? "Auto-singularity time: " + formatTime(player.sma.time) + "/" + formatTime(player.sma.amount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["text-input", "input", {
                         color: "var(--color)",
                         width: "400px",

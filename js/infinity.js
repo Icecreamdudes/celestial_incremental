@@ -147,6 +147,8 @@ addLayer("in", {
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cop.processedCoreInnateEffects[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.le.punchcardsPassiveEffect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 404)[0])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ma", 21))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ma.bestComboDepth1Effect)
 
         // POWER MODIFIERS
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])

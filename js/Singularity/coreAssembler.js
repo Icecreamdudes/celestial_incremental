@@ -430,7 +430,7 @@
         }
         if (fuel == 10)
         {
-            if (player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.3))
+            if (player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.15))
             {
             return [player.in.infinityPoints.pow(0.06).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
             player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]), 
@@ -438,7 +438,7 @@
             } else
             {
                 return [player.in.infinityPoints.pow(0.06).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
-                Decimal.add(1.3, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(3000)), 
+                Decimal.add(1.15, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(3000)), 
                 player.s.singularityTime.pow(0.1).div(4).add(1).pow(player.coa.strengthBuffs[strength])] //ip, ip, inf,
             }
         }
@@ -1813,7 +1813,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + " " + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],

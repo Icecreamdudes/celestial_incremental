@@ -337,6 +337,7 @@
             style() {
                 let look = {width: "404px", minHeight: "78.7px", borderRadius: "0px", color: "black", border: "2px solid white", margin: "-2px", fontSize: "8px"}
                 this.canClick() ? look.backgroundColor = "#bbbbbb" : look.backgroundColor = "#bf8f8f"
+                hasUpgrade("i", 13) ? look.borderRadius = "0px" : look.borderRadius = "0px 0px 15px 0px"
                 return look
             },
         },
@@ -626,14 +627,14 @@
                             ["raw-html", function () { return "x" + format(player.r.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "75px"}],
                         ["clickable", 12],
-                    ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "0px"}],
+                    ], () => {return hasUpgrade("i", 13) ? {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "0px"} : {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"}}],
                     ["style-row", [
                         ["style-column", [
                             ["raw-html", function () { return "Tetr " + formatWhole(player.r.tetr) + " (+" + formatWhole(player.r.tetrsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.r.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "75px"}],
                         ["clickable", 13],
-                    ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"}],
+                    ], () => {return hasUpgrade("i", 13) ? {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"} : {display: "none !important"}}],
                     ["style-column", [
                         ["raw-html", function () { return "Total Mult: x" + format(player.r.rankEffect.mul(player.r.tierEffect.mul(player.r.tetrEffect))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ], {width: "400px", height: "50px", backgroundColor: "#333333", border: "2px solid white", borderTop: "0px", borderRadius: "0px 0px 15px 15px"}],

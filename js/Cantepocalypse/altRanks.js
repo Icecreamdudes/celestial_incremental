@@ -163,7 +163,7 @@
                             ["raw-html", function () { return format(player.ar.rankPoints) + " Rank Points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", function () { return player.ar.rankPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.rankPointsToGet.mul(player.ar.rankPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "+" + format(player.ar.rankPointsEffect) + "x Replicanti Point Mult" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
-                        ], {width: "400px", height: "75px"}],
+                        ], {width: "399px", height: "75px"}],
                         ["clickable", 11],
                     ], {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderBottom: "0px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-row", [
@@ -171,7 +171,7 @@
                             ["raw-html", function () { return format(player.ar.tierPoints) + " Tier Points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", function () { return player.ar.tierPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.tierPointsToGet.mul(player.ar.tierPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.ar.tierPointsEffect) + " Rank Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
-                        ], {width: "400px", height: "75px"}],
+                        ], {width: "399px", height: "75px"}],
                         ["clickable", 12],
                     ], {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderBottom: "0px", borderRadius: "0px"}],
                     ["style-row", [
@@ -179,7 +179,7 @@
                             ["raw-html", function () { return format(player.ar.tetrPoints) + " Tetr Points (+" + format(player.ar.tetrPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", function () { return player.ar.tetrPointsPerSec.gt(0) ? "(+" + formatWhole(player.ar.tetrPointsToGet.mul(player.ar.tetrPointsPerSec)) + "/s)" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", function () { return "x" + format(player.ar.tetrPointsEffect) + " Rank and Tier Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],    
-                        ], {width: "400px", height: "75px", borderRadius: "0px 0px 0px 13px"}],
+                        ], {width: "399px", height: "75px", borderRadius: "0px 0px 0px 13px"}],
                         ["clickable", 13],
                     ], {width: "800px", height: "75px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderRadius: "0px 0px 15px 15px"}],
                 ]

@@ -230,7 +230,7 @@ addLayer("s", {
         23: {
             title: "Singularity Upgrade XII",
             unlocked() { return hasUpgrade("s", 22)},
-            description: "Unlock more check back content.",
+            description: "Unlock more check back content.<br>(CB Level 25,000)",
             cost: new Decimal("1e44"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",

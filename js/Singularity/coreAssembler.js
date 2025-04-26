@@ -513,7 +513,7 @@
         {
             return "Boosts rocket fuel based on itself: x" + format(layers.coa.determineEffect(8, strength)[0]) 
             + "<br>Boosts rocket fuel based on highest singularity points: ^" + format(layers.coa.determineEffect(8, strength)[1]) 
-            + "<br>Divides check back button cooldown based on time spent in singularity: /" + format(layers.coa.determineEffect(8, strength)[2]) 
+            + "<br>Divides check back XP and Pet button cooldowns based on time spent in singularity: /" + format(layers.coa.determineEffect(8, strength)[2]) 
         }
         if (fuel == 9)
         {

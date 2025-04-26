@@ -314,7 +314,6 @@
         for (let i = 0; i < player.cb.XPBoostTimersMax.length; i++) {
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(levelableEffect("pet", 401)[2])
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(buyableEffect("ep5", 13))
-            if (player.cop.processedCoreFuel.eq(8)) player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
         }
         for (let i = 0; i < player.cb.XPBoostTimers.length; i++) {
             player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(onepersec.mul(delta))

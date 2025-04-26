@@ -1039,6 +1039,7 @@ evoCutscenes(pet) {
             onClick() {
                 player.c.cutsceneIndex = player.c.cutsceneIndex + 1
             },
+            onHold() { clickClickable(this.layer, this.id) },
         },
         12: {
             title() { return "<img src='resources/backarrow.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>" },
@@ -1047,6 +1048,7 @@ evoCutscenes(pet) {
             onClick() {
                 player.c.cutsceneIndex = player.c.cutsceneIndex - 1
             },
+            onHold() { clickClickable(this.layer, this.id) },
         },
 
     },

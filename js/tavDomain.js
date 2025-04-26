@@ -50,7 +50,7 @@
         };
     },
     tooltip: "Tav's Domain",
-    color: "#333c81",
+    color: "#5b629a",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -169,6 +169,7 @@
             unlocked() { return true },
             onClick() {
                 player.in.unlockedBreak = true
+                player.subtabs["tad"]['stuff'] = 'Main'
                 if (options.newMenu) {
                     player.tab = 'otherfeat'
                 } else {

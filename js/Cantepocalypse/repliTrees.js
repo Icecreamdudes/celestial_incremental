@@ -21,7 +21,7 @@
     }
     },
     automate() {
-        if (hasMilestone("gs", 16) && !inChallenge("fu", 11))
+        if (hasMilestone("gs", 16))
         {
             buyBuyable("rt", 11)
             buyBuyable("rt", 12)

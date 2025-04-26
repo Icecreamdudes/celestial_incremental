@@ -167,7 +167,7 @@
         3: {
             title() { return "1" },
             canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(1) && player.rf.abilityTimers[4].lte(0) },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            unlocked() { return true },
             tooltip() { return player.rf.abilityIndex == 4 ? "<h3>5% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), new Decimal(1))
@@ -182,8 +182,8 @@
         },
         4: {
             title() { return "1%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
+            unlocked() { return true },
             tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.01).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.01))
@@ -198,8 +198,8 @@
         },
         5: {
             title() { return "10%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
-            unlocked() { return player.rf.abilitiesUnlocked[0]  },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0)  },
+            unlocked() { return true  },
             tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.1).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.1))
@@ -214,8 +214,8 @@
         },
         6: {
             title() { return "25%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
+            unlocked() { return true },
             tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.mul(0.25).add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel.mul(0.25))
@@ -230,8 +230,8 @@
         },
         7: {
             title() { return "100%" },
-            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(10) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
-            unlocked() { return player.rf.abilitiesUnlocked[0] },
+            canClick() { return player.rf.abilityIndex != 4 ? player.rf.rocketFuel.gt(1) : player.rf.rocketFuel.gt(10) && player.rf.abilityTimers[4].lte(0) },
+            unlocked() { return true },
             tooltip() { return player.rf.abilityIndex == 4 ? "<h3>" + formatWhole(player.rf.rocketFuel.add(1).log10().pow(0.75).div(2).add(5).floor()) + "% chance for a pet???" : ""},
             onClick() {
                 layers.rf.rocketFuelAbility(parseInt(player.rf.abilityIndex), player.rf.rocketFuel)

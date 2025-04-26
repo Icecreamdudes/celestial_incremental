@@ -491,7 +491,7 @@ addLayer("pet", {
             onClick() {
                 player.subtabs["pet"]["fragTabs"] = "Singularity"
             },
-            style: {width: "100px", minHeight: "47px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
+            style: {width: "125px", minHeight: "47px", backgroundColor: "#aa4444", color: "black", borderRadius: "0px", border: "0px", borderRight: "2px solid white"},
         },
         // SINGULARITY FRAGMENTATION
         121: {
@@ -506,7 +506,11 @@ addLayer("pet", {
                 layers.pet.evoBanner();
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: "225px", minHeight: "50px", borderRadius: "30px / 15px" },
+            style() {
+                let look = {width: "225px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         122: {
             title() { return player.pet.singularityButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.singularityButtonTimers[1]) + "." : "<h3>Sacrifice 3 paragon shards for rewards!"},
@@ -520,7 +524,11 @@ addLayer("pet", {
                 layers.pet.paragonBanner();
             },
             onHold() { clickClickable(this.layer, this.id) },
-            style: { width: "225px", minHeight: "50px", borderRadius: "30px / 15px" },
+            style() {
+                let look = {width: "225px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#4c64ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         // PET SHOP
         1001: {
@@ -2232,7 +2240,7 @@ addLayer("pet", {
         404: {
             image() { return this.canClick() ? "resources/kresEpicPet.png" : "resources/secret.png"},
             title() { return "Kres" },
-            lore() { return "Kres a member of the Celestial Hunting Corporation, and was sent out on the mission to the domain of singularity. Originally in the military from one universe's Earth, he joined the corporation when his universe got taken over by celestials." }, 
+            lore() { return "<small>Kres a member of the Celestial Hunting Corporation, and was sent out on the mission to the domain of singularity. Originally in the military from one universe's Earth, he joined the corporation when his universe got taken over by celestials.</small>" }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to infinity points <small>(based on check back level)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to singularity points <small>(based on check back level)</small>.<br>" +
@@ -3272,9 +3280,9 @@ addLayer("pet", {
                         ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.evolutionShards) + "</h3> evolution shards."  }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You have <h3>" + formatWhole(player.cb.paragonShards) + "</h3> paragon shards."  }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["clickable", 21],
-                        ["clickable", 22],
-                    ], {width: "550px", height: "650px", backgroundColor: "#7d3f98"}],
+                        ["clickable", 121],
+                        ["clickable", 122],
+                    ], {width: "550px", height: "650px", backgroundColor: "#662222"}],
                 ],
             },
         },

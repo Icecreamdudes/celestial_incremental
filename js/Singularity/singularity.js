@@ -363,7 +363,7 @@ addLayer("s", {
         },
         14: {
             requirementDescription: "<h3>4 Singularities",
-            effectDescription: "Keep XPBoost on singularity resets, unlock new goldsmith and marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
+            effectDescription: "Keep XPBoost on singularity resets, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
             done() { return player.s.singularities.gte(4) },
             style: { width: '800px', "min-height": '75px' },
         },

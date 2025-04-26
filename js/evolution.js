@@ -907,7 +907,7 @@ addLayer("ev0", {
             },
             "Coin Shards": {
                 buttonStyle() { return {color: "#655421", borderColor: "#655421", background: "linear-gradient(90deg, #e7c97c, #fad25a)", borderRadius: "5px"}},
-                unlocked() { return hasMilestone("s", 14) },
+                unlocked() { return player.cb.highestLevel.gte(250) },
                 content: [
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
@@ -930,23 +930,23 @@ addLayer("ev0", {
                     }
                 }, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
                 ["raw-html", () => { return "<div class='bottomTooltip'>Coin Dust<hr><small>x" + format(player.ev0.coinDustEffect) + " Check Back XP</small></div>"}],
-            ], () => {return !hasMilestone("s", 14) ? {width: "148px", height: "50px"} : {width: "148px", height: "50px", borderRight: "2px solid white"} }],
+            ], () => {return !player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px"} : {width: "148px", height: "50px", borderRight: "2px solid white"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/coinShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return format(player.ev0.coinShards) + "<br>" + format(player.ev0.coinShardsPerSecond) + "/s"}, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
                 ["raw-html", () => { return "<div class='bottomTooltip'>Coin Shards<hr><small>x" + format(player.ev0.coinShardEffect) + " Coin Dust</small></div>"}],
-            ], () => {return hasMilestone("s", 14) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
+            ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], () => {return hasMilestone("s", 14) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
+            ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], {width: "150px", height: "50px"}],
-        ], () => { return hasMilestone("s", 14) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }],
+        ], () => { return player.cb.highestLevel.gte(250) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],

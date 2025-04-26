@@ -1944,7 +1944,7 @@
             },
             "RESET": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("ta", 21) },
+                unlocked() { return getLevelableAmount("pet", 1101).gte(1) },
                 content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],

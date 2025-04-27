@@ -119,6 +119,14 @@
         player.ma.cooldown[2] = Decimal.div(4, player.ep5.selStats[2].mul(0.01).add(1))
         player.ma.cooldown2[2] = Decimal.div(30, player.ep5.selStats[2].mul(0.01).add(1))
 
+        player.ma.damage[0] = player.ma.damage[0].mul(buyableEffect("ma", 101))
+        player.ma.damage[1] = player.ma.damage[1].mul(buyableEffect("ma", 102))
+        player.ma.damage[2] = player.ma.damage[2].mul(buyableEffect("ma", 103))
+
+        player.ma.healthMax[0] = player.ma.healthMax[0].mul(buyableEffect("ma", 101))
+        player.ma.healthMax[1] = player.ma.healthMax[1].mul(buyableEffect("ma", 102))
+        player.ma.healthMax[2] = player.ma.healthMax[2].mul(buyableEffect("ma", 103))
+
         for (let i = 0; i < player.ma.attackTimer.length; i++) {
             player.ma.healthMax[i] = player.ma.healthMax[i].mul(buyableEffect("ma", 14))
             player.ma.damage[i] = player.ma.damage[i].mul(buyableEffect("ma", 15))
@@ -599,7 +607,7 @@
             tooltip() { return "Randomly heal a character by 5-10% of their max HP." },
             canClick() { 
                 // Ensure at least one character is alive and not at max health
-                return player.ma.deadCharacters.some((isDead, index) => !isDead && player.ma.health[index].lt(player.ma.healthMax[index])); 
+                return player.ma.deadCharacters.some((isDead, index) => !isDead && player.ma.health[index].lt(player.ma.healthMax[index])) && player.ma.deadCharacters[1] == false ; 
             },
             unlocked() { return player.ma.attackTimer2[1].lte(0) && hasUpgrade("ma", 12) },
             onClick() {
@@ -1312,6 +1320,68 @@
             currencyDisplayName: "Epic Matos Fragments",
             currencyInternalName: "epicMatosFragments",
         },
+        15:
+        {
+            title: "Kres Upgrade II",
+            unlocked() { return true},
+            description: "Kres' pet level boosts his strength and defense.",
+            cost: new Decimal("800"),
+            currencyLocation() { return player.ma },
+            currencyDisplayName: "Common Matos Fragments",
+            currencyInternalName: "commonMatosFragments",
+            effect() {
+                return getLevelableAmount("pet", 404)
+            },
+            effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        },
+        16:
+        {
+            title: "Nav Upgrade II",
+            unlocked() { return true},
+            description: "Nav's pet level boosts her strength and agility.",
+            cost: new Decimal("300"),
+            currencyLocation() { return player.ma },
+            currencyDisplayName: "Rare Matos Fragments",
+            currencyInternalName: "rareMatosFragments",
+            effect() {
+                return getLevelableAmount("pet", 405)
+            },
+            effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        },
+        17:
+        {
+            title: "Sel Upgrade II",
+            unlocked() { return true},
+            description: "Sel's pet level boosts his agility and defense.",
+            cost: new Decimal("16"),
+            currencyLocation() { return player.ma },
+            currencyDisplayName: "Epic Matos Fragments",
+            currencyInternalName: "epicMatosFragments",
+            effect() {
+                return getLevelableAmount("pet", 406)
+            },
+            effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+        },
+        18:
+        {
+            title: "New Buyables",
+            unlocked() { return player.ma.secondAreaUnlock},
+            description: "Unlock new buyables in the stats tab.",
+            cost: new Decimal("200"),
+            currencyLocation() { return player.ma },
+            currencyDisplayName: "Rare Matos Fragments",
+            currencyInternalName: "rareMatosFragments",
+        },
+        19:
+        {
+            title: "New Formula",
+            unlocked() { return player.ma.secondAreaUnlock},
+            description: "Buff the antimatter formula.",
+            cost: new Decimal("1000"),
+            currencyLocation() { return player.ma },
+            currencyDisplayName: "Common Matos Fragments",
+            currencyInternalName: "commonMatosFragments",
+        },
     },
     buyables: {
         11: {
@@ -1325,7 +1395,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Total Strength Boost"
+                return "Total Strength Boost"
             },
             display() {
                 return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " total strength to all characters.\n\
@@ -1359,7 +1429,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Total Defense Boost"
+                return "Total Defense Boost"
             },
             display() {
                 return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " total defense to all characters.\n\
@@ -1393,7 +1463,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Total Agility Boost"
+                return "Total Agility Boost"
             },
             display() {
                 return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " total agility to all characters.\n\
@@ -1427,7 +1497,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Total Health Boost"
+                return "Total Health Boost"
             },
             display() {
                 return "which are boosting all characters' health by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1461,7 +1531,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Total Damage Boost"
+                return "Total Damage Boost"
             },
             display() {
                 return "which are boosting all characters' damage by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1495,7 +1565,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Total Speed Boost"
+                return "Total Speed Boost"
             },
             display() {
                 return "which are dividing all characters' cooldowns by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1529,7 +1599,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Singularity Point Boost"
+                return "Singularity Point Boost"
             },
             display() {
                 return "which are boosting singularity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1563,7 +1633,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Infinity Boost"
+                return "Infinity Boost"
             },
             display() {
                 return "which are boosting infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ". (affected by infinity points)\n\
@@ -1597,7 +1667,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Post-OTF U1 Boost"
+                return "Post-OTF U1 Boost"
             },
             tooltip() {
                 return "This includes rage power, time cubes, crystals, steel, pollinators, and charge."
@@ -1634,7 +1704,7 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Starmetal Boost"
+                return "Starmetal Boost"
             },
             display() {
                 return "which are boosting starmetal alloy gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -1668,11 +1738,117 @@
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Normality Boost"
+                return "Normality Boost"
             },
             display() {
                 return "which are boosting normality gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Rare Matos Fragments"
+            },
+            buy() {
+                if (player.ma.maMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+
+
+
+        //other stuff
+        101: {
+            costBase() { return new Decimal(1e100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.s.singularityPoints},
+            pay(amt) { player.s.singularityPoints = this.currency().sub(amt).floor() },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1)},
+            unlocked() { return hasUpgrade("ma", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Kres Boost"
+            },
+            display() {
+                return "which are boosting Kres' max health and damage by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
+            },
+            buy() {
+                if (player.ma.maMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        102: {
+            costBase() { return new Decimal(1e100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.s.singularityPoints},
+            pay(amt) { player.s.singularityPoints = this.currency().sub(amt).floor() },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1)},
+            unlocked() { return hasUpgrade("ma", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Nav Boost"
+            },
+            display() {
+                return "which are boosting Nav's max health and damage by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
+            },
+            buy() {
+                if (player.ma.maMax == false) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', }
+        },
+        103: {
+            costBase() { return new Decimal(1e100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(1000) },
+            currency() { return player.s.singularityPoints},
+            pay(amt) { player.s.singularityPoints = this.currency().sub(amt).floor() },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).mul(0.03).add(1)},
+            unlocked() { return hasUpgrade("ma", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Sel Boost"
+            },
+            display() {
+                return "which are boosting Sel's max health and damage by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
             },
             buy() {
                 if (player.ma.maMax == false) {
@@ -1763,7 +1939,8 @@
                     ["blank", "25px"],
         ["row", [["clickable", 2], ["clickable", 3]]],
         ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                ]
+        ["row", [["ex-buyable", 101], ["ex-buyable", 102], ["ex-buyable", 103]]],
+    ]
 
             },
             "Black Heart": {
@@ -1934,8 +2111,6 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ma.epicMatosFragments) + "</h3> epic matos fragments." }, { "color": "#cb79ed", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ma.legendaryMatosFragments) + "</h3> legendary matos fragments." }, { "color": "#eed200", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "25px"],
-        ["row", [["clickable", 2], ["clickable", 3]]],
-        ["blank", "25px"],
         ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17]]],
         ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24],]],
     ]
@@ -1953,7 +2128,8 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ma.epicMatosFragments) + "</h3> epic matos fragments." }, { "color": "#cb79ed", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ma.legendaryMatosFragments) + "</h3> legendary matos fragments." }, { "color": "#eed200", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13],["upgrade", 14],]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13],["upgrade", 14],  ["upgrade", 15], ["upgrade", 16],["upgrade", 17],]],
+                    ["row", [["upgrade", 18], ["upgrade", 19],]],
     ]
 
             },
@@ -1962,6 +2138,7 @@
 
     tabFormat: [
 
+        ["raw-html", function () { return !player.ma.inBlackHeart ? "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

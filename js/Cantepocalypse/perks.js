@@ -116,7 +116,7 @@
             buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.3
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
@@ -126,7 +126,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -148,7 +148,7 @@
             buy(mult) {
                 let base = new Decimal(1)
                 let growth = 2
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
@@ -158,7 +158,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11))  player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13))  player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -180,7 +180,7 @@
             buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.4
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
@@ -190,7 +190,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -212,7 +212,7 @@
             buy(mult) {
                 let base = new Decimal(1)
                 let growth = 1.5
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
@@ -222,7 +222,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -244,7 +244,7 @@
             buy(mult) {
                 let base = new Decimal(2)
                 let growth = 1.2
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
@@ -254,7 +254,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -276,7 +276,7 @@
             buy(mult) {
                 let base = new Decimal(2)
                 let growth = 1.3
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.pr.perkPoints = player.pr.perkPoints.sub(buyonecost)
@@ -286,7 +286,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.pr.perkPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.pr.perkPoints = player.pr.perkPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -308,7 +308,7 @@
             buy(mult) {
                 let base = new Decimal(500)
                 let growth = 1.7
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.cp.replicantiPoints = player.cp.replicantiPoints.sub(buyonecost)
@@ -318,7 +318,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.cp.replicantiPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -340,7 +340,7 @@
             buy(mult) {
                 let base = new Decimal(1000)
                 let growth = 10
-                if (mult != true && (!hasMilestone("gs", 13) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 13))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.cp.replicantiPoints = player.cp.replicantiPoints.sub(buyonecost)
@@ -350,7 +350,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.cp.replicantiPoints, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 13) || inChallenge("fu", 11)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
+                if (!hasMilestone("gs", 13)) player.cp.replicantiPoints = player.cp.replicantiPoints.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

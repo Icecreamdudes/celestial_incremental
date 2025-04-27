@@ -45,6 +45,81 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.6 - The Polishing Update</h3><br>
+		Content:<br>
+			- Added the first 4 parts of the in-game Savebank.<br>
+			- Added 4 new Grass-Skip milestones.<br><br>
+		Balancing:<br>
+			- Nerfed U3 Upgrade 7. (It also didn't function previously, so actually a buff)<br>
+			- Grass Square Pet's special button effect now scales with level.<br>
+			- Voidgwa pet effects are buffed.<br>
+			- Base Pet Shop prices changed slightly. (Not the scaling though)<br>
+			- Fragmentation slightly buffed (More buttons, longer timers)<br>
+			- Added the ability to sacrifice epic fragments.<br>
+			- Made singularity no longer reset highest Check Back level.<br>
+			- No longer get stuck in Cantepocalypse after singularity.<br>
+			- Made IP Challenge 7 unlock after reaching Check Back level 100.<br>
+			- Slightly nerfed Realm Essence to counteract accidental buff from fixing pre-OTF multiplier order.<br>
+			- Replaced Antimatter Dimensions Upgrade 3, as it creates massive amounts of confusion, and slows down progression.<br><br>
+		Bugfixes:<br>
+			- Fixed the sidebar appearing while the game is loading.<br>
+			- Fixed U3 Upgrade 5 not working with Oil layer.<br>
+			- Fixed Repli-Grass Generator not working correctly when Repli-Grass is unfocused.<br>
+			- Fixed incorrect ordering of Pre-OTF multipliers when post singularity.<br>
+			- Fixed Check Back's effect being disabled.<br>
+			- Voidgwa pet effect now works.<br>
+			- Fixed D20 pet's 1st effect.<br>
+			- Fixed some offline Check Back timers.<br>
+			- Fixed singularity not resetting XP properly.<br>
+			- Made singularity properly kick you out of challenges.<br>
+			- Fixed scrap core toggle.<br>
+			- Fixed being able to process a null singularity core.<br>
+			- Fixed Dragon pet upgrade 2 not working.<br>
+			- Fixed U3 Milestone 3 not automating galaxy dust.<br>
+			- Fixed Cantepocalypse trigger.<br>
+			- Fixed Halter and OTF not having the correct background.<br>
+			- Fixed certain dice effects gain formulas being broken.<br>
+			- Fixed U3 Upgrade 6 not working on some resets.<br>
+			- Fixed being able to gain Infinity Milestones without having unlocked them.<br>
+			- Fixed U1 Upgrade order and Realm Essence upgrade not showing.<br>
+			- Fixed Funify's Fear challenge not working properly.<br>
+			- Fixed being able to enter halt values that are less then 1.<br><br>
+		Qol:<br>
+			- Added rigged booster dice.<br>
+			- Added new Break Infinity NIP Upgrade, which replaces the previous arbitrary requirement to improve IP formula.<br>
+			- Added keep cante cores to U3 milestone 8<br>
+			- Added U3 Upgrade 3, which unlocks a Challenge Dice upgrade and keeps T2 dice effects.<br>
+			- Made U3 Milestone 7 keep RBI toggle.<br>
+			- Added a U1 upgrade that improves Pent automation.<br>
+			- Added a Funify upgrade that unlocks bulk grass-skip.<br>
+			- Made many clickables able to be auto-clicked if you hold down left click.<br>
+			- Added claim all buttons to applicable check back pages.<br>
+			- Added toggle alert buttons to applicable check back pages.<br><br>
+		Visual Enhancements:<br>
+			- Visually remade almost all buyables.<br>
+			- Visually remade Check Back layer.<br>
+			- Combined Pet Shop and Epic Fragmentation layers into Check Back.<br>
+			- Visually touched up all evolution layers.<br>
+			- Visually remade Dice's Booster Dice tab.<br>
+			- Visually remade Rocket Fuel.<br>
+			- Improved the Settings menu.<br>
+			- Touched up most other layers.<br><br>
+		Typos & Text Changes:<br>
+			- Improved AU1 Upgrade 8s description.<br>
+			- Clarified that Antimatter Singularity Core effects ignore softcap.<br>
+			- Clarified that U3 Milestone 2 unlocks a Break Infinity upgrade.<br>
+			- Clarified that U3 Milestone 5 removes ALL realm mod requirements.<br>
+			- Removed mention of U3 Milestone 5 unlocking radiation milestones. (as it doesn't)<br>
+			- Changed the wording of U3 Milestone 7.<br>
+			- Fixed extra 'and' in U3 Milestone 9.<br>
+			- Fixed Break Infinity upgrade numbering.<br>
+			- Clarified what Break Infinity upgrades 13 and 17 do.<br>
+			- Clarified that Charger Milestone 2 ignores softcaps.<br>
+			- Clarified that IP Upgrade (4, 3) ignores softcaps.<br>
+			- Better clarified current status of OTF options.<br>
+			- Clarified that Dream Realm Mod Buyable 1 ignores softcaps.<br>
+			- Fixed Realm Mod Halter Boost's tab not having updated text.<br>
+			- Clarified that NIP Upgrade 4 unlocks new IP Upgrades.<br><br>
 	<h3>v1.5 - The Singularity Update Part II: Starmetal and Darkness</h3><br>
 			- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
 		<br>
@@ -270,6 +345,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
  "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
 "petButton7", "evoBanner", "paragonBanner", "gemReset", "generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32","startCutscene33","startCutscene34", "resetFightCooldown"]
 
+
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
 }
@@ -384,6 +460,43 @@ function fixOldSave(oldVersion){
 		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
 		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)
 	}
-}
+	if (typeof oldVersion === 'string' ) {
+		for (let i = 0; i < player.cb.commonPetAmounts.length; i++) {
+			setLevelableAmount("pet", i+101, player.cb.commonPetLevels[i]);
+			setLevelableXP("pet", i+101, player.cb.commonPetAmounts[i]);
+		}
+		for (let i = 0; i < player.cb.uncommonPetAmounts.length; i++) {
+			setLevelableAmount("pet", i+201, player.cb.uncommonPetLevels[i]);
+			setLevelableXP("pet", i+201, player.cb.uncommonPetAmounts[i]);
+		}
+		for (let i = 0; i < player.cb.rarePetAmounts.length; i++) {
+			setLevelableAmount("pet", i+301, player.cb.rarePetLevels[i]);
+			setLevelableXP("pet", i+301, player.cb.rarePetAmounts[i]);
+		}
+		for (let i = 0; i < 3; i++) {
+			setLevelableAmount("pet", i+401, player.cb.epicPetLevels[i]);
+			setLevelableXP("pet", i+401, player.cb.epicPetFragments[i]);
+		}
+		setLevelableAmount("pet", 404, player.cb.epicPetLevels[3])
+		setLevelableAmount("pet", 405, player.cb.epicPetLevels[4])
+		setLevelableAmount("pet", 406, player.cb.epicPetLevels[5])
+		player.pet.singularityFragments = player.cb.epicPetFragments[3]
+		
+		player.pet.lastDicePetRoll = player.cb.lastDicePetRoll
+		player.pet.highestDicePetCombo = player.cb.highestDicePetCombo
+		player.pet.dicePetCombo = player.cb.dicePetCombo
+		player.pet.dicePetPointsGain = player.cb.dicePetPointsGain
 
-// you know i actually did some work. yea it was copy / pasting dialogue and basically typing words, but now i can say that i worked on celesital incremental as a developer.
+		setLevelableAmount("pet", 1103, player.cb.evolvedLevels[0])
+		setLevelableAmount("pet", 1204, player.cb.evolvedLevels[1])
+		setLevelableAmount("pet", 1203, player.cb.evolvedLevels[2])
+		setLevelableAmount("pet", 1101, player.cb.evolvedLevels[3])
+		setLevelableAmount("pet", 1202, player.cb.evolvedLevels[4])
+		setLevelableAmount("pet", 1302, player.cb.evolvedLevels[5])
+		setLevelableAmount("pet", 1106, player.cb.evolvedLevels[6])
+		setLevelableAmount("pet", 1303, player.cb.evolvedLevels[7])
+		setLevelableAmount("pet", 1206, player.cb.evolvedLevels[8])
+		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
+		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
+	}
+}

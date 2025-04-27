@@ -21,7 +21,7 @@
     }
     },
     automate() {
-        if (hasMilestone("gs", 16) && !inChallenge("fu", 11))
+        if (hasMilestone("gs", 16))
         {
             buyBuyable("rt", 11)
             buyBuyable("rt", 12)
@@ -182,7 +182,7 @@
             buy(mult) {
                 let base = new Decimal(10000)
                 let growth = 1.2
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.an.anonymity = player.an.anonymity.sub(buyonecost)
@@ -192,7 +192,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -214,7 +214,7 @@
             buy(mult) {
                 let base = new Decimal(20000)
                 let growth = 3
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.an.anonymity = player.an.anonymity.sub(buyonecost)
@@ -224,7 +224,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -246,7 +246,7 @@
             buy(mult) {
                 let base = new Decimal(40000)
                 let growth = 1.4
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.an.anonymity = player.an.anonymity.sub(buyonecost)
@@ -256,7 +256,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -278,7 +278,7 @@
             buy(mult) {
                 let base = new Decimal(70000)
                 let growth = 1.5
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.an.anonymity = player.an.anonymity.sub(buyonecost)
@@ -288,7 +288,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.an.anonymity, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.an.anonymity = player.an.anonymity.sub(cost)
+                if (!hasMilestone("gs", 16)) player.an.anonymity = player.an.anonymity.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -310,7 +310,7 @@
             buy(mult) {
                 let base = new Decimal(4)
                 let growth = 1.25
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
@@ -320,7 +320,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -342,7 +342,7 @@
             buy(mult) {
                 let base = new Decimal(6)
                 let growth = 1.4
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
@@ -352,7 +352,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -374,7 +374,7 @@
             buy(mult) {
                 let base = new Decimal(8)
                 let growth = 1.2
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
@@ -384,7 +384,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -406,7 +406,7 @@
             buy(mult) {
                 let base = new Decimal(10)
                 let growth = 1.3
-                if (mult != true && (!hasMilestone("gs", 16) || inChallenge("fu", 11)))
+                if (mult != true && !hasMilestone("gs", 16))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.rt.repliTrees = player.rt.repliTrees.sub(buyonecost)
@@ -416,7 +416,7 @@
 
                 let max = Decimal.affordGeometricSeries(player.rt.repliTrees, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("gs", 16) || inChallenge("fu", 11)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
+                if (!hasMilestone("gs", 16)) player.rt.repliTrees = player.rt.repliTrees.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }

@@ -296,7 +296,7 @@
         {
             title: "Upgrade (3, 1)",
             unlocked() { return hasUpgrade("ip", 21) },
-            description: "Unlocks more check back content.",
+            description: "Unlocks more check back content and more IP upgrades.<br>(CB Level 100)",
             cost: new Decimal(10),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -305,7 +305,7 @@
         32:
         {
             title: "Upgrade (3, 2)",
-            unlocked() { return hasUpgrade("ip", 21) },
+            unlocked() { return hasUpgrade("ip", 31) },
             description: "Boosts grasshoppers based on infinity points.",
             cost: new Decimal(30),
             currencyLocation() { return player.in },

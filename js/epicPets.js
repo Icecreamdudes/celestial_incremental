@@ -1164,6 +1164,12 @@ addLayer("ep3", {
         player.ep3.kresStats[0] = player.ep3.kresStats[0].add(buyableEffect("ma", 11))
         player.ep3.kresStats[1] = player.ep3.kresStats[1].add(buyableEffect("ma", 12))
         player.ep3.kresStats[2] = player.ep3.kresStats[2].add(buyableEffect("ma", 13))
+
+        if (hasUpgrade("ma", 15)) 
+        {
+            player.ep3.kresStats[0] = player.ep3.kresStats[0].add(upgradeEffect("ma", 15))
+            player.ep3.kresStats[1] = player.ep3.kresStats[1].add(upgradeEffect("ma", 15))
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -1229,7 +1235,7 @@ addLayer("ep3", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         2: {
             costBase() { return new Decimal(25) },
@@ -1262,7 +1268,7 @@ addLayer("ep3", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         3: {
             costBase() { return new Decimal(75) },
@@ -1295,7 +1301,7 @@ addLayer("ep3", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         
         11: {
@@ -1474,6 +1480,12 @@ addLayer("ep4", {
         player.ep4.navStats[0] = player.ep4.navStats[0].add(buyableEffect("ma", 11))
         player.ep4.navStats[1] = player.ep4.navStats[1].add(buyableEffect("ma", 12))
         player.ep4.navStats[2] = player.ep4.navStats[2].add(buyableEffect("ma", 13))
+
+        if (hasUpgrade("ma", 16)) 
+        {
+            player.ep4.navStats[0] = player.ep4.navStats[0].add(upgradeEffect("ma", 16))
+            player.ep4.navStats[2] = player.ep4.navStats[2].add(upgradeEffect("ma", 16))
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -1539,7 +1551,7 @@ addLayer("ep4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         2: {
             costBase() { return new Decimal(75) },
@@ -1572,7 +1584,7 @@ addLayer("ep4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         3: {
             costBase() { return new Decimal(50) },
@@ -1605,7 +1617,7 @@ addLayer("ep4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         11: {
             purchaseLimit() { return new Decimal(990) },
@@ -1782,6 +1794,12 @@ addLayer("ep5", {
         player.ep5.selStats[0] = player.ep5.selStats[0].add(buyableEffect("ma", 11))
         player.ep5.selStats[1] = player.ep5.selStats[1].add(buyableEffect("ma", 12))
         player.ep5.selStats[2] = player.ep5.selStats[2].add(buyableEffect("ma", 13))
+ 
+        if (hasUpgrade("ma", 17)) 
+        {
+            player.ep5.selStats[1] = player.ep5.selStats[1].add(upgradeEffect("ma", 17))
+            player.ep5.selStats[2] = player.ep5.selStats[2].add(upgradeEffect("ma", 17))
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -1849,7 +1867,7 @@ addLayer("ep5", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         2: {
             costBase() { return new Decimal(50) },
@@ -1882,7 +1900,7 @@ addLayer("ep5", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         3: {
             costBase() { return new Decimal(25) },
@@ -1915,7 +1933,7 @@ addLayer("ep5", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '75px', }
+            style: { width: '175px', height: '100px', }
         },
         11: {
             purchaseLimit() { return new Decimal(990) },

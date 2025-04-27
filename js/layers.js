@@ -392,6 +392,7 @@ addLayer("i", {
         if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
 
         if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
+        if (hasUpgrade("s", 25)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet.mul(delta))
     },
     bars: {
         infbar: {

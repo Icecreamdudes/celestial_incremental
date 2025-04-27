@@ -118,6 +118,7 @@
         player.h.ragePowerToGet = player.h.hexPoints[0].plus(1).log10().pow(2).div(1000)
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(buyableEffect("oi", 24))
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(levelableEffect("pet", 307)[1])
+        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(player.cb.rarePetEffects[6][1])
 
         if (player.h.ragePowerPause.gt(0)) {
             layers.h.ragePowerReset();

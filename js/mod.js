@@ -343,8 +343,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
  "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset", "ordinalDisplay", "powerBase",
  "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
-"petButton7", "evoBanner", "paragonBanner", "gemReset", "generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32","startCutscene33","startCutscene34", "resetFightCooldown"]
-
+"petButton7", "evoBanner", "paragonBanner", "gemReset"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

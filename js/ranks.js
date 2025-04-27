@@ -168,7 +168,8 @@
 
         //Time reversal
 
-        if (!player.r.timeReversed && !hasUpgrade("ma", 14)) {
+        if (!player.r.timeReversed && !hasUpgrade("ma", 14))
+        {
             player.r.timeCubesPerSecond = new Decimal(0)
         } else {
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)
@@ -191,6 +192,7 @@
         player.r.timeCubeEffects[1] = player.r.timeCubesEffect.pow(1.1).mul(10).add(1)
         player.r.timeCubeEffects[2] = player.r.timeCubesEffect.pow(0.9).mul(6).add(1)
         player.r.timeCubeEffects[3] = player.r.timeCubesEffect.pow(0.7).mul(3).add(1)
+        
     },
     getRankReq() {
         if (player.r.rank.lte(20)) {

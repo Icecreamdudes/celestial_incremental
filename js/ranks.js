@@ -115,7 +115,7 @@
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
         player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("rm", 21))
         player.r.tetrReq = layers.r.getTetrReq()
-        if (player.r.tier.gte(player.r.tetr.add(player.r.tetrsToGet).add(1).mul(2).pow(1.08).floor().add(1)) && hasUpgrade("p", 14)) {
+        if (player.r.tier.gte(player.r.tetrReq) && hasUpgrade("p", 14)) {
             player.r.tetrsToGet = tetrGain.sub(player.r.tetr)
         }
         if (!hasUpgrade("p", 14)) player.r.tetrsToGet = new Decimal(1)

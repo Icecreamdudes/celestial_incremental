@@ -2635,11 +2635,11 @@
             title() {
                 return "Check Back Pity Req. Reducer."
             },
-            display(mult) {
+            display() {
                 return "which are reducing the pity requirement by " + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
-            buy() {
+            buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)

@@ -334,10 +334,10 @@
                 let random = getRandomInt(100)
                 let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
 
-                if (new Decimal(random).lte(prob))
-                {
-                    addLevelableXP("pet", 402, 1);
-                    callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/diceRarePet.png");
+                if (new Decimal(random).lte(prob)) {
+                    addLevelableXP("pet", 302, 1);
+                    if (player.cb.highestLevel.lt(35)) callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/diceRarePet.png");
+                    if (player.cb.highestLevel.gte(35)) callAlert("You gained a Dice!", "resources/diceRarePet.png");
                 }
 
                 if (inChallenge("ip", 15))

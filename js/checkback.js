@@ -541,6 +541,15 @@
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(time)
         }
+        for (let i = 0; i < player.cb.petAutomationTimers.length; i++) {
+            if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimers[i].sub(time)
+        }
+        for (let i = 0; i < player.cb.boostAutomationTimers.length; i++) {
+            if (player.cb.boostAutomationAllocation[i].gt(0)) player.cb.boostAutomationTimers[i] = player.cb.boostAutomationTimers[i].sub(time)
+        }
+        for (let i = 0; i < player.cb.pointAutomationTimers.length; i++) {
+            if (player.cb.pointAutomationAllocation[i].gt(0)) player.cb.pointAutomationTimers[i] = player.cb.pointAutomationTimers[i].sub(time)
+        }
 
         // Pet Shop
         player.pet.shopResetTimer = player.pet.shopResetTimer.sub(time)
@@ -2635,11 +2644,11 @@
             title() {
                 return "Check Back Pity Req. Reducer."
             },
-            display(mult) {
+            display() {
                 return "which are reducing the pity requirement by " + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
-            buy() {
+            buy(mult) {
                 if (mult != true) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)

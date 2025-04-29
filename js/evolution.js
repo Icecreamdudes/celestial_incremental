@@ -68,7 +68,7 @@
         100: {
             title() { return "<img src='" + tmp.pet.levelables[103].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[0] },
+            unlocked() { return tmp.pet.levelables[103].canClick && !player.ev.evolutionsUnlocked[0] },
             tooltip() { return "██████████ ████ ██ █████ ██<br>multiply ██ gain" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(0)
@@ -78,7 +78,7 @@
         101: {
             title() { return "<img src='" + tmp.pet.levelables[204].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[1] },
+            unlocked() { return tmp.pet.levelables[204].canClick && !player.ev.evolutionsUnlocked[1] },
             tooltip() { return "████████ ███ efficiency ██ XP<br>███████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(1)
@@ -88,7 +88,7 @@
         102: {
             title() { return "<img src='" + tmp.pet.levelables[203].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[2] && (player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0))},
+            unlocked() { return tmp.pet.levelables[203].canClick && !player.ev.evolutionsUnlocked[2] && (player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "Gives ███ daily ███████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(2)
@@ -98,7 +98,7 @@
         103: {
             title() { return "<img src='" + tmp.pet.levelables[101].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[3] && (player.in.unlockedBreak || player.s.highestSingularityPoints.gt(0))},
+            unlocked() { return tmp.pet.levelables[101].canClick && !player.ev.evolutionsUnlocked[3] && (player.in.unlockedBreak || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "Unlocks █████ Negative ████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(3)
@@ -108,7 +108,7 @@
         104: {
             title() { return "<img src='" + tmp.pet.levelables[202].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gt(250)},
+            unlocked() { return tmp.pet.levelables[202].canClick && !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gt(250)},
             tooltip() { return "██ ██████ automation ███████<br>sacrifices" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(4)
@@ -118,7 +118,7 @@
         105: {
             title() { return "<img src='" + tmp.pet.levelables[302].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gt(250)},
+            unlocked() { return tmp.pet.levelables[302].canClick && !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gt(250)},
             tooltip() { return "██-unlock █ previous ████████,<br>███████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(5)
@@ -128,7 +128,7 @@
         106: {
             title() { return "<img src='" + tmp.pet.levelables[106].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[6] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
+            unlocked() { return tmp.pet.levelables[106].canClick && !player.ev.evolutionsUnlocked[6] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "██████ ███ halt ███████ options" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(6)
@@ -138,7 +138,7 @@
         107: {
             title() { return "<img src='" + tmp.pet.levelables[303].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[7] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
+            unlocked() { return tmp.pet.levelables[303].canClick && !player.ev.evolutionsUnlocked[7] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "██████ ███ grass ███, █████<br>█████ buffs" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(7)
@@ -148,7 +148,7 @@
         108: {
             title() { return "<img src='" + tmp.pet.levelables[206].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[8] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
+            unlocked() { return tmp.pet.levelables[206].canClick && !player.ev.evolutionsUnlocked[8] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "Gain ███ █████ shards ██ ████<br>█████ back ███████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(8)
@@ -158,7 +158,7 @@
         109: {
             title() { return "<img src='" + tmp.pet.levelables[104].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[9] && hasMilestone("s", 12)},
+            unlocked() { return tmp.pet.levelables[104].canClick && !player.ev.evolutionsUnlocked[9] && hasMilestone("s", 12)},
             tooltip() { return "██████ █ ███ way ██ ████<br>offerings, ███ more ██████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(9)
@@ -168,7 +168,7 @@
         110: {
             title() { return "<img src='" + tmp.pet.levelables[205].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return !player.ev.evolutionsUnlocked[10] && hasMilestone("s", 12)},
+            unlocked() { return tmp.pet.levelables[205].canClick && !player.ev.evolutionsUnlocked[10] && hasMilestone("s", 12)},
             tooltip() { return "█████████ shards ██ speed ██<br>█████ back" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(10)

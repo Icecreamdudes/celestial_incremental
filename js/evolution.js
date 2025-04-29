@@ -198,11 +198,11 @@
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(4)
-                setLevelableXP("pet", 101, getLevelableAmount("pet", 101).sub(6))
-                setLevelableXP("pet", 102, getLevelableAmount("pet", 102).sub(6))
-                setLevelableXP("pet", 103, getLevelableAmount("pet", 103).sub(6))
-                setLevelableXP("pet", 104, getLevelableAmount("pet", 104).sub(6))
-                setLevelableXP("pet", 105, getLevelableAmount("pet", 105).sub(6))
+                setLevelableXP("pet", 101, getLevelableXP("pet", 101).sub(6))
+                setLevelableXP("pet", 102, getLevelableXP("pet", 102).sub(6))
+                setLevelableXP("pet", 103, getLevelableXP("pet", 103).sub(6))
+                setLevelableXP("pet", 104, getLevelableXP("pet", 104).sub(6))
+                setLevelableXP("pet", 105, getLevelableXP("pet", 105).sub(6))
 
                 player.ev.evolutionsUnlocked[0] = true
                 setLevelableAmount("pet", 1103, new Decimal(1))
@@ -229,12 +229,12 @@
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(6)
-                setLevelableXP("pet", 201, getLevelableAmount("pet", 201).sub(3))
-                setLevelableXP("pet", 202, getLevelableAmount("pet", 202).sub(3))
-                setLevelableXP("pet", 203, getLevelableAmount("pet", 203).sub(3))
-                setLevelableXP("pet", 204, getLevelableAmount("pet", 204).sub(3))
-                setLevelableXP("pet", 205, getLevelableAmount("pet", 205).sub(3))
-                setLevelableXP("pet", 303, getLevelableAmount("pet", 303).sub(2))
+                setLevelableXP("pet", 201, getLevelableXP("pet", 201).sub(3))
+                setLevelableXP("pet", 202, getLevelableXP("pet", 202).sub(3))
+                setLevelableXP("pet", 203, getLevelableXP("pet", 203).sub(3))
+                setLevelableXP("pet", 204, getLevelableXP("pet", 204).sub(3))
+                setLevelableXP("pet", 205, getLevelableXP("pet", 205).sub(3))
+                setLevelableXP("pet", 303, getLevelableXP("pet", 303).sub(2))
 
                 player.ev.evolutionsUnlocked[1] = true
                 setLevelableAmount("pet", 1204, new Decimal(1))
@@ -258,8 +258,8 @@
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(10)
-                setLevelableXP("pet", 301, getLevelableAmount("pet", 301).sub(3))
-                setLevelableXP("pet", 304, getLevelableAmount("pet", 304).sub(3))
+                setLevelableXP("pet", 301, getLevelableXP("pet", 301).sub(3))
+                setLevelableXP("pet", 304, getLevelableXP("pet", 304).sub(3))
 
                 player.ev.evolutionsUnlocked[2] = true
                 setLevelableAmount("pet", 1203, new Decimal(1))
@@ -321,13 +321,13 @@
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(20)
                 player.cb.paragonShards = player.cb.paragonShards.sub(1)
                 player.in.infinityPoints = player.in.infinityPoints.sub(1e11)
-                setLevelableXP("pet", 201, getLevelableAmount("pet", 201).sub(10))
-                setLevelableXP("pet", 202, getLevelableAmount("pet", 202).sub(10))
-                setLevelableXP("pet", 203, getLevelableAmount("pet", 203).sub(10))
-                setLevelableXP("pet", 204, getLevelableAmount("pet", 204).sub(10))
-                setLevelableXP("pet", 205, getLevelableAmount("pet", 205).sub(10))
-                setLevelableXP("pet", 206, getLevelableAmount("pet", 206).sub(2))
-                setLevelableXP("pet", 207, getLevelableAmount("pet", 207).sub(2))
+                setLevelableXP("pet", 201, getLevelableXP("pet", 201).sub(10))
+                setLevelableXP("pet", 202, getLevelableXP("pet", 202).sub(10))
+                setLevelableXP("pet", 203, getLevelableXP("pet", 203).sub(10))
+                setLevelableXP("pet", 204, getLevelableXP("pet", 204).sub(10))
+                setLevelableXP("pet", 205, getLevelableXP("pet", 205).sub(10))
+                setLevelableXP("pet", 206, getLevelableXP("pet", 206).sub(2))
+                setLevelableXP("pet", 207, getLevelableXP("pet", 207).sub(2))
                 player.cb.petPoints = player.cb.petPoints.sub(1000)
 
                 player.ev.evolutionsUnlocked[4] = true

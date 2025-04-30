@@ -2801,7 +2801,7 @@
                 ]
             },
             "Lore": {
-                buttonStyle() { return { 'color': '#06366e' } },
+                buttonStyle() { return { color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
                 unlocked() { return hasUpgrade("s", 23) },
                 content: [
                     ["blank", "25px"],
@@ -3338,7 +3338,7 @@
                 ["raw-html", "<img src='resources/automationShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.automationShards)}, {width: "70px", height: "50px", color: "grey", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
-                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatShortWhole(player.cb.totalAutomationShards) + ")<br>[Automation triggers only<br>once while offline]</small></div>"
+                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatShortWhole(player.cb.totalAutomationShards) + ")<br>[While offline, automation<br>only triggers once]</small></div>"
                 }],
             ], () => { return player.ev.evolutionsUnlocked[4] ? {width: "125px", height: "50px"} : {display: "none !important"}}],
         ], {width: "825px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],

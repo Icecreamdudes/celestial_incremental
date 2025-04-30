@@ -47,6 +47,7 @@ let credits = `<h1>Credits:</h1><br>
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.6.1 - Bug Fixes and Balancing</h3><br>
+	(Contains all the hotfixes from the past week)<br>
 		Content:<br>
 			- Added the pent punchcard.<br><br>
 		Balancing:<br>

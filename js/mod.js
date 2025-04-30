@@ -22,7 +22,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 160, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 161, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "The Polishing Update",
 }
 
@@ -46,6 +46,33 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.6.1 - Bug Fixes and Balancing</h3><br>
+		Content:<br>
+			- Added the pent punchcard.<br><br>
+		Balancing:<br>
+			- Improved the balancing of punchcards.<br>
+			- Changed the effect of dark grass.<br>
+			- Added softcaps to D1 resources, and a second dark point softcap at 1.79e308.<br><br>
+		Qol:<br>
+			- Added "Keep pre-singularity check back content on reset" to singularity milestone 4.<br><br>
+		Bugfixes:<br>
+			- Fixed layout bug when check back is the only unlocked U1 layer.<br>
+			- Fixed UFO pet point button.<br>
+			- Fixed Check Back pity req. buyable being broken.<br>
+			- Fixed pet automation not working offline.<br>
+			- Fixed booster dice giving the wrong pet.<br>
+			- Fixed evolutions purchase code.<br>
+			- Fixed evolutions being unlocked without having unlocked the relevent pet.<br>
+			- Fixed weird Tetr code.<br>
+			- Fixed rocket fuel's third effect not working.<br>
+			- Fixed Cante's IC puzzle being broken due to max pent.<br>
+			- Fixed export to clipboard (Yipee).<br>
+			- Fixed Fear challenge accidentally disabling automation unlocked by grass-skip.<br>
+			- Fixed unlocks for Tetr and Tetr Points.<br>
+			- Fixed ranks not displaying properly.<br>
+			- Fixed singularity epic pets not porting from old update properly.<br>
+			- Fixed singularity epic pet shop buyables not displaying properly.<br>
+			- Fixed singularity fragmentation not working properly.<br><br>
 	<h3>v1.6 - The Polishing Update</h3><br>
 		Content:<br>
 			- Added the first 4 parts of the in-game Savebank.<br>

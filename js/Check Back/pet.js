@@ -1775,7 +1775,7 @@ addLayer("pet", {
             canteBase() { return new Decimal(0.8)},
             pointTooltip() { return "Also subtract 5 minutes off the shop reset timer :)" },
             pointClick() {
-                player.pet.priceResetTimer = player.pet.priceResetTimer.sub(300)
+                player.pet.shopResetTimer = player.pet.shopResetTimer.sub(300)
                 return this.pointValue()
             },
             // CLICK CODE

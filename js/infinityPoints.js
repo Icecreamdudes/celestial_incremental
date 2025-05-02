@@ -822,6 +822,7 @@
                     ["row", [["milestone", 25]]],
                     ["row", [["milestone", 26]]],
                     ["row", [["milestone", 27]]],
+                    ["blank", "25px"],
                 ]
             },
             "Challenges": {

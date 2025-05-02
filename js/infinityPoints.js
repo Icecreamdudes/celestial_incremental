@@ -505,7 +505,7 @@
         },
         15: {
             requirementDescription: "<h3>6 Infinities",
-            effectDescription: "Keeps pent milestones on infinity.",
+            effectDescription: "Keeps pent milestones and start with 10 Tetr on resets.",
             done() { return player.in.infinities.gte(6) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -576,7 +576,7 @@
         },
         26: {
             requirementDescription: "<h3>30000 Infinities",
-            effectDescription() { return "Tav's domain don't reset infinity milestones." },
+            effectDescription() { return "Tav's domain doesn't reset infinity milestones." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },

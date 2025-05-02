@@ -214,7 +214,7 @@
         player.cb.levelEffect = player.cb.level.pow(3).pow(player.d.dicePointsEffect)
         if (hasUpgrade("bi", 25) && (!player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         if (hasUpgrade("bi", 25) && (player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(2)
-        if (hasUpgrade("s", 17)) player.cb.levelEffect = player.cb.levelEffect.pow(upgradeEffect("s", 17))
+        if (hasUpgrade("s", 17)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         
         player.cb.buttonBaseXP = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.06),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),]
 

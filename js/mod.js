@@ -49,14 +49,36 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.6.1 - Bug Fixes and Balancing</h3><br>
 	(Contains all the hotfixes from the past week)<br>
 		Content:<br>
-			- Added the pent punchcard.<br><br>
+			- Added the pent punchcard.<br>
+			- Added 9 new pent milestones.<br>
+			- Added 2 new charger milestones.<br>
+			- Added a new singularity milestone.<br>
+			- Added new booster dice effects.<br><br>
 		Balancing:<br>
 			- Improved the balancing of punchcards.<br>
 			- Changed the effect of dark grass.<br>
-			- Added softcaps to D1 resources, and a second dark point softcap at 1.79e308.<br><br>
+			- Added softcaps to D1 resources, and a second dark point softcap at 1.79e308.<br>
+			- Added softcaps to Pre-OTF U1 resources, and balanced the game accordingly.<br>
+			- Buffed antimatters effect and NIP's base formula to account for antimatter deflation.<br>
+			- Limited point gain to a max of 9.99e309 when not in break infinity. (RIP hex cheese).<br>
+			- Buffed grass-skip 40 milestone to account for weaker linkers due to U1 softcaps.<br>
+			- Nerfed singularity upgrade 7 to fit with the new balancing of U1.<br>
+			- Replaced singularity upgrade 6 due to previous use being no longer applicable.<br>
+			- Made point singularity core's second effect not work above 1e100,000 points.<br>
+			- Buffed point scrap buyable booster, cause lol.<br><br>
 		Qol:<br>
-			- Added "Keep pre-singularity check back content on reset" to singularity milestone 4.<br><br>
+			- Added "Keep pre-singularity check back content on reset" to singularity milestone 4.<br>
+			- Added "Keep 10 Tetr on reset" to infinity milestone 6.<br>
+			- Made infinity milestone 6 work with singularity milestone 2.<br><br>
 		Bugfixes:<br>
+			- Fixed potential crashes when loading cores.<br>
+			- Fixed being able to obtain some pent milestones without visually unlocking them.<br>
+			- Fixed max pent giving one less then intended.<br>
+			- Fixed a bug with early infinity resets post singularity.<br>
+			- Fixed Tetr automation (through a milestone perk that keeps Tetr).<br>
+			- Fixed XP booster dice effect having the wrong cap.<br>
+			- Fixed alt-rank point button allowing you to click it for zero points.<br>
+			- Fixed antimatter's softcap, causing tons of deflation.<br>
 			- Fixed layout bug when check back is the only unlocked U1 layer.<br>
 			- Fixed UFO pet point button.<br>
 			- Fixed Check Back pity req. buyable being broken.<br>
@@ -535,6 +557,23 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1206, player.cb.evolvedLevels[8])
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
+	}
+	if (typeof oldVersion === 'string') {
+		if (player.points.gt("1e100000")) {
+			layers.bigc.crunch()
+		}
+		if (player.ad.antimatter.gt(player.ad.antimatterPerSecond.mul(1e100))) {
+			layers.ta.negativeInfinityReset()
+		}
+	} else {
+		if (oldVersion < 161) {
+			if (player.points.gt("1e100000")) {
+				layers.bigc.crunch()
+			}
+			if (player.ad.antimatter.gt(player.ad.antimatterPerSecond.mul(1e100))) {
+				layers.ta.negativeInfinityReset()
+			}
+		}
 	}
 }
 

@@ -109,10 +109,20 @@
 
         // GRASSHOPPER EFFECTS
         player.gh.grasshopperEffects[0] = player.gh.grasshoppers.pow(1.1).pow(1.25).add(1)
+        if (player.gh.grasshopperEffects[0].gte("1e27500")) player.gh.grasshopperEffects[0] = player.gh.grasshopperEffects[0].div("1e27500").pow(0.1).mul("1e27500")
+
         player.gh.grasshopperEffects[1] = player.gh.grasshoppers.div(1.2).pow(1.2).add(1)
+        if (player.gh.grasshopperEffects[1].gte("1e24000")) player.gh.grasshopperEffects[1] = player.gh.grasshopperEffects[1].div("1e24000").pow(0.2).mul("1e24000")
+
         player.gh.grasshopperEffects[2] = player.gh.grasshoppers.div(1.7).pow(1.15).add(1)
+        if (player.gh.grasshopperEffects[2].gte("1e23000")) player.gh.grasshopperEffects[2] = player.gh.grasshopperEffects[2].div("1e23000").pow(0.2).mul("1e23000")
+
         player.gh.grasshopperEffects[3] = player.gh.grasshoppers.div(2).pow(1.1).add(1)
+        if (player.gh.grasshopperEffects[3].gte("1e22000")) player.gh.grasshopperEffects[3] = player.gh.grasshopperEffects[3].div("1e22000").pow(0.2).mul("1e22000")
+
         player.gh.grasshopperEffects[4] = player.gh.grasshoppers.div(4).pow(0.5).add(1)
+        if (player.gh.grasshopperEffects[4].gte("1e10000")) player.gh.grasshopperEffects[4] = player.gh.grasshopperEffects[4].div("1e10000").pow(0.2).mul("1e10000")
+
 
         //----------------------------------------
 
@@ -270,7 +280,7 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -342,13 +352,12 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
-        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
+        player.r.pent = new Decimal(0)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -1197,7 +1206,10 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", function () { return "<h1>Effects" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ["row", [
+                            ["raw-html", "Effects", { "color": "white", "font-size": "30px", "font-family": "monospace" }],
+                            ["raw-html", () => {return player.gh.grasshoppers.gte("1e20000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "24px", fontFamily: "monospace", paddingLeft: "12px"}],
+                        ]],
                         ["blank", "5px"],
                         ["h-line", "450px"],
                         ["blank", "5px"],

@@ -56,6 +56,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added new booster dice effects.<br><br>
 		Balancing:<br>
 			- Improved the balancing of punchcards.<br>
+			- Added softcaps to punchcard effects.<br>
 			- Changed the effect of dark grass.<br>
 			- Added softcaps to D1 resources, and a second dark point softcap at 1.79e308.<br>
 			- Added softcaps to Pre-OTF U1 resources, and balanced the game accordingly.<br>

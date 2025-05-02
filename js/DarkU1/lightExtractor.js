@@ -263,7 +263,7 @@ addLayer("le", {
             player.dgr.grass.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[11]),
             player.dg.generators.pow(0.15).add(1).pow(player.le.punchcardsLevelsEffect[12]),
             player.dp.prestigePoints.pow(0.1).add(1).pow(player.le.punchcardsLevelsEffect[13]),
-            player.sma.starmetalAlloy.div(10).add(1).pow(2).pow(player.le.punchcardsLevelsEffect[14]),
+            player.sma.starmetalAlloy.lt(1e10) ? player.sma.starmetalAlloy.div(10).add(1).pow(2).pow(player.le.punchcardsLevelsEffect[14]) : player.sma.starmetalAlloy.div(1e10).pow(0.25).mul(1e18).pow(player.le.punchcardsLevelsEffect[14]),
             player.le.resetAmount.div(5).add(1).pow(player.le.punchcardsLevelsEffect[15]),
             Decimal.pow(1.25, player.le.punchcardsLevelsEffect[16]),
         ]

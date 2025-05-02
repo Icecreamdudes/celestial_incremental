@@ -61,7 +61,7 @@ addLayer("s", {
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
-        if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone14Effect)
+        if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {

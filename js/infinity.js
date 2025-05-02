@@ -147,7 +147,7 @@ addLayer("in", {
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cop.processedCoreInnateEffects[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.le.punchcardsPassiveEffect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 404)[0])
-        if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone10Effect)
+        if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
 
         // POWER MODIFIERS
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])

@@ -50,7 +50,7 @@ let changelog = `<h1>Changelog:</h1><br>
 	(Contains all the hotfixes from the past week)<br>
 		Content:<br>
 			- Added the pent punchcard.<br>
-			- Added 9 new pent milestones.<br>
+			- Added 10 new pent milestones.<br>
 			- Added 2 new charger milestones.<br>
 			- Added a new singularity milestone.<br>
 			- Added new booster dice effects.<br><br>

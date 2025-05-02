@@ -1461,7 +1461,7 @@ const updateMoonstone = (delta) => {
     if (player.cop.processedCoreFuel.eq(4)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.le.punchcardsPassiveEffect[12])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
-    if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone17Effect)
+    if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
 
     // MOONSTONE REQUIREMENT
     player.g.moonstoneReq = new Decimal(15)

@@ -326,11 +326,11 @@
             currencyInternalName: "prestigePoints",
             effect() {
                 let mult = player.p.prestigePoints.pow(0.2).add(1)
-                if (mult.gte("1e25000")) mult = mult.div("1e25000").pow(0.1).mul("1e25000")
+                if (mult.gte("1e20000")) mult = mult.div("1e20000").pow(0.1).mul("1e20000")
                 return mult
             },
             effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).lt("1e25000")) {
+                if (upgradeEffect(this.layer, this.id).lt("1e20000")) {
                     return format(upgradeEffect(this.layer, this.id))+"x"
                 } else {
                     return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:darkred'>[SOFTCAPPED]</small>"

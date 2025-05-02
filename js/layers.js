@@ -195,6 +195,7 @@ addLayer("i", {
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
+        if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
 

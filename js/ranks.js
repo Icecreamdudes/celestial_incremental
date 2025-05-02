@@ -29,10 +29,10 @@
 
         pentMilestone3Effect: new Decimal(1),
         pentMilestone9Effect: [new Decimal(1), new Decimal(1)],
-        pentMilestone10Effect: new Decimal(1),
-        pentMilestone12Effect: new Decimal(1),
-        pentMilestone14Effect: new Decimal(1),
-        pentMilestone17Effect: new Decimal(1),
+        pentMilestone11Effect: new Decimal(1),
+        pentMilestone13Effect: new Decimal(1),
+        pentMilestone15Effect: new Decimal(1),
+        pentMilestone18Effect: new Decimal(1),
 
         challengeIVEffect: new Decimal(1),
 
@@ -157,10 +157,10 @@
         player.r.pentMilestone3Effect = player.g.grass.pow(0.3).add(1)
         if (player.r.pentMilestone3Effect.gte("1e10000")) player.r.pentMilestone3Effect = player.r.pentMilestone3Effect.div("1e10000").pow(0.1).mul("1e10000")
         player.r.pentMilestone9Effect = [player.r.pent.pow(2).add(1), player.r.pent.pow(1.2).add(1)]
-        if (player.r.pent.gt(10000)) {player.r.pentMilestone10Effect = Decimal.pow(10, player.r.pent.sub(10000).div(1000))} else {player.r.pentMilestone10Effect = new Decimal(1)}
-        if (player.r.pent.gt(12000)) {player.r.pentMilestone12Effect = Decimal.pow(10, player.r.pent.sub(12000).div(1000))} else {player.r.pentMilestone12Effect = new Decimal(1)}
-        if (player.r.pent.gt(14000)) {player.r.pentMilestone14Effect = Decimal.pow(3, player.r.pent.sub(14000).div(1000))} else {player.r.pentMilestone14Effect = new Decimal(1)}
-        player.r.pentMilestone17Effect = player.r.timeCubes.add(1).log(1000).div(10).add(1)
+        if (player.r.pent.gt(11000)) {player.r.pentMilestone11Effect = Decimal.pow(10, player.r.pent.sub(11000).div(1000))} else {player.r.pentMilestone11Effect = new Decimal(1)}
+        if (player.r.pent.gt(13000)) {player.r.pentMilestone13Effect = Decimal.pow(10, player.r.pent.sub(13000).div(1000))} else {player.r.pentMilestone13Effect = new Decimal(1)}
+        if (player.r.pent.gt(15000)) {player.r.pentMilestone15Effect = Decimal.pow(3, player.r.pent.sub(15000).div(1000))} else {player.r.pentMilestone15Effect = new Decimal(1)}
+        player.r.pentMilestone18Effect = player.r.timeCubes.add(1).log(1000).div(10).add(1)
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
@@ -620,66 +620,73 @@
             unlocked() { return hasUpgrade("i", 19) },
             style: { width: '800px', "min-height": '75px' },
         },
-        21: {
+        20: {
             requirementDescription: "<h3>Pent 10,000",
-            effectDescription() { return "Boosts infinity points based on pent above 10,000.<br>Currently: x" + format(player.r.pentMilestone10Effect) },
+            effectDescription() { return "Good luck on increasing pent, you will need it.<br>Boosts Pre-OTF currencies by x100" },
             done() { return player.r.pent.gte(10000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasUpgrade("i", 19) },
             style: { width: '800px', "min-height": '75px' },
         },
-        22: {
+        21: {
             requirementDescription: "<h3>Pent 11,000",
-            effectDescription() { return "Unlocks more booster dice effects." },
+            effectDescription() { return "Boosts infinity points based on pent above 11,000.<br>Currently: x" + format(player.r.pentMilestone11Effect) },
             done() { return player.r.pent.gte(11000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 20) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        22: {
+            requirementDescription: "<h3>Pent 12,000",
+            effectDescription() { return "Unlocks more booster dice effects." },
+            done() { return player.r.pent.gte(12000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 21) },
             style: { width: '800px', "min-height": '75px' },
         },
         23: {
-            requirementDescription: "<h3>Pent 12,000",
-            effectDescription() { return "Boosts negative infinity points based on pent above 12,000.<br>Currently: x" + format(player.r.pentMilestone12Effect) },
-            done() { return player.r.pent.gte(12000) && this.unlocked() },
+            requirementDescription: "<h3>Pent 13,000",
+            effectDescription() { return "Boosts negative infinity points based on pent above 13,000.<br>Currently: x" + format(player.r.pentMilestone13Effect) },
+            done() { return player.r.pent.gte(13000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 22) },
             style: { width: '800px', "min-height": '75px' },
         },
         24: {
-            requirementDescription: "<h3>Pent 13,000",
+            requirementDescription: "<h3>Pent 14,000",
             effectDescription() { return "Unlocks even more booster dice effects." },
-            done() { return player.r.pent.gte(13000) && this.unlocked() },
+            done() { return player.r.pent.gte(14000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 23) },
             style: { width: '800px', "min-height": '75px' },
         },
         25: {
-            requirementDescription: "<h3>Pent 14,000",
-            effectDescription() { return "Boosts singularity points based on pent above 14,000.<br>Currently: x" + format(player.r.pentMilestone14Effect) },
-            done() { return player.r.pent.gte(14000) && this.unlocked() },
+            requirementDescription: "<h3>Pent 15,000",
+            effectDescription() { return "Boosts singularity points based on pent above 15,000.<br>Currently: x" + format(player.r.pentMilestone15Effect) },
+            done() { return player.r.pent.gte(15000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 24) },
             style: { width: '800px', "min-height": '75px' },
         },
         26: {
-            requirementDescription: "<h3>Pent 15,000",
+            requirementDescription: "<h3>Pent 16,000",
             effectDescription() { return "Improve the negative infinity point formula." },
-            done() { return player.r.pent.gte(15000) && this.unlocked() },
+            done() { return player.r.pent.gte(16000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 25) },
             style: { width: '800px', "min-height": '75px' },
         },
         27: {
-            requirementDescription: "<h3>Pent 16,000",
+            requirementDescription: "<h3>Pent 17,000",
             effectDescription() { return "Boosts time cubes effect by ^2." },
-            done() { return player.r.pent.gte(16000) && this.unlocked() },
+            done() { return player.r.pent.gte(17000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 26) },
             style: { width: '800px', "min-height": '75px' },
         },
         28: {
-            requirementDescription: "<h3>Pent 17,000",
-            effectDescription() { return "Boosts moonstone value based on time cubes.<br>Currently: x" + format(player.r.pentMilestone17Effect) },
-            done() { return player.r.pent.gte(17000) && this.unlocked() },
+            requirementDescription: "<h3>Pent 18,000",
+            effectDescription() { return "Boosts moonstone value based on time cubes.<br>Currently: x" + format(player.r.pentMilestone18Effect) },
+            done() { return player.r.pent.gte(18000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 27) },
             style: { width: '800px', "min-height": '75px' },
         },
         29: {
-            requirementDescription: "<h3>Pent 18,000",
+            requirementDescription: "<h3>Pent 19,000",
             effectDescription() { return "Replaces the Replicanti hardcap with a softcap." },
-            done() { return player.r.pent.gte(18000) && this.unlocked() },
+            done() { return player.r.pent.gte(19000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 28) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -746,6 +753,7 @@
                     ["milestone", 17],
                     ["milestone", 18],
                     ["milestone", 19],
+                    ["milestone", 20],
                     ["milestone", 21],
                     ["milestone", 22],
                     ["milestone", 23],

@@ -157,6 +157,7 @@
 
         // FERTILIZER EFFECT
         player.gh.fertilizerEffect = player.gh.fertilizer.pow(0.4).div(10).add(1)
+        if (player.gh.fertilizerEffect.gte("1e15000")) player.gh.fertilizerEffect = player.gh.fertilizerEffect.div("1e15000").pow(0.2).mul("1e15000")
 
         //----------------------------------------
 
@@ -1227,7 +1228,10 @@
                 unlocked() { return true },
                 content:
                 [
-                    ["raw-html", function () { return "You have <h3>" + format(player.gh.fertilizer) + "</h3> fertilizer, which boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", function () { return "You have <h3>" + format(player.gh.fertilizer) + "</h3> fertilizer, which boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, {color: "#19e04d", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.gh.fertilizerEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", paddingLeft: "10px"}],
+                    ]],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.gh.fertilizerPerSecond) + "</h3> fertilizer per second." }, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],

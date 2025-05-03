@@ -98,7 +98,7 @@ function updateTemp() {
 	if (tmp === undefined)
 		setupTemp()
 
-	updateTempData(layers, tmp, funcs)
+	updateTempData(layers, tmp, funcs, undefined, true)
 
 	for (layer in layers){
 		tmp[layer].resetGain = getResetGain(layer)
@@ -123,8 +123,17 @@ function updateTemp() {
 	}
 }
 
-function updateTempData(layerData, tmpData, funcsData, useThis) {
+function updateTempData(layerData, tmpData, funcsData, useThis, firstStep = false) {
 	for (item in funcsData){
+		if (firstStep) {
+			if (layers[item].deactivated) {
+				if (layers[item].deactivated()) {
+					tmp[item].deactivated = true
+					tmp[item].layerShown = layers[item].layerShown()
+					continue
+				}
+			}
+		}
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
 				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis)
@@ -142,8 +151,7 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 	}	
 }
 
-function updateChallengeTemp(layer)
-{
+function updateChallengeTemp(layer) {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
 }
 
@@ -156,8 +164,7 @@ function updateLevelableTemp(layer) {
 	updateTempData(layers[layer].levelables, tmp[layer].levelables, funcs[layer].levelables)
 }
 
-function updateClickableTemp(layer)
-{
+function updateClickableTemp(layer) {
 	updateTempData(layers[layer].clickables, tmp[layer].clickables, funcs[layer].clickables)
 }
 

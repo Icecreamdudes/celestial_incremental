@@ -94,7 +94,7 @@ function buyUpg(layer, id) {
 }
 
 function buyMaxBuyable(layer, id) {
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || tmp[layer].deactivated) return
 	if (!tmp[layer].buyables[id].unlocked) return
 	if (!tmp[layer].buyables[id].canBuy) return
 	if (!layers[layer].buyables[id].buyMax) return
@@ -104,7 +104,7 @@ function buyMaxBuyable(layer, id) {
 }
 
 function buyBuyable(layer, id) {
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || tmp[layer].deactivated) return
 	if (!tmp[layer].buyables[id].unlocked) return
 	if (!tmp[layer].buyables[id].canBuy) return
 
@@ -113,7 +113,7 @@ function buyBuyable(layer, id) {
 }
 
 function buyMaxExBuyable(layer, id) {
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || tmp[layer].deactivated) return
 	if (!tmp[layer].buyables[id].unlocked) return
 	if (!tmp[layer].buyables[id].canBuy) return
 
@@ -122,7 +122,7 @@ function buyMaxExBuyable(layer, id) {
 }
 
 function buyLevelable(layer, id) {
-	if (!player[layer].unlocked) return
+	if (!player[layer].unlocked || tmp[layer].deactivated) return
 	if (!tmp[layer].levelables[id].unlocked) return
 	if (!tmp[layer].levelables[id].canBuy) return
 
@@ -291,7 +291,7 @@ function updateMilestones(layer) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete()
-			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
+			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup("milestone", tmp[layer].milestones[id].requirementDescription, "Milestone Gotten!", 3, tmp[layer].color);
 			player[layer].lastMilestone = id
 		}
 	}

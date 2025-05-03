@@ -392,6 +392,7 @@ addLayer("in", {
 
         //challenge stuff
         player.pe.pests = new Decimal(0)
+        player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
 
         if (!inChallenge("ip", 15))
         {
@@ -419,6 +420,8 @@ addLayer("in", {
         }
 
         player.de.antidebuffPoints = new Decimal(0)
+        player.de.antidebuffEffect = new Decimal(1)
+        player.de.antidebuffPointsEffect = new Decimal(1)
         player.fa.charge = new Decimal(0)
 
     },

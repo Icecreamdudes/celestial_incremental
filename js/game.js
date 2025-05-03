@@ -3,8 +3,8 @@ var needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.6.2",
-	tmtName: "Fixed Reality"
+	tmtNum: "2.7",
+	tmtName: "Δ"
 }
 
 function getResetGain(layer, useType = null) {
@@ -188,8 +188,10 @@ function doReset(layer, force=false) {
 		}
 
 
-		if (layers[layer].onPrestige)
+		if (layers[layer].onPrestige) {
+			updateMilestones(layer)
 			run(layers[layer].onPrestige, layers[layer], gain)
+		}
 
 		addPoints(layer, gain)
 		updateMilestones(layer)
@@ -247,15 +249,19 @@ function resetRow(row) {
 
 function startChallenge(layer, x) {
 	let enter = false
-	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return
+	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked || !canEnterChallenge(layer, x)) return
+
 	if (player[layer].activeChallenge == x) {
-		completeChallenge(layer, x)
-		Vue.set(player[layer], "activeChallenge", null)
-		} else {
+		// This needs to be embedded due to how 'enter' works
+		if(canExitChallenge(layer, x)){
+			completeChallenge(layer, x)
+			Vue.set(player[layer], "activeChallenge", null)
+		}
+	} else {
 		enter = true
 	}
-	doReset(layer, true)
-	if(enter) {
+	if (enter || canExitChallenge(layer, x)) doReset(layer, true)
+	if (enter) {
 		Vue.set(player[layer], "activeChallenge", x)
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x])
 	}
@@ -345,7 +351,7 @@ function gameLoop(diff) {
 			let layer = TREE_LAYERS[x][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-			if (layers[layer].update) layers[layer].update(diff);
+			if (layers[layer].update && !tmp[layer].deactivated) layers[layer].update(diff);
 		}
 	}
 
@@ -354,7 +360,7 @@ function gameLoop(diff) {
 			let layer = OTHER_LAYERS[row][item]
 			player[layer].resetTime += diff
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
-			if (layers[layer].update) layers[layer].update(diff);
+			if (layers[layer].update && !tmp[layer].deactivated) layers[layer].update(diff);
 		}
 	}
 

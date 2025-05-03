@@ -502,5 +502,4 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 16)},
-    deactivated: false,
 })

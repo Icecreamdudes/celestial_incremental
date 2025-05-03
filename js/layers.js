@@ -1,5 +1,4 @@
 ﻿var tree1 = [["h", "r", "f", "p", "re"], ["t", "g", "pe", "pol", "gh", "rf"], ["fa", "de", "m", "cb", "d"], ["rm", "gem", "oi"]]
-var gwa = [["gt"]]
 
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -306,16 +305,6 @@ addLayer("i", {
         },
     },
     upgrades: {
-        1:
-        {
-            title: ":gwa:",
-            unlocked() { return (!hasUpgrade("i", 11) && player.points.gte(96)) || hasUpgrade("i", 1)},
-            description: "Gwagwagwa.",
-            cost: new Decimal(96),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-        },
         11:
         {
             title: "Feature I",
@@ -626,13 +615,12 @@ addLayer("i", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                     ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32]]],
                     ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
                     ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
                     ["blank", "25px"],
-                    ["tree", gwa],
                 ],
             },
             "Portal": {

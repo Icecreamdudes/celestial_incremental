@@ -100,8 +100,8 @@
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
 
         // ANTIMATTER EFFECT
-        if (!hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(3).add(1).log10().add(1).pow(player.ad.antimatter.add(2).log10().pow(0.3))
-        if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(2).log10().pow(0.3))
+        if (!hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(3).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
+        if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)

@@ -569,7 +569,7 @@ function fixOldSave(oldVersion){
 	} else {
 		if (oldVersion < 161) {
 			if (player.points.gt("1e100000")) {
-				layers.bigc.crunch()
+				layers.in.bigCrunch()
 			}
 			if (player.ad.antimatter.gt(player.ad.antimatterPerSecond.mul(1e100))) {
 				layers.ta.negativeInfinityReset()

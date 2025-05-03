@@ -16,24 +16,38 @@ addLayer("in", {
 
         infinities: new Decimal(0),
         infinitiesToGet: new Decimal(1),
-    }
-    },
-    automate() {
-        
-    },
+
+        delay: new Decimal(0),
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
             "background-origin": "border-box",
             "border-color": "#119B35",
         }
-      },
-
+    },
     tooltip: "Universe 2 - Antimatter World",
     color: "white",
     branches: ["i"],
     update(delta) {
         let onepersec = new Decimal(1)
+
+        // USED FOR RESETTING OLD FILES
+        if (player.in.delay.gt(0)) {
+            player.in.delay = player.in.delay.sub(delta)
+            if (player.in.delay.gt(0) && player.in.delay.lte(1)) {
+                layers.in.bigCrunch()
+                layers.ta.negativeInfinityReset()
+                for (let i = 0; i < player.r.milestones.length; i++) {
+                    if (+player.r.milestones[i] > 20) {
+                        player.r.milestones.splice(i, 1);
+                        i--;
+                    }
+                }
+                player.in.delay = new Decimal(0)
+            }
+        }
 
         // MAKE TAB WORK
         if (player.subtabs["in"]['stuff'] == 'Portal') {

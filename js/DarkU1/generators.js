@@ -33,8 +33,10 @@ addLayer("dg", {
 
         player.dg.generatorsToGet = player.dp.prestigePoints.pow(0.35).floor()
         if (player.le.punchcards[7]) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.le.punchcardsEffect[7])
-        player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.dgr.grassEffect)
         if (player.le.punchcards[15]) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.le.punchcardsEffect[15])
+        
+        // GENERATOR SOFTCAP
+        if (player.dg.generatorsToGet.gte(1e100)) player.dg.generatorsToGet = player.dg.generatorsToGet.div(1e100).pow(0.2).mul(1e100)
 
         player.dg.generatorEffect = player.dg.generators.pow(1.5)
 
@@ -43,13 +45,16 @@ addLayer("dg", {
         if (player.le.punchcards[8]) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(player.le.punchcardsEffect[8])
         if (player.le.punchcards[15]) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(player.le.punchcardsEffect[15])
 
+        // GENERATOR POWER SOFTCAP
+        if (player.dg.generatorPowerPerSecond.gte(1e250)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.div(1e250).pow(0.1).mul(1e250)
+
         if (player.dg.generatorPause.gte(0))
         {
             layers.dg.generatorReset();
         }
         player.dg.generatorPause = player.dg.generatorPause.sub(1)
 
-        player.dg.generatorPowerEffect = player.dg.generatorPower.pow(0.25).add(1)
+        player.dg.generatorPowerEffect = player.dg.generatorPower.pow(0.25).add(1).pow(player.dgr.grassEffect)
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
     },
@@ -218,13 +223,19 @@ addLayer("dg", {
                 unlocked() { return true },
                 content:
                 [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.dg.generatorsToGet) + "</h3> generators on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Generators provide a base generator power gain of <h3>" + format(player.dg.generatorEffect) + "</h3>." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["row", [
+                        ["raw-html", () => { return "You will gain <h3>" + formatWhole(player.dg.generatorsToGet) + "</h3> generators on reset." }, { color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px" }],
+                        ["raw-html", () => { return (player.dg.generatorsToGet.gte(1e100)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                    ]],
+                    ["raw-html", function () { return "Generators provide a base generator power gain of <h3>" + format(player.dg.generatorEffect) + "</h3>." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.dg.generatorPower) + "</h3> generator power." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You are generating <h3>" + format(player.dg.generatorPowerPerSecond) + "</h3> generator power per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Generator power boosts point gain by x<h3>" + format(player.dg.generatorPowerEffect) + "</h3>." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + format(player.dg.generatorPower) + "</h3> generator power." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["row", [
+                        ["raw-html", () => { return "You are generating <h3>" + format(player.dg.generatorPowerPerSecond) + "</h3> generator power per second." }, { color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px" }],
+                        ["raw-html", () => { return (player.dg.generatorPowerPerSecond.gte(1e250)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                    ]],
+                    ["raw-html", function () { return "Generator power boosts point gain by x<h3>" + format(player.dg.generatorPowerEffect) + "</h3>." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
@@ -238,6 +249,7 @@ addLayer("dg", {
          ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
          ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
          ["row", [["clickable", 1]]],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

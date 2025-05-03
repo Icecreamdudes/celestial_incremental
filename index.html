@@ -89,7 +89,7 @@
 				<button class="menuButton" v-if="layerShown('gh') && player.universe == 1" v-bind:style="constructMenuButtonStyle('gh') " onclick="showTab('gh')"><span class="buttonText">Grasshop</span></button>
 				<button class="menuButton" v-if="layerShown('rf') && player.universe == 1" v-bind:style="constructMenuButtonStyle('rf') " onclick="showTab('rf')"><span class="buttonText">Rocket Fuel</span></button>
 
-			<div class="menuHeader" v-if="(layerShown('de') || layerShown('m') || layerShown('d')) && player.universe == 1">Row 3</div>
+			<div class="menuHeader" v-if="(layerShown('fa') || layerShown('de') || layerShown('m') || layerShown('cb') || layerShown('d')) && player.universe == 1">Row 3</div>
 				<button class="menuButton" v-if="layerShown('fa') && player.universe == 1" v-bind:style="constructMenuButtonStyle('fa') " onclick="showTab('fa')"><span class="buttonText">Factory</span></button>
 				<button class="menuButton" v-if="layerShown('de') && player.universe == 1" v-bind:style="constructMenuButtonStyle('de') " onclick="showTab('de')"><span class="buttonText">Debuff</span></button>
 				<button class="menuButton" v-if="layerShown('m') && player.universe == 1" v-bind:style="constructMenuButtonStyle('m') " onclick="showTab('m')"><span class="buttonText">Mods</span></button>
@@ -110,7 +110,7 @@
 				<button class="menuButton" v-if="layerShown('dr') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dr') " onclick="showTab('dr')"><span class="buttonText">Ranks</span></button>
 				<button class="menuButton" v-if="layerShown('dp') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dp') " onclick="showTab('dp')"><span class="buttonText">Prestige</span></button>
 			
-			<div class="menuHeader2" v-if="layerShown('dg') || layerShown('dgr') && player.universe == -0.1">Row 2</div>
+			<div class="menuHeader2" v-if="(layerShown('dg') || layerShown('dgr') || layerShown('dn')) && player.universe == -0.1">Row 2</div>
 				<button class="menuButton" v-if="layerShown('dg') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dg') " onclick="showTab('dg')"><span class="buttonText">Generators</span></button>
 				<button class="menuButton" v-if="layerShown('dgr') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dgr') " onclick="showTab('dgr')"><span class="buttonText">Dark Grass</span></button>
 				<button class="menuButton" v-if="layerShown('dn') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dn') " onclick="showTab('dn')"><span class="buttonText">Normality</span></button>

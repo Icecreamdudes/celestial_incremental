@@ -28,8 +28,11 @@
         pentPause: new Decimal(0),
 
         pentMilestone3Effect: new Decimal(1),
-        pentMilestone30Effect: new Decimal(1),
-        pentMilestone30Effect2: new Decimal(1),
+        pentMilestone9Effect: [new Decimal(1), new Decimal(1)],
+        pentMilestone11Effect: new Decimal(1),
+        pentMilestone13Effect: new Decimal(1),
+        pentMilestone15Effect: new Decimal(1),
+        pentMilestone18Effect: new Decimal(1),
 
         challengeIVEffect: new Decimal(1),
 
@@ -42,8 +45,7 @@
         timeMax: false,
 
         timeCubeEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("s", 16))
         {
@@ -53,8 +55,7 @@
             buyBuyable("r", 14)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Ranks",
     color: "#eaf6f7",
     update(delta) {
@@ -146,7 +147,7 @@
             } else if (player.points.gte(new Decimal(6e57).div(buyableEffect("g", 19))) && player.points.lt(new Decimal(4e152).div(buyableEffect("g", 19)))) {
                 player.r.pentToGet = player.points.mul(buyableEffect("g", 19)).pow(10/11).div(1e32).pow(1/75).floor().sub(player.r.pent)
             } else if (player.points.gte(new Decimal(4e152).div(buyableEffect("g", 19)))) {
-                player.r.pentToGet = Decimal.ln(player.points.mul(buyableEffect("g", 19))).div(Decimal.ln(1e10)).floor().sub(player.r.pent)
+                player.r.pentToGet = Decimal.ln(player.points.mul(buyableEffect("g", 19))).div(Decimal.ln(1e10)).add(1).floor().sub(player.r.pent)
             }
         }
         if (player.points.lt(player.r.pentReq)) {
@@ -154,9 +155,12 @@
         }
 
         player.r.pentMilestone3Effect = player.g.grass.pow(0.3).add(1)
-
-        player.r.pentMilestone30Effect = player.r.pent.pow(2).add(1)
-        player.r.pentMilestone30Effect2 = player.r.pent.pow(1.2).add(1)
+        if (player.r.pentMilestone3Effect.gte("1e10000")) player.r.pentMilestone3Effect = player.r.pentMilestone3Effect.div("1e10000").pow(0.1).mul("1e10000")
+        player.r.pentMilestone9Effect = [player.r.pent.pow(2).add(1), player.r.pent.pow(1.2).add(1)]
+        if (player.r.pent.gt(11000)) {player.r.pentMilestone11Effect = Decimal.pow(10, player.r.pent.sub(11000).div(1000))} else {player.r.pentMilestone11Effect = new Decimal(1)}
+        if (player.r.pent.gt(13000)) {player.r.pentMilestone13Effect = Decimal.pow(10, player.r.pent.sub(13000).div(1000))} else {player.r.pentMilestone13Effect = new Decimal(1)}
+        if (player.r.pent.gt(15000)) {player.r.pentMilestone15Effect = Decimal.pow(3, player.r.pent.sub(15000).div(1000))} else {player.r.pentMilestone15Effect = new Decimal(1)}
+        player.r.pentMilestone18Effect = player.r.timeCubes.add(1).log(1000).div(10).add(1)
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
@@ -177,6 +181,7 @@
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(levelableEffect("pet", 209)[2])
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
             if (hasUpgrade("s", 14)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("s", 14))
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.d.diceEffects[17])
         }
 
         player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
@@ -187,10 +192,17 @@
             player.r.timeCubesEffect = new Decimal(0)
         }
 
-        player.r.timeCubeEffects[0] = player.r.timeCubesEffect.pow(1.15).mul(100).add(1)
-        player.r.timeCubeEffects[1] = player.r.timeCubesEffect.pow(1.1).mul(10).add(1)
-        player.r.timeCubeEffects[2] = player.r.timeCubesEffect.pow(0.9).mul(6).add(1)
-        player.r.timeCubeEffects[3] = player.r.timeCubesEffect.pow(0.7).mul(3).add(1)
+        if (!hasMilestone("r", 27)) {
+            player.r.timeCubeEffects[0] = player.r.timeCubesEffect.pow(1.15).mul(100).add(1).pow(buyableEffect("cs", 21))
+            player.r.timeCubeEffects[1] = player.r.timeCubesEffect.pow(1.1).mul(10).add(1).pow(buyableEffect("cs", 21))
+            player.r.timeCubeEffects[2] = player.r.timeCubesEffect.pow(0.9).mul(6).add(1).pow(buyableEffect("cs", 21))
+            player.r.timeCubeEffects[3] = player.r.timeCubesEffect.pow(0.7).mul(3).add(1).pow(buyableEffect("cs", 21))
+        } else {
+            player.r.timeCubeEffects[0] = player.r.timeCubesEffect.pow(2.3).mul(100).add(1).pow(buyableEffect("cs", 21))
+            player.r.timeCubeEffects[1] = player.r.timeCubesEffect.pow(2.2).mul(10).add(1).pow(buyableEffect("cs", 21))
+            player.r.timeCubeEffects[2] = player.r.timeCubesEffect.pow(1.8).mul(6).add(1).pow(buyableEffect("cs", 21))
+            player.r.timeCubeEffects[3] = player.r.timeCubesEffect.pow(1.4).mul(3).add(1).pow(buyableEffect("cs", 21))
+        }
     },
     getRankReq() {
         if (player.r.rank.lte(20)) {
@@ -231,7 +243,7 @@
         player.points = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -555,9 +567,15 @@
         },
         13: {
             requirementDescription: "<h3>Pent 3",
-            effectDescription() { return "Autobuys grass buyables, and unlocks tree factor VI.<br>Boosts celestial points based on grass: Currently: " + format(player.r.pentMilestone3Effect) + "x" },
+            effectDescription() {
+                if (player.r.pentMilestone3Effect.lt("1e10000")) {
+                    return "Autobuys grass buyables, and unlocks tree factor VI.<br>Boosts celestial points based on grass<br>Currently: x" + format(player.r.pentMilestone3Effect) + "."
+                } else {
+                    return "Autobuys grass buyables, and unlocks tree factor VI.<br>Boosts celestial points based on grass<br>Currently: x" + format(player.r.pentMilestone3Effect) + ". <small style='color:darkred'>[SOFTCAPPED]</small>"
+                }  
+            },
             done() { return player.r.pent.gte(3) },
-            style: { width: '800px', "min-height": '75px' },
+            style: { width: '800px', "min-height": '90px' },
         },
         14: {
             requirementDescription: "<h3>Pent 5",
@@ -584,22 +602,92 @@
         17: {
             requirementDescription: "<h3>Pent 11",
             effectDescription() { return "Unlocks a new check back button." },
-            done() { return player.r.pent.gte(11)},
-            unlocked() { return hasUpgrade("i", 19)},
+            done() { return player.r.pent.gte(11) && this.unlocked() },
+            unlocked() { return hasUpgrade("i", 19) },
             style: { width: '800px', "min-height": '75px' },
         },
         18: {
             requirementDescription: "<h3>Pent 15",
             effectDescription() { return "Unlocks new grasshop studies." },
-            done() { return player.r.pent.gte(15) },
+            done() { return player.r.pent.gte(15) && this.unlocked() },
             unlocked() { return hasUpgrade("i", 19)},
             style: { width: '800px', "min-height": '75px' },
         },
         19: {
             requirementDescription: "<h3>Pent 30",
-            effectDescription() { return "Boosts tree and mod gain based on pent: Currently: " + format(player.r.pentMilestone30Effect) + "x and " + format(player.r.pentMilestone30Effect2) + "x respectively." },
-            done() { return player.r.pent.gte(30) },
+            effectDescription() { return "Boosts tree and mod gain based on pent.<br>Currently: x" + format(player.r.pentMilestone9Effect[0]) + " and x" + format(player.r.pentMilestone9Effect[1]) + " respectively" },
+            done() { return player.r.pent.gte(30) && this.unlocked() },
             unlocked() { return hasUpgrade("i", 19) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        20: {
+            requirementDescription: "<h3>Pent 10,000",
+            effectDescription() { return "Good luck on increasing pent, you will need it.<br>Boosts Pre-OTF currencies by x100" },
+            done() { return player.r.pent.gte(10000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasUpgrade("i", 19) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        21: {
+            requirementDescription: "<h3>Pent 11,000",
+            effectDescription() { return "Boosts infinity points based on pent above 11,000.<br>Currently: x" + format(player.r.pentMilestone11Effect) },
+            done() { return player.r.pent.gte(11000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 20) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        22: {
+            requirementDescription: "<h3>Pent 12,000",
+            effectDescription() { return "Unlocks more booster dice effects." },
+            done() { return player.r.pent.gte(12000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 21) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        23: {
+            requirementDescription: "<h3>Pent 13,000",
+            effectDescription() { return "Boosts negative infinity points based on pent above 13,000.<br>Currently: x" + format(player.r.pentMilestone13Effect) },
+            done() { return player.r.pent.gte(13000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 22) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        24: {
+            requirementDescription: "<h3>Pent 14,000",
+            effectDescription() { return "Unlocks even more booster dice effects." },
+            done() { return player.r.pent.gte(14000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 23) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        25: {
+            requirementDescription: "<h3>Pent 15,000",
+            effectDescription() { return "Boosts singularity points based on pent above 15,000.<br>Currently: x" + format(player.r.pentMilestone15Effect) },
+            done() { return player.r.pent.gte(15000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 24) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        26: {
+            requirementDescription: "<h3>Pent 16,000",
+            effectDescription() { return "Improve the negative infinity point formula." },
+            done() { return player.r.pent.gte(16000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 25) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        27: {
+            requirementDescription: "<h3>Pent 17,000",
+            effectDescription() { return "Boosts time cubes effect by ^2." },
+            done() { return player.r.pent.gte(17000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 26) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        28: {
+            requirementDescription: "<h3>Pent 18,000",
+            effectDescription() { return "Boosts moonstone value based on time cubes.<br>Currently: x" + format(player.r.pentMilestone18Effect) },
+            done() { return player.r.pent.gte(18000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 27) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        29: {
+            requirementDescription: "<h3>Pent 19,000",
+            effectDescription() { return "Replaces the Replicanti hardcap with a softcap." },
+            done() { return player.r.pent.gte(19000) && this.unlocked() },
+            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 28) },
             style: { width: '800px', "min-height": '75px' },
         },
     },
@@ -656,15 +744,26 @@
                     ], {width: "800px", height: "100px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "2px solid white", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["milestone", 11]]],
-                    ["row", [["milestone", 12]]],
-                    ["row", [["milestone", 13]]],
-                    ["row", [["milestone", 14]]],
-                    ["row", [["milestone", 15]]],
-                    ["row", [["milestone", 16]]],
-                    ["row", [["milestone", 17]]],
-                    ["row", [["milestone", 18]]],
-                    ["row", [["milestone", 19]]],
+                    ["milestone", 11],
+                    ["milestone", 12],
+                    ["milestone", 13],
+                    ["milestone", 14],
+                    ["milestone", 15],
+                    ["milestone", 16],
+                    ["milestone", 17],
+                    ["milestone", 18],
+                    ["milestone", 19],
+                    ["milestone", 20],
+                    ["milestone", 21],
+                    ["milestone", 22],
+                    ["milestone", 23],
+                    ["milestone", 24],
+                    ["milestone", 25],
+                    ["milestone", 26],
+                    ["milestone", 27],
+                    ["milestone", 28],
+                    ["milestone", 29],
+                    ["blank", "25px"],
                 ]
             },
             "Time Reversal": {

@@ -13,6 +13,8 @@
         replicantiEffect3: new Decimal(1),
         replicantiMult: new Decimal(1),
 
+        replicantiSoftcap: new Decimal(1),
+
         replicateChance: new Decimal(0.01),
 
         replicantiTimer: new Decimal(0),
@@ -77,11 +79,13 @@
         player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
+        if (hasUpgrade("bi", 116)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("bi", 116))
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 16))
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 19))
+        player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.mul(player.ca.replicantiSoftcap)
 
         player.ca.replicateChance = new Decimal(0.02)
         player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 11))
@@ -98,6 +102,14 @@
         if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.plus(1).log10().pow(1.4).pow(0.75).mul(10).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
         if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.plus(1).log10().pow(2.6).pow(0.45).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
         player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
+        
+        if (hasUpgrade("bi", 116))
+        {
+            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(player.ca.replicanti.plus(1).log10().pow(0.4))
+            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(player.ca.replicanti.plus(1).log10().pow(0.35))
+            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(player.ca.replicanti.plus(1).log10().pow(0.75))
+
+        }
 
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
@@ -126,6 +138,14 @@
         //rememberance
         player.ca.rememberanceCoreCost = player.ca.rememberanceCores.add(1).pow(1.5).mul(1000)
         player.ca.rememberanceCoresEffect = player.ca.rememberanceCores.mul(0.05).add(1)
+
+        if (player.ca.replicanti.gte("1.8e308"))
+        {
+            player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.3).plus(1)
+        } else
+        {
+            player.ca.replicantiSoftcap = new Decimal(1)
+        }
     },
     gainCanteCore()
     {
@@ -147,10 +167,10 @@
         random = Math.random()
         if (random < player.ca.replicateChance)
         {
-            if (player.ca.replicanti.lt(1.79e308))
+            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21))
             {
                 player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult)
-            } else
+            } else 
             {
                 player.ca.replicanti = new Decimal(1.79e308)
             }
@@ -748,7 +768,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
                     ["raw-html", function () { return "which boosts infinity points by <h3>" + format(player.ca.replicantiEffect) + "</h3>x, infinity dimensions by <h3>" + format(player.ca.replicantiEffect2) + "</h3>x, and points by <h3>" + format(player.ca.replicantiEffect3) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Caps out at 1.79e308 replicanti)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !hasUpgrade("ma", 21) ? "(Caps out at 1.79e308 replicanti)" : "After 1.79e308 replicanti, replicate interval is multiplied by x" + format(player.ca.replicantiSoftcap) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["bar", "replicantiBar"]]],
                     ["blank", "25px"],

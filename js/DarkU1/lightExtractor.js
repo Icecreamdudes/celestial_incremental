@@ -111,8 +111,6 @@ addLayer("le", {
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("sma", 11))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ep1", 11))
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(levelableEffect("pet", 404)[2])
-        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.cb.epicPetEffects[3][2])
-        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ma", 23))
 
         //punchcards
         player.le.lockedPunchcard = "<img src='resources/Punchcards/lockedPunchcard.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>"

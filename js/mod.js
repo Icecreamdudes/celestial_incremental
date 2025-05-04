@@ -1,6 +1,6 @@
 ﻿let modInfo = {
 	name: "Celestial Incremental",
-	id: "celestial_t",
+	id: "celestial",
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
@@ -12,7 +12,7 @@
 		"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
 		"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
 		"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
-		"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "legendaryPets.js"],
+		"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "legendaryPets.js", "rockets.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -22,8 +22,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.3",
-	name: "The Layout Update - with QoL",
+	num: 161, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "The Polishing Update",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -45,6 +45,57 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.6.1 - Bug Fixes and Balancing</h3><br>
+	(Contains all the hotfixes from the past week)<br>
+		Content:<br>
+			- Added the pent punchcard.<br>
+			- Added 10 new pent milestones.<br>
+			- Added 2 new charger milestones.<br>
+			- Added a new singularity milestone.<br>
+			- Added new booster dice effects.<br><br>
+		Balancing:<br>
+			- Improved the balancing of punchcards.<br>
+			- Added softcaps to punchcard effects.<br>
+			- Changed the effect of dark grass.<br>
+			- Added softcaps to D1 resources, and a second dark point softcap at 1.79e308.<br>
+			- Added softcaps to Pre-OTF U1 resources, and balanced the game accordingly.<br>
+			- Buffed antimatters effect and NIP's base formula to account for antimatter deflation.<br>
+			- Limited point gain to a max of 9.99e309 when not in break infinity. (RIP hex cheese).<br>
+			- Buffed grass-skip 40 milestone to account for weaker linkers due to U1 softcaps.<br>
+			- Nerfed singularity upgrade 7 to fit with the new balancing of U1.<br>
+			- Replaced singularity upgrade 6 due to previous use being no longer applicable.<br>
+			- Made point singularity core's second effect not work above 1e100,000 points.<br>
+			- Buffed point scrap buyable booster, cause lol.<br><br>
+		Qol:<br>
+			- Added "Keep pre-singularity check back content on reset" to singularity milestone 4.<br>
+			- Added "Keep 10 Tetr on reset" to infinity milestone 6.<br>
+			- Made infinity milestone 6 work with singularity milestone 2.<br><br>
+		Bugfixes:<br>
+			- Fixed potential crashes when loading cores.<br>
+			- Fixed being able to obtain some pent milestones without visually unlocking them.<br>
+			- Fixed max pent giving one less then intended.<br>
+			- Fixed a bug with early infinity resets post singularity.<br>
+			- Fixed Tetr automation (through a milestone perk that keeps Tetr).<br>
+			- Fixed XP booster dice effect having the wrong cap.<br>
+			- Fixed alt-rank point button allowing you to click it for zero points.<br>
+			- Fixed antimatter's softcap, causing tons of deflation.<br>
+			- Fixed layout bug when check back is the only unlocked U1 layer.<br>
+			- Fixed UFO pet point button.<br>
+			- Fixed Check Back pity req. buyable being broken.<br>
+			- Fixed pet automation not working offline.<br>
+			- Fixed booster dice giving the wrong pet.<br>
+			- Fixed evolutions purchase code.<br>
+			- Fixed evolutions being unlocked without having unlocked the relevent pet.<br>
+			- Fixed weird Tetr code.<br>
+			- Fixed rocket fuel's third effect not working.<br>
+			- Fixed Cante's IC puzzle being broken due to max pent.<br>
+			- Fixed export to clipboard (Yipee).<br>
+			- Fixed Fear challenge accidentally disabling automation unlocked by grass-skip.<br>
+			- Fixed unlocks for Tetr and Tetr Points.<br>
+			- Fixed ranks not displaying properly.<br>
+			- Fixed singularity epic pets not porting from old update properly.<br>
+			- Fixed singularity epic pet shop buyables not displaying properly.<br>
+			- Fixed singularity fragmentation not working properly.<br><br>
 	<h3>v1.6 - The Polishing Update</h3><br>
 		Content:<br>
 			- Added the first 4 parts of the in-game Savebank.<br>
@@ -339,9 +390,9 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "negativeInfinityReset", "reverseCrunch", "startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities", "domainReset", "gainAutomationShard",
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
 "gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
-"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
+"startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner", "ordinalDisplay", "powerBase",
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
- "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset", "ordinalDisplay", "powerBase",
+ "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset",
  "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
 "petButton7", "evoBanner", "paragonBanner", "gemReset", "generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32","startCutscene33","startCutscene34", "resetFightCooldown"]
 
@@ -498,5 +549,22 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1206, player.cb.evolvedLevels[8])
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
+	}
+	if (typeof oldVersion === 'string') {
+		if (player.points.gt("1e100000")) {
+			layers.bigc.crunch()
+		}
+		if (player.ad.antimatter.gt(player.ad.antimatterPerSecond.mul(1e100))) {
+			layers.ta.negativeInfinityReset()
+		}
+	} else {
+		if (oldVersion < 161) {
+			if (player.points.gt("1e100000")) {
+				layers.bigc.crunch()
+			}
+			if (player.ad.antimatter.gt(player.ad.antimatterPerSecond.mul(1e100))) {
+				layers.ta.negativeInfinityReset()
+			}
+		}
 	}
 }

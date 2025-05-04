@@ -152,7 +152,6 @@
         player.d.diceSides = new Decimal(6)
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
-        if (hasUpgrade("sma", 106)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 106)).floor()
 
         // LOWEST ROLL
         player.d.lowestRoll = buyableEffect("d", 14)

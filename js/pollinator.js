@@ -66,18 +66,9 @@ addLayer("pol", {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
             }
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
-            if (hasUpgrade("s", 13)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 13))
 
         }
-
-        if (player.pol.buyables[13].gt(1500))
-        {
-            player.pol.buyables[13] = new Decimal(1500)
-        }
-        if (player.pol.buyables[11].gt(1500))
-        {
-            player.pol.buyables[11] = new Decimal(1500)
-        }
+    
 
         if (player.pol.pollinators.gte(1e50) && player.pol.unlockHive < 1) {
             player.pol.unlockHive = 1
@@ -383,7 +374,7 @@ addLayer("pol", {
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5).div(player.pol.pollinators.plus(1).log10()) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5) },
             unlocked() { return hasUpgrade("pol", 13) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -391,7 +382,7 @@ addLayer("pol", {
                 return "Promised Pollinators"
             },
             display() {
-                return "which guarantees you have at least " + format(tmp[this.layer].buyables[this.id].effect) + " seconds worth of pollinators (scales down based on pollinators).\n\
+                return "which guarantees you have at least " + format(tmp[this.layer].buyables[this.id].effect) + " seconds worth of pollinators.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy(mult) {
@@ -561,7 +552,7 @@ addLayer("pol", {
             unlocked() { return player.pol.pollinatorsIndex == 7},
         },
         p8: {
-            title: "Mechanical Pollination",
+            title: "Mechanical Pollation",
             body() { return "Fun Fact: Humans can also contribute to pollination, by utillizing techniques such as using pollen spray systems, air blasters, and also pollinating by hand." },
             unlocked() { return player.pol.pollinatorsIndex == 8},
         }

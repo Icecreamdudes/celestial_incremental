@@ -60,9 +60,6 @@ addLayer("s", {
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.rarePetEffects[7][0])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cb.epicPetEffects[3][1])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {

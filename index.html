@@ -41,9 +41,9 @@
 
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
-		<div class="titleHeader" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart && player.sma.inStarmetalChallenge == false" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
-		<div class="titleHeader2" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart && player.sma.inStarmetalChallenge == true">Celestial<br>Incremental</div>
-		<div class="contentMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart " v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-270px'}:{'left':'0px'}">
+		<div class="titleHeader" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == false" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
+ 		<div class="titleHeader2" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == true" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
+		<div class="contentMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-270px'}:{'left':'0px'}">
 		<!-- Universes -->
 			<div class="uniMenu">
 				<div class="contentHeader" v-if="player.sma.inStarmetalChallenge == false">UNI</div>
@@ -67,7 +67,7 @@
 				<img class="miscButton" onclick="showTab('settings')" src="options_wheel.png"></img>
 			</div>
 		</div>
-		<div class="layerMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart " v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-200px'}:{'left':'76px'}">
+		<div class="layerMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-200px'}:{'left':'76px'}">
 		<!-- Universe 1 Stuff -->
 			<div class="uniHeader" v-if="player.universe == 1">Universe 1<br>Overworld</div>
 				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1t') " onclick="showTab('u1t')"><span class="buttonText">Tree</span></button>
@@ -211,7 +211,7 @@
  				<button class="menuButton" v-if="layerShown('ep4') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep4') " onclick="showTab('ep4')"><span class="buttonText">Nav</span></button>
  				<button class="menuButton" v-if="layerShown('ep5') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep5') " onclick="showTab('ep5')"><span class="buttonText">Sel</span></button>
 		</div>
-		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'274px'}">{{options.menuShown==true?'<':'>'}}</button>
+		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'274px'}">{{options.menuShown==true?'<':'>'}}</button>
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth">

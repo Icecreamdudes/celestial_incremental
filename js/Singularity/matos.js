@@ -71,9 +71,7 @@
         //add something kill combo related
         combo: new Decimal(0),
         bestComboDepth1: new Decimal(0),
-        bestComboDepth1Effect: new Decimal(1),
         bestComboDepth2: new Decimal(0),
-        bestComboDepth2Effect: new Decimal(1),
 
         //cooldowns
         depth1Cooldown: new Decimal(0), 
@@ -238,7 +236,6 @@
             player.ma.currentCelestialiteType = 5
             player.ma.combo = player.ma.combo.add(1)
         }
-
         if (player.ma.currentDepth.eq(1) && player.ma.combo.gt(player.ma.bestComboDepth1)) {
             player.ma.bestComboDepth1 = player.ma.combo
             logPrint("Your new highest combo for depth 1 is " + player.ma.bestComboDepth1 + "!")
@@ -247,10 +244,6 @@
             player.ma.bestComboDepth2 = player.ma.combo
             logPrint("Your new highest combo for depth 2 is " + player.ma.bestComboDepth2 + "!")
         }
-
-        player.ma.bestComboDepth1Effect = Decimal.pow(5, player.ma.bestComboDepth1.pow(1.35)).pow(0.3).add(1)
-        player.ma.bestComboDepth2Effect = Decimal.pow(2, player.ma.bestComboDepth2.pow(1.3)).pow(0.3).add(1)
-
         if (player.ma.health[0].lt(0) && !player.ma.deadCharacters[0]) {
             player.ma.deadCharacters[0] = true
             logPrint("<span style='color: #910a27;'>Kres has died!")
@@ -274,7 +267,6 @@
             }
             player.ma.fightingCelestialites = false
             player.ma.currentDepth = new Decimal(0)
-            player.ma.combo = new Decimal(0)
 
             player.ma.epsilonCelestialitesKilled = new Decimal(0)
         }
@@ -1976,8 +1968,8 @@
                     ["blank", "25px"],
         ["row", [["clickable", 11]]],
         ["blank", "25px"],
-        ["raw-html", function () { return "Depth 1 highest combo: <h3>" + formatWhole(player.ma.bestComboDepth1) + "</h3> kills, which boost infinity point gain by x" + format(player.ma.bestComboDepth1Effect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.ma.secondAreaUnlock ? "Depth 2 highest combo: <h3>" + formatWhole(player.ma.bestComboDepth2) + "</h3> kills, which boost negative infinity point gain by x" + format(player.ma.bestComboDepth2Effect) + "." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "Depth 1 highest combo: <h3>" + formatWhole(player.ma.bestComboDepth1) + "</h3> kills." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.ma.secondAreaUnlock ? "Depth 2 highest combo: <h3>" + formatWhole(player.ma.bestComboDepth2) + "</h3> kills." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
     ]
 
             },

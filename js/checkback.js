@@ -214,7 +214,7 @@
         player.cb.levelEffect = player.cb.level.pow(3).pow(player.d.dicePointsEffect)
         if (hasUpgrade("bi", 25) && (!player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         if (hasUpgrade("bi", 25) && (player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(2)
-        if (hasUpgrade("s", 17)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
+        if (hasUpgrade("s", 17)) player.cb.levelEffect = player.cb.levelEffect.pow(upgradeEffect("s", 17))
         
         player.cb.buttonBaseXP = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.06),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),]
 
@@ -541,15 +541,6 @@
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(time)
         }
-        for (let i = 0; i < player.cb.petAutomationTimers.length; i++) {
-            if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.cb.boostAutomationTimers.length; i++) {
-            if (player.cb.boostAutomationAllocation[i].gt(0)) player.cb.boostAutomationTimers[i] = player.cb.boostAutomationTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.cb.pointAutomationTimers.length; i++) {
-            if (player.cb.pointAutomationAllocation[i].gt(0)) player.cb.pointAutomationTimers[i] = player.cb.pointAutomationTimers[i].sub(time)
-        }
 
         // Pet Shop
         player.pet.shopResetTimer = player.pet.shopResetTimer.sub(time)
@@ -720,7 +711,7 @@
         14: {
             title() { return player.cb.buttonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.buttonTimers[3]) + "." : "<h3>+" + format(player.cb.buttonBaseXP[3].mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.buttonTimers[3].lt(0) && this.unlocked() },
-            unlocked() { return (hasMilestone("r", 17) || hasMilestone("s", 14)) },
+            unlocked() { return hasMilestone("r", 17) },
             tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.2%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[3].mul(player.cb.xpMult))
@@ -1330,7 +1321,7 @@
         302: {
             title() { return player.cb.XPBoostTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[1]) + "." : "<h3>+" + format(player.cb.XPBoostBase[1]) + " XP Boost."},
             canClick() { return player.cb.XPBoostTimers[1].lt(0) },
-            unlocked() { return player.cb.highestLevel.gte(666) },
+            unlocked() { return player.cb.highestLevel.gte(666) && hasUpgrade("ip", 31) },
             tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 25%" : ""},
             onClick() {
                 if (player.cb.highestLevel.gte(player.cb.XPBoostReq[1])) {
@@ -2602,7 +2593,7 @@
             currency() { return player.cb.totalxp},
             pay(amt) { player.cb.totalxp = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.15).add(1) },
-            unlocked() { return (hasUpgrade("i", 22) || hasMilestone("s", 14))},
+            unlocked() { return hasUpgrade("i", 22)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -2801,7 +2792,7 @@
                 ]
             },
             "Lore": {
-                buttonStyle() { return { color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
+                buttonStyle() { return { 'color': '#094599' } },
                 unlocked() { return hasUpgrade("s", 23) },
                 content: [
                     ["blank", "25px"],
@@ -2823,7 +2814,7 @@
             },
             "Buyables": {
                 buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
-                unlocked() { return (hasChallenge("ip", 17) || hasMilestone("s", 14)) },
+                unlocked() { return hasChallenge("ip", 17) },
                 content: [
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 15]]],
@@ -2903,7 +2894,7 @@
                                     ], {width: "200px", height: "47px"}],
                                     ["style-row", [["clickable", 1104]], {width: "47px", height: "47px"}],
                                 ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(hasMilestone("r", 17) || hasMilestone("s", 14)) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
+                            ], () => { return !hasMilestone("r", 17) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
                             ["style-row", [
                                 ["style-row", [
                                     ["style-row", [["clickable", 1005]], {width: "47px", height: "47px"}],
@@ -3088,7 +3079,7 @@
             },
             "XPBoost": {
                 buttonStyle() { return {color: "#00B229", borderColor: "#00B229", borderRadius: "5px"}},
-                unlocked() { return player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) },
+                unlocked() { return player.cb.highestLevel.gte(100) && hasUpgrade("ip", 31) },
                 content: [
                     ["blank", "10px"],
                     ["style-column", [
@@ -3144,7 +3135,7 @@
             },
             "Pet Points": {
                 buttonStyle() { return {color: "#A2D800", borderColor: "#A2D800", borderRadius: "5px"}},
-                unlocked() { return player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) },
+                unlocked() { return player.cb.highestLevel.gte(100) && hasUpgrade("ip", 31) },
                 content: [
                     ["blank", "10px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
@@ -3318,7 +3309,7 @@
                         return "<div class='bottomTooltip'>XPBoost<hr><small>x" + format(player.cb.XPBoostEffect) + " XP<br>[SOFTCAPPED]</small></div>"
                     }
                 }],
-            ], () => { return (player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14))) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
+            ], () => { return (player.cb.highestLevel.gte(100) && hasUpgrade("ip", 31)) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/petPoint.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return format(player.cb.petPoints)}, {width: "93px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
@@ -3338,7 +3329,7 @@
                 ["raw-html", "<img src='resources/automationShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatShortWhole(player.cb.automationShards)}, {width: "70px", height: "50px", color: "grey", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
-                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatShortWhole(player.cb.totalAutomationShards) + ")<br>[While offline, automation<br>only triggers once]</small></div>"
+                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatShortWhole(player.cb.totalAutomationShards) + ")<br>[Automation triggers only<br>once while offline]</small></div>"
                 }],
             ], () => { return player.ev.evolutionsUnlocked[4] ? {width: "125px", height: "50px"} : {display: "none !important"}}],
         ], {width: "825px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
@@ -3353,8 +3344,8 @@
         ["raw-html", function () { return player.cb.highestLevel.lt(50) && player.cb.highestLevel.gte(35) ?  "You will unlock something at level 50! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(65) && player.cb.highestLevel.gte(50) ?  "You will unlock something at level 65! <small>[XP TAB] [PET SHOP]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(75) && player.cb.highestLevel.gte(65) ?  "You will unlock something at level 75! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && (hasUpgrade("ip", 31) || hasMilestone("s", 14)) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && (hasChallenge("ip", 12) || hasMilestone("s", 14)) ?  "You will unlock something at level 125! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cb.highestLevel.lt(100) && player.cb.highestLevel.gte(75) && hasUpgrade("ip", 31) ?  "You will unlock something at level 100! <small>[??? TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.cb.highestLevel.lt(125) && player.cb.highestLevel.gte(100) && hasChallenge("ip", 12) ?  "You will unlock something at level 125! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(150) && player.cb.highestLevel.gte(125) ?  "You will unlock something at level 150! <small>[XP TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(200) && player.cb.highestLevel.gte(150) ?  "You will unlock something at level 200! <small>[MOST MAIN TABS]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(250) && player.cb.highestLevel.gte(200) ?  "You will unlock something at level 250! <small>[EVOLUTION TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -3366,5 +3357,5 @@
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14) }
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) }
 })

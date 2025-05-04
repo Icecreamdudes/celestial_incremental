@@ -49,7 +49,7 @@
         diceScore: new Decimal(0),
         rigIndex: 0,
 
-        diceEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+        diceEffects: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
         addDiceEffect: new Decimal(0),
         dicePointsMult: new Decimal(1),
@@ -175,10 +175,6 @@
             "Currently boosting check back xp.",
             "Currently boosting rocket fuel.",
             "Currently boosting hex 1 points.",
-            "Currently boosting pre-OTF currencies.",
-            "Currently boosting pollinators.",
-            "Currently boosting time cubes.",
-            "Currently boosting singularity points.",
         ]
 
         // BOOSTER DICE COOLDOWN DECREMENTOR
@@ -210,8 +206,7 @@
         player.d.manualCooldown = player.d.manualCooldown.div(buyableEffect("d", 23))
 
         // MAKE SURE CAPS WORK CORRECTLY
-        if (player.d.diceEffects[12].gt(10)) player.d.diceEffects[12] = new Decimal(10)
-        if (player.d.diceEffects[18].gt(100)) player.d.diceEffects[18] = new Decimal(100)
+        if (player.d.diceEffects[12].gt(100)) player.d.diceEffects[12] = new Decimal(100)
         if (player.d.buyables[14].gt(player.d.diceSides.sub(player.d.buyables[22].mul(2)))) {
             player.d.buyables[14] = player.d.diceSides.sub(player.d.buyables[22].mul(2))
         }
@@ -321,18 +316,17 @@
                     player.d.currentBoosterRoll = player.d.rigIndex
                     riggy = true
                 }
-                if (riggy == false) {
+                if (!hasChallenge("ip", 15) && riggy == false) {
                     do {
-                        player.d.previousBoosterRoll = player.d.currentBoosterRoll
-                        if (!hasChallenge("ip", 15)) {
-                            player.d.currentBoosterRoll = getRandomInt(11)
-                        } else if (!hasMilestone("r", 22)) {
-                            player.d.currentBoosterRoll = getRandomInt(15)
-                        } else if (!hasMilestone("r", 24)) {
-                            player.d.currentBoosterRoll = getRandomInt(17)
-                        } else {
-                            player.d.currentBoosterRoll = getRandomInt(19)
-                        }
+                      player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                      player.d.currentBoosterRoll = getRandomInt(11)
+                    }
+                    while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
+                }
+                if (hasChallenge("ip", 15) && riggy == false) {
+                    do {
+                      player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                      player.d.currentBoosterRoll = getRandomInt(15)
                     }
                     while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
                 }
@@ -341,10 +335,10 @@
                 let random = getRandomInt(100)
                 let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
 
-                if (new Decimal(random).lte(prob)) {
-                    addLevelableXP("pet", 302, 1);
-                    if (player.cb.highestLevel.lt(35)) callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/diceRarePet.png");
-                    if (player.cb.highestLevel.gte(35)) callAlert("You gained a Dice!", "resources/diceRarePet.png");
+                if (new Decimal(random).lte(prob))
+                {
+                    addLevelableXP("pet", 402, 1);
+                    callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/diceRarePet.png");
                 }
 
                 if (inChallenge("ip", 15))
@@ -572,62 +566,6 @@
                 return look
             },
         },
-        116: {
-            title() { return "Pre-OTF Currencies<br>x" + format(player.d.diceEffects[15]) },
-            canClick() { return true },
-            unlocked() { return hasMilestone("r", 22) },
-            onClick() {
-                player.d.rigIndex = 15
-            },
-            style() {
-                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
-                player.d.currentBoosterRoll == 15 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
-                player.d.rigIndex == 15 ? look.border = "3px solid red" : look.border = "3px solid white"
-                return look
-            },
-        },
-        117: {
-            title() { return "Pollinators<br>x" + format(player.d.diceEffects[16]) },
-            canClick() { return true },
-            unlocked() { return hasMilestone("r", 22) },
-            onClick() {
-                player.d.rigIndex = 16
-            },
-            style() {
-                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
-                player.d.currentBoosterRoll == 16 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
-                player.d.rigIndex == 16 ? look.border = "3px solid red" : look.border = "3px solid white"
-                return look
-            },
-        },
-        118: {
-            title() { return "Time Cubes<br>x" + format(player.d.diceEffects[17]) },
-            canClick() { return true },
-            unlocked() { return hasMilestone("r", 24) },
-            onClick() {
-                player.d.rigIndex = 17
-            },
-            style() {
-                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
-                player.d.currentBoosterRoll == 17 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
-                player.d.rigIndex == 17 ? look.border = "3px solid red" : look.border = "3px solid white"
-                return look
-            },
-        },
-        119: {
-            title() { return "Singularity Points<br>x" + format(player.d.diceEffects[18]) + "<br>(MAX IS x10)" },
-            canClick() { return true },
-            unlocked() { return hasMilestone("r", 24) },
-            onClick() {
-                player.d.rigIndex = 18
-            },
-            style() {
-                let look = {width: "125px", minHeight: "125px", color: "white", border: "3px solid white", margin: "5px", borderRadius: "20px"}
-                player.d.currentBoosterRoll == 18 ? look.backgroundColor = "#3b3b3b" : look.backgroundColor = "black"
-                player.d.rigIndex == 18 ? look.border = "3px solid red" : look.border = "3px solid white"
-                return look
-            },
-        },
     },
     addDiceEffect() {
         player.d.diceScore = new Decimal(0)
@@ -694,19 +632,6 @@
             player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00005)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
-        // PENT UNLOCKED EFFECTS
-        } else if (player.d.currentBoosterRoll == 15) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.01).div(player.d.diceEffects[15])
-            player.d.diceEffects[15] = player.d.diceEffects[15].add(player.d.addDiceEffect)
-        } else if (player.d.currentBoosterRoll == 16) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.001)
-            player.d.diceEffects[16] = player.d.diceEffects[16].add(player.d.addDiceEffect)
-        } else if (player.d.currentBoosterRoll == 17) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.1)
-            player.d.diceEffects[17] = player.d.diceEffects[17].add(player.d.addDiceEffect)
-        } else if (player.d.currentBoosterRoll == 18) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.0001).div(player.d.diceEffects[18].pow(10))
-            player.d.diceEffects[18] = player.d.diceEffects[18].add(player.d.addDiceEffect)
         }
     },
     bars: {
@@ -1153,8 +1078,7 @@
                         ["style-row", [
                             ["clickable", 12],
                             ["style-column", [
-                                ["raw-html", function () { return player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                                ["raw-html", function () { return player.d.currentBoosterRoll == 12 || player.d.currentBoosterRoll == 18 ? "(MAX IS x10)" : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                                ["raw-html", function () { return player.d.currentBoosterRoll != 12 ? player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")" : player.d.currentBoosterText[player.d.currentBoosterRoll] + "<br>(Currently x" + format(player.d.diceEffects[player.d.currentBoosterRoll]) + ")<br>(MAX IS x10)"  }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                             ], {width: "490px"}]
                         ]],
                         ["blank", "10px"],
@@ -1177,7 +1101,6 @@
                             ["h-line", "650px"],
                             ["blank", "10px"],
                             ["row", [["clickable", 112], ["clickable", 113], ["clickable", 114], ["clickable", 115]]],
-                            ["row", [["clickable", 116], ["clickable", 117], ["clickable", 118], ["clickable", 119]]],
                             ["blank", "10px"],
                         ], () => { return hasChallenge("ip", 15) ? {} : {display: "none !important"}}],
                     ], {backgroundColor: "#35654d", border: "3px solid white", borderRadius: "15px", width: "650px"}],

@@ -1775,7 +1775,7 @@ addLayer("pet", {
             canteBase() { return new Decimal(0.8)},
             pointTooltip() { return "Also subtract 5 minutes off the shop reset timer :)" },
             pointClick() {
-                player.pet.shopResetTimer = player.pet.shopResetTimer.sub(300)
+                player.ps.priceResetTimer = player.ps.priceResetTimer.sub(300)
                 return this.pointValue()
             },
             // CLICK CODE
@@ -2343,9 +2343,9 @@ addLayer("pet", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.sma.starmetalAlloy.add(1).log(2).div(10).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // Check Back XP (Based on Starmetal Alloy)
-                    player.sma.starmetalAlloy.add(1).log(2.5).div(20).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // XPBoost (Based on Starmetal Alloy)
-                    player.sma.starmetalAlloy.add(1).log(3).div(25).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // Pet Points (Based on Starmetal Alloy)
+                    player.sma.starmetalAlloy.div(40).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // Check Back XP (Based on Starmetal Alloy)
+                    player.sma.starmetalAlloy.pow(0.85).div(80).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // XPBoost (Based on Starmetal Alloy)
+                    player.sma.starmetalAlloy.pow(0.7).div(100).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.35)), // Pet Points (Based on Starmetal Alloy)
                 ]
             },
             sacValue() { return new Decimal(25)},

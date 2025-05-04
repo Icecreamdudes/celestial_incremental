@@ -371,14 +371,6 @@ function constructMenuButtonStyle(layer){
             	backgroundOrigin: "border-box"
 			});
 			break;
-		case 'ro':
-			style.push({
-				background: "linear-gradient(50deg,rgb(34, 34, 34) 0%,rgb(29, 23, 56) 50%,rgb(30, 13, 97) 100%)",
-				"background-origin": "border-box",
-				"border-color": "#44008b",
-				"color": "#2672e3",
-			});
-			break;
 		//case 'bb':
 		//	style.push({
 		//		backgroundColor: "#6d3200",

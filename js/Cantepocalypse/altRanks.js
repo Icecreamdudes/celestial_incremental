@@ -88,7 +88,7 @@
         },
         11: {
             title() { return "<h2>Gain " + format(player.ar.rankPointsToGet) + " rank points</h2><br><h3>But reset replicanti points<br><small>(Based on Replicanti Points)</small></h3>" },
-            canClick() { return player.ar.rankPointsToGet.gt(0) },
+            canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet)

@@ -42,18 +42,13 @@ addLayer("dgr", {
             }
         }
 
-        // MAX GRASS
         player.dgr.maxGrass = new Decimal(1)
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgr", 11))
         if (player.le.punchcards[11]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[11])
         if (player.le.punchcards[12]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[12])
         if (player.le.punchcards[13]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[13])
         if (player.le.punchcards[14]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[14])
-        
-        // MAX GRASS SOFTCAP
-        if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
 
-        // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
         if (player.le.punchcards[11]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[11])
@@ -61,29 +56,16 @@ addLayer("dgr", {
         if (player.le.punchcards[13]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[13])
         if (player.le.punchcards[14]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[14])
 
-        // GRASS VALUE SOFTCAP
-        if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)
-
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
         player.dgr.grassTimerReq = new Decimal(10)
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("dgr", 13))
-        if (player.dgr.grassTimer.gte(player.dgr.grassTimerReq)) {
+        if (player.dgr.grassTimer.gte(player.dgr.grassTimerReq))
+        {
             layers.dgr.addGrass();
             player.dgr.grassTimer = new Decimal(0)
         }
 
-        if (player.dgr.grass.lt(1e10)) {
-            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.1).add(1)
-        } else if (player.dgr.grass.lt(1e50) && player.dgr.grass.gte(1e10)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e10).add(1).log(10).mul(0.05).add(2)
-        } else if (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e50).add(1).log(10).mul(0.02).add(4)
-        } else if (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e100).add(1).log(10).mul(0.005).add(5)
-        } else if (player.dgr.grass.gte("1e1000")) {
-            player.dgr.grassEffect = player.dgr.grass.div("1e1000").add(1).log(10).pow(0.5).mul(0.05).add(9.5)
-        }
-        
+        player.dgr.grassEffect = player.dgr.grass.pow(0.4).div(10).add(1)
     },
     addGrass(){
         let row = getRandomInt(5) + 1
@@ -377,19 +359,17 @@ addLayer("dgr", {
                         ], {width: "375px", borderRadius: "0px", paddingTop: "5px", paddingBottom: "5px"}],
                         ["style-row", [
                             ["style-column", [
-                                ["style-column", [
-                                    ["raw-html", "Grass Value", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ["raw-html", () => { return (player.dgr.grassValue.gte(1e100)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {width: "185px", height: "40px", borderBottom: "2px solid #006a44", borderRadius: "0px"}],
+                                ["style-row", [
+                                    ["raw-html", function () { return "Grass Value" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "185px", borderBottom: "2px solid #006a44", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
                                 ["style-row", [
                                     ["raw-html", function () { return format(player.dgr.grassValue) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ], {width: "185px", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
                             ], {width: "185px", borderRight: "2px solid #006a44", borderRadius: "0px"}],
                             ["style-column", [
-                                ["style-column", [
-                                    ["raw-html", "Max Grass/Plot", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ["raw-html", () => { return (player.dgr.maxGrass.gte(1e100)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-                                ], {width: "188px", height: "40px", borderBottom: "2px solid #006a44", borderRadius: "0px"}],
+                                ["style-row", [
+                                    ["raw-html", function () { return "Max Grass/Plot" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ], {width: "188px", borderBottom: "2px solid #006a44", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
                                 ["style-row", [
                                     ["raw-html", function () { return format(player.dgr.maxGrass) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ], {width: "188px", borderRadius: "0px", paddingTop: "2.5px", paddingBottom: "2.5px"}],
@@ -416,13 +396,7 @@ addLayer("dgr", {
         },
     },
     tabFormat: [
-        ["row", [
-            ["raw-html", () => { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass, which boosts generator power effect by ^" + format(player.dgr.grassEffect) }, {color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px"}],
-            ["raw-html", () => { return (player.dgr.grass.lt(1e50) && player.dgr.grass.gte(1e10)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-        ]],
+        ["raw-html", function () { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass, which boosts generator gain by x" + format(player.dgr.grassEffect) }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],

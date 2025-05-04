@@ -16,8 +16,10 @@
         abilityEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         abilityIndex: -1,
         abilityDesc: [],
-    }},
-    automate() {},
+    }
+    },
+    automate() {
+    },
     nodeStyle() {
         function degreesToRadians(degrees) {
             return (degrees * Math.PI) / 180;
@@ -396,12 +398,13 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        player.r.tetr = new Decimal(0)
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("rf", 11) && !hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (!hasUpgrade("rf", 11) && hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -611,13 +614,13 @@
                 ["clickable", 2],
                 ["style-column", [
                     ["style-row", [
-                        ["raw-html", function () { return player.rf.abilityIndex != -1 ? player.rf.abilityDesc[player.rf.abilityIndex][0] : "Nothing Selected" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][0] }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "372px", height: "38px", borderBottom: "2px solid white"}],
                     ["style-row", [
-                        ["raw-html", function () { return player.rf.abilityIndex != -1 ? player.rf.abilityDesc[player.rf.abilityIndex][1] : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][1] }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "362px", height: "60px", paddingLeft: "5px", paddingRight: "5px"}],
                     ["style-row", [
-                        ["raw-html", function () { return player.rf.abilityIndex != -1 ? player.rf.abilityDesc[player.rf.abilityIndex][2] : formatTime(0) + " left" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return player.rf.abilityDesc[player.rf.abilityIndex][2] }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "372px", height: "48px", borderTop: "2px solid white"}],
                 ], {width: "372px", height: "150px", backgroundColor: "#282828", borderLeft: "3px solid white", borderRadius: "0px 12px 0px 0px"}],
             ], {width: "600px", height: "150px", borderBottom: "3px solid white"}],

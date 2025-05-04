@@ -268,7 +268,6 @@ addLayer("u3u", {
             ["blank", "25px"],
             ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
             ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],["upgrade", 25]]],
-            ["row", [["upgrade", 26],]],
         ]]]
     ],
     layerShown() { return false }
@@ -310,8 +309,6 @@ addLayer("u3m", {
             ["milestone", 18],
             ["milestone", 19],
             ["milestone", 21],
-            ["milestone", 22],
-            ["blank", "25px"],
         ]]]
     ],
     layerShown() { return false }

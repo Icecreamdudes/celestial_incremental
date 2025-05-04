@@ -10,9 +10,9 @@
         processedCoreFuel: new Decimal(-1),
         processedCorePrime: new Decimal(0),
         processedCoreStarmetalValue: new Decimal(0),
-        processedCoreInnateEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+        processedCoreInnateEffects: [],
         processedCoreInnateEffectsText: "",
-        processedCorePrimedEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+        processedCorePrimedEffects: [],
         processedCorePrimedEffectsText: "",
 
         processedCoreColorFuel: "",

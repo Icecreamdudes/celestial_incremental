@@ -320,7 +320,7 @@
                 return "Point Scrap Buyable Booster"
             },
             display() {
-                return "which are raising time cube's effects and buyable effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are raising time cube buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rank Core Scraps'
             },
             buy(mult) {

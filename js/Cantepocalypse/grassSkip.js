@@ -93,7 +93,7 @@
         if (player.gs.grassSkip.lte(39)) {
             player.gs.milestone10Effect = new Decimal(1)
         } else {
-            player.gs.milestone10Effect = Decimal.pow(1.25, player.gs.grassSkip.sub(39))
+            player.gs.milestone10Effect = Decimal.pow(1.2, player.gs.grassSkip.sub(39))
         }
     },
     grassSkipReset()

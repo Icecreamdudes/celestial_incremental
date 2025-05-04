@@ -430,7 +430,7 @@
         }
         if (fuel == 10)
         {
-            if (player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.3))
+            if (player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.15))
             {
             return [player.in.infinityPoints.pow(0.06).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
             player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]), 
@@ -438,7 +438,7 @@
             } else
             {
                 return [player.in.infinityPoints.pow(0.06).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
-                Decimal.add(1.3, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(3000)), 
+                Decimal.add(1.15, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(3000)), 
                 player.s.singularityTime.pow(0.1).div(4).add(1).pow(player.coa.strengthBuffs[strength])] //ip, ip, inf,
             }
         }
@@ -461,7 +461,7 @@
         if (fuel == 0)
         {
             return "Boosts points based on itself: x" + format(layers.coa.determineEffect(0, strength)[0]) 
-            + "<br>Boosts points before 1e100,000 based on highest singularity points: ^" + format(layers.coa.determineEffect(0, strength)[1]) 
+            + "<br>Boosts points based on highest singularity points: ^" + format(layers.coa.determineEffect(0, strength)[1]) 
             + "<br>Boosts replicanti point multiplier based on time spent in singularity: x" + format(layers.coa.determineEffect(0, strength)[2]) 
         }
         if (fuel == 1)
@@ -658,12 +658,13 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("s", 12)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        player.r.tetr = new Decimal(0)
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
+        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -728,12 +729,10 @@
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("s", 12)) {
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 24) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
+        for (let i = 0; i < player.p.upgrades.length; i++) {
+            if (+player.p.upgrades[i] < 24) {
+                player.p.upgrades.splice(i, 1);
+                i--;
             }
         }
 
@@ -760,30 +759,19 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
-        if (!hasMilestone("s", 12)) {
-            for (let i = 0; i < player.g.upgrades.length; i++) {
-                if (+player.g.upgrades[i] < 23) {
-                    player.g.upgrades.splice(i, 1);
-                    i--;
-                }
+        for (let i = 0; i < player.g.upgrades.length; i++) {
+            if (+player.g.upgrades[i] < 23) {
+                player.g.upgrades.splice(i, 1);
+                i--;
             }
         }
 
-        // REGULAR PENT MILESTONES
-        if (!hasMilestone("s", 12)) {
+        if (!hasUpgrade("sma", 104)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
                     i--;
                 }
-            }
-        }
-
-        // SINGULARITY PENT MILESTONES
-        for (let i = 0; i < player.r.milestones.length; i++) {
-            if (+player.r.milestones[i] > 20) {
-                player.r.milestones.splice(i, 1);
-                i--;
             }
         }
 
@@ -833,11 +821,11 @@
         player.d.buyables[15] = new Decimal(0)
 
         if (!hasUpgrade("s", 13)) {
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 14; i++) {
                 player.d.diceEffects[i] = new Decimal(1)
             }
         } else {
-            for (let i = 0; i < 11; i++) {
+            for (let i = 0; i < 10; i++) {
                 player.d.diceEffects[i] = new Decimal(1)
             }
         }
@@ -1389,19 +1377,17 @@
 
         //poll
         player.pol.pollinators = new Decimal(0)
-        if (!hasMilestone("s", 22)) {
-            player.pol.pollinatorsIndex = 0
+        player.pol.pollinatorsIndex = 0
 
-            player.pol.buyables[11] = new Decimal(0)
-            player.pol.buyables[12] = new Decimal(0)
-            player.pol.buyables[13] = new Decimal(0)
-            player.pol.buyables[14] = new Decimal(0)
-
-            for (let i = 0; i < player.pol.upgrades.length; i++) {
-                if (+player.pol.upgrades[i] < 100) {
-                    player.pol.upgrades.splice(i, 1);
-                    i--;
-                }
+        player.pol.buyables[11] = new Decimal(0)
+        player.pol.buyables[12] = new Decimal(0)
+        player.pol.buyables[13] = new Decimal(0)
+        player.pol.buyables[14] = new Decimal(0)
+        
+        for (let i = 0; i < player.pol.upgrades.length; i++) {
+            if (+player.pol.upgrades[i] < 100) {
+                player.pol.upgrades.splice(i, 1);
+                i--;
             }
         }
 
@@ -1827,7 +1813,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + " " + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],

@@ -37,10 +37,8 @@ addLayer("dp", {
         if (player.le.punchcards[14]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[14])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
 
-        // PRESTIGE SOFTCAP
-        if (player.dp.prestigePointsToGet.gte(1e250)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.div(1e250).pow(0.2).mul(1e250)
-
-        if (player.dp.prestigePause.gte(0)) {
+        if (player.dp.prestigePause.gte(0))
+        {
             layers.dp.prestigeReset();
         }
         player.dp.prestigePause = player.dp.prestigePause.sub(1)
@@ -212,11 +210,8 @@ addLayer("dp", {
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.dp.prestigePoints) + "</h3> prestige points, which boosts rank, tier, and tetr point gain by x" + format(player.dp.prestigePointsEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [
-                        ["raw-html", () => {return "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset." }, {color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px"}],
-                        ["raw-html", () => { return (player.du.points.div(1000).pow(0.25).gte(1e7) && player.dp.prestigePointsToGet.lt(1e250)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-                    ]],
+                    ["raw-html", function () { return player.dp.prestigePointsToGet.lte(1e10) ? "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.dp.prestigePointsToGet.gt(1e10) ? "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset. (Softcapped)" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
@@ -230,7 +225,6 @@ addLayer("dp", {
          ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
          ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
          ["row", [["clickable", 1]]],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

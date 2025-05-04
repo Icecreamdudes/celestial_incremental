@@ -53,7 +53,7 @@
         player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])
         player.t.treesToGet = player.t.treesToGet.mul(player.rf.abilityEffects[1])
         if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("g", 12))
-        if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
+        if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone30Effect)
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
 
@@ -83,7 +83,6 @@
 
         // TREE EFFECT
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
-        if (player.t.treeEffect.gte("1e15000")) player.t.treeEffect = player.t.treeEffect.div("1e15000").pow(0.2).mul("1e15000")
 
         //----------------------------------------
 
@@ -478,10 +477,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", function () { return "<h2>You have " + formatWhole(player.t.trees) + "<h2> trees, which boost prestige point gain by x" + format(player.t.treeEffect) + "."}],
-                        ["raw-html", () => {return player.t.treeEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", paddingLeft: "10px"}]
-                    ]],
+                    ["raw-html", function () { return "<h2>You have " + formatWhole(player.t.trees) + "<h2> trees, which boost prestige point gain by x" + format(player.t.treeEffect) + "."}],
                     ["raw-html", function () { return "<h2>You will gain " + format(player.t.treesToGet, 1) + "<h2> trees." }],
                     ["raw-html", function () { return "<h2>You are making " + format(player.t.leavesPerSecond) + "<h2> leaves per second. " }],
                     ["raw-html", function () { return player.t.trees.gte(player.t.treeSoftcapStart) ? "After " + formatWhole(player.t.treeSoftcapStart) + " trees, leaf gain is divided by " + format(player.t.treeSoftcap) + " (Based on trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],

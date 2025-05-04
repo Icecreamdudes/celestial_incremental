@@ -71,10 +71,7 @@
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 206))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 207))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 208))
-        if (hasMilestone("fa", 21)) player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.milestoneEffect[9])
         player.fa.chargeRate = player.fa.chargeRate.mul(player.le.punchcardsPassiveEffect[5])
-
-        if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
 
         player.fa.milestoneEffect[0] = player.fa.charge.pow(0.3).div(3).add(1) //ip
         player.fa.milestoneEffect[1] = player.fa.charge.pow(3).add(1) //ad
@@ -85,8 +82,6 @@
         player.fa.milestoneEffect[6] = player.fa.charge.pow(0.1).div(4).add(1) //oil
         player.fa.milestoneEffect[7] = player.fa.charge.pow(0.25).div(5).add(1) //anon
         player.fa.milestoneEffect[8] = player.fa.charge.pow(0.08).div(15).add(1) //galaxy dust
-        player.fa.milestoneEffect[9] = player.fa.charge.pow(0.1).add(1) //charge
-        player.fa.milestoneEffect[10] = player.fa.charge.pow(0.015).add(1) //pre-otf
     },
     branches: ["m", "t",],
     clickables: {
@@ -729,18 +724,6 @@
             done() { return player.fa.bestCharge.gte(1e14) },
             style: { width: '800px', "min-height": '75px' },
         },
-        21: {
-            requirementDescription: "<h3>1e50 Best Charge",
-            effectDescription() { return "Boosts charge based on charge: Currently: " + format(player.fa.milestoneEffect[9]) + "x" },
-            done() { return player.fa.bestCharge.gte(1e50) },
-            style: { width: '800px', "min-height": '75px' },
-        },
-        22: {
-            requirementDescription: "<h3>1e100 Best Charge",
-            effectDescription() { return "Boosts Pre-OTF currencies based on charge: Currently: " + format(player.fa.milestoneEffect[10]) + "x" },
-            done() { return player.fa.bestCharge.gte(1e100) },
-            style: { width: '800px', "min-height": '75px' },
-        },
     },
     challenges: {
     },
@@ -801,18 +784,15 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "Charger Milestones"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["milestone", 11],
-                    ["milestone", 12],
-                    ["milestone", 13],
-                    ["milestone", 14],
-                    ["milestone", 15],
-                    ["milestone", 16],
-                    ["milestone", 17],
-                    ["milestone", 18],
-                    ["milestone", 19],
-                    ["milestone", 21],
-                    ["milestone", 22],
-                    ["blank", "25px"],
+                    ["row", [["milestone", 11]]],
+                    ["row", [["milestone", 12]]],
+                    ["row", [["milestone", 13]]],
+                    ["row", [["milestone", 14]]],
+                    ["row", [["milestone", 15]]],
+                    ["row", [["milestone", 16]]],
+                    ["row", [["milestone", 17]]],
+                    ["row", [["milestone", 18]]],
+                    ["row", [["milestone", 19]]],
                 ]
             },
         },

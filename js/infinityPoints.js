@@ -51,6 +51,65 @@
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
+
+                        // Autocrunch Functionality
+                        if (player.in.infinityPointsToGet.gte(player.bi.IACamount) && player.bi.IACtoggle && !player.bi.IACtype && player.points.gte(1e308)) {
+                            if (inChallenge("tad", 11)) {
+                                if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
+                                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                                }
+                                if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
+                                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                                }
+                                if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
+                                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                                }
+                            }
+                            if (hasUpgrade("bi", 14)) {
+                                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                            }
+                            if (!hasMilestone("ip", 21)) {
+                                player.tab = "bigc"
+                            } else {
+                                layers.bigc.crunch()
+                            }
+                        }
+                
+                        if (player.bi.IACtoggle && player.bi.IACtype) {
+                            player.bi.IACtime = player.bi.IACtime.add(onepersec.mul(delta));
+                            if (player.bi.IACtime.gte(player.bi.IACamount) && player.points.gte(1e308)) {
+                                player.bi.IACtime = new Decimal(0)
+                                if (inChallenge("tad", 11)) {
+                                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
+                                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
+                                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
+                                    }
+                                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
+                                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
+                                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
+                                    }
+                                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
+                                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
+                                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
+                                    }
+                                }
+                                if (hasUpgrade("bi", 14)) {
+                                        if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                                        if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                                        if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                                }
+                                if (!hasMilestone("ip", 21)) {
+                                    player.tab = "bigc"
+                                } else {
+                                    layers.bigc.crunch()
+                                }
+                            }
+                        }
     },
     branches: ["ad"],
     clickables: {
@@ -505,7 +564,7 @@
         },
         15: {
             requirementDescription: "<h3>6 Infinities",
-            effectDescription: "Keeps pent milestones and start with 10 Tetr on resets.",
+            effectDescription: "Keeps pent milestones on infinity.",
             done() { return player.in.infinities.gte(6) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -576,7 +635,7 @@
         },
         26: {
             requirementDescription: "<h3>30000 Infinities",
-            effectDescription() { return "Tav's domain doesn't reset infinity milestones." },
+            effectDescription() { return "Tav's domain don't reset infinity milestones." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: { width: '800px', "min-height": '90px' },
@@ -822,7 +881,6 @@
                     ["row", [["milestone", 25]]],
                     ["row", [["milestone", 26]]],
                     ["row", [["milestone", 27]]],
-                    ["blank", "25px"],
                 ]
             },
             "Challenges": {

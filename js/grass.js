@@ -310,17 +310,9 @@
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
             effect() {
-                let mult = player.p.prestigePoints.pow(0.05).div(9).add(1)
-                if (mult.gte("1e7500")) mult = mult.div("1e7500").pow(0.2).mul("1e7500")
-                return mult
+                return player.p.prestigePoints.pow(0.05).div(9).add(1)
             },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).lt("1e7500")) {
-                    return format(upgradeEffect(this.layer, this.id))+"x"
-                } else {
-                    return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:darkred'>[SOFTCAPPED]</small>"
-                }
-            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
         },
         12: {
             title: 'Grass Upgrade II',
@@ -331,17 +323,9 @@
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
             effect() {
-                let mult = player.g.grass.pow(0.3).div(7).add(1)
-                if (mult.gte("1e10000")) mult = mult.div("1e10000").pow(0.2).mul("1e10000")
-                return mult
+                return player.g.grass.pow(0.3).div(7).add(1)
             },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).lt("1e10000")) {
-                    return format(upgradeEffect(this.layer, this.id))+"x"
-                } else {
-                    return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:darkred'>[SOFTCAPPED]</small>"
-                }
-            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
         },
         13: {
             title: 'Grass Upgrade III',
@@ -1178,11 +1162,8 @@
     },
 
     tabFormat: [
-        ["row", [
-            ['raw-html', () => 'You have <h3>' + format(player.g.grass) + '</h3> grass, which boost leaf gain by <h3>x' + format(player.g.grassEffect) + '.',
-                { color: 'white', fontSize: '24px', fontFamily: 'monospace'}],
-            ['raw-html', () => {return player.g.grassEffect.gte("1e25000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", paddingLeft: "10px"}]
-        ]],
+        ['raw-html', () => 'You have <h3>' + format(player.g.grass) + '</h3> grass, which boost leaf gain by <h3>x' + format(player.g.grassEffect) + '.',
+            { color: 'white', fontSize: '24px', fontFamily: 'monospace'}],
         ['raw-html', () => 'Grass value: ' + format(player.g.grassVal) + '.',
             { color: 'white', fontSize: '20px', fontFamily: 'monospace'}],
         ['clickable', 1],
@@ -1295,7 +1276,6 @@ const updateGrass = (delta) => {
 
     // GRASS EFFECT
     player.g.grassEffect = player.g.grass.mul(0.3).pow(0.7).add(1)
-    if (player.g.grassEffect.gte("1e25000")) player.g.grassEffect = player.g.grassEffect.div("1e25000").pow(0.2).mul("1e25000")
     
     // GRASS REQUIREMENT
     player.g.grassReq = new Decimal(4).div(buyableEffect('g', 12))
@@ -1461,7 +1441,6 @@ const updateMoonstone = (delta) => {
     if (player.cop.processedCoreFuel.eq(4)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.le.punchcardsPassiveEffect[12])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
-    if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
 
     // MOONSTONE REQUIREMENT
     player.g.moonstoneReq = new Decimal(15)

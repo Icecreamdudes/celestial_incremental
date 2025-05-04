@@ -71,6 +71,7 @@ player.tab == "ma" && player.ma.currentDepth.eq(2) ? "linear-gradient(-180deg,rg
 player.sma.inStarmetalChallenge || player.ma.inBlackHeart ? "black" : 
 !player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
 player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
+player.tab == "ro" ? "#3d3d3d" : 
 "#161616");
 
 //1

@@ -46,7 +46,6 @@
             "background-origin": "border-box",
             "border-color": "#b2d8d8",
             "color": "#b2d8d8",
-            "transform": "scale(0.7)",
         };
     },
     tooltip: "Tav's Domain",
@@ -82,7 +81,7 @@
 
         if (hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(Decimal.mul(player.tad.corruptedInfinitiesToGet.mul(0.1), delta))
     },
-    branches: ["ta", "ad", "ca"],
+    branches() { return hasUpgrade("s", 26) ? ["ta", "ad"] : ["ta", "ad", "ca"] },
     clickables: {
         1: {
             title() { return "<h2>Return" },

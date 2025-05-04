@@ -54,6 +54,7 @@ addLayer("pol", {
             if (hasUpgrade("bi", 17)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("bi", 17))
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.le.punchcardsPassiveEffect[13])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(0.8)
@@ -188,7 +189,11 @@ addLayer("pol", {
             onClick() {
                 player.pol.pollinatorsIndex = 0
             },
-            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#28242c", borderWidth: '4px' },
+            style() {
+                let look = {width: '100px', minHeight: '100px', fontSize: '30px', background: "#28242c", borderWidth: '4px'}
+                hasUpgrade("pol", 14) ? look.borderRadius = "0px" : look.borderRadius = "0px 0px 0px 13px"
+                return look
+            },
         },
         12: {
             title() { return "<img src='resources/pollinators/beetle.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
@@ -224,7 +229,11 @@ addLayer("pol", {
             onClick() {
                 player.pol.pollinatorsIndex = 4
             },
-            style: { width: '100px', minHeight: '100px', fontSize: '30px', borderRadius: "0%", background: "#119B35", borderWidth: '4px' },
+            style() {
+                let look = {width: '100px', minHeight: '100px', fontSize: '30px', background: "#119B35", borderWidth: '4px'}
+                hasUpgrade("pol", 14) ? look.borderRadius = "0px" : look.borderRadius = "0px 0px 13px 0px"
+                return look
+            },
         },
         16: {
             title() { return "<img src='resources/pollinators/bee.png' style='width:calc(80%);height:calc(80%);padding-top:18%'></img>"},
@@ -600,7 +609,7 @@ addLayer("pol", {
                         ["style-column", [
                             ["left-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]]],
                             ["left-row", [["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
-                        ], {width: "500px", height: "200px", backgroundColor: "#281c00", borderRadius: "0px 0px 13px 13px"}],
+                        ], {width: "500px", backgroundColor: "#281c00", borderRadius: "0px 0px 13px 13px"}],
                     ], {width: "500px", backgroundColor: "#654700", border: "3px solid #cb8e00", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["row", [["infobox", "p0"], ["infobox", "p1"], ["infobox", "p2"], ["infobox", "p3"], ["infobox", "p4"], ["infobox", "p5"], ["infobox", "p6"], ["infobox", "p7"], ["infobox", "p8"]]],
@@ -646,7 +655,7 @@ addLayer("pol", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { color: "#cb8e00", fontSize: "24px", fontFamily: "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { color: "#cb8e00", fontSize: "16px", fontFamily: "monospace" }],
-        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+        ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { color: "red", fontSize: "16px", fontFamily: "monospace" }],
         ["row", [["clickable", 1]]],
                         ["microtabs", "stuff", { borderWidth: '0px' }],
         ],

@@ -10,9 +10,9 @@
         processedCoreFuel: new Decimal(-1),
         processedCorePrime: new Decimal(0),
         processedCoreStarmetalValue: new Decimal(0),
-        processedCoreInnateEffects: [],
+        processedCoreInnateEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         processedCoreInnateEffectsText: "",
-        processedCorePrimedEffects: [],
+        processedCorePrimedEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         processedCorePrimedEffectsText: "",
 
         processedCoreColorFuel: "",
@@ -263,7 +263,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Current core being processed: " + player.coa.primes[player.cop.processedCorePrime] + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current core being processed: " + player.coa.primes[player.cop.processedCorePrime] + " " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", function () { return " <div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

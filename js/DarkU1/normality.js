@@ -29,8 +29,6 @@ addLayer("dn", {
         let onepersec = new Decimal(1)
 
         player.dn.normalityToGet = player.du.points.div(1e30).pow(0.1).div(10)
-        player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ma", 24))
-
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
         player.dn.normalityPause = player.dn.normalityPause.sub(1)
@@ -221,6 +219,7 @@ addLayer("dn", {
         ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],

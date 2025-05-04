@@ -121,6 +121,7 @@
         if (player.cop.processedCoreFuel.eq(1)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.cop.processedCoreInnateEffects[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
+        if (player.f.factorPowerPerSecond.gte("1e50000")) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div("1e50000").pow(0.2).mul("1e50000")
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.po.halterEffects[1])
         if (player.r.timeReversed) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(0)
         
@@ -990,7 +991,7 @@
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return player.r.tetr.gte(11) && tmp.f.buyables[24].unlocked },
+            unlocked() { return player.r.tetr.gte(10) && tmp.f.buyables[24].unlocked },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -1939,7 +1940,10 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h2>You have " + format(player.f.factorPower) + " factor power." }, { "coslor": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>You are gaining " + format(player.f.factorPowerPerSecond) + " factor power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", function () { return "<h3>You are gaining " + format(player.f.factorPowerPerSecond) + " factor power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                        ['raw-html', () => {return player.f.factorPowerPerSecond.gte("1e50000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", paddingLeft: "10px"}]
+                    ]],
                     ["raw-html", function () { return "<h3>which boost celestial points by x" + format(player.f.factorPowerEffect) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.p.prestigePoints) + " prestige points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

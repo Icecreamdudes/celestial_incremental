@@ -41,9 +41,9 @@
 
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
-		<div class="titleHeader" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart && player.sma.inStarmetalChallenge == false" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
-		<div class="titleHeader2" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart && player.sma.inStarmetalChallenge == true">Celestial<br>Incremental</div>
-		<div class="contentMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart " v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-270px'}:{'left':'0px'}">
+		<div class="titleHeader" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == false" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
+ 		<div class="titleHeader2" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.sma.inStarmetalChallenge == true" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-276px'}:{'left':'0px'}">Celestial<br>Incremental</div>
+		<div class="contentMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-270px'}:{'left':'0px'}">
 		<!-- Universes -->
 			<div class="uniMenu">
 				<div class="contentHeader" v-if="player.sma.inStarmetalChallenge == false">UNI</div>
@@ -67,7 +67,7 @@
 				<img class="miscButton" onclick="showTab('settings')" src="options_wheel.png"></img>
 			</div>
 		</div>
-		<div class="layerMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart " v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-200px'}:{'left':'76px'}">
+		<div class="layerMenu" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-200px'}:{'left':'76px'}">
 		<!-- Universe 1 Stuff -->
 			<div class="uniHeader" v-if="player.universe == 1">Universe 1<br>Overworld</div>
 				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1t') " onclick="showTab('u1t')"><span class="buttonText">Tree</span></button>
@@ -89,7 +89,7 @@
 				<button class="menuButton" v-if="layerShown('gh') && player.universe == 1" v-bind:style="constructMenuButtonStyle('gh') " onclick="showTab('gh')"><span class="buttonText">Grasshop</span></button>
 				<button class="menuButton" v-if="layerShown('rf') && player.universe == 1" v-bind:style="constructMenuButtonStyle('rf') " onclick="showTab('rf')"><span class="buttonText">Rocket Fuel</span></button>
 
-			<div class="menuHeader" v-if="(layerShown('de') || layerShown('m') || layerShown('d')) && player.universe == 1">Row 3</div>
+			<div class="menuHeader" v-if="(layerShown('fa') || layerShown('de') || layerShown('m') || layerShown('cb') || layerShown('d')) && player.universe == 1">Row 3</div>
 				<button class="menuButton" v-if="layerShown('fa') && player.universe == 1" v-bind:style="constructMenuButtonStyle('fa') " onclick="showTab('fa')"><span class="buttonText">Factory</span></button>
 				<button class="menuButton" v-if="layerShown('de') && player.universe == 1" v-bind:style="constructMenuButtonStyle('de') " onclick="showTab('de')"><span class="buttonText">Debuff</span></button>
 				<button class="menuButton" v-if="layerShown('m') && player.universe == 1" v-bind:style="constructMenuButtonStyle('m') " onclick="showTab('m')"><span class="buttonText">Mods</span></button>
@@ -110,7 +110,7 @@
 				<button class="menuButton" v-if="layerShown('dr') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dr') " onclick="showTab('dr')"><span class="buttonText">Ranks</span></button>
 				<button class="menuButton" v-if="layerShown('dp') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dp') " onclick="showTab('dp')"><span class="buttonText">Prestige</span></button>
 			
-			<div class="menuHeader2" v-if="layerShown('dg') || layerShown('dgr') && player.universe == -0.1">Row 2</div>
+			<div class="menuHeader2" v-if="(layerShown('dg') || layerShown('dgr') || layerShown('dn')) && player.universe == -0.1">Row 2</div>
 				<button class="menuButton" v-if="layerShown('dg') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dg') " onclick="showTab('dg')"><span class="buttonText">Generators</span></button>
 				<button class="menuButton" v-if="layerShown('dgr') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dgr') " onclick="showTab('dgr')"><span class="buttonText">Dark Grass</span></button>
 				<button class="menuButton" v-if="layerShown('dn') && player.universe == -0.1" v-bind:style="constructMenuButtonStyle('dn') " onclick="showTab('dn')"><span class="buttonText">Normality</span></button>
@@ -211,7 +211,7 @@
  				<button class="menuButton" v-if="layerShown('ep4') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep4') " onclick="showTab('ep4')"><span class="buttonText">Nav</span></button>
  				<button class="menuButton" v-if="layerShown('ep5') && player.universe == 0.5" v-bind:style="constructCbButtonStyle('ep5') " onclick="showTab('ep5')"><span class="buttonText">Sel</span></button>
 		</div>
-		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'274px'}">{{options.menuShown==true?'<':'>'}}</button>
+		<button class="backButton" onclick="toggleOpt('menuShown')"v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && player.tab != 'g' && player.tab != 'rg' && player.startedGame" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'0px'}:{'left':'274px'}">{{options.menuShown==true?'<':'>'}}</button>
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 
 		<div v-if="false" id="loadingSection" class="fullWidth">

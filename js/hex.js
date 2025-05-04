@@ -118,7 +118,8 @@
         player.h.ragePowerToGet = player.h.hexPoints[0].plus(1).log10().pow(2).div(1000)
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(buyableEffect("oi", 24))
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(levelableEffect("pet", 307)[1])
-        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(player.cb.rarePetEffects[6][1])
+
+        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
 
         if (player.h.ragePowerPause.gt(0)) {
             layers.h.ragePowerReset();
@@ -276,13 +277,12 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
-        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
+        player.r.pent = new Decimal(0)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -370,7 +370,7 @@
         }
         }
 
-        if (!hasMilestone("ip", 14))
+        if (!hasMilestone("ip", 15))
         {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
@@ -458,13 +458,12 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
-        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
+        player.r.pent = new Decimal(0)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -552,7 +551,7 @@
         }
         }
 
-        if (!hasMilestone("ip", 14))
+        if (!hasMilestone("ip", 15))
         {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {

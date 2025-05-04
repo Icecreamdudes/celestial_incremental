@@ -1161,15 +1161,6 @@ addLayer("ep3", {
         player.ep3.kresStats[0] = player.ep3.kresStats[0].add(buyableEffect("ep3", 1))
         player.ep3.kresStats[1] = player.ep3.kresStats[1].add(buyableEffect("ep3", 2))
         player.ep3.kresStats[2] = player.ep3.kresStats[2].add(buyableEffect("ep3", 3))
-        player.ep3.kresStats[0] = player.ep3.kresStats[0].add(buyableEffect("ma", 11))
-        player.ep3.kresStats[1] = player.ep3.kresStats[1].add(buyableEffect("ma", 12))
-        player.ep3.kresStats[2] = player.ep3.kresStats[2].add(buyableEffect("ma", 13))
-
-        if (hasUpgrade("ma", 15)) 
-        {
-            player.ep3.kresStats[0] = player.ep3.kresStats[0].add(upgradeEffect("ma", 15))
-            player.ep3.kresStats[1] = player.ep3.kresStats[1].add(upgradeEffect("ma", 15))
-        }
     },
     branches: ["branch"],
     clickables: {
@@ -1477,15 +1468,6 @@ addLayer("ep4", {
         player.ep4.navStats[0] = player.ep4.navStats[0].add(buyableEffect("ep4", 1))
         player.ep4.navStats[1] = player.ep4.navStats[1].add(buyableEffect("ep4", 2))
         player.ep4.navStats[2] = player.ep4.navStats[2].add(buyableEffect("ep4", 3))
-        player.ep4.navStats[0] = player.ep4.navStats[0].add(buyableEffect("ma", 11))
-        player.ep4.navStats[1] = player.ep4.navStats[1].add(buyableEffect("ma", 12))
-        player.ep4.navStats[2] = player.ep4.navStats[2].add(buyableEffect("ma", 13))
-
-        if (hasUpgrade("ma", 16)) 
-        {
-            player.ep4.navStats[0] = player.ep4.navStats[0].add(upgradeEffect("ma", 16))
-            player.ep4.navStats[2] = player.ep4.navStats[2].add(upgradeEffect("ma", 16))
-        }
     },
     branches: ["branch"],
     clickables: {
@@ -1791,15 +1773,6 @@ addLayer("ep5", {
         player.ep5.selStats[0] = player.ep5.selStats[0].add(buyableEffect("ep5", 1))
         player.ep5.selStats[1] = player.ep5.selStats[1].add(buyableEffect("ep5", 2))
         player.ep5.selStats[2] = player.ep5.selStats[2].add(buyableEffect("ep5", 3))
-        player.ep5.selStats[0] = player.ep5.selStats[0].add(buyableEffect("ma", 11))
-        player.ep5.selStats[1] = player.ep5.selStats[1].add(buyableEffect("ma", 12))
-        player.ep5.selStats[2] = player.ep5.selStats[2].add(buyableEffect("ma", 13))
- 
-        if (hasUpgrade("ma", 17)) 
-        {
-            player.ep5.selStats[1] = player.ep5.selStats[1].add(upgradeEffect("ma", 17))
-            player.ep5.selStats[2] = player.ep5.selStats[2].add(upgradeEffect("ma", 17))
-        }
     },
     branches: ["branch"],
     clickables: {

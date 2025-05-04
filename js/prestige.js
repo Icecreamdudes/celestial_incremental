@@ -131,7 +131,7 @@
         player.points = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -148,13 +148,12 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
-        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
+        player.r.pent = new Decimal(0)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -326,9 +325,17 @@
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
             effect() {
-                return player.p.prestigePoints.pow(0.2).add(1)
+                let mult = player.p.prestigePoints.pow(0.2).add(1)
+                if (mult.gte("1e20000")) mult = mult.div("1e20000").pow(0.1).mul("1e20000")
+                return mult
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (upgradeEffect(this.layer, this.id).lt("1e20000")) {
+                    return format(upgradeEffect(this.layer, this.id))+"x"
+                } else {
+                    return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:darkred'>[SOFTCAPPED]</small>"
+                }
+            },
             style: { width: '150px', height: '100px', }
         },
         13:

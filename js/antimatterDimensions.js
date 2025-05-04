@@ -85,9 +85,9 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.h.ragePowerEffect)
 
         // SOFTCAP MODIFIER
-        if (player.ad.antimatter.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 1000)))
-        if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 1100)))
+        if (player.ad.antimatterPerSecond.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(1, Decimal.div(player.ad.antimatterPerSecond.plus(1).log10(), 1000))).mul(1e300)
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(1, Decimal.div(player.ad.antimatterPerSecond.plus(1).log10(), 1100))).mul(1e300)
 
         // SOFTCAP IGNORING MODIFIERS
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
@@ -105,7 +105,6 @@
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
-        if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(100)
         player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("cs", 31))
 
         //----------------------------------------
@@ -136,9 +135,9 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.h.ragePowerEffect)
 
             // SOFTCAP MODIFIER
-            if (player.ad.antimatter.gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
-            if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.96)
-            if (player.ad.antimatter.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.975)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.96).mul(1e300)
+            if (player.ad.dimensionsPerSecond[i].gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].div(1e300).pow(0.975).mul(1e300)
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))

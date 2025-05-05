@@ -125,7 +125,7 @@
         player.m.modsToGet = new Decimal(1)
         if (hasUpgrade("g", 21)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("g", 21))
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 203)[1])
-        if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone30Effect2)
+        if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone9Effect[1])
         player.m.modsToGet = player.m.modsToGet.mul(player.d.diceEffects[8])
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 302)[1])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
@@ -207,7 +207,7 @@
         player.points = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)

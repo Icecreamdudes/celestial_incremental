@@ -1,12 +1,12 @@
 # The Modding Tree changelog:
 
-# v2.6.6.2 = 9/9/21
+### v2.6.6.2 = 9/9/21
 - nodeStyle can now be used to set fonts.
 
-# v2.6.6.1 = 9/8/21
+### v2.6.6.1 = 9/8/21
 - Fixed options not updating when new ones are added.
 
-# v2.6.6 - 9/7/21
+### v2.6.6 - 9/7/21
 - Added option for shift-clicking nodes toggling their tooltips.
 - Fixed NaN check for setting Decimal values with text boxes.
 - Added display-image, h-line, and v-line to documentation.
@@ -16,10 +16,10 @@
 - Updated break_eternity library.
 - Cleaned up buyable/clickable code.
 
-# v2.6.5.1 - 7/13/21
+### v2.6.5.1 - 7/13/21
 - Fixed offline production more.
 
-# v2.6.5 - 7/7/21
+### v2.6.5 - 7/7/21
 - Fixed offline production.
 - Fixed formatting for small negative numbers.
 - Fixed divide by zero when a 0-second tick occurs.
@@ -27,12 +27,12 @@
 - Locked challenges cannot be entered.
 - Fixed a bug with subtab glow colors.
 
-# v2.6.4.2 - 6/17/21
+### v2.6.4.2 - 6/17/21
 - Fixed a bug with the endgame screen.
 - Fixed hotkey-related crash.
 - Fixed resetting not working correctly.
 
-# v2.6.4 - 6/17/21
+### v2.6.4 - 6/17/21
 - The game now autosaves before closing, if autosave is on. (Thank you to thepaperpilot for this!)
 - More Anti-NaN safety.
 - Fixed challenges glowing from countsAs.
@@ -43,17 +43,17 @@
 - Changed some default values on startup to prevent potential issues.
 - Cleaned up resetting.
 
-# v2.6.3 - 6/11/21
+### v2.6.3 - 6/11/21
 - Added better support for using multiple layer files and similar. See modFiles in modInfo.
 - The demo now has each layer in its own file as well.
 
-# v2.6.2.2 - 6/10/21
+### v2.6.2.2 - 6/10/21
 - Fixed an error message regarding popup.css.
 
-# v2.6.2.1 - 6/10/21
+### v2.6.2.1 - 6/10/21
 - Fixed a visual bug with milestones.
 
-## v2.6.2 - 6/10/21
+### v2.6.2 - 6/10/21
 - Broke up style.css into many files to make it easier to find and customize what matters. If you already have custom CSS, keep that and ignore the new ones maybe?
 - Added buyable and clickable trees.
 - Added optional tooltips to upgrades, buyables, clickables, milestones, and gridables.
@@ -61,7 +61,7 @@
 - Fixed "marked" feature.
 - doReset now will function on non-numeric rows besides "side".
 
-## v2.6.1 - 6/7/21
+### v2.6.1 - 6/7/21
 - Added global background style to mod.js.
 - Tree branches can have custom line widths.
 - If an upgrade has both canAfford and cost, it checks both. (So you can use canAfford for other things)
@@ -71,11 +71,11 @@
 - Added "instant" feature for bars. (not useful for most people)
 - Improvements to theme code, partially by Cubedey.
 
-## v2.6.0.1 - 6/4/21
+### v2.6.0.1 - 6/4/21
 - Removed excess NaN alerts (now only checks player, not temp).
 - Fixed background images covering up tree branches.
 
-## v2.6: Fixed Reality - 6/3/21
+# v2.6: Fixed Reality - 6/3/21
 - Fixed issues with NaN checking. The game also will not save if the save is broken.
 - Added a drop-down menu component!
 - Added upgrade-tree component!

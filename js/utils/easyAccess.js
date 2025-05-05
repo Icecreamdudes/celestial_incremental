@@ -22,6 +22,14 @@ function challengeCompletions(layer, id) {
 	return (player[layer].challenges[id])
 }
 
+function canEnterChallenge(layer, id){
+	return tmp[layer].challenges[id].canEnter ?? true
+}
+
+function canExitChallenge(layer, id){
+	return tmp[layer].challenges[id].canExit ?? true
+}
+
 function getBuyableAmount(layer, id) {
 	return (player[layer].buyables[id])
 }

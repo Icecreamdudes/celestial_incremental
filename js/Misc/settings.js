@@ -76,25 +76,22 @@ addLayer("settings", {
     infoboxes: {},
     microtabs: {},
     tabFormat: [
-
         ["clickable", 1],
-
         ["blank", "25px"],
-
         ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
-
         ["blank", "50px"],
 
         ["row", [
             ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave:<br>" + options.autosave + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=hardReset()>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
+            ["raw-html", () => "<button class=opt onclick=hardReset() style='color:darkred'>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
+            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
 
         ["row", [
             ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+            ["raw-html", () => "<button class=opt onclick=toggleOpt('hideMilestonePopups'); needsCanvasUpdate = true>Hide Milestone Popups:<br>" + options.hideMilestonePopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('newMenu')>Toggle Layout:<br>" + options.newMenu + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
 
@@ -106,15 +103,10 @@ addLayer("settings", {
         ]],
 
         ["blank", "25px"],
-
         ["raw-html", () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
         ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
         ["blank", "25px"],
-
         ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-
     ],
     layerShown() { return false }
 })

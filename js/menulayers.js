@@ -310,6 +310,8 @@ addLayer("u3m", {
             ["milestone", 18],
             ["milestone", 19],
             ["milestone", 21],
+            ["milestone", 22],
+            ["blank", "25px"],
         ]]]
     ],
     layerShown() { return false }

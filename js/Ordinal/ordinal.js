@@ -117,5 +117,6 @@ addLayer("od", {
         ["blank", "25px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return /* player.startedGame == true */ false }
+    layerShown() { return /* player.startedGame == true */ false },
+    deactivated() { return true},
 })

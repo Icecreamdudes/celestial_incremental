@@ -60,6 +60,8 @@ addLayer("s", {
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
+        if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {
@@ -156,7 +158,7 @@ addLayer("s", {
         16: {
             title: "Singularity Upgrade VI",
             unlocked() { return true},
-            description: "Stay at pent 30 on all resets.",
+            description: "Unlock new Pent milestones.",
             cost: new Decimal("4e7"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
@@ -166,15 +168,11 @@ addLayer("s", {
         17: {
             title: "Singularity Upgrade VII",
             unlocked() { return true},
-            description: "Boost checkback effect based on itself",
+            description: "Boost checkback effect by ^5",
             cost: new Decimal("1e10"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            effect() {
-                return player.cb.level.pow(0.7).div(20).add(1)
-            },
-            effectDisplay() { return '^'+format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: { width: '125px', "min-height": '120px' },
         },
         18: {
@@ -393,9 +391,9 @@ addLayer("s", {
         },
         14: {
             requirementDescription: "<h3>4 Singularities",
-            effectDescription: "Keep XPBoost on singularity resets, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
+            effectDescription: "Keep XPBoost on reset, keep pre-singularity check back content on reset, unlock new marcelacoplao content, keep moonstone buyables on reset, and unlock singularity dimensions.",
             done() { return player.s.singularities.gte(4) },
-            style: { width: '800px', "min-height": '75px' },
+            style: { width: '800px', "min-height": '85px' },
         },
         15: {
             requirementDescription: "<h3>5 Singularities",
@@ -431,6 +429,12 @@ addLayer("s", {
             requirementDescription: "<h3>100 Singularities",
             effectDescription: "Keep OTFs on singularity resets.",
             done() { return player.s.singularities.gte(100) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        22: {
+            requirementDescription: "<h3>1000 Singularities",
+            effectDescription: "Keep pollinator selection, upgrades, and buyables on singularity resets.",
+            done() { return player.s.singularities.gte(1000) },
             style: { width: '800px', "min-height": '75px' },
         },
         //REMINDER: MAKE THE TIME MACHINE at some point
@@ -503,6 +507,8 @@ addLayer("s", {
                     ["milestone", 18],
                     ["milestone", 19],
                     ["milestone", 21],
+                    ["milestone", 22],
+                    ["blank", "25px"],
                 ]
             },
             "Buyables": {

@@ -47,8 +47,9 @@ addLayer("cp", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.musuniverse == 1.5 && player.cap.cantepocalypsePrep == true) {
+        if (player.universe == 1.5 && player.cap.cantepocalypsePrep == true) {
             player.cap.cantepocalypsePrep = false
+            player.subtabs["cap"]['stuff'] = 'Main'
             player.cp.cantepocalypseActive = true
             if (options.newMenu == true) showTab("a1u")
         }

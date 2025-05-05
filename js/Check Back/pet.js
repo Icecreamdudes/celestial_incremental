@@ -576,7 +576,7 @@ addLayer("pet", {
                 if (player.pet.shopIndex > 0 && player.pet.shopIndex < 11) {
                     return player.cb.petPoints.gte(player.pet.shardPrices[player.pet.shopIndex - 1])
                 } else if (player.pet.shopIndex > 10 && player.pet.shopIndex < 100) {
-                    return player.cb.petPoints.gte(player.pet.cratePrices[player.pet.shopIndex - 11])
+                    return player.cb.petPoints.gte(player.pet.cratePrices[player.pet.shopIndex - 1])
                 } else {
                     return false
                 }

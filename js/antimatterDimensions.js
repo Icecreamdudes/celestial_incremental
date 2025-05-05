@@ -105,7 +105,6 @@
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
-        if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(100)
         player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("cs", 31))
 
         //----------------------------------------

@@ -237,26 +237,6 @@ addLayer("s", {
             currencyInternalName: "singularityPoints",
             style: { width: '125px', "min-height": '120px' },
         },
-        24: {
-            title: "Singularity Upgrade XIII",
-            unlocked() { return hasUpgrade("s", 23)},
-            description: "Gain 100% of IP per second.",  
-            cost: new Decimal("1e80"),
-            currencyLocation() { return player.s },
-            currencyDisplayName: "Singularity Points",
-            currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
-        },
-        25: {
-            title: "Singularity Upgrade XIV",
-            unlocked() { return hasUpgrade("s", 24)},
-            description: "Gain 100% of NIP per second.",  
-            cost: new Decimal("1e100"),
-            currencyLocation() { return player.s },
-            currencyDisplayName: "Singularity Points",
-            currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
-        },
     },
     buyables: {
         11: {
@@ -459,7 +439,7 @@ addLayer("s", {
                 content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17]]],
-                    ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],["upgrade", 24],["upgrade", 25]]],
+                    ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23]]],
                 ]
             },
             "Lore": {

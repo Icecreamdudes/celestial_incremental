@@ -1,4 +1,4 @@
-﻿﻿addLayer("r", {
+﻿addLayer("r", {
     name: "Ranks", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -115,7 +115,7 @@
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
         player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("rm", 21))
         player.r.tetrReq = layers.r.getTetrReq()
-        if (player.r.tier.gte(player.r.tetrReq) && hasUpgrade("p", 14)) {
+        if (player.r.tier.gte(player.r.tetr.add(player.r.tetrsToGet).add(1).mul(2).pow(1.08).floor().add(1)) && hasUpgrade("p", 14)) {
             player.r.tetrsToGet = tetrGain.sub(player.r.tetr)
         }
         if (!hasUpgrade("p", 14)) player.r.tetrsToGet = new Decimal(1)
@@ -140,7 +140,7 @@
         player.r.pentPause = player.r.pentPause.sub(1)
 
         player.r.pentToGet = new Decimal(1)
-        if (hasUpgrade("i", 32) && !inChallenge("ip", 14)) {
+        if (hasUpgrade("i", 32)) {
             if (player.points.lt(new Decimal(6e57).div(buyableEffect("g", 19)))) {
                 player.r.pentToGet = player.points.mul(buyableEffect("g", 19)).div(1e28).pow(1/42.5).floor().sub(player.r.pent)
             } else if (player.points.gte(new Decimal(6e57).div(buyableEffect("g", 19))) && player.points.lt(new Decimal(4e152).div(buyableEffect("g", 19)))) {
@@ -160,7 +160,7 @@
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
-        if (hasUpgrade("i", 32) && !inChallenge("ip", 14) && player.points.gte(player.r.pentReq)) {
+        if (hasUpgrade("i", 32) && player.points.gte(player.r.pentReq)) {
             player.r.pent = player.r.pent.add(player.r.pentToGet)
         } else if (hasUpgrade("i", 27) && player.points.gte(player.r.pentReq)) {
             player.r.pent = player.r.pent.add(1)
@@ -168,8 +168,7 @@
 
         //Time reversal
 
-        if (!player.r.timeReversed)
-        {
+        if (!player.r.timeReversed) {
             player.r.timeCubesPerSecond = new Decimal(0)
         } else {
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)

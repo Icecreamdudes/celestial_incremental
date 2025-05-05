@@ -273,7 +273,7 @@ function exportSave() {
 	el.value = str;
 	document.body.appendChild(el);
 	el.select();
-	el.setSelectionRange(0, 9999999);
+	el.setSelectionRange(0, 99999);
 	document.execCommand("copy");
 	document.body.removeChild(el);
 }

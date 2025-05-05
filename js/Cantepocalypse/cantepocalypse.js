@@ -47,11 +47,13 @@ addLayer("cp", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
-            player.cp.cantepocalypsePrep = false
+        if (player.musuniverse == 1.5 && player.cap.cantepocalypsePrep == true) {
+            player.cap.cantepocalypsePrep = false
             player.cp.cantepocalypseActive = true
             if (options.newMenu == true) showTab("a1u")
         }
+
+        if (hasUpgrade("cp", 18) && player.cp.cantepocalypseActive) player.cp.cantepocalypseActive = false
 
         if (player.subtabs["cp"]['stuff'] == 'Portal') {
             player.po.lastUniverse = 'cp'

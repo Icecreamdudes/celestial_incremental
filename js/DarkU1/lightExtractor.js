@@ -16,27 +16,27 @@ addLayer("le", {
 
         resetAmount: new Decimal(0),
 
-        punchcards: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,],
-        punchcardsEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),, new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),  ],
-        punchcardsPassiveEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), ],
-        punchcardsLevels: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), ],
-        punchcardsLevelsEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), ],
-        punchcardsEffectText: ["","","","","","","","","","","","","","","","",],
-        punchcardsEffectText2: ["","","","","","","","","","","","","","","","",],
-        punchcardsPassiveEffectText: ["","","","","","","","","","","","","","","","",] ,
-        punchcardsXP: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),  new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
-        punchcardsXPReq: [new Decimal(10), new Decimal(25), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(25), new Decimal(10), new Decimal(10), new Decimal(25), new Decimal(25), new Decimal(10), new Decimal(25), new Decimal(25), new Decimal(75), new Decimal(75),],
+        punchcards: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+        punchcardsEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),, new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        punchcardsPassiveEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        punchcardsLevels: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        punchcardsLevelsEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        punchcardsEffectText: ["","","","","","","","","","","","","","","","","",],
+        punchcardsEffectText2: ["","","","","","","","","","","","","","","","","",],
+        punchcardsPassiveEffectText: ["","","","","","","","","","","","","","","","","",] ,
+        punchcardsXP: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),  new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
+        punchcardsXPReq: [new Decimal(10), new Decimal(25), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(25), new Decimal(10), new Decimal(10), new Decimal(25), new Decimal(25), new Decimal(10), new Decimal(25), new Decimal(25), new Decimal(75), new Decimal(75), new Decimal(25),],
         punchcardIndex: new Decimal(0),
-        punchcardsUnlocked: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, ],
+        punchcardsUnlocked: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
         selectedPunchcards: [0, 0, 0],
-        punchcardImages: ["","","","","","","","","","","","","","","","",],
+        punchcardImages: ["","","","","","","","","","","","","","","","","",],
 
         activePunchcards: [],
         activePunchcardIndex: new Decimal(0),
 
         lockedPunchcard: "<img src='resources/Punchcards/lockedPunchcard.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        punchcardNames: ["","","","","","","","","","","","","","","","",],
-        punchcardSelections: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, ],
+        punchcardNames: ["","","","","","","","","","","","","","","","","",],
+        punchcardSelections: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,],
         storedSelections: new Decimal(0),
         selectionIndex: new Decimal(0),
 
@@ -131,6 +131,7 @@ addLayer("le", {
             "<img src='resources/Punchcards/punchcard13.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>",
             "<img src='resources/Punchcards/punchcard14.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>",
             "<img src='resources/Punchcards/punchcard15.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>",
+            "<img src='resources/Punchcards/punchcard16.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>",
         ]
         player.le.punchcardNames = [
             "Points based on points",
@@ -149,6 +150,7 @@ addLayer("le", {
             "Grass based on prestige",
             "Multipurpose I",
             "Matos",
+            "Pent",
         ]
         player.le.punchcardsXPReq = [
             player.le.punchcardsLevels[0].pow(1.5).mul(10).floor(),
@@ -167,42 +169,45 @@ addLayer("le", {
             player.le.punchcardsLevels[13].pow(1.6).mul(25).floor(),
             player.le.punchcardsLevels[14].pow(1.6).mul(75).floor(),
             player.le.punchcardsLevels[15].pow(1.6).mul(75).floor(),
+            player.le.punchcardsLevels[16].pow(1.6).mul(25).floor(), 
         ]
         player.le.punchcardsLevelsEffect = [
-            player.le.punchcardsLevels[0].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[1].sub(1).mul(0.1).add(1), 
-            player.le.punchcardsLevels[2].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[3].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[4].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[5].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[6].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[7].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[8].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[9].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[10].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[11].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[12].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[13].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[14].sub(1).mul(0.1).add(1),
-            player.le.punchcardsLevels[15].sub(1).mul(0.1).add(1),
+            player.le.punchcardsLevels[0].lt(11) ? player.le.punchcardsLevels[0].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[0].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[1].lt(11) ? player.le.punchcardsLevels[1].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[1].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[2].lt(11) ? player.le.punchcardsLevels[2].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[2].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[3].lt(11) ? player.le.punchcardsLevels[3].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[3].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[4].lt(11) ? player.le.punchcardsLevels[4].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[4].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[5].lt(11) ? player.le.punchcardsLevels[5].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[5].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[6].lt(11) ? player.le.punchcardsLevels[6].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[6].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[7].lt(11) ? player.le.punchcardsLevels[7].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[7].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[8].lt(11) ? player.le.punchcardsLevels[8].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[8].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[9].lt(11) ? player.le.punchcardsLevels[9].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[9].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[10].lt(11) ? player.le.punchcardsLevels[10].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[10].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[11].lt(11) ? player.le.punchcardsLevels[11].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[11].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[12].lt(11) ? player.le.punchcardsLevels[12].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[12].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[13].lt(11) ? player.le.punchcardsLevels[13].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[13].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[14].lt(11) ? player.le.punchcardsLevels[14].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[14].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[15].lt(11) ? player.le.punchcardsLevels[15].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[15].sub(9).log(2).mul(0.1).add(1.9),
+            player.le.punchcardsLevels[16].lt(11) ? player.le.punchcardsLevels[16].sub(1).mul(0.1).add(1) : player.le.punchcardsLevels[16].sub(9).log(2).mul(0.1).add(1.9),
         ]
         player.le.punchcardsPassiveEffect = [
-            Decimal.pow(1000, player.le.punchcardsLevels[0].sub(1)), //Infinity Points
-            player.le.punchcardsLevels[1].sub(1).mul(0.03).add(1).pow(0.8), //Check back cooldowns
-            Decimal.pow(100, player.le.punchcardsLevels[2].sub(1)), //Negative Infinity Points
-            Decimal.pow(250, player.le.punchcardsLevels[3].sub(1)),//Anonymity
-            Decimal.pow(125, player.le.punchcardsLevels[4].sub(1)), //Oil
-            Decimal.pow(50, player.le.punchcardsLevels[5].sub(1)), //Charge
-            player.le.punchcardsLevels[6].sub(1).mul(0.1).add(1).pow(0.7), //Check back XP
-            Decimal.pow(333, player.le.punchcardsLevels[7].sub(1)), //Dice points and rocket fuel
-            Decimal.pow(666, player.le.punchcardsLevels[8].sub(1)), //All hex points
-            player.le.punchcardsLevels[9].sub(1).pow(0.85).add(1), //Realm essence
-            player.le.punchcardsLevels[10].sub(1).mul(0.05).add(1), //Core Scraps
-            Decimal.pow(200, player.le.punchcardsLevels[11].sub(1)), //Golden Grass
-            player.le.punchcardsLevels[12].sub(1).pow(0.6).add(1), //Moonstone
-            player.le.punchcardsLevels[13].sub(1).mul(5).pow(1.4).add(1), //Pollinators
-            Decimal.pow(333, player.le.punchcardsLevels[14].sub(1)), //Pre-OTF currencies
-            player.le.punchcardsLevels[15].sub(1).mul(0.2).add(1), //Starmetal
+            player.le.punchcardsLevels[0].lt(11) ? Decimal.pow(1000, player.le.punchcardsLevels[0].sub(1)) : Decimal.pow(100, player.le.punchcardsLevels[0].sub(10).log(2)).mul(1e30), //Infinity Points
+            player.le.punchcardsLevels[1].lt(11) ? player.le.punchcardsLevels[1].sub(1).mul(0.03).add(1).pow(0.8) : player.le.punchcardsLevels[1].sub(10).log(1.6).mul(0.03).add(1.23), //Check back cooldowns
+            player.le.punchcardsLevels[2].lt(11) ? Decimal.pow(100, player.le.punchcardsLevels[2].sub(1)) : Decimal.pow(10, player.le.punchcardsLevels[2].sub(10).log(2)).mul(1e20), //Negative Infinity Points
+            player.le.punchcardsLevels[3].lt(11) ? Decimal.pow(250, player.le.punchcardsLevels[3].sub(1)) : Decimal.pow(25, player.le.punchcardsLevels[3].sub(10).log(2)).mul(9.54e23),//Anonymity
+            player.le.punchcardsLevels[4].lt(11) ? Decimal.pow(125, player.le.punchcardsLevels[4].sub(1)) : Decimal.pow(12.5, player.le.punchcardsLevels[4].sub(10).log(2)).mul(9.31e20), //Oil
+            player.le.punchcardsLevels[5].lt(11) ? Decimal.pow(50, player.le.punchcardsLevels[5].sub(1)) : Decimal.pow(5, player.le.punchcardsLevels[5].sub(10).log(2)).mul(9.77e16), //Charge
+            player.le.punchcardsLevels[6].lt(11) ? player.le.punchcardsLevels[6].sub(1).mul(0.1).add(1).pow(0.7) : player.le.punchcardsLevels[1].sub(10).log(1.8).mul(0.1).add(1.62), //Check back XP
+            player.le.punchcardsLevels[7].lt(11) ? Decimal.pow(333, player.le.punchcardsLevels[7].sub(1)) : Decimal.pow(33.3, player.le.punchcardsLevels[7].sub(10).log(2)).mul(1.68e25), //Dice points and rocket fuel
+            player.le.punchcardsLevels[8].lt(11) ? Decimal.pow(666, player.le.punchcardsLevels[8].sub(1)) : Decimal.pow(66.6, player.le.punchcardsLevels[8].sub(10).log(2)).mul(1.72e28), //All hex points
+            player.le.punchcardsLevels[9].lt(11) ? player.le.punchcardsLevels[9].sub(1).pow(0.85).add(1) : player.le.punchcardsLevels[9].sub(10).log(1.1).div(5).add(7.74), //Realm essence
+            player.le.punchcardsLevels[10].lt(11) ? player.le.punchcardsLevels[10].sub(1).mul(0.05).add(1) : player.le.punchcardsLevels[10].sub(10).log(2).mul(0.05).add(1.5), //Core Scraps
+            player.le.punchcardsLevels[11].lt(11) ? Decimal.pow(200, player.le.punchcardsLevels[11].sub(1)) : Decimal.pow(20, player.le.punchcardsLevels[11].sub(10).log(2)).mul(1.02e23), //Golden Grass
+            player.le.punchcardsLevels[12].lt(11) ? player.le.punchcardsLevels[12].sub(1).pow(0.6).add(1) : player.le.punchcardsLevels[12].sub(10).log(2).add(4.74), //Moonstone
+            player.le.punchcardsLevels[13].lt(11) ? player.le.punchcardsLevels[13].sub(1).mul(5).pow(1.4).add(1) : player.le.punchcardsLevels[13].sub(10).log(1.01).add(240.09), //Pollinators
+            player.le.punchcardsLevels[14].lt(11) ? Decimal.pow(333, player.le.punchcardsLevels[14].sub(1)) : Decimal.pow(33.3, player.le.punchcardsLevels[14].sub(10).log(2)).mul(1.68e25), //Pre-OTF currencies
+            player.le.punchcardsLevels[15].lt(11) ? player.le.punchcardsLevels[15].sub(1).mul(0.2).add(1) : player.le.punchcardsLevels[15].sub(10).log(2).mul(0.2).add(3), //Starmetal
+            player.le.punchcardsLevels[16].lt(11) ? Decimal.pow(625, player.le.punchcardsLevels[16].sub(1)) : Decimal.pow(62.5, player.le.punchcardsLevels[16].sub(10).log(2)).mul(9.09e27), //Time Cubes
         ]
         
         player.le.punchcardsPassiveEffectText = [
@@ -222,6 +227,7 @@ addLayer("le", {
             "This card boosts pollinators by x",
             "This card boosts pre-otf currencies by x",
             "This card boosts starmetal alloy by x",
+            "This card boosts time cubes by x",
         ]
         player.le.punchcardsEffectText = [
             "This card boosts points by x", //0
@@ -240,25 +246,26 @@ addLayer("le", {
             "This card boosts grass capacity and value by x", //13
             "This card boosts points, rank/tier/tetr points, prestige points, grass, generator power, and generators by x", //14
             "This card boosts starmetal alloy gain by x", //15
-
+            "This card unlocks Pent and raises Pent's effect by ^", //16
         ]
         player.le.punchcardsEffect = [
-            player.du.points.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[0]),
+            player.du.points.pow(0.1).add(1).pow(player.le.punchcardsLevelsEffect[0]),
             Decimal.pow(0.7, player.le.punchcardsLevelsEffect[1]),
             player.dp.prestigePoints.pow(0.4).add(1).pow(player.le.punchcardsLevelsEffect[2]),
-            player.du.points.pow(0.27).add(1).pow(player.le.punchcardsLevelsEffect[3]),
-            player.du.points.pow(0.26).add(1).pow(player.le.punchcardsLevelsEffect[4]),
-            player.du.points.pow(0.25).add(1).pow(player.le.punchcardsLevelsEffect[5]),
-            player.du.points.pow(0.1).add(1).pow(player.le.punchcardsLevelsEffect[6]),
+            player.du.points.pow(0.1).add(1).pow(player.le.punchcardsLevelsEffect[3]),
+            player.du.points.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[4]),
+            player.du.points.pow(0.4).add(1).pow(player.le.punchcardsLevelsEffect[5]),
+            player.du.points.pow(0.15).add(1).pow(player.le.punchcardsLevelsEffect[6]),
             player.dg.generators.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[7]),
-            player.dg.generatorPower.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[8]),
+            player.dg.generatorPower.pow(0.25).add(1).pow(player.le.punchcardsLevelsEffect[8]),
             player.dg.generators.pow(0.6).div(2).add(1).pow(player.le.punchcardsLevelsEffect[9]),
             player.dg.generators.pow(0.4).div(2).add(1).pow(player.le.punchcardsLevelsEffect[10]),
-            player.dgr.grass.pow(0.1).add(1).pow(player.le.punchcardsLevelsEffect[11]),
-            player.dg.generators.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[12]),
-            player.dp.prestigePoints.pow(0.07).add(1).pow(player.le.punchcardsLevelsEffect[13]),
-            player.sma.starmetalAlloy.div(10).add(1).pow(2).pow(player.le.punchcardsLevelsEffect[14]),
+            player.dgr.grass.pow(0.2).add(1).pow(player.le.punchcardsLevelsEffect[11]),
+            player.dg.generators.pow(0.15).add(1).pow(player.le.punchcardsLevelsEffect[12]),
+            player.dp.prestigePoints.pow(0.1).add(1).pow(player.le.punchcardsLevelsEffect[13]),
+            player.sma.starmetalAlloy.lt(1e10) ? player.sma.starmetalAlloy.div(10).add(1).pow(2).pow(player.le.punchcardsLevelsEffect[14]) : player.sma.starmetalAlloy.div(1e10).pow(0.25).mul(1e18).pow(player.le.punchcardsLevelsEffect[14]),
             player.le.resetAmount.div(5).add(1).pow(player.le.punchcardsLevelsEffect[15]),
+            Decimal.pow(1.25, player.le.punchcardsLevelsEffect[16]),
         ]
         player.le.punchcardsEffectText2 = [
             ". (Based on points)",
@@ -277,30 +284,24 @@ addLayer("le", {
             ". (Based on prestige)",
             ". (Based on starmetal alloy)",
             ". (Based on starmetal resets)",
-
+            ".",
         ]
-        if (player.le.resetAmount.lt(2))
-        {
-            for (let i = 0; i < 7; i++)
-            {
+        if (player.le.resetAmount.lt(2)) {
+            for (let i = 0; i < 7; i++) {
                 player.le.punchcardSelections[i] = true
             }
-        } else if (player.le.resetAmount.gt(2))
-        {
-            for (let i = 0; i < 11; i++)
-            {
+        } else if (player.le.resetAmount.gt(2)) {
+            for (let i = 0; i < 11; i++) {
                 player.le.punchcardSelections[i] = true
             }
         } 
-        if (player.le.resetAmount.gt(3))
-        {
-            for (let i = 0; i < 14; i++)
-            {
+        if (player.le.resetAmount.gt(3)) {
+            for (let i = 0; i < 14; i++) {
                 player.le.punchcardSelections[i] = true
             }
         }
-        if (hasUpgrade("sma", 17))
-        {
+        if (player.le.resetAmount.gt(4)) player.le.punchcardSelections[16] = true
+        if (hasUpgrade("sma", 17)) {
             player.le.punchcardSelections[14] = true
             player.le.punchcardSelections[15] = true
         }
@@ -313,7 +314,7 @@ addLayer("le", {
     
         // Add common cards 4 times, rare cards once, and epic cards 1/15 times to the weighted array
         availableIndices.forEach(index => {
-            if ([1, 6, 9, 10, 12, 13].includes(index)) {
+            if ([1, 6, 9, 10, 12, 13, 16].includes(index)) {
                 weightedIndices.push(index);
             } else if ([14, 15].includes(index)) {
                 for (let i = 0; i < 1; i++) {
@@ -407,7 +408,7 @@ addLayer("le", {
                     layers.le.generateSelection();
             },
             style() {
-                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #384166", borderRight: "2px solid #384166"}
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -637,6 +638,15 @@ addLayer("le", {
             },
             style: { width: '75px', "min-height": '125px', color: "white" },
         },
+        116: {
+            title() { return player.le.punchcardsUnlocked[16] ? player.le.punchcardImages[16] : player.le.lockedPunchcard},
+            canClick() { return player.le.punchcardsUnlocked[16] },
+            unlocked() { return true },
+            onClick() {
+                player.le.punchcardIndex = new Decimal(16)
+            },
+            style: { width: '75px', "min-height": '125px', color: "white" },
+        },
         //Level Up
         1000: {
             title() { return "<h2>Level Up" },
@@ -659,10 +669,12 @@ addLayer("le", {
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)
         player.dr.tetr = new Decimal(0)
+        player.dr.pent = new Decimal(0)
 
         player.dr.rankPoints = new Decimal(0)
         player.dr.tierPoints = new Decimal(0)
         player.dr.tetrPoints = new Decimal(0)
+        player.dr.pentPoints = new Decimal(0)
 
         player.dp.prestigePoints = new Decimal(0)
         player.dp.buyables[11] = new Decimal(0)
@@ -707,10 +719,12 @@ addLayer("le", {
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)
         player.dr.tetr = new Decimal(0)
+        player.dr.pent = new Decimal(0)
 
         player.dr.rankPoints = new Decimal(0)
         player.dr.tierPoints = new Decimal(0)
         player.dr.tetrPoints = new Decimal(0)
+        player.dr.pentPoints = new Decimal(0)
 
         player.dp.prestigePoints = new Decimal(0)
         player.dp.buyables[11] = new Decimal(0)
@@ -935,13 +949,9 @@ addLayer("le", {
             }
         },
     },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
+    buyables: {},
+    milestones: {},
+    challenges: {},
     infoboxes: {
         1: {
             title: "Log 1",
@@ -1125,8 +1135,8 @@ addLayer("le", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "You will gain punchcard selections every time you reset for starmetal alloy." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.le.storedSelections.gt(0) ? "Selected Card: " + player.le.punchcardNames[player.le.selectedPunchcards[player.le.selectionIndex]] : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.le.storedSelections.gt(0) ? player.le.punchcardsEffectText[player.le.selectedPunchcards[player.le.selectionIndex]] + format(player.le.punchcardsEffect[player.le.selectedPunchcards[player.le.selectionIndex]]) +  player.le.punchcardsEffectText2[player.le.selectedPunchcards[player.le.selectionIndex]] : ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.le.storedSelections.gt(0) ? "Selected Card: " + player.le.punchcardNames[player.le.selectedPunchcards[player.le.selectionIndex]] : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return player.le.storedSelections.gt(0) ? player.le.punchcardsEffectText[player.le.selectedPunchcards[player.le.selectionIndex]] + format(player.le.punchcardsEffect[player.le.selectedPunchcards[player.le.selectionIndex]]) +  player.le.punchcardsEffectText2[player.le.selectedPunchcards[player.le.selectionIndex]] : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 21], ["clickable", 22], ["clickable", 23],]],   
                     ["blank", "25px"],
@@ -1157,8 +1167,14 @@ addLayer("le", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "Selected Card: " + player.le.punchcardNames[player.le.punchcardIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Level: " + formatWhole(player.le.punchcardsLevels[player.le.punchcardIndex]) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "The level boosts the card effect by ^" + format(player.le.punchcardsLevelsEffect[player.le.punchcardIndex]) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Passive effect: " + player.le.punchcardsPassiveEffectText[player.le.punchcardIndex] + format(player.le.punchcardsPassiveEffect[player.le.punchcardIndex]) + "." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", function () { return "The level boosts the card effect by ^" + format(player.le.punchcardsLevelsEffect[player.le.punchcardIndex]) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return (player.le.punchcardsLevels[player.le.punchcardIndex].gt(11)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", paddingLeft: "8px"}],
+                    ]],
+                    ["row", [
+                        ["raw-html", function () { return "Passive effect: " + player.le.punchcardsPassiveEffectText[player.le.punchcardIndex] + format(player.le.punchcardsPassiveEffect[player.le.punchcardIndex]) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return (player.le.punchcardsLevels[player.le.punchcardIndex].gt(11)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", paddingLeft: "8px"}],
+                    ]],
                     ["raw-html", function () { return "XP: " + formatWhole(player.le.punchcardsXP[player.le.punchcardIndex]) + "/" + formatWhole(player.le.punchcardsXPReq[player.le.punchcardIndex]) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 1000],]],
@@ -1178,7 +1194,6 @@ addLayer("le", {
                     ["blank", "25px"],
                     ["row", [["clickable", 100], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], ["clickable", 107], ["clickable", 108], ["clickable", 111]]],
                 ]
-
             },
             "Rare": {
                 buttonStyle() { return { border: "2px solid #644B00", borderRadius: "10px" } },
@@ -1186,10 +1201,9 @@ addLayer("le", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["clickable", 101], ["clickable", 106], ["clickable", 109], ["clickable", 110], ["clickable", 112], ["clickable", 113]]],
-         ["raw-html", function () { return "Rare cards are 4x as rare as common cards." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["row", [["clickable", 101], ["clickable", 106], ["clickable", 109], ["clickable", 110], ["clickable", 112], ["clickable", 113], ["clickable", 116]]],
+                    ["raw-html", function () { return "Rare cards are 4x as rare as common cards." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
-
             },
             "Epic": {
                 buttonStyle() { return { border: "2px solid #02345C", borderRadius: "10px" } },
@@ -1198,19 +1212,18 @@ addLayer("le", {
                 [
                     ["blank", "25px"],
                     ["row", [["clickable", 114], ["clickable", 115],]],
-         ["raw-html", function () { return "Epic cards are 15x as rare as common cards." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Epic cards are 15x as rare as common cards." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
-
             },
         },
     },
-
     tabFormat: [
-         ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-         ["row", [["clickable", 1]]],
-         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.sma.inStarmetalChallenge }
 })

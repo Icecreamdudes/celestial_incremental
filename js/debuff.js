@@ -21,20 +21,17 @@
 
         tavEssence: new Decimal(0),
         tavEssencePerSecond: new Decimal(0),
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)",
             "background-origin": "border-box",
             "border-color": "#3A2558",
         };
-      },
+    },
     tooltip: "Debuff",
     color: "#4e386e",
-
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -53,75 +50,56 @@
 
         if (hasUpgrade("de", 17) && inChallenge("tad", 11)) player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet.mul(delta))
 
-        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(0))
-        {
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(0)) {
             player.points = player.points.sub(player.points.mul(0.95 * delta))
         }
-        if (player.points.lte(0))
-        {
+        if (player.points.lte(0)) {
             player.points = new Decimal(0)
         }
-        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(1))
-        {
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(1)) {
             player.p.prestigePoints = player.p.prestigePoints.sub(player.p.prestigePoints.mul(0.95 * delta))
         }
-        if (player.p.prestigePoints.lte(0))
-        {
+        if (player.p.prestigePoints.lte(0)) {
             player.p.prestigePoints = new Decimal(0)
         }
-        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(2))
-        {
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(2)) {
             player.g.grass = player.g.grass.sub(player.g.grass.mul(0.95 * delta))
         }
-        if (player.g.grass.lte(0))
-        {
+        if (player.g.grass.lte(0)) {
             player.g.grass = new Decimal(0)
         }
-        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(3))
-        {
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(3)) {
             player.t.trees = player.t.trees.sub(player.t.trees.mul(0.95 * delta))
         }
-        if (player.t.trees.lte(0))
-        {
+        if (player.t.trees.lte(0)) {
             player.t.trees = new Decimal(0)
         }
-        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(4))
-        {
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(4)) {
             player.m.mods = player.m.mods.sub(player.m.mods.mul(0.95 * delta))
         }
-        if (player.m.mods.lte(0))
-        {
+        if (player.m.mods.lte(0)) {
             player.m.mods = new Decimal(0)
         }
-        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(5))
-        {
+        if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(5)) {
             player.m.codeExperience = player.m.codeExperience.sub(player.m.codeExperience.mul(0.95 * delta))
         }
-        if (player.m.codeExperience.lte(0))
-        {
+        if (player.m.codeExperience.lte(0)) {
             player.m.codeExperience = new Decimal(0)
         }
 
-        if (player.de.antidebuffIndex == 0)
-        {
+        if (player.de.antidebuffIndex == 0) {
                 player.de.antidebuffText = "Your chosen effect is boosting points by x" + format(player.de.antidebuffEffect) + "."
-        } else if (player.de.antidebuffIndex == 1)
-        {
+        } else if (player.de.antidebuffIndex == 1) {
                 player.de.antidebuffText = "Your chosen effect is boosting prestige points by x" + format(player.de.antidebuffEffect) + "."
-        } else if (player.de.antidebuffIndex == 2)
-        {
+        } else if (player.de.antidebuffIndex == 2) {
                 player.de.antidebuffText = "Your chosen effect is boosting grass by x" + format(player.de.antidebuffEffect) + "."
-        } else if (player.de.antidebuffIndex == 3)
-        {
+        } else if (player.de.antidebuffIndex == 3) {
                 player.de.antidebuffText = "Your chosen effect is boosting trees by x" + format(player.de.antidebuffEffect) + "."
-        } else if (player.de.antidebuffIndex == 4)
-        {
+        } else if (player.de.antidebuffIndex == 4) {
                 player.de.antidebuffText = "Your chosen effect is boosting mods by x" + format(player.de.antidebuffEffect) + "."
-        } else if (player.de.antidebuffIndex == 5)
-        {
+        } else if (player.de.antidebuffIndex == 5) {
                 player.de.antidebuffText = "Your chosen effect is boosting code experience by x" + format(player.de.antidebuffEffect) + "."
-        } else if (player.de.antidebuffIndex == 6)
-        {
+        } else if (player.de.antidebuffIndex == 6) {
                 player.de.antidebuffText = "Your chosen effect is boosting nothing."
         }
 
@@ -137,50 +115,40 @@
         player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("de", 13))
         if (hasUpgrade("de", 12)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 12))
         if (hasUpgrade("de", 19)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 19))
-     player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("tad", 15))
+        player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("tad", 15))
 
         player.de.tavEssence = player.de.tavEssence.add(player.de.tavEssencePerSecond.mul(delta))
 
         player.de.tavPointsEffect = player.de.tavPoints.pow(2).add(1)
     },
-    getAntidebuffEffect(index)
-    {
-        if (index == 0)
-        {
+    getAntidebuffEffect(index) {
+        if (index == 0) {
                 return player.de.antidebuffPoints.mul(50).pow(4.6).add(1)
-        } else if (index == 1)
-        {
+        } else if (index == 1) {
                 return player.de.antidebuffPoints.mul(30).pow(4).add(1)
-        } else if (index == 2)
-        {
+        } else if (index == 2) {
                 return player.de.antidebuffPoints.mul(20).pow(3.5).add(1)
-        } else if (index == 3)
-        {
+        } else if (index == 3) {
                 return player.de.antidebuffPoints.mul(14).pow(3.2).add(1)
-        } else if (index == 4)
-        {
+        } else if (index == 4) {
                 return player.de.antidebuffPoints.mul(10).pow(2.8).add(1)
-        } else if (index == 5)
-        {
+        } else if (index == 5) {
                 return player.de.antidebuffPoints.mul(7).pow(2.7).add(1)
-        } else if (index == 6)
-        {
+        } else if (index == 6) {
                 return new Decimal(1)
         }
     },
-    antidebuffReset()
-    {
+    antidebuffReset() {
         player.pe.pests = new Decimal(0)
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        player.r.tetr = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        if (!hasUpgrade("s", 16)) player.r.pent = new Decimal(0)
-        if (hasUpgrade("s", 16)) player.r.pent = new Decimal(30)
+        player.r.pent = new Decimal(0)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -225,15 +193,14 @@
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
-        for (let i = 0; i < player.p.upgrades.length; i++) {
-            if (+player.p.upgrades[i] < 24) {
-                player.p.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
+            for (let i = 0; i < player.p.upgrades.length; i++) {
+                if (+player.p.upgrades[i] < 24) {
+                    player.p.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
 
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
@@ -258,18 +225,16 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 22) {
-                player.g.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
+            for (let i = 0; i < player.g.upgrades.length; i++) {
+                if (+player.g.upgrades[i] < 22) {
+                    player.g.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-        }
 
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
-        {
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
                     player.r.milestones.splice(i, 1);
@@ -321,19 +286,16 @@
         player.d.buyables[14] = new Decimal(0)
         player.d.buyables[15] = new Decimal(0)
 
-        for (let i = 0; i < 11; i++)
-        {
+        for (let i = 0; i < 11; i++) {
             player.d.diceEffects[i] = new Decimal(1)
         }
 
         //rf
         player.rf.rocketFuel = new Decimal(0)
-        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++)
-        {
+        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
             player.rf.abilitiesUnlocked[i] = false
         }
-        for (let i = 0; i < 4; i++)
-        {
+        for (let i = 0; i < 4; i++) {
             player.rf.abilityTimers[i] = new Decimal(0)
         }
 
@@ -343,8 +305,6 @@
                 i--;
             }
         }
-
-
     },
     branches: ["t", "m"],
     clickables: {
@@ -462,8 +422,7 @@
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11:
         {
@@ -831,13 +790,9 @@
             style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "C8 Debuffs": {
@@ -856,8 +811,7 @@
                     ["raw-html", function () { return "-40% of grass per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "-30% of trees and mods per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "-20% of code experience per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-             ]
-
+                ]
             },
             "Tav's Domain Debuffs": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -874,8 +828,7 @@
                     ["raw-html", function () { return "^0.5 to leaf gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "^0.55 to all antimatter dimensions." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-             ]
-
+                ]
             },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -888,8 +841,7 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
-             ]
-
+                ]
             },
             "Antidebuff": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -908,8 +860,7 @@
                     ["raw-html", function () { return inChallenge("tad", 11) ? "<s>When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
-        ]
-
+                ]
             },
             "Tav's Compensation": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -929,17 +880,16 @@
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                     ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
-    ]
-
+                ]
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-         ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
-    layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) }
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) },
+    deactivated() { return !(inChallenge("ip", 18) || inChallenge("tad", 11))},
 })

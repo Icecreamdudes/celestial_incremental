@@ -145,5 +145,6 @@ addLayer("mu", {
         ["blank", "25px"],
         ["microtabs", "Content", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && layerShown("od") }
+    layerShown() { return player.startedGame == true && layerShown("od") },
+    deactivated() { return true},
 })

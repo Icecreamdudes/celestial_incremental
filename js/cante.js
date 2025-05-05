@@ -78,6 +78,9 @@
         player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
 
+        // SOFTCAP
+        if (hasMilestone("r", 29) && player.ca.replicanti.gte(1.79e308)) player.ca.replicantiMult = player.ca.replicantiMult.div(Decimal.pow(10, player.ca.replicanti.div(1.79e308).add(1).log(1e100)))
+
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 16))
@@ -95,9 +98,17 @@
             layers.ca.replicantiMultiply();
         }
 
-        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.plus(1).log10().pow(1.4).pow(0.75).mul(10).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
-        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.plus(1).log10().pow(2.6).pow(0.45).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
+        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect = player.ca.replicanti.add(1).log(10).pow(1.05).mul(10).add(1) } else { player.ca.replicantiEffect = new Decimal(1) }
+        if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.add(1).log(10).pow(1.17).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
         player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
+
+        // EFFECT INCREASE POST SOFTCAP
+        if (player.ca.replicanti.gte(1.79e308) && hasMilestone("r", 29)) {
+            let magnitude = player.ca.replicanti.div(1.79e308).add(1).log(1e100).add(1)
+            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(magnitude)
+            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(magnitude)
+            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(magnitude)
+        }
 
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
@@ -145,13 +156,10 @@
     {
         let random = new Decimal(0)
         random = Math.random()
-        if (random < player.ca.replicateChance)
-        {
-            if (player.ca.replicanti.lt(1.79e308))
-            {
+        if (random < player.ca.replicateChance) {
+            if (player.ca.replicanti.lt(1.79e308) || hasMilestone("r", 29)) {
                 player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult)
-            } else
-            {
+            } else {
                 player.ca.replicanti = new Decimal(1.79e308)
             }
         }
@@ -213,7 +221,7 @@
             },
         },
         13: {
-            title() { return "<h3>Reset replicanti, but gain a replicanti galaxy. (Req: 1.79e308 replicanti)" },
+            title() { return "<h3>Reset replicanti, but gain a replicanti galaxy.<br>(Req: 1.79e308 replicanti)" },
             canClick() { return player.ca.replicanti.gte(1.79e308) && player.ca.replicantiGalaxies.lt(player.ca.replicantiGalaxiesCap) },
             unlocked() { return true },
             onClick() {
@@ -748,11 +756,14 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
                     ["raw-html", function () { return "which boosts infinity points by <h3>" + format(player.ca.replicantiEffect) + "</h3>x, infinity dimensions by <h3>" + format(player.ca.replicantiEffect2) + "</h3>x, and points by <h3>" + format(player.ca.replicantiEffect3) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Caps out at 1.79e308 replicanti)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !hasMilestone("r", 29) ? "(Caps out at 1.79e308 replicanti)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["bar", "replicantiBar"]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Replicanti Mult: " + format(player.ca.replicantiMult) + "x" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", function () { return "Replicanti Mult: " + format(player.ca.replicantiMult) + "x" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
+                        ["raw-html", () => {return hasMilestone("r", 29) && player.ca.replicanti.gte(1.79e308) ? "[SOFTCAPPED]" : ""}, { color: "red", fontSize: "18px", fontFamily: "monospace", paddingLeft: "10px"}]
+                    ]],
                     ["raw-html", function () { return "Replicate Chance: " + format(player.ca.replicateChance.mul(100)) + "%" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],

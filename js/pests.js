@@ -10,10 +10,8 @@
         pestsPerSecond: new Decimal(0),
 
         pestEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0),]
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(0deg, #770022 0%, #8D71B4 100%)",
@@ -23,16 +21,14 @@
       },
     tooltip: "Pests",
     color: "#770022",
-
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (inChallenge("ip", 12) || inChallenge("ip", 18))
-        {
+        if (inChallenge("ip", 12) || inChallenge("ip", 18)) {
             if (inChallenge("ip", 12)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(1.4)
             if (inChallenge("ip", 18)) player.pe.pestsPerSecond = player.points.plus(1).log10().pow(2.6)
-        player.pe.pestsPerSecond = player.pe.pestsPerSecond.div(player.de.antidebuffPointsEffect)
-        player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
+            player.pe.pestsPerSecond = player.pe.pestsPerSecond.div(player.de.antidebuffPointsEffect)
+            player.pe.pests = player.pe.pests.add(player.pe.pestsPerSecond.mul(delta))
         }
 
         player.pe.pestEffect = [
@@ -59,19 +55,12 @@
             style: { width: '100px', "min-height": '50px' },
         },
     },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -96,13 +85,13 @@
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "There are <h3>" + format(player.pe.pests) + "</h3> pests." }, { "color": "#770022", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.pe.pestsPerSecond) + "</h3> pests per second." }, { "color": "#770022", "font-size": "16px", "font-family": "monospace" }],
-         ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
-    layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) }
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.pe.pestsPerSecond) + "</h3> pests per second." }, { "color": "#770022", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [["clickable", 1]]],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) },
+    deactivated() { return !(inChallenge("ip", 12) || inChallenge("ip", 18))},
 })

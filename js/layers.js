@@ -1,5 +1,4 @@
 ﻿var tree1 = [["h", "r", "f", "p", "re"], ["t", "g", "pe", "pol", "gh", "rf"], ["fa", "de", "m", "cb", "d"], ["rm", "gem", "oi"]]
-var gwa = [["gt"]]
 
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -195,6 +194,9 @@ addLayer("i", {
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
+        if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
+        if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
 
         //----------------------------------------
 
@@ -256,8 +258,10 @@ addLayer("i", {
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.pow(player.re.realmEssenceEffect)
-        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
-        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
+        if (player.cop.processedCoreFuel.eq(0) && player.gain.lt("1e100000")) {
+            player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
+            if (player.gain.gte("1e100000")) player.gain = new Decimal("1e100000")
+        }
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -267,6 +271,7 @@ addLayer("i", {
         }
         if (player.po.realmMods) player.gain = player.gain.pow(0.35)
         player.gain = player.gain.div(player.po.halterEffects[0])
+        if (!player.in.breakInfinity && player.gain.gte("9.99e309")) player.gain = new Decimal("9.99e309")
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
@@ -300,16 +305,6 @@ addLayer("i", {
         },
     },
     upgrades: {
-        1:
-        {
-            title: ":gwa:",
-            unlocked() { return (!hasUpgrade("i", 11) && player.points.gte(96)) || hasUpgrade("i", 1)},
-            description: "Gwagwagwa.",
-            cost: new Decimal(96),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-        },
         11:
         {
             title: "Feature I",
@@ -620,13 +615,12 @@ addLayer("i", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 1], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
                     ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32]]],
                     ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
                     ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
                     ["blank", "25px"],
-                    ["tree", gwa],
                 ],
             },
             "Portal": {

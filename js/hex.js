@@ -118,6 +118,13 @@
         player.h.ragePowerToGet = player.h.hexPoints[0].plus(1).log10().pow(2).div(1000)
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(buyableEffect("oi", 24))
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(levelableEffect("pet", 307)[1])
+        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(player.cb.rarePetEffects[6][1])
+
+        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
+
+        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
+
+        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
 
         player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
 

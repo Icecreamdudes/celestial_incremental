@@ -133,6 +133,7 @@
 
 			<div class="menuHeader" v-if="layerShown('ca') && player.universe == 2">Row 3</div>
 				<button class="menuButton" v-if="layerShown('ca') && player.universe == 2" v-bind:style="constructMenuButtonStyle('ca') " onclick="showTab('ca')"><span class="buttonText">Cante, Celestial of Replicanti</span></button>
+				<button class="menuButton" v-if="layerShown('ro') && player.universe == 2" v-bind:style="constructMenuButtonStyle('ro') " onclick="showTab('ro')"><span class="buttonText">Rockets</span></button>
 
 		<!-- Universe A1 Stuff -->
 			<div class="uniHeader" v-if="player.universe == 1.5">Alt-Universe 1<br>Cantepocalypse</div>

@@ -87,7 +87,7 @@ function buyableEffect(layer, id) {
 }
 
 function levelableEffect(layer, id) {
-	if ((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11))) && !inChallenge("ip", 13)) {
+	if (layer != "pet" || ((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11))) && !inChallenge("ip", 13))) {
 		return (tmp[layer].levelables[id].effect)
 	} else {
 		return [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]

@@ -267,7 +267,8 @@ addLayer("u3u", {
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
-            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],["upgrade", 25]]],
+            ["row", [["upgrade", 26]]],
         ]]]
     ],
     layerShown() { return false }

@@ -119,5 +119,6 @@ addLayer("du", {
         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.sma.inStarmetalChallenge }
+    layerShown() { return player.sma.inStarmetalChallenge },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

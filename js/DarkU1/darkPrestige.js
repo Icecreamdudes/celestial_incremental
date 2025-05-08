@@ -234,5 +234,6 @@ addLayer("dp", {
          ["row", [["clickable", 1]]],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return hasUpgrade("le", 13) }
+    layerShown() { return hasUpgrade("le", 13) },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

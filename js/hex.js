@@ -256,6 +256,396 @@
                 return look
             },
         },
+        101: {
+            title: "1",
+            canClick() { return player.h.hexResetIndex.neq(0)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(0)
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "20px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "0px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        102: {
+            title: "2",
+            canClick() { return player.h.hexResetIndex.neq(1)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(1)
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "20px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "0px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        103: {
+            title: "3",
+            canClick() { return player.h.hexResetIndex.neq(2)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(2)
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "20px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "0px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        104: {
+            title: "4",
+            canClick() { return player.h.hexResetIndex.neq(3)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(3)
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "20px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "0px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        105: {
+            title: "5",
+            canClick() { return player.h.hexResetIndex.neq(4)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(4)
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "20px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "0px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        106: {
+            title: "6",
+            canClick() { return player.h.hexResetIndex.neq(5)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(5)
+            },
+            style() {
+                let look = {width: "50px", minHeight: "50px", fontSize: "20px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "0px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        107: {
+            title: "07",
+            canClick() { return player.h.hexResetIndex.neq(6)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(6)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        108: {
+            title: "08",
+            canClick() { return player.h.hexResetIndex.neq(7)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(7)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        109: {
+            title: "09",
+            canClick() { return player.h.hexResetIndex.neq(8)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(8)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        110: {
+            title: "10",
+            canClick() { return player.h.hexResetIndex.neq(9)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(9)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        111: {
+            title: "11",
+            canClick() { return player.h.hexResetIndex.neq(10)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(10)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        112: {
+            title: "12",
+            canClick() { return player.h.hexResetIndex.neq(11)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(11)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        113: {
+            title: "13",
+            canClick() { return player.h.hexResetIndex.neq(12)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(12)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        114: {
+            title: "14",
+            canClick() { return player.h.hexResetIndex.neq(13)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(13)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        115: {
+            title: "15",
+            canClick() { return player.h.hexResetIndex.neq(14)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(14)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        116: {
+            title: "16",
+            canClick() { return player.h.hexResetIndex.neq(15)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(15)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        117: {
+            title: "17",
+            canClick() { return player.h.hexResetIndex.neq(16)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(16)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        118: {
+            title: "18",
+            canClick() { return player.h.hexResetIndex.neq(17)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(17)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        119: {
+            title: "19",
+            canClick() { return player.h.hexResetIndex.neq(18)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(18)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        120: {
+            title: "20",
+            canClick() { return player.h.hexResetIndex.neq(19)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(19)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        121: {
+            title: "21",
+            canClick() { return player.h.hexResetIndex.neq(20)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(20)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        122: {
+            title: "22",
+            canClick() { return player.h.hexResetIndex.neq(21)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(21)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        123: {
+            title: "23",
+            canClick() { return player.h.hexResetIndex.neq(22)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(22)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        124: {
+            title: "24",
+            canClick() { return player.h.hexResetIndex.neq(23)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(23)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        125: {
+            title: "25",
+            canClick() { return player.h.hexResetIndex.neq(24)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(24)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        126: {
+            title: "26",
+            canClick() { return player.h.hexResetIndex.neq(25)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(25)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        127: {
+            title: "27",
+            canClick() { return player.h.hexResetIndex.neq(26)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(26)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        128: {
+            title: "28",
+            canClick() { return player.h.hexResetIndex.neq(27)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(27)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        129: {
+            title: "29",
+            canClick() { return player.h.hexResetIndex.neq(28)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(28)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
+        130: {
+            title: "30",
+            canClick() { return player.h.hexResetIndex.neq(29)},
+            unlocked: true,
+            onClick() {
+                player.h.hexResetIndex = new Decimal(29)
+            },
+            style() {
+                let look = {width: "40px", minHeight: "40px", fontSize: "14px", color: "#0061ff", backgroundColor: "black", border: "2px solid #0061ff", borderRadius: "5px"}
+                this.canClick() ? look.borderColor = "#0061ff" : look.borderColor = "white"
+                return look
+            },
+        },
     },
     hexPointReset(layer)
     {
@@ -1051,6 +1441,14 @@
                     ["raw-html", function () { return player.h.hexResetIndex.gt(0) ? "Boosts hex " + formatWhole(player.h.hexResetIndex) + " points by x" + format(player.h.hexPointsEffect[player.h.hexResetIndex]) + ".":"" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Hex progress is kept on infinity, but the effects are only active when hex is active."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    //["style-row", [
+                    //    ["style-column", [
+                    //        ["row", [["clickable", 101], ["clickable", 102], ["clickable", 103]]],
+                    //        ["row", [["clickable", 104], ["clickable", 105], ["clickable", 106]]],
+                    //    ], {border: "2px solid #0061ff"}],
+                    //    ["raw-html", "Hex of Beginnings<br>Boosts Celestial Points", {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    //], {width: "800px", height: "200px"}],
+                    
                 ],
             },
             "Buyables": {

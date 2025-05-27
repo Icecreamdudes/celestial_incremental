@@ -669,7 +669,7 @@ addLayer("ep1", {
                 return "Dragon Dotknights"
             },
             display() {
-                return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting dotknight point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dragon Points'
             },
             buy(mult) {
@@ -1064,7 +1064,7 @@ addLayer("ep2", {
                 return "Cookie Dragons"
             },
             display() {
-                return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting dragon point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Cookie Points'
             },
             buy(mult) {

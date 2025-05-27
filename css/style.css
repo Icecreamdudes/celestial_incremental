@@ -304,6 +304,30 @@ h1, h2, h3, b, input {
 	color: white;
 }
 
+.jinxTitle {
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	font-size: 10px;
+	text-align: right;
+}
+
+.jinxCost {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	font-size: 10px;
+	text-align: right;
+}
+
+.jinxTotal {
+	position: absolute;
+	bottom: 4px;
+	left: 50%;
+    transform: translate(-50%, 0);
+	font-size: 10px;
+}
+
 .levelableHolder {
 	width: 100px;
 	height: 125px;
@@ -544,7 +568,7 @@ h1, h2, h3, b, input {
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
-	margin: 0 10px 0 10px;
+	margin: 0 5px 0 5px;
 }
 
 
@@ -563,7 +587,7 @@ h1, h2, h3, b, input {
 }
 
 .treeThing {
-	margin: 0 10px 0 10px;
+	margin: 0 5px 0 5px;
 	vertical-align: middle;
 }
 

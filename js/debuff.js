@@ -343,7 +343,6 @@
                 player.de.antidebuffPause = new Decimal(4)
                 player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '80px', borderRadius: '15px' },
         },
         12: {
@@ -418,7 +417,6 @@
                 layers.in.bigCrunch();
                 player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },

@@ -38,7 +38,7 @@
         player.re.realmEssenceEffect = player.re.realmEssence.plus(1).log10().mul(1000).pow(0.2).div(235).add(1)
         //WORK ON THE DANG EFFECT
     },
-    branches: ["h", "r", "f", "p"],
+    branches: ["gh"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -68,10 +68,8 @@
             style: { width: '75px', "min-height": '50px', }
         },
     },
-    bars: {
-    },
-    upgrades: {
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         11: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(50)},

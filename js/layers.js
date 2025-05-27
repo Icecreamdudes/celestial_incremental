@@ -1,5 +1,4 @@
-﻿var tree1 = [["h", "r", "f", "p", "re"], ["t", "g", "pe", "pol", "gh", "rf"], ["fa", "de", "m", "cb", "d"], ["rm", "gem", "oi"]]
-
+﻿var tree1 = [["h", "r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "de"], ["m", "rm", "cb"], ["rf", "d", "oi"], ["re", "fa"]]
 addLayer("i", {
     name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -227,11 +226,16 @@ addLayer("i", {
         player.gain = player.gain.mul(player.d.diceEffects[0])
         if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[0][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[1][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[2][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[3][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[4][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[5][0])
 
         // CHALLENGE CONTENT
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
         if (inChallenge("ip", 14)) player.gain = player.gain.div(player.r.challengeIVEffect)
         if (inChallenge("ip", 15)) player.gain = player.gain.pow(0.9)
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))

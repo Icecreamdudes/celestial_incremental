@@ -47,6 +47,9 @@
     },
     tooltip: "Rocket Fuel",
     color: "#949494",
+    branches() {
+        return player.po.dice ? ["gh", "d"] : ["gh", "cb"]
+    },
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -92,7 +95,7 @@
             ["XP Boost", "Gives +" + format(player.rf.abilityEffects[4]) + " check back XP.", player.rf.abilityTimers[4].lt(3.2e7) ? formatTime(player.rf.abilityTimers[4]) + " cooldown<br><h6>(Based on first XP Button)" : "Multiple years left<br><h6>(Based on first XP Button)"],
             ["Infinity Point Boost", "Gives a x" + format(player.rf.abilityEffects[5]) + " boost to infinity points.", player.rf.abilityTimers[5].lt(3.2e7) ? formatTime(player.rf.abilityTimers[5]) + " left" : "Multiple years left"],
             ["Button Cooldown", "Divides XP button cooldown by /1.2.", player.rf.abilityTimers[6].lt(3.2e7) ? formatTime(player.rf.abilityTimers[6]) + " left" : "Multiple years left"],
-            ["Hex Boost", "Gives a x" + format(player.rf.abilityEffects[7]) + " boost to hex 1 points.", player.rf.abilityTimers[7].lt(3.2e7) ? formatTime(player.rf.abilityTimers[7]) + " left" : "Multiple years left"],
+            ["Refinement Divider", "Divides refinement requirement by /" + format(player.rf.abilityEffects[7]) + ".", player.rf.abilityTimers[7].lt(3.2e7) ? formatTime(player.rf.abilityTimers[7]) + " left" : "Multiple years left"],
         ]
 
         // ABILITY UNLOCK CODE
@@ -125,16 +128,12 @@
         }
 
         // ABILITY AUTOMATION
-        if (hasUpgrade("tad", 12))
-        {
+        if (hasUpgrade("tad", 12)) {
             layers.rf.rocketFuelAbility(0, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(1, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(3, player.rf.rocketFuel)
         }
-    },
-    branches() {
-        return player.po.dice ? ["gh", "p", "d"] : ["gh", "p", "cb"]
     },
     clickables: {
         1: {
@@ -154,7 +153,6 @@
                 player.rf.rocketFuelPause = new Decimal(3)
                 player.rf.rocketFuel = player.rf.rocketFuel.add(player.rf.rocketFuelToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "225px", minHeight: "150px", borderRadius: "12px 0px 0px 0px"}
                 this.canClick() ? look.backgroundColor = "#666666" : look.backgroundColor = "#bf8f8f"
@@ -334,7 +332,7 @@
             },
         },
         18: {
-            title() { return "Hex<br>Boost" },
+            title() { return "Refinement<br>Divider" },
             canClick() { return true },
             unlocked() { return player.rf.abilitiesUnlocked[7] },
             onClick() {
@@ -386,8 +384,8 @@
                 player.rf.abilityTimers[6] = amount.add(1).log10().add(1).mul(20)
             break;
             case 7:
-                player.rf.abilityEffects[7] = amount.pow(0.015).mul(3).add(1).pow(buyableEffect("cs", 29))
-                player.rf.abilityTimers[7] = amount.pow(0.05).mul(60)
+                player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(buyableEffect("cs", 29))
+                player.rf.abilityTimers[7] = amount.add(1).log(6).add(1).mul(60)
             break;
         }
     },

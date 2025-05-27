@@ -22,17 +22,14 @@
         NACtoggle: false,
         NACtype: false, // False: Amount ; True: Time
         NACtime: new Decimal(0),
-    }
-    },
+    }},
     automate() {
-        if (hasUpgrade("bi", 109))
-        {
+        if (hasUpgrade("bi", 109)) {
             buyBuyable("bi", 11)
             buyBuyable("bi", 12)
             buyBuyable("bi", 13)
         }
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyUpgrade("bi", 11)
             buyUpgrade("bi", 12)
             buyUpgrade("bi", 13)
@@ -73,10 +70,10 @@
             "background-origin": "border-box",
             "border-color": "#2B7F0A",
         };
-      },
-
+    },
     tooltip: "Break Infinity",
     color: "#2B7F0A",
+    branches: ["ta"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -179,11 +176,9 @@
             }
         }
     },
-    breakInfinities()
-    {
+    breakInfinities() {
         player.in.infinities = new Decimal(0)
     },
-    branches: ["ta", "ip"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -214,13 +209,12 @@
         },
         11: {
             title() { return "<h2>Break Your Infinities" },
-            canClick() { return true },
+            canClick() { return player.bi.brokenInfinitiesToGet.gt(0) },
             unlocked() { return true },
             onClick() {
                 layers.bi.breakInfinities()
                 player.bi.brokenInfinities = player.bi.brokenInfinities.add(player.bi.brokenInfinitiesToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         12: {
@@ -314,8 +308,7 @@
             style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         //Infinity Points
         11:

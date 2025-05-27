@@ -231,8 +231,7 @@ addLayer("u2t", {
     tabFormat: [
         ["layer-proxy", ["in", [
             ["blank", "25px"],
-            ["tree", function () { return player.universe == 2 ? tree2 : null } ],
-
+            ["tree", function () { return player.universe == 2 ? tree : null } ],
         ]]]
     ],
     layerShown() { return false }

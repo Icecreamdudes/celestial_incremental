@@ -12,7 +12,7 @@
 	"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
 	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
 	"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
-	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "legendaryPets.js"],
+	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -144,7 +144,6 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Made U3 Milestone 7 keep RBI toggle.<br>
 			- Added a U1 upgrade that improves Pent automation.<br>
 			- Added a Funify upgrade that unlocks bulk grass-skip.<br>
-			- Made many clickables able to be auto-clicked if you hold down left click.<br>
 			- Added claim all buttons to applicable check back pages.<br>
 			- Added toggle alert buttons to applicable check back pages.<br><br>
 		Visual Enhancements:<br>
@@ -396,10 +395,10 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset", "tierReset", "tetrReset", "prestigeReset", "loadGrass", "unloadGrass",
 "pentReset", "loadGoldGrass", "unloadGoldGrass", "grasshopReset", "codeExperienceReset", "levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2", "resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
 "rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5", "dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8", "dailyReward", "dailyRewardPet",
-"petButton4", "hexReset", "hexPointReset", "automationTierReset", "startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12", "startCutscene13", "antidebuffReset", "startCutscene14",
+"petButton4", "hexReq", "hexGain", "startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12", "startCutscene13", "antidebuffReset", "startCutscene14",
 "negativeInfinityReset", "reverseCrunch", "startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities", "domainReset", "gainAutomationShard",
 "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet", "sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset", "replicantiMultiply",
-"gainCanteCore", "ragePowerReset", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
+"gainCanteCore", "blankModReset", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass", "unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore",
 "startCutsceneDice", "startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone", "petButton5", "petButton6", "refreshBanner",
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
 "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset", 
@@ -462,28 +461,21 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
-	if (player.de.tavPoints.gte(1e120)) {
-		player.de.tavPoints = new Decimal(1e104)
-		player.de.tavEssence = new Decimal(0)
-		player.gh.steel = new Decimal(0)
-		player.p.crystals = new Decimal(0)
-		callAlert("Oh no, your save file was inflated. Steel, Crystal, and debuff currencies are reset.", "resources/gat.png")
-	}
-	if (oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
-		if ((player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs") && !hasUpgrade("cp", 18)) {
-			player.cp.cantepocalypseActive = true
+	if (oldVersion == "1.3" || oldVersion == "1.2.1" || oldVersion == "1.2" || oldVersion == "1.1.2" || oldVersion == "1.1.1" || oldVersion == "1.1" || oldVersion == "1.0") {
+		// Fix dimension content
+		if (oldVersion != "1.3") {
+			setBuyableAmount("ad", 2, player.ad.dimBoostAmount)
+			setBuyableAmount("ad", 3, player.ad.galaxyAmount)
+			setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)
+			setBuyableAmount("id", 11, player.id.dimensionsPurchased[0])
+			setBuyableAmount("id", 12, player.id.dimensionsPurchased[1])
+			setBuyableAmount("id", 13, player.id.dimensionsPurchased[2])
+			setBuyableAmount("id", 14, player.id.dimensionsPurchased[3])
+			setBuyableAmount("id", 15, player.id.dimensionsPurchased[4])
+			setBuyableAmount("id", 16, player.id.dimensionsPurchased[5])
+			setBuyableAmount("id", 17, player.id.dimensionsPurchased[6])
+			setBuyableAmount("id", 18, player.id.dimensionsPurchased[7])
 		}
-		setBuyableAmount("ad", 2, player.ad.dimBoostAmount)
-		setBuyableAmount("ad", 3, player.ad.galaxyAmount)
-		setBuyableAmount("id", 1, player.id.dimensionUnlockAmount)
-		setBuyableAmount("id", 11, player.id.dimensionsPurchased[0])
-		setBuyableAmount("id", 12, player.id.dimensionsPurchased[1])
-		setBuyableAmount("id", 13, player.id.dimensionsPurchased[2])
-		setBuyableAmount("id", 14, player.id.dimensionsPurchased[3])
-		setBuyableAmount("id", 15, player.id.dimensionsPurchased[4])
-		setBuyableAmount("id", 16, player.id.dimensionsPurchased[5])
-		setBuyableAmount("id", 17, player.id.dimensionsPurchased[6])
-		setBuyableAmount("id", 18, player.id.dimensionsPurchased[7])
 		// Prevent old save factor buyables from being over cap
 		for (let i = 1; i < 9; i++) {
 			if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
@@ -519,8 +511,8 @@ function fixOldSave(oldVersion){
 		if (getBuyableAmount("g", 14).gt(1000)) setBuyableAmount("g", 14, 1000)
 		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
 		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)
-	}
-	if (typeof oldVersion === 'string' ) {
+
+		// Fix Pet Content
 		for (let i = 0; i < player.cb.commonPetAmounts.length; i++) {
 			setLevelableAmount("pet", i+101, player.cb.commonPetLevels[i]);
 			setLevelableXP("pet", i+101, player.cb.commonPetAmounts[i]);
@@ -558,16 +550,13 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1206, player.cb.evolvedLevels[8])
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
+
+		player.d.diceEffects[14] = new Decimal(1)
+		player.rf.abilityEffects[7] = new Decimal(1)
 	}
-	if (typeof oldVersion === 'string') {
+	if (oldVersion < 161) {
 		if (player.points.gt("1e100000")) {
 			player.in.delay = new Decimal(2)
-		}
-	} else {
-		if (oldVersion < 161) {
-			if (player.points.gt("1e100000")) {
-				player.in.delay = new Decimal(2)
-			}
 		}
 	}
 }

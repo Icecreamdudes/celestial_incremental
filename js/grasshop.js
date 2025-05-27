@@ -22,8 +22,7 @@
 
         studyMax: false,
         steelMax: false,
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("ip", 17))
         {
@@ -53,8 +52,7 @@
             buyBuyable("gh", 38)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Grasshop",
     color: "#19e04d",
     update(delta) {
@@ -68,7 +66,6 @@
         if (player.po.rocketFuel) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
-        if (inChallenge("ip", 13) || player.po.hex) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(buyableEffect("h", 15))
         if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
 
         // CHALLENGE MODIFIERS
@@ -138,7 +135,6 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.pe.pestEffect[6])
 
         // CONTINUED REGULAR MODIFIERS
-        if (inChallenge("ip", 13) || player.po.hex) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("h", 16))
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
         if (player.pol.pollinatorsIndex == 5) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorsEffect[9])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
@@ -198,9 +194,7 @@
         }
         
     },
-    branches() {
-        return player.po.realmMods ? ["cb", "g", "p"] : ["g"]
-    },
+    branches: ["g"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -257,7 +251,6 @@
 
                 player.pe.pests = player.pe.pests.mul(0.9)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
@@ -268,7 +261,6 @@
                 player.gh.steelPause = new Decimal(5)
                 player.gh.steel = player.gh.steel.add(player.gh.steelToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "grey" : look.backgroundColor = "#bf8f8f"
@@ -455,10 +447,8 @@
         player.fa.foundryEffect = new Decimal(1)
         player.fa.charge = new Decimal(0)
     },
-    bars: {
-    },
-    upgrades: {
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(10) },
@@ -1189,13 +1179,9 @@
             style: { width: '275px', height: '150px', backgroundColor: 'grey'}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {

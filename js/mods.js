@@ -22,8 +22,7 @@
         modSoftcapStart: new Decimal(10),
 
         modMax: false,
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("ip", 17))
         {
@@ -33,8 +32,8 @@
             buyBuyable("m", 14)
         }
     },
-    nodeStyle() {
-    },
+    branches: ["gh"],
+    nodeStyle() {},
     tooltip: "Mods",
     color: "#1377BF",
     update(delta) {
@@ -46,7 +45,6 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(levelableEffect("pet", 201)[0])
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
         if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
-        if (inChallenge("ip", 13) || player.po.hex) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("h", 17))
 
         // CHALLENGE MODIFIERS
         if (inChallenge('ip', 15)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.65)
@@ -97,7 +95,6 @@
 
         // CONTINUED REGULAR MODIFIERS
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ad", 18))
-        if (inChallenge("ip", 13) || player.po.hex) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("h", 18))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("p", 12))
         if (player.pol.pollinatorsIndex == 6) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.pol.pollinatorsEffect[10])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.i.preOTFMult)
@@ -130,7 +127,6 @@
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 302)[1])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
-        if (inChallenge("ip", 13) || player.po.hex) player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("h", 18))
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
         if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
         if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
@@ -161,7 +157,6 @@
             player.m.linesOfCode = new Decimal(0)
         }
     },
-    branches: ["t"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -198,7 +193,6 @@
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },

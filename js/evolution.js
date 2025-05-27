@@ -439,7 +439,7 @@
             description() {
                 return formatWhole(player.cb.evolutionShards) + "/100 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/20 Paragon Shards" +
-                "<br>"  + format(player.points) + "/1e1,000,000 Celestial Points" +
+                "<br>"  + format(player.points) + "/1e120,000 Celestial Points" +
                 "<br>"  + formatWhole(player.g.goldGrass) + "/1e40 Golden Grass" +
                 "<br>"  + formatWhole(player.g.moonstone) + "/2,000 Moonstone" +
                 "<br>"  + formatWhole(player.cp.replicantiPoints) + "/1e250 Replicanti Points" +
@@ -447,7 +447,7 @@
                 "<br>"  + formatWhole(player.cs.paragonScraps) + "/100 Paragon Scraps"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(100) && player.cb.paragonShards.gte(20) && player.points.gte("1e1000000")
+                return (player.cb.evolutionShards.gte(100) && player.cb.paragonShards.gte(20) && player.points.gte("1e120000")
                 && player.g.goldGrass.gte(1e40) && player.g.moonstone.gte(2000) && player.cp.replicantiPoints.gte(1e250)
                 && player.ca.replicantiGalaxies.gte(15) && player.cs.paragonScraps.gte(100))
             },
@@ -2329,7 +2329,6 @@ addLayer("ev9", {
                 player.coa.coreStrengths[player.ev9.coreIndex] = new Decimal(-1)
                 player.coa.coreOccupied[player.ev9.coreIndex] = false
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "140px", minHeight: "70px", borderRadius: "10px" },
         },
         101: {
@@ -2547,7 +2546,6 @@ addLayer("ev10", {
                 player.ev10.evoSacrificeCooldownTimer = player.ev10.evoSacrificeCooldownTimerMax
                 player.ev10.activeBoost = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "150px", minHeight: "75px", borderRadius: "10px 0px 0px 10px" },
         },
         12: {
@@ -2562,7 +2560,6 @@ addLayer("ev10", {
                 player.ev10.paragonSacrificeCooldownTimer = player.ev10.paragonSacrificeCooldownTimerMax
                 player.ev10.activeBoost = new Decimal(2)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "150px", minHeight: "75px", borderRadius: "0px 10px 10px 0px" },
         },
     },

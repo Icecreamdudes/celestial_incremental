@@ -19,18 +19,15 @@
         //buymax
         dimMax: false,
         ipMax: false,
-    }
-    },
+    }},
     automate() {
-        if (hasMilestone("s", 13))
-        {
+        if (hasMilestone("s", 13)) {
             buyBuyable("id", 21)
             buyBuyable("id", 22)
             buyBuyable("id", 23)
             buyBuyable("id", 24)
         }
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyBuyable("id", 11)
             buyBuyable("id", 12)
             buyBuyable("id", 13)
@@ -47,10 +44,10 @@
             "background-origin": "border-box",
             "border-color": "#b87400",
         };
-      },
-
+    },
     tooltip: "Infinity Dimensions",
     color: "white",
+    branches: ["bi"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -92,7 +89,6 @@
 
         }
     },
-    branches: ["ad"],
     clickables: {
         1: {
             title() { return "<h2>Return" },

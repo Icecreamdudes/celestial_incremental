@@ -47,7 +47,7 @@
     },
     tooltip: "Prestige",
     color: "#31aeb0",
-    branches: ["f"],
+    branches: ["r"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -62,12 +62,12 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(levelableEffect("pet", 102)[0])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.diceEffects[2])
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("ip", 21))
+        if (inChallenge("ip", 13) || player.po.hex) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.h.HRErefinementEffect[1][1])
            
         // CHALLENGE MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.pe.pestEffect[2])
         if (hasUpgrade("d", 17)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("d", 17))
         if (inChallenge("ip", 13)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.7)
-        if (inChallenge("ip", 13) || player.po.hex) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("h", 12))
         if (inChallenge("ip", 15)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.65)
         if (inChallenge("ip", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.5)
         if (player.de.antidebuffIndex.eq(1)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.de.antidebuffEffect)
@@ -282,7 +282,6 @@
                 layers.p.prestigeReset()
                 player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
         },
         12: {
@@ -293,7 +292,6 @@
                 player.p.crystalPause = new Decimal(5)
                 player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#98245c" : look.backgroundColor = "#bf8f8f"

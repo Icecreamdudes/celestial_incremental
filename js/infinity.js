@@ -1,4 +1,4 @@
-﻿var tree2 = [["ad", "ip", "id"], ["tad", "ta", "bi", "om"], ["ga", "ca"]]
+﻿var tree2 = [["ad", "ip"], ["ta", "tad"], ["bi", "id", "om"], ["ca"]]
 addLayer("in", {
     name: "Universe 2", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "2", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -126,22 +126,13 @@ addLayer("in", {
         if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
         if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
         if (player.in.breakInfinity && hasUpgrade("bi", 114)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 21))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 22))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.h.HBLboonEffects[2])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ta", 33))
         if (hasUpgrade("ip", 42)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("ip", 42))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 41))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 42))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 43))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 44))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 45))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 46))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 47))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("f", 48))
         if (hasUpgrade("bi", 101)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 101))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.om.diceMasteryPointsEffect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("tad", 21))
@@ -149,7 +140,6 @@ addLayer("in", {
         if (hasUpgrade("bi", 23)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 23))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("h", 23))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 403)[1])
@@ -188,9 +178,9 @@ addLayer("in", {
                 {
                     player.ta.highestRocketFuel = player.rf.rocketFuel
                 }
-                if (player.h.hexPoints[0].gt(player.ta.highestHex1Points))
+                if (player.h.hexPoint.gt(player.ta.highestHexPoints))
                 {
-                    if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
+                    if (player.po.hex) player.ta.highestHexPoints = player.h.hexPoint
                 }
             }
         player.points = new Decimal(10)
@@ -581,8 +571,8 @@ addLayer("bigc", {
             if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel)) {
                 player.ta.highestRocketFuel = player.rf.rocketFuel
             }
-            if (player.h.hexPoints[0].gt(player.ta.highestHex1Points)) {
-                if (player.po.hex) player.ta.highestHex1Points = player.h.hexPoints[0]
+            if (player.h.hexPoint.gt(player.ta.highestHexPoints)) {
+                if (player.po.hex) player.ta.highestHexPoints = player.h.hexPoint
             }
         }
         layers.in.bigCrunch()

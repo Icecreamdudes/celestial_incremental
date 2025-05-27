@@ -33,6 +33,15 @@ addLayer("pet", {
         singularityButtonTimers: [new Decimal(0), new Decimal(0),],
         singularityButtonTimersMax: [new Decimal(600), new Decimal(3600),],
 
+        // Legendary Gems
+        legendaryGemsToGetMin: new Decimal(0),
+        legendaryGemsToGetMax: new Decimal(0),
+
+        legendaryGemTimer: new Decimal(0),
+        legendaryGemTimerMax: new Decimal(86400),
+
+        gemEffects: [new Decimal(1), new Decimal(1), new Decimal(1)], // Red, Purple, Green
+
         // PET SHOP
         shopResetTimer: new Decimal(0),
         shopResetTimerMax: new Decimal(21600),
@@ -75,7 +84,7 @@ addLayer("pet", {
         if (hasUpgrade("ev8", 13)) player.pet.petPointMult = player.pet.petPointMult.mul(1.2)
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 401)[0])
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 406)[2])
-        player.pet.petPointMult = player.pet.petPointMult.mul(player.leg.gemEffects[1])
+        player.pet.petPointMult = player.pet.petPointMult.mul(player.pet.gemEffects[1])
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("ep4", 12))
 
         // PET BUTTON COOLDOWN CALC
@@ -108,6 +117,17 @@ addLayer("pet", {
  
             player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(ops.mul(delta))
         }
+
+        // =- LEGENDARY GEMS -=
+        player.pet.legendaryGemsToGetMin = player.cb.XPBoost.pow(0.2).div(2).floor()
+        player.pet.legendaryGemsToGetMax = player.cb.XPBoost.pow(0.25).div(2).floor()
+
+        player.pet.legendaryGemTimerMax = new Decimal(86400)
+        player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(onepersec.mul(delta))
+
+        player.pet.gemEffects[0] = player.cb.legendaryPetGems[0].pow(0.1).div(5).add(1)
+        player.pet.gemEffects[1] = player.cb.legendaryPetGems[1].pow(0.07).div(10).add(1)
+        player.pet.gemEffects[2] = player.cb.legendaryPetGems[2].pow(0.05).div(7).add(1)
 
         // =- PET SHOP START -=
         player.pet.shopResetTimerMax = new Decimal(21600)
@@ -320,11 +340,11 @@ addLayer("pet", {
             style: {width: "125px", minHeight: "60px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
         },
         15: {
-            title() { return "Legendary Pets" },
+            title() { return "Legendary Gems" },
             canClick() { return true },
             unlocked() { return player.cb.legendaryPetGems[0].gt(0) || player.cb.legendaryPetGems[1].gt(0) || player.cb.legendaryPetGems[2].gt(0) },
             onClick() {
-                player.tab = "leg"
+                player.subtabs["pet"]["content"] = "Legendary Gems"
             },
             style: {width: "125px", minHeight: "60px", backgroundColor: "#eed200", color: "#fe6d00", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"}, 
         },
@@ -487,7 +507,7 @@ addLayer("pet", {
         112: {
             title() { return "Singularity"},
             canClick() { return true },
-            unlocked() { return hasUpgrade("s", 23) },
+            unlocked() { return hasUpgrade("s", 23) && player.cb.highestLevel.gte(25000) },
             onClick() {
                 player.subtabs["pet"]["fragTabs"] = "Singularity"
             },
@@ -527,6 +547,37 @@ addLayer("pet", {
             style() {
                 let look = {width: "225px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4c64ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        // LEGENDARY GEMS
+        201: {
+            title() { return player.pet.legendaryGemTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.legendaryGemTimer) + "." : "Reset for legendary gems."},
+            canClick() { return player.pet.legendaryGemTimer.lt(0) },
+            unlocked() { return true },
+            onClick() {
+                const redGemGain = randomInt(player.pet.legendaryGemsToGetMin, player.pet.legendaryGemsToGetMax)
+                const purpleGemGain = randomInt(player.pet.legendaryGemsToGetMin, player.pet.legendaryGemsToGetMax)
+                const greenGemGain = randomInt(player.pet.legendaryGemsToGetMin, player.pet.legendaryGemsToGetMax)
+    
+                // Add the gems to the player's inventory
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(redGemGain)
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(purpleGemGain)
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(greenGemGain)
+
+                player.pet.legendaryGemTimer = player.pet.legendaryGemTimerMax
+
+                // RESET CODE
+                player.cb.xp = new Decimal(0)
+                player.cb.totalxp = new Decimal(0)
+                player.cb.level = new Decimal(0)
+                player.cb.highestLevel = new Decimal(0)
+                player.cb.XPBoost = new Decimal(1)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#fe9400" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -3167,6 +3218,36 @@ addLayer("pet", {
                     ["buttonless-microtabs", "fragTabs", { 'border-width': '0px' }],
                 ],
             },
+            "Legendary Gems": {
+                buttonStyle() { return {color: "#222222"}},
+                unlocked() { return true },
+                content: [
+                    ["scroll-column", [
+                        ["blank", "20px"],
+                        ["left-row", [
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.legendaryPetGems[0])}, {width: "93px", height: "50px", color: "#ff5555", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Red Legendary Gem<hr><small>x" + format(player.pet.gemEffects[0]) + " XP</small></div>"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.legendaryPetGems[1])}, {width: "93px", height: "50px", color: "#aa55aa", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Purple Legendary Gem<hr><small>x" + format(player.pet.gemEffects[1]) + " Pet Points</small></div>"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.legendaryPetGems[2])}, {width: "95px", height: "50px", color: "#55ff55", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Green Legendary Gem<hr><small>x" + format(player.pet.gemEffects[2]) + " XPBoost</small></div>"}],
+                            ], {width: "150px", height: "50px"}],
+                        ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                        ["blank", "20px"],
+                        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.pet.legendaryGemsToGetMin) + " to " + formatWhole(player.pet.legendaryGemsToGetMax) + "</h3> of each gem on reset. (based on XPBoost)" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["row", [["clickable", 201]]],
+                    ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
+                ],
+            },
             "???": {
                 buttonStyle() { return {color: "#222222"}},
                 unlocked() { return true },
@@ -3308,3 +3389,8 @@ addLayer("pet", {
     ],
     layerShown() { return player.startedGame == true }
 })
+function randomInt(min, max) {
+    min = Math.ceil(min.toNumber());
+    max = Math.floor(max.toNumber());
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

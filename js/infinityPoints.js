@@ -118,7 +118,6 @@
                     layers.bigc.crunch()
                 }
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },
@@ -289,7 +288,7 @@
         {
             title: "Upgrade (4, 1)",
             unlocked() { return hasUpgrade("ta", 14) },
-            description: "Boosts negative infinity points baseed on infinity points.",
+            description: "Boosts negative infinity points based on infinity points.",
             cost: new Decimal(20000),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -303,7 +302,7 @@
         {
             title: "Upgrade (4, 2)",
             unlocked() { return hasUpgrade("ta", 14) },
-            description: "Boosts infinity points baseed on negative infinity points.",
+            description: "Boosts infinity points based on negative infinity points.",
             cost: new Decimal(40000),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -635,9 +634,9 @@
         13: {
             name: "Challenge III",
             challengeDescription() { return "<h4>Hex... A feature seemingly coming from thin air. No check back effects either..." },
-            goalDescription() { return "Hex 4" },
-            goal() { return new Decimal("4") },
-            canComplete: function () { return player.h.hex.gte(4) },
+            goalDescription() { return "6 Refinements" },
+            goal() { return new Decimal("6") },
+            canComplete: function () { return player.h.HRErefinement.gte(6) },
             rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {

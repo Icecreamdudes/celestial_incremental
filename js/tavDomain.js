@@ -51,6 +51,7 @@
     },
     tooltip: "Tav's Domain",
     color: "#5b629a",
+    branches: ["ta"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -82,7 +83,6 @@
 
         if (hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(Decimal.mul(player.tad.corruptedInfinitiesToGet.mul(0.1), delta))
     },
-    branches: ["ta", "ad", "ca"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -180,14 +180,13 @@
             style: { width: '500px', "min-height": '200px', borderRadius: '15px' },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11:
         {
-            title: "Hex Buyable Automation",
+            title: "Productive Provenance",
             unlocked() { return true },
-            description: "Autobuys hex buyables (not blessings).",
+            description: "First of each provenance's effects are boosted by ^1.1.",
             cost: new Decimal(20),
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
@@ -195,7 +194,7 @@
         },
         12:
         {
-            title: "Rocket Fuel Ability Automation",
+            title: "Fully Fueled Abilities",
             unlocked() { return true },
             description: "Auto activates the first four rocket fuel abilities.",
             cost: new Decimal(20),
@@ -206,7 +205,7 @@
         },
         13:
         {
-            title: "Dice Buyable Automation",
+            title: "Diced Automation",
             unlocked() { return true },
             description: "Autobuys dice buyables.",
             cost: new Decimal(20),

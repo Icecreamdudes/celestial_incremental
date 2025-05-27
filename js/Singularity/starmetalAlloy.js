@@ -155,7 +155,6 @@
                 player.coa.coreStarmetalValue[player.sma.coreIndex] = player.coa.coreStarmetalValue[player.sma.coreIndex].add(player.sma.primePrice)
                 player.coa.corePrimes[player.sma.coreIndex] = player.coa.corePrimes[player.sma.coreIndex].add(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: "15px" },
         },
         13: {

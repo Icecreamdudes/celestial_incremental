@@ -32,10 +32,10 @@
             buyBuyable("t", 18)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Trees",
     color: "#0B6623",
+    branches: ["p"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -56,10 +56,10 @@
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
+        if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(player.h.HRErefinementEffect[2][1])
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("h", 13))
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
 
@@ -111,7 +111,6 @@
         // CHALLENGE MODIFIERS
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.pe.pestEffect[3])
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("h", 13))
         if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
@@ -140,7 +139,6 @@
             player.t.leaves = new Decimal(0)
         }
     },
-    branches: ["r"],
     clickables: {
         1: {
             title() { return "<h2>Return" },

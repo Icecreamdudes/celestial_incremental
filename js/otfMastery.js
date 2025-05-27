@@ -78,14 +78,14 @@
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
-        if (player.po.hex && player.h.hexPoints[0].gte(1))
+        if (player.po.hex && player.h.hexPoint.gte(1))
         {
-            if (!hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.h.hexPoints[0].plus(1).log10().pow(1.65)
+            if (!hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.h.hexPoint.plus(1).log10().pow(1.65)
         } else
         {
             player.om.hexMasteryPointsToGet = new Decimal(0)
         }
-        if (hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.ta.highestHex1Points.plus(1).log10().pow(1.65)
+        if (hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.ta.highestHexPoints.plus(1).log10().pow(1.65)
 
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("om", 16))
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 17))

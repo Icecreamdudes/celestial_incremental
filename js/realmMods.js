@@ -68,6 +68,7 @@
     },
     tooltip: "Realm Mods",
     color: "white",
+    branches: ["m", "cb"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -363,7 +364,6 @@
             }
         }
     },
-    branches: ["m", "cb"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -400,7 +400,6 @@
                 player.rm.blankModsPause = new Decimal(5)
                 player.rm.blankMods = player.rm.blankMods.add(player.rm.blankModsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
@@ -462,7 +461,6 @@
                 player.cb.xp = new Decimal(0)
                 player.cb.totalxp = new Decimal(5.1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         22: {
@@ -498,12 +496,11 @@
                 player.gh.buyables[37] = new Decimal(0)
                 player.gh.buyables[38] = new Decimal(0)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         23: {
             title() { return "<h3>Convert Death Realm Mods (Req: hex 21)" },
-            canClick() { return player.h.hex.gte(21)},
+            canClick() { return true /*player.h.hex.gte(21)*/},
             unlocked() { return player.rm.currentDisplay.eq(2) },
             onClick() {
                 player.rm.realmMods[2] = player.rm.realmMods[2].add(player.rm.realmModsToGet[2])
@@ -516,7 +513,6 @@
                     player.h.hexPoints[i] = new Decimal(0)
                 }
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         24: {
@@ -533,7 +529,6 @@
                     if (player.id.dimensionsUnlocked[i]) player.id.dimensionAmounts[i] = new Decimal(1)
                 }
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         25: {
@@ -580,7 +575,6 @@
                 player.om.buyables[15] = new Decimal(0)
                 player.om.buyables[16] = new Decimal(0)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         26: {
@@ -602,7 +596,6 @@
                 player.bi.buyables[12] = new Decimal(0)
                 player.bi.buyables[13] = new Decimal(0)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
     },

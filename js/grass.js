@@ -1261,11 +1261,11 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
     if (hasUpgrade('g', 11)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect('g', 11))
     if (hasUpgrade('ad', 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect('ad', 14))
+    if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(player.h.HRErefinementEffect[3][1])
 
     // CHALLENGE MODIFIERS
     player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
     if (inChallenge('ip', 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
-    if (inChallenge('ip', 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(buyableEffect('h', 14))
     if (player.de.antidebuffIndex.eq(2)) player.g.grassVal = player.g.grassVal.mul(player.de.antidebuffEffect)
     if (inChallenge('tad', 11)) player.g.grassVal = player.g.grassVal.pow(0.4)
     if (inChallenge('tad', 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect('de', 15))

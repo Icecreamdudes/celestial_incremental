@@ -13,8 +13,7 @@
 
     }},
     automate() {
-        if (hasUpgrade("p", 15))
-        {
+        if (hasUpgrade("p", 15)) {
             buyBuyable("f", 11)
             buyBuyable("f", 12)
             buyBuyable("f", 13)
@@ -24,8 +23,7 @@
             buyBuyable("f", 17)
             buyBuyable("f", 18)
         }
-        if (hasUpgrade("p", 21))
-        {
+        if (hasUpgrade("p", 21)) {
             buyBuyable("f", 19)
             buyBuyable("f", 21)
             buyBuyable("f", 22)
@@ -35,8 +33,7 @@
             buyBuyable("f", 26)
             buyBuyable("f", 27)
         }
-        if (hasMilestone("r", 16))
-        {
+        if (hasMilestone("r", 16)) {
             buyBuyable("f", 1)
             buyBuyable("f", 2)
             buyBuyable("f", 3)
@@ -54,31 +51,8 @@
             buyBuyable("f", 35)
             buyBuyable("f", 36)
         }
-        if (hasUpgrade("bi", 103))
-        {
-            buyBuyable("f", 41)
-            buyBuyable("f", 42)
-            buyBuyable("f", 43)
-            buyBuyable("f", 44)
-            buyBuyable("f", 45)
-            buyBuyable("f", 46)
-            buyBuyable("f", 47)
-            buyBuyable("f", 48)
-        }
-        if (hasUpgrade("bi", 13))
-        {
-            buyBuyable("f", 51)
-            buyBuyable("f", 52)
-            buyBuyable("f", 53)
-            buyBuyable("f", 54)
-            buyBuyable("f", 55)
-            buyBuyable("f", 56)
-            buyBuyable("f", 57)
-            buyBuyable("f", 58)
-        }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Factors",
     color() { return "#83cecf" },
     branches: ["r"],
@@ -104,13 +78,13 @@
         if (hasUpgrade("p", 16)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("p", 16))
         if (hasUpgrade("ip", 14) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 14))
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 21))
+        if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.h.HRErefinementEffect[0][1])
         
         // CHALLENGE MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.pe.pestEffect[1])
         if (inChallenge("ip", 13)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(0.7)
 
         // CONTINUED REGULAR MODIFIERS
-        if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("h", 11))
         if (player.pol.pollinatorsIndex == 2) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.pol.pollinatorsEffect[2])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.i.preOTFMult)
         if (player.cop.processedCoreFuel.eq(1)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.cop.processedCoreInnateEffects[0])
@@ -140,9 +114,7 @@
         if (player.pol.pollinatorsIndex == 1) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorsEffect[1])
         player.f.factorBase = player.f.factorBase.mul(buyableEffect("rm", 22))
         if (player.cop.processedCoreFuel.eq(1)) player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
-
     },
-
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -262,10 +234,8 @@
             style: { width: '75px', "min-height": '50px', }
         },
     },
-    bars: {
-    },
-    upgrades: {
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         // Grass Factors
         1: {
@@ -1359,560 +1329,10 @@
             },
             style: { width: '275px', height: '150px', backgroundColor: "#3b844e" }
         },
-        // Infinity Factors
-        41: {
-            costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor I"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        42: {
-            costBase() { return new Decimal(30) },
-            costGrowth() { return new Decimal(1.22) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor II"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        43: {
-            costBase() { return new Decimal(45) },
-            costGrowth() { return new Decimal(1.24) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor III"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        44: {
-            costBase() { return new Decimal(80) },
-            costGrowth() { return new Decimal(1.26) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor IV"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        45: {
-            costBase() { return new Decimal(200) },
-            costGrowth() { return new Decimal(1.28) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor V"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        46: {
-            costBase() { return new Decimal(550) },
-            costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor VI"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        47: {
-            costBase() { return new Decimal(1200) },
-            costGrowth() { return new Decimal(1.32) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor VII"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        48: {
-            costBase() { return new Decimal(2600) },
-            costGrowth() { return new Decimal(1.34) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.ta.negativeInfinityPoints},
-            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Infinity Factor VIII"
-            },
-            display() {
-                return "which are boosting infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 103)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 103)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#FFBF00", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)" }
-        },
-        // NIP Factors
-        51: {
-            costBase() { return new Decimal(10000) },
-            costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor I"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        52: {
-            costBase() { return new Decimal(18000) },
-            costGrowth() { return new Decimal(1.13) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor II"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        53: {
-            costBase() { return new Decimal(32000) },
-            costGrowth() { return new Decimal(1.16) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor III"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        54: {
-            costBase() { return new Decimal(60000) },
-            costGrowth() { return new Decimal(1.19) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor IV"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        55: {
-            costBase() { return new Decimal(110000) },
-            costGrowth() { return new Decimal(1.22) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor V"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        56: {
-            costBase() { return new Decimal(270000) },
-            costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor VI"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        57: {
-            costBase() { return new Decimal(500000) },
-            costGrowth() { return new Decimal(1.28) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor VII"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
-        58: {
-            costBase() { return new Decimal(1200000) },
-            costGrowth() { return new Decimal(1.31) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.in.infinityPoints},
-            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.015).add(1).pow(buyableEffect("cs", 22)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Negative Infinity Factor VIII"
-            },
-            display() {
-                return "which are boosting negative infinity point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
-            },
-            buy(mult) {
-                if (mult != true && !hasUpgrade("bi", 13)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("bi", 13)) this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: "#b2d8d8" }
-        },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -1991,37 +1411,6 @@
                     ["row", [["ex-buyable", 5], ["ex-buyable", 6], ["ex-buyable", 7], ["ex-buyable", 8]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 1).mul(buyableEffect("f", 2).mul(buyableEffect("f", 3)).mul(buyableEffect("f", 4)).mul(buyableEffect("f", 5)).mul(buyableEffect("f", 6)).mul(buyableEffect("f", 7)).mul(buyableEffect("f", 8)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                ]
-            },
-            "Infinity": {
-                buttonStyle() { return { borderColor: "#FFBF00", color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("ta", 15)},
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>You have " + format(player.ta.negativeInfinityPoints) + " negative infinity points. (+" + format(player.ta.negativeInfinityPointsToGet) + ")"  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>You have " + format(player.in.infinityPoints) + " infinity points. (+" + format(player.in.infinityPointsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44]]],
-                    ["row", [["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 47], ["ex-buyable", 48]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 41).mul(buyableEffect("f", 42).mul(buyableEffect("f", 43)).mul(buyableEffect("f", 44)).mul(buyableEffect("f", 45)).mul(buyableEffect("f", 46)).mul(buyableEffect("f", 47)).mul(buyableEffect("f", 48)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-                ]
-            },
-            "Negative Infinity": {
-                buttonStyle() { return { borderColor: "#b2d8d8", color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("ta", 16)},
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>You have " + format(player.ta.negativeInfinityPoints) + " negative infinity points. (+" + format(player.ta.negativeInfinityPointsToGet) + ")"  }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>You have " + format(player.in.infinityPoints) + " infinity points. (+" + format(player.in.infinityPointsToGet) + ")" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 51], ["ex-buyable", 52], ["ex-buyable", 53], ["ex-buyable", 54]]],
-                    ["row", [["ex-buyable", 55], ["ex-buyable", 56], ["ex-buyable", 57], ["ex-buyable", 58]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 51).mul(buyableEffect("f", 52).mul(buyableEffect("f", 53)).mul(buyableEffect("f", 54)).mul(buyableEffect("f", 55)).mul(buyableEffect("f", 56)).mul(buyableEffect("f", 57)).mul(buyableEffect("f", 58)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
         },

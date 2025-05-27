@@ -193,7 +193,6 @@
 
                 player.cs.paragonScraps = player.cs.paragonScraps.add(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '150px', borderRadius: "15px"}
         },
     },

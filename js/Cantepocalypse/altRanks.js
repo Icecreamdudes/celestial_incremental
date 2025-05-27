@@ -94,7 +94,6 @@
                 player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "406px", minHeight: "80.7px", borderRadius: "0px 15px 0px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
         12: {
@@ -106,7 +105,6 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {return hasUpgrade("cp", 13) ? {width: "406px", minHeight: "80.7px", borderRadius: "0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"} : {width: "406px", minHeight: "80.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"} },
         },
         13: {
@@ -119,7 +117,6 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "406px", minHeight: "80.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
     },

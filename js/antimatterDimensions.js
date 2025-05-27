@@ -260,39 +260,37 @@
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },
-    dimBoostReset()
-    {
+    dimBoostReset() {
         player.ad.antimatter = new Decimal(10)
+        player.ad.antimatterPerSecond = new Decimal(0)
 
         player.ad.buyables[1] = new Decimal(0)
 
-        for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
             player.ad.dimensionAmounts[i] = new Decimal(0)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
             player.ad.buyables[11+i] = new Decimal(0)
         }
 
     },
-    galaxyReset()
-    {
+    galaxyReset() {
         player.ad.antimatter = new Decimal(10)
+        player.ad.antimatterPerSecond = new Decimal(0)
 
         player.ad.buyables[1] = new Decimal(0)
 
-        for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
             player.ad.dimensionAmounts[i] = new Decimal(0)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
             player.ad.buyables[11+i] = new Decimal(0)
         }
 
         player.ad.buyables[2] = new Decimal(0)
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11:
         {

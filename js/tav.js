@@ -33,13 +33,11 @@
 
         highestDicePoints: new Decimal(0),
         highestRocketFuel: new Decimal(0),
-        highestHex1Points: new Decimal(0),
+        highestHexPoints: new Decimal(0),
 
-    }
-    },
+    }},
     automate() {
-        if (hasUpgrade("bi", 104))
-        {
+        if (hasUpgrade("bi", 104)) {
             buyBuyable("ta", 11)
             buyBuyable("ta", 12)
             buyBuyable("ta", 13)
@@ -81,8 +79,7 @@
             buyBuyable("ta", 52)
             buyBuyable("ta", 53)
         }
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyUpgrade("ta", 11)
             buyUpgrade("ta", 12)
             buyUpgrade("ta", 13)
@@ -102,10 +99,10 @@
             "border-color": "#31aeb0",
             "color": "#008080",
         };
-      },
-
+    },
     tooltip: "Tav, the Celestial of Limits",
     color: "#b2d8d8",
+    branches: ["ad"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -140,14 +137,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ip", 12))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 34))
         if (hasUpgrade('ip', 41)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(upgradeEffect("ip", 41))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 51))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 52))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 53))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 54))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 55))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 56))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 57))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("f", 58))
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("h", 109))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 51))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 52))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ta", 53))
@@ -265,27 +255,27 @@
         if (player.ta.galaxyLimitInput.gte(0)) player.ta.galaxyLimit = player.ta.galaxyLimitInput.floor()
         if (player.ta.galaxyLimitInput.lt(0)) player.ta.galaxyLimit = new Decimal(0)
     },
-    negativeInfinityReset()
-    {
+    negativeInfinityReset() {
         player.ad.antimatter = new Decimal(10)
+        player.ad.antimatterPerSecond = new Decimal(0)
 
         player.ad.buyables[1] = new Decimal(0)
 
-        for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
             player.ad.dimensionAmounts[i] = new Decimal(0)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
             player.ad.buyables[11+i] = new Decimal(0)
         }
 
         player.ad.buyables[2] = new Decimal(0)
-        player.ad.buyables[3] = new Decimal(0)
+        if (!hasUpgrade("ta", 11)) player.ad.buyables[3] = new Decimal(0)
+        if (hasUpgrade("ta", 11)) player.ad.buyables[3] = new Decimal(1)
 
-        for (let i = 0; i < player.ta.dimensionPower.length; i++)
-        {
+        for (let i = 0; i < player.ta.dimensionPower.length; i++) {
             player.ta.dimensionPower[i] = new Decimal(0)
+            player.ta.dimensionPowerPerSecond[i] = new Decimal(0)
         }
     },
-    branches: ["ad"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -358,7 +348,6 @@
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         16: {
@@ -603,7 +592,7 @@
         {
             title: "Negative Upgrade I",
             unlocked() { return true },
-            description: "Unlocks Buyables.",
+            description: "Unlocks Buyables and keep a galaxy on reset.",
             cost: new Decimal(1),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
@@ -648,8 +637,8 @@
         {
             title: "Negative Upgrade V",
             unlocked() { return hasUpgrade("ta", 14) },
-            description: "Unlock infinity point factors (in factors).",
-            cost: new Decimal(88),
+            description: "Unlock new hex of blessing content.",
+            cost: new Decimal(77),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -658,8 +647,8 @@
         {
             title: "Negative Upgrade VI",
             unlocked() { return hasUpgrade("ta", 15) },
-            description: "Unlock negative infinity point factors.",
-            cost: new Decimal(444),
+            description: "Unlock the hex of curses.",
+            cost: new Decimal(666),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -678,16 +667,11 @@
         {
             title: "Negative Upgrade VIII",
             unlocked() { return hasUpgrade("ta", 17) },
-            description: "Boost hex points based on NIP.",
+            description: "Unlock graces in hex of blessing.",
             cost: new Decimal(15000),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
-            effect() {
-                return player.ta.negativeInfinityPoints.pow(0.55).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', "min-height": '120px' },
         },
         19:
         {
@@ -1519,13 +1503,13 @@
             cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
-            canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
+            canAfford() { return player.h.hexPoint.gte(this.cost()) },
             title() {
                 return "Hex-Dice Synergy"
             },
             display() {
                 return "which are multiplying dice point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Points"
             },
             buy(mult) {
                 let base = new Decimal(1e20)
@@ -1533,14 +1517,14 @@
                 if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.h.hexPoint, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1615,13 +1599,13 @@
             cost(x) { return new Decimal(8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
-            canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
+            canAfford() { return player.h.hexPoint.gte(this.cost()) },
             title() {
                 return "Hex-Rocket Fuel Synergy"
             },
             display() {
                 return "which are multiplying rocket fuel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Points"
             },
             buy(mult) {
                 let base = new Decimal(1e20)
@@ -1629,14 +1613,14 @@
                 if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoint.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.h.hexPoint, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1645,14 +1629,14 @@
         },
         47: {
             cost(x) { return new Decimal(66).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e25) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2).add(1).pow(buyableEffect("cs", 31)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.d.dicePoints.gte(this.cost()) },
             title() {
                 return "Dice-Hex Synergy"
             },
             display() {
-                return "which are multiplying all hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing refinement req. by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy(mult) {
@@ -1677,14 +1661,14 @@
         },
         48: {
             cost(x) { return new Decimal(25).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.15).add(1).pow(buyableEffect("cs", 31)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.4).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
             canAfford() { return player.rf.rocketFuel.gte(this.cost()) },
             title() {
                 return "Rocket Fuel-Hex Synergy"
             },
             display() {
-                return "which are multiplying all hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Rocket Fuel"
             },
             buy(mult) {
@@ -1709,15 +1693,15 @@
         },
         49: {
             cost(x) { return new Decimal(9).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.125).add(1).pow(buyableEffect("cs", 31)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.2).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return true },
-            canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
+            canAfford() { return player.h.hexPoint.gte(this.cost()) },
             title() {
                 return "Hex-Hex Synergy"
             },
             display() {
-                return "which are multiplying all hex point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
+                return "which are multiplying curse gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Points"
             },
             buy(mult) {
                 let base = new Decimal(1e20)
@@ -1725,14 +1709,14 @@
                 if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.h.hexPoint, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1804,31 +1788,31 @@
             style: { width: '275px', height: '150px', }
         },
         53: {
-            cost(x) { return new Decimal(1e5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e40) },
+            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e24) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.5).add(1).pow(buyableEffect("cs", 31)) },
             unlocked() { return hasUpgrade("ta", 19) },
-            canAfford() { return player.h.hexPoints[0].gte(this.cost()) },
+            canAfford() { return player.h.hexPoint.gte(this.cost()) },
             title() {
                 return "Hex-NIP Synergy"
             },
             display() {
                 return "which are multiplying NIP gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex 1 Points"
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Hex Points"
             },
             buy(mult) {
-                let base = new Decimal(1e40)
-                let growth = 1e5
+                let base = new Decimal(1e24)
+                let growth = 100
                 if (mult != true && !hasUpgrade("bi", 104))
                 {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(buyonecost)
+                    if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else
                 {
 
-                let max = Decimal.affordGeometricSeries(player.h.hexPoints[0], base, growth, getBuyableAmount(this.layer, this.id))
+                let max = Decimal.affordGeometricSeries(player.h.hexPoint, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasUpgrade("bi", 104)) player.h.hexPoints[0] = player.h.hexPoints[0].sub(cost)
+                if (!hasUpgrade("bi", 104)) player.h.hexPoint = player.h.hexPoint.sub(cost)
 
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
@@ -1930,8 +1914,8 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.d.dicePoints) + "</h3> dice points. (highest: "  + format(player.ta.highestDicePoints) + ")" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel. (highest: "  + format(player.ta.highestRocketFuel) + ")"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return player.po.hex ? "You have <h3>" + format(player.h.hexPoints[0]) + "</h3> hex 1 points. (highest: " + format(player.ta.highestHex1Points) + ")" :""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return !player.po.hex ? "You have <h3><s>" + format(player.h.hexPoints[0]) + "</s></h3> hex 1 points. (highest: " + format(player.ta.highestHex1Points) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return player.po.hex ? "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (highest: " + format(player.ta.highestHexPoints) + ")" :""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return !player.po.hex ? "You have <h3><s>" + format(player.h.hexPoint) + "</s></h3> hex points. (highest: " + format(player.ta.highestHexPoints) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Highest values get updated on infinity resets." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["raw-html", function () { return "Tip: Use the halter for OTF progression." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],

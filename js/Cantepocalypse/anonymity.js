@@ -30,7 +30,7 @@
     nodeStyle() {
     },
     tooltip: "Anonymity",
-    branches: ["pr"],
+    branches: ["ar"],
     color: "#0c04c1",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -76,7 +76,6 @@
                 player.ar.tetrPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: "400px", minHeight: "100px", borderRadius: "15px"},
         },
     },

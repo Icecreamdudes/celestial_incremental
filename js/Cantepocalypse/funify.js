@@ -307,7 +307,6 @@
                 player.fu.funifyPause = new Decimal(4)
                 player.fu.fun = player.fu.fun.add(player.fu.funToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
         12: {
@@ -508,7 +507,6 @@
                 }
                 player.fu.jocusEssence = player.fu.jocusEssence.add(player.fu.jocusEssenceToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '75px', borderRadius: '15px' },
 
         },

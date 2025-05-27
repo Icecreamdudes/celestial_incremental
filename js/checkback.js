@@ -242,7 +242,7 @@
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cop.processedCorePrimedEffects[3])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.le.punchcardsPassiveEffect[6])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pet", 406)[0])
-            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.leg.gemEffects[0])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.pet.gemEffects[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("ep3", 12))
         }
 
@@ -305,7 +305,7 @@
             if (hasUpgrade("ev8", 16)) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.2)
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cop.processedCorePrimedEffects[4])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 406)[1])
-            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.leg.gemEffects[2])
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.pet.gemEffects[2])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("ep5", 12))
         }
 
@@ -343,6 +343,7 @@
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimersMax[i] = player.cb.buttonTimersMax[i].mul(10).div(player.cb.buttonAutomationAllocation[i].pow(0.75))
         }
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
+            if (player.cb.buttonAutomationTimers[i].gt(player.cb.buttonTimersMax[i].mul(10))) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimersMax[i]
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(onepersec.mul(delta))
 
             if (player.cb.buttonAutomationTimers[i].lt(0)) {
@@ -358,6 +359,7 @@
             if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimersMax[i] = player.cb.petButtonTimersMax[i].mul(25).div(player.cb.petAutomationAllocation[i].pow(0.75))
         }
         for (let i = 0; i < player.cb.petAutomationTimers.length; i++) {
+            if (player.cb.petAutomationTimers[i].gt(player.cb.petButtonTimersMax[i].mul(25))) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimersMax[i]
             if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimers[i].sub(onepersec.mul(delta))
 
             if (player.cb.petAutomationTimers[i].lt(0)) {
@@ -393,6 +395,7 @@
             if (player.cb.boostAutomationAllocation[i].gt(0)) player.cb.boostAutomationTimersMax[i] = player.cb.XPBoostTimersMax[i].mul(100).div(player.cb.boostAutomationAllocation[i].pow(0.75))
         }
         for (let i = 0; i < player.cb.boostAutomationTimers.length; i++) {
+            if (player.cb.boostAutomationTimers[i].gt(player.cb.XPBoostTimersMax[i].mul(100))) player.cb.boostAutomationTimers[i] = player.cb.boostAutomationTimersMax[i]
             if (player.cb.boostAutomationAllocation[i].gt(0)) player.cb.boostAutomationTimers[i] = player.cb.boostAutomationTimers[i].sub(onepersec.mul(delta))
 
             if (player.cb.boostAutomationTimers[i].lt(0)) {
@@ -407,6 +410,7 @@
             if (player.cb.pointAutomationAllocation[i].gt(0)) player.cb.pointAutomationTimersMax[i] = tmp.pet.levelables[i+301].pointCooldown.mul(50).div(player.cb.pointAutomationAllocation[i].pow(0.75))
         }
         for (let i = 0; i < player.cb.pointAutomationTimers.length; i++) {
+            if (player.cb.pointAutomationTimers[i].gt(tmp.pet.levelables[i+301].pointCooldown.mul(50))) player.cb.pointAutomationTimers[i] = player.cb.pointAutomationTimersMax[i]
             if (player.cb.pointAutomationAllocation[i].gt(0)) player.cb.pointAutomationTimers[i] = player.cb.pointAutomationTimers[i].sub(onepersec.mul(delta))
 
             if (player.cb.pointAutomationTimers[i].lt(0)) {
@@ -470,7 +474,7 @@
             return quantity
         } else {
             quantity = quantity.sub(100000)
-            quantity = quantity.add(20875).pow(2.6).sub(170227162034).add(806892071467)
+            quantity = quantity.add(20875).pow(2.6).sub(1.7e11).add(8.07e11)
             quantity = quantity.div(levelableEffect("pet", 203)[2])
             quantity = quantity.div(levelableEffect("pet", 304)[1])
             return quantity
@@ -483,17 +487,17 @@
             quantity = quantity.mul(levelableEffect("pet", 304)[1])
             quantity = quantity.div(5/11).pow(5/11).sub(2).floor()
             return quantity
-        } else if (!quantity.gte(new Decimal(806892071467).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))) {
+        } else if (!quantity.gte(new Decimal(8.07e11).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))) {
             quantity = quantity.sub(new Decimal(286925000).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))
             quantity = quantity.mul(levelableEffect("pet", 203)[2])
             quantity = quantity.mul(levelableEffect("pet", 304)[1])
             quantity = quantity.add(37772059).pow(5/12).sub(1436).add(10000).floor()
             return quantity
         } else {
-            quantity = quantity.sub(new Decimal(806892071467).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))
+            quantity = quantity.sub(new Decimal(8.07e11).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))
             quantity = quantity.mul(levelableEffect("pet", 203)[2])
             quantity = quantity.mul(levelableEffect("pet", 304)[1])
-            quantity = quantity.add(170227162034).pow(5/13).sub(20875).add(100000).floor()
+            quantity = quantity.add(1.7e11).pow(5/13).sub(20875).add(100000).floor()
             return quantity
         }
     },
@@ -558,7 +562,10 @@
         player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(time)
         for (let i = 0; i < player.pet.bannerButtonTimers.length; i++) {
             player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(time)
-        } 
+        }
+        for (let i = 0; i < player.pet.singularityButtonTimers.length; i++) {
+            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(time)
+        }
 
         // Epic Pet Timers
         for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++) {
@@ -570,6 +577,9 @@
         for (let i = 0; i < player.ep2.cookiePointButtonTimers.length; i++) {
             player.ep2.cookiePointButtonTimers[i] = player.ep2.cookiePointButtonTimers[i].sub(time)
         }
+
+        // Legendary Pet Timer
+        player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(time)
 
         // Daily Reward (Insane Face Evo)
         player.ev2.cooldown = player.ev2.cooldown.sub(time)
@@ -2465,7 +2475,7 @@
                 return "Check Back OTF Boost."
             },
             display() {
-                return "which are multiplying hex 1 points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying hex points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
             },
             buy(mult) {

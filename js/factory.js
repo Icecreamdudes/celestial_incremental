@@ -20,11 +20,8 @@
 
         milestoneEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), 
             new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), ]
-    }
-    },
-    automate() {
-
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             "background": "gray",
@@ -33,6 +30,7 @@
             "border-color": "white",
         }
     },
+    branches: ["re"],
     tooltip: "Factory",
     color: "gray",
     update(delta) {
@@ -88,7 +86,6 @@
         player.fa.milestoneEffect[9] = player.fa.charge.pow(0.1).add(1) //charge
         player.fa.milestoneEffect[10] = player.fa.charge.pow(0.015).add(1) //pre-otf
     },
-    branches: ["m", "t",],
     clickables: {
         1: {
             title() { return "<h2>Return" },

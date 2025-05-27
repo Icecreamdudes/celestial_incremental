@@ -63,8 +63,7 @@
         boosterDiceStatsPerSecond: new Decimal(0),
 
         boosterDiceAutomation: false,
-    }
-    },
+    }},
     automate() {
         if (hasUpgrade("d", 11) || hasUpgrade("tad", 13))
         {
@@ -102,6 +101,7 @@
     },
     color: "white",
     tooltip: "Dice",
+    branches: ["cb"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -173,7 +173,7 @@
             "Currently boosting infinity points.",
             "Currently boosting check back xp.",
             "Currently boosting rocket fuel.",
-            "Currently boosting hex 1 points.",
+            "Currently boosting hex points.",
             "Currently boosting pre-OTF currencies.",
             "Currently boosting pollinators.",
             "Currently boosting time cubes.",
@@ -252,7 +252,6 @@
         player.d.diceCooldown = player.d.manualCooldown
         layers.d.addDiceEffect()
     },
-    branches: ["cb"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -353,7 +352,6 @@
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "150px", minHeight: "150px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
@@ -558,7 +556,7 @@
             },
         },
         115: {
-            title() { return "Hex 1 Points<br>x" + format(player.d.diceEffects[14]) },
+            title() { return "Hex Points<br>x" + format(player.d.diceEffects[14]) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -690,7 +688,7 @@
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
-            player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00005)
+            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.006)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         // PENT UNLOCKED EFFECTS

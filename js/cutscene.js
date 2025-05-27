@@ -54,7 +54,6 @@
         player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
         player.tab == "revc" ? "#31aeb0" : 
         player.tab == "tad" ? "#b2d8d8" : 
-        player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" : 
         player.tab == "ca" ? "#2a3e66" : 
         player.tab == "cap" ? "#1f1e33" : 
         player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || 
@@ -564,9 +563,9 @@
 
 
         //h
-        if (player.c.cutsceneHex && player.h.hex.gte(1)) {
+        if (player.c.cutsceneHex && player.h.HPRrank[0].gte(1)) {
             player.c.currentCutscene = -3
-        } else if (player.tab != "c" && player.h.hex.gte(1) && hasChallenge("ip", 13)) {
+        } else if (player.tab != "c" && player.h.HPRrank[0].gte(1) && hasChallenge("ip", 13)) {
             player.c.currentCutscene = 0
         }
         if (player.c.currentCutscene == -3) {

@@ -220,7 +220,6 @@
                 player.ra.unequippedRadiationOutput[player.coa.coreIndex] = new Decimal(0)
                 player.ra.unequippedRadiationValue[player.coa.coreIndex] = new Decimal(0)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '140px', "min-height": '70px', borderRadius: '10px 0px 0px 10px' },
         },
         113: {

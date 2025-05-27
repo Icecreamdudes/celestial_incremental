@@ -13,8 +13,7 @@ addLayer("pol", {
         pollinatorsEffect: [new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
         pollinatorsIndex: 0,
         pollinatorsMax: false
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("s", 16))
         {
@@ -35,14 +34,12 @@ addLayer("pol", {
             buyUpgrade("pol", 18)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Pollinators",
     color: "#cb8e00",
-
+    branches: ["g", "gh"],
     update(delta) {
         let onepersec = new Decimal(1)
-
         if (hasUpgrade("i", 22)) {
             // START OF POLLINATORS
             player.pol.pollinatorsPerSecond = player.g.grass.add(1).log(10).pow(0.75).div(3)
@@ -68,8 +65,7 @@ addLayer("pol", {
             }
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
 
-        }
-    
+        }  
 
         if (player.pol.pollinators.gte(1e50) && player.pol.unlockHive < 1) {
             player.pol.unlockHive = 1
@@ -130,7 +126,7 @@ addLayer("pol", {
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
                     player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Dice Points
                     player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Rocket Fuel
-                    player.pol.pollinators.add(1).log(100).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // All Hex Points
+                    player.pol.pollinators.add(1).log(60).add(1).pow(0.6).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Hex Points
                     player.pol.pollinators.add(1).log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)), new Decimal(1), new Decimal(1) // Realm Mod Energy
                 ];
                 break;
@@ -144,7 +140,6 @@ addLayer("pol", {
                 break;
         }
     },
-    branches: ["g", "gh"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -593,8 +588,8 @@ addLayer("pol", {
                             ["raw-html", function () { return player.pol.pollinatorsIndex == 4 ? "Grass Value: x" + format(player.pol.pollinatorsEffect[6]) + "<br>Golden Grass Value: x" + format(player.pol.pollinatorsEffect[7]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
                             ["raw-html", function () { return player.pol.pollinatorsIndex == 5 ? "Grasshoppers: x" + format(player.pol.pollinatorsEffect[8]) + "<br>Fertilizer: x" + format(player.pol.pollinatorsEffect[9]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
                             ["raw-html", function () { return player.pol.pollinatorsIndex == 6 ? "Lines of Code: x" + format(player.pol.pollinatorsEffect[10]) + "<br>Mods: x" + format(player.pol.pollinatorsEffect[11]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                            ["raw-html", function () { return player.pol.pollinatorsIndex != 7 ? "" : hasUpgrade("bi", 27) ? "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) + "<br>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15])
-                                : "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>All Hex Points: x" + format(player.pol.pollinatorsEffect[14]) }, { color: "white", fontSize: "18px", fontFamily: "monospace" }],
+                            ["raw-html", function () { return player.pol.pollinatorsIndex != 7 ? "" : hasUpgrade("bi", 27) ? "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>Hex Points: x" + format(player.pol.pollinatorsEffect[14]) + "<br>Realm Mod Energy: x" + format(player.pol.pollinatorsEffect[15])
+                                : "Dice Points: x" + format(player.pol.pollinatorsEffect[12]) + "<br>Rocket Fuel: x" + format(player.pol.pollinatorsEffect[13]) + "<br>Hex Points: x" + format(player.pol.pollinatorsEffect[14]) }, { color: "white", fontSize: "18px", fontFamily: "monospace" }],
                             ["raw-html", function () { return player.pol.pollinatorsIndex == 8 ? "Steel: x" + format(player.pol.pollinatorsEffect[16]) + "<br>Oil: x" + format(player.pol.pollinatorsEffect[17]) : "" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],        
                         ], {width: "500px", height: "100px", borderBottom: "3px solid #cb8e00"}],
                         ["style-column", [

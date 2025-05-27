@@ -485,7 +485,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
-			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].buyables[data].style]">
+			<div class="exBuyableHolder tooltipBox" v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].buyables[data].style]">
 				<div class="exBuyableBar">
 					<div class="exBuyableBarText">
 						<span v-html="tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? formatWhole(player[layer].buyables[data]) : formatWhole(player[layer].buyables[data])+'/'+formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
@@ -493,22 +493,23 @@ function loadVue() {
 					<div class="exBuyableBarProgress" v-bind:style="{'width': tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? '100%' : toNumber(player[layer].buyables[data].div(tmp[layer].buyables[data].purchaseLimit).mul(100))+'%',
 					'background-color': tmp[layer].buyables[data].style.borderColor != undefined ? tmp[layer].buyables[data].style.borderColor : tmp[layer].buyables[data].style.backgroundColor != undefined ? tmp[layer].buyables[data].style.backgroundColor : tmp[layer].color}"></div>
 				</div>
-				<div class="exBuyableInfo">
+				<div class="exBuyableInfo" :id='"buyable-" + layer + "-" + data'>
 					<div class="exBuyableInfo2">
 						<span v-if= "tmp[layer].buyables[data].title"><h2 v-html="tmp[layer].buyables[data].title"></h2><br></span>
 						<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
 					</div>
 				</div>
 				<div class="exBuyableRow">
-					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					<button v-bind:class="{ exBuyableButton: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': '#cccccc'} : {}"
-					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 					Buy 1</button>
-					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					<button v-bind:class="{ exBuyableButton: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': '#cccccc'} : {}"
-					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
+					v-on:click="{buyMaxExBuyable(layer, data)}">
 					Buy Max</button>
 				</div>
+				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
 			</div>
 		</div>
 		`,
@@ -559,6 +560,51 @@ function loadVue() {
 					Buy Max</button>
 				</div>
 			</div>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	Vue.component('jinx-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<button v-bind:class="{ buyable: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+			v-bind:style="[tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}, tmp[layer].componentStyles.buyable, tmp[layer].buyables[data].style]"
+			v-on:click="if(!interval) buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+				<div v-bind:class="{jinxTitle: true}" v-if="tmp[layer].buyables[data].title">
+					<span v-html="tmp[layer].buyables[data].title"></span>
+				</div>
+				<div v-bind:class="{jinxCost: true}">
+					<span v-html="formatWhole(player[layer].buyables[data]) + '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span><br>
+					<span v-html="'Cost: ' + format(tmp[layer].buyables[data].cost)"></span>
+				</div>
+				<div v-bind:class="{jinxTotal: true}" v-if="tmp[layer].buyables[data].total">
+					<span v-html="tmp[layer].buyables[data].total"></span>
+				</div>
+				<span v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+				<node-mark :layer='layer' :data='tmp[layer].buyables[data].marked'></node-mark>
+				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
+
+			</button>
+			<br v-if="(tmp[layer].buyables[data].sellOne !== undefined && !(tmp[layer].buyables[data].canSellOne !== undefined && tmp[layer].buyables[data].canSellOne == false)) || (tmp[layer].buyables[data].sellAll && !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false))">
+			<sell-one :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-one']" v-if="(tmp[layer].buyables[data].sellOne)&& !(tmp[layer].buyables[data].canSellOne !== undefined && tmp[layer].buyables[data].canSellOne == false)"></sell-one>
+			<sell-all :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-all']" v-if="(tmp[layer].buyables[data].sellAll)&& !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false)"></sell-all>
 		</div>
 		`,
 		data() { return { interval: false, time: 0,}},
@@ -937,12 +983,26 @@ function loadVue() {
 		computed: {
 			key() {return this.$vnode.key}
 		},
-		template: `<div>
-		<span class="upgRow" v-for="(row, r) in data"><table>
+		template: `<div class="trees">
+		<span class="upgRow" v-for="(row, r) in data"><table class="treeRow">
 			<span v-for="(node, id) in row" style = "{width: 0px}">
 				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
-			<tr><table><button class="treeNode hidden"></button></table></tr>
+		</span></div>
+	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('row-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `<div class="upgRow">
+		<span class="upgTable" v-for="(row, r) in data">
+			<span v-for="(node, id) in row" style = "{width: 0px}">
+				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
+			</span>
 		</span></div>
 
 	`

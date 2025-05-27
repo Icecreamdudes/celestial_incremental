@@ -94,7 +94,6 @@
         }
 
         let tiersGain = player.r.rank.div(3).mul(levelableEffect("pet", 204)[1]).pow(Decimal.div(10, 11)).floor()
-
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
         player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("rm", 21))

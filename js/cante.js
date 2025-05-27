@@ -36,8 +36,7 @@
         rememberanceCoreCost: new Decimal(1000),
 
         defeatedCante: false,
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("s", 16))
         {
@@ -63,9 +62,9 @@
             "border-color": "#0f354c",
         };
     },
-
     tooltip: "Cante, the Celestial of Replicanti",
     color: "white",
+    branches: ["bi"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -165,7 +164,6 @@
         }
         player.ca.replicantiTimer = new Decimal(0)
     },
-    branches: ["om"],
     clickables: {
         1: {
             title() { return "<h2>Return" },
@@ -196,7 +194,7 @@
         },
         11: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoints[19].gte(1e22) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
+            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && /*player.h.hexPoints[19].gte(1e22) &&*/ player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
             unlocked() { return true},
             onClick() {
                 player.ca.unlockedCante = true
@@ -212,7 +210,6 @@
                 player.ca.galaxyDust = player.ca.galaxyDust.add(player.ca.galaxyDustToGet)
                 player.ca.replicanti = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
@@ -228,7 +225,6 @@
                 player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.add(1)
                 player.ca.replicanti = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
@@ -252,7 +248,6 @@
             onClick() {
                 layers.ca.convertRememberanceCore();
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         16: {
@@ -742,7 +737,7 @@
                     ["raw-html", function () { return formatWhole(player.cb.level) + "/250 Check Back Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.ad.antimatter) + "/1e600 Antimatter" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return formatWhole(player.in.infinities) + "/100,000 Infinities" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return format(player.h.hexPoints[19]) + "/1e22 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return /*format(player.h.hexPoints[19])*/ + "/1e22 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.ta.highestDicePoints) + "/1e50 Highest Dice Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.cb.petPoints) + "/500 Pet Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

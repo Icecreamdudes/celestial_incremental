@@ -1,17 +1,17 @@
 /* Tree nodes, button nodes, and side layers */
 .treeNode {
-	height: 100px;
-	width: 100px;
+	height: 75px;
+	width: 75px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 50%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
-	font-size: 40px;
-	font-family: "Lucida Console", "Courier New", monospace;
+	font-size: 35px;
+	font-family: "Roboto Mono", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
-	margin: 0 10px 0 10px;
+	margin: 0 5px 0 5px;
 }
 
 .nodeLabel {
@@ -20,8 +20,8 @@
 }
 
 .treeButton {
-	height: 100px;
-	width: 100px;
+	height: 75px;
+	width: 75px;
 	border: var(--hqProperty1);
 	border-color: rgba(0, 0, 0, 0.125);
 	border-radius: 33%;

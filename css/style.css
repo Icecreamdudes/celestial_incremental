@@ -556,47 +556,10 @@ h1, h2, h3, b, input {
 	position: relative;
 }
 
-.treeNode {
-	height: 100px;
-	width: 100px;
-	border: var(--hqProperty1);
-	border-color: rgba(0, 0, 0, 0.125);
-	border-radius: 50%;
-	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
-	font-size: 40px;
-	font-family: "Roboto Mono", monospace;
-	color: rgba(0, 0, 0, 0.5);
-	text-shadow: var(--hqProperty3);
-	padding: 0;
-	margin: 0 5px 0 5px;
-}
-
-
-.treeButton {
-	height: 100px;
-	width: 100px;
-	border: var(--hqProperty1);
-	border-color: rgba(0, 0, 0, 0.125);
-	border-radius: 33%;
-	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
-	font-size: 40px;
-	font-family: "Roboto Mono", monospace;
-	color: rgba(0, 0, 0, 0.5);
-	text-shadow: var(--hqProperty3);
-	padding: 0;
-}
-
 .treeThing {
 	margin: 0 5px 0 5px;
 	vertical-align: middle;
 }
-
-.smallNode {
-	height: 60px;
-	width: 60px;
-	font-size: 30px;
-}
-
 
 .locked {
 	background-color: #bf8f8f;

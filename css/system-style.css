@@ -18,7 +18,7 @@
 }
 .layerHolder {
 	position: absolute;
-	top: 103px;
+	top: 76px;
 	left: 0px;
 	display: block;
 	flex-direction: column;
@@ -27,21 +27,21 @@
 	justify-content: center;
 	align-items: start;
 	width: 400px;
-	height: calc(100% - 229px);
+	height: calc(100% - 191px);
 	border-left: 3px solid #7a7a7a;
 	border-right: 3px solid #7a7a7a;
 	border-bottom: 3px solid #7a7a7a;
 	padding-left: 0px;
 	padding-top: 40px;
 	user-select: none;
-	z-index:1000;
+	z-index:1001;
 }
 .layerBG {
 	z-index: -9000;
 	width: 400px;
-	height: calc(100% - 184px);
+	height: calc(100% - 151px);
 	position: absolute;
-	top: 100px;
+	top: 76px;
 	left: 0px;
 	background: #0f0f0f
 }
@@ -49,30 +49,32 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index:1001;
-	width: 380px;
-	height: 100px;
-	display: flex;
-	flex-direction: row;
-	justify-content: start;
-	align-items: center;
+	z-index:1000;
+	width: 384px;
+	height: 70px;
+	display: block;
+	text-align: start;
 	text-wrap: nowrap;
 	background: #0f0f0f;
-	overflow-y: hidden;
-	overflow-x: scroll;
-	border-left: 3px solid #7a7a7a;
-	border-right: 3px solid #7a7a7a;
-	border-top: 3px solid #7a7a7a;
-	padding-left: 10px;
-	padding-right: 10px;
+	overflow: hidden;
+	border: 3px solid #7a7a7a;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+.uniHolder {
+	width: auto;
+	height: 100%;
+	display: flex;
+	justify-content: left;
+	align-items: center;
 }
 .miscMenu {
 	position: absolute;
 	bottom: 0px;
 	left: 0px;
-	z-index:1001;
+	z-index:1000;
 	width: 400px;
-	height: 80px;
+	height: 70px;
 	display: flex;
 	flex-direction: row;
 	justify-content: auto;
@@ -82,8 +84,8 @@
 	border-bottom: 3px solid #7a7a7a;
 }
 .uniButton {
-	width: 70px;
-	height: 70px;
+	width: 65px;
+	height: 65px;
 	color: rgba(0, 0, 0, 0.9);
 	font-size: 30px;
 	z-index:10000;
@@ -91,29 +93,48 @@
 	pointer-events: auto;
 	background: #a3a3a3;
 	border: var(--hqProperty1);
-	border-width: 6px;
+	border-width: 5px;
 	border-radius: 25%;
 	border-color: rgba(0, 0, 0, 0.125);
+	margin: 0 8px 0 0;
 	transition: all 0s;
 }
 .uniButton:hover {
 	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
 }
 .miscButton {
-	width: 70px;
-	height: 70px;
-	z-index:10000;
+	width: auto;
+	height: 100%;
+	display: flex;
+	flex-grow: 1;
+	z-index:10001;
+	background-color: #333;
+	border-top: 0px;
+	border-bottom: 0px;
+	border-left: 1.5px solid #7a7a7a;
+	border-right: 1.5px solid #7a7a7a;
 	cursor: pointer;
 	pointer-events: auto;
 	transition: all 0.5s;
 }
 .miscButton:hover {
-	transform: rotate(180deg)
+	background-color: #444;
+}
+.miscButton:disabled {
+	background-color: #222;
+	cursor: default;
+}
+.miscImg {
+	width: 60px;
+	height: 60px;
+}
+.treeRow {
+	margin: 0px 0px 10px 0px;
 }
 /* For when width is less then or equal to 1200px */
 @media (max-width: 1250px) {
 	.uniMenu {
-		width: calc(100% - 27px);
+		width: calc(100% - 23px);
 	}
 	.layerHolder {
 		width: calc(100% - 47px);;
@@ -123,6 +144,7 @@
 		overflow-x: scroll;
 		justify-content: start;
 		align-items: center;
+		text-align: left;
 		padding-top: 0px;
 		padding-left: 40px;
 	}
@@ -135,18 +157,22 @@
 		border-top: 3px solid #7a7a7a;
 	}
 	.fullWidth {
-		top: 405px !important;
-		height: calc(100% - 491px) !important;
+		top: 379px !important;
+		height: calc(100% - 454px) !important;
 	}
 	.trees {
-		display: flex;
-		height: 300px;
+		display: inline-flex;
+		width: auto;
+		height: 285px;
 		flex-direction: row;
+	}
+	.treeNode {
+		margin: 5px 0px 5px 0px !important;
 	}
 	.treeRow {
 		display: flex !important;
 		flex-flow: column wrap !important;
-		margin: auto 0;
+		margin: 0 10px 0px 10px !important;
 	}
 }
 

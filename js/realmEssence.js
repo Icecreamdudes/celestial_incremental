@@ -38,7 +38,7 @@
         player.re.realmEssenceEffect = player.re.realmEssence.plus(1).log10().mul(1000).pow(0.2).div(235).add(1)
         //WORK ON THE DANG EFFECT
     },
-    branches: ["gh"],
+    branches: ["cb"],
     clickables: {
         1: {
             title() { return "<h2>Return" },

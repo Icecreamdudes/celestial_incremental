@@ -34,23 +34,23 @@ function constructUniButtonStyle(layer){
 				backgroundOrigin: "border-box",
 				borderColor: "#555555"
 			});
-			uni = 1;
+			if (player.universe == 1) style.push({borderColor: "white"})
 			break;
 		case 'in':
 			style.push({
 				background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
 				backgroundOrigin: "border-box",
-				borderColor: "#119B35"
+				borderColor: "#116622"
 			});
-			uni = 2;
+			if (player.universe == 2) style.push({borderColor: "white"})
 			break;
 		case 's':
 			style.push({
 				background: "linear-gradient(140deg, red 0%, black 125%)",
 				backgroundOrigin: "border-box",
-				borderColor: "#800000"
+				borderColor: "#600000"
 			});
-			uni = 3;
+			if (player.universe == 3) style.push({borderColor: "white"})
 			break;
 		case 'cp':
 			style.push({
@@ -58,15 +58,7 @@ function constructUniButtonStyle(layer){
 				backgroundOrigin: "border-box",
 				borderColor: "#013851"
 			});
-			uni = 1.5;
-			break;
-		case 'ch':
-			style.push({
-				background: "linear-gradient(45deg, #8801aa 0%, #0260fe 100%)",
-				backgroundOrigin: "border-box",
-				borderColor: "#2e0054",
-			});
-			uni = -0.5;
+			if (player.universe == 1.5) style.push({borderColor: "white"})
 			break;
 		case 'du':
 			style.push({
@@ -74,7 +66,7 @@ function constructUniButtonStyle(layer){
 				backgroundOrigin: "border-box",
 				color: "#ffffff",
 				borderColor: "#555555",});
-			uni = -0.1;
+			if (player.universe == -0.1) style.push({borderColor: "white"})
 			break;
 		case 'od':
 			style.push({
@@ -83,44 +75,17 @@ function constructUniButtonStyle(layer){
             	borderColor: "black",
             	color: "black",
 			});
-			uni = 1337;
+			if (player.universe == 1337) style.push({borderColor: "white"})
 			break;
 		//case 'uh':
 		//	style.push({
 		//	background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",
 		//	backgroundOrigin: "border-box",
 		//	borderColor: "#6b4701"});
-		//	uni = 101;
+		//	if (player.universe == 101) style.push({borderColor: "white"});
 		//	break;
-		case 'otherfeat':
-			style.push({
-				background: "linear-gradient(45deg, #8a00a9, #0061ff)",
-				backgroundOrigin: "border-box",
-				borderColor: "purple"
-			});
-			if (player.tab == layer) {
-				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
-			};
-			break;
-		case 'halter':
-			style.push({
-				color: "white",
-				backgroundColor: "black",
-				borderColor: "purple"
-			});
-			if (player.tab == layer) {
-				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
-			};
-			break;
-		case 'cb':
-			style.push({'background-color': tmp[layer].color});
-			uni = 0.5;
-			break;
 		default:
 			style.push({'background-color': tmp[layer].color});
-	}
-	if (player.universe == uni) {
-		style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
 	}
 	if(tmp[layer].notify && player[layer].unlocked)
 		style.push({'box-shadow': 'var(--hqProperty2a), 0 0 20px ' + tmp[layer].trueGlowColor})

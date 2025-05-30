@@ -57,16 +57,18 @@
 			</div>
 			<div class="miscMenu">
 				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasUpgrade('i', 21) || hasUpgrade('ad', 13))" onclick="showTab('otherfeat')" style="border-left:0px">
-					<img class="miscImg" src="resources/ui/universe.png"></img>
+					<img class="miscImg" src="resources/ui/universe.png" v-if="hasUpgrade('i', 21) || hasUpgrade('ad', 13)"></img>
+					<div class="miscText" v-if="!(hasUpgrade('i', 21) || hasUpgrade('ad', 13))">?</div>
 				</button>
 				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasMilestone('ip', 23))" onclick="showTab('halter')">
-					<img class="miscImg" src="resources/ui/halter.png"></img>
+					<img class="miscImg" src="resources/ui/halter.png" v-if="hasMilestone('ip', 23)"></img>
+					<div class="miscText" v-if="!hasMilestone('ip', 23)">?</div>
 				</button>
 				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('cb')" onclick="showTab('cb')">
-					<img class="miscImg" src="resources/ui/locked.png"></img>
+					<div class="miscText">?</div>
 				</button>
 				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('ch')" onclick="showTab('cmh')">
-					<img class="miscImg" src="resources/ui/locked.png"></img>
+					<div class="miscText">?</div>
 				</button>
 				<button class="miscButton" onclick="showTab('settings')" style="border-right:0px">
 					<img class="miscImg" src="resources/ui/settings.png"></img>

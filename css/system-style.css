@@ -34,7 +34,7 @@
 	padding-left: 0px;
 	padding-top: 40px;
 	user-select: none;
-	z-index:1001;
+	z-index: 1010;
 }
 .layerBG {
 	z-index: -9000;
@@ -49,8 +49,7 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index:1000;
-	width: 384px;
+	width: 400px;
 	height: 70px;
 	display: block;
 	text-align: start;
@@ -58,8 +57,7 @@
 	background: #0f0f0f;
 	overflow: hidden;
 	border: 3px solid #7a7a7a;
-	padding-left: 8px;
-	padding-right: 8px;
+	z-index: 1000;
 }
 .uniHolder {
 	width: auto;
@@ -72,7 +70,6 @@
 	position: absolute;
 	bottom: 0px;
 	left: 0px;
-	z-index:1000;
 	width: 400px;
 	height: 70px;
 	display: flex;
@@ -82,32 +79,30 @@
 	border-left: 3px solid #7a7a7a;
 	border-right: 3px solid #7a7a7a;
 	border-bottom: 3px solid #7a7a7a;
+	z-index: 1000;
 }
 .uniButton {
-	width: 65px;
-	height: 65px;
+	width: auto;
+	height: 100%;
+	flex-grow: 1;
 	color: rgba(0, 0, 0, 0.9);
 	font-size: 30px;
-	z-index:10000;
 	cursor: pointer;
 	pointer-events: auto;
 	background: #a3a3a3;
 	border: var(--hqProperty1);
-	border-width: 5px;
-	border-radius: 25%;
+	border-width: 4px;
 	border-color: rgba(0, 0, 0, 0.125);
-	margin: 0 8px 0 0;
 	transition: all 0s;
 }
 .uniButton:hover {
 	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
 }
 .miscButton {
-	width: auto;
+	width: 60px;
 	height: 100%;
 	display: flex;
 	flex-grow: 1;
-	z-index:10001;
 	background-color: #333;
 	border-top: 0px;
 	border-bottom: 0px;
@@ -128,13 +123,17 @@
 	width: 60px;
 	height: 60px;
 }
+.miscText {
+	color: white;
+	font-size: 60px;
+}
 .treeRow {
 	margin: 0px 0px 10px 0px;
 }
 /* For when width is less then or equal to 1200px */
 @media (max-width: 1250px) {
 	.uniMenu {
-		width: calc(100% - 23px);
+		width: calc(100% - 7px);
 	}
 	.layerHolder {
 		width: calc(100% - 47px);;

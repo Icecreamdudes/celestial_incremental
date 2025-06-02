@@ -911,7 +911,7 @@
         14: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(2.5) },
-            purchaseLimit() { return player.d.diceSides.sub(player.d.buyables[22].mul(2)) },
+            purchaseLimit() { return player.d.diceSides.sub(player.d.buyables[22].mul(2)).sub(1) },
             currency() { return player.d.dicePoints},
             pay(amt) { player.d.dicePoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },

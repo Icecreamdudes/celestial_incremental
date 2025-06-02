@@ -489,12 +489,6 @@ function fixOldSave(oldVersion){
         for (let i = 31; i < 37; i++) {
             if (getBuyableAmount("f", i).gt(2500)) setBuyableAmount("f", i, 2500)
         }
-		for (let i = 41; i < 49; i++) {
-			if (getBuyableAmount("f", i).gt(250)) setBuyableAmount("f", i, 250)
-        }
-		for (let i = 51; i < 59; i++) {
-			if (getBuyableAmount("f", i).gt(1000)) setBuyableAmount("f", i, 1000)
-        }
 
 		// Prevent old save tree buyables from being over cap
 		if (getBuyableAmount("t", 11).gt(5000)) setBuyableAmount("t", 11, 5000)

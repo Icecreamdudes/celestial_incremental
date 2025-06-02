@@ -79,18 +79,33 @@ addLayer("halter", {
     layerShown() { return false }
 })
 addLayer("u1u", {
-    name: "u1u", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "U1U", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "O", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
     }},
     automate() {},
-    nodeStyle() {},
-    tooltip: "Upgrades",
+    shouldNotify() {
+        for (id in tmp["i"].upgrades){
+		    if (isPlainObject(layers["i"].upgrades[id])){
+			    if (canAffordUpgrade("i", id) && !hasUpgrade("i", id) && tmp["i"].upgrades[id].unlocked){
+				    return true
+			    }
+		    }
+	    }
+    },
+    nodeStyle() {
+        return {
+            background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
+            "background-origin": "border-box",
+            "border-color": "#333333",
+        };
+    },
+    tooltip: "Origin",
     color: "white",
-    branches: ["branch"],
+    branches: ["r", "f"],
     clickables: {},
     bars: {},
     upgrades: {},
@@ -113,7 +128,7 @@ addLayer("u1u", {
             ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
         ]]]
     ],
-    layerShown() { return false }
+    layerShown() { return true }
 })
 addLayer("u1l", {
     name: "u1l", // This is optional, only used in a few places, If absent it just uses the layer id.

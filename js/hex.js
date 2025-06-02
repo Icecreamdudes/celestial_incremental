@@ -117,15 +117,15 @@ addLayer("h", {
         let onepersec = new Decimal(1)
 
         // START OF HEX POINT GAIN
-        if (player.h.HRErefinement.lt(10)) player.h.hexPointGain = player.points.add(1).log(10).add(1).log(2)
-        if (player.h.HRErefinement.gte(10)) player.h.hexPointGain = player.points.add(1).log(6).pow(0.6)
+        if (!hasChallenge("ip", 13)) player.h.hexPointGain = new Decimal(6)
+        if (hasChallenge("ip", 13)) player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HPRrankEffect[0][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HPRrankEffect[1][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HPRrankEffect[2][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HPRrankEffect[3][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HPRrankEffect[4][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HPRrankEffect[5][1])
-        player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HRErefinementEffect[1][0])
+        player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HRErefinementEffect[0][0])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.d.diceEffects[14])
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("cb", 11))
         player.h.hexPointGain = player.h.hexPointGain.mul(player.h.HBLboonEffects[0])
@@ -137,7 +137,7 @@ addLayer("h", {
         player.h.hexPoint = player.h.hexPoint.add(player.h.hexPointGain.mul(delta))
 
         // HEX OF PROVENANCE CALCULATIONS
-        player.h.HPRdivider = player.h.HRErefinementEffect[0][0]
+        player.h.HPRdivider = player.h.HRErefinementEffect[1][0]
 
         if (player.h.HPRrank[0].lt(1200)) player.h.HPRrankReq[0] = layers.h.hexReq(player.h.HPRrank[0], 60, 1.6, player.h.HPRdivider)
         if (player.h.HPRrank[0].gte(1200) && player.h.HPRrank[0].lt(6000000)) player.h.HPRrankReq[0] = layers.h.hexReq(player.h.HPRrank[0], 60, 2.4, player.h.HPRdivider, -1087)
@@ -168,23 +168,23 @@ addLayer("h", {
 
         if (hasMilestone("h", 103)) player.h.HPRrank[0] = player.h.HPRrank[0].add(player.h.HPRrankGain[0])
 
-        player.h.HPRrankEffect[0][0] = player.h.HPRrank[0].pow(2.5).add(1)
-        player.h.HPRrankEffect[0][1] = player.h.HPRrank[0].pow(1.1).mul(0.5).add(1)
+        player.h.HPRrankEffect[0][0] = player.h.HPRrank[0].pow(2.5).mul(player.h.HRErefinementEffect[2][0]).add(1)
+        player.h.HPRrankEffect[0][1] = player.h.HPRrank[0].pow(1.1).mul(0.5).mul(player.h.HRErefinementEffect[2][0]).add(1)
 
-        player.h.HPRrankEffect[1][0] = player.h.HPRrank[1].pow(2.8).mul(2).add(1)
-        player.h.HPRrankEffect[1][1] = player.h.HPRrank[1].pow(1.2).add(1)
+        player.h.HPRrankEffect[1][0] = player.h.HPRrank[1].pow(2.8).mul(2).mul(player.h.HRErefinementEffect[2][0]).add(1)
+        player.h.HPRrankEffect[1][1] = player.h.HPRrank[1].pow(1.2).mul(player.h.HRErefinementEffect[2][0]).add(1)
 
-        player.h.HPRrankEffect[2][0] = player.h.HPRrank[2].pow(3.1).mul(4).add(1)
-        player.h.HPRrankEffect[2][1] = player.h.HPRrank[2].pow(1.4).mul(2).add(1)
+        player.h.HPRrankEffect[2][0] = player.h.HPRrank[2].pow(3.1).mul(4).mul(player.h.HRErefinementEffect[2][0]).add(1)
+        player.h.HPRrankEffect[2][1] = player.h.HPRrank[2].pow(1.4).mul(2).mul(player.h.HRErefinementEffect[2][0]).add(1)
 
-        player.h.HPRrankEffect[3][0] = player.h.HPRrank[3].pow(3.4).mul(8).add(1)
-        player.h.HPRrankEffect[3][1] = player.h.HPRrank[3].pow(1.8).mul(4).add(1)
+        player.h.HPRrankEffect[3][0] = player.h.HPRrank[3].pow(3.4).mul(8).mul(player.h.HRErefinementEffect[2][0]).add(1)
+        player.h.HPRrankEffect[3][1] = player.h.HPRrank[3].pow(1.8).mul(4).mul(player.h.HRErefinementEffect[2][0]).add(1)
 
-        player.h.HPRrankEffect[4][0] = player.h.HPRrank[4].pow(3.7).mul(16).add(1)
-        player.h.HPRrankEffect[4][1] = player.h.HPRrank[4].pow(2.2).mul(8).add(1)
+        player.h.HPRrankEffect[4][0] = player.h.HPRrank[4].pow(3.7).mul(16).mul(player.h.HRErefinementEffect[2][0]).add(1)
+        player.h.HPRrankEffect[4][1] = player.h.HPRrank[4].pow(2.2).mul(8).mul(player.h.HRErefinementEffect[2][0]).add(1)
 
-        player.h.HPRrankEffect[5][0] = player.h.HPRrank[5].pow(4).mul(32).add(1)
-        player.h.HPRrankEffect[5][1] = player.h.HPRrank[5].pow(2.6).mul(16).add(1)
+        player.h.HPRrankEffect[5][0] = player.h.HPRrank[5].pow(4).mul(32).mul(player.h.HRErefinementEffect[2][0]).add(1)
+        player.h.HPRrankEffect[5][1] = player.h.HPRrank[5].pow(2.6).mul(16).mul(player.h.HRErefinementEffect[2][0]).add(1)
 
         if (hasUpgrade("tad", 11)) {
             for (let i = 0; i < 6; i++) {
@@ -203,13 +203,14 @@ addLayer("h", {
         if (player.h.HRErefinementGain.lt(0)) player.h.HRErefinementGain = new Decimal(0)
 
         player.h.HRErefinementEffect = [[new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)]]
-        if (player.h.HRErefinement.gte(1)) player.h.HRErefinementEffect[0][0] = Decimal.pow(1.15, player.h.HRErefinement.pow(0.6))
+        if (player.h.HRErefinement.gte(1)) player.h.HRErefinementEffect[0][0] = Decimal.pow(1.3, player.h.HRErefinement.pow(0.8)).mul(2)
         if (player.h.HRErefinement.gte(1)) player.h.HRErefinementEffect[0][1] = Decimal.pow(2, player.h.HRErefinement)
 
-        if (player.h.HRErefinement.gte(4)) player.h.HRErefinementEffect[1][0] = Decimal.pow(1.3, player.h.HRErefinement.sub(3).pow(0.8)).mul(2)
-        if (player.h.HRErefinement.gte(4)) player.h.HRErefinementEffect[1][1] = Decimal.pow(1.9, player.h.HRErefinement.sub(2))
+        if (player.h.HRErefinement.gte(3)) player.h.HRErefinementEffect[1][0] = Decimal.pow(1.15, player.h.HRErefinement.sub(2).pow(0.6))
+        if (player.h.HRErefinement.gte(3)) player.h.HRErefinementEffect[1][1] = Decimal.pow(1.9, player.h.HRErefinement.sub(2))
 
-        if (player.h.HRErefinement.gte(10)) player.h.HRErefinementEffect[2][1] = Decimal.pow(1.8, player.h.HRErefinement.sub(5))
+        if (player.h.HRErefinement.gte(9)) player.h.HRErefinementEffect[2][0] = Decimal.pow(1.06, player.h.HRErefinement.sub(4).pow(0.6))
+        if (player.h.HRErefinement.gte(9)) player.h.HRErefinementEffect[2][1] = Decimal.pow(1.8, player.h.HRErefinement.sub(4))
 
         if (player.h.HRErefinement.gte(24)) player.h.HRErefinementEffect[3][0] = Decimal.pow(1.5, player.h.HRErefinement.sub(23).pow(0.6))
         if (player.h.HRErefinement.gte(24)) player.h.HRErefinementEffect[3][1] = Decimal.pow(1.7, player.h.HRErefinement.sub(12))
@@ -1206,9 +1207,8 @@ addLayer("h", {
                 unlocked: true,
                 content: [
                     ["row", [
-                        ["raw-html", () => {return player.h.HRErefinement.lt(1) ? "Next refiner at 1 refinement" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.h.HRErefinement.gte(1) && player.h.HRErefinement.lt(4) ? "Next refiner at 4 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.h.HRErefinement.gte(4) && player.h.HRErefinement.lt(10) ? "Next refiner at 10 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.h.HRErefinement.lt(3) ? "Next refiner at 3 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.h.HRErefinement.gte(3) && player.h.HRErefinement.lt(9) ? "Next refiner at 9 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.h.HRErefinement.gte(10) && player.h.HRErefinement.lt(24) ? "Next refiner at 24 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.h.HRErefinement.gte(24) && player.h.HRErefinement.lt(100) ? "Next refiner at 100 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.h.HRErefinement.gte(100) && player.h.HRErefinement.lt(600) ? "Next refiner at 600 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -1220,34 +1220,34 @@ addLayer("h", {
                                 ["raw-html", "Refiner 1", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "36px", backgroundColor: "#333", borderBottom: "2px solid white", borderRadius: "10px 10px 0px 0px"}],
                             ["style-column", [
-                                ["raw-html", () => {return "/" + format(player.h.HRErefinementEffect[0][0]) + "<br>Provenance Req's"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "x" + format(player.h.HRErefinementEffect[0][0]) + "<br>Hex Points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px", borderBottom: "2px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return "x" + format(player.h.HRErefinementEffect[0][1]) + "<br>Factor Power"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px"}],
-                        ], () => {return player.h.HRErefinement.gte(1) ? {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"} : {display: "none !important"}}],
+                        ], {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", "Refiner 2", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "36px", backgroundColor: "#333", borderBottom: "2px solid white", borderRadius: "10px 10px 0px 0px"}],
                             ["style-column", [
-                                ["raw-html", () => {return "x" + format(player.h.HRErefinementEffect[1][0]) + "<br>Hex Points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "/" + format(player.h.HRErefinementEffect[1][0]) + "<br>Provenance Req's"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px", borderBottom: "2px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return "x" + format(player.h.HRErefinementEffect[1][1]) + "<br>Prestige Points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px"}],
-                        ], () => {return player.h.HRErefinement.gte(4) ? {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"} : {display: "none !important"}}],
+                        ], () => {return player.h.HRErefinement.gte(3) ? {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"} : {display: "none !important"}}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", "Refiner 3", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "36px", backgroundColor: "#333", borderBottom: "2px solid white", borderRadius: "10px 10px 0px 0px"}],
                             ["style-column", [
-                                ["raw-html", () => {return "Improve base hex formula"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "x" + format(player.h.HRErefinementEffect[2][0]) + "<br>Provenance Effects"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                                 ], {width: "150px", height: "40px", borderBottom: "2px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return "x" + format(player.h.HRErefinementEffect[2][1]) + "<br>Trees"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px"}],
-                        ], () => {return player.h.HRErefinement.gte(10) ? {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"} : {display: "none !important"}}],
+                        ], () => {return player.h.HRErefinement.gte(9) ? {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"} : {display: "none !important"}}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", "Refiner 4", {color: "white", fontSize: "20px", fontFamily: "monospace"}],

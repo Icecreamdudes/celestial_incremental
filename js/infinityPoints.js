@@ -634,10 +634,10 @@
         13: {
             name: "Challenge III",
             challengeDescription() { return "<h4>Hex... A feature seemingly coming from thin air. No check back effects either..." },
-            goalDescription() { return "6 Refinements" },
-            goal() { return new Decimal("6") },
-            canComplete: function () { return player.h.HRErefinement.gte(6) },
-            rewardDescription: "Permanently unlocks hex as an otherworldly feature.",
+            goalDescription() { return "2 Refinements" },
+            goal() { return new Decimal("2") },
+            canComplete: function () { return player.h.HRErefinement.gte(2) },
+            rewardDescription: "Permanently unlock hex as an otherworldly feature, and improve base hex point gain.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
                 //OTF is reset here and not in crunch to prevent a bug

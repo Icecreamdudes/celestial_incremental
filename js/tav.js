@@ -162,6 +162,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("ra", 16))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.le.punchcardsPassiveEffect[2])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.r.pentMilestone13Effect)
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("st", 301))
 
         player.ta.negativeInfinityPause = player.ta.negativeInfinityPause.sub(1)
         if (player.ta.negativeInfinityPause.gt(0)) {

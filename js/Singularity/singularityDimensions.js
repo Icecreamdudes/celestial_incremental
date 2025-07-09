@@ -44,7 +44,9 @@
 
         // Singularity Power Effects
         player.sd.singularityPowerEffect = player.sd.singularityPower.pow(0.4).add(1)
+        if (player.sd.singularityPower.gt("1e1000")) player.sd.singularityPowerEffect = Decimal.mul("1e400", player.sd.singularityPower.div("1e1000").pow(0.06).add(1))
         player.sd.singularityPowerEffect2 = player.sd.singularityPower.pow(1.1).add(1)
+        if (player.sd.singularityPower.gt("1e1000")) player.sd.singularityPowerEffect2 = Decimal.mul("1e1100", player.sd.singularityPower.div("1e1000").pow(0.06).add(1))
         
         if (player.sd.pausedDimensions && player.sd.producingDimensions) {
         // Singularity Power Gain
@@ -55,6 +57,7 @@
             .mul(player.cop.processedCorePrimedEffects[2])
             .mul(buyableEffect("sma", 14))
             .mul(levelableEffect("pet", 308)[1])
+            .mul(player.st.starPowerEffect2) 
         // Dimension Gain
         for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
             player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
@@ -65,6 +68,7 @@
             .mul(buyableEffect("fu", 53))
             .mul(buyableEffect("sma", 14))
             .mul(player.cop.processedCorePrimedEffects[2])
+            .mul(player.st.starPowerEffect2) 
         }
 
         player.ra.storedRadiation = player.ra.storedRadiation.sub(player.sd.radiationUsage.mul(delta))
@@ -175,7 +179,7 @@
             },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Next ID: " + format(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
+                return "Next SD: " + format(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
             },
             buy() {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))

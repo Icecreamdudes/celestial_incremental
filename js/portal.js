@@ -1,4 +1,4 @@
-﻿var tree = [["i", "in", "s"], ["cp"], ["ch", "od"]]
+﻿var tree = [["i", "in", "s"], ["cp", "au2"], ["ch", "od"]]
 addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized

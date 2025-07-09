@@ -157,9 +157,9 @@
         player.r.pentMilestone3Effect = player.g.grass.pow(0.3).add(1)
         if (player.r.pentMilestone3Effect.gte("1e10000")) player.r.pentMilestone3Effect = player.r.pentMilestone3Effect.div("1e10000").pow(0.1).mul("1e10000")
         player.r.pentMilestone9Effect = [player.r.pent.pow(2).add(1), player.r.pent.pow(1.2).add(1)]
-        if (player.r.pent.gt(11000)) {player.r.pentMilestone11Effect = Decimal.pow(10, player.r.pent.sub(11000).div(1000))} else {player.r.pentMilestone11Effect = new Decimal(1)}
-        if (player.r.pent.gt(13000)) {player.r.pentMilestone13Effect = Decimal.pow(10, player.r.pent.sub(13000).div(1000))} else {player.r.pentMilestone13Effect = new Decimal(1)}
-        if (player.r.pent.gt(15000)) {player.r.pentMilestone15Effect = Decimal.pow(3, player.r.pent.sub(15000).div(1000))} else {player.r.pentMilestone15Effect = new Decimal(1)}
+        if (player.r.pent.gt(11000)) {player.r.pentMilestone11Effect = Decimal.pow(40, player.r.pent.sub(11000).div(500))} else {player.r.pentMilestone11Effect = new Decimal(1)}
+        if (player.r.pent.gt(13000)) {player.r.pentMilestone13Effect = Decimal.pow(20, player.r.pent.sub(13000).div(700))} else {player.r.pentMilestone13Effect = new Decimal(1)}
+        if (player.r.pent.gt(15000)) {player.r.pentMilestone15Effect = Decimal.pow(5, player.r.pent.sub(15000).div(1000))} else {player.r.pentMilestone15Effect = new Decimal(1)}
         player.r.pentMilestone18Effect = player.r.timeCubes.add(1).log(1000).div(10).add(1)
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
@@ -172,7 +172,7 @@
 
         //Time reversal
 
-        if (!player.r.timeReversed)
+        if (!player.r.timeReversed && !hasUpgrade("ma", 14))
         {
             player.r.timeCubesPerSecond = new Decimal(0)
         } else {
@@ -685,9 +685,9 @@
             style: { width: '800px', "min-height": '75px' },
         },
         29: {
-            requirementDescription: "<h3>Pent 19,000",
-            effectDescription() { return "Replaces the Replicanti hardcap with a softcap." },
-            done() { return player.r.pent.gte(19000) && this.unlocked() },
+            requirementDescription: "<h3>Pent 30,000",
+            effectDescription() { return "Produce 0.2% of moonstone value per second." },
+            done() { return player.r.pent.gte(30000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 28) },
             style: { width: '800px', "min-height": '75px' },
         },

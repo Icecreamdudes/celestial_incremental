@@ -1,6 +1,6 @@
 ﻿addLayer("cop", {
     name: "Core Processor", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "CP", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol() { return !player.ma.matosDefeated ? "CP" : "<s>CP"; }, // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -27,18 +27,41 @@
     automate() {
     },
     nodeStyle() {
-        return {
+        return !player.ma.matosDefeated ? {
             background: "linear-gradient(120deg, #6b1919 0%, #000000 100%)",
             "background-origin": "border-box",
             "border-color": "#260300",
             "color": "#8c3129",
+        }: {
+            background: "linear-gradient(-120deg, #000000 0%, #1a1a1a 100%)",
+            "background-origin": "border-box",
+            "border-color": "#000000",
+            "color": "grey",
         };
     },
     tooltip: "Core Processor",
-    branches: ["coa"],
-    color: "#8c3129",
+    branches: [["coa", "#000000"]],
+    color()  {
+        return !player.ma.matosDefeated ? "#8c3129" : "#000000";
+    },
     update(delta) {
         let onepersec = new Decimal(1)
+
+        if (player.ma.matosDefeated) {
+            player.cop.processedCoreStrength = new Decimal(-1)
+            player.cop.processedCoreFuel = new Decimal(-1)
+            player.cop.processedCorePrime = new Decimal(0)
+            player.cop.processedCoreStarmetalValue = new Decimal(0)
+            player.cop.processedCoreInnateEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+            player.cop.processedCoreInnateEffectsText = ""
+        player.cop.processedCorePrimedEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+        player.cop.processedCorePrimedEffectsText = ""
+
+        player.cop.processedCoreColorFuel = ""
+        player.cop.processedCoreColorStrength = ""
+        player.cop.processedCoreColorPrime = ""
+
+        }
 
         player.cop.processedCoreColorStrength = player.coa.strengthColors[player.cop.processedCoreStrength]
         player.cop.processedCoreColorFuel = player.coa.fuelColors[player.cop.processedCoreFuel]
@@ -263,7 +286,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Current core being processed: " + player.coa.primes[player.cop.processedCorePrime] + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current core being processed: " + player.coa.primes[player.cop.processedCorePrime] + " " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", function () { return " <div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

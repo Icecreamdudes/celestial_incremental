@@ -14,6 +14,12 @@ addLayer("dp", {
     }
     },
     automate() {
+        if (hasUpgrade("dn", 11))
+        {
+            buyBuyable("dp", 11)
+            buyBuyable("dp", 12)
+            buyBuyable("dp", 13)
+        }
     },
     nodeStyle() {
         return {
@@ -36,6 +42,8 @@ addLayer("dp", {
         if (player.le.punchcards[10]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[10])
         if (player.le.punchcards[14]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[14])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
+        if (player.pet.activeAbilities[0]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)
 
         // PRESTIGE SOFTCAP
         if (player.dp.prestigePointsToGet.gte(1e250)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.div(1e250).pow(0.2).mul(1e250)
@@ -48,6 +56,9 @@ addLayer("dp", {
         player.dp.prestigePointsEffect = player.dp.prestigePoints.pow(0.4).add(1)
 
         player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet.mul(buyableEffect("dn", 12)).mul(delta))
+        if (hasUpgrade("sma", 202)) {
+            player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet.mul(0.01).mul(delta))
+        }
     },
     bars: {
     },
@@ -110,7 +121,7 @@ addLayer("dp", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -119,7 +130,7 @@ addLayer("dp", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -144,7 +155,7 @@ addLayer("dp", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -153,7 +164,7 @@ addLayer("dp", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -178,7 +189,7 @@ addLayer("dp", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -187,7 +198,7 @@ addLayer("dp", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -231,6 +242,7 @@ addLayer("dp", {
          ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
          ["row", [["clickable", 1]]],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

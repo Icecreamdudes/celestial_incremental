@@ -91,10 +91,14 @@ addLayer("i", {
             player.gain = new Decimal(1)
         }
 
-        if (player.tab == "cb" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ev" || player.tab == "ev0"
+        if (player.tab == "cb" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4" || player.tab == "ep5" || player.tab == "ev" || player.tab == "ev0"
           || player.tab == "ev1" || player.tab == "ev2" || player.tab == "ev4" || player.tab == "ev8" || player.tab == "ev9" || player.tab == "ev10") {
             if (options.newMenu == false) player.universe = 0.5
             player.musuniverse = 0.5
+        }
+        if (player.tab == "mi") {
+            if (options.newMenu == false) player.universe = 0.6
+            player.musuniverse = 0.6
         }
         if (player.tab == "i" || player.tab == "u1u" || player.tab == "u1t" || player.tab == "u1l"  || player.tab == "h" || player.tab == "r" || player.tab == "f" || player.tab == "p" || player.tab == "t" || player.tab == "g"
           || player.tab == "pe" || player.tab == "pol" || player.tab == "gh" || player.tab == "rf" || player.tab == "de" || player.tab == "m" || player.tab == "d" || player.tab == "rm" ||
@@ -104,15 +108,15 @@ addLayer("i", {
         }
 
         if (player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "id" || player.tab == "tad" || player.tab == "ta" || player.tab == "bi" || player.tab == "om"
-          || player.tab == "ga" || player.tab == "ca" || player.tab == "u2t" || player.tab == "u2l" ) {
+          || player.tab == "ga" || player.tab == "ca" || player.tab == "u2t" || player.tab == "u2l" || player.tab == "ro"  ) {
             if (options.newMenu == false) player.universe = 2
             player.musuniverse = 2
         }
-        if (player.tab == "coa" || player.tab == "cop" || player.tab == "ra" || player.tab == "cs" || player.tab == "sd" || player.tab == "u3t" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3b" || player.tab == "sma"|| player.tab == "ma") {
+        if (player.tab == "sme" || player.tab == "cof" || player.tab == "coa" || player.tab == "cop" || player.tab == "ra" || player.tab == "cs" || player.tab == "sd" || player.tab == "u3t" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3b" || player.tab == "sma"|| player.tab == "ma") {
             if (options.newMenu == false) player.universe = 3
             player.musuniverse = 3
         }
-        if (player.tab == "ch" || player.tab == "cmh" ) {
+        if (player.tab == "ch" || player.tab == "cmh" || player.tab == "cmc" ) {
             if (options.newMenu == false) player.universe = -0.5
             player.musuniverse = -0.5
         }
@@ -127,6 +131,10 @@ addLayer("i", {
             //startRain("#1486ff");
         } else {
             //stopRain();
+        }
+        if (player.tab == "au2" || player.tab == "au2t" || player.tab == "st" || player.tab == "pl") {
+            if (options.newMenu == false) player.universe = 2.5
+            player.musuniverse = 2.5
         }
 
         if (player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter") {
@@ -154,13 +162,34 @@ addLayer("i", {
         } else if (player.musuniverse == 2 && options.musicToggle) {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
         } else if (player.musuniverse == 3 && options.musicToggle) {
-            playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+            if (player.ma.inBlackHeart == false)
+            {
+                if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
+                if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
+            } else
+            {
+                if (!player.ma.fightingCelestialites)
+                {
+                    playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
+                } else
+                {
+                    if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
+                    if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
+                    if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
+                    if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
+                } //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
+            }
         } else if (player.musuniverse == 0.5 && options.musicToggle) {
             playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
+        } else if (player.musuniverse == 0.6 && options.musicToggle) {
+            //playAndLoopAudio("music/mining.mp3", options.musicVolume/10);
         } else if (player.musuniverse == -0.5 && options.musicToggle) {
-            playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -0.1 && options.musicToggle) {
+            if (player.tab == "cmh") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
+            if ((player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") || player.tab == "cmc") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+        } else if (player.musuniverse == -0.1 && !player.pet.activeAbilities[0] && options.musicToggle) {
             playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10);
+        } else if (player.musuniverse == -0.1 && player.pet.activeAbilities[0] && options.musicToggle) {
+            playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10);
         } else if (player.musuniverse == -1 && options.musicToggle && player.tab == "c") {
             if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12) {
                playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
@@ -172,10 +201,20 @@ addLayer("i", {
                 playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
             } else if (player.c.currentCutscene == 19 || player.c.currentCutscene == 20 || player.c.currentCutscene == 21 || player.c.currentCutscene == 22 || player.c.currentCutscene == 23) {
                 playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+            } else if (player.c.currentCutscene == 28 || player.c.currentCutscene == 29) {
+                playAndLoopAudio("music/confrontation.mp3", options.musicVolume/10);
+            } else if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) {
+                playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+            } else if (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24) {
+                playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
+            } else if (player.c.currentCutscene == 30 || player.c.currentCutscene == 31|| player.c.currentCutscene == 32) {
+                playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
             }
         } else if (player.musuniverse == 1.5 && options.musicToggle) {
             playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
-        } else {
+        } else if (player.musuniverse == 2.5 && options.musicToggle) {
+            playAndLoopAudio("music/space.mp3", options.musicVolume/10);
+        }  else {
             stopAudio();
         }
 
@@ -258,10 +297,7 @@ addLayer("i", {
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(0) && player.gain.lt("1e100000")) {
-            player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
-            if (player.gain.gte("1e100000")) player.gain = new Decimal("1e100000")
-        }
+        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -272,6 +308,23 @@ addLayer("i", {
         if (player.po.realmMods) player.gain = player.gain.pow(0.35)
         player.gain = player.gain.div(player.po.halterEffects[0])
         if (!player.in.breakInfinity && player.gain.gte("9.99e309")) player.gain = new Decimal("9.99e309")
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
+        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
+        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
+
+        //post otf
+        let postOTFMult = new Decimal(1)
+        postOTFMult = postOTFMult.mul(buyableEffect("ma", 22))
+
+        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(postOTFMult)
+        player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(postOTFMult)
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(postOTFMult)
+        player.gh.steelToGet = player.gh.steelToGet.mul(postOTFMult)
+        player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(postOTFMult)
+        player.fa.chargeRate = player.fa.chargeRate.mul(postOTFMult)
+        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
+        player.gain = player.gain.pow(player.st.starPowerEffect)
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
@@ -528,7 +581,7 @@ addLayer("i", {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e11000"),
+            cost: new Decimal("1e8000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -538,7 +591,7 @@ addLayer("i", {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e10500"),
+            cost: new Decimal("1e7500"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -548,7 +601,7 @@ addLayer("i", {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e2750"),
+            cost: new Decimal("1e2000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -558,7 +611,7 @@ addLayer("i", {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e8000"),
+            cost: new Decimal("1e7000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -651,7 +704,7 @@ addLayer("i", {
          ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
-    layerShown() { return true }
+    layerShown() { return player.tab != "cmc" }
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {

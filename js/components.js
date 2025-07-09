@@ -163,7 +163,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollRowTable instant">
+		<div id="scrCon" class="upgScrollRowTable instant">
 			<div class="upgScrollRow" v-bind:style="look" >
 				<div v-for="(item, index) in data">
 				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -183,7 +183,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollRowTable upgAlwaysScrollRow instant">
+		<div id="scrCon" class="upgScrollRowTable upgAlwaysScrollRow instant">
 			<div class="upgScrollRow" v-bind:style="look" >
 				<div v-for="(item, index) in data">
 				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -203,7 +203,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollColTable instant" >
+		<div id="scrCon" class="upgScrollColTable instant" >
 			<div class="upgScrollCol" v-bind:style="look" >
 				<div v-for="(item, index) in data">
 					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -223,7 +223,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollColTable upgAlwaysScrollCol instant" >
+		<div id="scrCon" class="upgScrollColTable upgAlwaysScrollCol instant" >
 			<div class="upgScrollCol" v-bind:style="look" >
 				<div v-for="(item, index) in data">
 					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -493,7 +493,7 @@ function loadVue() {
 					<div class="exBuyableBarProgress" v-bind:style="{'width': tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? '100%' : toNumber(player[layer].buyables[data].div(tmp[layer].buyables[data].purchaseLimit).mul(100))+'%',
 					'background-color': tmp[layer].buyables[data].style.borderColor != undefined ? tmp[layer].buyables[data].style.borderColor : tmp[layer].buyables[data].style.backgroundColor != undefined ? tmp[layer].buyables[data].style.backgroundColor : tmp[layer].color}"></div>
 				</div>
-				<div class="exBuyableInfo">
+				<div class="exBuyableInfo" :id='"buyable-" + layer + "-" + data'>
 					<div class="exBuyableInfo2">
 						<span v-if= "tmp[layer].buyables[data].title"><h2 v-html="tmp[layer].buyables[data].title"></h2><br></span>
 						<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
@@ -502,11 +502,11 @@ function loadVue() {
 				<div class="exBuyableRow">
 					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': '#cccccc'} : {}"
-					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 					Buy 1</button>
 					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': '#cccccc'} : {}"
-					v-on:click="{buyMaxExBuyable(layer, data)}" :id='"buyable-" + layer + "-" + data'>
+					v-on:click="{buyMaxExBuyable(layer, data)}">
 					Buy Max</button>
 				</div>
 			</div>

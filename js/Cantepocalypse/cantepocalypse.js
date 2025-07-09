@@ -326,5 +326,5 @@ addLayer("cp", {
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && ((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)}
+    layerShown() { return (player.startedGame == true && ((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && player.tab != "cmc"}
 })

@@ -81,9 +81,6 @@
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
         if (hasUpgrade("bi", 116)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("bi", 116))
 
-        // SOFTCAP
-        if (hasMilestone("r", 29) && player.ca.replicanti.gte(1.79e308)) player.ca.replicantiMult = player.ca.replicantiMult.div(Decimal.pow(10, player.ca.replicanti.div(1.79e308).add(1).log(1e100)))
-
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 16))
@@ -113,14 +110,11 @@
             player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(player.ca.replicanti.plus(1).log10().pow(0.75))
 
         }
-
-        // EFFECT INCREASE POST SOFTCAP
-        if (player.ca.replicanti.gte(1.79e308) && hasMilestone("r", 29)) {
-            let magnitude = player.ca.replicanti.div(1.79e308).add(1).log(1e100).add(1)
-            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(magnitude)
-            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(magnitude)
-            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(magnitude)
+        if (player.ca.replicanti.gt("1e2000"))
+        {
+            player.ca.replicantiEffect3 = Decimal.mul("1e300000", player.ca.replicantiEffect3.plus(1).log10().pow(10))
         }
+
 
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
@@ -152,8 +146,9 @@
 
         if (player.ca.replicanti.gte("1.8e308"))
         {
-            player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.3).plus(1)
-        } else
+            if (player.ca.replicanti.lt("1e2000")) player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.3).plus(1)
+            if (player.ca.replicanti.gte("1e2000")) player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.6).plus(1)
+            } else
         {
             player.ca.replicantiSoftcap = new Decimal(1)
         }
@@ -785,7 +780,6 @@
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", function () { return "Replicanti Mult: " + format(player.ca.replicantiMult) + "x" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
-                        ["raw-html", () => {return hasMilestone("r", 29) && player.ca.replicanti.gte(1.79e308) ? "[SOFTCAPPED]" : ""}, { color: "red", fontSize: "18px", fontFamily: "monospace", paddingLeft: "10px"}]
                     ]],
                     ["raw-html", function () { return "Replicate Chance: " + format(player.ca.replicateChance.mul(100)) + "%" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
                     ["blank", "25px"],

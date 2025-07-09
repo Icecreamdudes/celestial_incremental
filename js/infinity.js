@@ -1,4 +1,4 @@
-﻿var tree2 = [["ad", "ip", "id"], ["tad", "ta", "bi", "om"], ["ro", "ca"]]
+﻿var tree2 = [["ad", "ip", "id"], ["tad", "ta", "bi", "om"], ["ro", "ca"], /*["mi"]*/]
 addLayer("in", {
     name: "Universe 2", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "2", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -164,6 +164,8 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ma", 21))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ma.bestComboDepth1Effect)
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("st", 301))
+        if (player.ma.matosDefeated) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul("1e600")
 
         // POWER MODIFIERS
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])
@@ -517,7 +519,7 @@ addLayer("in", {
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ad.antimatterPerSecond) + "</h3> antimatter per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity}
+    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && player.tab != "cmc"}
 })
 addLayer("bigc", {
     name: "Big Crunch", // This is optional, only used in a few places, If absent it just uses the layer id.

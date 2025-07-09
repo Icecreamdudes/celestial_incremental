@@ -1,6 +1,6 @@
 ﻿addLayer("coa", {
     name: "Core Assembler", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "CA", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol() { return !player.ma.matosDefeated ? "CA" : "<s>CA"; }, // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -93,16 +93,23 @@
     automate() {
     },
     nodeStyle() {
-        return {
+        return !player.ma.matosDefeated ?  {
             background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)",
             "background-origin": "border-box",
             "border-color": "#260300",
             "color": "#8c3129",
+        } : {
+            background: "linear-gradient(-120deg, #1a1a1a 0%, #000000 100%)",
+            "background-origin": "border-box",
+            "border-color": "#000000",
+            "color": "grey",
         };
     },
     tooltip: "Core Assembler",
     branches: ["cop"],
-    color: "#8c3129",
+    color()  {
+        return !player.ma.matosDefeated ? "#8c3129" : "#000000";
+    },
     update(delta) {
         let onepersec = new Decimal(1)
         player.coa.strengthColors = [
@@ -165,6 +172,38 @@
             "4th Prime",
             "5th Prime",
         ]
+
+        if (player.ma.matosDefeated) { 
+        player.coa.coreStrengths = [new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),]
+        player.coa.coreFuelSources = [new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),new Decimal(-1),]
+        player.coa.corePrimes = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),]
+        player.coa.coreStarmetalValue = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),]
+        player.coa.coreOccupied = [false,false,false,false,false,false,false,false,false,false,]
+        player.coa.coreStrengthText = ["None", "None", "None", "None", "None", "None", "None", "None","None", "None",]
+        player.coa.coreFuelSourceText = ["None", "None", "None", "None", "None", "None", "None", "None","None", "None",]
+        player.coa.corePrimeText = ["None", "None", "None", "None", "None", "None", "None", "None","None", "None",]
+        player.coa.coreStrengthColor = ["","","","","","","","","","",]
+        player.coa.coreFuelSourceColor = ["","","","","","","","","","",]
+        player.coa.corePrimeColor = ["","","","","","","","","","",]
+        player.coa.coreIndex = new Decimal(0)
+        player.coa.coreCount = new Decimal(0)
+
+        player.coa.coreInnateEffects = [[],[],[],[],[],[],[],[],[],[],]
+        player.coa.coreInnateEffectText = ["","","","","","","","","","",]
+
+        player.coa.corePrimedEffects = [[],[],[],[],[],[],[],[],[],[],]
+
+        player.coa.corePrimedEffectText = ["","","","","","","","","","",]
+
+        player.coa.nextCoreStrength = new Decimal(0)
+        player.coa.nextCoreFuel = new Decimal(0)
+        player.coa.nextCoreInnateEffects = []
+        player.coa.nextCoreInnateEffectsText = ""
+
+        player.coa.nextCoreColorFuel = ""
+        player.coa.nextCoreColorStrength = ""
+        player.coa.nextCoreColorPrime = ""
+        }
 
         player.coa.nextCoreColorStrength = player.coa.strengthColors[player.coa.viewingStrength]
         player.coa.nextCoreColorFuel = player.coa.fuelColors[player.coa.nextCoreFuel]
@@ -432,12 +471,12 @@
         {
             if (player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]).lt(1.3))
             {
-            return [player.in.infinityPoints.pow(0.06).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
+            return [player.in.infinityPoints.pow(0.08).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
             player.s.highestSingularityPoints.pow(0.06).div(50).add(1).pow(player.coa.strengthBuffs[strength]), 
             player.s.singularityTime.pow(0.1).div(4).add(1).pow(player.coa.strengthBuffs[strength])] //ip, ip, inf,
             } else
             {
-                return [player.in.infinityPoints.pow(0.06).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
+                return [player.in.infinityPoints.pow(0.08).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"), 
                 Decimal.add(1.3, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(3000)), 
                 player.s.singularityTime.pow(0.1).div(4).add(1).pow(player.coa.strengthBuffs[strength])] //ip, ip, inf,
             }
@@ -1827,7 +1866,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.coa.coreIndex]] + " " + player.coa.strengths[player.coa.coreStrengths[player.coa.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.coa.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Innate Effects:<br>" + player.coa.coreInnateEffectText[player.coa.coreIndex] }, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],

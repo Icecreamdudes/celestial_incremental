@@ -805,7 +805,7 @@
             },
             "Break Infinity Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return player.in.unlockedBreak },
+                unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
                 content:
                 [
                     ["blank", "25px"],
@@ -859,7 +859,6 @@
                     ["row", [["clickable", 21], ["clickable", 22]]],
                     ["row", [["clickable", 16], ["clickable", 17]]],
                 ]
-
             },
         },
     },

@@ -29,7 +29,7 @@ addLayer("s", {
     tooltip: "Universe 3 - Domain of Singularity",
     color: "white",
     update(delta) {
-
+        if (player.ma.matosDefeated) tree3 = [["cof",], ["coa", "cop"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]]
         let onepersec = new Decimal(1)
         if (player.subtabs["s"]['stuff'] == 'Portal') {
             player.po.lastUniverse = 's'
@@ -46,10 +46,12 @@ addLayer("s", {
 
         if (player.in.infinityPoints.pow(0.125).div(15000).lt(1e20)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
-        } else {
+        } else if (player.in.infinityPoints.pow(0.02).div(55000).lt(1e200)) {
             player.s.singularityPointsToGet = Decimal.mul(1e20, player.in.infinityPoints.pow(0.02).div(55000))
+        } else
+        {
+            player.s.singularityPointsToGet = Decimal.add(1e200, player.in.infinityPoints.div("1e9000").pow(0.02).div(55000))
         }
-
 
         if (hasUpgrade("ev8", 22)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ev8", 22))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("s", 11))
@@ -62,6 +64,10 @@ addLayer("s", {
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
+        if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
         {
@@ -218,7 +224,7 @@ addLayer("s", {
         22: {
             title: "Singularity Upgrade XI",
             unlocked() { return hasUpgrade("s", 21)},
-            description: "Automate fun and sfrgt buyables.",
+            description: "Autobuy fun and sfrgt buyables.",
             cost: new Decimal("1e38"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
@@ -249,7 +255,7 @@ addLayer("s", {
             title: "Singularity Upgrade XIV",
             unlocked() { return hasUpgrade("s", 24)},
             description: "Gain 100% of NIP per second.",  
-            cost: new Decimal("1e140"),
+            cost: new Decimal("1e120"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -259,7 +265,17 @@ addLayer("s", {
             title: "Singularity Upgrade XV",
             unlocked() { return hasUpgrade("s", 26)},
             description: "Unlocks rockets (in universe 2).",  
-            cost: new Decimal("1e180"),
+            cost: new Decimal("1e160"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        27: {
+            title: "Singularity Upgrade XVI",
+            unlocked() { return hasUpgrade("s", 26)},
+            description: "Autobuys all emotion buyables.",  
+            cost: new Decimal("1e300"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -474,7 +490,7 @@ addLayer("s", {
                     ["blank", "25px"],
                     ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17]]],
                     ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],["upgrade", 24],["upgrade", 25]]],
-                    ["row", [["upgrade", 26]]],
+                    ["row", [["upgrade", 26],["upgrade", 27]]],
                 ]
             },
             "Lore": {
@@ -544,5 +560,5 @@ addLayer("s", {
         ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }], 
     ],
-    layerShown() { return player.startedGame == true && player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)}
+    layerShown() { return (player.startedGame == true && player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && player.tab != "cmc"}
 })

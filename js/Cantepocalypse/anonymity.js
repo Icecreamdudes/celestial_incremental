@@ -47,7 +47,8 @@
         player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("fu", 46))
         player.an.anonymityToGet = player.an.anonymityToGet.mul(player.le.punchcardsPassiveEffect[3])
         player.an.anonymityToGet = player.an.anonymityToGet.mul(levelableEffect("pet", 405)[0])
-        
+        player.an.anonymityToGet = player.an.anonymityToGet.mul(buyableEffect("st", 108))
+
         // ALWAYS AFTER
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.pow(0.2)
         if (inChallenge("fu", 11)) player.an.anonymityToGet = player.an.anonymityToGet.mul(player.fu.jocusEssenceEffect)

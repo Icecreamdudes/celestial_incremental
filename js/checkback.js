@@ -244,6 +244,9 @@
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pet", 406)[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.leg.gemEffects[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("ep3", 12))
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("pl", 12))
+            if (hasMilestone("db", 101)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(1.25)
+            if (player.ma.matosDefeated) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(2)
         }
 
 
@@ -307,6 +310,8 @@
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 406)[1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.leg.gemEffects[2])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("ep5", 12))
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("pl", 13))
+            if (player.ma.matosDefeated) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.5)
         }
 
         player.cb.XPBoostReq = [new Decimal(100), new Decimal(500)]
@@ -341,6 +346,8 @@
         //automation
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++) {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimersMax[i] = player.cb.buttonTimersMax[i].mul(10).div(player.cb.buttonAutomationAllocation[i].pow(0.75))
+            player.cb.buttonAutomationTimersMax[i] = player.cb.buttonAutomationTimersMax[i].div(buyableEffect("ma", 33))
+
         }
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(onepersec.mul(delta))
@@ -356,6 +363,7 @@
         //pet
         for (let i = 0; i < player.cb.petAutomationTimersMax.length; i++) {
             if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimersMax[i] = player.cb.petButtonTimersMax[i].mul(25).div(player.cb.petAutomationAllocation[i].pow(0.75))
+            player.cb.petAutomationTimersMax[i] = player.cb.petAutomationTimersMax[i].div(buyableEffect("ma", 34))
         }
         for (let i = 0; i < player.cb.petAutomationTimers.length; i++) {
             if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimers[i].sub(onepersec.mul(delta))
@@ -3366,5 +3374,5 @@
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14) }
+    layerShown() { return (player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14)) && player.tab != "cmc"}
 })

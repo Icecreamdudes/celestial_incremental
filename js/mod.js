@@ -1,6 +1,6 @@
 ﻿let modInfo = {
 	name: "Celestial Incremental",
-	id: "celestial",
+	id: "celestial_t",
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
@@ -11,8 +11,9 @@
 		"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "menulayers.js", "pollinator.js", "Singularity/coreProcessor.js",
 		"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
 		"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
-		"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
-		"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "legendaryPets.js", "rockets.js"],
+		"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js", "DarkU1/boosters.js", "DarkU1/vaporizer.js",
+		"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", "Singularity/starmetalEssence.js",  
+		"legendaryPets.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "mining.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -22,8 +23,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 161, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "The Polishing Update",
+	num: 170, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "Singularity Update Part III: Matos and Cosmos",
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -45,6 +46,34 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.7 - The Singularity Update Part III: Matos</h3><br>
+				- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
+		<br>
+		<br>
+		<br>
+		Content:<br>
+			- Added Matos.<br>
+			- Added Black Heart depths 1, 2, and 3.<br>
+			- Added the Matos bossfight.<br>
+			- Added Alt-Uni 2.<br>
+			- Added Rockets.<br>
+			- Added Stars.<br>
+			- Added Planets.<br>
+			- Added Eclipse, the first legendary pet.<br>
+			- Added Eclipse's ability in DU1.<br>
+			- Added 3 new punchards.<br>
+			- Added 4 playable characters in the Black Heart.<br>
+			- A good amount of lore.<br>
+			- A lot of new music made by yours truly.<br>
+		Balancing:<br>
+			- A bit of balancing here and there, made the game easier.<br>
+		Qol:<br>
+			- I lost track lmao.<br>
+
+		Bugfixes:<br>
+			- Fixed the darn AU1 bug.<br>
+			- I lost track lmao.<br>
+
 	<h3>v1.6.1 - Bug Fixes and Balancing</h3><br>
 	(Contains all the hotfixes from the past week)<br>
 		Content:<br>
@@ -172,7 +201,6 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed Realm Mod Halter Boost's tab not having updated text.<br>
 			- Clarified that NIP Upgrade 4 unlocks new IP Upgrades.<br><br>
 	<h3>v1.5 - The Singularity Update Part II: Starmetal and Darkness</h3><br>
-			- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
 		<br>
 		<br>
 		<br>
@@ -394,8 +422,8 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
  "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset",
  "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
-"petButton7", "evoBanner", "paragonBanner", "gemReset", "generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32","startCutscene33","startCutscene34", "resetFightCooldown"]
-
+"petButton7", "evoBanner", "paragonBanner", "gemReset", "generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32","startCutscene33","startCutscene34", "resetFightCooldown",
+"starReset", "legendarySummon", "generatePhase1Attack", "generatePhase2Attack","startCutscene35","startCutscene36","startCutscene37","startCutscene38","startCutscene39", ]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

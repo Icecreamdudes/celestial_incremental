@@ -282,7 +282,7 @@ function importSave(imported = undefined, forced = false) {
 		imported = prompt("Paste your save here. Don't screw up the timeline though.");
 	try {
 		tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
-		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save does not seem compatible with this multiverse. Try it where it belongs.")) // Wrong save (use "Forced" to force it to accept.)
+		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save may or may not work, just press 'ok' and see what happens.")) // Wrong save (use "Forced" to force it to accept.)
 			return;
 		player = tempPlr;
 		player.versionType = modInfo.id;

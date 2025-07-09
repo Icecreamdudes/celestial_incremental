@@ -873,8 +873,8 @@ for (let i = 0; i < player.ma.health.length; i++) {
             branches: [4]
         },
         8: {
-            title() { return !player.ma.matosUnlockConditions[3] ? "<h2>1e1,500,000 Points" : "<h1>WARNED" },
-            canClick() { return player.points.gte("1e1500000") && player.ma.matosUnlockConditions[3] == false },
+            title() { return !player.ma.matosUnlockConditions[3] ? "<h2>1e500,000 Points" : "<h1>WARNED" },
+            canClick() { return player.points.gte("1e500000") && player.ma.matosUnlockConditions[3] == false },
             unlocked() { return true },
             onClick() {
                 player.ma.matosUnlockConditions[3] = true

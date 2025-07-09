@@ -121,7 +121,7 @@
         player.h.ragePowerToGet = player.h.ragePowerToGet.mul(player.cb.rarePetEffects[6][1])
 
         player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
-
+        
         if (player.h.ragePowerPause.gt(0)) {
             layers.h.ragePowerReset();
         }

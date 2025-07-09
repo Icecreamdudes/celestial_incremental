@@ -443,7 +443,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
             logPrint("<span style='color: hsl(44, 76.70%, 40.40%);'>Sel has died!")
         }
 
-        if (player.ma.deadCharacters[0] && player.ma.deadCharacters[1] && player.ma.deadCharacters[2] && player.ma.deadCharacters[3]) {
+        if (player.ma.deadCharacters[0] && player.ma.deadCharacters[1] && player.ma.deadCharacters[2] && player.ma.deadCharacters[3] && player.subtabs["ma"]["stuff"] == "Fight") {
             player.subtabs["ma"]["stuff"] = "Dead"
 
             for (let i = 0; i < player.ma.deadCharacters.length; i++) 
@@ -451,6 +451,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 player.ma.health[i] = player.ma.healthMax[i]
                 player.ma.deadCharacters[i] = false
             }
+
             player.ma.fightingCelestialites = false
             player.ma.currentDepth = new Decimal(0)
             player.ma.combo = new Decimal(0)

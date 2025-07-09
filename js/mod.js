@@ -1,6 +1,6 @@
 ﻿let modInfo = {
 	name: "Celestial Incremental",
-	id: "celestial_t",
+	id: "celestial",
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",

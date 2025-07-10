@@ -9,6 +9,8 @@ addLayer("ch", {
 
         celestialIndex: new Decimal(0),
         celestialTexts: ["", "", "",],
+
+        matosDisplay: new Decimal(0),
     }},
     automate() {},
     nodeStyle() {
@@ -38,7 +40,7 @@ addLayer("ch", {
         player.ch.celestialTexts = [
             "Tav, the Celestial of Limits",
             "Cante, the Celestial of Replicanti",
-            "Jocus, the Celestial of Law",
+            "Jocus, the Celestial of Fun",
         ]
     },
     clickables: {
@@ -84,13 +86,15 @@ addLayer("ch", {
             branches: [11]
         },
         14: {
-            title() { return "<h1>?" },
-            canClick() { return false },
+            title() { return player.ma.matosDefeated ? "<h1>⊘" : "<h1>?" },
+            canClick() { return player.ma.matosDefeated },
             unlocked() { return true },
+            tooltip() { return player.ma.matosDefeated ? "Matos, the Celestial of Machinery" : "" },
             onClick() {
-                //player.ch.celestialIndex = new Decimal(2)
+                player.ch.celestialIndex = new Decimal(3)
             },
             style: { width: '50px', "min-height": '50px' }, //matos
+            branches: [12]
         },
         15: {
             title() { return "<h1>?" },
@@ -137,6 +141,63 @@ addLayer("ch", {
             },
             style: { width: '75px', "min-height": '75px' }, //nova
         },
+
+        //prison
+        101: {
+            title() { return "<h1>?" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                //
+            },
+            style: { width: '75px', "min-height": '75px' }, //aniciffo
+        },
+        102: {
+            title() { return "<h1>?" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                //
+            },
+            style: { width: '75px', "min-height": '75px' }, //
+        },
+        103: {
+            title() { return "<h1>?" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                //
+            },
+            style: { width: '75px', "min-height": '75px' }, //
+        },
+        104: {
+            title() { return "<h1>?" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                //
+            },
+            style: { width: '75px', "min-height": '75px' }, //
+        },
+        105: {
+            title() { return "<h1>?" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                //
+            },
+            style: { width: '75px', "min-height": '75px' }, //
+        },
+        106: {
+            title() { return "<h1>?" },
+            canClick() { return false },
+            unlocked() { return true },
+            onClick() {
+                //
+            },
+            style: { width: '75px', "min-height": '75px' }, //
+        },
+
     },
     bars: {},
     upgrades: {},
@@ -159,9 +220,57 @@ addLayer("ch", {
             body() { return "When I first met Jocus, one thing that stood out is their extreme insanity. I don't understand anything about this guy, but all I know is that Jocus idolizes Cante a little bit too much, despite being Nova's servant. I still don't know much about Jocus... seems like a normal celestial that lost it's mind over time." },
             unlocked() { return player.ch.celestialIndex.eq(2) },      
         },
+        4: {
+            title: "Matos",
+            body() { return "The human civilization from the domain of singularity... A world polluted with industry, corruption in government, and ongoing conflict. This hatred all accumulating into one, mean, celestial. The human version of Matos had a dream. To experience the beauty and wonders of the natural world. But that dream was stripped away from him a long, long time ago. I've never met Matos, but I have heard many things about him. Matos is being used to ressurect Nova and the Novasent after they have been banished by ????????. Having taken part in Nova's religion, Matos believes that working for Nova in order to reach his goal will help him reach true freedom, which is one step closer to his goal. Despite having intent to harm, I completely understand the reasons Matos' hatred." },
+            unlocked() { return player.ch.celestialIndex.eq(3) },      
+        },
     },
     microtabs: {
         stuff: {
+            "Hall": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+        ["microtabs", "hall", { 'border-width': '0px' }],
+                ]
+            },
+            "???": {
+                buttonStyle() { return {			   
+                background: "black",
+				backgroundOrigin: "border-box",
+				borderColor: "red",
+				color: "red",borderRadius: "5px"  } },
+                unlocked() { return player.ma.secondAreaUnlocked },
+                content: [
+                    ["blank", "25px"],
+                    ["row", [["raw-html", function () { return "Celestial Constellation ??? - ????????????" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],]],
+                    ["blank", "50px"],
+                    ["row", [["clickable", 101],]],
+                    ["blank", "25px"],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 102], ]],
+                                        ["blank", "25px"],
+                    ["row", [["clickable", 103], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }],]],
+                    ["blank", "25px"],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 104], ]],
+                                        ["blank", "25px"],
+                    ["row", [["clickable", 105],]],
+                    ["blank", "25px"],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 106], ]],
+                ]
+            },
+            "Portal": {
+                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
+                unlocked() { return true },
+                content: [],
+            },
+            "Settings": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+                unlocked() { return true },
+                content: [],
+            },
+        },
+                hall: {
             "Hall": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
@@ -181,23 +290,28 @@ addLayer("ch", {
                     ["infobox", 1],
                     ["infobox", 2],
                     ["infobox", 3],
+                    ["infobox", 4],
                     //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return true },
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
+                        "Matos Perks": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.ch.celestialIndex.eq(3) && player.ch.matosDisplay.eq(1) },
+                content: [
+                    ["blank", "25px"],
+                ["style-column", [
+                    ["row", [["raw-html", function () { return "Perks - Matos" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                ["style-column", [
+                    ["row", [["raw-html", function () { return "Perks - Matos" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
+                    
+                ]
             },
         },
     },
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.fu.defeatedJocus}
+    layerShown() { return player.startedGame == true && player.fu.defeatedJocus && player.tab != "cmc"}
 })

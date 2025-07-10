@@ -86,8 +86,12 @@ addLayer("cap", {
             player.subtabs["cap"]['stuff'] = 'CANTEPOCALYPSE'
         }
 
-        if (player.subtab = 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
+        if (player.subtabs["cap"]['stuff'] == 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
             player.cap.cantepocalypsePrep = true
+        }
+        if (player.universe == 1.5)
+        {
+            player.cap.cantepocalypsePrep = false
         }
 
         player.cap.quizAnswers =

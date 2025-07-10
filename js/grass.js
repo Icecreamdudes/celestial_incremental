@@ -182,6 +182,11 @@
         updateGrass(delta)
         updateGoldGrass(delta)
         updateMoonstone(delta)
+
+        if (hasMilestone("r", 29))
+        {
+            player.g.moonstone = player.g.moonstone.add(player.g.moonstoneVal.mul(Decimal.mul(delta, 0.01)))
+        }
     },
     unloadGrass() {
         // N.B. this space intentionally left blank
@@ -1280,6 +1285,7 @@ const updateGrass = (delta) => {
     // POWER MODIFIERS
     player.g.grassVal = player.g.grassVal.pow(buyableEffect('rm', 25))
     player.g.grassVal = player.g.grassVal.pow(player.re.realmEssenceEffect)
+    player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
 
     // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
     player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
@@ -1375,6 +1381,9 @@ const updateGoldGrass = (delta) => {
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('rm', 26))
     if (player.cop.processedCoreFuel.eq(4)) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.le.punchcardsPassiveEffect[11])
+    player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
+    player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
+    if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
 
     // GOLDEN GRASS PER SECOND
     player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))
@@ -1462,6 +1471,8 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.le.punchcardsPassiveEffect[12])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
     if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
+    player.g.moonstoneVal = player.g.moonstoneVal.mul(player.ro.rocketPartsEffect)
+    if (player.ma.matosDefeated) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)
 
     // MOONSTONE REQUIREMENT
     player.g.moonstoneReq = new Decimal(15)

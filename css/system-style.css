@@ -37,6 +37,20 @@
 	background: linear-gradient(45deg, #000000, #1c0136);
 	border: 2px solid #7a7a7a;
 }
+.titleHeader3 {
+	position: absolute;
+	width: 272.5px;
+	height: 60px;
+	left: -276px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.75);
+	font-size:20px;
+	z-index:10000;
+	background: linear-gradient(180deg, black, rgb(39, 0, 0), black);
+	border: 2px solid #7a7a7a;
+}
 .layerMenu {
 	position: absolute;
 	z-index:1000;
@@ -280,7 +294,24 @@
 	margin-bottom: 10px;
 	transition: all 0s;
 }
-
+.uniHeader3 {
+	width: 185px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: rgba(255, 255, 255, 0.9);
+	font-size:18px;
+	line-height:1;
+	z-index:10000;
+	background: linear-gradient(90deg, #000000 0%, #000000 50%, #000000 100%);
+	border-top: 2px solid #7a7a7a;
+	border-bottom: 2px solid #7a7a7a;
+	border-left: 0px solid #3e3e3e;
+	border-right: 0px solid #3e3e3e;
+	margin-bottom: 10px;
+	transition: all 0s;
+}
 *:focus {
 	outline: none;
 	webkit-outline: none;

@@ -1161,6 +1161,9 @@ addLayer("ep3", {
         player.ep3.kresStats[0] = player.ep3.kresStats[0].add(buyableEffect("ep3", 1))
         player.ep3.kresStats[1] = player.ep3.kresStats[1].add(buyableEffect("ep3", 2))
         player.ep3.kresStats[2] = player.ep3.kresStats[2].add(buyableEffect("ep3", 3))
+        player.ep3.kresStats[0] = player.ep3.kresStats[0].add(buyableEffect("ma", 11))
+        player.ep3.kresStats[1] = player.ep3.kresStats[1].add(buyableEffect("ma", 12))
+        player.ep3.kresStats[2] = player.ep3.kresStats[2].add(buyableEffect("ma", 13))
     },
     branches: ["branch"],
     clickables: {
@@ -1198,7 +1201,7 @@ addLayer("ep3", {
         1: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep3.kresPoints},
             pay(amt) { player.ep3.kresPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1231,7 +1234,7 @@ addLayer("ep3", {
         2: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep3.kresPoints},
             pay(amt) { player.ep3.kresPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1264,7 +1267,7 @@ addLayer("ep3", {
         3: {
             costBase() { return new Decimal(75) },
             costGrowth() { return new Decimal(1.65) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep3.kresPoints},
             pay(amt) { player.ep3.kresPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1468,6 +1471,9 @@ addLayer("ep4", {
         player.ep4.navStats[0] = player.ep4.navStats[0].add(buyableEffect("ep4", 1))
         player.ep4.navStats[1] = player.ep4.navStats[1].add(buyableEffect("ep4", 2))
         player.ep4.navStats[2] = player.ep4.navStats[2].add(buyableEffect("ep4", 3))
+        player.ep4.navStats[0] = player.ep4.navStats[0].add(buyableEffect("ma", 11))
+        player.ep4.navStats[1] = player.ep4.navStats[1].add(buyableEffect("ma", 12))
+        player.ep4.navStats[2] = player.ep4.navStats[2].add(buyableEffect("ma", 13))
     },
     branches: ["branch"],
     clickables: {
@@ -1505,7 +1511,7 @@ addLayer("ep4", {
         1: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep4.navPoints},
             pay(amt) { player.ep4.navPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1538,7 +1544,7 @@ addLayer("ep4", {
         2: {
             costBase() { return new Decimal(75) },
             costGrowth() { return new Decimal(1.65) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep4.navPoints},
             pay(amt) { player.ep4.navPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1571,7 +1577,7 @@ addLayer("ep4", {
         3: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep4.navPoints},
             pay(amt) { player.ep4.navPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1773,6 +1779,9 @@ addLayer("ep5", {
         player.ep5.selStats[0] = player.ep5.selStats[0].add(buyableEffect("ep5", 1))
         player.ep5.selStats[1] = player.ep5.selStats[1].add(buyableEffect("ep5", 2))
         player.ep5.selStats[2] = player.ep5.selStats[2].add(buyableEffect("ep5", 3))
+        player.ep5.selStats[0] = player.ep5.selStats[0].add(buyableEffect("ma", 11))
+        player.ep5.selStats[1] = player.ep5.selStats[1].add(buyableEffect("ma", 12))
+        player.ep5.selStats[2] = player.ep5.selStats[2].add(buyableEffect("ma", 13))
     },
     branches: ["branch"],
     clickables: {
@@ -1812,7 +1821,7 @@ addLayer("ep5", {
         1: {
             costBase() { return new Decimal(75) },
             costGrowth() { return new Decimal(1.65) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep5.selPoints},
             pay(amt) { player.ep5.selPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1845,7 +1854,7 @@ addLayer("ep5", {
         2: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep5.selPoints},
             pay(amt) { player.ep5.selPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
@@ -1878,7 +1887,7 @@ addLayer("ep5", {
         3: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ep5.selPoints},
             pay(amt) { player.ep5.selPoints = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id) },

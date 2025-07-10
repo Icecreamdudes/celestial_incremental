@@ -65,6 +65,7 @@
             buyUpgrade("bi", 113)
             buyUpgrade("bi", 114)
             buyUpgrade("bi", 115)
+            buyUpgrade("bi", 116)
         }
     },
     nodeStyle() {
@@ -666,6 +667,20 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '125px', height: '100px', }
         },
+        116: {
+            title: "BI NIP Upgrade XV",
+            unlocked() { return hasMilestone("s", 12) },
+            description: "Replicate chance boosts replicanti mult, and replicanti effects are heavily buffed.",
+            cost: new Decimal(1e188),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            effect() {
+                return player.ca.replicateChance.mul(0.3).add(1).pow(0.5)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
+        },
     },
     buyables: {
         11: {
@@ -790,7 +805,7 @@
             },
             "Break Infinity Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return player.in.unlockedBreak },
+                unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
                 content:
                 [
                     ["blank", "25px"],
@@ -801,7 +816,7 @@
                     ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
-                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115]]],
+                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -844,7 +859,6 @@
                     ["row", [["clickable", 21], ["clickable", 22]]],
                     ["row", [["clickable", 16], ["clickable", 17]]],
                 ]
-
             },
         },
     },

@@ -31,7 +31,7 @@ addLayer("otherfeat", {
             ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]]],
     ]]]
 ],
-    layerShown() { return false }
+    layerShown() { return }
 })
 addLayer("halter", {
     name: "Halter", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -267,7 +267,8 @@ addLayer("u3u", {
             ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
-            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+            ["row", [["upgrade", 18], ["upgrade", 19], ["upgrade", 20], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],["upgrade", 25]]],
+            ["row", [["upgrade", 26],["upgrade", 27]]],
         ]]]
     ],
     layerShown() { return false }
@@ -542,12 +543,56 @@ addLayer("cmh", {
             ["blank", "12.5px"],
             ["row", [["clickable", 17], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 18], ]],
             ["blank", "25px"],
+                                ["row", [["clickable", 201],["clickable", 202],]],
+            ["blank", "25px"],
             ["infobox", 1],
             ["infobox", 2],
             ["infobox", 3],
+            ["infobox", 4],
         ]]]
     ],
     layerShown() { return false }
+})
+addLayer("cmc", {
+    name: "cmc", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "cmc", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }},
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#eaf6f7",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["ch", [
+                                ["blank", "25px"],
+                    ["row", [["raw-html", function () { return "Celestial Constellation ??? - ????????????" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],]],
+                    ["blank", "50px"],
+                    ["row", [["clickable", 101],]],
+                    ["blank", "25px"],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 102], ]],
+                                        ["blank", "25px"],
+                    ["row", [["clickable", 103], ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }],]],
+                    ["blank", "25px"],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 104], ]],
+                                        ["blank", "25px"],
+                    ["row", [["clickable", 105],]],
+                    ["blank", "25px"],
+                    ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 106], ]],
+        ]]]
+    ],
+    layerShown() { return player.ma.secondAreaUnlocked }
 })
 addLayer("dut", {
     name: "dut", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -575,6 +620,7 @@ addLayer("dut", {
             ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
             ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
          ["blank", "25px"],
             ["tree", function () { return player.universe == -0.1 ? treeD : null } ],
         ]]]],
@@ -606,6 +652,7 @@ addLayer("duu", {
             ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
             ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
          ["blank", "25px"],
         ]]]],
     layerShown() { return false }
@@ -637,5 +684,35 @@ addLayer("odt", {
             ["tree", function () { return player.universe == 1337 ? tree : null } ],
         ]]]
     ],
+    layerShown() { return false }
+})
+addLayer("au2t", {
+    name: "au2t", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "au2t", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }},
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#5A4FCF",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["du", [
+                ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+            ["blank", "25px"],
+            ["tree", function () { return player.universe == 2.5 ? treeAU2 : null } ],
+        ]]]],
     layerShown() { return false }
 })

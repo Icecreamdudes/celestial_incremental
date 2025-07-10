@@ -16,7 +16,13 @@ addLayer("dg", {
         generatorPowerEffect: new Decimal(1),
         generatorPowerPerSecond: new Decimal(0),
     }},
-    automate() {},
+    automate() {
+        if (hasUpgrade("dn", 12)) {
+            buyBuyable("dg", 11)
+            buyBuyable("dg", 12)
+            buyBuyable("dg", 13)
+        }
+    },
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #a8dca4 0%, #53bd96 50%, #147363 100%)",
@@ -34,6 +40,7 @@ addLayer("dg", {
         player.dg.generatorsToGet = player.dp.prestigePoints.pow(0.35).floor()
         if (player.le.punchcards[7]) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.le.punchcardsEffect[7])
         if (player.le.punchcards[15]) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.le.punchcardsEffect[15])
+        player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
         
         // GENERATOR SOFTCAP
         if (player.dg.generatorsToGet.gte(1e100)) player.dg.generatorsToGet = player.dg.generatorsToGet.div(1e100).pow(0.2).mul(1e100)
@@ -44,6 +51,7 @@ addLayer("dg", {
         player.dg.generatorPowerPerSecond = player.dg.generatorEffect
         if (player.le.punchcards[8]) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(player.le.punchcardsEffect[8])
         if (player.le.punchcards[15]) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(player.le.punchcardsEffect[15])
+        player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("st", 107)[0])
 
         // GENERATOR POWER SOFTCAP
         if (player.dg.generatorPowerPerSecond.gte(1e250)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.div(1e250).pow(0.1).mul(1e250)
@@ -57,6 +65,9 @@ addLayer("dg", {
         player.dg.generatorPowerEffect = player.dg.generatorPower.pow(0.25).add(1).pow(player.dgr.grassEffect)
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
+        if (hasUpgrade("sma", 205)) {
+            player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(0.01).mul(delta))
+        }
     },
     bars: {},
     generatorReset()
@@ -123,7 +134,7 @@ addLayer("dg", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -132,7 +143,7 @@ addLayer("dg", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 12)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -157,7 +168,7 @@ addLayer("dg", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -166,7 +177,7 @@ addLayer("dg", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 12)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -191,7 +202,7 @@ addLayer("dg", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -200,7 +211,7 @@ addLayer("dg", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 12)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -250,6 +261,7 @@ addLayer("dg", {
          ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
          ["row", [["clickable", 1]]],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],

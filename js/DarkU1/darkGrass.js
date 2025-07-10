@@ -19,6 +19,15 @@ addLayer("dgr", {
         lastPickedText: "",
     }},
     automate() {
+        if (hasUpgrade("dn", 13))
+        {
+            buyBuyable("dgr", 11)
+            buyBuyable("dgr", 12)
+            buyBuyable("dgr", 13)
+            buyBuyable("dgr", 14)
+            buyBuyable("dgr", 15)
+            buyBuyable("dgr", 16)
+        }
     },
     nodeStyle() {
         return {
@@ -49,6 +58,7 @@ addLayer("dgr", {
         if (player.le.punchcards[12]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[12])
         if (player.le.punchcards[13]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[13])
         if (player.le.punchcards[14]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[14])
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
         
         // MAX GRASS SOFTCAP
         if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
@@ -60,6 +70,7 @@ addLayer("dgr", {
         if (player.le.punchcards[12]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[12])
         if (player.le.punchcards[13]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[13])
         if (player.le.punchcards[14]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[14])
+        player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)
@@ -67,6 +78,8 @@ addLayer("dgr", {
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
         player.dgr.grassTimerReq = new Decimal(10)
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("dgr", 13))
+        player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(levelableEffect("st", 206)[0])
+        player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("st", 102))
         if (player.dgr.grassTimer.gte(player.dgr.grassTimerReq)) {
             layers.dgr.addGrass();
             player.dgr.grassTimer = new Decimal(0)
@@ -147,7 +160,7 @@ addLayer("dgr", {
             setGridData("dgr", id, new Decimal(0))
         },
         getStyle(data, id) {
-            let look = {width: "75px", height: "75px", fontSize: "10px", borderRadius: "0px"}
+            let look = {width: "75px", height: "75px", fontSize: "7px", borderRadius: "0px"}
             getGridData("dgr", id).eq(0) ? look.backgroundColor = "#081707" : getGridData("dgr", id).lt(player.dgr.maxGrass) ? look.backgroundColor = "#1a4516" : look.backgroundColor = "#2b7326"
             getGridData("dgr", id).eq(0) ? look.color = "dimgray" : look.color = "white"
             return look
@@ -173,7 +186,7 @@ addLayer("dgr", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -182,7 +195,7 @@ addLayer("dgr", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -207,7 +220,7 @@ addLayer("dgr", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -216,7 +229,7 @@ addLayer("dgr", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -241,7 +254,7 @@ addLayer("dgr", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -250,7 +263,7 @@ addLayer("dgr", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -275,7 +288,7 @@ addLayer("dgr", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -284,7 +297,7 @@ addLayer("dgr", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -309,7 +322,7 @@ addLayer("dgr", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -318,7 +331,7 @@ addLayer("dgr", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -343,7 +356,7 @@ addLayer("dgr", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dark Grass"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -352,7 +365,7 @@ addLayer("dgr", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 13)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -422,6 +435,7 @@ addLayer("dgr", {
             ["raw-html", () => { return (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
         ]],
         ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],

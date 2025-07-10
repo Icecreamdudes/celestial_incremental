@@ -120,6 +120,7 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
         if (player.pol.pollinatorsIndex == 7) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorsEffect[12])
         if (player.cop.processedCoreFuel.eq(7)) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cop.processedCoreInnateEffects[0])
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.st.starPowerEffect2)
 
         // POWER MODIFIERS
         if (player.cop.processedCoreFuel.eq(7)) player.d.dicePointsMult = player.d.dicePointsMult.pow(player.cop.processedCoreInnateEffects[1])
@@ -152,6 +153,7 @@
         player.d.diceSides = new Decimal(6)
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
+        if (hasUpgrade("sma", 106)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 106)).floor()
 
         // LOWEST ROLL
         player.d.lowestRoll = buyableEffect("d", 14)

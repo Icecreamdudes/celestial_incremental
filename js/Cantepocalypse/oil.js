@@ -62,6 +62,7 @@
         if (hasUpgrade("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("fu", 12))
         player.oi.oilToGet = player.oi.oilToGet.mul(player.le.punchcardsPassiveEffect[4])
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 405)[1])
+        player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("st", 107))
 
         // KEEP AFTER
         if (inChallenge("fu", 11)) player.oi.oilToGet = player.oi.oilToGet.pow(0.2)
@@ -88,6 +89,7 @@
 
             // KEEP MULTIPLIERS BEFORE THIS
             if (inChallenge("fu", 11)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].pow(0.1)
+                if (hasUpgrade('ma', 22)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(upgradeEffect('ma', 22))
             player.oi.linkingPower[i] = player.oi.linkingPower[i].add(player.oi.linkingPowerPerSecond[i].mul(delta))
         }
 

@@ -53,7 +53,6 @@ function drawComponentBranches(layer, data, prefix) {
 	}
 
 }
-
 function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions & adjusted slightly
 	let num2 = data
 	let color_id = 1
@@ -72,7 +71,7 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
 	}
 	if (document.getElementById(num1) == null || document.getElementById(num2) == null)
 		return
-
+if (!isVisibleInViewport(document.getElementById(num1)) || !isVisibleInViewport(document.getElementById(num2))) return
 	let start = document.getElementById(num1).getBoundingClientRect();
     let end = document.getElementById(num2).getBoundingClientRect();
     let x1 = start.left + (start.width / 2) + document.body.scrollLeft;
@@ -85,4 +84,23 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.stroke();
+}
+function isVisibleInViewport(element) {
+    let rect = element.getBoundingClientRect()
+    let par = document.documentElement.getBoundingClientRect()
+    if (document.getElementById("layerHolder").contains(element)) {
+        par = document.getElementById("layerHolder").getBoundingClientRect()
+    }
+    if (document.getElementById("scrCon") != null) {
+        if (document.getElementById("scrCon").contains(element)) {
+            par = document.getElementById("scrCon").getBoundingClientRect()
+        }
+    }
+    if (
+        rect.top >= par.top - (rect.height/2) &&
+        rect.left >= par.left - (rect.width/2) &&
+        rect.bottom <= par.bottom + (rect.height/2) &&
+        rect.right <= par.right + (rect.width/2)
+    ) return true
+    return false
 }

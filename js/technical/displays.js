@@ -76,6 +76,14 @@ function constructUniButtonStyle(layer){
 				borderColor: "#555555",});
 			uni = -0.1;
 			break;
+		case 'au2':
+			style.push({
+            background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
+            "background-origin": "border-box",
+			color: "#ffffff",
+            "border-color": "#270052",});
+			uni = -0.1;
+			break;
 		case 'od':
 			style.push({
 				backgroundImage: "linear-gradient(0deg, #256413, #49AE1E)",
@@ -115,6 +123,16 @@ function constructUniButtonStyle(layer){
 		case 'cb':
 			style.push({'background-color': tmp[layer].color});
 			uni = 0.5;
+			break;
+		case 'mi':
+			style.push({
+            background: "linear-gradient(90deg,rgba(102, 229, 255, 1) 0%, rgba(250, 244, 62, 1) 100%)",
+            "background-origin": "border-box",
+            "border-color": "rgb(63, 98, 253)",
+			});
+			if (player.tab == layer) {
+				style.push({"outline": "2px solid rgb(255,255,255,0.75)"})
+			};
 			break;
 		default:
 			style.push({'background-color': tmp[layer].color});
@@ -246,20 +264,38 @@ function constructMenuButtonStyle(layer){
 			});
 			break;
 		case 'coa':
+			if (!player.ma.matosDefeated) {
 			style.push({
 				background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)",
 				backgroundOrigin: "border-box",
 				borderColor: "#260300",
 				color: "#8c3129",
 			});
+			} else {
+			style.push({
+            background: "linear-gradient(-120deg, #1a1a1a 0%, #000000 100%)",
+            "background-origin": "border-box",
+            "border-color": "#000000",
+            "color": "grey",
+			});
+			}
 			break;
 		case 'cop':
+			if (!player.ma.matosDefeated) {
 			style.push({
 				background: "linear-gradient(120deg, #6b1919 0%, #000000 100%)",
 				backgroundOrigin: "border-box",
 				borderColor: "#260300",
 				color: "#8c3129",
 			});
+			} else {
+			style.push({
+            background: "linear-gradient(120deg, #1a1a1a 0%, #000000 100%)",
+            "background-origin": "border-box",
+            "border-color": "#000000",
+            "color": "grey",
+			});
+			}
 			break;
 	    case 'ra':
 			style.push({
@@ -298,6 +334,22 @@ function constructMenuButtonStyle(layer){
             	backgroundOrigin: "border-box",
             	borderColor: "#282363",
             	color: "#282363",
+			});
+			break;
+	    case 'cof':
+			style.push({
+            background: "linear-gradient(120deg,rgb(128, 24, 11) 0%,rgb(136, 6, 82) 100%)",
+            "background-origin": "border-box",
+            "border-color": "#000000",
+            "color": "#000000",
+			});
+			break;
+		case 'sme':
+			style.push({
+            background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",
+            "background-origin": "border-box",
+            "border-color": "#282363",
+            "color": "#282363",
 			});
 			break;
 		case 'dut':
@@ -369,6 +421,61 @@ function constructMenuButtonStyle(layer){
 				borderColor: "#780af3",
             	backgroundImage: "linear-gradient(0deg, #ab66f9, #c18dfa)",
             	backgroundOrigin: "border-box"
+			});
+			break;
+		case 'ro':
+			style.push({
+				background: "linear-gradient(50deg,rgb(34, 34, 34) 0%,rgb(29, 23, 56) 50%,rgb(30, 13, 97) 100%)",
+				"background-origin": "border-box",
+				"border-color": "#44008b",
+				"color": "#2672e3",
+			});
+			break;
+		case 'st':
+			style.push({
+            background: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)",
+            "background-origin": "border-box",
+            "border-color": "#eaf6f7",
+            "color": "#eaf6f7",
+			});
+			break;
+	    case 'pl':
+			style.push({
+            background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)",
+            "background-origin": "border-box",
+            "border-color": "#59c2ff",
+            "color": "#eaf6f7",
+			});
+			break;
+		case 'cmc':
+			style.push({
+			    background: "black",
+				backgroundOrigin: "border-box",
+				borderColor: "red",
+				color: "red",
+			});
+			break;
+		case 'mi':
+			style.push({
+            background: "linear-gradient(90deg,rgba(102, 229, 255, 1) 0%, rgba(250, 244, 62, 1) 100%)",
+            "background-origin": "border-box",
+            "border-color": "rgb(63, 98, 253)",
+			});
+			break;
+		case 'db':
+			style.push({
+            background: "linear-gradient(120deg, #6e64c4 0%,rgb(86, 84, 192) 50%,rgb(37, 101, 153) 100%)",
+            "background-origin": "border-box",
+            "border-color": "#9f98d4",
+            "color": "#eaf6f7",
+			});
+			break;
+		case 'dv':
+			style.push({
+            background: "linear-gradient(150deg,rgb(122, 122, 122) 0%,rgb(233, 233, 233) 50%,rgb(122, 122, 122) 100%)",
+            "background-origin": "border-box",
+            "border-color": "rgb(255, 255, 255)",
+            "color": "black",
 			});
 			break;
 		//case 'bb':

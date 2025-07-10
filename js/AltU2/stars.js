@@ -597,7 +597,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).eq(0) ? new Decimal(0) : Decimal.pow(0.98, getLevelableAmount(this.layer, this.id)), // Softcap 
+                    getLevelableAmount(this.layer, this.id).eq(0) ? new Decimal(1) : Decimal.pow(0.98, getLevelableAmount(this.layer, this.id)), // Softcap 
                 ]
             },
             sacValue() { return new Decimal(1)},

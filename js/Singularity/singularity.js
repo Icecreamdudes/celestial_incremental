@@ -263,7 +263,7 @@ addLayer("s", {
         },
         26: {
             title: "Singularity Upgrade XV",
-            unlocked() { return hasUpgrade("s", 26)},
+            unlocked() { return hasUpgrade("s", 25)},
             description: "Unlocks rockets (in universe 2).",  
             cost: new Decimal("1e160"),
             currencyLocation() { return player.s },

@@ -381,7 +381,7 @@
             layers.ma.generateCelestialite()
             player.ma.respawnTimer = new Decimal(-1e100)
         }
-        if (player.ma.celestialiteHealth.lt(0)) {
+        if (player.ma.celestialiteHealth.lt(0) && player.ma.currentCelestialiteType != 25) {
             if (player.ma.currentCelestialiteType != 25) logPrint("The " + player.ma.celestialiteNames[player.ma.currentCelestialiteType] + " Celestialite died!")
             if (player.ma.currentCelestialiteType == 25) logPrint("Matos has been defeated!")
 
@@ -735,6 +735,8 @@ for (let i = 0; i < player.ma.health.length; i++) {
                     if (player.subtabs["ma"]["stuff"] == "Bullet Hell" && player.ma.currentCelestialiteType == 25)
                     {
                                     player.ma.matosDefeated = true
+                                    player.ma.inBlackHeart = false
+                                    player.ma.matosFightActive = false
                         for (let i = 0; i < player.ma.deadCharacters.length; i++) 
             {
                 player.ma.health[i] = player.ma.healthMax[i]

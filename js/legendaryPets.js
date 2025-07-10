@@ -238,7 +238,7 @@
 
         } else if (random < 0.9) {
             let random3 = getRandomInt(1000, 2000)
-            random3 = random3 * player.cb.petPointMult
+            random3 = random3 * player.pet.petPointMult
 
             player.cb.petPoints = player.cb.petPoints.add(random3)
             callAlert("You gained " + formatWhole(random3) + " pet points!", "resources/petPoint.png");

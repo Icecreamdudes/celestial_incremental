@@ -467,7 +467,6 @@ addLayer("le", {
                         if (player.le.punchcards[i] == true)
                         {
                             player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.starmetalAlloyToGetTrue.floor())
-                            player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).floor())
                         }
                         player.le.punchcards[i] = false
                     }
@@ -526,7 +525,7 @@ addLayer("le", {
                     {
                         if (player.le.punchcards[i] == true)
                         {
-                            player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.starmetalAlloyToGetTrue.floor())
+                            player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).floor())
                         }
                         player.le.punchcards[i] = false
                     }

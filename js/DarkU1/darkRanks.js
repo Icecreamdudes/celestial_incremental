@@ -69,11 +69,11 @@ addLayer("dr", {
 
         player.dr.tierDiv = new Decimal(1)
         player.dr.tierDiv = player.dr.tierDiv.mul(buyableEffect("dp", 12))
-        player.dr.rankDiv = player.dr.rankDiv.mul(levelableEffect("st", 203)[0])
+        player.dr.tierDiv = player.dr.tierDiv.mul(levelableEffect("st", 203)[0])
 
         player.dr.tetrDiv = new Decimal(1)
         player.dr.tetrDiv = player.dr.tetrDiv.mul(buyableEffect("dp", 13))
-        player.dr.rankDiv = player.dr.rankDiv.mul(levelableEffect("st", 204)[0])
+        player.dr.tetrDiv = player.dr.tetrDiv.mul(levelableEffect("st", 204)[0])
 
         player.dr.pentDiv = new Decimal(1)
 

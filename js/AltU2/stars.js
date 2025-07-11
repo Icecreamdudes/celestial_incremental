@@ -240,10 +240,10 @@ addLayer("st", {
         },
         3: {
             title() { return "Buy Max On" },
-            canClick() { return player.sd.dimMax == false },
+            canClick() { return player.st.dimMax == false },
             unlocked() { return true },
             onClick() {
-                player.sd.dimMax = true
+                player.st.dimMax = true
             },
             style() {
                     return { color: "white", width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
@@ -251,10 +251,10 @@ addLayer("st", {
         },
         4: {
             title() { return "Buy Max Off" },
-            canClick() { return player.sd.dimMax == true  },
+            canClick() { return player.st.dimMax == true  },
             unlocked() { return true },
             onClick() {
-                player.sd.dimMax = false
+                player.st.dimMax = false
             },
             style() {
                     return { color: "white", width: '75px', "min-height": '50px', borderRadius: '0px 0px 0px 0px' }

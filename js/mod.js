@@ -28,11 +28,7 @@ let VERSION = {
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
-		(They only bring you to the selected universe if you have it unlocked)<br>
-		Q - Universe 1.<br>
-		W - Universe 2.<br>
-		A - Alt-Universe 1.<br>
-		E - Universe 3.<br>
+		Maybe soon. (Removed for optimization with other stuff)<br>
 		`
 
 let credits = `<h1>Credits:</h1><br>

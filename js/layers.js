@@ -775,29 +775,3 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
-        if (!options.newMenu) {
-            player.tab = "i"
-        } else {
-            player.universe = 1
-        }
-    }
-    if(event.keyCode == 65 && hasUpgrade("cp", 18) && options.toggleHotkey) {
-        if (!options.newMenu) {
-            player.tab = "cp"
-        } else {
-            player.universe = 1.5
-        }
-    }
-    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
-        if (!options.newMenu) {
-            player.tab = "in"
-        } else {
-            player.universe = 2
-        }
-    }
-    if(event.keyCode == 69 && (hasUpgrade("cp", 18) || player.universe != 1.5) && player.ca.defeatedCante && options.toggleHotkey) {
-        player.tab = "s"
-    }
-});

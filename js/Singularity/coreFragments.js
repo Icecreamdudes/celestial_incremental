@@ -56,7 +56,6 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Coming Soon!" }, { "color": "white", "font-size": "48px", "font-family": "monospace" }],
                 ]
             },
         },

@@ -812,7 +812,7 @@
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.level.gte(60) },
             rewardDescription: "Check back buyables.",
-            unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(100) },
+            unlocked() { return hasChallenge("ip", 16) },
             onEnter() {
                 layers.in.bigCrunch()
 

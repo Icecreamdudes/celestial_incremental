@@ -324,7 +324,7 @@ addLayer("po", {
             display() {
                 return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated<br>Can't activate in Tav's domain";
             },
-            canClick() { return player.po.featureSlots.gte(1) && player.in.unlockedBreak && !inChallenge("tad", 11)},
+            canClick() { return (player.po.featureSlots.gte(1) && player.in.unlockedBreak && !inChallenge("tad", 11)) || hasMilestone("s", 11)},
             unlocked() { return player.in.unlockedBreak },
             onClick() {
                 player.po.breakInfinity = true

@@ -5,6 +5,18 @@
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+
+        coreFragments: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        /*
+        0 - Ancient Core Fragments (Points, recplicanti points, factors, perks, prestige points, anonymity) 6
+        1 - Natural Core Fragments (Grass, golden grass, trees, grasshop, repli-trees, repli-grass, grass-skip) 6
+        2 - Technological Core Fragments (Steel, mods, dice, oil, rocket fuel, activated fuel, rocket parts, ) 7
+        3 - Metaphysical Core Fragments (infinity, negative infinity, infinites, broken infinities, alt-broken infinities, mastery points,) 6
+        4 - Singularity Core Fragments (singularity points, singularity dimensions, core fragments, starmetal alloy, starmetal essence, radiation) 6
+        5 - Cosmic Core Fragments (antimatter dimensions, replicanti, stars, star dimensions, planets, space dust) 6
+        6 - Temporal Core Fragments (Check back xp, xp boost, pet points, ) 
+        7 - Celestial Core Fragments (Secret) 
+        */
     }
     },
     automate() {
@@ -56,6 +68,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
+                    ["raw-html", function () { return "Coming Soon!" }, { "color": "white", "font-size": "48px", "font-family": "monospace" }],
                 ]
             },
         },

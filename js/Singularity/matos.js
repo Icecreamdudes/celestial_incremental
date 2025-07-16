@@ -3724,6 +3724,7 @@ for (let i = 0; i < player.ma.deadCharacters.length; i++)
                             ["raw-html", function () { return "x5 to moonstone." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                             ["raw-html", function () { return "x1e600 boost to infinity points." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                             ["raw-html", function () { return "x1e40 boost to singularity points." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                            ["raw-html", function () { return "x100 boost to radiation gain." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
 
                 ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]

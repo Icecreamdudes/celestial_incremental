@@ -29,7 +29,7 @@ addLayer("dgr", {
         };
     },
     tooltip: "Dark Grass",
-    branches: [["dg", "#4f0694"]],
+    branches: [["dg", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -119,17 +119,7 @@ addLayer("dgr", {
             },
         },
     },
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #006a44" },
-        },
-    },
+    clickables: {},
     grid: {
         rows: 5,
         cols: 5,
@@ -409,8 +399,8 @@ addLayer("dgr", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["dark-buyable", 11],["dark-buyable", 12],["dark-buyable", 13],]],
-                    ["row", [["dark-buyable", 14],["dark-buyable", 15],["dark-buyable", 16],]],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],
+                        ["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -423,7 +413,6 @@ addLayer("dgr", {
             ["raw-html", () => { return (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
         ]],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return hasUpgrade("le", 22) },

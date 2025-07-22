@@ -19,8 +19,7 @@ function getStartOptions() {
 		musicVolume: 3,
 		toggleHotkey: true,
 		toggleParticle: true,
-		menuShown: true,
-		newMenu: true,
+		menuType: "Tree",
 	}
 }
 function updateMusicVolume() {
@@ -37,6 +36,13 @@ function toggleOpt(name) {
 		changeTreeQuality();
 	if (name == "oldStyle")
 		updateStyle();
+}
+function selectMenu() {
+	if (options.menuType == "Tree") {
+		options.menuType = "Tab"
+	} else {
+		options.menuType = "Tree"
+	}
 }
 var styleCooldown = 0;
 function updateStyle() {

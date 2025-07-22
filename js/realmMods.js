@@ -365,15 +365,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -1209,8 +1200,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
             "Realms": {
@@ -1243,9 +1234,9 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return player.rm.realmEnergyText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
-                    ["row", [["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27], ["ex-buyable", 28]]],
-                    ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24],
+                        ["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27], ["ex-buyable", 28],
+                        ["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]], {maxWidth: "1200px"}],
                 ]
             },
             "Halter Boosts": {
@@ -1269,8 +1260,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.rm.blankMods) + "</h3> Blank Mods" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain <h3>" + format(player.rm.blankModsToGet) + "</h3> blank mods on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && player.po.realmMods}

@@ -106,3 +106,52 @@
 .star:after {
 	transform: rotate(35deg);
 }
+
+.tabNode {
+	height: 50px;
+	width: 200px;
+	border: var(--hqProperty1);
+	border-color: rgba(0, 0, 0, 0.125);
+	border-radius: 15px;
+	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
+	font-size: 16px;
+	font-family: "Roboto Mono", monospace;
+	color: rgba(0, 0, 0, 0.9);
+	text-shadow: var(--hqProperty3);
+	padding: 0 12% 0 12%;
+	margin: 4px 0 4px 0;
+	transition: all 0s;
+}
+
+.tabNode.can:hover {
+	box-shadow: var(--hqProperty2a), 0 0 20px var(--points);
+}
+
+.tabRow {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	border-bottom: 3px solid #7a7a7a;
+}
+
+.tabTitleHolder {
+	min-width: 100px;
+	margin: 0px;
+}
+
+.tabTitle {
+	width: 100%;
+	height: 100%;
+	font-size: 18px;
+	display: flex;
+	background: #444;
+	border-right: 3px solid #7a7a7a;
+}
+
+.tabRowHolder {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	padding: 4px 0 4px 0;
+}

@@ -168,24 +168,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return (A1)" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-        2: {
-            title() { return "<h2>Return (U1)" },
-            canClick() { return true },
-            unlocked() { return (hasUpgrade("cp", 18) && options.newMenu == false) },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         3: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -679,8 +661,8 @@
                         ["raw-html", () => { return "(Each linking power is based on it's respective currency)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "825px", height: "30px", backgroundColor: "#0c1a36", borderLeft: "3px solid #0c1a36", borderRight: "3px solid #0c1a36", borderBottom: "3px solid #0c1a36"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
             "PROTO MEMORIES": {
@@ -750,7 +732,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 14]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                 ]
             },
             "REMEMBERANCE CORES": {
@@ -777,7 +759,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1], ["clickable", 2]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasMilestone("gs", 17) }

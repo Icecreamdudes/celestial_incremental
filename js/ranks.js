@@ -284,15 +284,6 @@
         player.t.trees = new Decimal(0)
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.r.timeMax == false },
@@ -602,28 +593,28 @@
             requirementDescription: "<h3>Pent 11",
             effectDescription() { return "Unlocks a new check back button." },
             done() { return player.r.pent.gte(11) && this.unlocked() },
-            unlocked() { return hasUpgrade("i", 19) },
+            unlocked() { return layerShown("cb") },
             style: { width: '800px', "min-height": '75px' },
         },
         18: {
             requirementDescription: "<h3>Pent 15",
             effectDescription() { return "Unlocks new grasshop studies." },
             done() { return player.r.pent.gte(15) && this.unlocked() },
-            unlocked() { return hasUpgrade("i", 19)},
+            unlocked() { return layerShown("cb") },
             style: { width: '800px', "min-height": '75px' },
         },
         19: {
             requirementDescription: "<h3>Pent 30",
             effectDescription() { return "Boosts tree and mod gain based on pent.<br>Currently: x" + format(player.r.pentMilestone9Effect[0]) + " and x" + format(player.r.pentMilestone9Effect[1]) + " respectively" },
             done() { return player.r.pent.gte(30) && this.unlocked() },
-            unlocked() { return hasUpgrade("i", 19) },
+            unlocked() { return layerShown("cb") },
             style: { width: '800px', "min-height": '75px' },
         },
         20: {
             requirementDescription: "<h3>Pent 10,000",
             effectDescription() { return "Good luck on increasing pent, you will need it.<br>Boosts Pre-OTF currencies by x100" },
             done() { return player.r.pent.gte(10000) && this.unlocked() },
-            unlocked() { return hasUpgrade("s", 16) && hasUpgrade("i", 19) },
+            unlocked() { return hasUpgrade("s", 16) && layerShown("cb") },
             style: { width: '800px', "min-height": '75px' },
         },
         21: {
@@ -786,11 +777,11 @@
                             ["raw-html", function () { return "Tree: x" + format(player.r.timeCubeEffects[1]) }, () => { return player.points.gte("1e1000") ? {color: "white", fontSize: "20px", fontFamily: "monospace"} : {color: "grey", fontSize: "20px", fontFamily: "monospace"} }],
                             ["raw-html", function () { return "Grass: x" + format(player.r.timeCubeEffects[2]) }, () => { return player.points.gte("1e1000") ? {color: "white", fontSize: "20px", fontFamily: "monospace"} : {color: "grey", fontSize: "20px", fontFamily: "monospace"} }],
                             ["raw-html", function () { return "Fertilizer: x" + format(player.r.timeCubeEffects[3]) }, () => { return player.points.gte("1e1000") ? {color: "white", fontSize: "20px", fontFamily: "monospace"} : {color: "grey", fontSize: "20px", fontFamily: "monospace"} }],
-                            ["raw-html", function () { return "(Only active at >1e1,000 Points)" }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],        
+                            ["raw-html", function () { return "<i>(Only active at >1e1,000 Points)</i>" }, { color: "#ddd", fontSize: "16px", fontFamily: "monospace" }],        
                         ], {width: "650px", height: "125px"}],
                     ], {width: "650px", height:"175px", backgroundColor: "#561154", border: "2px solid #d82cd4", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                 ]
             },
@@ -800,7 +791,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 11) }

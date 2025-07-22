@@ -45,15 +45,6 @@
     },
     branches: ["g", "gh"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
     },
     bars: {},
     upgrades: {},
@@ -89,7 +80,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "There are <h3>" + format(player.pe.pests) + "</h3> pests." }, { "color": "#770022", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.pe.pestsPerSecond) + "</h3> pests per second." }, { "color": "#770022", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) },

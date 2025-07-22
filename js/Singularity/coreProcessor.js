@@ -94,15 +94,6 @@
         
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "s"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         101: {
             title() { return "<div id=core0 class=singularityCore><div class=centerCircle></div>" },
             canClick() { return true },
@@ -292,7 +283,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0) }

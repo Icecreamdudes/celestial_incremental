@@ -55,15 +55,6 @@
         if (hasMilestone("gs", 15)) player.an.anonymity = player.an.anonymity.add(player.an.anonymityToGet.mul(Decimal.mul(delta, 0.1)))
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h2>Reset previous content except perks for anonymity.</h2><br><h3>(based on replicanti points)</h3>" },
             canClick() { return player.an.anonymityToGet.gte(1) },
@@ -274,8 +265,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "850px"}],
                 ]
             },
         },
@@ -285,7 +276,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 14) }

@@ -56,7 +56,7 @@
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
-        if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(player.h.HRErefinementEffect[2][1])
+        if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(player.hre.refinementEffect[2][1])
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
@@ -140,15 +140,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.t.treeMax == false },
@@ -486,8 +477,8 @@
                     ["blank", "25px"],
                     ["row", [["bar", "treebar"]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -496,7 +487,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 16)},

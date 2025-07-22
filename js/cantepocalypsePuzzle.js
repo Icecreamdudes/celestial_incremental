@@ -125,15 +125,6 @@ addLayer("cap", {
     },
     branches: ["ta", "om"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ca"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h1>I" },
             canClick() { return true },
@@ -284,9 +275,7 @@ addLayer("cap", {
     },
 
     tabFormat: [
-
-        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)}
 })

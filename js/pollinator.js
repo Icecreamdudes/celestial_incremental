@@ -126,7 +126,7 @@ addLayer("pol", {
                     new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
                     player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Dice Points
                     player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Rocket Fuel
-                    player.pol.pollinators.add(1).log(60).add(1).pow(0.6).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Hex Points
+                    player.pol.pollinators.add(1).log(60).add(1).log(6).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)), // Hex Points
                     player.pol.pollinators.add(1).log(100).pow(0.5).div(2).add(1).pow(buyableEffect("pol", 14)), new Decimal(1), new Decimal(1) // Realm Mod Energy
                 ];
                 break;
@@ -141,15 +141,6 @@ addLayer("pol", {
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.pol.pollinatorsMax == false },
@@ -607,11 +598,11 @@ addLayer("pol", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
-                    ["row", [["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                        ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]], {maxWidth: "600px"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12]]],
-                    ["row", [["ex-buyable", 13], ["ex-buyable", 14]]]
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12],
+                        ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "600px"}],
                 ]
             },
             "???": {
@@ -642,8 +633,7 @@ addLayer("pol", {
         ["raw-html", function () { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, { color: "#cb8e00", fontSize: "24px", fontFamily: "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.pol.pollinatorsPerSecond) + "</h3> pollinators per second." }, { color: "#cb8e00", fontSize: "16px", fontFamily: "monospace" }],
         ["raw-html", function () { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, { color: "red", fontSize: "16px", fontFamily: "monospace" }],
-        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { borderWidth: '0px' }],
-        ],
+        ["microtabs", "stuff", { borderWidth: '0px' }],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !(inChallenge("ip", 12) || inChallenge("ip", 18)) }
 })

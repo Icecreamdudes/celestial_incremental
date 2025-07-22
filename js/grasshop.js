@@ -67,6 +67,7 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
         if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
+        if (inChallenge("ip", 13) || player.po.hex) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.hre.refinementEffect[4][1])
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 15)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.85)
@@ -196,15 +197,6 @@
     },
     branches: ["g"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.gh.studyMax == false },
@@ -482,7 +474,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         12: {
             costBase() { return new Decimal(50) },
@@ -517,7 +509,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         13: {
             costBase() { return new Decimal(100) },
@@ -552,7 +544,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         14: {
             costBase() { return new Decimal(250) },
@@ -587,7 +579,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         15: {
             costBase() { return new Decimal(300) },
@@ -622,7 +614,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         16: {
             costBase() { return new Decimal(100000) },
@@ -657,7 +649,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         17: {
             costBase() { return new Decimal(1e8) },
@@ -692,7 +684,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         18: {
             costBase() { return new Decimal(2e8) },
@@ -727,7 +719,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         19: {
             costBase() { return new Decimal(5e8) },
@@ -762,7 +754,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         21: {
             costBase() { return new Decimal(1e16) },
@@ -773,12 +765,82 @@
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return hasMilestone("r", 18) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[19].gte(1)},
+            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[18].gte(1)},
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "/200<br/>Check Back Study I"
             },
             display() {
                 return "<h4>which multiplying check back xp gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
+            },
+            branches: [18],
+            buy() {
+                if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '150px', height: '150px', margin: "10px"}
+        },
+        22: {
+            costBase() { return new Decimal(1e19) },
+            costGrowth() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.gh.fertilizer},
+            pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return hasMilestone("r", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[21].gte(1)},
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Check Back Study II"
+            },
+            display() {
+                return "<h4>which dividing xp button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
+            },
+            branches: [21],
+            buy() {
+                if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '150px', height: '150px', margin: "10px"}
+        },
+        23: {
+            costBase() { return new Decimal(1e30) },
+            costGrowth() { return new Decimal(1e10) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.gh.fertilizer},
+            pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 25)) },
+            unlocked() { return hasChallenge("ip", 11) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[19].gte(1)},
+            title() {
+                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Antimatter Study I"
+            },
+            display() {
+                return "<h4>which are boosting antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [19],
@@ -797,77 +859,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
-        },
-        22: {
-            costBase() { return new Decimal(1e19) },
-            costGrowth() { return new Decimal(1000) },
-            purchaseLimit() { return new Decimal(50) },
-            currency() { return player.gh.fertilizer},
-            pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
-            unlocked() { return hasMilestone("r", 18) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[19].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Check Back Study II"
-            },
-            display() {
-                return "<h4>which dividing xp button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
-            },
-            branches: [21, 18],
-            buy() {
-                if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '150px', height: '150px', }
-        },
-        23: {
-            costBase() { return new Decimal(1e30) },
-            costGrowth() { return new Decimal(1e10) },
-            purchaseLimit() { return new Decimal(50) },
-            currency() { return player.gh.fertilizer},
-            pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 25)) },
-            unlocked() { return hasChallenge("ip", 11) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[15].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Antimatter Study I"
-            },
-            display() {
-                return "<h4>which are boosting antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
-            },
-            branches: [15],
-            buy() {
-                if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '150px', height: '150px', }
+            style: { width: '150px', height: '150px', margin: "10px"}
         },
         24: {
             costBase() { return new Decimal(1e40) },
@@ -878,7 +870,7 @@
             effect(x) { return new getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 25)) },
             unlocked() { return hasChallenge("ip", 11) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[23].gte(1)&& player.gh.buyables[22].gte(1)},
+            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[23].gte(1)},
             title() {
                 return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Antimatter Study II"
             },
@@ -886,7 +878,7 @@
                 return "<h4>which are boosting antimatter by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
-            branches: [22, 23],
+            branches: [23],
             buy() {
                 if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
@@ -902,7 +894,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', }
+            style: {width: '150px', height: '150px', margin: "10px"}
         },
 
         //Steel
@@ -1219,16 +1211,44 @@
                         ["raw-html", () => {return player.gh.fertilizerEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", paddingLeft: "10px"}],
                     ]],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.gh.fertilizerPerSecond) + "</h3> fertilizer per second." }, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 12], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 15], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 23]]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 13], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 16], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 18]["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 18], ["raw-html", function () { return hasMilestone("r", 17) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 22], ["raw-html", function () { return "&nbsp;&nbsp;&nbsp;&nbsp;" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 24],]],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 17], ["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 14], ["raw-html", function () { return hasMilestone("r", 14) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 19], ["raw-html", function () { return hasMilestone("r", 17) ? "&nbsp;&nbsp;&nbsp;&nbsp;" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }], ["buyable", 21],]],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["blank", "10px"],
+                        ["row", [
+                            ["buyable", 11],
+                        ]],
+                        ["row", [
+                            ["buyable", 12],
+                            ["blank", ["170px", "170px"]],
+                            ["buyable", 13]
+                        ]],
+                        ["row", [
+                            ["buyable", 15],
+                            ["style-row", [["buyable", 17]], {width: "170px", height: "170px"}],
+                            ["buyable", 14],
+                        ]],
+                        ["row", [
+                            ["buyable", 16],
+                        ]],
+                        ["row", [
+                            ["style-row", [["buyable", 18]], {width: "170px", height: "170px"}],
+                            ["style-row", [["buyable", 19]], {width: "170px", height: "170px"}],
+                        ]],
+                        ["row", [
+                            ["style-row", [["buyable", 21]], {width: "170px", height: "170px"}],
+                            ["blank", ["170px", "170px"]],
+                            ["style-row", [["buyable", 23]], {width: "170px", height: "170px"}],
+                        ]],
+                        ["row", [
+                            ["style-row", [["buyable", 22]], {width: "170px", height: "170px"}],
+                            ["blank", ["170px", "170px"]],
+                            ["style-row", [["buyable", 24]], {width: "170px", height: "170px"}],
+                        ]],
+                        ["blank", "10px"],
+                    ], {width: "650px", backgroundColor: "rgba(0,0,0,0.3)", border: "3px solid #031d3b", borderRadius: "15px"}],
                 ]
-
             },
             "Steelie": {
                 buttonStyle() { return { color: "white", borderColor: "black", backgroundColor: "grey", borderRadius: "5px" } },
@@ -1242,8 +1262,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34]]],
-                    ["row", [["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]]],
+                    ["style-row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34],
+                        ["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]], {maxWidth: "1200px"}],
                 ]
 
             },
@@ -1254,8 +1274,8 @@
         ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.gh.grasshoppers) + "</h3> grasshoppers." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.gh.grasshoppersToGet.gt(1) ? "You will gain <h3>" + format(player.gh.grasshoppersToGet) + "</h3> grasshoppers on reset." : ""}, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
         ],
     layerShown() { return player.startedGame == true && hasMilestone("r", 12) }
 })

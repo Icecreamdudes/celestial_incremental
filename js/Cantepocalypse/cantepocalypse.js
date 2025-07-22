@@ -1,7 +1,7 @@
-﻿var treeA1 = [["ar", "pr"], ["an", "rt", "rg"], ["gs", "oi"], ["fu"]]
+﻿var treeA1 = [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["gs", "oi"], ["fu"]]
 addLayer("cp", {
-    name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "A1", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Alternate Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "AO", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -34,16 +34,14 @@ addLayer("cp", {
             buyUpgrade("cp", 18)
         }
     },
-    nodeStyle() {
-        return {
-            background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
-            "background-origin": "border-box",
-            "border-color": "#012738",
-        }
+    nodeStyle: {
+        background: "linear-gradient(45deg, #146 0%, #4a9 100%)",
+        backgroundOrigin: "border-box",
+        borderColor: "#333",
     },
-    tooltip: "Alt-Universe 1: Cantepocalypse",
-    color: "white",
-    branches: ["i"],
+    tooltip: "Alternate Origin",
+    color: "#398",
+    branches: ["ar", "pr"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -51,21 +49,9 @@ addLayer("cp", {
             player.cap.cantepocalypsePrep = false
             player.subtabs["cap"]['stuff'] = 'Main'
             player.cp.cantepocalypseActive = true
-            if (options.newMenu == true) showTab("a1u")
         }
 
         if (hasUpgrade("cp", 18) && player.cp.cantepocalypseActive) player.cp.cantepocalypseActive = false
-
-        if (player.subtabs["cp"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'cp'
-            player.tab = "po"
-            player.subtabs["cp"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["cp"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'cp'
-            player.tab = "settings"
-            player.subtabs["cp"]['stuff'] = 'Features'
-        }
 
         multAdd = new Decimal(0.01)
         multAdd = multAdd.add(player.ar.rankPointsEffect)
@@ -145,17 +131,7 @@ addLayer("cp", {
             player.cp.replicantiPointsTimer = new Decimal(0)
         }
     },
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-    },
+    clickables: {},
     bars: {
         replicantiBar: {
             unlocked() { return true },
@@ -254,7 +230,7 @@ addLayer("cp", {
         {
             title: "Feature VIII",
             unlocked() { return true },
-            description: "Unlocks THE PORTAL, and more oil content.",
+            description: "Escape Cantepocalypse, and unlock more oil content.",
             cost: new Decimal(1e90),
             onPurchase() {
                 player.cp.cantepocalypseActive = false
@@ -280,21 +256,13 @@ addLayer("cp", {
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Features": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["tree", treeA1],
-                ]
-            },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]], {maxWidth: "800px"}],
                 ]
             },
             "Softcap": {
@@ -309,16 +277,6 @@ addLayer("cp", {
                     ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return hasUpgrade("cp", 18) || player.s.highestSingularityPoints.gt(0) },
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
     tabFormat: [
@@ -327,5 +285,5 @@ addLayer("cp", {
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && ((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)}
+    layerShown() { return player.startedGame == true && (((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge}
 })

@@ -1,18 +1,16 @@
-﻿var tree1 = [["u1u"], ["h", "r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rm", "rf", "d"], ["cb", "oi"], ["re", "fa"]]
+﻿var tree1 = [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rm", "rf", "d"], ["cb", "oi"], ["re", "fa"]]
 addLayer("i", {
-    name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "OR", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
 
         PreOTFMult: new Decimal(1),
-    }
-    },
+    }},
     automate() {
-        if (player.i.auto == true && hasMilestone("ip", 19))
-        {
+        if (player.i.auto == true && hasMilestone("ip", 19)) {
             buyUpgrade("i", 11)
             buyUpgrade("i", 12)
             buyUpgrade("i", 13)
@@ -25,8 +23,7 @@ addLayer("i", {
             buyUpgrade("i", 21)
             if (hasMilestone("s", 11)) buyUpgrade("i", 20)
         }
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyUpgrade("i", 11)
             buyUpgrade("i", 12)
             buyUpgrade("i", 13)
@@ -55,144 +52,29 @@ addLayer("i", {
             buyUpgrade("i", 38)
             buyUpgrade("i", 39)
             buyUpgrade("i", 41)
-        }
+    }},
+    nodeStyle: {
+        background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
+        backgroundOrigin: "border-box",
+        borderColor: "#333",
     },
-    nodeStyle() {
-        return {
-            background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
-            "background-origin": "border-box",
-            "border-color": "#151515",
-        };
-    },
-    tooltip: "Universe 1 - Overworld",
-    branches: ["in"],
+    tooltip: "Origin",
+    branches: ["r", "f"],
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
+
+        stopRain()
 
         if (player.startedGame == false && player.tab == "i") {
             player.startedGame = true
         }
 
-        if (player.startedGame && options.newMenu) {
-            if (player.tab == "i") {
-                player.tab = "u1u"
-            } else if (player.tab == "in") {
-                player.tab = "ip"
-            } else if (player.tab == "cp" && !player.cap.cantepocalypsePrep) {
-                player.tab = "a1u"
-            } else if (player.tab == "po") {
-                player.tab = "otherfeat"
-            }
-        }
-
-        if (player.startedGame == true && player.c.cutscene1 == false) {
-            player.gain = new Decimal(1)
-        }
-
-        if (player.tab == "cb" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ev" || player.tab == "ev0"
-          || player.tab == "ev1" || player.tab == "ev2" || player.tab == "ev4" || player.tab == "ev8" || player.tab == "ev9" || player.tab == "ev10") {
-            if (options.newMenu == false) player.universe = 0.5
-            player.musuniverse = 0.5
-        }
-        if (player.tab == "i" || player.tab == "u1u" || player.tab == "u1t" || player.tab == "u1l"  || player.tab == "h" || player.tab == "r" || player.tab == "f" || player.tab == "p" || player.tab == "t" || player.tab == "g"
-          || player.tab == "pe" || player.tab == "pol" || player.tab == "gh" || player.tab == "rf" || player.tab == "de" || player.tab == "m" || player.tab == "d" || player.tab == "rm" ||
-        player.tab == "re" || player.tab == "fa" ) {
-            if (options.newMenu == false) player.universe = 1
-            player.musuniverse = 1
-        }
-
-        if (player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "id" || player.tab == "tad" || player.tab == "ta" || player.tab == "bi" || player.tab == "om"
-          || player.tab == "ga" || player.tab == "ca" || player.tab == "u2t" || player.tab == "u2l" ) {
-            if (options.newMenu == false) player.universe = 2
-            player.musuniverse = 2
-        }
-        if (player.tab == "coa" || player.tab == "cop" || player.tab == "ra" || player.tab == "cs" || player.tab == "sd" || player.tab == "u3t" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3b" || player.tab == "sma"|| player.tab == "ma") {
-            if (options.newMenu == false) player.universe = 3
-            player.musuniverse = 3
-        }
-        if (player.tab == "ch" || player.tab == "cmh" ) {
-            if (options.newMenu == false) player.universe = -0.5
-            player.musuniverse = -0.5
-        }
-        if (player.tab == "dut" || player.tab == "du" || player.tab == "dg" || player.tab == "dgr" || player.tab == "dn" || player.tab == "dp" || player.tab == "dr" || player.tab == "le"  ) {
-            if (options.newMenu == false) player.universe = -0.1
-            player.musuniverse = -0.1
-        }
-        if (player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi"
-          || player.tab == "a1u" || player.tab == "a1t" || player.tab == "a1s"|| player.tab == "fu") {
-            if (options.newMenu == false) player.universe = 1.5
-            player.musuniverse = 1.5
-            //startRain("#1486ff");
-        } else {
-            //stopRain();
-        }
-
-        if (player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter") {
-            if (options.newMenu == false) player.universe = 0
-            player.musuniverse = 0
-        }
-
-        if (player.tab == "c" || player.tab == "gt") {
-            if (options.newMenu == false) player.universe = -1
-            player.musuniverse = -1
-        }
-
-        if (player.tab == "od" || player.tab == "mu") {
-            if (options.newMenu == false) player.universe = 1337
-            player.musuniverse = 1337
-        }
-
-        //music control
-        if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) ) {
-            playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle) {
-            playAndLoopAudio("music/tav.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 0 && options.musicToggle) {
-            playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 2 && options.musicToggle) {
-            playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 3 && options.musicToggle) {
-            playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 0.5 && options.musicToggle) {
-            playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -0.5 && options.musicToggle) {
-            playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -0.1 && options.musicToggle) {
-            playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -1 && options.musicToggle && player.tab == "c") {
-            if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12) {
-               playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13) {
-                playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 14 || player.c.currentCutscene == 15 ) {
-                playAndLoopAudio("music/singularityCutscene.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 16 || player.c.currentCutscene == 17 || player.c.currentCutscene == 18 || player.c.currentCutscene == 24 || player.c.currentCutscene == 25 || player.c.currentCutscene == 26 || player.c.currentCutscene == 27) {
-                playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 19 || player.c.currentCutscene == 20 || player.c.currentCutscene == 21 || player.c.currentCutscene == 22 || player.c.currentCutscene == 23) {
-                playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            }
-        } else if (player.musuniverse == 1.5 && options.musicToggle) {
-            playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
-        } else {
-            stopAudio();
-        }
-
-
-        stopRain();
-       /* if (player.universe == 1.5)
-        {
-            startRain("#1486ff");
-        }
-         else
-        {
-            stopRain();
-        } */
-
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.h.HRErefinementEffect[5][1])
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
@@ -200,6 +82,9 @@ addLayer("i", {
         //----------------------------------------
 
         // START OF CELESTIAL POINT MODIFIERS
+        if (player.startedGame == true && player.c.cutscene1 == false) {
+            player.gain = new Decimal(1)
+        }
         player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
         player.gain = player.gain.mul(player.r.tierEffect)
@@ -226,12 +111,12 @@ addLayer("i", {
         player.gain = player.gain.mul(player.d.diceEffects[0])
         if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[0][0])
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[1][0])
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[2][0])
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[3][0])
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[4][0])
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.HPRrankEffect[5][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.hpr.rankEffect[0][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.hpr.rankEffect[1][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.hpr.rankEffect[2][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.hpr.rankEffect[3][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.hpr.rankEffect[4][0])
+        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.hpr.rankEffect[5][0])
 
         // CHALLENGE CONTENT
         player.gain = player.gain.div(player.pe.pestEffect[0])
@@ -279,18 +164,6 @@ addLayer("i", {
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
-
-        // MAKE TAB WORK
-        if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in") {
-            player.po.lastUniverse = 'i'
-            player.tab = "po"
-            player.subtabs["i"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["i"]['stuff'] == 'Settings' && player.tab != "in") {
-            player.po.lastUniverse = 'i'
-            player.tab = "settings"
-            player.subtabs["i"]['stuff'] = 'Features'
-        }
     },
     bars: {
         infbar: {
@@ -491,10 +364,19 @@ addLayer("i", {
         },
         29:
         {
-            title: "Rage Power",
-            unlocked() { return (hasUpgrade("i", 28) && hasUpgrade("bi", 106) && player.po.hex && player.ca.unlockedCante) || hasUpgrade("i", 29)},
-            description: "Unlock Rage Power (requires hex, in hex).",
-            cost: new Decimal("1e3333"),
+            title: "True Refinement",
+            unlocked() { return hasUpgrade("i", 32) && hasUpgrade("bi", 106) && player.ca.unlockedCante},
+            description: "Unlock Hex of Purity.",
+            cost: new Decimal("1e3000"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+        },
+        30: {
+            title: "Hexing Power",
+            unlocked() { return hasUpgrade("i", 29) && hasUpgrade("bi", 106) && player.ca.unlockedCante},
+            description: "Unlock Hex of Power.",
+            cost: new Decimal("1e3600"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -512,7 +394,7 @@ addLayer("i", {
             title: "Completely Pentomated",
             unlocked() { return hasUpgrade("i", 28) && hasUpgrade("bi", 106)},
             description: "You can now buy max pent.",
-            cost: new Decimal("1e2000"),
+            cost: new Decimal("1e2400"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -595,12 +477,17 @@ addLayer("i", {
     },
     microtabs: {
         stuff: {
-            "Features": {
+            "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("i", 11) },
+                unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["tree", tree1],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
+                        ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],
+                        ["upgrade", 20], ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
+                        ["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]], {maxWidth: "800px"}],
+                    ["blank", "25px"],
                 ],
             },
             "Lore": {
@@ -614,38 +501,14 @@ addLayer("i", {
                     ["infobox", "4"],
                 ],
             },
-            "Upgrades": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-                    ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32]]],
-                    ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
-                    ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
-                    ["blank", "25px"],
-                ],
-            },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)" }},
-                unlocked() { return hasUpgrade("i", 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0)},
-                content:  [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
-
     tabFormat: [
-         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
-    layerShown() { return true }
+        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
+    layerShown() { return !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge }
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {
@@ -718,27 +581,15 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
 }
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
-        if (!options.newMenu) {
-            player.tab = "i"
-        } else {
-            player.universe = 1
-        }
+        player.universe = 1
     }
     if(event.keyCode == 65 && hasUpgrade("cp", 18) && options.toggleHotkey) {
-        if (!options.newMenu) {
-            player.tab = "cp"
-        } else {
-            player.universe = 1.5
-        }
+        player.universe = 1.5
     }
     if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
-        if (!options.newMenu) {
-            player.tab = "in"
-        } else {
-            player.universe = 2
-        }
+        player.universe = 2
     }
     if(event.keyCode == 69 && (hasUpgrade("cp", 18) || player.universe != 1.5) && player.ca.defeatedCante && options.toggleHotkey) {
-        player.tab = "s"
+        player.universe = 3
     }
 });

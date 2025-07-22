@@ -20,16 +20,6 @@ addLayer("lo", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-                player.subtabs["po"]['stuff'] = 'Portals'
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h2>1" },
             canClick() { return true },
@@ -68,9 +58,8 @@ addLayer("lo", {
     },
 
     tabFormat: [
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true }
 })
 
@@ -95,15 +84,6 @@ addLayer("los", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "lo"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
     },
     bars: {
     },
@@ -132,8 +112,7 @@ addLayer("los", {
     },
 
     tabFormat: [
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true }
 })

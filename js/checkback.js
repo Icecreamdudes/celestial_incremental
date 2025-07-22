@@ -1,4 +1,5 @@
-﻿addLayer("cb", {
+﻿var treeCB = [["cb"], ["ev0", "ev1", "ev2", "ev4", "ev8", "ev9", "ev10"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]]
+addLayer("cb", {
     name: "Check Back", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CB", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -581,6 +582,10 @@
         // Legendary Pet Timer
         player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(time)
 
+        // Goldsmith Evo
+        player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(time))
+        player.ev0.coinShards = player.ev0.coinShards.add(player.ev0.coinShardsPerSecond.mul(time))
+
         // Daily Reward (Insane Face Evo)
         player.ev2.cooldown = player.ev2.cooldown.sub(time)
 
@@ -594,15 +599,6 @@
     },
     branches: ["m"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Alerts<br>On" },
             canClick() { return !player.cb.alertToggle },
@@ -1801,8 +1797,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1829,8 +1824,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1857,8 +1851,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1885,8 +1878,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1913,8 +1905,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1941,8 +1932,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1969,8 +1959,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -1997,8 +1986,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -2025,8 +2013,7 @@
             unlocked() { return true },
             tooltip() { return "Allocate automation shards" },
             onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.cb.automationShards.lt(player.cb.autoAllocateAmt)) amt = player.cb.automationShards
+                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
                 
                 player.cb.automationShards = player.cb.automationShards.sub(amt)
                 if (player.subtabs["cb"]['buttons'] == 'XP') {
@@ -2836,10 +2823,10 @@
                 unlocked() { return (hasChallenge("ip", 17) || hasMilestone("s", 14)) },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 15]]],
-                    ["row", [["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 16]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 15],
+                        ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 16]], {maxWidth: "900px"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -3372,7 +3359,6 @@
         ["raw-html", function () { return player.cb.highestLevel.lt(1500) && player.cb.highestLevel.gte(666) ?  "You will unlock something at level 1,500! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(3000) && player.cb.highestLevel.gte(1500) ?  "You will unlock something at level 3,000! <small>[PET SHOP]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(3000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],

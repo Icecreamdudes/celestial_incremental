@@ -191,8 +191,27 @@
         // AUTO BOOSTER DICE CODE
         if (player.d.boosterDiceCooldown.lt(0) && (inChallenge("ip", 15) || player.d.boosterDiceAutomation)) {
             if (inChallenge("ip", 15)) layers.in.bigCrunch()
-            if (!hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(11)
-            if (hasChallenge("ip", 15)) player.d.currentBoosterRoll = getRandomInt(15)
+            let rigged = false
+            if (getRandomInt(2) == 0) {
+                player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                player.d.currentBoosterRoll = player.d.rigIndex
+                rigged = true
+            }
+            if (rigged == false) {
+                do {
+                    player.d.previousBoosterRoll = player.d.currentBoosterRoll
+                    if (!hasChallenge("ip", 15)) {
+                        player.d.currentBoosterRoll = getRandomInt(11)
+                    } else if (!hasMilestone("r", 22)) {
+                        player.d.currentBoosterRoll = getRandomInt(15)
+                    } else if (!hasMilestone("r", 24)) {
+                        player.d.currentBoosterRoll = getRandomInt(17)
+                    } else {
+                        player.d.currentBoosterRoll = getRandomInt(19)
+                    }
+                }
+                while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
+            }
             player.d.boosterDiceCooldown = new Decimal(120)
 
             if (inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
@@ -253,15 +272,6 @@
         layers.d.addDiceEffect()
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Turn booster dice automation on.<br>(Currently off)" },
             canClick() { return true },
@@ -688,8 +698,8 @@
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).pow(buyableEffect("cs", 28)).mul(0.006)
-            if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
+            player.d.addDiceEffect = player.d.diceScore.add(1).log(60).pow(buyableEffect("cs", 28)).mul(0.006)
+            if (player.d.addDiceEffect.gt(60)) player.d.addDiceEffect = player.d.addDiceEffect.div(60).pow(0.3).mul(60)
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         // PENT UNLOCKED EFFECTS
         } else if (player.d.currentBoosterRoll == 15) {
@@ -810,7 +820,7 @@
         {
             title: "Dicey Dicey Dicey Dicey.",
             unlocked() { return hasUpgrade("s", 13) },
-            description: "Infinity points, rocket fuel, and hex booster dice effects are gained x100 more.",
+            description: "Infinity points and rocket fuel dice effects are gained x100 more.",
             cost: new Decimal(1e32),
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",
@@ -1129,7 +1139,7 @@
                         ["raw-html", function () { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],    
                     ], {width: "60%", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]]],
+                    ["style-row", [["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], ["ex-buyable", 15]], {maxWidth: "1200px"}],
                 ]
             },
             "Booster Dice": {
@@ -1191,9 +1201,9 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.d.challengeDicePoints) + "</h3> challenge dice points, which boost dice point gain by x" + format(player.d.challengeDicePointsEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain <h3>" + format(player.d.challengeDicePointsToGet) + "</h3> challenge dice points next booster dice roll." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]], {maxWidth: "1200px"}],
                 ]
             },
             "Challenge Debuffs": {
@@ -1215,7 +1225,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.d.dicePoints) + "</h3> dice points, which boost check back effect by ^" + format(player.d.dicePointsEffect) + ". (based on dice points)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && (player.po.dice == true || inChallenge("ip", 15))}

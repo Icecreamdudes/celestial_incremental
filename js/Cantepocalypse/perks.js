@@ -46,15 +46,6 @@
         player.pr.perkPointsChance = player.pr.perkPointsChance.add(buyableEffect("pr", 18))
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -377,8 +368,8 @@
                     ["raw-html", function () { return "You will gain <h3>" + format(player.pr.perkPointsToGet) + "</h3> perk points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Chance to gain perk points: <h3>" + format(player.pr.perkPointsChance.mul(100)) + "</h3>%" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -388,7 +379,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 12) }

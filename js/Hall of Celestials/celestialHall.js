@@ -1,7 +1,7 @@
-﻿var treeCH = []
+﻿var treeCH = [["ch"]]
 addLayer("ch", {
-    name: "Celestial Hall", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Hall", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "CH", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -18,22 +18,11 @@ addLayer("ch", {
             "border-color": "#2e0054",
         }
     },
-    tooltip: "Hall of Celestials",
+    tooltip: "Hall",
     color: "#0260fe",
     branches: ["cp"],
     update(delta) {
         let onepersec = new Decimal(1)
-
-        if (player.subtabs["ch"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'ch'
-            player.tab = "po"
-            player.subtabs["ch"]['stuff'] = 'Hall'
-        }
-        if (player.subtabs["ch"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'ch'
-            player.tab = "settings"
-            player.subtabs["ch"]['stuff'] = 'Hall'
-        }
         
         player.ch.celestialTexts = [
             "Tav, the Celestial of Limits",
@@ -42,15 +31,6 @@ addLayer("ch", {
         ]
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h1>→" },
             canClick() { return true },
@@ -184,20 +164,10 @@ addLayer("ch", {
                     //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return true },
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
     tabFormat: [
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.fu.defeatedJocus}
+    layerShown() { return player.startedGame == true && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge}
 })

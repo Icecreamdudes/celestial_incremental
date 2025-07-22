@@ -5,14 +5,15 @@
 	pointsName: "celestial points",
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
 	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js", "infinity.js",
-	"antimatterDimensions.js", "infinityPoints.js", "pests.js", "hex.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
+	"antimatterDimensions.js", "infinityPoints.js", "pests.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
 	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
 	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "menulayers.js", "pollinator.js", "Singularity/coreProcessor.js",
 	"Singularity/coreAssembler.js", "realmEssence.js", "factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
 	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
 	"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
-	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js"],
+	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js",
+	"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js", "Hex/purity.js", "Hex/power.js", "Hex/realms.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -22,8 +23,291 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 161, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 170, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "The Polishing Update",
+}
+
+function miscCode() {
+	player.minUniTab = 1
+	player.maxUniTab = 1
+
+	// SET MIN UNI-TAB
+	if (player.cp.cantepocalypseActive) player.minUniTab = 2
+
+	// SET MAX UNI-TAB
+	if (layerShown("h") || layerShown("cp")) player.maxUniTab = 2
+	if (player.sma.inStarmetalChallenge) player.maxUniTab = 1
+
+	// PREVENT TAB BEING OUT OF BOUNDS
+	if (player.uniTab < player.minUniTab) player.uniTab = minUniTab
+	if (player.uniTab > player.maxUniTab) player.uniTab = player.maxUniTab
+}
+
+function updateStyles() {
+	// ===------   LAYER BACKGROUND   ------=== //
+	let layerBG = ""
+
+	// Find background color
+	switch(player.tab) {
+		case "c":
+			if (player.c.cutscene1 || player.c.cutscene2 || player.c.cutscene13) layerBG = "black"
+			break;
+		case "settings": case "stats": case "savebank": case "changelog": case "credits":
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			break;
+		case "po":
+			layerBG = "linear-gradient(45deg, #8a00a9, #0061ff)"
+			break;
+		case "t":
+			layerBG = "#02172f"
+			break;
+		case "g":
+			layerBG = "#042347"
+			break;
+		case "gh":
+			layerBG = "#073b77"
+			break;
+		case "hpr":
+			layerBG = "#000919"
+			break;
+		case "hre":
+			layerBG = "#111"
+			break;
+		case "hbl":
+			layerBG = "#191300"
+			break;
+		case "hcu":
+			layerBG = "#111515"
+			break;
+		case "hpu":
+			layerBG = "#161511"
+			break;
+		case "hpw":
+			layerBG = "#200"
+			break;
+		case "hrm":
+			layerBG = "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)"
+			break;
+		case "bigc":
+			layerBG = "#b87c34"
+			break;
+		case "in": case "ad": case "ip": case "ta": case "bi":
+		case "om": case "id": case "u2l": case "u2t":
+			layerBG = "#001f18"
+			break;
+		case "revc":
+			layerBG = "#31aeb0"
+			break;
+		case "tad":
+			layerBG = "#b2d8d8"
+			break;
+		case "ca":
+			layerBG = "#2a3e66"
+			break;
+		case "cap":
+			layerBG = "#1f1e33"
+			break;
+		case "cp": case "ar": case "pr": case "an": case "rt":
+		case "rg": case "gs": case "oi": case "fu": case "a1u":
+		case "a1s": case "a1t":
+			layerBG = "#204387"
+			break;
+		case "s": case "cop": case "coa": case "ra": case "sd":
+		case "cs": case "sma": case "ma": case "u3u": case "u3m":
+		case "u3b": case "u3l": case "u3t":
+			layerBG = "#260300"
+			break;
+		case "du": case "le": case "dr": case "dp": case "dg":
+		case "dgr": case "dn": case "dut": 
+			layerBG = "black"
+			break;
+		case "ch": case "cmh":
+			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
+			break;
+		case "cb":
+			layerBG = "#021124"
+			break;
+		case "ev0":
+			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
+			break;
+		case "ev1":
+			layerBG = "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)"
+			break;
+		case "ev2":
+			layerBG = "url(resources/gdbg.jpg)"
+			break;
+		case "ev4":
+			layerBG = "linear-gradient(-90deg, #f38004, #fc3404)"
+			break;
+		case "ev8":
+			layerBG = "#252525"
+			break;
+		case "ev9":
+			layerBG = "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)"
+			break;
+		case "ep0": case "ep1": case "ep2": case "ep3": case "ep4":
+		case "ep5":
+			layerBG = "#7d3f98"
+			break;
+		case "leg":
+			layerBG = "#eed200"
+			break;
+		default:
+			layerBG = "#161616"
+			break;
+	}
+
+	// Set background color
+	document.body.style.setProperty('--background', layerBG)
+
+	// ===------   SIDE BACKGROUND   ------=== //
+	let sideBG = ""
+
+	// Find background color
+	if (options.menuType == "Tree") {
+		switch(player.universe) {
+			case 2: 
+				sideBG = "#001f18"
+				break;
+			case -666:
+				sideBG = "linear-gradient(180deg, #333, #222)"
+				break;
+			case 1.5:
+				sideBG = "#204387"
+				break;
+			case 3:
+				sideBG = "#260300"
+				break;
+			case -0.1:
+				sideBG = "black"
+				break;
+			case 0.5:
+				sideBG = "#021124"
+				break;
+			default:
+				sideBG = "#161616"
+				break;
+		}
+	}
+	if (options.menuType == "Tab") {
+		sideBG = "#161616"
+	}
+
+	// Set background color
+	document.getElementById('uniBG').style.setProperty('background', sideBG)
+
+	// ===------   MUSIC   ------=== //
+	// Find music value
+	switch(player.tab) {
+		case "po":
+			player.musuniverse = 0
+			break;
+		case "c":
+			player.musuniverse = -1
+			break;
+		case "h": case "hpr": case "hre": case "hbl": case "hcu":
+		case "hpu": case "hpw": case "hrm":
+			player.musuniverse = -666
+			break;
+		case "i": case "u1u": case "u1t": case "u1l": case "r":
+		case "f": case "p": case "t": case "g": case "pe":
+		case "pol": case "gh": case "rf": case "de": case "m":
+		case "d": case "rm": case "re": case "fa":
+			player.musuniverse = 1
+			break;
+		case "in": case "ad": case "ip": case "id": case "tad":
+		case "ta": case "bi": case "om": case "ga": case "ca":
+		case "u2t": case "u2l":
+            player.musuniverse = 2
+			break;
+		case "cp": case "ar": case "pr": case "an": case "rt":
+		case "rg": case "gs": case "oi": case "fu": case "a1u":
+		case "a1s": case "a1t":
+            player.musuniverse = 1.5
+			break;
+		case "s": case "cop": case "coa": case "ra": case "sd":
+		case "cs": case "sma": case "ma": case "u3u": case "u3m":
+		case "u3b": case "u3l": case "u3t":
+            player.musuniverse = 3
+			break;
+		case "du": case "le": case "dr": case "dp": case "dg":
+		case "dgr": case "dn": case "dut":
+            player.musuniverse = -0.1
+			break;
+		case "ch": case "chm":
+            player.musuniverse = -0.5
+			break;
+		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
+		case "ev8": case "ev9": case "ev10": case "ep0": case "ep1":
+		case "ep2": case "ep3": case "ep4": case "ep5":
+            player.musuniverse = 0.5
+			break;
+		case "od": case "mu":
+            player.musuniverse = 1337
+			break;
+	}
+
+	// Play/Stop Music
+	if (options.musicToggle) {
+		switch(player.musuniverse) {
+			case 0:
+				playAndLoopAudio("music/portal.mp3", options.musicVolume/10)
+				break;
+			case -666:
+				playAndLoopAudio("music/hex.mp3", options.musicVolume/10)
+				break;
+			case 1:
+				if (player.startedGame && player.ip.activeChallenge == null && !inChallenge("tad", 11)) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
+				if (player.ip.activeChallenge != null || inChallenge("tad", 11)) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
+				break;
+			case 2:
+				playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
+				break;
+			case 1.5:
+				playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
+				break;
+			case 3:
+				playAndLoopAudio("music/singularity.mp3", options.musicVolume/10)
+				break;
+			case -0.1:
+				playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
+				break;
+			case -0.5:
+				playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
+				break;
+			case 0.5:
+				playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
+				break;
+			case -1:
+				switch(player.c.currentCutscene) {
+					case 0: case 1: case 3: case 6: case 7:
+					case 9: case 11: case 12:
+						playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10)
+						break;
+					case 2: case 4: case 5: case 8: case 10:
+					case 13:
+						playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10)
+						break;
+					case 14: case 15:
+						playAndLoopAudio("music/singularityCutscene.mp3", options.musicVolume/10)
+						break;
+					case 16: case 17: case 18: case 24: case 25:
+					case 26: case 27:
+						playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10)
+						break;
+					case 19: case 20: case 21: case 22: case 23:
+						playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10)
+						break;
+				}
+				break;
+			default:
+				stopAudio()
+				break;
+		}
+	} else {
+		stopAudio()
+	}
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
@@ -403,7 +687,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
 "commonPetBanner", "uncommonPetBanner", "rarePetBanner", "generateCoreStrength", "generateCore", "clearCores", "singularityReset", "unprocessCore", "offlineCooldown", "generateRadiationValue",
 "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset", 
 "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
-"petButton7", "evoBanner", "paragonBanner", "gemReset", "pollenReset", "ordinalDisplay", "powerBase"]
+"petButton7", "evoBanner", "paragonBanner", "gemReset", "pollenReset", "ordinalDisplay", "powerBase", "powerReset"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)
@@ -433,6 +717,9 @@ function addedPlayerData() { return {
 	gain: new Decimal(0),
 	universe: 1,
 	musuniverse: 1,
+	uniTab: 1,
+	minUniTab: 1,
+	maxUniTab: 2,
 }}
 
 // Display extra things at the top of the page
@@ -545,13 +832,17 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
 
-		player.d.diceEffects[14] = new Decimal(1)
-		player.rf.abilityEffects[7] = new Decimal(1)
+		if (player.d.diceEffects[14].gt(1e3)) player.d.diceEffects[14] = new Decimal(1e3)
+		if (player.rf.abilityEffects[7].gt(1e3)) player.rf.abilityEffects[7] = new Decimal(1e3)
 	}
 	if (oldVersion < 161) {
 		if (player.points.gt("1e100000")) {
 			player.in.delay = new Decimal(2)
 		}
+	}
+	if (oldVersion < 170) {
+		if (player.d.diceEffects[14].gt(1e3)) player.d.diceEffects[14] = new Decimal(1e3)
+		if (player.rf.abilityEffects[7].gt(1e3)) player.rf.abilityEffects[7] = new Decimal(1e3)
 	}
 }
 

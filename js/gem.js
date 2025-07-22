@@ -41,17 +41,7 @@ addLayer("gem", {
         player.gem.gems = player.gem.gems.add(player.gem.gps.mul(delta))
 
     },
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', minHeight: '50px' },
-        },
-    },
+    clickables: {},
     levelables: {},
     bars: {},
     upgrades: {},
@@ -61,8 +51,6 @@ addLayer("gem", {
     infoboxes: {},
     microtabs: {},
     tabFormat: [
-        ["blank", "10px"],
-        ["clickable", 1],
         ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (player.po.gem /* || inChallenge("ip", 17) */) }

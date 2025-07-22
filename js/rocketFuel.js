@@ -136,15 +136,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "<h3>Gain rocket fuel, but reset everything before check back, excluding milestones.<br><small>Req: 1e15 Grasshoppers</small></h3>" },
             canClick() { return player.rf.rocketFuelToGet.gte(1)},
@@ -399,7 +390,7 @@
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        if (!hasUpgrade("rf", 11)) player.r.pent = new Decimal(0)
 
         player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
         player.f.factorGain = new Decimal(1)
@@ -602,7 +593,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel, which boost grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, { "color": "#949494", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.rf.rocketFuel.lt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset." : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return player.rf.rocketFuel.gt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset. (softcapped)" : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["blank", "25px"],
         ["style-column", [
             ["style-row", [

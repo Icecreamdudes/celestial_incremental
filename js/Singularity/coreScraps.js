@@ -135,15 +135,6 @@
         player.cop.processedCoreInnateEffectsText = ""
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "s"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.cs.coreScrapMax == false },
@@ -731,10 +722,10 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
-                    ["row", [["ex-buyable", 21],["ex-buyable", 22],["ex-buyable", 23],["ex-buyable", 24],]],
-                    ["row", [["ex-buyable", 25],["ex-buyable", 26],["ex-buyable", 27],["ex-buyable", 28],]],
-                    ["row", [["ex-buyable", 29],["ex-buyable", 31],["ex-buyable", 32],]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
+                    ["style-row", [["ex-buyable", 21],["ex-buyable", 22],["ex-buyable", 23],["ex-buyable", 24],
+                        ["ex-buyable", 25],["ex-buyable", 26],["ex-buyable", 27],["ex-buyable", 28],
+                        ["ex-buyable", 29],["ex-buyable", 31],["ex-buyable", 32]], {maxWidth: "1200px"}],
                 ]
             },
             "Paragon Scraps": {
@@ -754,7 +745,6 @@
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasUpgrade("s", 19)  }

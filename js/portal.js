@@ -37,13 +37,9 @@ addLayer("po", {
         */
        halterIndex: new Decimal(0),
        halterText: ["", "", "", "", "", "", "", "", "", "", ""],
-
-    }
-    },
-    automate() {
-    },
-    nodeStyle() {
-    },
+    }},
+    automate() {},
+    nodeStyle() {},
     tooltip: "Portal",
     color: "white",
     update(delta) {
@@ -131,15 +127,6 @@ addLayer("po", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = player.po.lastUniverse
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Keep OTFs on reset. (Currently off)" },
             display() {
@@ -388,68 +375,31 @@ addLayer("po", {
             },
         },
     },
-    bars: {
-        infbar: {
-            unlocked() { return !player.in.unlockedInfinity },
-            direction: UP,
-            width: 476,
-            height: 476,
-            progress() {
-                return player.points.add(1).log10().div("308.25")
-            },
-            fillStyle: {
-                "background-color": "#e81cff",
-            },
-            display() {
-                return "<h1>" + format(player.points.add(1).log10().div("308.25").mul(100)) + "%</h5>";
-            },
-        },
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Otherworldly Features": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return inChallenge("ip", 14) ? "You can pick an OTF once you are at pent 15." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return inChallenge("ip", 14) ? "You can pick an OTF once you are at pent 15." : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]]],
+                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]], {maxWidth: "1000px"}],
                 ]
-
-            },
-            "Portals": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["bar", "infbar"]]],
-                    ["blank", "25px"],
-                    ["tree", tree],
-                ]
-
             },
             "Halter": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasMilestone("ip", 23)},
-                content:
-                [
+                unlocked() { return true},
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>" + player.po.halterText[player.po.halterIndex]}],
                     ["text-input", "halterInput", {
@@ -464,17 +414,15 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
-                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)" }],
+                    ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
+                    ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)"],
                     ["blank", "25px"],
                 ]
             },
         },
     },
-
     tabFormat: [
-        ["row", [["clickable", 1]]],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true }
 })

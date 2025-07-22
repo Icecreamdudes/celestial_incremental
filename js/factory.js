@@ -87,15 +87,6 @@
         player.fa.milestoneEffect[10] = player.fa.charge.pow(0.015).add(1) //pre-otf
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.fa.factoryMax == false },
@@ -750,7 +741,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
             "Foundry": {
@@ -766,8 +757,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.an.anonymity) + "</h3> Anonymity" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 101], ["ex-buyable", 102]]],
-                    ["row", [["ex-buyable", 103], ["ex-buyable", 104]]],
+                    ["style-row", [["ex-buyable", 101], ["ex-buyable", 102],
+                        ["ex-buyable", 103], ["ex-buyable", 104]], {maxWidth: "600px"}],
 
                 ]
             },
@@ -781,8 +772,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> Repli-Grass" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 201], ["ex-buyable", 202], ["ex-buyable", 203], ["ex-buyable", 204]]],
-                    ["row", [["ex-buyable", 205], ["ex-buyable", 206], ["ex-buyable", 207], ["ex-buyable", 208]]],
+                    ["style-row", [["ex-buyable", 201], ["ex-buyable", 202], ["ex-buyable", 203], ["ex-buyable", 204],
+                        ["ex-buyable", 205], ["ex-buyable", 206], ["ex-buyable", 207], ["ex-buyable", 208]], {maxWidth: "1200px"}],
                 ]
             },
             "Charger": {
@@ -817,8 +808,6 @@
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.gh.steel) + "</h3> Steel" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 101)}

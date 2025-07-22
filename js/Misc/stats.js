@@ -13,15 +13,6 @@ addLayer("stats", {
     color: "white",
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = player.po.lastUniverse
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Settings" },
             canClick() { return true },
@@ -2383,10 +2374,6 @@ addLayer("stats", {
         },
     },
     tabFormat: [
-
-        ["clickable", 1],
-
-        ["blank", "25px"],
 
         ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
 

@@ -40,15 +40,6 @@
     },
     branches: ["cb"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -213,7 +204,7 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.re.realmEssence) + "</h3> Realm Essence, which boosts all pre-otf currencies by ^" + format(player.re.realmEssenceEffect, 3) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.re.realmEssencePerSecond) + "</h3> Realm Essence per second (based on halter essence)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -223,8 +214,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.re.halterEssence) + "</h3> Halter Essence" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain <h3>" + format(player.rm.halterBoostEffect) + "</h3> Halter Essence on singularity reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "(Based on realm mod halter amount)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 20)}

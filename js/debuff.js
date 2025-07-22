@@ -308,15 +308,6 @@
     },
     branches: ["t", "m"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -837,8 +828,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]], {maxWidth: "800px"}],
                 ]
             },
             "Antidebuff": {
@@ -857,7 +848,7 @@
                     ["raw-html", function () { return !inChallenge("tad", 11) ? "When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return inChallenge("tad", 11) ? "<s>When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
+                    ["style-row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]], {maxWidth: "1100px"}],
                 ]
             },
             "Tav's Compensation": {
@@ -876,8 +867,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -885,7 +876,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) },

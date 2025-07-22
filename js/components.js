@@ -46,10 +46,10 @@ function loadVue() {
 		template: `
 		<div class="upgTable instant">
 			<div class="upgRow">
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -85,10 +85,10 @@ function loadVue() {
 		template: `
 		<div class="upgTable instant">
 			<div class="upgRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -105,10 +105,10 @@ function loadVue() {
 		template: `
 		<div class="upgTable instant">
 			<div class="upgRow tooltipBox" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -125,10 +125,10 @@ function loadVue() {
 		template: `
 		<div class="upgLeftTable instant">
 			<div class="upgScrollRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -163,12 +163,12 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollRowTable instant">
+		<div id="scrCon" class="upgScrollRowTable instant">
 			<div class="upgScrollRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -183,12 +183,12 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollRowTable upgAlwaysScrollRow instant">
+		<div id="scrCon" class="upgScrollRowTable upgAlwaysScrollRow instant">
 			<div class="upgScrollRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -203,7 +203,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollColTable instant" >
+		<div id="scrCon" class="upgScrollColTable instant" >
 			<div class="upgScrollCol" v-bind:style="look" >
 				<div v-for="(item, index) in data">
 					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -223,7 +223,7 @@ function loadVue() {
 			key() {return this.$vnode.key}
 		},
 		template: `
-		<div class="upgScrollColTable upgAlwaysScrollCol instant" >
+		<div id="scrCon" class="upgScrollColTable upgAlwaysScrollCol instant" >
 			<div class="upgScrollCol" v-bind:style="look" >
 				<div v-for="(item, index) in data">
 					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
@@ -315,8 +315,10 @@ function loadVue() {
 		template: `
 		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, [data]) && !inChallenge(layer, [data]))"
 			v-bind:class="['challenge', challengeStyle(layer, data), player[layer].activeChallenge === data ? 'resetNotify' : '']" v-bind:style="tmp[layer].challenges[data].style">
-			<br><h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
-			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
+			<h3 v-html="tmp[layer].challenges[data].name"></h3><br>
+			<button v-bind:class="{ challengeButton: true, can: tmp[layer].challenges[data].canClick, locked: !tmp[layer].challenges[data].canClick, [layer]: true }" 
+				v-bind:style="[{'background-color': tmp[layer].color},tmp[layer].challenges[data].buttonStyle]" 
+				v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br>
 			<span v-if="layers[layer].challenges[data].fullDisplay" v-html="run(layers[layer].challenges[data].fullDisplay, layers[layer].challenges[data])"></span>
 			<span v-else>
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
@@ -1050,6 +1052,30 @@ function loadVue() {
 	`
 	})
 
+	// Data is an array with the structure of the tree
+	Vue.component('tab-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="tabHolder">
+			<div class="tabRow" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
+				<div class="tabTitleHolder">
+					<div class="tabTitle">
+						<span v-html="'Row ' + r"></span>
+					</div>
+				</div>
+				<div class="tabRowHolder">
+					<span v-for="(node, id) in row" style = "{width: 0px}">
+						<tab-node :layer='node' :prev='layer' :abb='tmp[node].name' :key="key + '-' + r + '-' + id"></tab-node>
+					</span>
+				</div>
+			</div>
+		</div>
+	`
+	})
+
 
 	// Updates the value in player[layer][data]
 	Vue.component('text-input', {
@@ -1098,6 +1124,7 @@ function loadVue() {
 	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
 	Vue.component('tree-node', systemComponents['tree-node'])
+	Vue.component('tab-node', systemComponents['tab-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])
 	Vue.component('overlay-head', systemComponents['overlay-head'])
 	Vue.component('info-tab', systemComponents['info-tab'])

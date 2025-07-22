@@ -57,7 +57,7 @@ addLayer("dr", {
         };
     },
     tooltip: "Ranks",
-    branches: [["le", "#4f0694"]],
+    branches: [["le", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -205,15 +205,6 @@ addLayer("dr", {
     },
     bars: {},
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #0d515a"  },
-        },
         11: {
             title() {
                 if (player.dr.rank.lte(20)) {
@@ -432,7 +423,6 @@ addLayer("dr", {
         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return hasUpgrade("le", 11) },

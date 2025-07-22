@@ -1,5 +1,5 @@
 ﻿addLayer("m", {
-    name: "M", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Mods", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "M", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -158,15 +158,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.m.modMax == false },
@@ -475,7 +466,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h2>You have " + formatWhole(player.m.mods) + "<h2> mods."}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -485,7 +476,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.m.codeExperience) + "</h3> Code Experience" }, { "color": "#1377BF", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.m.codeExperienceToGet.gt(1) ? "You will gain <h3>" + format(player.m.codeExperienceToGet) + "</h3> code experience on reset." : ""}, { "color": "#1377BF", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasMilestone("r", 14) }

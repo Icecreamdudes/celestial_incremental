@@ -132,15 +132,6 @@
         player.rg.repliGrassCount = player.rg.savedRepliGrass
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -429,12 +420,12 @@
                 [
                     ["raw-html", function () { return "<h3>" + formatWhole(player.rg.repliGrassCount) + "/" + formatWhole(player.rg.repliGrassCap) + " Repli-Grass (Hover over the grass)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<h3>" + format(player.rg.repliGrassTimer) + "/" + format(player.rg.repliGrassReq) + " Seconds to spawn repli-grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Repli-Grass mult: x" + format(player.rg.repliGrassMult) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Repli-Grass boosts repli-leaf mult by x" + format(player.rg.repliGrassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "Repli-Grass boosts replicanti point mult by x" + format(player.rg.repliGrassEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Repli-Grass mult: x" + format(player.rg.repliGrassMult) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Repli-Grass boosts repli-leaf mult by x" + format(player.rg.repliGrassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Repli-Grass boosts replicanti point mult by x" + format(player.rg.repliGrassEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart) ? "After " + formatWhole(player.rg.repliGrassSoftcapStart) + " repli-grass, repli-grass mult is divided by " + format(player.rg.repliGrassSoftcapEffect) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return options.newMenu ? "<div id=repli-spawn-area class=menu-spawn-area></div>" : "<div id=repli-spawn-area class=spawn-area></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "<div id=repli-spawn-area class=menu-spawn-area></div>", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
             "Buyables": {
@@ -443,8 +434,8 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -452,7 +443,6 @@
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> repli-grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 16) }

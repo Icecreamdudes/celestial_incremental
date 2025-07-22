@@ -224,15 +224,6 @@
     },
     branches: ['t'],
     clickables: {
-        1: {
-            title() { return '<h2>Return' },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = 'i'
-            },
-            style: { width: '100px', 'min-height': '50px' },
-        },
         2: {
             title() { return 'Buy Max On' },
             canClick() { return player.g.grassMax == false },
@@ -1078,7 +1069,7 @@
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                     ['raw-html', () => '<h3>' + format(player.g.grassTimer) + '/' + format(player.g.grassReq) + ' Seconds to spawn grass.',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
-                    ['raw-html', () => options.newMenu ? '<div id=spawn-area class=menu-spawn-area></div>' : '<div id=spawn-area class=spawn-area></div>',
+                    ['raw-html', '<div id=spawn-area class=menu-spawn-area></div>',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                     ['blank', '600px'],
                 ],
@@ -1097,7 +1088,7 @@
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                     ['raw-html', () => '<h3>' + format(player.g.goldGrassTimer) + '/' + format(player.g.goldGrassReq) + ' Seconds to spawn golden grass.',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
-                    ['raw-html', () => options.newMenu ? '<div id=gold-spawn-area class=menu-spawn-area></div>' : '<div id=gold-spawn-area class=spawn-area></div>',
+                    ['raw-html', '<div id=gold-spawn-area class=menu-spawn-area></div>',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                 ],
             },
@@ -1118,9 +1109,9 @@
                         { color: 'white', fontSize: '20px', fontFamily: 'monospace', userSelect: 'none' }],
                     ['raw-html', () => '<h3>' + format(player.g.moonstoneTimer) + '/' + format(player.g.moonstoneReq) + ' Seconds to spawn moonstone.',
                         { color: 'white', fontSize: '20px', fontFamily: 'monospace', 'user-select': 'none' }],
-                    ['raw-html', () => options.newMenu ? '<div id=mainCircle class=menuMainCircle></div>' : '<div id=mainCircle class=mainCircle></div>',
+                    ['raw-html', '<div id=mainCircle class=menuMainCircle></div>',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
-                    ['raw-html', () => options.newMenu ? '<div id=moonstone-spawn-area class=menu-spawn-area></div>' : '<div id=moonstone-spawn-area class=spawn-area></div>',
+                    ['raw-html', '<div id=moonstone-spawn-area class=menu-spawn-area></div>',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                 ],
             },
@@ -1132,8 +1123,8 @@
                     ['raw-html', () => 'You have <h3>' + format(player.g.moonstone) + '</h3> moonstone.',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                     ['blank', '25px'],
-                    ['row', [['ex-buyable', 21], ['ex-buyable', 22], ['ex-buyable', 23], ['ex-buyable', 24]]],
-                    ['row', [['ex-buyable', 25], ['ex-buyable', 26], ['ex-buyable', 27], ['ex-buyable', 28]]],
+                    ['style-row', [['ex-buyable', 21], ['ex-buyable', 22], ['ex-buyable', 23], ['ex-buyable', 24],
+                        ['ex-buyable', 25], ['ex-buyable', 26], ['ex-buyable', 27], ['ex-buyable', 28]], {maxWidth: "1200px"}],
                     ['blank', '25px'],
                     ['ex-buyable', 29],
                     ['row', [['clickable', 6], ['clickable', 7]]],
@@ -1156,13 +1147,13 @@
                 unlocked: true,
                 content: [
                     ['blank', '25px'],
-                    ['row', [['ex-buyable', 11], ['ex-buyable', 12], ['ex-buyable', 13]]],
-                    ['row', [['ex-buyable', 14], ['ex-buyable', 15], ['ex-buyable', 16]]],
+                    ['style-row', [['ex-buyable', 11], ['ex-buyable', 12], ['ex-buyable', 13],
+                        ['ex-buyable', 14], ['ex-buyable', 15], ['ex-buyable', 16]], {maxWidth: "900px"}],
                     ['blank', '15px'],
                     ['raw-html', () => hasUpgrade('g', 13) ? 'You have <h3>' + format(player.g.goldGrass) + '</h3> golden grass.' : '',
                         { color: 'white', fontSize: '24px', fontFamily: 'monospace' }],
                     ['blank', '15px'],
-                    ['row', [['ex-buyable', 17], ['ex-buyable', 18], ['ex-buyable', 19]]],
+                    ['style-row', [['ex-buyable', 17], ['ex-buyable', 18], ['ex-buyable', 19]], {maxWidth: "900px"}],
                 ],
             },
             'Upgrades': {
@@ -1170,8 +1161,8 @@
                 unlocked: () => hasMilestone('r', 11),
                 content: [
                     ['blank', '25px'],
-                    ['row', [['upgrade', 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 14], ['upgrade', 15], ['upgrade', 16]]],
-                    ['row', [['upgrade', 17], ['upgrade', 18], ['upgrade', 19], ['upgrade', 21], ['upgrade', 23], ['upgrade', 22]]],
+                    ['style-row', [['upgrade', 11], ['upgrade', 12], ['upgrade', 13], ['upgrade', 14], ['upgrade', 15], ['upgrade', 16],
+                        ['upgrade', 17], ['upgrade', 18], ['upgrade', 19], ['upgrade', 21], ['upgrade', 23], ['upgrade', 22]], {maxWidth: "800px"}],
                 ],
             },
         },
@@ -1185,7 +1176,6 @@
         ]],
         ['raw-html', () => 'Grass value: ' + format(player.g.grassVal) + '.',
             { color: 'white', fontSize: '20px', fontFamily: 'monospace'}],
-        ['clickable', 1],
         ['microtabs', 'stuff', { 'border-width': '0px' }],
     ],
     layerShown: () => player.startedGame && hasUpgrade('i', 17),
@@ -1261,7 +1251,7 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
     if (hasUpgrade('g', 11)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect('g', 11))
     if (hasUpgrade('ad', 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect('ad', 14))
-    if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(player.h.HRErefinementEffect[3][1])
+    if (inChallenge("ip", 13) || player.po.hex) player.g.grassVal = player.g.grassVal.mul(player.hre.refinementEffect[3][1])
 
     // CHALLENGE MODIFIERS
     player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])

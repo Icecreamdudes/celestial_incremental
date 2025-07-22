@@ -77,15 +77,6 @@
 
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h2>Gain " + format(player.ar.rankPointsToGet) + " rank points</h2><br><h3>But reset replicanti points<br><small>(Based on Replicanti Points)</small></h3>" },
             canClick() { return player.ar.rankPointsToGet.gt(0) },
@@ -187,7 +178,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 11) }

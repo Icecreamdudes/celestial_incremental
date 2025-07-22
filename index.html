@@ -38,39 +38,66 @@
 </head>
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
-		<div class="uiHolder" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!options.menuShown || !player.startedGame || player.tab == 'c' ?{'left':'-400px'}:{'left':'0px'}">
-			<div class="uniMenu">
-				<div class="uniHolder">
-					<button class="uniButton" v-if="layerShown('i') && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe='1'"><span class="buttonText">1</span></button>
- 					<button class="uniButton" v-if="layerShown('in') && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" v-bind:style="constructUniButtonStyle('in') " onclick="player.universe='2'"><span class="buttonText">2</span></button>
- 					<button class="uniButton" v-if="layerShown('cp') && !player.sma.inStarmetalChallenge" v-bind:style="constructUniButtonStyle('cp') " onclick="player.universe='1.5'"><span class="buttonText">A1</span></button>
- 					<button class="uniButton" v-if="layerShown('s') && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe='3'"><span class="buttonText">3</span></button>
- 					<button class="uniButton" v-if="layerShown('du') && !player.cp.cantepocalypseActive" v-bind:style="constructUniButtonStyle('du') " onclick="player.universe='-0.1'"><span class="buttonText">D1</span></button>
+		<div class="uiHolder" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-400px'}:{'left':'0px'}">
+			<div class="uniHolder">
+				<button class="uniButton" v-if="layerShown('i') && player.uniTab==1" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe=1"><span class="buttonText">1</span></button>
+				<button class="uniButton" v-if="layerShown('h') && player.uniTab==2" v-bind:style="constructUniButtonStyle('h') " onclick="player.universe=-666"><span class="buttonText">H</span></button>
+ 				<button class="uniButton" v-if="layerShown('in') && player.uniTab==1" v-bind:style="constructUniButtonStyle('in') " onclick="player.universe=2"><span class="buttonText">2</span></button>
+ 				<button class="uniButton" v-if="layerShown('cp') && player.uniTab==2" v-bind:style="constructUniButtonStyle('cp') " onclick="player.universe=1.5"><span class="buttonText">A1</span></button>
+ 				<button class="uniButton" v-if="layerShown('s') && player.uniTab==1" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe=3"><span class="buttonText">3</span></button>
+				<button class="uniButton" v-if="layerShown('ch') && player.uniTab==1" v-bind:style="constructUniButtonStyle('ch') " onclick="player.universe=-0.5"><span class="buttonText">γ</span></button>
+ 				<button class="uniButton" v-if="layerShown('du') && player.uniTab==1" v-bind:style="constructUniButtonStyle('du') " onclick="player.universe=-0.1"><span class="buttonText">D1</span></button>
+				<div class="arrowHolder">
+					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab-1" :disabled="player.uniTab<=player.minUniTab" style="border-bottom:1.5px solid"><span class="buttonText">⮝</span></button>
+					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab+1" :disabled="player.uniTab>=player.maxUniTab" style="border-top:1.5px solid"><span class="buttonText">⮟</span></button>
 				</div>
 			</div>
 			<div class="layerHolder">
-				<tree :layer="'i'" :data="tree1" v-if="player.universe == 1"></tree>
-				<tree :layer="'in'" :data="tree2" v-if="player.universe == 2"></tree>
-				<tree :layer="'cp'" :data="treeA1" v-if="player.universe == 1.5"></tree>
-				<tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tree>
-				<tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tree>
+				<div v-bind:class="{titleHolder:true,darkTitle:player.sma.inStarmetalChallenge}">
+					<p v-if="player.universe == 1">Universe 1<br>Overworld</p>
+					<p v-if="player.universe == -666">Sub-Universe 1<br>Hex</p>
+					<p v-if="player.universe == 2">Universe 2<br>Antimatter World</p>
+					<p v-if="player.universe == 1.5">Alt-Universe 1<br>Cantepocalypse</p>
+					<p v-if="player.universe == 3">Universe 3<br>Domain of Singularity</p>
+					<p v-if="player.universe == -0.5">Universe γ<br>Hall of Celestials</p>
+					<p v-if="player.universe == -0.1">Dark Universe 1<br>Shadow Overworld</p>
+					<p v-if="player.universe == 0.5">Check Back</p>
+				</div>
+				<span v-if="options.menuType == 'Tree'">
+					<tree :layer="'i'" :data="tree1" v-if="player.universe == 1"></tree>
+					<tree :layer="'h'" :data="treeh" v-if="player.universe == -666"></tree>
+					<tree :layer="'in'" :data="tree2" v-if="player.universe == 2"></tree>
+					<tree :layer="'cp'" :data="treeA1" v-if="player.universe == 1.5"></tree>
+					<tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tree>
+					<tree :layer="'ch'" :data="treeCH" v-if="player.universe == -0.5"></tree>
+					<tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tree>
+					<tree :layer="'cb'" :data="treeCB" v-if="player.universe == 0.5"></tree>
+				</span>
+				<span v-if="options.menuType == 'Tab'">
+					<tab-tree :layer="'i'" :data="tree1" v-if="player.universe == 1"></tab-tree>
+					<tab-tree :layer="'h'" :data="treeh" v-if="player.universe == -666"></tab-tree>
+					<tab-tree :layer="'in'" :data="tree2" v-if="player.universe == 2"></tab-tree>
+					<tab-tree :layer="'cp'" :data="treeA1" v-if="player.universe == 1.5"></tab-tree>
+					<tab-tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tab-tree>
+					<tab-tree :layer="'ch'" :data="treeCH" v-if="player.universe == -0.5"></tab-tree>
+					<tab-tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tab-tree>
+					<tab-tree :layer="'cb'" :data="treeCB" v-if="player.universe == 0.5"></tab-tree>
+				</span>
 			</div>
 			<div class="miscMenu">
-				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('cb')" onclick="showTab('cb')">
-					<div class="miscText">?</div>
+				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('cb')" onclick="player.universe=0.5;showTab('cb')">
+					<img class="miscImg" src="resources/ui/checkback.png" v-if="layerShown('cb')"></img>
+					<div class="miscText" v-if="!layerShown('cb')">?</div>
 				</button>
-				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasUpgrade('i', 21) || hasUpgrade('ad', 13))" onclick="showTab('otherfeat')" style="border-left:0px">
+				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasUpgrade('i', 21) || hasUpgrade('ad', 13))" onclick="showTab('po');player.subtabs['po']['stuff'] = 'Otherworldly Features'" style="border-left:0px">
 					<img class="miscImg" src="resources/ui/universe.png" v-if="hasUpgrade('i', 21) || hasUpgrade('ad', 13)"></img>
 					<div class="miscText" v-if="!(hasUpgrade('i', 21) || hasUpgrade('ad', 13))">?</div>
 				</button>
-				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasMilestone('ip', 23))" onclick="showTab('halter')">
+				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasMilestone('ip', 23))" onclick="showTab('po');player.subtabs['po']['stuff'] = 'Halter'">
 					<img class="miscImg" src="resources/ui/halter.png" v-if="hasMilestone('ip', 23)"></img>
 					<div class="miscText" v-if="!hasMilestone('ip', 23)">?</div>
 				</button>
-				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('ch')" onclick="showTab('cmh')">
-					<div class="miscText">?</div>
-				</button>
-				<button class="miscButton" onclick="showTab('settings')" style="border-right:0px">
+				<button v-bind:class="{miscButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="showTab('settings')" style="border-right:0px">
 					<img class="miscImg" src="resources/ui/settings.png"></img>
 				</button>
 			</div>
@@ -140,7 +167,7 @@
 				</div>
 		</div>
 
-		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(tmp.gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" v-bind:class="{fullWidth: player.navTab == 'none' || !tmp.other.splitScreen || !readData(layoutInfo.showTree), fast: true, tab: true}">
+		<div id="layerHolder" v-if="player.navTab !== 'none' && player.tab !== 'none' && !(tmp.gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" v-bind:class="{fullWidth: player.navTab == 'none' || !tmp.other.splitScreen || !readData(layoutInfo.showTree), fast: true, tab: true}">
 			<div v-for="layer in LAYERS">
 				<div v-if="player.tab==layer">
 					<layer-tab :layer="layer" :back="'none'" :spacing="'50px'" :key="'left'"></layer-tab>
@@ -149,7 +176,6 @@
 			<bg :layer="player.tab" ></bg>
 
 		</div>
-		<div class = "bg2" v-bind:style = "tmp.backgroundStyle"></div>
-		<div class="layerBG" v-if="options.newMenu==true && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'"></div>
+		<div class="layerBG" id="uniBG" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'"></div>
 	</div>
 </body>

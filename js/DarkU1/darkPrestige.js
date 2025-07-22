@@ -24,7 +24,7 @@ addLayer("dp", {
         };
     },
     tooltip: "Prestige",
-    branches: [["dr", "#4f0694"]],
+    branches: [["dr", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -52,15 +52,6 @@ addLayer("dp", {
     bars: {
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #102e67" },
-        },
         11: {
             title() { return "<h2>Reset previous content for prestige points." },
             canClick() { return player.dp.prestigePointsToGet.gte(1) },
@@ -219,7 +210,7 @@ addLayer("dp", {
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]]],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -230,7 +221,6 @@ addLayer("dp", {
          ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
          ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-         ["row", [["clickable", 1]]],
          ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return hasUpgrade("le", 13) },

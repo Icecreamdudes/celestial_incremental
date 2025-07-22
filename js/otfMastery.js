@@ -105,15 +105,6 @@
         },
     branches: ["id", "bi"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -372,8 +363,8 @@
                         ["raw-html", function () { return "You have <h3>" + format(player.om.rocketFuelMasteryPoints) + "</h3> rocket fuel mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                         ["blank", "25px"],
-                        ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                        ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
+                        ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                            ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],
                 ]
 
             },
@@ -381,7 +372,6 @@
     },
 
     tabFormat: [
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 14)) || hasMilestone("s", 19)}

@@ -23,7 +23,7 @@ addLayer("dn", {
         };
     },
     tooltip: "Normality",
-    branches: [["dgr", "#4f0694"]],
+    branches: [["dgr", "#309"]],
     color: "rgba(193, 223, 0)",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -38,15 +38,6 @@ addLayer("dn", {
     },
     bars: {},
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #33662c" },
-        },
         11: {
             title() { return "<h2>Reset previous content except grass for normality. (Based on points)" },
             canClick() { return player.dn.normalityToGet.gte(1) },
@@ -208,7 +199,7 @@ addLayer("dn", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "Normality is kept on starmetal resets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]]],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -219,7 +210,6 @@ addLayer("dn", {
         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return hasUpgrade("le", 23) },

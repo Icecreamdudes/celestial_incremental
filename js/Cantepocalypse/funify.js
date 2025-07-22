@@ -1,5 +1,7 @@
 ﻿addLayer("fu", {
-    name: "Funify", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name() {
+        return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, Celestial of Fun"
+    }, // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {
         return !player.fu.jocusCelestialActivate ? "Funify" : "☻"
     },
@@ -272,15 +274,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.fu.fMax == false },
@@ -325,6 +318,7 @@
             unlocked() { return true },
             onClick() {
                 player.fu.emotionIndex = new Decimal(0)
+                player.subtabs["fu"]["mood"] = "Happiness"
             },
             style: { width: '100px', "min-height": '100px', "background-color": "#fff654", borderRadius: "10px" },
             branches: [24],
@@ -336,6 +330,7 @@
             unlocked() { return true },
             onClick() {
                 player.fu.emotionIndex = new Decimal(1)
+                player.subtabs["fu"]["mood"] = "Sadness"
             },
             style: { width: '100px', "min-height": '100px', "background-color": "#322bff", borderRadius: "10px"  },
             branches: [25],
@@ -347,6 +342,7 @@
             unlocked() { return true },
             onClick() {
                 player.fu.emotionIndex = new Decimal(2)
+                player.subtabs["fu"]["mood"] = "Anger"
             },
             style: { width: '100px', "min-height": '100px', "background-color": "#ff2b3d", borderRadius: "10px" },
             branches() {
@@ -360,6 +356,7 @@
             unlocked() { return inChallenge("fu", 11) || player.fu.enterFear },
             onClick() {
                 player.fu.emotionIndex = new Decimal(3)
+                player.subtabs["fu"]["mood"] = "Fear"
             },
             style() {
                 let look = {width: '100px', minHeight: '100px', backgroundColor: "grey", borderRadius: "10px"}
@@ -1006,7 +1003,7 @@
         31: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
                 return "Happiness Generator"
@@ -1038,7 +1035,7 @@
         32: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.6).mul(0.01).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Factor Power Exponentiator"
@@ -1070,7 +1067,7 @@
         33: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(20)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.01).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Prestige Exponentiator"
@@ -1102,7 +1099,7 @@
         34: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(50)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.4).mul(0.01).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Grasshop Exponentiator"
@@ -1134,7 +1131,7 @@
         35: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.3).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Sadness Boost"
@@ -1166,7 +1163,7 @@
         36: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Replicanti Pointer"
@@ -1198,7 +1195,7 @@
         37: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(70)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.75).mul(0.5).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Perk Pointer"
@@ -1230,7 +1227,7 @@
         38: {
             cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(0) },
+            unlocked: true,
             canAfford() { return player.fu.happiness.gte(this.cost()) },
             title() {
                 return "Funner"
@@ -1264,7 +1261,7 @@
         41: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
                 return "Sadness Generator"
@@ -1296,7 +1293,7 @@
         42: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(5)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.01).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "Infinity Dimension Exponentiator"
@@ -1328,7 +1325,7 @@
         43: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(15)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(5).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "Mastery Multiplier"
@@ -1360,7 +1357,7 @@
         44: {
             cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(35)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "Galactic Multiplier"
@@ -1392,7 +1389,7 @@
         45: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.3).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "Anger Boost"
@@ -1424,7 +1421,7 @@
         46: {
             cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(2).mul(0.6).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "Anonymiter"
@@ -1456,7 +1453,7 @@
         47: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(140)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(3).mul(0.6).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "Repli-Treer"
@@ -1488,7 +1485,7 @@
         48: {
             cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(1) },
+            unlocked: true,
             canAfford() { return player.fu.sadness.gte(this.cost()) },
             title() {
                 return "SFRGTer"
@@ -1522,7 +1519,7 @@
         51: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
                 return "Anger Generator"
@@ -1554,7 +1551,7 @@
         52: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(15)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.2).mul(0.1).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Radiation Multiplier"
@@ -1586,7 +1583,7 @@
         53: {
             cost(x) { return new Decimal(1.45).pow(x || getBuyableAmount(this.layer, this.id)).mul(30)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.25).mul(0.15).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Singularity Dimension Multiplier"
@@ -1618,7 +1615,7 @@
         54: {
             cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(60)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Radiation Usage Divider"
@@ -1650,7 +1647,7 @@
         55: {
             cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.3).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Happiness Boost"
@@ -1682,7 +1679,7 @@
         56: {
             cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(3.5).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Repli-Grassier"
@@ -1714,7 +1711,7 @@
         57: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(180)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.1).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Grass-Skippier"
@@ -1746,7 +1743,7 @@
         58: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(1000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.7).mul(0.1).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(2) },
+            unlocked: true,
             canAfford() { return player.fu.anger.gte(this.cost()) },
             title() {
                 return "Mood Triangler"
@@ -1780,7 +1777,7 @@
         61: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(100000000)},
             effect(x) { return new getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fun.gte(this.cost()) },
             title() {
                 return "Fear Generator"
@@ -1813,7 +1810,7 @@
         62: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Happier"
@@ -1845,7 +1842,7 @@
         63: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Sadder"
@@ -1877,7 +1874,7 @@
         64: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Angrier"
@@ -1909,7 +1906,7 @@
         65: {
             cost(x) { return new Decimal(1.15).pow(x || getBuyableAmount(this.layer, this.id)).mul(2.5)},
             effect(x) { return new Decimal.pow(3, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Softcap Extender #1"
@@ -1941,7 +1938,7 @@
         66: {
             cost(x) { return new Decimal(1.08).pow(x || getBuyableAmount(this.layer, this.id)).mul(2.5)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(2).add(1)},
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Softcap Weakener #1"
@@ -1973,7 +1970,7 @@
         67: {
             cost(x) { return new Decimal(1.17).pow(x || getBuyableAmount(this.layer, this.id)).mul(6)},
             effect(x) { return new Decimal.pow(3.5, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Softcap Extender #2"
@@ -2005,7 +2002,7 @@
         68: {
             cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id)).mul(6)},
             effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.8).add(1)},
-            unlocked() { return player.fu.emotionIndex.eq(3) },
+            unlocked: true,
             canAfford() { return player.fu.fear.gte(this.cost()) },
             title() {
                 return "Softcap Weakener #2"
@@ -2190,17 +2187,9 @@
                         i--;
                     }
                 }
-
-                if (player.fu.emotionIndex.eq(3)) {
-                    player.fu.emotionIndex = new Decimal(0)
-                }
             },
             onExit() {
                 player.fu.funifyPause = new Decimal(12)
-
-                if (player.fu.emotionIndex.eq(3)) {
-                    player.fu.emotionIndex = new Decimal(0)
-                }
             },
             style: { width: '350px', height: '275px', }
         },
@@ -2220,10 +2209,10 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]], {maxWidth: "1000px"}],
                 ]
             },
             "SFRGT": {
@@ -2240,8 +2229,8 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.fu.sfrgt) + "</h3> SFRGT (Super fun real good time)."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.fu.sfrgtPerSecond) + "</h3> SFRGT per second."  }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
 
             },
@@ -2251,38 +2240,11 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["clickable", 23],["blank", "25px"],["blank", "25px"], ["clickable", 26],]],
+                    ["row", [["clickable", 23],["blank", ["25px", "25px"]],["clickable", 26],]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 24],["blank", "25px"],["blank", "25px"], ["clickable", 25],]],
+                    ["row", [["clickable", 24],["blank", ["25px", "25px"]],["clickable", 25],]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(0) ? "You have <h3>" + format(player.fu.happiness) + "</h3> happiness, which boosts steel gain by x" + format(player.fu.happinessEffect2) + ".": ""  }, { "color": "#fcff04", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(0) ? "You are gaining <h3>" + format(player.fu.happinessPerSecond) + "</h3> happiness per second." : ""  }, { "color": "#fcff04", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(0) ? "which divides anger by /<h3>" + format(player.fu.happinessEffect) + "</h3>." : ""  }, { "color": "#fcff04", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(1) ? "You have <h3>" + format(player.fu.sadness) + "</h3> sadness, which boosts infinity points gain by x" + format(player.fu.sadnessEffect2) + "." : "" }, { "color": "#110057", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(1) ? "You are gaining <h3>" + format(player.fu.sadnessPerSecond) + "</h3> sadness per second." : ""  }, { "color": "#110057", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(1) ? "which divides happiness by /<h3>" + format(player.fu.sadnessEffect) + "</h3>." : ""  }, { "color": "#110057", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(2) ? "You have <h3>" + format(player.fu.anger) + "</h3> anger, which boosts singularity point gain by x" + format(player.fu.angerEffect2) + "." : "" }, { "color": "#ff2b3d", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(2) ? "You are gaining <h3>" + format(player.fu.angerPerSecond) + "</h3> anger per second." : ""  }, { "color": "#ff2b3d", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(2) ? "which divides sadness by /<h3>" + format(player.fu.angerEffect) + "</h3>." : ""  }, { "color": "#ff2b3d", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(3) && inChallenge("fu", 11) ? "You have <h3>" + format(player.fu.fear) + "</h3> fear, which boosts replicanti point mult post softcap by x" + format(player.fu.fearEffect2) + "." : player.fu.emotionIndex.eq(3) && !inChallenge("fu", 11) ? "You have <h3>" + format(player.fu.fear) + "</h3> fear <small>(Effect only active in Fear Challenge)</small>" : "" }, { "color": "grey", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(3) && inChallenge("fu", 11) ? "(Only active in challenge)" : ""  }, { "color": "grey", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(3) && inChallenge("fu", 11) ? "You are gaining <h3>" + format(player.fu.fearPerSecond) + "</h3> fear per second." : player.fu.emotionIndex.eq(3) && !inChallenge("fu", 11) ? "You are gaining <h3>0</h3> fear per second. <small>(Currently not in Fear Challenge)</small>" : ""  }, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.fu.emotionIndex.eq(3) ? "which divides fear by /<h3>" + format(player.fu.fearEffect) + "</h3>." : ""  }, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
-                    ["blank", "25px"],
-                    ["row", [
-                        ["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34], 
-                        ["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44], 
-                        ["ex-buyable", 51], ["ex-buyable", 52], ["ex-buyable", 53], ["ex-buyable", 54],
-                        ["ex-buyable", 61], ["ex-buyable", 62], ["ex-buyable", 63], ["ex-buyable", 64],  
-                    ]],
-                    ["row", [
-                        ["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38],
-                        ["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 47], ["ex-buyable", 48], 
-                        ["ex-buyable", 55], ["ex-buyable", 56], ["ex-buyable", 57], ["ex-buyable", 58], 
-                        ["ex-buyable", 65], ["ex-buyable", 66], ["ex-buyable", 67], ["ex-buyable", 68],        
-                    ]],
+                    ["buttonless-microtabs", "mood", { 'border-width': '0px' }],
                 ]
             },
             "Fear": {
@@ -2300,19 +2262,67 @@
                     ["blank", "25px"],  
                     ["raw-html", function () { return inChallenge("fu", 11) ? "The Jocus essence effect is only active in challenge." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [
-                        ["ex-buyable", 71], ["ex-buyable", 72], ["ex-buyable", 73], ["ex-buyable", 74], 
-                    ]],
+                    ["style-row", [["ex-buyable", 71], ["ex-buyable", 72], ["ex-buyable", 73], ["ex-buyable", 74]], {maxWidth: "1200px"}],
                 ]
             },
         },
+        mood: {
+            "Happiness": {
+                content: [
+                    ["raw-html", function () { return "You have <h3>" + format(player.fu.happiness) + "</h3> happiness, which boosts steel gain by x" + format(player.fu.happinessEffect2) + "."}, { "color": "#fcff04", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.fu.happinessPerSecond) + "</h3> happiness per second."}, { "color": "#fcff04", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "which divides anger by /<h3>" + format(player.fu.happinessEffect) + "</h3>."}, { "color": "#fcff04", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["blank", "25px"],
+                    ["style-row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34],
+                        ["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]], {maxWidth: "1200px"}],
+                ]
+            },
+            "Sadness": {
+                content: [
+                    ["raw-html", function () { return "You have <h3>" + format(player.fu.sadness) + "</h3> sadness, which boosts infinity points gain by x" + format(player.fu.sadnessEffect2) + "."}, { "color": "#110057", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.fu.sadnessPerSecond) + "</h3> sadness per second."}, { "color": "#110057", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "which divides happiness by /<h3>" + format(player.fu.sadnessEffect) + "</h3>."}, { "color": "#110057", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["blank", "25px"],
+                    ["style-row", [["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 44],
+                        ["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 47], ["ex-buyable", 48]], {maxWidth: "1200px"}],
+                ]
+            },
+            "Anger": {
+                content: [
+                    ["raw-html", function () { return "You have <h3>" + format(player.fu.anger) + "</h3> anger, which boosts singularity point gain by x" + format(player.fu.angerEffect2) + "."}, { "color": "#ff2b3d", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You are gaining <h3>" + format(player.fu.angerPerSecond) + "</h3> anger per second."}, { "color": "#ff2b3d", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "which divides sadness by /<h3>" + format(player.fu.angerEffect) + "</h3>."}, { "color": "#ff2b3d", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["blank", "25px"],
+                    ["style-row", [["ex-buyable", 51], ["ex-buyable", 52], ["ex-buyable", 53], ["ex-buyable", 54],
+                        ["ex-buyable", 55], ["ex-buyable", 56], ["ex-buyable", 57], ["ex-buyable", 58]], {maxWidth: "1200px"}],
+                ]
+            },
+            "Fear": {
+                content: [
+                    ["raw-html", function () { return inChallenge("fu", 11) ? "You have <h3>" + format(player.fu.fear) + "</h3> fear, which boosts replicanti point mult post softcap by x" + format(player.fu.fearEffect2) + "." : "You have <h3>" + format(player.fu.fear) + "</h3> fear <small>(Effect only active in Fear Challenge)</small>"}, { "color": "grey", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return inChallenge("fu", 11) ? "(Only active in challenge)" : ""  }, { "color": "grey", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return inChallenge("fu", 11) ? "You are gaining <h3>" + format(player.fu.fearPerSecond) + "</h3> fear per second." : "You are gaining <h3>0</h3> fear per second. <small>(Currently not in Fear Challenge)</small>"}, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "which divides fear by /<h3>" + format(player.fu.fearEffect) + "</h3>."}, { "color": "grey", "font-size": "20px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18], ["clickable", 19]]],
+                    ["blank", "25px"],
+                    ["style-row", [["ex-buyable", 61], ["ex-buyable", 62], ["ex-buyable", 63], ["ex-buyable", 64],
+                        ["ex-buyable", 65], ["ex-buyable", 66], ["ex-buyable", 67], ["ex-buyable", 68]], {maxWidth: "1200px"}],
+                ]
+            },
+        }
     },
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 19) }

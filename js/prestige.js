@@ -62,7 +62,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(levelableEffect("pet", 102)[0])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.diceEffects[2])
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("ip", 21))
-        if (inChallenge("ip", 13) || player.po.hex) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.h.HRErefinementEffect[1][1])
+        if (inChallenge("ip", 13) || player.po.hex) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.hre.refinementEffect[1][1])
            
         // CHALLENGE MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.pe.pestEffect[2])
@@ -247,15 +247,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.p.crystalMax == false },
@@ -733,8 +724,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "800px"}],
                 ]
             },
             "Crystallize": {
@@ -749,8 +740,8 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -760,7 +751,6 @@
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return player.points.gt(100000) ? "You will gain <h3>" + format(player.p.prestigePointsToGet) + "</h3> prestige points on reset." : ""}, { "color": "#31aeb0", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 14) }

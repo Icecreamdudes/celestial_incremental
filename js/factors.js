@@ -78,7 +78,7 @@
         if (hasUpgrade("p", 16)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("p", 16))
         if (hasUpgrade("ip", 14) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 14))
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 21))
-        if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.h.HRErefinementEffect[0][1])
+        if (inChallenge("ip", 13) || player.po.hex) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.hre.refinementEffect[0][1])
         
         // CHALLENGE MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div(player.pe.pestEffect[1])
@@ -116,15 +116,6 @@
         if (player.cop.processedCoreFuel.eq(1)) player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.f.mfactorMax == false },
@@ -1347,8 +1338,8 @@
                     ["raw-html", function () { return tmp.f.buyables[16].unlocked && !tmp.f.buyables[17].unlocked ?  "Next factor unlocks at Prestige Upgrade III." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return tmp.f.buyables[17].unlocked && !tmp.f.buyables[18].unlocked ?  "Next factor unlocks at tetr 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 11).mul(buyableEffect("f", 12).mul(buyableEffect("f", 13)).mul(buyableEffect("f", 14)).mul(buyableEffect("f", 15)).mul(buyableEffect("f", 16)).mul(buyableEffect("f", 17)).mul(buyableEffect("f", 18)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1373,8 +1364,8 @@
                     ["raw-html", function () { return tmp.f.buyables[24].unlocked && !tmp.f.buyables[25].unlocked ?  "Next factor unlocks at tetr 11." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return tmp.f.buyables[25].unlocked && !tmp.f.buyables[26].unlocked ?  "Next factor unlocks at 25 trees." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return tmp.f.buyables[26].unlocked && !tmp.f.buyables[27].unlocked ?  "Next factor unlocks at ???." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["ex-buyable", 19], ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]]],
-                    ["row", [["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27]]],
+                    ["style-row", [["ex-buyable", 19], ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23],
+                        ["ex-buyable", 24], ["ex-buyable", 25], ["ex-buyable", 26], ["ex-buyable", 27]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 19).mul(buyableEffect("f", 21).mul(buyableEffect("f", 22)).mul(buyableEffect("f", 23)).mul(buyableEffect("f", 24)).mul(buyableEffect("f", 25)).mul(buyableEffect("f", 26)).mul(buyableEffect("f", 27)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1392,8 +1383,8 @@
                     ["raw-html", function () { return tmp.f.buyables[32].unlocked && !tmp.f.buyables[33].unlocked ?  "Next factor unlocks at pent 3." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return tmp.f.buyables[33].unlocked && !tmp.f.buyables[34].unlocked ?  "Next factor unlocks at 20 mods." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return tmp.f.buyables[34].unlocked && !tmp.f.buyables[35].unlocked ?  "Next factor unlocks at pent 8." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["ex-buyable", 28], ["ex-buyable", 29], ["ex-buyable", 31], ["ex-buyable", 32]]],
-                    ["row", [["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35], ["ex-buyable", 36]]],
+                    ["style-row", [["ex-buyable", 28], ["ex-buyable", 29], ["ex-buyable", 31], ["ex-buyable", 32],
+                        ["ex-buyable", 33], ["ex-buyable", 34], ["ex-buyable", 35], ["ex-buyable", 36]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 28).mul(buyableEffect("f", 29).mul(buyableEffect("f", 31)).mul(buyableEffect("f", 32)).mul(buyableEffect("f", 33)).mul(buyableEffect("f", 34)).mul(buyableEffect("f", 35)).mul(buyableEffect("f", 36)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1407,8 +1398,8 @@
                     ["raw-html", function () { return "<h3>You have " + format(player.gh.fertilizer) + " fertilizer." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return (getBuyableAmount("gh", 15).lt(8)) ? "Factors unlock with Grass Study III.<br>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3], ["ex-buyable", 4]]],
-                    ["row", [["ex-buyable", 5], ["ex-buyable", 6], ["ex-buyable", 7], ["ex-buyable", 8]]],
+                    ["style-row", [["ex-buyable", 1], ["ex-buyable", 2], ["ex-buyable", 3], ["ex-buyable", 4],
+                        ["ex-buyable", 5], ["ex-buyable", 6], ["ex-buyable", 7], ["ex-buyable", 8]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Total Mult: x" + format(buyableEffect("f", 1).mul(buyableEffect("f", 2).mul(buyableEffect("f", 3)).mul(buyableEffect("f", 4)).mul(buyableEffect("f", 5)).mul(buyableEffect("f", 6)).mul(buyableEffect("f", 7)).mul(buyableEffect("f", 8)))) }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1419,7 +1410,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 12)}

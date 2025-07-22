@@ -92,15 +92,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "s"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.sd.dimMax == false },
@@ -503,7 +494,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.sd.singularityPower) + "</h3> singularity power, which boosts infinity and negative infinity points by x" + format(player.sd.singularityPowerEffect) + ", and infinity dimensions by x" + format(player.sd.singularityPowerEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.sd.singularityPowerPerSecond) + "</h3> singularity power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return player.startedGame == true && hasMilestone("s", 14)  }

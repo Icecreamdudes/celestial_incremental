@@ -3,7 +3,7 @@ var systemComponents = {
 		props: ['layer', 'data', 'name'],
 		template: `
 			<div class="upgRow">
-				<div v-for="tab in Object.keys(data)">
+				<div style="margin:0px" v-for="tab in Object.keys(data)">
 					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
 					v-bind:style="[{'border-color': tmp[layer].color}, (subtabShouldNotify(layer, name, tab) ? {'box-shadow': 'var(--hqProperty2a), 0 0 20px '  + (data[tab].glowColor || defaultGlow)} : {}), tmp[layer].componentStyles['tab-button'], data[tab].buttonStyle]"
 						v-on:click="function(){player.subtabs[layer][name] = tab; updateTabFormats(); needCanvasUpdate = true;}">{{tab}}</button>
@@ -30,8 +30,7 @@ var systemComponents = {
 				else {run(layers[layer].onClick, layers[layer])}
 			}"
 			v-bind:class="{
-				treeNode: tmp[layer].isLayer,
-				treeButton: !tmp[layer].isLayer,
+				treeNode: true,
 				smallNode: size == 'small',
 				[layer]: true,
 				tooltipBox: true,
@@ -61,11 +60,44 @@ var systemComponents = {
 		`
 	},
 
+	'tab-node': {
+		props: ['layer', 'abb', 'size', 'prev'],
+		template: `
+		<button v-if="nodeShown(layer)"
+			v-on:click="function() {
+				if(tmp[layer].isLayer) {
+					if (tmp[layer].leftTab) {
+						showNavTab(layer, prev)
+						showTab('none')
+					}
+					else
+						showTab(layer, prev)
+				}
+				else {run(layers[layer].onClick, layers[layer])}
+			}"
+			v-bind:class="{
+				tabNode: true,
+				smallNode: size == 'small',
+				[layer]: true,
+				ghost: tmp[layer].layerShown == 'ghost',
+				hidden: !tmp[layer].layerShown,
+				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
+				notify: tmp[layer].notify && player[layer].unlocked,
+				resetNotify: tmp[layer].prestigeNotify,
+				can: ((player[layer].unlocked || tmp[layer].canReset) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				front: !tmp.scrolled,
+			}"
+			v-bind:style="constructNodeStyle(layer)">
+			<span class="nodeLabel tabLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
+		</button>
+		`
+	},
 
 	'layer-tab': {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {},
-				window.innerWidth > 1250 && options.newMenu==true && player.startedGame && player.tab!='c' && player.tab!='bigc' && player.tab!='revc' && !embedded ? {'margin-left':'400px'}:{'margin-left':'0px'}]" class="noBackground">
+				window.innerWidth > 1250 && player.startedGame && player.tab!='c' && player.tab!='bigc' && player.tab!='revc' && !embedded ? {'margin-left':'400px'}:{'margin-left':'0px'}]" class="noBackground">
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
 			<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]":key="this.$vnode.key + '-info'"></infobox>
@@ -183,7 +215,6 @@ var systemComponents = {
         <button v-bind:class="back" onclick="goBack()">←</button>
         `
 	},
-
 
 	'tooltip': {
 		props: ['text'],

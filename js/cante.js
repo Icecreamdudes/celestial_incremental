@@ -1,5 +1,5 @@
 ﻿addLayer("ca", {
-    name: "Cante, the Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Cante, Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() { return "Ξ"} , // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -165,15 +165,6 @@
         player.ca.replicantiTimer = new Decimal(0)
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -194,7 +185,7 @@
         },
         11: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && /*player.h.hexPoints[19].gte(1e22) &&*/ player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
+            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoint.gte(1e36) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
             unlocked() { return true},
             onClick() {
                 player.ca.unlockedCante = true
@@ -256,13 +247,8 @@
             unlocked() { return true },
             onClick() {
                 player.ca.defeatedCante = true
-                if (options.newMenu) {
-                    player.tab = 'ca'
-                    player.microtabs["ca"]['stuff'] = 'Main'
-                } else {
-                    player.tab = 'po'
-                    player.subtabs["po"]['stuff'] = 'Portals'
-                }
+                player.tab = 'ca'
+                player.microtabs["ca"]['stuff'] = 'Main'
             },
             style: { width: '500px', "min-height": '200px', borderRadius: '20px' },
         },
@@ -737,7 +723,7 @@
                     ["raw-html", function () { return formatWhole(player.cb.level) + "/250 Check Back Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.ad.antimatter) + "/1e600 Antimatter" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return formatWhole(player.in.infinities) + "/100,000 Infinities" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return /*format(player.h.hexPoints[19])*/ + "/1e22 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return format(player.h.hexPoint) + "/1e36 Hex Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.ta.highestDicePoints) + "/1e50 Highest Dice Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.cb.petPoints) + "/500 Pet Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -761,9 +747,9 @@
                     ]],
                     ["raw-html", function () { return "Replicate Chance: " + format(player.ca.replicateChance.mul(100)) + "%" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
-                    ["row", [["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],
+                        ["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19]], {maxWidth: "900px"}],
                 ]
             },
             "Galaxy Dust": {
@@ -778,7 +764,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, { "color": "#979EE8", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "(They just act like regular antimatter galaxies)" }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
@@ -826,16 +812,13 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 16]]],
                 ]
-
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)) || hasMilestone("s", 19)}
 })

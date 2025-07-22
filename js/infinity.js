@@ -1,7 +1,7 @@
-﻿var tree2 = [["ad", "ip"], ["ta", "tad"], ["bi", "id", "om"], ["ca"]]
+﻿var tree2 = [["in"], ["ad", "ip"], ["ta", "tad"], ["bi", "id", "om"], ["ca"]]
 addLayer("in", {
-    name: "Universe 2", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "2", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Roots", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "RO", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -22,14 +22,14 @@ addLayer("in", {
     automate() {},
     nodeStyle() {
         return {
-            background: "linear-gradient(140deg, #10e96b 0%, #0f871c 100%)",
+            background: "linear-gradient(140deg, #1e6 0%, #181 100%)",
             "background-origin": "border-box",
-            "border-color": "#119B35",
+            "border-color": "#333",
         }
     },
-    tooltip: "Universe 2 - Antimatter World",
-    color: "white",
-    branches: ["i"],
+    tooltip: "Roots",
+    color: "#1b4",
+    branches: ["ad", "ip"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -47,18 +47,6 @@ addLayer("in", {
                 }
                 player.in.delay = new Decimal(0)
             }
-        }
-
-        // MAKE TAB WORK
-        if (player.subtabs["in"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'in'
-            player.tab = "po"
-            player.subtabs["in"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["in"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'in'
-            player.tab = "settings"
-            player.subtabs["in"]['stuff'] = 'Features'
         }
 
         // UNI 2 UNLOCK VARIABLE
@@ -126,7 +114,7 @@ addLayer("in", {
         if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
         if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
         if (player.in.breakInfinity && hasUpgrade("bi", 114)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.h.HBLboonEffects[2])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosterEffects[2])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
@@ -429,28 +417,12 @@ addLayer("in", {
         player.fa.charge = new Decimal(0)
 
     },
-    branches: ["branch"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-    },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-    },
-    challenges: {
-    },
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
     infoboxes: {
         1: {
             title: "Infinity",
@@ -470,14 +442,6 @@ addLayer("in", {
     },
     microtabs: {
         stuff: {
-            "Features": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["tree", tree2],
-                ]
-            },
             "Lore": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
@@ -488,16 +452,6 @@ addLayer("in", {
                         ["infobox", "3"],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)" }},
-                unlocked() { return true },
-                content: []
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
     tabFormat: [
@@ -505,7 +459,7 @@ addLayer("in", {
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ad.antimatterPerSecond) + "</h3> antimatter per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity}
+    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
 })
 addLayer("bigc", {
     name: "Big Crunch", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -538,11 +492,7 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                if (options.newMenu) {
-                    player.tab = "ip"
-                } else {
-                    player.tab = "in"
-                }
+                player.tab = "ip"
 
                 layers.bigc.crunch()
             },

@@ -40,16 +40,6 @@
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-                stopRain('#4b79ff');
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #d487fd, #4b79ff)', border: '2px solid #4b79ff', 'border-radius': "0%"},
-        },
         2: {
             title() { return "EVOLVE" },
             canClick() {
@@ -108,7 +98,7 @@
         104: {
             title() { return "<img src='" + tmp.pet.levelables[202].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[202].canClick && !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gt(250)},
+            unlocked() { return tmp.pet.levelables[202].canClick && !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gte(250)},
             tooltip() { return "██ ██████ automation ███████<br>sacrifices" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(4)
@@ -118,7 +108,7 @@
         105: {
             title() { return "<img src='" + tmp.pet.levelables[302].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[302].canClick && !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gt(250)},
+            unlocked() { return tmp.pet.levelables[302].canClick && !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gte(250)},
             tooltip() { return "██-unlock █ previous ████████,<br>███████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(5)
@@ -578,7 +568,7 @@
 })
 addLayer("ev0", {
     name: "Goldsmith", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E0", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "Gs", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -593,7 +583,12 @@ addLayer("ev0", {
         coinShardsPerSecond: new Decimal(0),
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        background: "linear-gradient(90deg, #e7c97c, #fad25a)",
+		backgroundOrigin: "border-box",
+		borderColor: "#655421",
+		color: "#655421"
+    },
     tooltip: "Goldsmith",
     color: "white",
     update(delta) {
@@ -601,7 +596,8 @@ addLayer("ev0", {
 
         player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(delta))
 
-        player.ev0.coinDustPerSecond = levelableEffect("pet", 1103)[1].div(3600)
+        if (!player.ev.evolutionsUnlocked[0]) player.ev0.coinDustPerSecond = new Decimal(0)
+        if (player.ev.evolutionsUnlocked[0]) player.ev0.coinDustPerSecond = levelableEffect("pet", 1103)[1].div(3600)
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 11))
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(player.ev0.coinShardEffect)
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 18))
@@ -619,18 +615,7 @@ addLayer("ev0", {
         player.ev0.coinShardEffect = player.ev0.coinShards.pow(0.4).add(1)
     },
     branches: ["branch"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-                stopRain('#4b79ff');
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': 'linear-gradient(90deg, #e7c97c, #fad25a)', 'border-width': "10px" },
-        },
-    },
+    clickables: {},
     bars: {},
     upgrades: {},
     buyables: {
@@ -901,7 +886,7 @@ addLayer("ev0", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                 ]
             },
@@ -910,14 +895,12 @@ addLayer("ev0", {
                 unlocked() { return player.cb.highestLevel.gte(250) },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
     },
     tabFormat: [
-        ["blank", "10px"],
-        ["clickable", 1],
         ["blank", "10px"],
         ["left-row", [
             ["tooltip-row", [
@@ -945,23 +928,27 @@ addLayer("ev0", {
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "150px", height: "50px"}],
+            ], () => {return player.cb.highestLevel.gte(250) ? {width: "150px", height: "50px"} : {display: "none !important"}}],
         ], () => { return player.cb.highestLevel.gte(250) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return false }
+    layerShown() { return player.ev.evolutionsUnlocked[0] }
 })
 addLayer("ev1", {
     name: "MrRedShark", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "ev1", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "Rs", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        background: "linear-gradient(140deg, #b00000 0%, #bda500 50%, #b00000 100%)",
+		backgroundOrigin: "border-box",
+		borderColor: "#750000"
+    },
     tooltip: "MrRedShark",
     color: "white",
     update(delta) {
@@ -969,15 +956,6 @@ addLayer("ev1", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -1503,8 +1481,6 @@ addLayer("ev1", {
     microtabs: {},
     tabFormat: [
         ["blank", "10px"],
-        ["row", [["clickable", 1]]],
-        ["blank", "10px"],
         ["tooltip-row", [
             ["raw-html", "<img src='resources/petPoint.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
             ["raw-html", () => { return format(player.cb.petPoints)}, {width: "95px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
@@ -1556,11 +1532,11 @@ addLayer("ev1", {
             ], {width: "200px"}],
         ], {width: "775px"}],
     ],
-    layerShown() { return player.startedGame == true }
+    layerShown() { return player.ev.evolutionsUnlocked[1] }
 })
 addLayer("ev2", {
     name: "Insane Face", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E2", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "If", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1576,7 +1552,10 @@ addLayer("ev2", {
     },
     automate() {
     },
-    nodeStyle() {
+    nodeStyle: {
+        background: "#106ccc",
+		backgroundOrigin: "border-box",
+		borderColor: "black",
     },
     tooltip: "Insane Face",
     color: "#106ccc",
@@ -1591,16 +1570,6 @@ addLayer("ev2", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-                stopRain('#4b79ff');
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#106ccc' },
-        },
         11: {
             title() { return player.ev2.cooldown.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.cooldown) + "." : "<h3>Collect Daily Reward!"},
             canClick() { return player.ev2.cooldown.lt(0) },
@@ -1697,8 +1666,6 @@ addLayer("ev2", {
 
     tabFormat: [
         ["blank", "10px"],
-        ["row", [["clickable", 1]]],
-        ["blank", "10px"],
         ["style-row", [
             ["raw-html", function () { return "<h2>Day " + formatWhole(player.ev2.day) }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
         ], {width: "250px", height: "60px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px"}],
@@ -1709,11 +1676,11 @@ addLayer("ev2", {
             ["clickable", 11],
         ], {width: "350px", height: "125px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px"}],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.ev.evolutionsUnlocked[2]  }
 })
 addLayer("ev4", {
     name: "Sun", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E4", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "Su", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1724,7 +1691,11 @@ addLayer("ev4", {
         offeringReq: new Decimal(100),
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        background: "linear-gradient(-90deg, #f38004, #fc3404)",
+		backgroundOrigin: "border-box",
+		borderColor: "#DC2D03"
+    },
     tooltip: "Sun",
     color: "#febc06",
     update(delta) {
@@ -1746,15 +1717,6 @@ addLayer("ev4", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -1875,8 +1837,6 @@ addLayer("ev4", {
     microtabs: {},
     tabFormat: [
         ["blank", "10px"],
-        ["clickable", 1],
-        ["blank", "10px"],
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
@@ -1902,11 +1862,11 @@ addLayer("ev4", {
         ["blank", "10px"],
         ["raw-html", function () { return "Offering multiplier: <h3>" + format(player.ev4.offeringsBase) + "</h3>x" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
 ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.startedGame == player.ev.evolutionsUnlocked[4]  }
 })
 addLayer("ev8", {
     name: "Marcel", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E8", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "Mc", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1925,7 +1885,12 @@ addLayer("ev8", {
         alertToggle: true,
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        background: "linear-gradient(90deg, #d487fd, #4b79ff)",
+		backgroundOrigin: "border-box",
+		borderColor: "#1500bf",
+		color: "#1500bf"
+    },
     tooltip: "Marcel",
     color: "grey",
     update(delta) {
@@ -1960,16 +1925,6 @@ addLayer("ev8", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-
         //evo
         11: {
             title() { return player.ev8.evoButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[0]) + " Evo Shards."},
@@ -2248,17 +2203,15 @@ addLayer("ev8", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
-                    ["row", [["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
-                    ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], /*["upgrade", 23]*/]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                        ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
+                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], /*["upgrade", 23]*/], {maxWidth: "500px"}],
                 ]
             },
         },
     },
 
     tabFormat: [
-        ["blank", "10px"],
-        ["row", [["clickable", 1]]],
         ["blank", "10px"],
         ["left-row", [
             ["tooltip-row", [
@@ -2275,11 +2228,11 @@ addLayer("ev8", {
         ["blank", "25px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.ev.evolutionsUnlocked[8]  }
 })
 addLayer("ev9", {
     name: "Paragon Checkpoint", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E9", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "Pc", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -2289,7 +2242,12 @@ addLayer("ev9", {
         offeringsOnSacrifice: [new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        background: "linear-gradient(90deg, #e75753, #e1843c, #fff463, #90f32d, #5cd4a6)",
+		backgroundOrigin: "border-box",
+		borderColor: "black",
+		color: "black",
+    },
     tooltip: "Paragon Checkpoint",
     color: "#5cd4a6",
     update(delta) {
@@ -2305,15 +2263,6 @@ addLayer("ev9", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: "100px", minHeight: "50px", backgroundColor: "#febc06" },
-        },
         11: {
             title() { return "Sacrifice this core." },
             canClick() { return true },
@@ -2470,11 +2419,11 @@ addLayer("ev9", {
         ["raw-html", function () { return "Offerings will be gained when you remove cores out of the tab."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "New Check Back buyable unlocked!"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.ev.evolutionsUnlocked[9]  }
 })
 addLayer("ev10", {
     name: "Eye", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "E10", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "Ey", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -2501,7 +2450,12 @@ addLayer("ev10", {
 
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        background: "linear-gradient(120deg, #121212, #1c1c1c)",
+		backgroundOrigin: "border-box",
+		borderColor: "black",
+		color: "gray"
+    },
     tooltip: "EYE",
     color: "grey",
     update(delta) {
@@ -2572,8 +2526,6 @@ addLayer("ev10", {
     microtabs: {},
     tabFormat: [
         ["blank", "10px"],
-        ["clickable", 1],
-        ["blank", "10px"],
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
@@ -2604,5 +2556,5 @@ addLayer("ev10", {
             background: "var(--background)",
         }],
     ],
-    layerShown() { return player.startedGame == true  }
+    layerShown() { return player.ev.evolutionsUnlocked[10]  }
 })

@@ -1,7 +1,7 @@
-﻿var tree3 = [["coa", "cop"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
+﻿var tree3 = [["s"], ["coa", "cop"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
 addLayer("s", {
-    name: "Universe 3", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "3", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Genesis", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "GE", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -19,28 +19,16 @@ addLayer("s", {
         sMax: false,
     }},
     automate() {},
-    nodeStyle() {
-        return {
-            background: "linear-gradient(140deg, red 0%, black 100%)",
-            "background-origin": "border-box",
-            "border-color": "#800000",
-        }
+    nodeStyle: {
+        background: "linear-gradient(140deg, red -20%, black 120%)",
+        backgroundOrigin: "border-box",
+        borderColor: "#333",
     },
-    tooltip: "Universe 3 - Domain of Singularity",
-    color: "white",
+    tooltip: "Genesis",
+    color: "#a00",
+    branches: ["coa", "cop"],
     update(delta) {
-
         let onepersec = new Decimal(1)
-        if (player.subtabs["s"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 's'
-            player.tab = "po"
-            player.subtabs["s"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["s"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 's'
-            player.tab = "settings"
-            player.subtabs["s"]['stuff'] = 'Features'
-        }
 
         player.s.singularitiesToGet = new Decimal(1)
 
@@ -70,36 +58,7 @@ addLayer("s", {
 
         player.s.singularityTime = player.s.singularityTime.add(onepersec.mul(delta))
     },
-    branches: ["in"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.s.sMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.s.sMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.s.sMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.s.sMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-    },
+    clickables: {},
     bars: {},
     upgrades: {
         11: {
@@ -429,36 +388,16 @@ addLayer("s", {
     },
     microtabs: {
         stuff: {
-            "Features": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["tree", tree3],
-                ]
-            },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17]]],
-                    ["row", [["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23]]],
+                    ["style-row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
+                        ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23]], {maxWidth: "1000px"}],
                 ]
             },
-            "Lore": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["infobox", "1"],
-                    ["infobox", "2"],
-                    ["infobox", "3"],
-                    ["infobox", "4"],
-                ]
-            },      
-            "Singularity Milestones": {
+            "Milestones": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
                 content: [
@@ -489,22 +428,23 @@ addLayer("s", {
                     ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return true},
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
+            "Lore": {
+                buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content: [],
+                content:
+                [
+                    ["blank", "25px"],
+                    ["infobox", "1"],
+                    ["infobox", "2"],
+                    ["infobox", "3"],
+                    ["infobox", "4"],
+                ]
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -513,5 +453,5 @@ addLayer("s", {
         ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }], 
     ],
-    layerShown() { return player.startedGame == true && player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)}
+    layerShown() { return player.startedGame == true && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
 })

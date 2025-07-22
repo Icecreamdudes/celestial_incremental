@@ -106,6 +106,8 @@ function setupLayer(layer){
                 layers[layer].challenges[thing].layer = layer
                 if (layers[layer].challenges[thing].unlocked === undefined)
                     layers[layer].challenges[thing].unlocked = true
+                if (layers[layer].challenges[thing].canClick === undefined)
+                    layers[layer].challenges[thing].canClick = true
                 if (layers[layer].challenges[thing].completionLimit === undefined)
                     layers[layer].challenges[thing].completionLimit = 1
                 else if (layers[layer].challenges[thing].marked === undefined) 

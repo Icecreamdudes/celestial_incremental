@@ -90,15 +90,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.id.dimMax == false },
@@ -624,7 +615,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -633,8 +624,7 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power, which boosts antimatter dimensions by x" + format(player.id.infinityPowerEffect) + ", and points by x" + format(player.id.infinityPowerEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.id.infinityPowerPerSecond) + "</h3> infinity power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
         ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 18)) || hasMilestone("s", 19)}
 })

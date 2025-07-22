@@ -41,13 +41,25 @@
         }
     },
     nodeStyle() {
-        return {
-            background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
-            "background-origin": "border-box",
-            "border-color": "#b2d8d8",
-            "color": "#b2d8d8",
-            "transform": "scale(0.7)",
-        };
+        if (options.menuType == "tree") {
+            return {
+                background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
+                backgroundOrigin: "border-box",
+                borderColor: "#b2d8d8",
+                color: "#b2d8d8",
+                width: "50px",
+                height: "50px",
+                fontSize: "20px",
+                margin: "0px 17.5px 0px 17.5px",
+            }
+        } else {
+            return {
+                background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
+                backgroundOrigin: "border-box",
+                borderColor: "#b2d8d8",
+                color: "#b2d8d8",
+            }
+        }
     },
     tooltip: "Tav's Domain",
     color: "#5b629a",
@@ -66,6 +78,7 @@
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("om", 13)).floor()
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("p", 18)).floor()
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(levelableEffect("pet", 209)[1]).floor()
+        player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(levelableEffect("pet", 1101)[2]).floor()
 
         if (hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(Decimal.mul(player.tad.shatteredInfinitiesToGet.mul(0.1), delta))
 
@@ -73,6 +86,7 @@
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("om", 13)).floor()
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("p", 18)).floor()
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(levelableEffect("pet", 209)[1]).floor()
+        player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(levelableEffect("pet", 1101)[2]).floor()
 
         if (hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(Decimal.mul(player.tad.disfiguredInfinitiesToGet.mul(0.1), delta))
 
@@ -80,19 +94,11 @@
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("om", 13)).floor()
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("p", 18)).floor()
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(levelableEffect("pet", 209)[1]).floor()
+        player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(levelableEffect("pet", 1101)[2]).floor()
 
         if (hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(Decimal.mul(player.tad.corruptedInfinitiesToGet.mul(0.1), delta))
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -170,12 +176,8 @@
             onClick() {
                 player.in.unlockedBreak = true
                 player.subtabs["tad"]['stuff'] = 'Main'
-                if (options.newMenu) {
-                    player.tab = 'otherfeat'
-                } else {
-                    player.tab = 'po'
-                    player.subtabs["po"]['stuff'] = 'Otherworldly Features'
-                }
+                player.tab = "po"
+                player.subtabs["po"]["stuff"] = "Otherworldly Features"
             },
             style: { width: '500px', "min-height": '200px', borderRadius: '15px' },
         },
@@ -186,11 +188,14 @@
         {
             title: "Productive Provenance",
             unlocked() { return true },
-            description: "First of each provenance's effects are boosted by ^1.1.",
+            description() {return "First of each provenance's effects are boosted by ^" + format(upgradeEffect(this.layer, this.id), 1) + "."},
             cost: new Decimal(20),
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
+            effect() {
+                return new Decimal(1.1).add(player.h.HPUpurifierEffects[2])
+            },
         },
         12:
         {
@@ -719,10 +724,10 @@
                     ["blank", "10px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
                     ["blank", "10px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
-                    ["row", [["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19]]],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],
+                        ["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19],
+                        ["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]], {maxWidth: "900px"}],
                 ]
             },
             "THE BARRIER": {
@@ -769,7 +774,6 @@
             ], {width: "250px"}],
         ], {width: "750px", border: "3px solid #122727", backgroundColor: "#7AA6A6", borderRadius: "0px 0px 15px 15px"}],
         ["blank", "10px"],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)}

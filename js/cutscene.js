@@ -28,49 +28,8 @@
             "As the voice fades away, you look at your own hands, and see ten points manifest as rings. One for each finger.",
         ],
         cutsceneIndex: 0,
-
-        //background images
-        ev2bg: "<img src='resources/gdbg.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>"
-    }
-    },
+    }},
     update(delta) {
-
-        player.c.ev2bg = "resources/gdbg.jpg"
-
-        //Background
-        document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2 || player.c.cutscene13) && player.tab == "c" ? "black":
-
-        player.tab == "t" ? "#02172f" : 
-        player.tab == "g" ? "#042347" : 
-        player.tab == "gh" ? "#073b77" : 
-        player.tab == "cb" || player.tab == "ps" || player.tab == "pet" ? "#021124" : 
-        player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter" ? "linear-gradient(45deg, #8a00a9, #0061ff)" :
-        player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
-        player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
-        player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
-        player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
-        player.tab == "bigc" ? "#b87c34" : 
-        player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.tab == "bi" || player.tab == "om" || player.tab == "id" || player.tab == "u2l" || player.tab == "u2t" ? "#001f18" : 
-        player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
-        player.tab == "revc" ? "#31aeb0" : 
-        player.tab == "tad" ? "#b2d8d8" : 
-        player.tab == "ca" ? "#2a3e66" : 
-        player.tab == "cap" ? "#1f1e33" : 
-        player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || 
-        player.tab == "a1u" || player.tab == "a1s" || player.tab == "a1t" || player.tab == "fu" ? "#204387" : 
-        player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
-        player.tab == "ev8" ? "#252525" : 
-        player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
-        player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || player.tab == "ma" || player.tab == "sma" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd"? "#260300" : 
-        player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4"  || player.tab == "ep5" ? "#7d3f98" : 
-        !player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
-        player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
-        player.tab == "ch" || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
-        player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 
-        player.tab == "leg" ? "#eed200" : 
-        player.sma.inStarmetalChallenge ? "black" : 
-        "#161616");
-
         //1
         if (player.c.cutscenes[0] && player.startedGame)
         {
@@ -88,7 +47,6 @@
         {
             player.c.cutscenes[0] = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Upgrades'
             player.c.cutscenes[0] = false
         }
 
@@ -105,7 +63,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 2) {
             player.c.cutscenes[1] = false
             player.tab = "po"
-            player.subtabs["po"]['stuff'] = 'Otherworldly Features'
             player.c.cutscenes[1] = false
         }
 
@@ -122,7 +79,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3) {
             player.c.cutscenes[2] = false
             player.tab = "in"
-            player.subtabs["in"]['stuff'] = 'Features'
             player.c.cutscenes[2] = false
         }
 
@@ -139,7 +95,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 4) {
             player.c.cutscenes[3] = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
             player.c.cutscenes[3] = false
 
         }
@@ -158,7 +113,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 5) {
             player.c.cutscenes[4] = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
             player.c.cutscenes[4] = false
         }
 
@@ -176,7 +130,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 6) {
             player.c.cutscenes[5] = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
             player.c.cutscenes[5] = false
         }
 
@@ -194,7 +147,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 7) {
             player.c.cutscenes[6] = false
             player.tab = "po"
-            player.subtabs["po"]['stuff'] = 'Otherworldly Features'
             player.c.cutscenes[6] = false
         }
 
@@ -211,7 +163,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8) {
             player.c.cutscenes[7] = false
             player.tab = "in"
-            player.subtabs["in"]['stuff'] = 'Features'
             player.c.cutscenes[7] = false
         }
 
@@ -228,7 +179,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9) {
             player.c.cutscenes[8] = false
             player.tab = "in"
-            player.subtabs["in"]['stuff'] = 'Features'
             player.c.cutscenes[8] = false
         }
 
@@ -262,7 +212,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 11) {
             player.c.cutscenes[10] = false
             player.tab = "cp"
-            player.subtabs["cp"]['stuff'] = 'Features'
             player.c.cutscenes[10] = false
         }
 
@@ -279,7 +228,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 12) {
             player.c.cutscenes[11] = false
             player.tab = "cp"
-            player.subtabs["cp"]['stuff'] = 'Features'
             player.c.cutscenes[11] = false
         }
 
@@ -296,7 +244,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 13) {
             player.c.cutscenes[12] = false
             player.tab = "po"
-            player.subtabs["po"]['stuff'] = 'Portals'
             player.c.cutscenes[12] = false
         }
 
@@ -458,8 +405,7 @@
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23) {
             player.c.cutscenes[22] = false
-            if (!options.newMenu) player.tab = "ch" 
-            if (options.newMenu) player.tab = "cmh" 
+            player.tab = "ch" 
             player.universe = -0.5
             player.c.cutscenes[22] = false
         }
@@ -541,7 +487,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -1) {
             player.c.cutsceneDice = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
         }
 
 
@@ -558,14 +503,13 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -2) {
             player.c.cutsceneRocketFuel = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Features'
         }
 
 
         //h
-        if (player.c.cutsceneHex && player.h.HPRrank[0].gte(1)) {
+        if (player.c.cutsceneHex && player.hpr.rank[0].gte(1)) {
             player.c.currentCutscene = -3
-        } else if (player.tab != "c" && player.h.HPRrank[0].gte(1) && hasChallenge("ip", 13)) {
+        } else if (player.tab != "c" && player.hpr.rank[0].gte(1) && hasChallenge("ip", 13)) {
             player.c.currentCutscene = 0
         }
         if (player.c.currentCutscene == -3) {
@@ -575,7 +519,6 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -3) {
             player.c.cutsceneHex = false
             player.tab = "i"
-            player.subtabs["i"]['stuff'] = 'Upgrades'
         }
 
         if (player.tab != "c" && player.tab != "bigc" && player.c.cutsceneIndex == player.c.cutsceneText.length) {

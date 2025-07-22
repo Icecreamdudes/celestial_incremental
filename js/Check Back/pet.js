@@ -161,15 +161,6 @@ addLayer("pet", {
         player.pet.cratePrices[5] = player.pet.cratePrices[5].add(new Decimal(250).mul(player.pet.crateBought[5]))
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', minHeight: '50px' },
-        },
         2: {
             title() { return "<h3>Level Up" },
             canClick() { return tmp.pet.levelables[layers.pet.levelables.index].canBuy },
@@ -2437,13 +2428,15 @@ addLayer("pet", {
             lore() { return "Seems to be like gwa, but its appearance is inverted. It has a strange force that prevents you from getting near it." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to infinities.<br>" +
-                    "x" + format(this.effect()[1]) + " to broken infinities.<br>"
+                    "x" + format(this.effect()[1]) + " to broken infinities.<br>" +
+                    "x" + format(this.effect()[2]) + " to alternate infinities.<br>"
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).div(5).add(1), // Infinities
                     getLevelableAmount(this.layer, this.id).div(5).add(1), // Broken Infinities
+                    getLevelableAmount(this.layer, this.id).div(5).add(1), // Alternate Infinities
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },
@@ -2585,13 +2578,8 @@ addLayer("pet", {
             evoCan() { return true },
             evoTooltip() { return ""},
             evoClick() {
-                player.po.lastUniverse = "cb"
-                if (options.newMenu) {
-                    player.tab = "halter"
-                } else {
-                    player.tab = "po"
-                    player.subtabs["po"]['stuff'] = 'Halter'
-                }
+                player.tab = "po"
+                player.subtabs["po"]["stuff"] = "Halter"
             },
             // CLICK CODE
             unlocked() { return hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0) },

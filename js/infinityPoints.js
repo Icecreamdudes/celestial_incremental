@@ -1,5 +1,5 @@
 ﻿addLayer("ip", {
-    name: "Infinity Points", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Infinity", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "∞", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -49,20 +49,11 @@
 
     tooltip: "Infinity",
     color: "white",
+    branches: ["ad"],
     update(delta) {
         let onepersec = new Decimal(1)
     },
-    branches: ["ad"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -121,8 +112,7 @@
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11:
         {
@@ -133,6 +123,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
+            style: {width: "130px", height: "130px"},
         },
         12:
         {
@@ -147,6 +138,7 @@
                 return player.ip.diceRuns.pow(1.1).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         13:
         {
@@ -161,6 +153,7 @@
                 return player.ip.rocketFuelRuns.pow(0.9).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         14:
         {
@@ -175,6 +168,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         21:
         {
@@ -189,6 +183,7 @@
                 return player.in.infinities.pow(1.4).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         22:
         {
@@ -203,6 +198,7 @@
                 return player.in.infinities.pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         23:
         {
@@ -217,6 +213,7 @@
                 return player.in.infinities.pow(1.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         24:
         {
@@ -231,6 +228,7 @@
                 return player.in.infinities.add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         31:
         {
@@ -241,6 +239,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
+            style: {width: "130px", height: "130px"},
         },
         32:
         {
@@ -255,6 +254,7 @@
                 return player.in.infinityPoints.mul(0.5).pow(0.7).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         33:
         {
@@ -269,6 +269,7 @@
                 return player.in.infinityPoints.mul(0.65).pow(0.65).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         34:
         {
@@ -283,6 +284,7 @@
                 return player.in.infinityPoints.mul(0.3).pow(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         41:
         {
@@ -297,6 +299,7 @@
                 return player.in.infinityPoints.plus(1).log10().mul(0.65).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         42:
         {
@@ -311,6 +314,7 @@
                 return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         43:
         {
@@ -325,6 +329,7 @@
                 return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.35).mul(2.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
         44:
         {
@@ -339,6 +344,7 @@
                 return player.in.infinityPoints.plus(1).log10().pow(1.25).mul(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "130px", height: "130px"},
         },
     },
     buyables: {
@@ -636,7 +642,7 @@
             challengeDescription() { return "<h4>Hex... A feature seemingly coming from thin air. No check back effects either..." },
             goalDescription() { return "2 Refinements" },
             goal() { return new Decimal("2") },
-            canComplete: function () { return player.h.HRErefinement.gte(2) },
+            canComplete: function () { return player.hre.refinement.gte(2) },
             rewardDescription: "Permanently unlock hex as an otherworldly feature, and improve base hex point gain.",
             unlocked() { return hasChallenge("ip", 12) },
             onEnter() {
@@ -791,10 +797,10 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
-                    ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24]]],
-                    ["row", [["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34]]],
-                    ["row", [["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                        ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],
+                        ["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34],
+                        ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]], {maxWidth: "600px"}],
                 ]
             },
             "Milestones": {
@@ -829,12 +835,14 @@
                 unlocked() { return hasMilestone("ip", 16) },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["challenge", 11], ["challenge", 12], ["challenge", 13], ["challenge", 14]]],
-                    ["row", [["challenge", 15], ["challenge", 16], ["challenge", 17], ["challenge", 18]]],
-                    ["blank", "25px"],
+                    ["style-row", [["challenge", 11], ["challenge", 12], ["challenge", 13],
+                        ["challenge", 14], ["challenge", 15], ["challenge", 16],
+                        ["challenge", 17], ["challenge", 18]], {maxWidth: "1200px"}],
+                    ["blank", "10px"],
                     ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(100) ? "Unlock Challenge VII by reaching Check Back Level 100" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
+                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(100) ? "Unlock Challenge VII by reaching Check Back Level 100" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["blank", "10px"],
                 ]
             },
             "Buyables": {
@@ -842,7 +850,7 @@
                 unlocked() { return hasChallenge("ip", 14) },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                 ]
             },
             "Reset": {
@@ -859,7 +867,6 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}

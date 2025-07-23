@@ -194,7 +194,7 @@
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
             effect() {
-                return new Decimal(1.1).add(player.h.HPUpurifierEffects[2])
+                return new Decimal(1.1).add(player.hpu.purifierEffects[2])
             },
         },
         12:

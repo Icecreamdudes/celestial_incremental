@@ -1,4 +1,4 @@
-﻿var treeh = [["hpr"], ["hre"], ["hpu", "hbl", "hcu"], ["hpw", "hrm"]]
+﻿var treeh = [["hpr"], ["hre", "hpu"], ["hbl", "hcu", "hve"], ["hpw", "hrm"]]
 addLayer("h", {
     name: "Hex", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "H", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -39,9 +39,15 @@ addLayer("h", {
         if (hasUpgrade("hbl", 2)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hbl", 2))
         if (hasUpgrade("hbl", 5)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hbl", 5))
         if (hasUpgrade("hpw", 2)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hpw", 2))
+        if (hasUpgrade("hve", 11)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 11))
+        if (hasUpgrade("hve", 12)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 12))
+        if (hasUpgrade("hve", 13)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 13))
 
-        // HEX POINT PER SECOND FORMULA
-        player.h.hexPoint = player.h.hexPoint.add(player.h.hexPointGain.mul(delta))
+        // POWER AND PER SECOND
+        if (hasUpgrade("hve", 61)) player.h.hexPointGain = player.h.hexPointGain.pow(1.03)
+
+        if (inChallenge("hrm", 13)) player.h.hexPointGain = player.h.hexPointGain.sub(player.h.hexPoint.mul(0.06))
+        if (player.h.hexPoint.add(player.h.hexPointGain.mul(delta)).gt(0)) player.h.hexPoint = player.h.hexPoint.add(player.h.hexPointGain.mul(delta))
     },
     hexReq(value, base, scale, div = new Decimal(1), add = new Decimal(1)) {
         return value.add(add).pow(scale).mul(base).div(div).ceil()
@@ -50,7 +56,10 @@ addLayer("h", {
         return value.mul(div).div(base).pow(Decimal.div(1, scale)).floor()
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["buttonless-microtabs", "hexes", { 'border-width': '0px' }],
         ["blank", "25px"],

@@ -112,7 +112,7 @@
         player.f.factorBase = player.f.factorBase.add(buyableEffect("gh", 16))
         if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
         if (player.pol.pollinatorsIndex == 1) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorsEffect[1])
-        player.f.factorBase = player.f.factorBase.mul(buyableEffect("rm", 22))
+        if (hasUpgrade("hpw", 1013)) player.f.factorBase = player.f.factorBase.mul(120)
         if (player.cop.processedCoreFuel.eq(1)) player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
     },
     clickables: {

@@ -365,6 +365,26 @@ function loadVue() {
 		`
 	})
 
+	// data = id
+	Vue.component('id-upgrade', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, tooltipBox: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
+			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), tmp[layer].upgrades[data].style]">
+			<h3 class="idUpgrade" v-html="data"></h3>
+			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
+			<span v-else>
+				<span v-if= "tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
+				<span v-html="tmp[layer].upgrades[data].description"></span>
+				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
+				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+			</span>
+			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>
+
+			</button>
+		`
+	})
+
 	Vue.component('milestones', {
 		props: ['layer', 'data'],
 		template: `
@@ -593,7 +613,9 @@ function loadVue() {
 					<span v-html="tmp[layer].buyables[data].title"></span>
 				</div>
 				<div v-bind:class="{jinxCost: true}">
-					<span v-html="formatWhole(player[layer].buyables[data]) + '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span><br>
+					<span v-if="!tmp[layer].buyables[data].extraAmount || tmp[layer].buyables[data].extraAmount.eq(0)" v-html="formatWhole(player[layer].buyables[data]) + '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					<span v-if="tmp[layer].buyables[data].extraAmount && tmp[layer].buyables[data].extraAmount.neq(0)" v-html="formatWhole(player[layer].buyables[data]) + '+' + formatWhole(tmp[layer].buyables[data].extraAmount) + '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					<br>
 					<span v-html="'Cost: ' + format(tmp[layer].buyables[data].cost)"></span>
 				</div>
 				<div v-bind:class="{jinxTotal: true}" v-if="tmp[layer].buyables[data].total">

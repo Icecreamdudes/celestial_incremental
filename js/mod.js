@@ -13,7 +13,7 @@
 	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
 	"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
 	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js",
-	"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js", "Hex/purity.js", "Hex/power.js", "Hex/realms.js"],
+	"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js", "Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -168,25 +168,25 @@ function updateStyles() {
 	if (options.menuType == "Tree") {
 		switch(player.universe) {
 			case 2: 
-				sideBG = "#001f18"
+				sideBG = "#000f0c"
 				break;
 			case -666:
 				sideBG = "linear-gradient(180deg, #333, #222)"
 				break;
 			case 1.5:
-				sideBG = "#204387"
+				sideBG = "#102143"
 				break;
 			case 3:
-				sideBG = "#260300"
+				sideBG = "#130100"
 				break;
 			case -0.1:
 				sideBG = "black"
 				break;
 			case 0.5:
-				sideBG = "#021124"
+				sideBG = "#010812"
 				break;
 			default:
-				sideBG = "#161616"
+				sideBG = "#0b0b0b"
 				break;
 		}
 	}
@@ -195,7 +195,7 @@ function updateStyles() {
 	}
 
 	// Set background color
-	document.getElementById('uniBG').style.setProperty('background', sideBG)
+	if (document.getElementById('uniBG')) document.getElementById('uniBG').style.setProperty('background', sideBG)
 
 	// ===------   MUSIC   ------=== //
 	// Find music value

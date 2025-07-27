@@ -71,7 +71,7 @@
         player.r.rankEffect = player.r.rank.mul(0.4).add(1).pow(1.055)
         if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
-        player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("rm", 21))
+        if (hasUpgrade("hpw", 1012)) player.r.rankEffect = player.r.rankEffect.pow(1.18)
         player.r.rankReq = layers.r.getRankReq()
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)
@@ -96,7 +96,7 @@
         let tiersGain = player.r.rank.div(3).mul(levelableEffect("pet", 204)[1]).pow(Decimal.div(10, 11)).floor()
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
-        player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("rm", 21))
+        if (hasUpgrade("hpw", 1012)) player.r.tierEffect = player.r.tierEffect.pow(1.18)
         player.r.tierReq = layers.r.getTierReq()
         if (player.r.rank.gte(player.r.tierReq) && hasUpgrade("p", 14)) {
              player.r.tiersToGet = tiersGain.sub(player.r.tier)
@@ -113,7 +113,7 @@
 
         player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
-        player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("rm", 21))
+        if (hasUpgrade("hpw", 1012)) player.r.tetrEffect = player.r.tetrEffect.pow(1.18)
         player.r.tetrReq = layers.r.getTetrReq()
         if (player.r.tier.gte(player.r.tetrReq) && hasUpgrade("p", 14)) {
             player.r.tetrsToGet = tetrGain.sub(player.r.tetr)
@@ -128,7 +128,7 @@
 
         player.r.pentEffect = player.r.pent.add(1).pow(3)
         player.r.pentEffect = player.r.pentEffect.pow(player.p.crystalEffect)
-        player.r.pentEffect = player.r.pentEffect.pow(buyableEffect("rm", 21))
+        if (hasUpgrade("hpw", 1012)) player.r.pentEffect = player.r.pentEffect.pow(1.18)
         if (player.r.pent.lt(5)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28)
         if (player.r.pent.gte(5)) player.r.pentReq = player.r.pent.add(1).pow(75).mul(1e32).pow(1.1)
         if (player.r.pent.gte(30)) player.r.pentReq = Decimal.pow(1e10, player.r.pent)

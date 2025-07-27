@@ -70,13 +70,19 @@ addLayer("cap", {
 
         player.cap.quizNumber = player.cap.quizInput
 
-        player.cap.quizQuestions = ["log10(infinity points) + check back level", "log10(celestial points)/pet points", "(cante energy/cante energy req) * cante cores",
-             "log10(negative infinity points) + cante cores^4",
-             "pet points - (check back level * log10(infinities))",
-             "log10(broken infinities) + infinities on reset + (evolution shards * paragon shards)",
-             "log1000(celestial points) + log100(celestial points) + log10(steel)", ""]
+        player.cap.quizQuestions = [
+            "What numbered Tree Factor does Prestige Upgrade XII unlock?",
+            "What is the buy cap of grass buyable 'Grass Grow Rate'?",
+            "What is the XPBoost cost of an antimatter crate?",
+            "How many booster dice effects are initially unlocked?",
+            "How many infinities were required to unlock the halter?",
+            "What value does Tav's Domain's debuff raise celestial points by?",
+            "What is hex of blessings refinement requirement?",
+            "What numbered BI IP upgrade unlocks galaxy dust?",
+            ""
+        ]
 
-        if (player.cap.quizIndex.eq(7))
+        if (player.cap.quizIndex.eq(8))
         {
             player.cap.passingReqs[3] = true
             player.subtabs["cap"]['stuff'] = 'Main'
@@ -92,18 +98,19 @@ addLayer("cap", {
 
         player.cap.quizAnswers =
         [
-            player.in.infinityPoints.plus(1).log10().add(player.cb.level).abs(),
-            player.points.plus(1).log10().div(player.cb.petPoints.add(0.01)).abs(),
-            player.ca.canteEnergy.div(player.ca.canteEnergyReq).mul(player.ca.canteCores).abs(),
-            player.ta.negativeInfinityPoints.plus(1).log10().add(player.ca.canteCores.pow(4)).abs(),
-            player.cb.petPoints.sub(player.cb.level.mul(player.in.infinities.plus(1).log10())).abs(),
-            player.bi.brokenInfinities.plus(1).log10().add(player.in.infinitiesToGet.add(player.cb.evolutionShards.mul(player.cb.paragonShards))).abs(),
-            player.points.plus(1).log(1000).add(player.points.plus(1).log(100).add(player.gh.steel.plus(1).log10())).abs(),
+            new Decimal(4).abs(),
+            new Decimal(200).abs(),
+            new Decimal(0.04).abs(),
+            new Decimal(11).abs(),
+            new Decimal(777).abs(),
+            new Decimal(0.45).abs(),
+            new Decimal(18).abs(),
+            new Decimal(15).abs(),
             new Decimal(0)
         ]
 
-        if (player.cap.quizIndex.lt(7)) player.cap.quizLower = player.cap.quizAnswers[player.cap.quizIndex].sub(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
-        if (player.cap.quizIndex.lt(7)) player.cap.quizHigher = player.cap.quizAnswers[player.cap.quizIndex].add(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
+        if (player.cap.quizIndex.lt(8)) player.cap.quizLower = player.cap.quizAnswers[player.cap.quizIndex].sub(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
+        if (player.cap.quizIndex.lt(8)) player.cap.quizHigher = player.cap.quizAnswers[player.cap.quizIndex].add(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
 
         if (player.cap.reqsPassed[0] && player.cap.reqsPassed[1] && player.cap.reqsPassed[2] && player.cap.reqsPassed[3])
         {
@@ -239,8 +246,6 @@ addLayer("cap", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "If the answer is close enough it can work." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "All answers are converted to positive." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Your answer: " + format(player.cap.quizNumber) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.cap.quizQuestions[player.cap.quizIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

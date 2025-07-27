@@ -404,7 +404,7 @@ addLayer("i", {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e11000"),
+            cost: new Decimal("1e9000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -414,7 +414,7 @@ addLayer("i", {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e10500"),
+            cost: new Decimal("1e12000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -424,7 +424,7 @@ addLayer("i", {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e2750"),
+            cost: new Decimal("1e2400"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -508,7 +508,10 @@ addLayer("i", {
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge }
+    layerShown() {
+        if (player.startedGame == false) return true
+        return !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge
+    }
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {

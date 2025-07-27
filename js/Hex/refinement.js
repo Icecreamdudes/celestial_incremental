@@ -25,7 +25,7 @@ addLayer("hre", {
         if (player.h.hexPoint.lt(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).div(1e8).mul(player.hre.refinementDiv).ln().div(new Decimal(6).ln()).add(1).sub(player.hre.refinement).floor()
         if (player.h.hexPoint.gte(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).mul(1e82).mul(player.hre.refinementDiv).ln().div(new Decimal(60).ln()).add(1).sub(player.hre.refinement).floor()
         
-        if (player.hre.refinementGain.lt(0)) player.hre.refinementGain = new Decimal(0)
+        if (player.hre.refinementGain.lt(1)) player.hre.refinementGain = new Decimal(0)
 
         if (hasMilestone("hre", 5)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
 
@@ -50,7 +50,7 @@ addLayer("hre", {
         if (player.hre.refinement.gte(54)) player.hre.refinementEffect[4][0] = Decimal.pow(1.3, player.hre.refinement.sub(53).pow(0.6))
         if (player.hre.refinement.gte(54)) player.hre.refinementEffect[4][1] = Decimal.pow(1.6, player.hre.refinement.sub(27))
 
-        if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][0] = Decimal.pow(1.1, player.hre.refinement.sub(89).pow(0.6))
+        if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][0] = player.hre.refinement.sub(89).mul(0.1).add(1)
         if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][1] = Decimal.pow(1.1, player.hre.refinement.sub(45).pow(0.8))
     },
     clickables: {
@@ -143,14 +143,14 @@ addLayer("hre", {
         },
         10: {
             requirementDescription: "<h3>72 Refinements",
-            effectDescription: "Automate δ-Provenance gain.",
+            effectDescription: "Unlock purifier level amount controls.",
             done() { return player.hre.refinement.gte(72)},
             unlocked() { return hasMilestone("hre", 9) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         11: {
             requirementDescription: "<h3>78 Refinements",
-            effectDescription: "Unlock buy max purity.",
+            effectDescription: "Automate δ-Provenance gain.",
             done() { return player.hre.refinement.gte(78)},
             unlocked() { return hasMilestone("hre", 10) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -164,21 +164,21 @@ addLayer("hre", {
         },
         13: {
             requirementDescription: "<h3>90 Refinements",
-            effectDescription: "Automate ε-Provenance gain.",
+            effectDescription: "Unlock buy max purity.",
             done() { return player.hre.refinement.gte(90)},
             unlocked() { return hasMilestone("hre", 12) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         14: {
             requirementDescription: "<h3>96 Refinements",
-            effectDescription: "Automate purity gain.",
+            effectDescription: "Automate ε-Provenance gain.",
             done() { return player.hre.refinement.gte(96)},
             unlocked() { return hasMilestone("hre", 13) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         15: {
             requirementDescription: "<h3>102 Refinements",
-            effectDescription: "Unlock purifier level amount controls.",
+            effectDescription: "Automate purity gain.",
             done() { return player.hre.refinement.gte(102)},
             unlocked() { return hasMilestone("hre", 14) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -192,14 +192,14 @@ addLayer("hre", {
         },
         17: {
             requirementDescription: "<h3>114 Refinements",
-            effectDescription: "Automate ζ-Provenance gain.",
+            effectDescription: "TEMP.",
             done() { return player.hre.refinement.gte(114)},
             unlocked() { return hasMilestone("hre", 16) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         18: {
             requirementDescription: "<h3>120 Refinements",
-            effectDescription: "TEMP.",
+            effectDescription: "Automate ζ-Provenance gain.",
             done() { return player.hre.refinement.gte(120)},
             unlocked() { return hasMilestone("hre", 17) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -320,7 +320,10 @@ addLayer("hre", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Refinement", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

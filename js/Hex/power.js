@@ -9,7 +9,7 @@ addLayer("hpw", {
         power: new Decimal(0),
         totalPower: new Decimal(0),
         powerGain: new Decimal(0),
-        upgScale: [1, 1, 1, 1, 1, 1, 1],
+        upgScale: [1, 1, 1, 1, 1, 1, 1, 1],
         vigor: 0,
     }},
     update(delta) {
@@ -17,10 +17,11 @@ addLayer("hpw", {
         if (hasUpgrade("hpw", 11)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hre.refinementEffect[5][0])
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hrm.realmEffect)
+        if (hasUpgrade("hpw", 72)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
     },
-    powerReset(vigor) {
+    powerReset(type) {
         // TEMP REALM
         player.hrm.blessLimit = new Decimal(0)
 
@@ -29,10 +30,13 @@ addLayer("hpw", {
         player.hpu.totalPurity = player.hpu.keptPurity
         player.hpu.purityGain = new Decimal(0)
         player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        if (hasUpgrade("hpw", 41)) {
-            player.hpu.purifier[1] = new Decimal(1)
-            player.hpu.purifier[4] = new Decimal(1)
-        }
+        
+        let extra = new Decimal(0)
+        if (hasUpgrade("hpw", 41)) extra = extra.add(1)
+        if (type == 2 && hasUpgrade("hve", 33)) extra = extra.add(1)
+        player.hpu.purifier[1] = extra
+        player.hpu.purifier[4] = extra
+
         player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
 
         // CURSES
@@ -46,12 +50,22 @@ addLayer("hpw", {
         player.hcu.buyables[111] = new Decimal(0)
         if (!hasMilestone("hpw", 4)) player.hcu.buyables[112] = new Decimal(0)
 
-        player.hcu.vex = new Decimal(0)
-        player.hcu.vexGain = new Decimal(0)
+        if (type != 2) {
+            player.hve.vex = new Decimal(0)
+            player.hve.vexTotal = new Decimal(0)
+            player.hve.vexGain = new Decimal(0)
+            player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
+            player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+            for (let i = 0; i < player.hve.upgrades.length; i++) {
+                player.hve.upgrades.splice(i, 1);
+                i--;
+            }
+        }
 
         // BLESSINGS
         player.hbl.blessings = new Decimal(0)
         player.hbl.blessingsGain = new Decimal(0)
+        player.hbl.blessingPerSec = new Decimal(0)
         player.hbl.boons = new Decimal(0)
         player.hbl.boonsGain = new Decimal(0)
         player.hbl.blessAutomation = false
@@ -64,11 +78,11 @@ addLayer("hpw", {
         player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
         for (let i = 0; i < player.hbl.upgrades.length; i++) {
-            if (vigor && +player.hbl.upgrades[i] > player.hpw.vigor) {
+            if (type != 1 && +player.hbl.upgrades[i] > player.hpw.vigor) {
                 player.hbl.upgrades.splice(i, 1);
                 i--;
             }
-            if (!vigor) {
+            if (type == 1) {
                 player.hbl.upgrades.splice(i, 1);
                 i--;
             }
@@ -102,7 +116,7 @@ addLayer("hpw", {
             onClick() {
                 player.hpw.power = player.hpw.power.add(player.hpw.powerGain)
                 player.hpw.totalPower = player.hpw.totalPower.add(player.hpw.powerGain)
-                layers.hpw.powerReset(true)
+                layers.hpw.powerReset(0)
             },
             style: {width: "400px", minHeight: "100px", border: "2px solid black", borderRadius: "15px"},
         },
@@ -117,8 +131,8 @@ addLayer("hpw", {
                         player.hpw.upgrades.splice(i, 1);
                         i--;
                     }
-                    player.hpw.upgScale = [1, 1, 1, 1, 1, 1, 1]
-                    setTimeout(() => {layers.hpw.powerReset(true)}, 500)
+                    player.hpw.upgScale = [1, 1, 1, 1, 1, 1, 1, 1]
+                    setTimeout(() => {layers.hpw.powerReset(0)}, 500)
                 }
             },
             style: {width: "250px", minHeight: "40px", lineHeight: "0.9", border: "2px solid black", borderRadius: "15px"},
@@ -150,7 +164,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                if (hasUpgrade("hpw", 1031)) return player.hpw.power.add(1).pow(1.6).log(1.6).add(1).mul(6)
+                if (hasUpgrade("hpw", 1031)) return player.hpw.power.add(1).pow(3).log(1.6).add(1).mul(6)
                 return player.hpw.power.add(1).log(2).add(1).mul(3)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
@@ -232,7 +246,7 @@ addLayer("hpw", {
         32: {
             title: "Might 4:2",
             unlocked: true,
-            description: "Boost jinx cap based on total jinxes.",
+            description: "Boost jinx cap based on jinx score.",
             branches: [22],
             cost() {return new Decimal(27).pow(player.hpw.upgScale[3])},
             canAfford() { return hasUpgrade("hpw", 22)},
@@ -249,7 +263,7 @@ addLayer("hpw", {
         41: {
             title: "Might 5:1",
             unlocked: true,
-            description: "Gain a level in Multiplied Miracles and Amended Automation.",
+            description: "Multiplied Miracles and Amended Automation gain a free level.",
             branches: [31],
             cost() {return new Decimal(240).pow(player.hpw.upgScale[4])},
             canAfford() { return hasUpgrade("hpw", 31)},
@@ -266,7 +280,7 @@ addLayer("hpw", {
         42: {
             title: "Might 5:2",
             unlocked: true,
-            description: "Unlock Vex in Hex of Curses.",
+            description: "Unlock Hex of Vexes.",
             branches: [32],
             cost() {return new Decimal(240).pow(player.hpw.upgScale[4])},
             canAfford() { return hasUpgrade("hpw", 32)},
@@ -292,9 +306,9 @@ addLayer("hpw", {
         61: {
             title: "Might 7:1",
             unlocked: true,
-            description: "TEMP.",
+            description: "Reduce the softcap on Amended Automation.",
             branches: [51],
-            cost() {return new Decimal(600000).pow(player.hpw.upgScale[6])},
+            cost() {return new Decimal(12000).pow(player.hpw.upgScale[6])},
             canAfford() { return hasUpgrade("hpw", 51)},
             onPurchase() {player.hpw.upgScale[6] = player.hpw.upgScale[6] + 1},
             currencyLocation() { return player.hpw },
@@ -305,11 +319,41 @@ addLayer("hpw", {
         62: {
             title: "Might 7:2",
             unlocked: true,
-            description: "TEMP.",
-            branches: [61],
-            cost() {return new Decimal(60000).pow(player.hpw.upgScale[6])},
-            canAfford() { return hasUpgrade("hpw", 61)},
+            description: "Add a new effect to Hex of Vexes.",
+            branches: [51],
+            cost() {return new Decimal(12000).pow(player.hpw.upgScale[6])},
+            canAfford() { return hasUpgrade("hpw", 51)},
             onPurchase() {player.hpw.upgScale[6] = player.hpw.upgScale[6] + 1},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {margin: "10px", borderRadius: "15px"},
+        },
+        71: {
+            title: "Might 8:1",
+            unlocked: true,
+            description: "Boost blessings based on mights.",
+            branches: [61, 62],
+            cost() {return new Decimal(600000).pow(player.hpw.upgScale[7])},
+            canAfford() { return hasUpgrade("hpw", 61) || hasUpgrade("hpw", 62)},
+            onPurchase() {player.hpw.upgScale[7] = player.hpw.upgScale[7] + 1},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            effect() {
+                return new Decimal(0.2).mul(player.hpw.upgrades.length).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id), 1) + "x" }, // Add formatting to the effect
+            style: {margin: "10px", borderRadius: "15px"},
+        },
+        72: {
+            title: "Might 8:2",
+            unlocked: true,
+            description: "Double power gain.",
+            branches: [71],
+            cost() {return new Decimal(1200).pow(player.hpw.upgScale[7])},
+            canAfford() { return hasUpgrade("hpw", 71)},
+            onPurchase() {player.hpw.upgScale[7] = player.hpw.upgScale[7] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
@@ -356,7 +400,7 @@ addLayer("hpw", {
             title: "Might D:0",
             unlocked() { return hasUpgrade("bi", 27) },
             description: "Unlock the Dimensional Realm challenge.",
-            branches: [61],
+            branches: [71],
             cost() {return new Decimal(1679616)},
             canAfford() { return hasUpgrade("hpw", 61)},
             currencyLocation() { return player.hpw },
@@ -471,14 +515,54 @@ addLayer("hpw", {
         1033: {
             title: "Might C:3",
             unlocked() {return challengeCompletions("hrm", 13) >= 3},
-            description: "Boost golden grass gain by ^1.06.",
+            description: "Raise golden grass gain by ^1.06.",
             branches: [1003],
-            cost() {return new Decimal(1296)},
+            cost() {return new Decimal(7776)},
             canAfford() { return hasUpgrade("hpw", 1003)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             style: {margin: "10px", borderRadius: "15px", border: "2px solid #ff0"},
+        },
+        1041: {
+            title: "Might D:1",
+            unlocked() {return challengeCompletions("hrm", 13) >= 1},
+            description: "Boost infinity dimensions based on power.",
+            branches: [1004],
+            cost() {return new Decimal(1296)},
+            canAfford() { return hasUpgrade("hpw", 1004)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            effect() {
+                return player.hpw.power.add(1).pow(0.3).add(1)
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style: {margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
+        },
+        1042: {
+            title: "Might D:2",
+            unlocked() {return challengeCompletions("hrm", 13) >= 2},
+            description: "Raise grasshopper gain by ^1.1.",
+            branches: [1004],
+            cost() {return new Decimal(7776)},
+            canAfford() { return hasUpgrade("hpw", 1004)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
+        },
+        1043: {
+            title: "Might D:3",
+            unlocked() {return challengeCompletions("hrm", 13) >= 3},
+            description: "Raise mod gain by ^1.1.",
+            branches: [1004],
+            cost() {return new Decimal(46656)},
+            canAfford() { return hasUpgrade("hpw", 1004)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
         },
     },
     milestones: {
@@ -581,9 +665,13 @@ addLayer("hpw", {
                         ["style-row", [["upgrade", 1033]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
-                        ["style-row", [["upgrade", 1004]], {width: "140px", height: "140px"}],
                         ["upgrade", 61],
                         ["upgrade", 62],
+                    ]],
+                    ["row", [
+                        ["style-row", [["upgrade", 1004]], {width: "140px", height: "140px"}],
+                        ["upgrade", 71],
+                        ["upgrade", 72],
                     ]],
                 ],
             },
@@ -604,7 +692,10 @@ addLayer("hpw", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Power", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

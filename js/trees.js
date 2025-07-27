@@ -71,7 +71,7 @@
         if (player.cop.processedCoreFuel.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.cop.processedCoreInnateEffects[0])
 
         // POWER MODIFIERS
-        player.t.treesToGet = player.t.treesToGet.pow(buyableEffect("rm", 24))
+        if (hasUpgrade("hpw", 1023)) player.t.treesToGet = player.t.treesToGet.pow(1.24)
         player.t.treesToGet = player.t.treesToGet.pow(player.re.realmEssenceEffect)
         if (player.cop.processedCoreFuel.eq(3)) player.t.treesToGet = player.t.treesToGet.pow(player.cop.processedCoreInnateEffects[1])
 

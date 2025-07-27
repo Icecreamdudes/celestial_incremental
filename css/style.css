@@ -557,6 +557,14 @@ h1, h2, h3, b, input {
 	position: relative;
 }
 
+.idUpgrade {
+	position: absolute;
+	top: 4px;
+	left: calc(50%);
+	transform: translateX(-50%);
+	color: rgba(0, 0, 0, 0.5);
+}
+
 .treeThing {
 	margin: 0 5px 0 5px;
 	vertical-align: middle;

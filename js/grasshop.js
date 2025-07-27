@@ -84,7 +84,7 @@
         if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cop.processedCoreInnateEffects[0])
 
         // POWER MODIFIERS
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("rm", 27))
+        if (hasUpgrade("hpw", 1042)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(1.1)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.re.realmEssenceEffect)
         if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.cop.processedCoreInnateEffects[1])
@@ -164,7 +164,7 @@
         if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.rm.realmModsEffect[1])
+        if (hasUpgrade("hpw", 1021)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("hpw", 1021))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
         player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 1106)[0])
         player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 306)[0])

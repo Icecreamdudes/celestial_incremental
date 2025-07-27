@@ -1,7 +1,10 @@
 ﻿var treeA1 = [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["gs", "oi"], ["fu"]]
 addLayer("cp", {
     name: "Alternate Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "AO", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol() {
+        if (player.cap.cantepocalypsePrep) return "CP"
+        return "AO"
+    }, // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -34,18 +37,18 @@ addLayer("cp", {
             buyUpgrade("cp", 18)
         }
     },
-    nodeStyle: {
-        background: "linear-gradient(45deg, #146 0%, #4a9 100%)",
-        backgroundOrigin: "border-box",
-        borderColor: "#333",
+    nodeStyle: {background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)", backgroundOrigin: "border-box", borderColor: "#013851"},
+    tooltip() {
+        if (player.cap.cantepocalypsePrep) return "Cantepocalypse"
+        return "Alternate Origin"
     },
-    tooltip: "Alternate Origin",
     color: "#398",
     branches: ["ar", "pr"],
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.universe == 1.5 && player.cap.cantepocalypsePrep == true) {
+        if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
+            player.uniTab = 2
             player.cap.cantepocalypsePrep = false
             player.subtabs["cap"]['stuff'] = 'Main'
             player.cp.cantepocalypseActive = true

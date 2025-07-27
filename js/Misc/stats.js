@@ -950,11 +950,6 @@ addLayer("stats", {
                         ], () => { return !(player.in.unlockedInfinity && hasUpgrade("bi", 18)) ? {display: "none !important"} : player.id.infinityPowerEffect.eq(1) ? { color: "grey" } : { color: "white" }}],
 
                         ["stat-row", [
-                            "Rage Power Effect",
-                            () => { return "x" + format(player.h.ragePowerEffect)}
-                        ], () => { return !(hasUpgrade("i", 29)) ? {display: "none !important"} : player.h.ragePowerEffect.eq(1) ? { color: "grey" } : { color: "white" }}],
-
-                        ["stat-row", [
                             "[1e300] Antimatter Softcap",
                             () => { return !hasChallenge("ip", 18) ? "^0.1" : !hasUpgrade("bi", 21) ? "^" + format(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 310))) : "^" + format(Decimal.div(1, Decimal.div(player.ad.antimatter.plus(1).log10(), 355)))}
                         ], () => { return player.ad.antimatter.lte(1e300) ? { color: "maroon" } : { color: "red" }}],
@@ -1101,11 +1096,6 @@ addLayer("stats", {
                             "Infinity Power Effect",
                             () => { return "x" + format(player.id.infinityPowerEffect)}
                         ], () => { return !(player.in.unlockedInfinity && hasUpgrade("bi", 18)) ? {display: "none !important"} : player.id.infinityPowerEffect.eq(1) ? { color: "grey" } : { color: "white" }}],
-
-                        ["stat-row", [
-                            "Rage Power Effect",
-                            () => { return "x" + format(player.h.ragePowerEffect)}
-                        ], () => { return !(hasUpgrade("i", 29)) ? {display: "none !important"} : player.h.ragePowerEffect.eq(1) ? { color: "grey" } : { color: "white" }}],
 
                         ["stat-row", [
                             "[1e300] Antimatter Softcap",
@@ -1826,8 +1816,8 @@ addLayer("stats", {
                     ["always-scroll-column", [
                         ["stat-row", [
                             "[Hex] Base Value<br><h6>(log10(Hex 1 Points+1)^1.65)",
-                            () => { return (player.po.hex && player.h.hexPoints[0].gte(1)) ? format(player.h.hexPoints[0].plus(1).log10().pow(1.65)) : "0"}
-                        ], () => { return (player.h.hexPoints[0].gt(1) && player.po.hex) ? {color: "white", height: "40px"} : {color: "grey", height: "40px"}}],
+                            () => { return (player.po.hex && player.h.hexPoint.gte(1)) ? format(player.h.hexPoint.plus(1).log10().pow(1.65)) : "0"}
+                        ], () => { return (player.h.hexPoint.gt(1) && player.po.hex) ? {color: "white", height: "40px"} : {color: "grey", height: "40px"}}],
 
                         ["stat-row", [
                             "OTF Mastery Buyable 6",
@@ -1870,10 +1860,10 @@ addLayer("stats", {
                     ["style-row", [
                         ["style-row", [
                             ["raw-html", "Hex Mastery Point Gain: ", { "font-size": "16px", "font-family": "monospace" }],
-                        ], () => { return (player.h.hexPoints[0].gt(1) && player.po.hex) ? {color: "white", width: "298px", height: "25px", borderRight: "2px solid white"} : {color: "grey", width: "298px", height: "25px", borderRight: "2px solid white"}}],
+                        ], () => { return (player.h.hexPoint.gt(1) && player.po.hex) ? {color: "white", width: "298px", height: "25px", borderRight: "2px solid white"} : {color: "grey", width: "298px", height: "25px", borderRight: "2px solid white"}}],
                         ["style-column", [
                             ["raw-html", function () { return format(player.om.hexMasteryPointsToGet)}, { "font-size": "16px", "font-family": "monospace" }],
-                        ], () => { return (player.h.hexPoints[0].gt(1) && player.po.hex) ? {color: "white", width: "382px", height: "25px"} : {color: "grey", width: "382px", height: "25px"}}],
+                        ], () => { return (player.h.hexPoint.gt(1) && player.po.hex) ? {color: "white", width: "382px", height: "25px"} : {color: "grey", width: "382px", height: "25px"}}],
                     ], {background: "#333333", width: "682px", height: "25px", borderTop: "2px solid white"}],
 
                 ]

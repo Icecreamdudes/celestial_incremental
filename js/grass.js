@@ -429,9 +429,9 @@
         },
         22: {
             title: "Grass Upgrade XII",
-            unlocked() { return hasMilestone('r', 11) && (player.po.realmMods || hasUpgrade("g", 22)) },
+            unlocked() { return hasMilestone('r', 11) && player.hrm.realmCompletions.gt(0) },
             description() { return "Raise golden grass effect by ^6." },
-            cost: new Decimal("1e550"),
+            cost: new Decimal("1e1200"),
             currencyLocation() { return player.g },
             currencyDisplayName: "Grass",
             currencyInternalName: "grass",
@@ -1268,7 +1268,7 @@ const updateGrass = (delta) => {
     if (player.cop.processedCoreFuel.eq(4)) player.g.grassVal = player.g.grassVal.mul(player.cop.processedCoreInnateEffects[0])
 
     // POWER MODIFIERS
-    player.g.grassVal = player.g.grassVal.pow(buyableEffect('rm', 25))
+    if (hasUpgrade("hpw", 1032)) player.g.grassVal = player.g.grassVal.pow(1.18)
     player.g.grassVal = player.g.grassVal.pow(player.re.realmEssenceEffect)
 
     // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
@@ -1362,9 +1362,11 @@ const updateGoldGrass = (delta) => {
     if (player.pol.pollinatorsIndex == 4) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.pol.pollinatorsEffect[7])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 305)[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
-    player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('rm', 26))
     if (player.cop.processedCoreFuel.eq(4)) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.le.punchcardsPassiveEffect[11])
+
+    // POWER MODIFIERS
+    if (hasUpgrade("hpw", 1033)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
 
     // GOLDEN GRASS PER SECOND
     player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))

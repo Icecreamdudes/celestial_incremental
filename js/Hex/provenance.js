@@ -45,9 +45,9 @@ addLayer("hpr", {
         if (hasMilestone("hre", 3)) player.hpr.rank[0] = player.hpr.rank[0].add(player.hpr.rankGain[0])
         if (hasMilestone("hre", 6)) player.hpr.rank[1] = player.hpr.rank[1].add(player.hpr.rankGain[1])
         if (hasMilestone("hre", 8)) player.hpr.rank[2] = player.hpr.rank[2].add(player.hpr.rankGain[2])
-        if (hasMilestone("hre", 10)) player.hpr.rank[3] = player.hpr.rank[3].add(player.hpr.rankGain[3])
-        if (hasMilestone("hre", 13)) player.hpr.rank[4] = player.hpr.rank[4].add(player.hpr.rankGain[4])
-        if (hasMilestone("hre", 17)) player.hpr.rank[5] = player.hpr.rank[5].add(player.hpr.rankGain[5])
+        if (hasMilestone("hre", 11)) player.hpr.rank[3] = player.hpr.rank[3].add(player.hpr.rankGain[3])
+        if (hasMilestone("hre", 14)) player.hpr.rank[4] = player.hpr.rank[4].add(player.hpr.rankGain[4])
+        if (hasMilestone("hre", 18)) player.hpr.rank[5] = player.hpr.rank[5].add(player.hpr.rankGain[5])
 
         player.hpr.effectMult = player.hre.refinementEffect[2][0]
         if (hasUpgrade("hbl", 6)) player.hpr.effectMult = player.hpr.effectMult.mul(upgradeEffect("hbl", 6))
@@ -141,7 +141,7 @@ addLayer("hpr", {
         },
         4: {
             title() { return "<h2>Reset prior provenances,<br>but gain δ-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[3]) + " γ-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[3].gt(0) && !hasMilestone("hre", 10)},
+            canClick() { return player.hpr.rankGain[3].gt(0) && !hasMilestone("hre", 11)},
             unlocked: true,
             onClick() {
                 player.hpr.rank[3] = player.hpr.rank[3].add(player.hpr.rankGain[3])
@@ -157,13 +157,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 10)) look.cursor = "default !important"
+                if (hasMilestone("hre", 11)) look.cursor = "default !important"
                 return look
             },
         },
         5: {
             title() { return "<h2>Reset prior provenances,<br>but gain ε-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[4]) + " δ-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[4].gt(0) && !hasMilestone("hre", 13)},
+            canClick() { return player.hpr.rankGain[4].gt(0) && !hasMilestone("hre", 14)},
             unlocked: true,
             onClick() {
                 player.hpr.rank[4] = player.hpr.rank[4].add(player.hpr.rankGain[4])
@@ -179,13 +179,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 13)) look.cursor = "default !important"
+                if (hasMilestone("hre", 14)) look.cursor = "default !important"
                 return look
             },
         },
         6: {
             title() { return "<h2>Reset prior provenances,<br>but gain ζ-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[5]) + " ε-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[5].gt(0) && !hasMilestone("hre", 17)},
+            canClick() { return player.hpr.rankGain[5].gt(0) && !hasMilestone("hre", 18)},
             unlocked: true,
             onClick() {
                 player.hpr.rank[5] = player.hpr.rank[5].add(player.hpr.rankGain[5])
@@ -201,13 +201,16 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 17)) look.cursor = "default !important"
+                if (hasMilestone("hre", 18)) look.cursor = "default !important"
                 return look
             },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Provenance", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

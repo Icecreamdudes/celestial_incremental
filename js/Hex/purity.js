@@ -19,13 +19,13 @@ addLayer("hpu", {
         player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(6)).sub(42).div(6).add(1).sub(player.hpu.totalPurity).floor()
 
         if (inChallenge("hrm", 12)) {
-            player.hpu.purityReq = player.hpu.totalPurity.mul(3).add(27).sub(player.hpu.keptPurity.mul(3)).ceil()
-            player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(3)).sub(27).div(3).add(1).sub(player.hpu.totalPurity).floor()
+            player.hpu.purityReq = player.hpu.totalPurity.mul(4).add(28).sub(player.hpu.keptPurity.mul(4)).ceil()
+            player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(4)).sub(28).div(4).add(1).sub(player.hpu.totalPurity).floor()
         }
 
-        if (player.hpu.purityGain.lt(0)) player.hpu.purityGain = new Decimal(0)
+        if (player.hpu.purityGain.lt(1)) player.hpu.purityGain = new Decimal(0)
 
-        if (hasMilestone("hre", 14)) {
+        if (hasMilestone("hre", 15)) {
             player.hpu.purity = player.hpu.purity.add(player.hpu.purityGain)
             player.hpu.totalPurity = player.hpu.totalPurity.add(player.hpu.purityGain)
         }
@@ -43,12 +43,13 @@ addLayer("hpu", {
         if (player.hpu.purifierEffects[3].gt(1.5)) player.hpu.purifierEffects[3] = player.hpu.purifierEffects[3].div(1.5).pow(0.6).mul(1.5)
 
         player.hpu.purifierEffects[4] = new Decimal(0)
-        if (player.hpu.purifier[4].gt(0) && !inChallenge("hrm", 11)) player.hpu.purifierEffects[4] = Decimal.pow(2, player.hpu.purifier[4].sub(1)).mul(0.1)
-        if (player.hpu.purifierEffects[4].gt(1.6)) player.hpu.purifierEffects[4] = player.hpu.purifierEffects[4].div(1.6).pow(0.6).mul(1.6)
+        if (player.hpu.purifier[4].gt(0) && !inChallenge("hrm", 11)) player.hpu.purifierEffects[4] = Decimal.pow(2, player.hpu.purifier[4].sub(1)).mul(0.2)
+        if (player.hpu.purifierEffects[4].gt(3.2) && !hasUpgrade("hpw", 61)) player.hpu.purifierEffects[4] = player.hpu.purifierEffects[4].div(3.2).pow(0.6).mul(3.2)
+        if (player.hpu.purifierEffects[4].gt(3.2) && hasUpgrade("hpw", 61)) player.hpu.purifierEffects[4] = player.hpu.purifierEffects[4].div(3.2).pow(0.7).mul(3.2)
 
         if (!inChallenge("hrm", 12)) {
-            player.hpu.purifierEffects[5] = player.hpu.purifier[5].mul(0.2).add(1)
-            if (player.hpu.purifierEffects[5].gt(2)) player.hpu.purifierEffects[5] = player.hpu.purifierEffects[5].div(2).pow(0.6).mul(2)
+            player.hpu.purifierEffects[5] = player.hpu.purifier[5].mul(0.15).add(1)
+            if (player.hpu.purifierEffects[5].gt(1.75)) player.hpu.purifierEffects[5] = player.hpu.purifierEffects[5].div(1.75).pow(0.6).mul(1.75)
         }
         if (inChallenge("hrm", 12)) {
             player.hpu.purifierEffects[5] = player.hpu.purifier[5].mul(0.1).add(1)
@@ -61,11 +62,11 @@ addLayer("hpu", {
     clickables: {
         1: {
             title() { return "<h2>Purify, but reset hex points, provenance, and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"},
-            canClick() { return player.hpu.purityGain.gte(1) && !hasMilestone("hre", 14)},
+            canClick() { return player.hpu.purityGain.gte(1) && !hasMilestone("hre", 15)},
             unlocked: true,
             onClick() {
                 let amt = new Decimal(1)
-                if (hasMilestone("hre", 11)) amt = player.hpu.purityGain
+                if (hasMilestone("hre", 13)) amt = player.hpu.purityGain
                 player.hpu.purity = player.hpu.purity.add(amt)
                 player.hpu.totalPurity = player.hpu.totalPurity.add(amt)
 
@@ -90,8 +91,12 @@ addLayer("hpu", {
             onClick() {
                 player.hpu.purity = player.hpu.totalPurity
                 player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-                if (hasUpgrade("hpw", 41)) player.hpu.purifier[1] = new Decimal(1)
-                if (hasUpgrade("hpw", 41)) player.hpu.purifier[4] = new Decimal(1)
+
+                let extra = new Decimal(0)
+                if (hasUpgrade("hpw", 41)) extra = extra.add(1)
+                if (hasUpgrade("hve", 33)) extra = extra.add(1)
+                player.hpu.purifier[1] = extra
+                player.hpu.purifier[4] = extra
             },
             style: {width: "250px", minHeight: "40px", border: "2px solid black", borderRadius: "15px"},
         },
@@ -161,7 +166,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Amended Automation</h3><br>Lv." + formatWhole(player.hpu.purifier[4]) + "<br>+" + formatWhole(player.hpu.purifierEffects[4].mul(100)) + "% blessings/s"
                 str = str.concat("<br><small>(" + format(player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4])) + "/s)</small>")
-                if (player.hpu.purifierEffects[4].gt(1.6)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[4].gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
                 if (inChallenge("hrm", 11)) str = str.concat("<br><small style='color:red'>[DISABLED BY CREATOR REALM]</small>")
                 return str
             },
@@ -182,7 +187,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " 4th Grace Effect"
                 if (inChallenge("hrm", 12)) str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " Base Α-Jinx Effect"
-                if (player.hpu.purifierEffects[5].gt(2) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -197,7 +202,7 @@ addLayer("hpu", {
         101: {
             title: "1",
             canClick() { return player.hpu.purifierAssign != 1},
-            unlocked() { return hasMilestone("hre", 15)},
+            unlocked() { return hasMilestone("hre", 10)},
             onClick() {
                 player.hpu.purifierAssign = 1
             },
@@ -206,7 +211,7 @@ addLayer("hpu", {
         102: {
             title: "5",
             canClick() { return player.hpu.purifierAssign != 5},
-            unlocked() { return hasMilestone("hre", 15)},
+            unlocked() { return hasMilestone("hre", 10)},
             onClick() {
                 player.hpu.purifierAssign = 5
             },
@@ -215,7 +220,7 @@ addLayer("hpu", {
         103: {
             title: "25",
             canClick() { return player.hpu.purifierAssign != 25},
-            unlocked() { return hasMilestone("hre", 15)},
+            unlocked() { return hasMilestone("hre", 10)},
             onClick() {
                 player.hpu.purifierAssign = 25
             },
@@ -223,7 +228,10 @@ addLayer("hpu", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Purity", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
@@ -231,7 +239,7 @@ addLayer("hpu", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpu.purity) + "</h3> purity." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasMilestone("hre", 11) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return hasMilestone("hre", 13) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return "(You have <h3>" + formatWhole(player.hpu.totalPurity) + "</h3> total purity)" }, {color: "#ddd", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "10px"],
@@ -248,7 +256,7 @@ addLayer("hpu", {
             ], {width: "98px", height: "40px", borderRight: "2px solid black"}],
             ["clickable", 101], ["clickable", 102], ["clickable", 103]
         ], () => {
-            if (hasMilestone("hre", 15)) return {width: "250px", height: "40px", backgroundColor: "#2c2a22", border: "2px solid black", borderRadius: "15px"}
+            if (hasMilestone("hre", 10)) return {width: "250px", height: "40px", backgroundColor: "#2c2a22", border: "2px solid black", borderRadius: "15px"}
             return {display: "none !important"}
         }],
         ["blank", "25px"],

@@ -135,7 +135,7 @@
         if (player.cop.processedCoreFuel.eq(6)) player.m.modsToGet = player.m.modsToGet.mul(player.cop.processedCoreInnateEffects[2])
 
         // POWER MODIFIERS
-        player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("rm", 28))
+        if (hasUpgrade("hpw", 1043)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
         player.m.modsToGet = player.m.modsToGet.pow(player.re.realmEssenceEffect)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS

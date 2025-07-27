@@ -7,6 +7,7 @@ addLayer("hbl", {
     startData() { return {
         blessings: new Decimal(0),
         blessingsGain: new Decimal(0),
+        blessingPerSec: new Decimal(0),
         boons: new Decimal(0),
         boonsGain: new Decimal(0),
         blessAutomation: false,
@@ -32,11 +33,19 @@ addLayer("hbl", {
         if (hasMilestone("hbl", 1) || inChallenge("hrm", 12)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[1])
         if (hasUpgrade("hpw", 1)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 1))
         player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hre.refinementEffect[4][0])
-        if (hasMilestone("hpw", 3) && player.hbl.blessings.lt(1e6)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
-        if (hasMilestone("hpw", 6) && player.hbl.blessings.lt(1e6)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
+        if (hasMilestone("hpw", 3) && player.hbl.blessings.lt(1e6) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
+        if (hasMilestone("hpw", 6) && player.hbl.blessings.lt(1e6) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
+        if (hasUpgrade("hpw", 71)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 71))
+        if (hasUpgrade("hve", 31)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(3)
 
-        player.hbl.blessings = player.hbl.blessings.add(player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4]).mul(delta))
+        // POWER AND AUTOMATION
+        if (hasUpgrade("hve", 62)) player.hbl.blessingsGain = player.hbl.blessingsGain.pow(1.03)
+
+        player.hbl.blessingPerSec = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4])
+        if (inChallenge("hrm", 13)) player.hbl.blessingPerSec = player.hbl.blessingPerSec.sub(player.hbl.blessings.mul(0.06))
+        if (player.hbl.blessings.add(player.hbl.blessingPerSec.mul(delta)).gt(0)) player.hbl.blessings = player.hbl.blessings.add(player.hbl.blessingPerSec.mul(delta))
         
+        // BOON START
         player.hbl.boonsGain = player.hbl.blessings.pow(1.6).div(6)
         player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hbl.boosterEffects[1])
         player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hre.refinementEffect[3][0])
@@ -44,9 +53,11 @@ addLayer("hbl", {
         if (hasMilestone("hbl", 4)) player.hbl.boonsGain = player.hbl.boonsGain.mul(2)
         if (hasMilestone("hbl", 4) || inChallenge("hrm", 12)) player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hpu.purifierEffects[1])
 
+        // POWER AND AUTOMATION
         if (inChallenge("hrm", 12)) player.hbl.boonsGain = player.hbl.boonsGain.pow(0.6)
 
-        player.hbl.boons = player.hbl.boons.add(player.hbl.boonsGain.mul(delta))
+        if (inChallenge("hrm", 13)) player.hbl.boonsGain = player.hbl.boonsGain.sub(player.hbl.boons.mul(0.06))
+        if (player.hbl.boons.add(player.hbl.boonsGain.mul(delta)).gt(0)) player.hbl.boons = player.hbl.boons.add(player.hbl.boonsGain.mul(delta))
         if (hasUpgrade("hpw", 51)) {
             for (let i = 0; i < 6; i++) {
                 player.hbl.boosterXP[i] = player.hbl.boosterXP[i].add(player.hbl.boons.mul(0.1).mul(delta))
@@ -82,11 +93,15 @@ addLayer("hbl", {
         if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = Decimal.pow(3, player.hbl.boosterLevels[3])
         if (hasMilestone("hre", 2)) {
             if (!hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).mul(0.5).add(1))
-            if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).mul(0.75).add(1))
+            if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).add(1))
         }
 
-        player.hbl.boosterEffects[4] = Decimal.pow(1.5, player.hbl.boosterLevels[4])
-        if (hasMilestone("hre", 2)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.25).add(1))
+        if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.5, player.hbl.boosterLevels[4])
+        if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.66, player.hbl.boosterLevels[4])
+        if (hasMilestone("hre", 2)) {
+            if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.25).add(1))
+            if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.33).add(1))
+        }
 
         if (!hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = Decimal.pow(2, player.hbl.boosterLevels[5])
         if (hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = Decimal.pow(2.3, player.hbl.boosterLevels[5])
@@ -449,7 +464,8 @@ addLayer("hbl", {
                     ["blank", "5px"],
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + format(player.hbl.boons) + "</h3> boons." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.hbl.boonsGain) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return player.hbl.boonsGain.eq(0) ? "" : player.hbl.boonsGain.gt(0) ? "(+" + format(player.hbl.boonsGain) + "/s)" : "<span style='color:red'>(" + format(player.hbl.boonsGain) + "/s)</span>" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return inChallenge("hrm", 12) && player.hbl.boonsGain.gt(0) ? "<small>[SOFTCAPPED]</small>" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["blank", "10px"],
                     ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4]]],
@@ -493,33 +509,39 @@ addLayer("hbl", {
                 unlocked() {return hasMilestone("hre", 4)},
                 content: [
                     ["blank", "10px"],
-                    ["style-column", [
-                        ["style-row", [
-                            ["raw-html", "Autoclicker", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ], {width: "300px", height: "48px", borderBottom: "2px solid white"}],
-                        ["clickable", 101],
-                    ], () => {
-                        if (hasMilestone("hre", 12)) return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px 0 0 15px"}
-                        return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px"}
-                    }],
-                    ["style-column", [
-                        ["style-row", [
-                            ["raw-html", "Min. Refinement", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ], {width: "300px", height: "48px", borderBottom: "2px solid white"}],
+                    ["row", [
                         ["style-column", [
-                            ["raw-html", () => { return "Current minimum: " + formatWhole(player.hbl.minRefine) + "."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["text-input", "minRefineInput", {color: "var(--color)", width: "200px", textAlign: "left", fontSize: "32px", border: "2px solid #ffffff17"}],
-                        ], {width: "300px", height: "100px"}],
-                    ], () => {
-                        if (hasMilestone("hre", 12)) return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px"}
-                        return {display: "none !important"}
-                    }],
+                            ["style-row", [
+                                ["raw-html", "Autoclicker", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {width: "300px", height: "48px", borderBottom: "2px solid white"}],
+                            ["clickable", 101],
+                        ], () => {
+                            if (hasMilestone("hre", 12)) return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px 0 0 15px"}
+                            return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderRadius: "15px"}
+                        }],
+                        ["style-column", [
+                            ["style-row", [
+                                ["raw-html", "Min. Refinement", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ], {width: "300px", height: "48px", borderBottom: "2px solid white"}],
+                            ["style-column", [
+                                ["raw-html", () => { return "Current minimum: " + formatWhole(player.hbl.minRefine)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["blank", "10px"],
+                                ["text-input", "minRefineInput", {backgroundColor: "#191300", color: "white", width: "180px", padding: "0 10px", textAlign: "left", fontSize: "28px", border: "2px solid black"}],
+                            ], {width: "300px", height: "100px"}],
+                        ], () => {
+                            if (hasMilestone("hre", 12)) return {width: "300px", height: "150px", backgroundColor: "#332600", border: "2px solid white", borderLeft: "0px", borderRadius: "0 15px 15px 0"}
+                            return {display: "none !important"}
+                        }],
+                    ]],
                 ]
             },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Blessings", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
@@ -528,6 +550,7 @@ addLayer("hbl", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.hbl.blessings) + "</h3> blessings." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.hbl.blessingsGain) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.hbl.blessingPerSec.eq(0) ? "" : player.hbl.blessingPerSec.gt(0) ? "(+" + format(player.hbl.blessingPerSec) + "/s)" : "<span style='color:red'>(" + format(player.hbl.blessingPerSec) + "/s)</span>" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return inChallenge("hrm", 11) ? "Bless resets left: " + formatWhole(player.hrm.blessLimit) + "/6" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],

@@ -2,7 +2,7 @@ addLayer("hrm", {
     name: "Hex of Realms",
     symbol: "Re", // Decides what text appears on the node.
     tooltip: "Realms", // Decides the nodes tooltip
-    color: "#ff5555", // Decides the nodes color.
+    color: "white", // Decides the nodes color.
     nodeStyle: {color: "#ccc", background: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", borderColor: "#0061ff"}, // Decides the nodes style, in CSS format.
     branches: ["hpw"], // Decides the nodes branches.
     startData() { return {
@@ -28,7 +28,7 @@ addLayer("hrm", {
                 if (challengeCompletions(this.layer, this.id) == 0) str = str.concat("<br>Goal: 6,000 Blessings")
                 if (challengeCompletions(this.layer, this.id) == 1) str = str.concat("<br>Goal: 60,000 Blessings")
                 if (challengeCompletions(this.layer, this.id) == 2) str = str.concat("<br>Goal: 600,000 Blessings")
-                if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:green'>COMPLETED</p>")
+                if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:#4c4'>COMPLETED</p>")
                 return str
             },
             canComplete() {
@@ -40,10 +40,10 @@ addLayer("hrm", {
             unlocked() { return hasUpgrade("hpw", 1001) || challengeCompletions(this.layer, this.id) > 0 },
             canClick() { return hasUpgrade("hpw", 1001) },
             onEnter() {
-                layers.hpw.powerReset()
+                layers.hpw.powerReset(1)
             },
             onExit() {
-                layers.hpw.powerReset()
+                layers.hpw.powerReset(1)
             },
             style: {width: '250px', height: '184px', backgroundColor: "#c44", border: "6px solid #800", borderRadius: "13px"},
             buttonStyle() {
@@ -62,7 +62,7 @@ addLayer("hrm", {
                 if (challengeCompletions(this.layer, this.id) == 0) str = str.concat("<br>Goal: 1e6 Blessings")
                 if (challengeCompletions(this.layer, this.id) == 1) str = str.concat("<br>Goal: 1e8 Blessings")
                 if (challengeCompletions(this.layer, this.id) == 2) str = str.concat("<br>Goal: 1e10 Blessings")
-                if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:green'>COMPLETED</p>")
+                if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:#4c4'>COMPLETED</p>")
                 return str
             },
             canComplete() {
@@ -74,10 +74,10 @@ addLayer("hrm", {
             unlocked() { return hasUpgrade("hpw", 1002) || challengeCompletions(this.layer, this.id) > 0 },
             canClick() { return hasUpgrade("hpw", 1002) },
             onEnter() {
-                layers.hpw.powerReset()
+                layers.hpw.powerReset(1)
             },
             onExit() {
-                layers.hpw.powerReset()
+                layers.hpw.powerReset(1)
             },
             style: {width: '250px', height: '184px', backgroundColor: "#c84", border: "6px solid #840", borderRadius: "13px"},
             buttonStyle() {
@@ -92,26 +92,26 @@ addLayer("hrm", {
             completionLimit: 3,
             marked: false,
             fullDisplay() {
-                let str = "<h4>Blessing and Purity are disabled. Bane is heavily buffed.</h4>"
-                if (challengeCompletions(this.layer, this.id) == 0) str = str.concat("<br>Goal: 1e60 Curses")
-                if (challengeCompletions(this.layer, this.id) == 1) str = str.concat("<br>Goal: 1e80 Curses")
-                if (challengeCompletions(this.layer, this.id) == 2) str = str.concat("<br>Goal: 1e100 Curses")
-                if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:green'>COMPLETED</p>")
+                let str = "<h4>Hex points, blessings, and boons now decay. Base curse formula is buffed.</h4>"
+                if (challengeCompletions(this.layer, this.id) == 0) str = str.concat("<br>Goal: 3 Vexes")
+                if (challengeCompletions(this.layer, this.id) == 1) str = str.concat("<br>Goal: 6 Vexes")
+                if (challengeCompletions(this.layer, this.id) == 2) str = str.concat("<br>Goal: 9 Vexes")
+                if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:#4c4'>COMPLETED</p>")
                 return str
             },
             canComplete() {
-                if (challengeCompletions(this.layer, this.id) == 0) return player.hcu.curses.gte(1e60)
-                if (challengeCompletions(this.layer, this.id) == 1) return player.hcu.curses.gte(1e80)
-                if (challengeCompletions(this.layer, this.id) == 2) return player.hcu.curses.gte(1e100)
-                return player.hcu.curses.gte(1e120)
+                if (challengeCompletions(this.layer, this.id) == 0) return player.hve.vexTotal.gte(3)
+                if (challengeCompletions(this.layer, this.id) == 1) return player.hve.vexTotal.gte(6)
+                if (challengeCompletions(this.layer, this.id) == 2) return player.hve.vexTotal.gte(9)
+                return player.hve.vexTotal.gte(12)
             },
             unlocked() { return hasUpgrade("hpw", 1003) || challengeCompletions(this.layer, this.id) > 0 },
             canClick() { return hasUpgrade("hpw", 1003) },
             onEnter() {
-                layers.hpw.powerReset()
+                layers.hpw.powerReset(1)
             },
             onExit() {
-                layers.hpw.powerReset()
+                layers.hpw.powerReset(1)
             },
             style: {width: '250px', height: '184px', backgroundColor: "#cc4", border: "6px solid #880", borderRadius: "13px"},
             buttonStyle() {
@@ -123,7 +123,10 @@ addLayer("hrm", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (+" + format(player.h.hexPointGain) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Realms", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

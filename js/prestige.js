@@ -81,7 +81,7 @@
         if (player.cop.processedCoreFuel.eq(2)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.cop.processedCoreInnateEffects[0])
 
         // POWER MODIFIERS
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("rm", 23))
+        if (hasUpgrade("hpw", 1022)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.re.realmEssenceEffect)
         if (player.cop.processedCoreFuel.eq(2)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.cop.processedCoreInnateEffects[1])
@@ -110,7 +110,7 @@
         player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.rm.realmModsEffect[1])
+        if (hasUpgrade("hpw", 1021)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1021))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 1106)[1])
         player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 306)[1])

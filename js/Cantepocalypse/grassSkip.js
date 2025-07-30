@@ -207,260 +207,276 @@
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(10)},
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Grass-Skipper Factor I."
+                return "Grass-Skipper Factor I"
             },
             display() {
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(10)
-                let growth = 1.2
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         12: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(25)},
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Grass-Skipper Factor II."
+                return "Grass-Skipper Factor II"
             },
             display() {
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(25)
-                let growth = 1.25
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         13: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(40)},
+            costBase() { return new Decimal(40) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Grass-Skipper Factor III."
+                return "Grass-Skipper Factor III"
             },
             display() {
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(40)
-                let growth = 1.3
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         14: {
-            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(100)},
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(500) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Grass-Skipper Factor IV."
+                return "Grass-Skipper Factor IV"
             },
             display() {
                 return "which are multiplying grass-skippers by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(100)
-                let growth = 1.35
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         15: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(2500)},
+            costBase() { return new Decimal(2500) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Perk Point Skip Booster."
+                return "Perk Point Skip Booster"
             },
             display() {
                 return "which are boosting perk points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(2500)
-                let growth = 1.25
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         16: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6000)},
+            costBase() { return new Decimal(6000) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Anonymity Skip Booster."
+                return "Anonymity Skip Booster"
             },
             display() {
                 return "which are boosting anonymity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(6000)
-                let growth = 1.3
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         17: {
-            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(15000)},
+            costBase() { return new Decimal(15000) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Repli-Tree Skip Booster."
+                return "Repli-Tree Skip Booster"
             },
             display() {
                 return "which are boosting repli-trees by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(15000)
-                let growth = 1.35
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         18: {
-            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(40000)},
+            costBase() { return new Decimal(40000) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.gs.grassSkippers},
+            pay(amt) { player.gs.grassSkippers = this.currency().sub(amt) },
             effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.gs.grassSkippers.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Repli-Grass Skip Booster."
+                return "Repli-Grass Skip Booster"
             },
             display() {
                 return "which are boosting the repli-grass mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers."
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Grass-Skippers"
             },
             buy(mult) {
-                let base = new Decimal(40000)
-                let growth = 1.4
-                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11)))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.gs.grassSkippers = player.gs.grassSkippers.sub(buyonecost)
+                if (mult != true && (!hasMilestone("s", 16) || inChallenge("fu", 11))) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16) || inChallenge("fu", 11)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.gs.grassSkippers, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id)).floor()
-                if (!hasMilestone("s", 16) || inChallenge("fu", 11)) player.gs.grassSkippers = player.gs.grassSkippers.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
     },
     milestones: {

@@ -133,6 +133,7 @@
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1
                 player.tab = "dut"
+                player.uniTab = 1
                 layers.le.generateSelection();
             },
             style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)', borderRadius: "15px" },

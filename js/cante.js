@@ -248,7 +248,7 @@
             onClick() {
                 player.ca.defeatedCante = true
                 player.tab = 'ca'
-                player.microtabs["ca"]['stuff'] = 'Main'
+                player.subtabs["ca"]['stuff'] = 'Main'
             },
             style: { width: '500px', "min-height": '200px', borderRadius: '20px' },
         },

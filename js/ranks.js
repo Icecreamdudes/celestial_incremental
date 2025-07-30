@@ -122,7 +122,7 @@
         if (player.r.tier.lt(player.r.tetrReq)) {
             player.r.tetrsToGet = new Decimal(0)
         }
-        if (hasUpgrade("p", 22) || hasMilestone("s", 19)) {
+        if (hasUpgrade("p", 22)) {
             player.r.tetr = player.r.tetr.add(player.r.tetrsToGet)
         }
 

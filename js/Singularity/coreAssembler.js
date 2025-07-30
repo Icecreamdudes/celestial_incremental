@@ -88,10 +88,8 @@
         9 - Antimatter
         10 - Infinity Points 
         */
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)",
@@ -264,8 +262,7 @@
             }
         }
     },
-    determineEffect(fuel, strength)
-    {
+    determineEffect(fuel, strength) {
         /*
         0 - Points
         1 - Factor Power
@@ -290,7 +287,7 @@
                 ]//points, points, replicanti points
             } else
             {
-                return [             
+                return [
                 player.points.pow(0.07).add(1).pow(player.coa.strengthBuffs[strength]).min("1e50000"),
                 Decimal.add(1.6, player.s.highestSingularityPoints.pow(player.coa.strengthBuffs[strength]).plus(1).log10().div(250)), 
                 player.s.singularityTime.pow(0.125).add(1).pow(player.coa.strengthBuffs[strength])] //points, points, replicanti points
@@ -443,8 +440,7 @@
             }
         }
     },
-    determineText(fuel, strength)
-    {
+    determineText(fuel, strength) {
         /*
         0 - Points
         1 - Factor Power
@@ -589,8 +585,7 @@
             +  "<br>XPBoost: x" + format(layers.coa.determinePrimedEffect(5, strength)[4])
         }
     },
-    generateCoreStrength()
-    {
+    generateCoreStrength() {
         let random = getRandomInt(100);
 
         let thresholds = [
@@ -613,8 +608,7 @@
             return new Decimal(4);
         }
     },
-    generateCore()
-    {
+    generateCore() {
         //MAKE CODE
         if (player.coa.coreCount.lt(10))
         {
@@ -637,8 +631,7 @@
             }
         }
     },
-    clearCores()
-    {
+    clearCores() {
         for (let i = 0; i < player.coa.coreFuelSourceText.length; i++)
         {
             player.coa.coreOccupied[i] = false
@@ -650,221 +643,164 @@
             player.ra.unequippedRadiationOutput[i] = new Decimal(0)
         }
     },
-    singularityReset()
-    {
-        if (!hasMilestone("s", 18)) player.tab = "i"
-        if (!hasMilestone("s", 11)) player.in.unlockedBreak = false
-
+    singularityReset() {
+        //     <----     RANK LAYER     ---->
         player.points = new Decimal(10)
+        player.gain = new Decimal(0)
+
+        for (let i in player.i.upgrades) {
+            player.i.upgrades.splice(i, 1)
+        }
+
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
         if (hasMilestone("s", 12)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        player.r.pent = new Decimal(0)
+
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
 
-        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
-        player.f.factorGain = new Decimal(1)
-
-        player.f.factorPower = new Decimal(0)
-        player.f.factorPowerEffect = new Decimal(1)
-        player.f.factorPowerPerSecond = new Decimal(0)
-        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-
-        player.f.buyables[1] = new Decimal(0)
-        player.f.buyables[2] = new Decimal(0)
-        player.f.buyables[3] = new Decimal(0)
-        player.f.buyables[4] = new Decimal(0)
-        player.f.buyables[5] = new Decimal(0)
-        player.f.buyables[6] = new Decimal(0)
-        player.f.buyables[7] = new Decimal(0)
-        player.f.buyables[8] = new Decimal(0)
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
-        player.f.buyables[28] = new Decimal(0)
-        player.f.buyables[29] = new Decimal(0)
-        player.f.buyables[31] = new Decimal(0)
-        player.f.buyables[32] = new Decimal(0)
-        player.f.buyables[33] = new Decimal(0)
-        player.f.buyables[34] = new Decimal(0)
-        player.f.buyables[35] = new Decimal(0)
-        player.f.buyables[36] = new Decimal(0)
-        player.f.buyables[37] = new Decimal(0)
-        player.f.buyables[38] = new Decimal(0)
-        player.f.buyables[39] = new Decimal(0)
-        player.f.buyables[41] = new Decimal(0)
-        player.f.buyables[42] = new Decimal(0)
-        player.f.buyables[43] = new Decimal(0)
-        player.f.buyables[44] = new Decimal(0)
-        player.f.buyables[45] = new Decimal(0)
-        player.f.buyables[46] = new Decimal(0)
-        player.f.buyables[47] = new Decimal(0)
-        player.f.buyables[48] = new Decimal(0)
-        player.f.buyables[49] = new Decimal(0)
-        player.f.buyables[51] = new Decimal(0)
-        player.f.buyables[52] = new Decimal(0)
-        player.f.buyables[53] = new Decimal(0)
-        player.f.buyables[54] = new Decimal(0)
-        player.f.buyables[55] = new Decimal(0)
-        player.f.buyables[56] = new Decimal(0)
-        player.f.buyables[57] = new Decimal(0)
-        player.f.buyables[58] = new Decimal(0)
-
-        player.p.prestigePoints = new Decimal(0)
-
-        if (!hasMilestone("s", 12)) {
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 24) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
-
-        player.f.factorPower = new Decimal(0)
-
-        player.t.leaves = new Decimal(0)
-        player.t.trees = new Decimal(0)
-
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
-
-        if (!hasMilestone("s", 12)) {
-            for (let i = 0; i < player.g.upgrades.length; i++) {
-                if (+player.g.upgrades[i] < 23) {
-                    player.g.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        // REGULAR PENT MILESTONES
-        if (!hasMilestone("s", 12)) {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        // SINGULARITY PENT MILESTONES
         for (let i = 0; i < player.r.milestones.length; i++) {
-            if (+player.r.milestones[i] > 20) {
+            if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] > 20) {
                 player.r.milestones.splice(i, 1);
                 i--;
             }
         }
 
+        player.r.timeCubes = new Decimal(0)
+        player.r.timeCubesPerSecond = new Decimal(0)
+        for (let i in player.r.buyables) {
+            player.r.buyables[i] = new Decimal(0)
+        }
+        player.r.timeReversed = false
+
+        //     <----     FACTOR LAYER     ---->
+        player.f.factorPower = new Decimal(0)
+        player.f.factorPowerEffect = new Decimal(1)
+        player.f.factorPowerPerSecond = new Decimal(0)
+
+        for (let i in player.f.buyables) {
+            player.f.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     PRESTIGE LAYER     ---->
+        player.p.prestigePoints = new Decimal(0)
+        player.p.prestigePointsToGet = new Decimal(0)
+
+        if (!hasMilestone("s", 12)) {
+            for (let i in player.p.upgrades) {
+                player.p.upgrades.splice(i, 1)
+            }
+        }
+    
+        player.p.crystals = new Decimal(0)
+        player.p.crystalsToGet = new Decimal(0)
+        for (let i in player.p.buyables) {
+            player.p.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     TREE LAYER     ---->
+        player.t.trees = new Decimal(0)
+        player.t.treesToGet = new Decimal(0)
+        player.t.leaves = new Decimal(0)
+        player.t.leavesPerSecond = new Decimal(0)
+
+        for (let i in player.t.buyables) {
+            player.t.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     GRASS LAYER     ---->
         player.g.grass = new Decimal(0)
+        player.g.grassVal = new Decimal(0)
         player.g.savedGrass = new Decimal(0)
         player.g.grassCount = new Decimal(0)
         player.g.grassTimer = new Decimal(0)
 
         player.g.goldGrass = new Decimal(0)
+        player.g.goldGrassVal = new Decimal(0)
         player.g.savedGoldGrass = new Decimal(0)
         player.g.goldGrassCount = new Decimal(0)
         player.g.goldGrassTimer = new Decimal(0)
 
+        for (let i = 11; i < 20; i++) {
+            player.g.buyables[i] = new Decimal(0)
+        }
+
+        if (!hasMilestone("s", 12)) {
+            for (let i in player.g.upgrades) {
+                player.g.upgrades.splice(i, 1)
+            }
+        }
+
+        player.g.moonstone = new Decimal(0)
+        player.g.moonstoneVal = new Decimal(0)
+        player.g.savedMoonstone = new Decimal(0)
+        player.g.moonstoneCount = new Decimal(0)
+        player.g.moonstoneTimer = new Decimal(0)
+
+        if (!hasMilestone("s", 14)) {
+            player.g.moonstoneLevel = new Decimal(1)
+            for (let i = 21; i < 30; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
+        }
+
+        //     <----     GRASSHOPPER LAYER     ---->
         player.gh.grasshoppers = new Decimal(0)
+        player.gh.grasshoppersToGet = new Decimal(0)
         player.gh.fertilizer = new Decimal(0)
+        player.gh.fertilizerPerSecond = new Decimal(0)
+        player.gh.steel = new Decimal(0)
+        player.gh.steelToGet = new Decimal(0)
 
-        player.gh.buyables[11] = new Decimal(0)
-        player.gh.buyables[12] = new Decimal(0)
-        player.gh.buyables[13] = new Decimal(0)
-        player.gh.buyables[14] = new Decimal(0)
-        player.gh.buyables[15] = new Decimal(0)
-        player.gh.buyables[16] = new Decimal(0)
-        player.gh.buyables[17] = new Decimal(0)
-        player.gh.buyables[18] = new Decimal(0)
-        player.gh.buyables[19] = new Decimal(0)
-        player.gh.buyables[21] = new Decimal(0)
-        player.gh.buyables[22] = new Decimal(0)
+        for (let i in player.gh.buyables) {
+            player.gh.buyables[i] = new Decimal(0)
+        }
 
+        //     <----     MOD LAYER     ---->
         player.m.codeExperience = new Decimal(0)
+        player.m.codeExperienceToGet = new Decimal(0)
         player.m.linesOfCode = new Decimal(0)
+        player.m.linesOfCodePerSecond = new Decimal(0)
         player.m.mods = new Decimal(0)
+        player.m.modsToGet = new Decimal(0)
 
-        player.m.buyables[11] = new Decimal(0)
-        player.m.buyables[12] = new Decimal(0)
-        player.m.buyables[13] = new Decimal(0)
-        player.m.buyables[14] = new Decimal(0)
+        for (let i in player.m.buyables) {
+            player.m.buyables[i] = new Decimal(0)
+        }
 
-        //dice
+        //     <----     DICE LAYER     ---->
         player.d.dicePoints = new Decimal(0)
         player.d.diceRolls = [new Decimal(1)]
         player.d.dice = new Decimal(1)
+        player.d.challengeDicePoints = new Decimal(0)
+        player.d.challengeDicePointsToGet = new Decimal(0)
 
-        player.d.buyables[11] = new Decimal(0)
-        player.d.buyables[12] = new Decimal(0)
-        player.d.buyables[13] = new Decimal(0)
-        player.d.buyables[14] = new Decimal(0)
-        player.d.buyables[15] = new Decimal(0)
-
-        if (!hasUpgrade("s", 13)) {
-            for (let i = 0; i < 15; i++) {
-                player.d.diceEffects[i] = new Decimal(1)
-            }
-        } else {
-            for (let i = 0; i < 11; i++) {
-                player.d.diceEffects[i] = new Decimal(1)
-            }
+        for (let i in player.d.buyables) {
+            player.d.buyables[i] = new Decimal(0)
         }
 
-        //rf
+        for (let i in player.d.upgrades) {
+                player.d.upgrades.splice(i, 1)
+            }
+
+        for (let i = 0; !hasUpgrade("s", 13) ? i < 15 : i < 11; i++) {
+            player.d.diceEffects[i] = new Decimal(1)
+        }
+
+        //     <----     ROCKETFUEL LAYER     ---->
         player.rf.rocketFuel = new Decimal(0)
-        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++)
-        {
+        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
             player.rf.abilitiesUnlocked[i] = false
         }
-        for (let i = 0; i < 4; i++)
-        {
+        for (let i = 0; i < 4; i++) {
             player.rf.abilityTimers[i] = new Decimal(0)
         }
 
-        for (let i = 0; i < player.rf.upgrades.length; i++) {
-            if (+player.rf.upgrades[i] < 18) {
-                player.rf.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-
-        for (let i = 0; i < player.i.upgrades.length; i++) {
-            if (+player.i.upgrades[i] < 36) {
-                player.i.upgrades.splice(i, 1);
-                i--;
-            }
+        for (let i in player.rf.upgrades) {
+            player.rf.upgrades.splice(i, 1)
         }
 
         if (!hasMilestone("s", 21)) {
@@ -898,10 +834,7 @@
                 }
             }
 
-        if (!hasMilestone("s", 17))
-        {
-            player.ta.unlockedReverseBreak = false
-        }
+        if (!hasMilestone("s", 17)) player.ta.unlockedReverseBreak = false
         player.ad.buyables[1] = new Decimal(0)
         player.ad.buyables[2] = new Decimal(0)
         player.ad.buyables[3] = new Decimal(0)
@@ -918,20 +851,6 @@
         //challenge stuff
         player.pe.pests = new Decimal(0)
 
-        player.d.challengeDicePoints = new Decimal(0)
-        player.d.buyables[21] = new Decimal(0)
-        player.d.buyables[22] = new Decimal(0)
-        player.d.buyables[23] = new Decimal(0)
-        player.d.buyables[24] = new Decimal(0)
-
-        for (let i = 0; i < player.d.upgrades.length; i++) {
-            if (+player.d.upgrades[i] < 100) {
-                player.d.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-
-
         player.de.antidebuffPoints = new Decimal(0)
 
         //STUFF THAT GETS RESET ON SINGULARITY
@@ -942,111 +861,11 @@
         player.cb.level = new Decimal(1)
         if (!hasMilestone("s", 14)) player.cb.XPBoost = new Decimal(1)
 
-        if (!hasMilestone("s", 15))
-        {
+        if (!hasMilestone("s", 15)) {
         player.cb.buyables[11] = new Decimal(0)
         player.cb.buyables[12] = new Decimal(0)
         player.cb.buyables[13] = new Decimal(0)
         player.cb.buyables[14] = new Decimal(0)
-        }
-
-        //universe 1 such
-        player.gh.steel = new Decimal(0)
-        player.gh.buyables[31] = new Decimal(0)
-        player.gh.buyables[32] = new Decimal(0)
-        player.gh.buyables[33] = new Decimal(0)
-        player.gh.buyables[34] = new Decimal(0)
-        player.gh.buyables[35] = new Decimal(0)
-        player.gh.buyables[36] = new Decimal(0)
-        player.gh.buyables[37] = new Decimal(0)
-        player.gh.buyables[38] = new Decimal(0)
-
-        player.r.timeCubes = new Decimal(0)
-        player.r.buyables[11] = new Decimal(0)
-        player.r.buyables[12] = new Decimal(0)
-        player.r.buyables[13] = new Decimal(0)
-        player.r.buyables[14] = new Decimal(0)
-        player.r.timeReversed = false
-
-        player.p.crystals = new Decimal(0)
-        player.p.buyables[11] = new Decimal(0)
-        player.p.buyables[12] = new Decimal(0)
-        player.p.buyables[13] = new Decimal(0)
-        player.p.buyables[14] = new Decimal(0)
-        player.p.buyables[15] = new Decimal(0)
-        player.p.buyables[16] = new Decimal(0)
-        player.p.buyables[17] = new Decimal(0)
-        player.p.buyables[18] = new Decimal(0)
-
-        //hex
-        for (let i = 0; i<player.h.hex; i++)
-        {
-            player.h.hexPoints[i] = new Decimal(0)
-        }
-        player.h.hexResetIndex = new Decimal(0)
-        if (!hasMilestone("s", 19)) player.h.hex = new Decimal(0)
-        player.h.automationTier = new Decimal(0)
-        player.h.ragePower = new Decimal(0)
-        player.h.hexPoints[0] = new Decimal(0)
-
-        player.h.buyables[11] = new Decimal(0)
-        player.h.buyables[12] = new Decimal(0)
-        player.h.buyables[13] = new Decimal(0)
-        player.h.buyables[14] = new Decimal(0)
-        player.h.buyables[15] = new Decimal(0)
-        player.h.buyables[16] = new Decimal(0)
-        player.h.buyables[17] = new Decimal(0)
-        player.h.buyables[18] = new Decimal(0)
-        player.h.buyables[19] = new Decimal(0)
-        player.h.buyables[21] = new Decimal(0)
-        player.h.buyables[22] = new Decimal(0)
-        player.h.buyables[23] = new Decimal(0)
-
-        //realm mods
-        player.rm.blankMods = new Decimal(0),
-
-        player.rm.realmMods = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),]
-        player.rm.realmEnergy = [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),]
-        player.rm.halterBoost = new Decimal(0)
-
-        player.rm.buyables[11] = new Decimal(0)
-        player.rm.buyables[12] = new Decimal(0)
-        player.rm.buyables[13] = new Decimal(0)
-        player.rm.buyables[14] = new Decimal(0)
-        player.rm.buyables[15] = new Decimal(0)
-        player.rm.buyables[16] = new Decimal(0)
-        player.rm.buyables[17] = new Decimal(0)
-        player.rm.buyables[18] = new Decimal(0)
-        player.rm.buyables[19] = new Decimal(0)
-        player.rm.buyables[21] = new Decimal(0)
-        player.rm.buyables[22] = new Decimal(0)
-        player.rm.buyables[23] = new Decimal(0)
-        player.rm.buyables[24] = new Decimal(0)
-        player.rm.buyables[25] = new Decimal(0)
-        player.rm.buyables[26] = new Decimal(0)
-        player.rm.buyables[27] = new Decimal(0)
-        player.rm.buyables[28] = new Decimal(0)
-        player.rm.buyables[29] = new Decimal(0)
-        player.rm.buyables[31] = new Decimal(0)
-        player.rm.buyables[32] = new Decimal(0)
-        player.rm.buyables[33] = new Decimal(0)
-        player.rm.buyables[34] = new Decimal(0)
-
-        //moonstone
-        player.g.moonstone = new Decimal(0)
-
-        if (!hasMilestone("s", 14))
-        {
-            player.g.moonstoneLevel = new Decimal(1)
-            player.g.buyables[21] = new Decimal(0)
-            player.g.buyables[22] = new Decimal(0)
-            player.g.buyables[23] = new Decimal(0)
-            player.g.buyables[24] = new Decimal(0)
-            player.g.buyables[25] = new Decimal(0)
-            player.g.buyables[26] = new Decimal(0)
-            player.g.buyables[27] = new Decimal(0)
-            player.g.buyables[28] = new Decimal(0)
-            player.g.buyables[29] = new Decimal(0)
         }
 
         //debuff
@@ -1103,8 +922,7 @@
         player.ip.buyables[14] = new Decimal(0)
 
         player.in.infinityPoints = new Decimal(0)
-        if (!hasMilestone("s", 11)) player.in.infinities = new Decimal(0)
-        if (hasMilestone("s", 11)) player.in.infinities = new Decimal(8)
+        player.in.infinities = new Decimal(8)
 
         //inf dimensions
         player.id.infinityPower = new Decimal(0)
@@ -1201,7 +1019,7 @@
 
         player.ta.highestDicePoints = new Decimal(0)
         player.ta.highestRocketFuel = new Decimal(0)
-        player.ta.highestHex1Points = new Decimal(0)
+        player.ta.highestHexPoints = new Decimal(0)
         for (let i = 0; i < player.ta.upgrades.length; i++) {
             if (+player.ta.upgrades[i] < 100) {
                 player.ta.upgrades.splice(i, 1);
@@ -1416,11 +1234,6 @@
         player.subtabs["id"]['stuff'] = 'Dimensions'
 
 
-        //core
-        if (player.cop.unprocessCoreOnReset) 
-        {
-            layers.cop.unprocessCore();
-        }
 
         player.fa.charge = new Decimal(0)
         player.fa.bestCharge = new Decimal(0)
@@ -1438,25 +1251,23 @@
         //sing dims
         player.sd.singularityPower = new Decimal(0)
 
-        for (let i = 0; i < player.sd.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
             player.sd.dimensionAmounts[i] = getBuyableAmount("sd", i+11)
         }
 
-        for (let i = 0; i < player.po.halterEffects.length; i++)
-        {
+        for (let i = 0; i < player.po.halterEffects.length; i++) {
             player.po.halterEffects[i] = new Decimal(1)
         }
     },
     clickables: {
         2: {
-            title() { return "Faulty" },
-            canClick() { return true },
-            unlocked() { return true },
+            title: "Faulty",
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.coa.viewingStrength = new Decimal(0)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#b5b5b5', borderRadius: '5px' },
+            style: {width: "75px", minHeight: "75px", backgroundColor: "#b5b5b5", borderRadius: "5px" },
         },
         3: {
             title() { return "Weak" },
@@ -1465,7 +1276,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(1)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#ebcc6e', borderRadius: '5px' },
+            style: {width: "75px", minHeight: "75px", backgroundColor: "#ebcc6e", borderRadius: "5px" },
         },
         4: {
             title() { return "Average" },
@@ -1474,7 +1285,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(2)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#cf7429', borderRadius: '5px' },
+            style: {width: "75px", minHeight: "75px", backgroundColor: "#cf7429", borderRadius: "5px" },
         },
         5: {
             title() { return "Strong" },
@@ -1483,7 +1294,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(3)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#cf3a29', borderRadius: '5px' },
+            style: {width: "75px", minHeight: "75px", backgroundColor: "#cf3a29", borderRadius: "5px" },
         },
         6: {
             title() { return "Pinnacle" },
@@ -1492,7 +1303,7 @@
             onClick() {
                 player.coa.viewingStrength = new Decimal(4)
             },
-            style: { width: '75px', "min-height": '75px', 'background-color': '#4a1616', borderRadius: '5px' },
+            style: {width: "75px", minHeight: "75px", backgroundColor: "#4a1616", borderRadius: "5px" },
         },
         7: {
             title() { return "<h5>Upgrade Luck Level" },
@@ -1502,7 +1313,7 @@
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(player.coa.luckLevelUpgradeCost)
                 player.coa.luckLevel = player.coa.luckLevel.add(1)
             },
-            style: { width: "100px", minHeight: "35px", height: "30px", borderRadius: "5px" },
+            style: {width: "100px", minHeight: "35px", height: "30px", borderRadius: "5px" },
         },
         11: {
             title() { return "Points" },
@@ -1511,7 +1322,7 @@
             onClick() {
                 player.coa.nextCoreFuel = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '100px', 'background-color': '#eaf6f7', borderRadius: '10px' },
+            style: {width: "100px", minHeight: "100px", backgroundColor: "#eaf6f7", borderRadius: "10px" },
         },
         12: {
             title() { return "Factor Power" },
@@ -1735,28 +1546,9 @@
 
                 player.coa.singularityPause = new Decimal(12)
                 if (!hasMilestone("s", 18)) player.tab = "i"
-
-                if (hasMilestone("s", 11))
-                {
-                    player.in.infinities = new Decimal(8)
-                }
             },
             style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)', borderRadius: "25px" },
         },
-    },
-    bars: {
-    },
-    upgrades: { 
-    },
-    buyables: {
-
-    },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
     },
     microtabs: {
         stuff: {
@@ -1869,4 +1661,4 @@ function setCoreColors(coreElement, color1, color2, centerColor) {
     } else {
       centerCircle.style.display = "none"; // Hide the center circle
     }
-  }
+}

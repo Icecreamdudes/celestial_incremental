@@ -1,4 +1,4 @@
-﻿var treeA1 = [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["gs", "oi"], ["fu"]]
+﻿var treeA1 = [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs"], ["fu"]]
 addLayer("cp", {
     name: "Alternate Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {

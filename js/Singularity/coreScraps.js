@@ -85,7 +85,7 @@
         }
         if (player.cop.processedCoreFuel.eq(8))
         {   
-            player.cs.resourceCoreScrapsToGet = player.m.codeExperience.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
+            player.cs.resourceCoreScrapsToGet = player.rf.rocketFuel.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
         }
         if (player.cop.processedCoreFuel.eq(9))
         {   

@@ -1839,7 +1839,7 @@ addLayer("ev4", {
         ["blank", "10px"],
         ["raw-html", function () { return "Offering multiplier: <h3>" + format(player.ev4.offeringsBase) + "</h3>x" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
 ],
-    layerShown() { return player.startedGame == player.ev.evolutionsUnlocked[4]  }
+    layerShown() { return player.startedGame && player.ev.evolutionsUnlocked[4]  }
 })
 addLayer("ev8", {
     name: "Marcel", // This is optional, only used in a few places, If absent it just uses the layer id.

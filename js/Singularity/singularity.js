@@ -1,4 +1,4 @@
-﻿var tree3 = [["s"], ["coa", "cop"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
+﻿var tree3 = [["s"], ["co", "coa", "cop"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
 addLayer("s", {
     name: "Genesis", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "GE", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -344,13 +344,13 @@ addLayer("s", {
         },
         18: {
             requirementDescription: "<h3>12 Singularities",
-            effectDescription: "Start singularity with infinity broken and alt-uni 1 unlocked, keep cante and rememberance cores, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
+            effectDescription: "Start singularity with alt-uni 1 unlocked, keep cante and rememberance cores, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
             done() { return player.s.singularities.gte(12) },
-            style: { width: '800px', "min-height": '85px' },
+            style: { width: '800px', "min-height": '75px' },
         },
         19: {
             requirementDescription: "<h3>25 Singularities",
-            effectDescription: "Start each singularity with every universe 2 layer unlocked, and hex is kept on singularity reset, always autobuy tetr, and autoroll cooldown is 10x shorter.",
+            effectDescription: "Start each singularity with every universe 2 layer unlocked, and hex is kept on singularity reset, and autoroll cooldown is 10x shorter.",
             done() { return player.s.singularities.gte(25) },
             style: { width: '800px', "min-height": '75px' },
         },

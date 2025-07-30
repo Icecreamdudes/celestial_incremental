@@ -783,8 +783,8 @@
         }
 
         for (let i in player.d.upgrades) {
-                player.d.upgrades.splice(i, 1)
-            }
+            player.d.upgrades.splice(i, 1)
+        }
 
         for (let i = 0; !hasUpgrade("s", 13) ? i < 15 : i < 11; i++) {
             player.d.diceEffects[i] = new Decimal(1)
@@ -792,192 +792,134 @@
 
         //     <----     ROCKETFUEL LAYER     ---->
         player.rf.rocketFuel = new Decimal(0)
+        player.rf.rocketFuelToGet = new Decimal(0)
+        player.rf.abilityIndex = -1
+
         for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
             player.rf.abilitiesUnlocked[i] = false
         }
-        for (let i = 0; i < 4; i++) {
+
+        for (let i = 0; i < 8; i++) {
             player.rf.abilityTimers[i] = new Decimal(0)
+            player.rf.abilityEffects[i] = new Decimal(1)
         }
 
         for (let i in player.rf.upgrades) {
             player.rf.upgrades.splice(i, 1)
         }
 
-        if (!hasMilestone("s", 21)) {
-            player.po.dice = false
-            player.po.rocketFuel = false
-            player.po.hex = false
-            if (!hasMilestone("s", 18)) player.po.breakInfinity = false
-            if (hasMilestone("s", 18)) player.po.breakInfinity = true
-            player.po.realmMods = false
-            player.po.featureSlots = player.po.featureSlotsMax
-        }
-
-
-        //reset antimatter stuff
-            player.ad.antimatter = new Decimal(0)
-
-            player.ad.buyables[1] = new Decimal(0)
-
-            for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-            {
-                player.ad.dimensionAmounts[i] = new Decimal(0)
-            }
-
-            player.ad.dimBoostAmount = new Decimal(0)
-            player.ad.galaxyAmount = new Decimal(0)
-
-            for (let i = 0; i < player.ad.upgrades.length; i++) {
-                if (+player.ad.upgrades[i] < 100) {
-                    player.ad.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-
-        if (!hasMilestone("s", 17)) player.ta.unlockedReverseBreak = false
-        player.ad.buyables[1] = new Decimal(0)
-        player.ad.buyables[2] = new Decimal(0)
-        player.ad.buyables[3] = new Decimal(0)
-
-        player.ad.buyables[11] = new Decimal(0)
-        player.ad.buyables[12] = new Decimal(0)
-        player.ad.buyables[13] = new Decimal(0)
-        player.ad.buyables[14] = new Decimal(0)
-        player.ad.buyables[15] = new Decimal(0)
-        player.ad.buyables[16] = new Decimal(0)
-        player.ad.buyables[17] = new Decimal(0)
-        player.ad.buyables[18] = new Decimal(0)
-
-        //challenge stuff
-        player.pe.pests = new Decimal(0)
-
-        player.de.antidebuffPoints = new Decimal(0)
-
-        //STUFF THAT GETS RESET ON SINGULARITY
-
-        //check back
+        //     <----     CHECKBACK LAYER     ---->
         player.cb.xp = new Decimal(0)
         player.cb.totalxp = new Decimal(0)
         player.cb.level = new Decimal(1)
         if (!hasMilestone("s", 14)) player.cb.XPBoost = new Decimal(1)
 
         if (!hasMilestone("s", 15)) {
-        player.cb.buyables[11] = new Decimal(0)
-        player.cb.buyables[12] = new Decimal(0)
-        player.cb.buyables[13] = new Decimal(0)
-        player.cb.buyables[14] = new Decimal(0)
-        }
-
-        //debuff
-        player.de.buyables[11] = new Decimal(0)
-        player.de.buyables[12] = new Decimal(0)
-        player.de.buyables[13] = new Decimal(0)
-        player.de.buyables[14] = new Decimal(0)
-        player.de.buyables[15] = new Decimal(0)
-        player.de.buyables[16] = new Decimal(0)
-        player.de.buyables[17] = new Decimal(0)
-        player.de.buyables[18] = new Decimal(0)
-        for (let i = 0; i < player.de.upgrades.length; i++) {
-            if (+player.de.upgrades[i] < 100) {
-                player.de.upgrades.splice(i, 1);
-                i--;
+            for (let i = 11; i < 15; i++) {
+                player.cb.buyables[i] = new Decimal(0)
             }
         }
+
+        //     <----     OTF STUFF     ---->
+        if (!hasMilestone("s", 21)) {
+            player.po.dice = false
+            player.po.rocketFuel = false
+            player.po.hex = false
+            if (!hasMilestone("s", 18)) player.po.breakInfinity = false
+            if (hasMilestone("s", 18)) player.po.breakInfinity = true
+            player.po.featureSlots = player.po.featureSlotsMax
+        }
+
+        //     <----     U1 CHALLENGE STUFF     ---->
+        player.pe.pests = new Decimal(0)
+        player.pe.pestsPerSecond = new Decimal(0)
+
         player.de.antidebuffPoints = new Decimal(0)
+        player.de.antidebuffPointsToGet = new Decimal(0)
         player.de.tavEssence = new Decimal(0)
+        player.de.tavEssencePerSecond = new Decimal(0)
         player.de.tavPoints = new Decimal(0)
+        player.de.tavPointsToGet = new Decimal(0)
 
-        //UNI 2 STUFF?
+        for (let i in player.de.buyables) {
+            player.de.buyables[i] = new Decimal(0)
+        }
+
+        for (let i in player.de.upgrades) {
+            player.de.upgrades.splice(i, 1)
+        }
+
+        //     <----     ANTIMATTER LAYER     ---->
+        player.ad.antimatter = new Decimal(0)
+        player.ad.antimatterPerSecond = new Decimal(0)
+
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
+            player.ad.dimensionAmounts[i] = new Decimal(0)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
+        }
+
+        for (let i in player.ad.upgrades) {
+            player.ad.upgrades.splice(i, 1)
+        }
+
+        for (let i in player.ad.buyables) {
+            player.ad.buyables[i] = new Decimal(0)
+        }
+
+        if (!hasMilestone("s", 17)) player.ta.unlockedReverseBreak = false
+
+        //     <----     IP LAYER     ---->
         player.ip.activeChallenge = null
-        for (let i = 0; i < player.ip.upgrades.length; i++) {
-            if (+player.ip.upgrades[i] < 100) {
-                player.ip.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-        if (!hasMilestone("s", 12))
-        {
-            for (let i = 0; i < player.ip.milestones.length; i++) {
-                if (+player.ip.milestones[i] < 100) {
-                    player.ip.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-        if (!hasMilestone("s", 15))
-        {
-        player.ip.challenges[11] = 0
-        player.ip.challenges[12] = 0
-        player.ip.challenges[13] = 0
-        player.ip.challenges[14] = 0
-        player.ip.challenges[15] = 0
-        player.ip.challenges[16] = 0
-        player.ip.challenges[17] = 0
-        player.ip.challenges[18] = 0
-        }
-                    
-        player.ip.buyables[11] = new Decimal(0)
-        player.ip.buyables[12] = new Decimal(0)
-        player.ip.buyables[13] = new Decimal(0)
-        player.ip.buyables[14] = new Decimal(0)
-
         player.in.infinityPoints = new Decimal(0)
+        player.in.infinityPointsToGet = new Decimal(0)
         player.in.infinities = new Decimal(8)
+        player.in.infinitiesToGet = new Decimal(0)
 
-        //inf dimensions
+        for (let i in player.ip.upgrades) {
+            player.ip.upgrades.splice(i, 1)
+        }
+        if (!hasMilestone("s", 12)) {
+            for (let i in player.ip.milestones) {
+                player.ip.milestones.splice(i, 1)
+            }
+        }
+        if (!hasMilestone("s", 15)) {
+            for (let i in player.ip.challenges) {
+                player.ip.challenges[i] = 0
+            }
+        }
+                  
+        for (let i in player.ip.buyables) {
+            player.ip.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     ID LAYER     ---->
         player.id.infinityPower = new Decimal(0)
-        player.id.dimensionUnlockAmount = new Decimal(0)
+        player.id.infinityPowerPerSecond = new Decimal(0)
 
-        player.id.buyables[11] = new Decimal(0)
-        player.id.buyables[12] = new Decimal(0)
-        player.id.buyables[13] = new Decimal(0)
-        player.id.buyables[14] = new Decimal(0)
-        player.id.buyables[15] = new Decimal(0)
-        player.id.buyables[16] = new Decimal(0)
-        player.id.buyables[17] = new Decimal(0)
-        player.id.buyables[18] = new Decimal(0)
-        player.id.buyables[22] = new Decimal(0)
-        player.id.buyables[23] = new Decimal(0)
-        player.id.buyables[24] = new Decimal(0)
-
-        for (let i = 0; i < player.id.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.id.dimensionAmounts.length; i++) {
             player.id.dimensionAmounts[i] = new Decimal(0)
+            player.id.dimensionsPerSecond[i] = new Decimal(0)
+        }
+
+        for (let i in player.id.buyables) {
+            player.id.buyables[i] = new Decimal(0)
         }
         
-        //tav
+        //     <----     TAV LAYER     ---->
         player.ta.negativeInfinityPoints = new Decimal(0)
-        player.ta.buyables[11] = new Decimal(0)
-        player.ta.buyables[12] = new Decimal(0)
-        player.ta.buyables[13] = new Decimal(0)
-        player.ta.buyables[14] = new Decimal(0)
-        player.ta.buyables[15] = new Decimal(0)
-        player.ta.buyables[16] = new Decimal(0)
-        player.ta.buyables[17] = new Decimal(0)
-        player.ta.buyables[18] = new Decimal(0)
-        player.ta.buyables[19] = new Decimal(0)
-        player.ta.buyables[33] = new Decimal(0)
-        player.ta.buyables[34] = new Decimal(0)
-        player.ta.buyables[35] = new Decimal(0)
-        player.ta.buyables[36] = new Decimal(0)
-        player.ta.buyables[37] = new Decimal(0)
-        player.ta.buyables[38] = new Decimal(0)
-        player.ta.buyables[39] = new Decimal(0)
-        player.ta.buyables[41] = new Decimal(0)
-        player.ta.buyables[42] = new Decimal(0)
-        player.ta.buyables[43] = new Decimal(0)
-        player.ta.buyables[44] = new Decimal(0)
-        player.ta.buyables[45] = new Decimal(0)
-        player.ta.buyables[46] = new Decimal(0)
-        player.ta.buyables[47] = new Decimal(0)
-        player.ta.buyables[48] = new Decimal(0)
-        player.ta.buyables[49] = new Decimal(0)
-        player.ta.buyables[51] = new Decimal(0)
-        player.ta.buyables[52] = new Decimal(0)
-        player.ta.buyables[53] = new Decimal(0)
 
-        if (!hasMilestone("s", 17))
-        {
+        for (let i in player.ta.buyables) {
+            player.ta.buyables[i] = new Decimal(0)
+        }
+
+        if (hasMilestone("s", 17)) {
+            for (let i in player.ta.buyables) {
+                player.ta.buyables[i] = new Decimal(0)
+            }
+        }
+
+        if (!hasMilestone("s", 17)) {
         player.ta.buyables[21] = new Decimal(0)
         player.ta.buyables[22] = new Decimal(0)
         player.ta.buyables[23] = new Decimal(0)

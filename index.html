@@ -38,7 +38,7 @@
 </head>
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
-		<div class="uiHolder" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-420px'}:{'left':'0px'}">
+		<div class="uiHolder" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
 			<div class="uniHolder">
 				<button class="uniButton" v-if="layerShown('i') && player.uniTab==1" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe=1"><span class="buttonText">1</span></button>
 				<button class="uniButton" v-if="layerShown('h') && player.uniTab==0" v-bind:style="constructUniButtonStyle('h') " onclick="player.universe=-666"><span class="buttonText">H</span></button>
@@ -55,7 +55,7 @@
 			<div class="layerHolder">
 				<div v-bind:class="{titleHolder:true,darkTitle:player.sma.inStarmetalChallenge}">
 					<p v-if="player.universe == 1">Universe 1<br>Overworld</p>
-					<p v-if="player.universe == -666">Sub-Universe 1<br>Hex</p>
+					<p v-if="player.universe == -666">Universe α<br>Hex</p>
 					<p v-if="player.universe == 2">Universe 2<br>Antimatter World</p>
 					<p v-if="player.universe == 1.5">Alt-Universe 1<br>Cantepocalypse</p>
 					<p v-if="player.universe == 3">Universe 3<br>Domain of Singularity</p>

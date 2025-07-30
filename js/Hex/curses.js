@@ -71,7 +71,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(6) },
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap) },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 21)) amt = amt.add(3)
@@ -116,7 +116,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(12) },
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap) },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 22)) amt = amt.add(9)
@@ -156,7 +156,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(36) },
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap) },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 23)) amt = amt.add(4)
@@ -196,7 +196,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(100) },
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(1.5).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return true },
             cost(x = getBuyableAmount(this.layer, this.id)) {
@@ -231,7 +231,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(1000) },
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(2).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             effectBase() {
                 let base = player.hcu.jinxTotal.mul(0.01).add(1)
                 if (base.gte(6)) base = base.div(6).pow(0.3).mul(6)
@@ -271,7 +271,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(1e6)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(3).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             effect(x) { return Decimal.pow(1.01, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return true },
             cost(x = getBuyableAmount(this.layer, this.id)) {
@@ -306,7 +306,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(10)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap) },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 51)) amt = amt.add(6)
@@ -346,7 +346,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(100)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(1.5).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 52)) amt = amt.add(3)
@@ -386,7 +386,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(1000)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(2).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 53)) amt = amt.add(3)
@@ -440,7 +440,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(1e10)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(6).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             effect(x) { return Decimal.mul(0.03, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return hasUpgrade("bi", 13) },
             cost(x = getBuyableAmount(this.layer, this.id)) {
@@ -475,7 +475,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(5e7)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(5).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             effect(x) { return hasMilestone("hbl", 6) ? Decimal.mul(0.05, getBuyableAmount(this.layer, this.id)) : Decimal.mul(0.03, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return hasUpgrade("bi", 13) },
             cost(x = getBuyableAmount(this.layer, this.id)) {
@@ -510,7 +510,7 @@ addLayer("hcu", {
             costGrowth() { return new Decimal(1e5)},
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(3.75).floor() },
             currency() { return player.hcu.curses},
-            pay(amt) { player.hcu.curses = this.currency().sub(amt) },
+            pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
             effect(x) { return Decimal.mul(0.1, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return hasUpgrade("bi", 13) },
             cost(x = getBuyableAmount(this.layer, this.id)) {

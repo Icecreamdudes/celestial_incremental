@@ -63,9 +63,6 @@
         // CONVERT TO PROPER MULTIPLIER
         player.rt.repliLeavesMult = preLeavesMult.add(1)
 
-        // POST CONVERSION MODIFIERS
-        if (player.cop.processedCoreFuel.eq(3)) player.rt.repliLeavesMult = player.rt.repliLeavesMult.mul(player.cop.processedCoreInnateEffects[3])
-
         // REPLI-LEAVES PER SECOND
         player.rt.repliLeavesTimer = player.rt.repliLeavesTimer.add(onepersec.mul(delta))
 

@@ -69,7 +69,7 @@ addLayer("cp", {
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
         multAdd = multAdd.mul(levelableEffect("pet", 402)[0])
-        if (player.cop.processedCoreFuel.eq(0)) multAdd = multAdd.mul(player.cop.processedCoreInnateEffects[2])
+        multAdd = multAdd.mul(player.co.cores.point.effect[2])
         if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
         player.cp.replicantiPointsTimerReq = new Decimal(3)

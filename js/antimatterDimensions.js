@@ -13,6 +13,7 @@
         // Dimension Stuff
         dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        dimensionBase: [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)],
         dimensionGrowths: [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),],
 
         tickspeedMult: new Decimal(1.13),
@@ -95,7 +96,7 @@
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("rm", 31))
         if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
-        if (player.cop.processedCoreFuel.eq(9)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.co.cores.antimatter.effect[0])
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
@@ -146,7 +147,7 @@
             if (hasMilestone("fa", 12)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[1])
 
             // POWER MODIFIERS
-            if (player.cop.processedCoreFuel.eq(9)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.cop.processedCoreInnateEffects[1])
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.co.cores.antimatter.effect[1])
         }
         
         // SPECIALIZED MODIFIERS
@@ -159,13 +160,22 @@
         if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
         player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(levelableEffect("pet", 106)[1])
 
-        // ANTIMATTER DIMENSION COST SOFTCAP
+        // ANTIMATTER DIMENSION COST SOFTCAP GROWTH
         player.ad.dimensionGrowths = [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),]
         if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21) ) {
             player.ad.dimensionGrowths = [new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e120),new Decimal(1e15),]        
         }
         if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21) ) {
             player.ad.dimensionGrowths = [new Decimal(1e15),new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e15),]        
+        }
+
+        // ANTIMATTER DIMENSION COST SOFTCAP BASE
+        player.ad.dimensionBase = [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
+        if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21)) {
+            player.ad.dimensionBase = [new Decimal("1e-2175"), new Decimal("1e-2325"), new Decimal("1e-2355"), new Decimal("1e-2640"), new Decimal("1e-2580"), new Decimal("1e-2500"), new Decimal("1e-2460"), new Decimal(1e24)]
+        }
+        if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21)) {
+            player.ad.dimensionBase = [new Decimal("1e-1200"), new Decimal("1e-1575"), new Decimal("1e-1765"), new Decimal("1e-1905"), new Decimal("1e-1860"), new Decimal("1e-1940"), new Decimal("1e-2000"), new Decimal(1e24)]
         }
 
         //----------------------------------------
@@ -175,7 +185,7 @@
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ad", 3))
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
         if (hasUpgrade("ep1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ep1", 12))
-        if (player.cop.processedCoreFuel.eq(9)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.cop.processedCoreInnateEffects[2])
+        player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.co.cores.antimatter.effect[2])
 
         //----------------------------------------
 
@@ -536,7 +546,7 @@
             style: { width: '300px', height: '75px', borderRadius: '10px'}
         },
         11: {
-            costBase() { return new Decimal(10) },
+            costBase() { return player.ad.dimensionBase[0] },
             costGrowth() { return player.ad.dimensionGrowths[0]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -566,7 +576,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         12: {
-            costBase() { return new Decimal(100) },
+            costBase() { return player.ad.dimensionBase[1] },
             costGrowth() { return player.ad.dimensionGrowths[1] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -596,7 +606,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         13: {
-            costBase() { return new Decimal(1e4) },
+            costBase() { return player.ad.dimensionBase[2] },
             costGrowth() { return player.ad.dimensionGrowths[2] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -626,7 +636,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         14: {
-            costBase() { return new Decimal(1e6) },
+            costBase() { return player.ad.dimensionBase[3] },
             costGrowth() { return player.ad.dimensionGrowths[3]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -656,7 +666,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         15: {
-            costBase() { return new Decimal(1e9) },
+            costBase() { return player.ad.dimensionBase[4] },
             costGrowth() { return player.ad.dimensionGrowths[4] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -686,7 +696,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         16: {
-            costBase() { return new Decimal(1e13) },
+            costBase() { return player.ad.dimensionBase[5] },
             costGrowth() { return player.ad.dimensionGrowths[5]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -716,7 +726,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         17: {
-            costBase() { return new Decimal(1e18) },
+            costBase() { return player.ad.dimensionBase[6] },
             costGrowth() { return player.ad.dimensionGrowths[6] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -746,7 +756,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         18: {
-            costBase() { return new Decimal(1e24) },
+            costBase() { return player.ad.dimensionBase[7] },
             costGrowth() { return player.ad.dimensionGrowths[7]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -776,31 +786,24 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]], {maxWidth: "720px"}],
                 ]
-
             },
             "Dimensions": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["buyable", 1], ["clickable", 2], ["clickable", 3], ["clickable", 4]]],
                     ["blank", "25px"],
@@ -857,14 +860,12 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return !hasChallenge("ip", 18) ?  "Progress gets halted at 1e300 antimatter." : "" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", function () { return hasChallenge("ip", 18) ?  "Progress gets softcapped at 1e300 antimatter." : "" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-    ]
-
+                ]
             },
             "Reverse Break": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return getLevelableAmount("pet", 1101).gte(1) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["blank", "25px"],

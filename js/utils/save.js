@@ -267,7 +267,7 @@ function NaNcheck(data) {
 }
 function exportSave() {
 	//if (NaNalert) return
-	let str = btoa(JSON.stringify(player));
+	let str = btoa(unescape(encodeURIComponent(JSON.stringify(player))));
 
 	const el = document.createElement("textarea");
 	el.value = str;
@@ -297,7 +297,7 @@ function importSave(imported = undefined, forced = false) {
 }
 
 function exportFile() {
-	let data = btoa(JSON.stringify(player));
+	let data = btoa(unescape(encodeURIComponent(JSON.stringify(player))));
 	let file = new Blob([data], {type: "text/plain"});
 	if (window.navigator.msSaveOrOpenBlob) // IE10+
         window.navigator.msSaveOrOpenBlob(file, "CI_Save");

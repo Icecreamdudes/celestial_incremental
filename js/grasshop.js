@@ -81,13 +81,11 @@
         if (player.pol.pollinatorsIndex == 5) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorsEffect[8])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.co.cores.grasshopper.effect[0])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1042)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(1.1)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.cop.processedCoreInnateEffects[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
@@ -139,11 +137,10 @@
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
         if (player.pol.pollinatorsIndex == 5) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorsEffect[9])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.co.cores.grasshopper.effect[1])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.i.preOTFMult)
 
         // POWER MODIFIERS
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(5)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.pow(player.cop.processedCoreInnateEffects[2])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.div(player.po.halterEffects[7])
@@ -174,7 +171,7 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("s", 13))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("fu", 18))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
-        if (player.cop.processedCoreFuel.eq(5)) player.gh.steelToGet = player.gh.steelToGet.mul(player.cop.processedCoreInnateEffects[3])
+        player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
 
         // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))

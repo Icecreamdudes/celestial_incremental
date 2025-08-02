@@ -7,20 +7,8 @@
         unlocked: true,
 
         starmetalAlloy: new Decimal(0),
-        coreIndex: new Decimal(0),
 
         inStarmetalChallenge: false,
-
-        primePrices: [
-            //primePrices[strength][prime]
-            [new Decimal(1), new Decimal(3), new Decimal(7), new Decimal(20), new Decimal(50),],
-            [new Decimal(3), new Decimal(9), new Decimal(16), new Decimal(36), new Decimal(81),],
-            [new Decimal(6), new Decimal(18), new Decimal(30), new Decimal(55), new Decimal(125),],
-            [new Decimal(12), new Decimal(30), new Decimal(55), new Decimal(90), new Decimal(200),],
-            [new Decimal(20), new Decimal(50), new Decimal(90), new Decimal(200), new Decimal(500),],
-        ],
-
-        primePrice: new Decimal(0),
 
         // Auto
         toggle: false,
@@ -28,12 +16,8 @@
         amount: new Decimal(1),
         type: false, // False: Amount ; True: Time
         time: new Decimal(0),
-
-        smaMax: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)",
@@ -47,84 +31,23 @@
     color: "#d460eb",
     update(delta) {
         let onepersec = new Decimal(1)
-
-        if (player.tab == "sma" && (player.subtabs["sma"]["stuff"] == "Prime Cores")) setCoreColors(document.getElementById("starmetalCore"), player.coa.coreFuelSourceColor[player.sma.coreIndex], player.coa.coreStrengthColor[player.sma.coreIndex], player.coa.corePrimeColor[player.sma.coreIndex]); //null for now
-
-        if (player.coa.coreOccupied[player.sma.coreIndex]) 
-        { 
-            player.sma.primePrice = player.sma.primePrices[player.coa.coreStrengths[player.sma.coreIndex]][player.coa.corePrimes[player.sma.coreIndex]] 
-
-        } else 
-        { 
-            player.sma.primePrice = new Decimal(1e308) 
-        }
-
-        
         // Set Autocrunch Values
         if (player.sma.input.gte(1) && !player.sma.type) player.sma.amount = player.sma.input
         if (player.sma.input.lt(1) && !player.sma.type) player.sma.amount = new Decimal(1)
 
         if (player.s.singularityPointsToGet.gte(player.sma.amount) && player.sma.toggle && !player.sma.type) {
-            player.coa.singularityPause = new Decimal(6)
-            if (player.cop.processedCoreFuel.neq(-1) && player.cs.scrapCoreOnReset) layers.cs.scrapCore();
-            layers.coa.generateCore();
-            player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
-            player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
-            player.re.halterEssence = player.re.halterEssence.add(player.rm.halterBoostEffect)
-            player.ra.storedRadiation = player.ra.radiation
-
-            player.coa.singularityPause = new Decimal(12)
-            if (!hasMilestone("s", 18)) player.tab = "i"
-
-            if (hasMilestone("s", 11))
-            {
-                player.in.infinities = new Decimal(8)
-            }
-
+            clickClickable("co", 1000)
         }
 
         if (player.sma.toggle && player.sma.type) {
             player.sma.time = player.sma.time.add(onepersec.mul(delta));
             if (player.sma.time.gte(player.sma.amount)) {
                 player.sma.time = new Decimal(0)
-                player.coa.singularityPause = new Decimal(6)
-                if (player.cop.processedCoreFuel.neq(-1) && player.cs.scrapCoreOnReset) layers.cs.scrapCore();
-                layers.coa.generateCore();
-                player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
-                player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
-                player.re.halterEssence = player.re.halterEssence.add(player.rm.halterBoostEffect)
-                player.ra.storedRadiation = player.ra.radiation
-
-                player.coa.singularityPause = new Decimal(12)
-                if (!hasMilestone("s", 18)) player.tab = "i"
-
-                if (hasMilestone("s", 11))
-                {
-                    player.in.infinities = new Decimal(8)
-                }
-
-        }
+                clickClickable("co", 1000)
+            }
         }
     },
     clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.sma.smaMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.sma.smaMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.sma.smaMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.sma.smaMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         11: {
             title() { return "<h1>START ABSORBING LIGHT<br><h3>And enter darkness..." },
             canClick() { return true },
@@ -137,17 +60,6 @@
                 layers.le.generateSelection();
             },
             style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)', borderRadius: "15px" },
-        },
-        12: {
-            title() { return "<h2>Prime this singularity core." },
-            canClick() { return player.sma.starmetalAlloy.gte(player.sma.primePrice) && player.coa.corePrimes[player.sma.coreIndex].lt(5)},
-            unlocked() { return true },
-            onClick() {
-                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(player.sma.primePrice)
-                player.coa.coreStarmetalValue[player.sma.coreIndex] = player.coa.coreStarmetalValue[player.sma.coreIndex].add(player.sma.primePrice)
-                player.coa.corePrimes[player.sma.coreIndex] = player.coa.corePrimes[player.sma.coreIndex].add(1)
-            },
-            style: { width: '400px', "min-height": '100px', borderRadius: "15px" },
         },
         13: {
             title() { return "<h2>Auto Singularity Toggle: On" },
@@ -185,97 +97,6 @@
             },
             style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
         },
-        101: {
-            title() { return "<div id=core0 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 0
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        102: {
-            title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 1
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        103: {
-            title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 2
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        104: {
-            title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 3
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        105: {
-            title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 4
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        106: {
-            title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 5
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        107: {
-            title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 6
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        108: {
-            title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 7
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        109: {
-            title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 8
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        111: {
-            title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.sma.coreIndex = 9
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        
     },
     bars: {
     },
@@ -672,26 +493,6 @@
                 [
                     ["blank", "25px"],
                     ["clickable", 11],
-                ]
-            },
-            "Prime Cores": {
-                buttonStyle() { return { 'color': 'white' } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return player.coa.primes[player.coa.corePrimes[player.sma.coreIndex]] + player.coa.strengths[player.coa.coreStrengths[player.sma.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.sma.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Primed Effects (All based on singularity time):<br>" + player.coa.corePrimedEffectText[player.sma.coreIndex]}, { "color": "white", "text-align": "justify", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<div id=starmetalCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Cost: <h3>" + formatWhole(player.sma.primePrice) + "</h3> starmetal alloy." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 12]]],
-                    ["raw-html", function () { return "Note: Starmetal alloy will be returned when a core is destroyed." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
                 ]
             },
             "Starmetal Upgrades": {

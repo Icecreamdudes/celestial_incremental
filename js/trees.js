@@ -48,6 +48,7 @@
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 33))
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 34))
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 35))
+        player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 36))
         player.t.treesToGet = player.t.treesToGet.mul(player.m.modEffect)
         player.t.treesToGet = player.t.treesToGet.mul(levelableEffect("pet", 102)[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])
@@ -68,12 +69,11 @@
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32))
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.t.treesToGet = player.t.treesToGet.mul(player.co.cores.tree.effect[0])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1023)) player.t.treesToGet = player.t.treesToGet.pow(1.24)
-        player.t.treesToGet = player.t.treesToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(3)) player.t.treesToGet = player.t.treesToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.t.treesToGet = player.t.treesToGet.pow(player.co.cores.tree.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
@@ -117,10 +117,9 @@
         if (player.pol.pollinatorsIndex == 3) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorsEffect[5])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 32))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(3)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.cop.processedCoreInnateEffects[2])
 
         // POWER MODIFIERS
-        player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.re.realmEssenceEffect)
+        player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.co.cores.tree.effect[2])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])

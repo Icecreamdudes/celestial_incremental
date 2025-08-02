@@ -78,13 +78,12 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("id", 22))
         if (player.pol.pollinatorsIndex == 2) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorsEffect[3])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(2)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.co.cores.prestige.effect[0])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1022)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(2)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.co.cores.prestige.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta))) {
@@ -118,7 +117,7 @@
         if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
-        if (player.cop.processedCoreFuel.eq(2)) player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.co.cores.prestige.effect[2])
 
         // CRYSTALS PER SECOND
         player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))

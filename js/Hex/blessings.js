@@ -37,6 +37,7 @@ addLayer("hbl", {
         if (hasMilestone("hpw", 6) && player.hbl.blessings.lt(1e6) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
         if (hasUpgrade("hpw", 71)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 71))
         if (hasUpgrade("hve", 31)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(3)
+        player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hrm.realmEssenceEffect[0][0])
 
         // POWER AND AUTOMATION
         if (hasUpgrade("hve", 62)) player.hbl.blessingsGain = player.hbl.blessingsGain.pow(1.03)
@@ -322,7 +323,7 @@ addLayer("hbl", {
     upgrades: {
         1: {
             title: "Grace I",
-            unlocked: true,
+            unlocked() {return tmp.hbl.microtabs.blessing.Graces.unlocked},
             description: "Increase jinx cap based on NIP.",
             cost: new Decimal(60),
             currencyLocation() { return player.hbl },
@@ -341,7 +342,7 @@ addLayer("hbl", {
         },
         2: {
             title: "Grace II",
-            unlocked: true,
+            unlocked() {return tmp.hbl.microtabs.blessing.Graces.unlocked},
             description: "IP boosts hex point gain.",
             cost: new Decimal(180),
             currencyLocation() { return player.hbl },
@@ -356,7 +357,7 @@ addLayer("hbl", {
         },
         3: {
             title: "Grace III",
-            unlocked: true,
+            unlocked() {return tmp.hbl.microtabs.blessing.Graces.unlocked},
             description: "Infinities reduce refinement req.",
             cost: new Decimal(360),
             currencyLocation() { return player.hbl },
@@ -421,37 +422,37 @@ addLayer("hbl", {
         1: {
             requirementDescription: "<h3>3,600 Blessings",
             effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifierEffects[1])) + " Blessings."},
-            done() { return player.hbl.blessings.gte(3600) && hasUpgrade("bi", 103) && !inChallenge("hrm", 12)},
+            done() { return player.hbl.blessings.gte(3600) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         2: {
             requirementDescription: "<h3>6,000 Blessings",
             effectDescription: "Increase base of IP Booster Booster by +0.3.",
-            done() { return player.hbl.blessings.gte(6000) && hasUpgrade("bi", 103) && !inChallenge("hrm", 12)},
+            done() { return player.hbl.blessings.gte(6000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         3: {
             requirementDescription: "<h3>12,000 Blessings",
             effectDescription: "Increase jinx cap by 6.",
-            done() { return player.hbl.blessings.gte(12000) && hasUpgrade("bi", 103) && !inChallenge("hrm", 12)},
+            done() { return player.hbl.blessings.gte(12000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         4: {
             requirementDescription: "<h3>36,000 Blessings",
             effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifierEffects[1])) + " Boons."},
-            done() { return player.hbl.blessings.gte(36000) && hasUpgrade("bi", 103) && !inChallenge("hrm", 12)},
+            done() { return player.hbl.blessings.gte(36000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         5: {
             requirementDescription: "<h3>120,000 Blessings",
             effectDescription: "Boost provenenace effects by x1.3.",
-            done() { return player.hbl.blessings.gte(120000) && hasUpgrade("bi", 103) && !inChallenge("hrm", 12)},
+            done() { return player.hbl.blessings.gte(120000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         6: {
             requirementDescription: "<h3>360,000 Blessings",
             effectDescription: "Increase base of Λ-Jinx by +0.02.",
-            done() { return player.hbl.blessings.gte(360000) && hasUpgrade("bi", 103) && !inChallenge("hrm", 12)},
+            done() { return player.hbl.blessings.gte(360000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
     },

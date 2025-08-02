@@ -8,25 +8,12 @@
 
         radiation: new Decimal(0),
         storedRadiation: new Decimal(0),
-        radiationOutput: new Decimal(0),
         radiationPerSecond: new Decimal(0),
-        coreIndex: new Decimal(0),
 
         radiationSoftcapEffect: new Decimal(1),
         radiationSoftcapStart: new Decimal(10000),
-
-        equippedRadiationOutput: new Decimal(0),
-        unequippedRadiationOutput: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-
-        equippedRadiationValue: new Decimal(0),
-        unequippedRadiationValue: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        radiationValueLimit: new Decimal(100),
-
-        radiationMax: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #0e8a22 0%, #45ff17 100%)",
@@ -36,27 +23,21 @@
         };
     },
     tooltip: "Radiation",
-    branches: ["coa",],
+    branches: ["co"],
     color: "#0e8a22",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.tab == "ra" && (player.subtabs["ra"]["stuff"] == "Main")) setCoreColors(document.getElementById("radiationCore"), player.cop.processedCoreColorFuel, player.cop.processedCoreColorStrength, player.cop.processedCorePrime);
-
-        player.ra.radiationOutput = new Decimal(0)
-        for (let i = 0; i < player.ra.unequippedRadiationValue.length; i++)
-        {
-            player.ra.radiationOutput = player.ra.radiationOutput.add(player.ra.unequippedRadiationValue[i])
+        player.ra.radiationPerSecond = new Decimal(0)
+        for (let i in player.co.cores) {
+            player.ra.radiationPerSecond = player.ra.radiationPerSecond.add(player.co.cores[i].level.pow(CORE_STRENGTH[player.co.cores[i].strength].buff).pow(0.8).div(5))
         }
-        player.ra.radiationOutput = player.ra.radiationOutput.add(player.ra.equippedRadiationOutput)
-
-        player.ra.radiationPerSecond = player.ra.radiationOutput
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.div(player.ra.radiationSoftcapEffect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 13))
         if (hasUpgrade("ev8", 19)) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(upgradeEffect("ev8", 19))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("fu", 52))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 1205)[0])
-        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cop.processedCorePrimedEffects[1])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.co.cores.singularity.effect[1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
@@ -67,153 +48,15 @@
         player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("sma", 13)) 
 
         player.ra.radiationSoftcapEffect = new Decimal(1)
-        if (player.ra.radiation.gte(player.ra.radiationSoftcapStart))
-        {
+        if (player.ra.radiation.gte(player.ra.radiationSoftcapStart)) {
             player.ra.radiationSoftcapEffect = player.ra.radiation.sub(player.ra.radiationSoftcapStart).pow(0.345)
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("ra", 12))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("cs", 12))
         }
-
     },
-
-    generateRadiationValue()
-    {
-        player.ra.equippedRadiationValue = player.cop.processedCoreStrength.add(1).mul(10).add(getRandomInt(10))
-
-        for (let i = 0; i < player.ra.unequippedRadiationValue.length; i++)
-        {
-            if (player.coa.coreOccupied[i] == true)
-            {
-                player.ra.unequippedRadiationValue[i] = player.coa.coreStrengths[i].add(1).mul(10).add(getRandomInt(10)).mul(buyableEffect("cs", 13))
-            }
-        }
-    }, 
-    generateRadiationOutput()
-    {
-        player.ra.equippedRadiationOutput = player.ra.equippedRadiationValue.mul(Decimal.add(2, Math.random()))
-
-        for (let i = 0; i < player.ra.unequippedRadiationValue.length; i++)
-        {
-            if (player.coa.coreOccupied[i] == true)
-            {
-                player.ra.unequippedRadiationOutput[i] = player.ra.unequippedRadiationValue[i].mul(Decimal.mul(Decimal.add(2, Math.random()), 0.1)).mul(buyableEffect("cs", 11))
-            }
-        }
-    }, 
-    clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.ra.radiationMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.ra.radiationMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.ra.radiationMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.ra.radiationMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        101: {
-            title() { return "<div id=core0 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 0
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        102: {
-            title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 1
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        103: {
-            title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 2
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        104: {
-            title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 3
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        105: {
-            title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 4
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        106: {
-            title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 5
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        107: {
-            title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 6
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        108: {
-            title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 7
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        109: {
-            title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 8
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-        111: {
-            title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ra.coreIndex = 9
-            },
-            style: { width: '140px', "min-height": '140px', borderRadius: '15px' },
-        },
-    },
-    bars: {
-    },
-    upgrades: { 
-    },
+    clickables: {},
+    bars: {},
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(10000) },
@@ -420,58 +263,37 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
+                    ["blank", "10px"],
+                    ["raw-html", function () { return "You have " + format(player.ra.radiation) + " radiation. <small>(" + format(player.ra.radiationPerSecond) + "/s)</small>" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "(Stored radiation: " + format(player.ra.storedRadiation) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "After " + format(player.ra.radiationSoftcapStart) + " radiation, radiation gain is divided by /" + format(player.ra.radiationSoftcapEffect)},
+                        () => {return player.ra.radiation.gte(player.ra.radiationSoftcapStart) ? {color: "red", fontSize: "20px", fontFamily: "monospace"} : {color: "gray", fontSize: "16px", fontFamily: "monospace"}}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Total Radiation Output: " + format(player.ra.radiationOutput) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["style-row", [
+                        ["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]
+                    ], {maxWidth: "840px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Radiation Value: " + formatWhole(player.ra.equippedRadiationValue) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Radiation Output: " + format(player.ra.equippedRadiationOutput) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Radiation gain is based on core progress." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<div id=radiationCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
-                    ["raw-html", function () { return player.coa.strengths[player.coa.coreStrengths[player.ra.coreIndex]] + " " + player.coa.fuels[player.coa.coreFuelSources[player.ra.coreIndex]] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Radiation Value: " + formatWhole(player.ra.unequippedRadiationValue[player.ra.coreIndex]) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Radiation Output: " + format(player.ra.unequippedRadiationOutput[player.ra.coreIndex]) }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Radiation value is determined based on core strength and a random value." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Radiation output is determined based on radiation value and another random value." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Stored cores also produce radiation, but at a slower rate." }, { "color": "white", "text-align": "justify", "font-size": "20px", "font-family": "monospace" }],
-                ]
-            },
-            "Softcap and Buyables": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Softcap starts at " + format(player.ra.radiationSoftcapStart) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Softcap divides radiation gain by /" + format(player.ra.radiationSoftcapEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
-                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],
-                ]
+                ],
             },
         },
     }, 
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ra.radiation) + "</h3> radiation." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Radiation per second:  " + format(player.ra.radiationPerSecond) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "(Stored radiation: " + format(player.ra.storedRadiation) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && hasMilestone("s", 13)  }
 })

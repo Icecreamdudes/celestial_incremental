@@ -55,11 +55,10 @@
 
         // CONTINUED REGULAR MODIFIERS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.co.cores.code.effect[0])
 
         // POWER MODIFIERS
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.co.cores.code.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halterEffects[8])
@@ -98,10 +97,8 @@
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("p", 12))
         if (player.pol.pollinatorsIndex == 6) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.pol.pollinatorsEffect[10])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cop.processedCoreInnateEffects[3])
 
         // POWER MODIFIERS
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.pow(player.re.realmEssenceEffect)
 
         // MOD SOFTCAP CODE
         if (player.m.mods.gte(player.m.modSoftcapStart)) {
@@ -132,11 +129,10 @@
         if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
         player.m.modsToGet = player.m.modsToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.modsToGet = player.m.modsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.m.modsToGet = player.m.modsToGet.mul(player.co.cores.code.effect[2])
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1043)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
-        player.m.modsToGet = player.m.modsToGet.pow(player.re.realmEssenceEffect)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])

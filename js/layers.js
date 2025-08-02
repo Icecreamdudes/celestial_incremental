@@ -1,4 +1,4 @@
-﻿var tree1 = [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rm", "rf", "d"], ["cb", "oi"], ["re", "fa"]]
+﻿var tree1 = [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rf", "d"], ["cb", "oi", "fa"]]
 addLayer("i", {
     name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OR", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -21,7 +21,6 @@ addLayer("i", {
             buyUpgrade("i", 18)
             buyUpgrade("i", 19)
             buyUpgrade("i", 21)
-            if (hasMilestone("s", 11)) buyUpgrade("i", 20)
         }
         if (hasMilestone("s", 17)) {
             buyUpgrade("i", 11)
@@ -75,6 +74,7 @@ addLayer("i", {
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
         player.i.preOTFMult = player.i.preOTFMult.mul(player.hre.refinementEffect[5][1])
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.hrm.realmEssenceEffect[1][1])
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
@@ -142,15 +142,11 @@ addLayer("i", {
         player.gain = player.gain.mul(player.r.timeCubeEffects[0])
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
         player.gain = player.gain.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.mul(player.cop.processedCoreInnateEffects[0])
+        player.gain = player.gain.mul(player.co.cores.point.effect[0])
 
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
-        player.gain = player.gain.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(0) && player.gain.lt("1e100000")) {
-            player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
-            if (player.gain.gte("1e100000")) player.gain = new Decimal("1e100000")
-        }
+        player.gain = player.gain.pow(player.co.cores.point.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -258,16 +254,6 @@ addLayer("i", {
             unlocked() { return hasUpgrade("i", 17) },
             description: "Unlocks Pent (in ranks).",
             cost: new Decimal(1e28),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-        },
-        20:
-        {
-            title: "Realm Essence",
-            unlocked() { return hasUpgrade("i", 18) && hasMilestone("s", 11) },
-            description: "Unlocks Realm Essence.",
-            cost: new Decimal(1e50),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -485,7 +471,7 @@ addLayer("i", {
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
                         ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],
-                        ["upgrade", 20], ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
+                        ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
                         ["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]], {maxWidth: "800px"}],
                     ["blank", "25px"],
                 ],

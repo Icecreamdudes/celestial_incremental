@@ -1265,11 +1265,10 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('gh', 33))
     player.g.grassVal = player.g.grassVal.mul(player.r.timeCubeEffects[2])
     player.g.grassVal = player.g.grassVal.mul(player.i.preOTFMult)
-    if (player.cop.processedCoreFuel.eq(4)) player.g.grassVal = player.g.grassVal.mul(player.cop.processedCoreInnateEffects[0])
+    player.g.grassVal = player.g.grassVal.mul(player.co.cores.grass.effect[0])
 
     // POWER MODIFIERS
     if (hasUpgrade("hpw", 1032)) player.g.grassVal = player.g.grassVal.pow(1.18)
-    player.g.grassVal = player.g.grassVal.pow(player.re.realmEssenceEffect)
 
     // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
     player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
@@ -1302,6 +1301,7 @@ const updateGoldGrass = (delta) => {
         player.g.goldGrassCount = new Decimal(0)
     }
 
+    if (player.g.goldGrass.eq(0)) player.g.goldGrassEffect = new Decimal(1)
     // Kick out early if we don't have access
     if (!hasUpgrade('g', 13)) {
         return
@@ -1362,7 +1362,7 @@ const updateGoldGrass = (delta) => {
     if (player.pol.pollinatorsIndex == 4) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.pol.pollinatorsEffect[7])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 305)[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
-    if (player.cop.processedCoreFuel.eq(4)) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cop.processedCoreInnateEffects[1])
+    player.g.goldGrassVal = player.g.goldGrassVal.mul(player.co.cores.grass.effect[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.le.punchcardsPassiveEffect[11])
 
     // POWER MODIFIERS
@@ -1450,7 +1450,7 @@ const updateMoonstone = (delta) => {
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.g.moonstoneLevelEffects[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(levelableEffect("pet", 1104)[0])
     if (hasUpgrade('ev8', 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
-    if (player.cop.processedCoreFuel.eq(4)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.cop.processedCoreInnateEffects[2])
+    player.g.moonstoneVal = player.g.moonstoneVal.mul(player.co.cores.grass.effect[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.le.punchcardsPassiveEffect[12])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
     if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)

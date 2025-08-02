@@ -1941,7 +1941,7 @@
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43], ["ex-buyable", 51],
                         ["ex-buyable", 44], ["ex-buyable", 45], ["ex-buyable", 46], ["ex-buyable", 52],
-                        ["ex-buyable", 47], ["ex-buyable", 48], ["ex-buyable", 49], ["ex-buyable", 53]], {maxWidth: "1200px"}],
+                        ["ex-buyable", 47], ["ex-buyable", 48], ["ex-buyable", 49], ["ex-buyable", 53]], () => {return hasUpgrade("ta", 19) ? {maxWidth: "1200px"} : {maxWidth: "900px"} }],
                     ["blank", "25px"],
                 ]
             },

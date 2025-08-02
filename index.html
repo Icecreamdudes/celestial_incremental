@@ -48,8 +48,8 @@
 				<button class="uniButton" v-if="layerShown('ch') && player.uniTab==1" v-bind:style="constructUniButtonStyle('ch') " onclick="player.universe=-0.5"><span class="buttonText">γ</span></button>
  				<button class="uniButton" v-if="layerShown('du') && player.uniTab==1" v-bind:style="constructUniButtonStyle('du') " onclick="player.universe=-0.1"><span class="buttonText">D1</span></button>
 				<div class="arrowHolder">
-					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab-1" :disabled="player.uniTab<=player.minUniTab" style="border-bottom:1.5px solid"><span class="buttonText">⮝</span></button>
-					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab+1" :disabled="player.uniTab>=player.maxUniTab" style="border-top:1.5px solid"><span class="buttonText">⮟</span></button>
+					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab-1" :disabled="player.uniTab<=player.minUniTab" style="border-bottom:1.5px solid"><span class="buttonText">▲</span></button>
+					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab+1" :disabled="player.uniTab>=player.maxUniTab" style="border-top:1.5px solid"><span class="buttonText">▼</span></button>
 				</div>
 			</div>
 			<div class="layerHolder">

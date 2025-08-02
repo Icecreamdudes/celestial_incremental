@@ -1,4 +1,4 @@
-﻿var tree3 = [["s"], ["co", "coa", "cop"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
+﻿var tree3 = [["s"], ["co"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
 addLayer("s", {
     name: "Genesis", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "GE", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -26,7 +26,7 @@ addLayer("s", {
     },
     tooltip: "Genesis",
     color: "#a00",
-    branches: ["coa", "cop"],
+    branches: ["co"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -41,10 +41,11 @@ addLayer("s", {
 
         if (hasUpgrade("ev8", 22)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ev8", 22))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("s", 11))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.hrm.realmEssenceEffect[5][1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("fu", 16))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.fu.angerEffect2)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 1104)[1])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.cop.processedCorePrimedEffects[0])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.co.cores.singularity.effect[0])
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])

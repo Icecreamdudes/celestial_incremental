@@ -87,12 +87,11 @@
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorsIndex == 2) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.pol.pollinatorsEffect[2])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(1)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.co.cores.point.effect[0])
 
         // POWER MODIFIERS
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(buyableEffect("fu", 32))
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(1)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.cop.processedCoreInnateEffects[1])
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(player.co.cores.factor.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (player.f.factorPowerPerSecond.gte("1e50000")) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.div("1e50000").pow(0.2).mul("1e50000")
@@ -113,7 +112,7 @@
         if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
         if (player.pol.pollinatorsIndex == 1) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorsEffect[1])
         if (hasUpgrade("hpw", 1013)) player.f.factorBase = player.f.factorBase.mul(120)
-        if (player.cop.processedCoreFuel.eq(1)) player.f.factorBase = player.f.factorBase.mul(player.cop.processedCoreInnateEffects[2])
+        player.f.factorBase = player.f.factorBase.mul(player.co.cores.factor.effect[2])
     },
     clickables: {
         2: {

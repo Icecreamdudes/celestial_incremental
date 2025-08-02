@@ -58,6 +58,7 @@ addLayer("pol", {
 
             // POST-SOFTCAP MULTIPLIERS
             if (hasUpgrade("s", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 14))
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.co.cores.rocket.effect[2])
 
             // GAIN FUNCTIONS
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {

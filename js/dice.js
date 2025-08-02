@@ -119,10 +119,10 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
         if (player.pol.pollinatorsIndex == 7) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorsEffect[12])
-        if (player.cop.processedCoreFuel.eq(7)) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.cop.processedCoreInnateEffects[0])
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.co.cores.dice.effect[0])
 
         // POWER MODIFIERS
-        if (player.cop.processedCoreFuel.eq(7)) player.d.dicePointsMult = player.d.dicePointsMult.pow(player.cop.processedCoreInnateEffects[1])
+        player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])
 
         // DICE POINT EFFECT
         player.d.dicePointsEffect = player.d.dicePoints.plus(1).log10().mul(0.1).add(1)
@@ -240,7 +240,7 @@
         player.d.challengeDicePointsToGet = player.d.dicePoints.pow(0.2).div(3)
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
-        if (player.cop.processedCoreFuel.eq(7)) player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.co.cores.dice.effect[2])
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.le.punchcardsPassiveEffect[7])
 
         // CHALLENGE DICE PER SECOND

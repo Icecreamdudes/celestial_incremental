@@ -20,10 +20,8 @@
         paragonScrapsEffect: new Decimal(1),
         canBuyParagonScraps: false,
     
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #4f4b45 0%, #2b2522 100%)",
@@ -39,15 +37,14 @@
         let onepersec = new Decimal(1)
 
         //ALL SCRAP GAINS ARE INTEGERS
-        if (player.cop.processedCoreFuel.neq(-1))
-        {
+        /*
+        if (player.cop.processedCoreFuel.neq(-1)) {
             player.cs.coreScrapsToGet = player.cop.processedCoreStrength.pow(1.4).add(1).mul(10).add(20).floor()
             player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(player.le.punchcardsPassiveEffect[10]).floor()
             if (hasUpgrade("sma", 102)) player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
             player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(buyableEffect("ep0", 11)).floor()
             player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
-        } else
-        {
+        } else {
             player.cs.coreScrapsToGet = new Decimal(0)
         }
 
@@ -99,6 +96,7 @@
         {
             player.cs.resourceCoreScrapsToGet = new Decimal(0)
         }
+        */
         if (hasUpgrade("sma", 102)) player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
         player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
 
@@ -117,7 +115,7 @@
         player.cs.paragonScrapsEffect = player.cs.paragonScraps.mul(0.6).pow(0.3).add(1)
     },
     scrapCore() {
-        player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.cop.processedCoreStarmetalValue)
+        /*player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.cop.processedCoreStarmetalValue)
         player.cop.processedCoreStarmetalValue = new Decimal(0)
 
         player.cs.coreScraps = player.cs.coreScraps.add(player.cs.coreScrapsToGet)
@@ -132,27 +130,9 @@
         player.ra.equippedRadiationOutput = new Decimal(0)
 
         player.cop.processedCoreInnateEffects = []
-        player.cop.processedCoreInnateEffectsText = ""
+        player.cop.processedCoreInnateEffectsText = ""*/
     },
     clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.cs.coreScrapMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.cs.coreScrapMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.cs.coreScrapMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.cs.coreScrapMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         4: {
             title() { return "Scrap Core" },
             canClick() { return player.cs.scrapCoreOnReset == false },
@@ -687,7 +667,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Current core being processed: " + player.coa.strengths[player.cop.processedCoreStrength] + " " + player.coa.fuels[player.cop.processedCoreFuel] + " Singularity Core"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current core being processed: Lv." + formatWhole(player.co.cores[player.co.coreIndex].level) + " " + CORE_STRENGTH[player.co.cores[player.co.coreIndex].strength].name + " " + CORE_INFO[player.co.coreIndex].name}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "<div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5]]],

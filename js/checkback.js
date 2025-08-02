@@ -239,8 +239,9 @@ addLayer("cb", {
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.d.diceEffects[12])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("g", 25))
             if (hasUpgrade("hpw", 1011)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("hpw", 1011))
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.hrm.realmEssenceEffect[0][1])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cs.paragonScrapsEffect)
-            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cop.processedCorePrimedEffects[3])
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.co.cores.checkback.effect[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.le.punchcardsPassiveEffect[6])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pet", 406)[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.pet.gemEffects[0])
@@ -265,10 +266,11 @@ addLayer("cb", {
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pet", 105)[1])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pet", 202)[2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("ev0", 12))
+            player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.hrm.realmEssenceEffect[4][1])
+            player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.co.cores.checkback.effect[2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.le.punchcardsPassiveEffect[1])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
-            if (player.cop.processedCoreFuel.eq(8)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
         }
 
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000), new Decimal(86400)]
@@ -279,7 +281,6 @@ addLayer("cb", {
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(buyableEffect("ev0", 13))
             if (hasUpgrade("ev8", 12)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(1.1)
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(levelableEffect("pet", 1104)[2])
-            if (player.cop.processedCoreFuel.eq(8)) player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
         }
 
         for (let i = 0; i < player.cb.petButtonTimers.length; i++) {
@@ -303,8 +304,9 @@ addLayer("cb", {
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 1203)[1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 107)[0])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.hrm.realmEssenceEffect[2][1])
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.co.cores.checkback.effect[1])
             if (hasUpgrade("ev8", 16)) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.2)
-            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.cop.processedCorePrimedEffects[4])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 406)[1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.pet.gemEffects[2])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("ep5", 12))

@@ -2229,14 +2229,14 @@ addLayer("ev9", {
     color: "#5cd4a6",
     update(delta) {
         let onepersec = new Decimal(1)
-
+        /*
         for (let i = 0; i < player.ev9.offeringsOnSacrifice.length; i++) {
             if (player.coa.coreStrengths[i].gte(0))  {
                 player.ev9.offeringsOnSacrifice[i] = player.coa.coreStrengths[i].add(1).pow(1.7).mul(player.ev4.offeringsBase)
             } else {
                 player.ev9.offeringsOnSacrifice[i] = new Decimal(0)
             }
-        }
+        }*/
     },
     branches: ["branch"],
     clickables: {
@@ -2245,6 +2245,7 @@ addLayer("ev9", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
+                /*
                 if (player.ev.evolutionsUnlocked[9]) player.ev4.offerings = player.ev4.offerings.add(player.ev9.offeringsOnSacrifice[player.ev9.coreIndex])
 
                     if (player.coa.coreOccupied[player.ev9.coreIndex])
@@ -2254,98 +2255,9 @@ addLayer("ev9", {
                 player.coa.coreFuelSources[player.ev9.coreIndex] = new Decimal(-1)
                 player.coa.coreStrengths[player.ev9.coreIndex] = new Decimal(-1)
                 player.coa.coreOccupied[player.ev9.coreIndex] = false
+                */
             },
             style: { width: "140px", minHeight: "70px", borderRadius: "10px" },
-        },
-        101: {
-            title() { return "<div id=core0 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 0
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        102: {
-            title() { return "<div id=core1 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 1
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        103: {
-            title() { return "<div id=core2 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 2
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        104: {
-            title() { return "<div id=core3 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 3
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        105: {
-            title() { return "<div id=core4 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 4
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        106: {
-            title() { return "<div id=core5 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 5
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        107: {
-            title() { return "<div id=core6 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 6
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        108: {
-            title() { return "<div id=core7 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 7
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        109: {
-            title() { return "<div id=core8 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 8
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
-        },
-        111: {
-            title() { return "<div id=core9 class=singularityCore><div class=centerCircle></div>" },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                player.ev9.coreIndex = 9
-            },
-            style: { width: "140px", minHeight: "140px", borderRadius: "15px" },
         },
     },
     bars: {

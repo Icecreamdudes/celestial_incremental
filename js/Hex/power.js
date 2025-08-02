@@ -18,6 +18,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hre.refinementEffect[5][0])
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hrm.realmEffect)
         if (hasUpgrade("hpw", 72)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
+        player.hpw.powerGain = player.hpw.powerGain.mul(player.hrm.realmEssenceEffect[3][0])
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
     },
@@ -50,6 +51,7 @@ addLayer("hpw", {
         player.hcu.buyables[111] = new Decimal(0)
         if (!hasMilestone("hpw", 4)) player.hcu.buyables[112] = new Decimal(0)
 
+        // VEXES
         if (type != 2) {
             player.hve.vex = new Decimal(0)
             player.hve.vexTotal = new Decimal(0)

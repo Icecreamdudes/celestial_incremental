@@ -21,6 +21,7 @@ addLayer("hcu", {
         player.hcu.cursesGain = player.hcu.cursesGain.mul(buyableEffect("ta", 49))
         if (hasUpgrade("hbl", 4)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("hbl", 4))
         if (hasUpgrade("hpw", 22)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("hpw", 22))
+        player.hcu.cursesGain = player.hcu.cursesGain.mul(player.hrm.realmEssenceEffect[2][0])
 
         // CURSE EXPONENT
         player.hcu.cursesGain = player.hcu.cursesGain.pow(buyableEffect("hcu", 106))
@@ -38,6 +39,7 @@ addLayer("hcu", {
             if (tmp["hcu"].buyables[i].extraAmount != null) player.hcu.jinxTotal = player.hcu.jinxTotal.add(tmp["hcu"].buyables[i].extraAmount)
         }
         player.hcu.jinxTotal = player.hcu.jinxTotal.mul(player.hve.vexEffects[1])
+        player.hcu.jinxTotal = player.hcu.jinxTotal.mul(player.hrm.realmEssenceEffect[5][0])
 
         // JINX ADD CAP
         player.hcu.jinxAddCap = new Decimal(0)

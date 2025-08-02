@@ -18,6 +18,7 @@ addLayer("hre", {
         player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hbl.boosterEffects[3])
         player.hre.refinementDiv = player.hre.refinementDiv.mul(buyableEffect("ta", 47))
         if (hasUpgrade("hbl", 3)) player.hre.refinementDiv = player.hre.refinementDiv.mul(upgradeEffect("hbl", 3))
+        player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hrm.realmEssenceEffect[4][0])
 
         if (player.hre.refinement.lt(90)) player.hre.refinementReq = Decimal.pow(6, player.hre.refinement).mul(1e8).div(player.hre.refinementDiv)
         if (player.hre.refinement.gte(90)) player.hre.refinementReq = Decimal.pow(60, player.hre.refinement).div(1e82).div(player.hre.refinementDiv)

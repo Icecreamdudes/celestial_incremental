@@ -6,13 +6,9 @@
     startData() { return {
         unlocked: true,
 
-        mMax: false,
-
         matosUnlock: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)",
@@ -27,60 +23,27 @@
     update(delta) {
         let onepersec = new Decimal(1)
     },
-    clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.ma.mMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.ma.mMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.ma.mMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.ma.mMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-    },
-    bars: {
-    },
-    upgrades: { 
-    },
-    buyables: {
-
-    },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    clickables: {},
+    bars: {},
+    upgrades: { },
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content:
-                [
-  
+                content:[
                     ["blank", "25px"],
                     ["raw-html", function () { return "Coming Soon!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-    ]
-
+                ]
             },
-
         },
     }, 
-
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return player.startedGame == true && player.le.punchcardsUnlocked[15]  }
 })

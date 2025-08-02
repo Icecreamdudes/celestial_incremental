@@ -66,11 +66,11 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 46))
         if (player.pol.pollinatorsIndex == 7) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorsEffect[13])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 1202)[1])
-        if (player.cop.processedCoreFuel.eq(8)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.co.cores.rocket.effect[0])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.le.punchcardsPassiveEffect[7])
 
         // POWER MODIFIERS
-        if (player.cop.processedCoreFuel.eq(8)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.co.cores.rocket.effect[1])
 
         // ROCKET FUEL PER SECOND
         if ((hasUpgrade("rf", 17) || hasChallenge("ip", 16)) && (player.po.rocketFuel || inChallenge("ip", 16))) {
@@ -563,7 +563,7 @@
         16: {
             title: "Rocket Fuel Upgrade VI",
             unlocked() { return hasUpgrade("rf", 15) && inChallenge("ip", 16)},
-            description: "Rocket Fuel boosts points.",
+            description: "Rocket Fuel boosts points, ignoring IC6 nerf.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
@@ -572,6 +572,7 @@
                 return player.rf.rocketFuel.pow(0.5).mul(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {width: "150px"},
         },
         17: {
             title: "Rocket Fuel Upgrade VII",

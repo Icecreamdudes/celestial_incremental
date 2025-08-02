@@ -130,19 +130,20 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hrm.realmEssenceEffect[3][1])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 403)[1])
         if (hasMilestone("fa", 11)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fa.milestoneEffect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.sd.singularityPowerEffect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("s", 12))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("fu", 17))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fu.sadnessEffect2)
-        if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.co.cores.infinity.effect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.le.punchcardsPassiveEffect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 404)[0])
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
 
         // POWER MODIFIERS
-        if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.co.cores.infinity.effect[1])
 
         //----------------------------------------
 
@@ -153,196 +154,25 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
-        if (player.cop.processedCoreFuel.eq(10)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
     },
     bigCrunch() {
-        if (hasUpgrade("ta", 17))
-            {
-                if (player.d.dicePoints.gt(player.ta.highestDicePoints))
-                {
-                    player.ta.highestDicePoints = player.d.dicePoints
-                }
-                if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel))
-                {
-                    player.ta.highestRocketFuel = player.rf.rocketFuel
-                }
-                if (player.h.hexPoint.gt(player.ta.highestHexPoints))
-                {
-                    if (player.po.hex) player.ta.highestHexPoints = player.h.hexPoint
-                }
+        if (hasUpgrade("ta", 17)) {
+            if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {
+                player.ta.highestDicePoints = player.d.dicePoints
             }
+            if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel)) {
+                player.ta.highestRocketFuel = player.rf.rocketFuel
+            }
+            if (player.h.hexPoint.gt(player.ta.highestHexPoints)) {
+                if (player.po.hex) player.ta.highestHexPoints = player.h.hexPoint
+            }
+        }
+
+        //     <----     U1 STUFF     ---->
         player.points = new Decimal(10)
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-        player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
+        player.gain = new Decimal(0)
 
-        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
-        player.f.factorGain = new Decimal(1)
-
-        player.f.factorPower = new Decimal(0)
-        player.f.factorPowerEffect = new Decimal(1)
-        player.f.factorPowerPerSecond = new Decimal(0)
-        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-
-        player.f.buyables[1] = new Decimal(0)
-        player.f.buyables[2] = new Decimal(0)
-        player.f.buyables[3] = new Decimal(0)
-        player.f.buyables[4] = new Decimal(0)
-        player.f.buyables[5] = new Decimal(0)
-        player.f.buyables[6] = new Decimal(0)
-        player.f.buyables[7] = new Decimal(0)
-        player.f.buyables[8] = new Decimal(0)
-        player.f.buyables[11] = new Decimal(0)
-        player.f.buyables[12] = new Decimal(0)
-        player.f.buyables[13] = new Decimal(0)
-        player.f.buyables[14] = new Decimal(0)
-        player.f.buyables[15] = new Decimal(0)
-        player.f.buyables[16] = new Decimal(0)
-        player.f.buyables[17] = new Decimal(0)
-        player.f.buyables[18] = new Decimal(0)
-        player.f.buyables[19] = new Decimal(0)
-        player.f.buyables[21] = new Decimal(0)
-        player.f.buyables[22] = new Decimal(0)
-        player.f.buyables[23] = new Decimal(0)
-        player.f.buyables[24] = new Decimal(0)
-        player.f.buyables[25] = new Decimal(0)
-        player.f.buyables[26] = new Decimal(0)
-        player.f.buyables[27] = new Decimal(0)
-        player.f.buyables[28] = new Decimal(0)
-        player.f.buyables[29] = new Decimal(0)
-        player.f.buyables[31] = new Decimal(0)
-        player.f.buyables[32] = new Decimal(0)
-        player.f.buyables[33] = new Decimal(0)
-        player.f.buyables[34] = new Decimal(0)
-        player.f.buyables[35] = new Decimal(0)
-        player.f.buyables[36] = new Decimal(0)
-
-        player.p.prestigePoints = new Decimal(0)
-
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 24) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        player.t.buyables[11] = new Decimal(0)
-        player.t.buyables[12] = new Decimal(0)
-        player.t.buyables[13] = new Decimal(0)
-        player.t.buyables[14] = new Decimal(0)
-        player.t.buyables[15] = new Decimal(0)
-        player.t.buyables[16] = new Decimal(0)
-        player.t.buyables[17] = new Decimal(0)
-        player.t.buyables[18] = new Decimal(0)
-
-        player.f.factorPower = new Decimal(0)
-
-        player.t.leaves = new Decimal(0)
-        player.t.trees = new Decimal(0)
-
-        player.g.buyables[11] = new Decimal(0)
-        player.g.buyables[12] = new Decimal(0)
-        player.g.buyables[13] = new Decimal(0)
-        player.g.buyables[14] = new Decimal(0)
-        player.g.buyables[15] = new Decimal(0)
-        player.g.buyables[16] = new Decimal(0)
-        player.g.buyables[17] = new Decimal(0)
-        player.g.buyables[18] = new Decimal(0)
-
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 22) {
-                player.g.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-        }
-
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14))
-        {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        player.g.grass = new Decimal(0)
-        player.g.savedGrass = new Decimal(0)
-        player.g.grassCount = new Decimal(0)
-        player.g.grassTimer = new Decimal(0)
-
-        player.g.goldGrass = new Decimal(0)
-        player.g.savedGoldGrass = new Decimal(0)
-        player.g.goldGrassCount = new Decimal(0)
-        player.g.goldGrassTimer = new Decimal(0)
-
-        player.gh.grasshoppers = new Decimal(0)
-        player.gh.fertilizer = new Decimal(0)
-
-        player.gh.buyables[11] = new Decimal(0)
-        player.gh.buyables[12] = new Decimal(0)
-        player.gh.buyables[13] = new Decimal(0)
-        player.gh.buyables[14] = new Decimal(0)
-        player.gh.buyables[15] = new Decimal(0)
-        player.gh.buyables[16] = new Decimal(0)
-        player.gh.buyables[17] = new Decimal(0)
-        player.gh.buyables[18] = new Decimal(0)
-        player.gh.buyables[19] = new Decimal(0)
-
-        player.m.codeExperience = new Decimal(0)
-        player.m.linesOfCode = new Decimal(0)
-        player.m.mods = new Decimal(0)
-
-        player.m.buyables[11] = new Decimal(0)
-        player.m.buyables[12] = new Decimal(0)
-        player.m.buyables[13] = new Decimal(0)
-        player.m.buyables[14] = new Decimal(0)
-
-        player.pol.pollinators = new Decimal(0)
-
-        //dice
-        player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)]
-        player.d.dice = new Decimal(1)
-
-        player.d.buyables[11] = new Decimal(0)
-        player.d.buyables[12] = new Decimal(0)
-        player.d.buyables[13] = new Decimal(0)
-        player.d.buyables[14] = new Decimal(0)
-        player.d.buyables[15] = new Decimal(0)
-
-        for (let i = 0; i < 11; i++)
-        {
-            player.d.diceEffects[i] = new Decimal(1)
-        }
-
-        //rf
-        player.rf.rocketFuel = new Decimal(0)
-        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++)
-        {
-            player.rf.abilitiesUnlocked[i] = false
-        }
-        for (let i = 0; i < 4; i++)
-        {
-            player.rf.abilityTimers[i] = new Decimal(0)
-        }
-
-        for (let i = 0; i < player.rf.upgrades.length; i++) {
-            if (+player.rf.upgrades[i] < 18) {
-                player.rf.upgrades.splice(i, 1);
-                i--;
-            }
-        }
         if (!hasMilestone("ip", 25)) {
             for (let i = 0; i < player.i.upgrades.length; i++) {
                 if (+player.i.upgrades[i] < 22) {
@@ -352,70 +182,182 @@ addLayer("in", {
             }
         }
 
-        if (!player.po.keepOTFS)
-        {
+        //     <----     RANK LAYER     ---->
+        player.r.rank = new Decimal(0)
+        player.r.tier = new Decimal(0)
+        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        player.r.pent = new Decimal(0)
+
+        player.r.ranksToGet = new Decimal(0)
+        player.r.tiersToGet = new Decimal(0)
+        player.r.tetrsToGet = new Decimal(0)
+        player.r.pentToGet = new Decimal(0)
+
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if (+player.r.milestones[i] < 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        
+        //     <----     FACTOR LAYER     ---->
+        player.f.factorPower = new Decimal(0)
+        player.f.factorPowerEffect = new Decimal(1)
+        player.f.factorPowerPerSecond = new Decimal(0)
+
+        for (let i in player.f.buyables) {
+            player.f.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     PRESTIGE LAYER     ---->
+        player.p.prestigePoints = new Decimal(0)
+        player.p.prestigePointsToGet = new Decimal(0)
+
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) player.p.upgrades.splice(0, player.p.upgrades.length)
+
+        //     <----     TREE LAYER     ---->
+        player.t.trees = new Decimal(0)
+        player.t.treesToGet = new Decimal(0)
+        player.t.leaves = new Decimal(0)
+        player.t.leavesPerSecond = new Decimal(0)
+
+        for (let i in player.t.buyables) {
+            player.t.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     GRASS LAYER     ---->
+        player.g.grass = new Decimal(0)
+        player.g.grassVal = new Decimal(0)
+        player.g.savedGrass = new Decimal(0)
+        player.g.grassCount = new Decimal(0)
+        player.g.grassTimer = new Decimal(0)
+
+        player.g.goldGrass = new Decimal(0)
+        player.g.goldGrassVal = new Decimal(0)
+        player.g.savedGoldGrass = new Decimal(0)
+        player.g.goldGrassCount = new Decimal(0)
+        player.g.goldGrassTimer = new Decimal(0)
+
+        for (let i = 11; i < 19; i++) {
+            player.g.buyables[i] = new Decimal(0)
+        }
+
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) player.g.upgrades.splice(0, player.g.upgrades.length)
+
+        //     <----     GRASSHOPPER LAYER     ---->
+        player.gh.grasshoppers = new Decimal(0)
+        player.gh.grasshoppersToGet = new Decimal(0)
+        player.gh.fertilizer = new Decimal(0)
+        player.gh.fertilizerPerSecond = new Decimal(0)
+
+        for (let i = 1; i < 20; i++) {
+            player.gh.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     MOD LAYER     ---->
+        player.m.codeExperience = new Decimal(0)
+        player.m.codeExperienceToGet = new Decimal(0)
+        player.m.linesOfCode = new Decimal(0)
+        player.m.linesOfCodePerSecond = new Decimal(0)
+        player.m.mods = new Decimal(0)
+        player.m.modsToGet = new Decimal(0)
+
+        for (let i in player.m.buyables) {
+            player.m.buyables[i] = new Decimal(0)
+        }
+
+        //     <----     DICE LAYER     ---->
+        player.d.dicePoints = new Decimal(0)
+        player.d.diceRolls = [new Decimal(1)]
+        player.d.dice = new Decimal(1)
+
+        for (let i = 0; i < 11; i++) {
+            player.d.diceEffects[i] = new Decimal(1)
+        }
+
+        for (let i = 11; i < 16; i++) {
+            player.d.buyables[i] = new Decimal(0)
+        }
+
+        if (!inChallenge("ip", 15)) {
+            player.d.challengeDicePoints = new Decimal(0)
+            player.d.challengeDicePointsToGet = new Decimal(0)
+
+            player.d.upgrades.splice(0, player.d.upgrades.length)
+
+            for (let i = 21; i < 25; i++) {
+                player.d.buyables[i] = new Decimal(0)
+            }
+        }
+
+        //     <----     ROCKETFUEL LAYER     ---->
+        player.rf.rocketFuel = new Decimal(0)
+        player.rf.rocketFuelToGet = new Decimal(0)
+        player.rf.abilityIndex = -1
+
+        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
+            player.rf.abilitiesUnlocked[i] = false
+        }
+
+        for (let i = 0; i < 8; i++) {
+            player.rf.abilityTimers[i] = new Decimal(0)
+            player.rf.abilityEffects[i] = new Decimal(1)
+        }
+
+        player.rf.upgrades.splice(0, player.rf.upgrades.length)
+
+        //     <----     U1 CHALLENGE STUFF     ---->
+        player.pe.pests = new Decimal(0)
+        player.pe.pestsPerSecond = new Decimal(0)
+        player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+
+        player.de.antidebuffPoints = new Decimal(0)
+        player.de.antidebuffPointsToGet = new Decimal(0)
+        player.de.antidebuffEffect = new Decimal(1)
+        player.de.antidebuffPointsEffect = new Decimal(1)
+
+        //     <----     POLLINATOR LAYER     ---->
+        player.pol.pollinators = new Decimal(0)
+        player.pol.pollinatorsPerSecond = new Decimal(0)
+
+        //     <----     FACTORY LAYER     ---->
+        player.fa.charge = new Decimal(0)
+        player.fa.chargeRate = new Decimal(0)
+
+
+        //     <----     ANTIMATTER LAYER     ---->
+        if (!hasMilestone("ip", 14)) {
+            if (player.in.infinities.eq(0)) player.ad.antimatter = new Decimal(10)
+            player.ad.antimatterPerSecond = new Decimal(0)
+
+            for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
+                player.ad.dimensionAmounts[i] = new Decimal(0)
+                player.ad.dimensionsPerSecond[i] = new Decimal(0)
+            }
+
+            for (let i in player.ad.buyables) {
+                player.ad.buyables[i] = new Decimal(0)
+            }
+        }
+
+        //     <----     OTF STUFF     ---->
+        if (!player.po.keepOTFS) {
             player.po.dice = false
             player.po.rocketFuel = false
             player.po.hex = false
             player.po.breakInfinity = false
-            player.po.realmMods = false
-            player.po.gem = false
+            player.in.breakInfinity = false
             player.po.featureSlots = player.po.featureSlotsMax
         }
 
-
-        //reset antimatter stuff
-
-        if (!hasMilestone("ip", 14))
-        {
-            if (player.in.infinities.eq(0)) player.ad.antimatter = new Decimal(10)
-
-            player.ad.buyables[1] = new Decimal(0)
-
-            for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-            {
-                player.ad.dimensionAmounts[i] = new Decimal(0)
-                player.ad.buyables[11+i] = new Decimal(0)
-            }
-
-            player.ad.buyables[2] = new Decimal(0)
-            player.ad.buyables[3] = new Decimal(0)
-        }
-
-        //challenge stuff
-        player.pe.pests = new Decimal(0)
-        player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
-
-        if (!inChallenge("ip", 15))
-        {
-
-        player.d.challengeDicePoints = new Decimal(0)
-        player.d.buyables[21] = new Decimal(0)
-        player.d.buyables[22] = new Decimal(0)
-        player.d.buyables[23] = new Decimal(0)
-        player.d.buyables[24] = new Decimal(0)
-
-        for (let i = 0; i < player.d.upgrades.length; i++) {
-            if (+player.d.upgrades[i] < 100) {
-                player.d.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-        }
-
-        // Mastery Point Stuff
-        if (hasUpgrade("bi", 14))
-        {
+        //     <----     MASTERY POINT STUFF     ---->
+        if (hasUpgrade("bi", 14)) {
             if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
             if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
             if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
         }
-
-        player.de.antidebuffPoints = new Decimal(0)
-        player.de.antidebuffEffect = new Decimal(1)
-        player.de.antidebuffPointsEffect = new Decimal(1)
-        player.fa.charge = new Decimal(0)
-
     },
     clickables: {},
     bars: {},
@@ -502,18 +444,9 @@ addLayer("bigc", {
     crunch(){
         player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
         player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
-        if (player.po.dice)
-        {
-            player.ip.diceRuns = player.ip.diceRuns.add(1)
-        }
-        if (player.po.rocketFuel)
-        {
-            player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
-        }
-        if (player.po.hex)
-        {
-            player.ip.hexRuns = player.ip.hexRuns.add(1)
-        }
+        if (player.po.dice) player.ip.diceRuns = player.ip.diceRuns.add(1)
+        if (player.po.rocketFuel) player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
+        if (player.po.hex) player.ip.hexRuns = player.ip.hexRuns.add(1)
         if (hasUpgrade("ta", 17)) {
             if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {
                 player.ta.highestDicePoints = player.d.dicePoints
@@ -527,13 +460,6 @@ addLayer("bigc", {
         }
         layers.in.bigCrunch()
         player.in.reachedInfinity = false
-
-        if (player.rm.halterBoostCheck && player.po.realmMods)
-        {
-            player.rm.halterBoost = player.po.halterEffects[0]
-        }
-
-        player.rm.halterBoostCheck = true
     },
     bars: {},
     upgrades: {},

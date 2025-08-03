@@ -262,11 +262,10 @@
             player.tab = "i"
             player.c.cutscenes[13] = false
         }
-
         //15
-        if (player.c.cutscenes[14] && player.cop.processingCore) {
+        if (player.c.cutscenes[14] && player.tab == "co" && player.subtabs["co"]['Cores'] == "Main") {
             player.c.currentCutscene = 15
-        } else if (player.tab != "c" && player.cop.processingCore) {
+        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
             player.c.currentCutscene = 0
         }
         if (player.c.currentCutscene == 15) {

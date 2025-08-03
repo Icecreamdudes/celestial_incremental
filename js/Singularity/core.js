@@ -604,7 +604,7 @@ addLayer("co", {
 
         //     <----     CHECKBACK LAYER     ---->
         player.cb.xp = new Decimal(0)
-        player.cb.totalxp = new Decimal(0)
+        player.cb.totalxp = new Decimal(4.5)
         player.cb.level = new Decimal(1)
         if (!hasMilestone("s", 14)) player.cb.XPBoost = new Decimal(1)
 
@@ -973,6 +973,8 @@ addLayer("co", {
         player.hbl.boons = new Decimal(0)
         player.hbl.boonsGain = new Decimal(0)
         player.hbl.blessAutomation = false
+        player.hbl.minRefineInput = new Decimal(18)
+        player.hbl.minRefine = new Decimal(18)
         player.hbl.boosterDeposit = 0.05
         player.hbl.boosterLevels = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
@@ -1416,7 +1418,7 @@ addLayer("co", {
                 return player.co.cores[player.co.coreIndex].xp.div(player.co.cores[player.co.coreIndex].req)
             },
             baseStyle: {backgroundColor: "black"},
-            fillStyle: {backgroundColor: "#822"},
+            fillStyle: {backgroundColor: "#933"},
             borderStyle: {border: "0px", borderLeft: "3px solid white", borderRadius: "0px"},
             display() {
                 return "<h3>" + format(player.co.cores[player.co.coreIndex].xp) + "/" + format(player.co.cores[player.co.coreIndex].req) + "</h3>";

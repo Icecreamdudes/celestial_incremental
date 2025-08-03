@@ -28,7 +28,7 @@ addLayer("hre", {
         
         if (player.hre.refinementGain.lt(1)) player.hre.refinementGain = new Decimal(0)
 
-        if (hasMilestone("hre", 5)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
+        if (hasMilestone("hre", 4)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
 
         player.hre.refinementEffect = [[new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)]]
         if (player.hre.refinement.gte(1)) player.hre.refinementEffect[0][0] = Decimal.pow(1.3, player.hre.refinement.pow(0.8)).mul(2)
@@ -57,7 +57,7 @@ addLayer("hre", {
     clickables: {
         1: {
             title() { return "<h2>Refine, but reset hex points and provenance.</h2><br><h3>Req: " + format(player.hre.refinementReq) + " Hex Points</h3>"},
-            canClick() { return player.hre.refinementGain.gte(1) && !hasMilestone("hre", 5)},
+            canClick() { return player.hre.refinementGain.gte(1) && !hasMilestone("hre", 4)},
             unlocked: true,
             onClick() {
                 if (!hasMilestone("hre", 1)) player.hre.refinement = player.hre.refinement.add(1)
@@ -102,14 +102,14 @@ addLayer("hre", {
         },
         4: {
             requirementDescription: "<h3>36 Refinements",
-            effectDescription: "Unlock blessing autoclicker.",
+            effectDescription: "Automate refinement gain.",
             done() { return player.hre.refinement.gte(36)},
             unlocked() { return hasMilestone("hre", 3) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         5: {
             requirementDescription: "<h3>42 Refinements",
-            effectDescription: "Automate refinement gain.",
+            effectDescription: "Unlock blessing autoclicker.",
             done() { return player.hre.refinement.gte(42)},
             unlocked() { return hasMilestone("hre", 4) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},

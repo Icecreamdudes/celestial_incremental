@@ -761,18 +761,16 @@
         },
         17: {
             name: "Challenge VII",
-            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECOMMENDED AFTER FIRST XPBOOST)" },
-            goalDescription() { return "Level 60" },
+            challengeDescription() { return "<h4>Clicking on a check back XP button resets the timer for all other check back XP buttons.</h4>" },
+            goalDescription() { return "Earning an evolution shard from an XP button." },
             goal() { return new Decimal("60") },
-            canComplete: function () { return player.cb.level.gte(60) },
+            canComplete: function () { return player.cb.IC7shardCount > 0 },
             rewardDescription: "Check back buyables.",
-            unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(100) },
+            unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(35) },
             onEnter() {
                 layers.in.bigCrunch()
 
-                player.cb.level = new Decimal(1)
-                player.cb.xp = new Decimal(0)
-                player.cb.totalxp = new Decimal(5.1)
+                player.cb.IC7shardCount = 0
             },
             onExit() {
                 layers.in.bigCrunch()
@@ -848,7 +846,7 @@
                         ["challenge", 17], ["challenge", 18]], {maxWidth: "1200px"}],
                     ["blank", "10px"],
                     ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(100) ? "Unlock Challenge VII by reaching Check Back Level 100" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(35) ? "Unlock Challenge VII by reaching Check Back Level 35" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["blank", "10px"],
                 ]

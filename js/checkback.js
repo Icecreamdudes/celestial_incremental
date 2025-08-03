@@ -10,9 +10,10 @@ addLayer("cb", {
         level: new Decimal(1),
         levelEffect: new Decimal(1),
         xp: new Decimal(0),
-        totalxp: new Decimal(5.1),
+        totalxp: new Decimal(4.5),
         xpMult: new Decimal(1),
         req: new Decimal(4),
+        reqDiv: new Decimal(1),
         effectActivate: false,
         xpBuyableMax: false,
 
@@ -21,87 +22,19 @@ addLayer("cb", {
         buttonBaseXP: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(0.04),new Decimal(25),new Decimal(80),new Decimal(220),new Decimal(666),],
 
         petsUnlocked: false,
+        petPoints: new Decimal(0),
+
 
         //petButtons
         petButtonTimersMax: [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600), new Decimal(7200), new Decimal(36000), new Decimal(86400)],
         petButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
 
-        //pets
-        lockedImg: "<img src='resources/secret.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        petDisplay: ["","","","","","","","",""],
-        petDisplayIndex: new Decimal(0),
-
-        commonPetUnlocks: [false, false, false, false, false, false, false, false, false],
-        commonPetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        commonPetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        commonPetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-        commonPetImage: ["<img src='resources/gwaCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        "<img src='resources/eggCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        "<img src='resources/unsmithCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        "<img src='resources/checkpointCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        "<img src='resources/slaxCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        "<img src='resources/spiderCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        "<img src='resources/blobCommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>"],
-        commonPetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),],
-            [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),new Decimal(1)], [new Decimal(1),],
-            [new Decimal(1),new Decimal(1),], [new Decimal(1),new Decimal(1),]
-        ],
-
-        uncommonPetDisplay: ["","","","","","","","","",],
-        uncommonPetDisplayIndex: new Decimal(0),
-
-        uncommonPetUnlocks: [false, false, false, false, false, false, false, false, false],
-        uncommonPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
-        uncommonPetAmounts: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
-        uncommonPetReq: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
-        uncommonPetImage: ["<img src='resources/testeUncommonPet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        ],
-        uncommonPetEffects: [[new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),],
-        [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]
-        , [new Decimal(1), new Decimal(1),new Decimal(1),], [new Decimal(1), new Decimal(1),new Decimal(1),]],
-
-        rarePetDisplay: ["","","","","","","",],
-        rarePetDisplayIndex: new Decimal(0),
-
-        rarePetUnlocks: [false, false, false, false, false, false, false],
-        rarePetLevels: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        rarePetAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
-        rarePetReq: [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-        rarePetImage: ["<img src='resources/novaRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-            "<img src='resources/diceRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-            "<img src='resources/ufoRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-            "<img src='resources/goofyAhhThingRarePet.png'style='width:calc(80%);height:calc(80%);margin:10%'></img>",
-        ],
-        rarePetEffects: [[new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),], [new Decimal(1), new Decimal(1),]],
-
-        petPoints: new Decimal(0),
-        rarePetPointBase: [new Decimal(1),new Decimal(0.1),new Decimal(12),new Decimal(180),new Decimal(4),new Decimal(25),new Decimal(0.05), new Decimal(50), new Decimal(90)],
-        rarePetButtonTimersMax: [new Decimal(40), new Decimal(20), new Decimal(600), new Decimal(18000), new Decimal(180), new Decimal(1000), new Decimal(1), new Decimal(4500), new Decimal(8000),],
-        rarePetButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-
-        //epic
-        epicPetUnlocks: [false, false, false, false, false, false,],
-        epicPetFragments: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), /* index 3 is singularity fragments, which are used for epic pets indices 3-5 */],
-        epicPetFragmentReq: [new Decimal(50), new Decimal(40), new Decimal(45), new Decimal(100), new Decimal(100), new Decimal(100),],
-        epicPetLevels: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        epicPetEffects: [[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],
-        [new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],[new Decimal(1), new Decimal(1), new Decimal(1)],],
-        epicPetImage: ["", "", "",],
-        epicPetDisplay: ["","","",],
-        epicPetDisplayIndex: new Decimal(0),
-
         //legendary
         legendaryPetGems: [new Decimal(0), new Decimal(0), new Decimal(0)],
         //red purple green
 
-        //dice pet
-        lastDicePetRoll: new Decimal(0),
-        dicePetRoll: new Decimal(0),
-        highestDicePetCombo: new Decimal(0),
-        dicePetCombo: new Decimal(0),
-        dicePetPointsGain: new Decimal(0),
-
         evolutionShards: new Decimal(0),
+        IC7shardCount: 0,
         viewingEvolved: [false, false, false, false, false, false, false, false, false, false, false,],
         evolvedLevels: [new Decimal(0), new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0),],
         evolvedReq: [new Decimal(2), new Decimal(3), new Decimal(4),new Decimal(6),new Decimal(1),new Decimal(1),new Decimal(3), new Decimal(1),new Decimal(5), new Decimal(9), new Decimal(2),],
@@ -117,9 +50,6 @@ addLayer("cb", {
         XPBoostReq: [new Decimal(100),new Decimal(500),],
 
         XPBoostEffect: new Decimal(1),
-
-        //chal 7
-        lossRate: new Decimal(0),
 
         //paragon
         paragonShards: new Decimal(0),
@@ -171,44 +101,31 @@ addLayer("cb", {
             layers.cb.offlineCooldown()
         }
 
-        if (player.cb.totalxp == 5.1 && player.cb.level > 1)
-        {
+        if (player.cb.totalxp == 4.5 && player.cb.level > 1) {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
         }
 
-        if (player.cb.level.gte(player.cb.highestLevel))
-        {
+        if (player.cb.level.gte(player.cb.highestLevel)) {
             player.cb.highestLevel = player.cb.level
         }
 
-        if (player.points.gt(1e100) && !inChallenge("ip", 13))
-        {
+        if (player.points.gt(1e100) && !inChallenge("ip", 13)) {
             player.cb.effectActivate = true
-        } else
-        {
+        } else {
             player.cb.effectActivate = false
         }
-        if (!inChallenge("ip", 17)) {
-            player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
-        } else {
-            if (player.cb.level.lt(10000)) {
-                player.cb.req = player.cb.level.pow(1.2).add(4).floor()
-            } else if (player.cb.level.lt(100000)) {
-                player.cb.req = player.cb.level.pow(1.4).sub(335008).floor()
-            } else {
-                player.cb.req = player.cb.level.pow(1.6).sub(90335008).floor()
-            }
-            player.cb.req = player.cb.req.div(levelableEffect("pet", 203)[2])
-            player.cb.req = player.cb.req.div(levelableEffect("pet", 304)[1])
-        }
 
-        for (let i = 0; i < player.cb.buttonTimers.length; i++)
-        {
+        player.cb.reqDiv = new Decimal(1)
+        player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 203)[2])
+        player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 304)[1])
+
+        player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
+
+        for (let i = 0; i < player.cb.buttonTimers.length; i++) {
             player.cb.buttonTimers[i] = player.cb.buttonTimers[i].sub(onepersec.mul(delta))
         }
 
-        if (player.cb.xp.gte(player.cb.req))
-        {
+        if (player.cb.xp.gte(player.cb.req)) {
             layers.cb.levelup();
         }
 
@@ -228,8 +145,7 @@ addLayer("cb", {
         player.cb.buttonBaseXP[6] = player.cb.buttonBaseXP[6].mul(buyableEffect("ev1", 25))
         player.cb.buttonBaseXP[7] = player.cb.buttonBaseXP[7].mul(buyableEffect("ev1", 27))
 
-        for (let i = 0; i < player.cb.buttonBaseXP.length; i++)
-        {
+        for (let i = 0; i < player.cb.buttonBaseXP.length; i++) {
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("gh", 21))
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pet", 101)[1])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pet", 205)[0])
@@ -260,8 +176,7 @@ addLayer("cb", {
         player.cb.buttonTimersMax[6] = player.cb.buttonTimersMax[6].div(buyableEffect("ev1", 26))
         player.cb.buttonTimersMax[7] = player.cb.buttonTimersMax[7].div(buyableEffect("ev1", 28))
 
-        for (let i = 0; i < player.cb.buttonTimersMax.length; i++)
-        {
+        for (let i = 0; i < player.cb.buttonTimersMax.length; i++) {
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("gh", 22))
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pet", 105)[1])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pet", 202)[2])
@@ -274,8 +189,7 @@ addLayer("cb", {
         }
 
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000), new Decimal(86400)]
-        for (let i = 0; i < player.cb.petButtonTimersMax.length; i++)
-        {
+        for (let i = 0; i < player.cb.petButtonTimersMax.length; i++) {
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(levelableEffect("pet", 105)[0])
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(levelableEffect("pet", 202)[2])
             player.cb.petButtonTimersMax[i] = player.cb.petButtonTimersMax[i].div(buyableEffect("ev0", 13))
@@ -329,17 +243,6 @@ addLayer("cb", {
         }
         
 
-        //chal 7
-        if (inChallenge("ip", 17) && player.cb.level.gt(1)) {
-            player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
-            player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
-
-            if (player.cb.xp.lt(0))
-            {
-                player.cb.level = player.cb.level.sub(2)
-                player.cb.xp = player.cb.req.sub(1)
-            }
-        }
 
         //automation
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++) {
@@ -457,68 +360,43 @@ addLayer("cb", {
             if (player.cb.alertToggle) callAlert("You gained a PARAGON SHARD! (Pity)", "resources/paragonShard.png");
         }
 
-        if (player.cb.paragonShards.lte(0))
-        {
+        if (player.cb.paragonShards.lte(0)) {
             player.cb.paragonShards = new Decimal(0)
         }
     },
-    levelToXP(quantity)
-    {
-        if (!quantity.gte(10000)) {
-            quantity = quantity.add(2).pow(2.2).mul(5/11)
-            quantity = quantity.div(levelableEffect("pet", 203)[2])
-            quantity = quantity.div(levelableEffect("pet", 304)[1])
-            return quantity
-        } else if (!quantity.gte(100000)) {
-            quantity = quantity.sub(10000)
-            quantity = quantity.add(1436).pow(2.4).sub(37772059).add(286925000)
-            quantity = quantity.div(levelableEffect("pet", 203)[2])
-            quantity = quantity.div(levelableEffect("pet", 304)[1])
-            return quantity
+    levelToXP(quantity) {
+        // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
+        if (quantity.lt(1000)) {
+            quantity = quantity.add(2).pow(2).div(2).div(player.cb.reqDiv)
+        } else if (quantity.lt(10000)) {
+            quantity = quantity.pow(2.25).div(2).sub(2309705).div(player.cb.reqDiv)
+        } else if (quantity.lt(100000)) {
+            quantity = quantity.pow(2.5).sub(9502309705).div(player.cb.reqDiv)
         } else {
-            quantity = quantity.sub(100000)
-            quantity = quantity.add(20875).pow(2.6).sub(1.7e11).add(8.07e11)
-            quantity = quantity.div(levelableEffect("pet", 203)[2])
-            quantity = quantity.div(levelableEffect("pet", 304)[1])
-            return quantity
+            quantity = Decimal.pow(1000, quantity.pow(0.125)).sub(1323276439362).div(player.cb.reqDiv)
         }
+        return quantity
     },
-    xpToLevel(quantity)
-    {
-        if (!quantity.gte(new Decimal(286925000).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))) {
-            quantity = quantity.mul(levelableEffect("pet", 203)[2])
-            quantity = quantity.mul(levelableEffect("pet", 304)[1])
-            quantity = quantity.div(5/11).pow(5/11).sub(2).floor()
-            return quantity
-        } else if (!quantity.gte(new Decimal(8.07e11).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))) {
-            quantity = quantity.sub(new Decimal(286925000).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))
-            quantity = quantity.mul(levelableEffect("pet", 203)[2])
-            quantity = quantity.mul(levelableEffect("pet", 304)[1])
-            quantity = quantity.add(37772059).pow(5/12).sub(1436).add(10000).floor()
-            return quantity
+    xpToLevel(quantity) {
+        // The number the quantity is less then is XP equivalent to the level softcaps above
+        // The big XP additions are the difference between post-softcap XP and pre-softcap XP at the softcap level
+        if (quantity.lt(Decimal.div(502002, player.cb.reqDiv))) {
+            quantity = quantity.mul(player.cb.reqDiv).mul(2).pow(1/2).sub(2).floor()
+        } else if (quantity.lt(Decimal.div(497690295, player.cb.reqDiv))) {
+            quantity = quantity.mul(player.cb.reqDiv).add(2309705).mul(2).pow(4/9).floor()
+        } else if (quantity.lt(Decimal.div(3152775350463, player.cb.reqDiv))) {
+            quantity = quantity.mul(player.cb.reqDiv).add(9502309705).pow(2/5).floor()
         } else {
-            quantity = quantity.sub(new Decimal(8.07e11).div(levelableEffect("pet", 203)[2]).div(levelableEffect("pet", 304)[1]))
-            quantity = quantity.mul(levelableEffect("pet", 203)[2])
-            quantity = quantity.mul(levelableEffect("pet", 304)[1])
-            quantity = quantity.add(1.7e11).pow(5/13).sub(20875).add(100000).floor()
-            return quantity
+            quantity = quantity.mul(player.cb.reqDiv).add(1323276439362).log(10).div(3).pow(8).floor()
         }
+        return quantity
     },
-    levelup()
-    {
-        if (!inChallenge("ip", 17)) {
-            let leftover = new Decimal(0)
-            player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
-            leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
-            player.cb.xp = new Decimal(0)
-            player.cb.xp = player.cb.xp.add(leftover)
-        } else {
-            let leftover = new Decimal(0)
-            leftover = player.cb.xp.sub(player.cb.req)
-            player.cb.level = player.cb.level.add(1)
-            player.cb.xp = new Decimal(0)
-            player.cb.xp = player.cb.xp.add(leftover)
-        }
+    levelup() {
+        let leftover = new Decimal(0)
+        player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
+        leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
+        player.cb.xp = new Decimal(0)
+        player.cb.xp = player.cb.xp.add(leftover)
     },
     offlineCooldown() {
         let time = player.cb.time
@@ -644,13 +522,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[0].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[0].mul(player.cb.xpMult))
                 player.cb.buttonTimers[0] = player.cb.buttonTimersMax[0]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(200)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (0.5%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(0.5);
@@ -674,13 +557,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[1].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[1].mul(player.cb.xpMult))
                 player.cb.buttonTimers[1] = player.cb.buttonTimersMax[1]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(100)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (1%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
@@ -704,13 +592,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[2].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[2].mul(player.cb.xpMult))
                 player.cb.buttonTimers[2] = player.cb.buttonTimersMax[2]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(50)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (2%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
@@ -734,13 +627,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[3].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[3].mul(player.cb.xpMult))
                 player.cb.buttonTimers[3] = player.cb.buttonTimersMax[3]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(500)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (0.2%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(0.2);
@@ -764,13 +662,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[4].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[4].mul(player.cb.xpMult))
                 player.cb.buttonTimers[4] = player.cb.buttonTimersMax[4]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(20)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (5%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(5);
@@ -794,13 +697,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[5].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[5].mul(player.cb.xpMult))
                 player.cb.buttonTimers[5] = player.cb.buttonTimersMax[5]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(5)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (20%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(20);
@@ -824,13 +732,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[6].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[6].mul(player.cb.xpMult))
                 player.cb.buttonTimers[6] = player.cb.buttonTimersMax[6]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(2)
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (50%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(50);
@@ -854,13 +767,18 @@ addLayer("cb", {
                 player.cb.xp = player.cb.xp.add(player.cb.buttonBaseXP[7].mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.buttonBaseXP[7].mul(player.cb.xpMult))
                 player.cb.buttonTimers[7] = player.cb.buttonTimersMax[7]
+                if (inChallenge("ip", 17)) {
+                    for (i = 0; i < player.cb.buttonTimers.length; i++) {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
 
-                if (player.cb.highestLevel.gt(35))
-                {
+                if (player.cb.highestLevel.gt(35)) {
                     let random = getRandomInt(50)
                     if (random != 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0)
+                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                         if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (98%)", "resources/evoShard.png");
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(98)
@@ -1323,7 +1241,7 @@ addLayer("cb", {
                     }
                     player.cb.level = new Decimal(1)
                     player.cb.xp = new Decimal(0)
-                    player.cb.totalxp = new Decimal(5.1)
+                    player.cb.totalxp = new Decimal(4.5)
                     if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[0].mul(player.ca.canteEnergyMult))
                 } else {
                     callAlert("You must be level " + formatWhole(player.cb.XPBoostReq[0]) + " to reset for this button.");
@@ -1357,7 +1275,7 @@ addLayer("cb", {
                     }
                     player.cb.level = new Decimal(1)
                     player.cb.xp = new Decimal(0)
-                    player.cb.totalxp = new Decimal(5.1)
+                    player.cb.totalxp = new Decimal(4.5)
                     if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[1].mul(player.ca.canteEnergyMult))
                 } else {
                     callAlert("You must be level " + formatWhole(player.cb.XPBoostReq[1]) + " to reset for this button.");
@@ -2438,12 +2356,14 @@ addLayer("cb", {
                 borderRadius: "0px 0px 10px 10px",
             },
             display() {
-                if (player.cb.level.lt(10000)) {
+                if (player.cb.level.lt(1000)) {
                     return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.</h5>"
-                } else if (player.cb.level.lt(100000)) {
+                } else if (player.cb.level.lt(10000)) {
                     return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED]</b></h6>"
-                } else {
+                } else if (player.cb.level.lt(100000)) {
                     return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED<sup>2</sup>]</b></h6>"
+                } else {
+                    return "<h5>" + format(player.cb.xp) + "/" + formatWhole(player.cb.req) + "<h5> XP to level up.<h6><b style='color:red'>[SOFTCAPPED<sup>3</sup>]</b></h6>"
                 }
             },
         },
@@ -3292,7 +3212,6 @@ addLayer("cb", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],        
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/level.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],

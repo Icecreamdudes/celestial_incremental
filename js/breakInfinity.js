@@ -548,7 +548,7 @@
         {
             title: "BI NIP Upgrade VI",
             unlocked() { return true },
-            description: "Unlock more universe 1 upgrades. (universe 1, then upgrades if you forgot)",
+            description: "Unlock more origin upgrades. (Universe 1 if you forgot)",
             cost: new Decimal(4e9),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",

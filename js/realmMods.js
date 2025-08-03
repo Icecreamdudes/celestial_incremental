@@ -450,7 +450,7 @@
 
                 player.cb.level = new Decimal(1)
                 player.cb.xp = new Decimal(0)
-                player.cb.totalxp = new Decimal(5.1)
+                player.cb.totalxp = new Decimal(4.5)
             },
             style: { 'background-image': '#98245c', width: '400px', "min-height": '100px', borderRadius: '15px' },
         },

@@ -40,7 +40,7 @@ function miscCode() {
 	if (player.sma.inStarmetalChallenge) player.maxUniTab = 1
 
 	// PREVENT TAB BEING OUT OF BOUNDS
-	if (player.uniTab < player.minUniTab) player.uniTab = minUniTab
+	if (player.uniTab < player.minUniTab) player.uniTab = player.minUniTab
 	if (player.uniTab > player.maxUniTab) player.uniTab = player.maxUniTab
 }
 

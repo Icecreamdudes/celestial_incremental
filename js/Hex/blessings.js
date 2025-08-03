@@ -507,7 +507,7 @@ addLayer("hbl", {
             },
             "Autoclicker": {
                 buttonStyle() { return {borderRadius: "5px"}},
-                unlocked() {return hasMilestone("hre", 4)},
+                unlocked() {return hasMilestone("hre", 5)},
                 content: [
                     ["blank", "10px"],
                     ["row", [

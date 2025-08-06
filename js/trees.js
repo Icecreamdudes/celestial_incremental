@@ -65,7 +65,7 @@
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 3) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorsEffect[4])
+        if (player.pol.pollinatorEffects.bat.enabled) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorEffects.bat.effects[1])
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32))
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.i.preOTFMult)
@@ -114,7 +114,7 @@
         if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 3) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorsEffect[5])
+        if (player.pol.pollinatorEffects.bat.enabled) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorEffects.bat.effects[0])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 32))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.i.preOTFMult)
 

@@ -13,7 +13,7 @@ addLayer("hpw", {
         vigor: 0,
     }},
     update(delta) {
-        player.hpw.powerGain = Decimal.pow(2, player.hbl.blessings.add(1).div(1e6).log(6))
+        player.hpw.powerGain = Decimal.pow(2, player.hbl.blessings.add(1).div(6e5).log(6))
         if (hasUpgrade("hpw", 11)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hre.refinementEffect[5][0])
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hrm.realmEffect)
@@ -112,8 +112,8 @@ addLayer("hpw", {
     },
     clickables: {
         1: {
-            title() { return "<h2>Amplify Power, but reset previous hex content.</h2><br><h3>Req: 1e6 Blessings</h3>"},
-            canClick() { return player.hbl.blessings.gte(1e6)},
+            title() { return "<h2>Amplify Power, but reset previous hex content.</h2><br><h3>Req: 600,000 Blessings</h3>"},
+            canClick() { return player.hbl.blessings.gte(6e5)},
             unlocked: true,
             onClick() {
                 player.hpw.power = player.hpw.power.add(player.hpw.powerGain)
@@ -577,7 +577,7 @@ addLayer("hpw", {
         },
         2: {
             requirementDescription: "<h3>6 Total Power",
-            effectDescription: "Keep IP related boosters on resets.",
+            effectDescription: "Keep IP related boosters on power resets.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(6)},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -591,7 +591,7 @@ addLayer("hpw", {
         },
         4: {
             requirementDescription: "<h3>216 Total Power",
-            effectDescription: "Keep NIP related jinxes on resets.",
+            effectDescription: "Keep NIP related jinxes on power resets.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(216)},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -705,7 +705,7 @@ addLayer("hpw", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpw.power) + "</h3> Power." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return player.hbl.blessings.gte(1e6) ? "(+" + formatWhole(player.hpw.powerGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.hbl.blessings.gte(6e5) ? "(+" + formatWhole(player.hpw.powerGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
         ["clickable", 1],

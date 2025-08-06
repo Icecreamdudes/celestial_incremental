@@ -1750,7 +1750,7 @@ addLayer("pet", {
             effect() { 
                 return [
                     player.pet.highestDicePetCombo.add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)).pow(levelableEffect("pet", 1302)[0]), // Dice Points (Based on Highest Combo)
-                    player.d.dicePoints.pow(0.1).mul(getLevelableAmount(this.layer, this.id).pow(1.2)).add(1).pow(levelableEffect("pet", 1302)[0]), // Mods (Based on Dice Points)
+                    player.d.dicePoints.add(1).log(6).mul(6).mul(getLevelableAmount(this.layer, this.id).pow(1.2)).add(1).pow(2).pow(levelableEffect("pet", 1302)[0]), // Mods (Based on Dice Points)
                 ]
             },
             sacValue() { return new Decimal(10)},

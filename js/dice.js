@@ -118,7 +118,7 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 41))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
-        if (player.pol.pollinatorsIndex == 7) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorsEffect[12])
+        if (player.pol.pollinatorEffects.ant.enabled) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorEffects.ant.effects[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.co.cores.dice.effect[0])
 
         // POWER MODIFIERS

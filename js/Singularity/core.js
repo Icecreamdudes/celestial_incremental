@@ -939,7 +939,7 @@ addLayer("co", {
         player.hpw.vigor = 0
 
         player.hpw.upgrades.splice(0, player.hpw.upgrades.length)
-        player.hpw.milestones.splice(0, player.hpw.milestones.length)
+        if (!hasMilestone("s", 16)) player.hpw.milestones.splice(0, player.hpw.milestones.length)
 
         //     <----     HEX OF PURITY LAYER     ---->
         player.hpu.purity = new Decimal(0)
@@ -989,8 +989,7 @@ addLayer("co", {
         player.hre.refinementGain = new Decimal(0)
         player.hre.refinementEffect = [[new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], 
             [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)]]
-
-        player.hre.milestones.splice(0, player.hre.milestones.length)
+        if (!hasMilestone("s", 13)) player.hre.milestones.splice(0, player.hre.milestones.length)
 
         //     <----     HEX OF PROVENANCE LAYER     ---->
         for (let i = 0; i < 6; i++) {

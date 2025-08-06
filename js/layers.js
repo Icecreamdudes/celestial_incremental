@@ -136,7 +136,7 @@ addLayer("i", {
         if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 1) player.gain = player.gain.mul(player.pol.pollinatorsEffect[0])
+        if (player.pol.pollinatorEffects.beetle.enabled) player.gain = player.gain.mul(player.pol.pollinatorEffects.beetle.effects[0])
         player.gain = player.gain.mul(buyableEffect("gh", 31))
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
         player.gain = player.gain.mul(player.r.timeCubeEffects[0])

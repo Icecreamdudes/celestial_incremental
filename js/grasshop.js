@@ -78,7 +78,7 @@
         if (hasUpgrade("de", 11) && inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 5) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorsEffect[8])
+        if (player.pol.pollinatorEffects.bee.enabled) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorEffects.bee.effects[0])
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.co.cores.grasshopper.effect[0])
@@ -135,7 +135,7 @@
 
         // CONTINUED REGULAR MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(buyableEffect("gh", 34))
-        if (player.pol.pollinatorsIndex == 5) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorsEffect[9])
+        if (player.pol.pollinatorEffects.bee.enabled) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.pol.pollinatorEffects.bee.effects[1])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.r.timeCubeEffects[3])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.co.cores.grasshopper.effect[1])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.i.preOTFMult)
@@ -163,10 +163,11 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
         if (hasUpgrade("hpw", 1021)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("hpw", 1021))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
+        if (hasUpgrade("s", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("s", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 1106)[0])
         player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 306)[0])
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.foundryEffect)
-        if (player.pol.pollinatorsIndex == 8) player.gh.steelToGet = player.gh.steelToGet.mul(player.pol.pollinatorsEffect[16])
+        if (player.pol.pollinatorEffects.mechanical.enabled) player.gh.steelToGet = player.gh.steelToGet.mul(player.pol.pollinatorEffects.mechanical.effects[0])
         if (hasMilestone("fa", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.milestoneEffect[3])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("s", 13))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("fu", 18))

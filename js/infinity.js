@@ -113,7 +113,7 @@ addLayer("in", {
         if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
         if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
         if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
-        if (player.in.breakInfinity && hasUpgrade("bi", 114)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
+        if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosterEffects[2])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
@@ -264,7 +264,7 @@ addLayer("in", {
         player.m.mods = new Decimal(0)
         player.m.modsToGet = new Decimal(0)
 
-        for (let i in player.m.buyables) {
+        for (let i = 11; i < 15; i++) {
             player.m.buyables[i] = new Decimal(0)
         }
 
@@ -301,7 +301,7 @@ addLayer("in", {
             player.rf.abilitiesUnlocked[i] = false
         }
 
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 5; i++) {
             player.rf.abilityTimers[i] = new Decimal(0)
             player.rf.abilityEffects[i] = new Decimal(1)
         }

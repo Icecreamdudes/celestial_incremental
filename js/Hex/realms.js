@@ -68,17 +68,17 @@ addLayer("hrm", {
             marked: false,
             fullDisplay() {
                 let str = "<h4>You can only reset blessing 6 times. Amended Automation is also locked.</h4>"
-                if (challengeCompletions(this.layer, this.id) == 0) str = str.concat("<br>Goal: 6,000 Blessings")
-                if (challengeCompletions(this.layer, this.id) == 1) str = str.concat("<br>Goal: 60,000 Blessings")
-                if (challengeCompletions(this.layer, this.id) == 2) str = str.concat("<br>Goal: 600,000 Blessings")
+                if (challengeCompletions(this.layer, this.id) == 0) str = str.concat("<br>Goal: 10,000 Blessings")
+                if (challengeCompletions(this.layer, this.id) == 1) str = str.concat("<br>Goal: 100,000 Blessings")
+                if (challengeCompletions(this.layer, this.id) == 2) str = str.concat("<br>Goal: 1,000,000 Blessings")
                 if (challengeCompletions(this.layer, this.id) > 2) str = str.concat("<br><p style='color:#4c4'>COMPLETED</p>")
                 return str
             },
             canComplete() {
-                if (challengeCompletions(this.layer, this.id) == 0) return player.hbl.blessings.gte(6000)
-                if (challengeCompletions(this.layer, this.id) == 1) return player.hbl.blessings.gte(60000)
-                if (challengeCompletions(this.layer, this.id) == 2) return player.hbl.blessings.gte(600000)
-                return player.hbl.blessings.gte(1e6)
+                if (challengeCompletions(this.layer, this.id) == 0) return player.hbl.blessings.gte(1e4)
+                if (challengeCompletions(this.layer, this.id) == 1) return player.hbl.blessings.gte(1e5)
+                if (challengeCompletions(this.layer, this.id) == 2) return player.hbl.blessings.gte(1e6)
+                return player.hbl.blessings.gte(1e7)
             },
             unlocked() { return hasUpgrade("hpw", 1001) || challengeCompletions(this.layer, this.id) > 0 },
             canClick() { return hasUpgrade("hpw", 1001) },

@@ -85,7 +85,7 @@
         if (inChallenge("ip", 13)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.pow(0.7)
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 2) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.pol.pollinatorsEffect[2])
+        if (player.pol.pollinatorEffects.fly.enabled) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.pol.pollinatorEffects.fly.effects[0])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.i.preOTFMult)
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.co.cores.point.effect[0])
 
@@ -110,7 +110,7 @@
         player.f.factorBase = new Decimal(0.05)
         player.f.factorBase = player.f.factorBase.add(buyableEffect("gh", 16))
         if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
-        if (player.pol.pollinatorsIndex == 1) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorsEffect[1])
+        if (player.pol.pollinatorEffects.beetle.enabled) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorEffects.beetle.effects[1])
         if (hasUpgrade("hpw", 1013)) player.f.factorBase = player.f.factorBase.mul(120)
         player.f.factorBase = player.f.factorBase.mul(player.co.cores.factor.effect[2])
     },

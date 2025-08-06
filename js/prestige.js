@@ -76,7 +76,7 @@
         // CONTINUED REGULAR MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("p", 11))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("id", 22))
-        if (player.pol.pollinatorsIndex == 2) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorsEffect[3])
+        if (player.pol.pollinatorEffects.fly.enabled) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorEffects.fly.effects[1])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.i.preOTFMult)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.co.cores.prestige.effect[0])
 

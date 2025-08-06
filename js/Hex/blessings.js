@@ -27,7 +27,7 @@ addLayer("hbl", {
     },
     update(delta) {
         player.hbl.blessingsGain = new Decimal(0)
-        if (player.hre.refinement.gte(18)) player.hbl.blessingsGain = player.hre.refinement.sub(16).pow(1.6).div(3)
+        if (player.hre.refinement.gte(18)) player.hbl.blessingsGain = player.hre.refinement.sub(16).pow(1.6).div(2)
         player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hbl.boosterEffects[4])
         if (hasMilestone("hbl", 1)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
         if (hasMilestone("hbl", 1) || inChallenge("hrm", 12)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[1])

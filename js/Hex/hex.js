@@ -21,7 +21,7 @@ addLayer("h", {
         let onepersec = new Decimal(1)
 
         // START OF HEX POINT GAIN
-        if (!hasChallenge("ip", 13)) player.h.hexPointGain = new Decimal(6)
+        if (!hasChallenge("ip", 13)) player.h.hexPointGain = new Decimal(12)
         if (hasChallenge("ip", 13)) player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[0][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[1][1])
@@ -35,7 +35,7 @@ addLayer("h", {
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hbl.boosterEffects[0])
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("hcu", 107))
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("ta", 48))
-        if (player.pol.pollinatorsIndex == 7) player.h.hexPointGain = player.h.hexPointGain.mul(player.pol.pollinatorsEffect[14])
+        if (player.pol.pollinatorEffects.ant.enabled) player.h.hexPointGain = player.h.hexPointGain.mul(player.pol.pollinatorEffects.ant.effects[2])
         if (hasUpgrade("hbl", 2)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hbl", 2))
         if (hasUpgrade("hbl", 5)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hbl", 5))
         if (hasUpgrade("hpw", 2)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hpw", 2))

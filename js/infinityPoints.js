@@ -260,7 +260,7 @@
         {
             title: "Upgrade (3, 3)",
             unlocked() { return hasUpgrade("ip", 31) },
-            description: "Boosts code experience based on infinity points.",
+            description: "Boosts mods based on infinity points.",
             cost: new Decimal(100),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",

@@ -1261,7 +1261,7 @@ const updateGrass = (delta) => {
     if (inChallenge('tad', 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect('de', 15))
 
     // CONTINUED REGULAR MODIFIERS
-    if (player.pol.pollinatorsIndex == 4) player.g.grassVal = player.g.grassVal.mul(player.pol.pollinatorsEffect[6])
+    if (player.pol.pollinatorEffects.wind.enabled) player.g.grassVal = player.g.grassVal.mul(player.pol.pollinatorEffects.wind.effects[0])
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('gh', 33))
     player.g.grassVal = player.g.grassVal.mul(player.r.timeCubeEffects[2])
     player.g.grassVal = player.g.grassVal.mul(player.i.preOTFMult)
@@ -1359,7 +1359,7 @@ const updateGoldGrass = (delta) => {
     player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 104)[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.g.moonstoneEffect)
     if (hasUpgrade('ip', 24) && !inChallenge('ip', 14)) player.g.goldGrassVal = player.g.goldGrassVal.add(upgradeEffect('ip', 24))
-    if (player.pol.pollinatorsIndex == 4) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.pol.pollinatorsEffect[7])
+    if (player.pol.pollinatorEffects.wind.enabled) player.g.goldGrassVal = player.g.goldGrassVal.mul(player.pol.pollinatorEffects.wind.effects[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 305)[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.co.cores.grass.effect[1])

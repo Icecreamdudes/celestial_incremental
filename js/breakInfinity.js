@@ -466,7 +466,7 @@
         {
             title: "BI IP Upgrade XVI",
             unlocked() { return true },
-            description: "Unlock a new OTF, realm mods.",
+            description: "Unlock hex of realms, and new hex of power mights.",
             cost: new Decimal(1e32),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -603,8 +603,7 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '125px', height: '100px', }
         },
-        112:
-        {
+        112: {
             title: "BI NIP Upgrade XI",
             unlocked() { return true },
             description: "Dimension boosts and antimatter galaxies don't reset antimatter dimensions.",
@@ -614,12 +613,11 @@
             currencyInternalName: "negativeInfinityPoints",
             style: { width: '150px', height: '100px', }
         },
-        113:
-        {
+        113: {
             title: "BI NIP Upgrade XII",
             unlocked() { return true },
-            description: "Raise the antimatter effect to the ^3.",
-            cost: new Decimal(1e16),
+            description: "Unlock new mod buyables.",
+            cost: new Decimal(1e15),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -628,8 +626,8 @@
         114: {
             title: "BI NIP Upgrade XIII",
             unlocked() { return true },
-            description: "Improve the infinity point formula again.",
-            cost: new Decimal(1e19),
+            description: "Raise the antimatter effect to the ^3.",
+            cost: new Decimal(1e17),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -637,9 +635,19 @@
         },
         115: {
             title: "BI NIP Upgrade XIV",
+            unlocked() { return true },
+            description: "Improve the infinity point formula again.",
+            cost: new Decimal(1e19),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', height: '100px', }
+        },
+        116: {
+            title: "BI NIP Upgrade XV",
             unlocked() { return hasMilestone("s", 12) },
             description: "Unlock a new pollinator.",
-            cost: new Decimal(1e22),
+            cost: new Decimal(1e21),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",

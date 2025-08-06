@@ -84,12 +84,14 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 37))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.id.infinityPowerEffect)
-        //player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.h.ragePowerEffect)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("m", 17))
 
         // SOFTCAP MODIFIER
         if (player.ad.antimatterPerSecond.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(1, Decimal.div(player.ad.antimatterPerSecond.plus(1).log10(), 1000))).mul(1e300)
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(1, Decimal.div(player.ad.antimatterPerSecond.plus(1).log10(), 1100))).mul(1e300)
+        let base = new Decimal(1000)
+        if (hasUpgrade("bi", 21)) base = base.mul(1.1)
+        base = base.mul(buyableEffect("m", 15))
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log10())).mul(1e300)
 
         // SOFTCAP IGNORING MODIFIERS
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
@@ -106,7 +108,7 @@
         if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
-        if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
+        if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
         player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("cs", 31))
 
         //----------------------------------------
@@ -134,7 +136,7 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.om.hexMasteryPointsEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 37))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)
-            //player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.h.ragePowerEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("m", 17))
 
             // SOFTCAP MODIFIER
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)

@@ -55,7 +55,7 @@
 
         player.oi.oilToGet = player.an.anonymity.div(1e25).pow(0.2)
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 1206)[1])
-        if (player.pol.pollinatorsIndex == 8) player.oi.oilToGet = player.oi.oilToGet.mul(player.pol.pollinatorsEffect[17])
+        if (player.pol.pollinatorEffects.mechanical.enabled) player.oi.oilToGet = player.oi.oilToGet.mul(player.pol.pollinatorEffects.mechanical.effects[1])
         if (hasMilestone("fa", 17)) player.oi.oilToGet = player.oi.oilToGet.mul(player.fa.milestoneEffect[6])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("ra", 15))
         player.oi.oilToGet = player.oi.oilToGet.mul(player.fu.funEffect)

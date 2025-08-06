@@ -84,7 +84,7 @@ addLayer("s", {
         13: {
             title: "Singularity Upgrade III",
             unlocked() { return true},
-            description: "Unlock a new challenge dice upgrade and keep the last 4 dice effects.",
+            description: "Unlock a new challenge dice upgrade and keep tier 2 dice effects.",
             cost: new Decimal("300"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
@@ -94,13 +94,13 @@ addLayer("s", {
         14: {
             title: "Singularity Upgrade IV",
             unlocked() { return true},
-            description: "Boost pollinators, crystal, and time cubes based on unspent singularity points.",
+            description: "Boost steel, crystal, and time cubes based on unspent singularity points.",
             cost: new Decimal("3600"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
             effect() {
-                return player.s.singularityPoints.pow(1.2).div(5).add(1)
+                return player.s.singularityPoints.pow(0.8).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
             style: { width: '175px', "min-height": '120px' },
@@ -315,7 +315,7 @@ addLayer("s", {
         },
         13: {
             requirementDescription: "<h3>3 Singularities",
-            effectDescription: "Always set automation tier to hex, produce 10% of alternate broken infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
+            effectDescription: "Keep hex of refinement milestones on singularity resets, produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
             done() { return player.s.singularities.gte(3) },
             style: { width: '800px', "min-height": '85px' },
         },
@@ -327,21 +327,21 @@ addLayer("s", {
         },
         15: {
             requirementDescription: "<h3>5 Singularities",
-            effectDescription: "Keep check back buyables on singularity resets, remove realm mod's requirements and gain 1% of each realm mod per second, keep challenges on reset, and unlock singularity point buyables.",
+            effectDescription: "Keep check back buyables and infinity challenges on singularity resets, and unlock singularity point buyables.",
             done() { return player.s.singularities.gte(5) },
-            style: { width: '800px', "min-height": '85px' },
+            style: { width: '800px', "min-height": '75px' },
         },
         16: {
             requirementDescription: "<h3>6 Singularities",
-            effectDescription: "Autobuy blessings, realm mod, challenge dice points, crystal, steel, pollinator, time cube, replicanti, galaxy dust, repli-grass, grass-skippers, linkers, and proto memory buyables, and gain 10% of blank mods per second.",
+            effectDescription: "Autobuy challenge dice points, crystal, steel, pollinator, time cube, replicanti, galaxy dust, repli-grass, grass-skippers, linkers, and proto memory buyables.<br>Keep hex of power's vigor milestones on singularity reset.",
             done() { return player.s.singularities.gte(6) },
             style: { width: '800px', "min-height": '85px' },
         },
         17: {
             requirementDescription: "<h3>7 Singularities",
-            effectDescription: "Autobuy infinity dimensions, autobuy all pre-singularity upgrades, no longer reset RBI toggle, have one of every antimatter dimensions autobuyer and unlock a new alt-uni 1 upgrade.",
+            effectDescription: "Autobuy infinity dimensions and all pre-singularity upgrades, no longer reset RBI toggle, keep one of every AD autobuyer, and unlock a new alt-uni 1 upgrade.",
             done() { return player.s.singularities.gte(7) },
-            style: { width: '800px', "min-height": '85px' },
+            style: { width: '800px', "min-height": '75px' },
         },
         18: {
             requirementDescription: "<h3>12 Singularities",
@@ -351,7 +351,7 @@ addLayer("s", {
         },
         19: {
             requirementDescription: "<h3>25 Singularities",
-            effectDescription: "Start each singularity with every universe 2 layer unlocked, and hex is kept on singularity reset, and autoroll cooldown is 10x shorter.",
+            effectDescription: "Start each singularity with every universe 2 layer unlocked, and autoroll cooldown is 10x shorter.",
             done() { return player.s.singularities.gte(25) },
             style: { width: '800px', "min-height": '75px' },
         },

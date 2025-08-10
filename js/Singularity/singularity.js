@@ -41,7 +41,6 @@ addLayer("s", {
 
         if (hasUpgrade("ev8", 22)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ev8", 22))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("s", 11))
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.hrm.realmEssenceEffect[5][1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("fu", 16))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.fu.angerEffect2)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 1104)[1])
@@ -100,7 +99,7 @@ addLayer("s", {
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
             effect() {
-                return player.s.singularityPoints.pow(0.8).add(1)
+                return player.s.singularityPoints.add(1).log(10).pow(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
             style: { width: '175px', "min-height": '120px' },
@@ -138,7 +137,7 @@ addLayer("s", {
         18: {
             title: "Singularity Upgrade VIII",
             unlocked() { return true},
-            description: "Unlock an additional OTF slot.",
+            description: "Keep hex unlocked permanently.",
             cost: new Decimal("5e12"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
@@ -447,7 +446,6 @@ addLayer("s", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],

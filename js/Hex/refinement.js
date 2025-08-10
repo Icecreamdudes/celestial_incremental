@@ -18,21 +18,21 @@ addLayer("hre", {
         player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hbl.boosterEffects[3])
         player.hre.refinementDiv = player.hre.refinementDiv.mul(buyableEffect("ta", 47))
         if (hasUpgrade("hbl", 3)) player.hre.refinementDiv = player.hre.refinementDiv.mul(upgradeEffect("hbl", 3))
-        player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hrm.realmEssenceEffect[4][0])
+        player.hre.refinementDiv = player.hre.refinementDiv.mul(player.h.prePowerMult)
 
         if (player.hre.refinement.lt(90)) player.hre.refinementReq = Decimal.pow(6, player.hre.refinement).mul(1e8).div(player.hre.refinementDiv)
-        if (player.hre.refinement.gte(90)) player.hre.refinementReq = Decimal.pow(60, player.hre.refinement).div(1e82).div(player.hre.refinementDiv)
+        if (player.hre.refinement.gte(90)) player.hre.refinementReq = Decimal.pow(1000, player.hre.refinement).div(1e190).div(player.hre.refinementDiv)
         
         if (player.h.hexPoint.lt(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).div(1e8).mul(player.hre.refinementDiv).ln().div(new Decimal(6).ln()).add(1).sub(player.hre.refinement).floor()
-        if (player.h.hexPoint.gte(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).mul(1e82).mul(player.hre.refinementDiv).ln().div(new Decimal(60).ln()).add(1).sub(player.hre.refinement).floor()
+        if (player.h.hexPoint.gte(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).mul(1e190).mul(player.hre.refinementDiv).ln().div(new Decimal(1000).ln()).add(1).sub(player.hre.refinement).floor()
         
         if (player.hre.refinementGain.lt(1)) player.hre.refinementGain = new Decimal(0)
 
         if (hasMilestone("hre", 4)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
 
         player.hre.refinementEffect = [[new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)]]
-        if (player.hre.refinement.gte(1)) player.hre.refinementEffect[0][0] = Decimal.pow(1.3, player.hre.refinement.pow(0.8)).mul(2)
-        if (player.hre.refinement.gte(1)) player.hre.refinementEffect[0][1] = Decimal.pow(2, player.hre.refinement)
+        if (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) player.hre.refinementEffect[0][0] = Decimal.pow(1.3, player.hre.refinement.pow(0.8)).mul(2)
+        if (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) player.hre.refinementEffect[0][1] = Decimal.pow(2, player.hre.refinement).mul(2)
         if (inChallenge("hrm", 12)) {
             player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(player.hpu.purifierEffects[3])
             player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(player.hpu.purifierEffects[3])
@@ -60,8 +60,8 @@ addLayer("hre", {
             canClick() { return player.hre.refinementGain.gte(1) && !hasMilestone("hre", 4)},
             unlocked: true,
             onClick() {
-                if (!hasMilestone("hre", 1)) player.hre.refinement = player.hre.refinement.add(1)
-                if (hasMilestone("hre", 1)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
+                if (!hasMilestone("hre", 0)) player.hre.refinement = player.hre.refinement.add(1)
+                if (hasMilestone("hre", 0)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
 
                 // RESET CODE
                 for (let i = 0; i < 6; i++) {
@@ -80,10 +80,17 @@ addLayer("hre", {
         },
     },
     milestones: {
+        0: {
+            requirementDescription: "<h3>12 Refinements",
+            effectDescription: "Unlocks buy max refinements.",
+            done() { return player.hre.refinement.gte(12)},
+            style: {width: '500px', height: "50px", borderRadius: "10px"},
+        },
         1: {
             requirementDescription: "<h3>18 Refinements",
-            effectDescription: "Unlocks buy max refinements.",
+            effectDescription: "1st refiner no longer requires a refinement.",
             done() { return player.hre.refinement.gte(18)},
+            unlocked() { return hasMilestone("hre", 0) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         2: {
@@ -213,7 +220,8 @@ addLayer("hre", {
                 unlocked: true,
                 content: [
                     ["row", [
-                        ["raw-html", () => {return player.hre.refinement.lt(3) ? "Next refiner at 3 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return player.hre.refinement.lt(1) && !hasMilestone("hre", 1) ? "Next refiner at 1 refinement" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) && player.hre.refinement.lt(3) ? "Next refiner at 3 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.hre.refinement.gte(3) && player.hre.refinement.lt(9) ? "Next refiner at 9 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.hre.refinement.gte(9) && player.hre.refinement.lt(24) ? "Next refiner at 24 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.hre.refinement.gte(24) && player.hre.refinement.lt(54) ? "Next refiner at 54 refinements" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -231,7 +239,7 @@ addLayer("hre", {
                             ["style-column", [
                                 ["raw-html", () => {return "x" + format(player.hre.refinementEffect[0][1]) + "<br>Factor Power"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px"}],
-                        ], {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"}],
+                        ], () => {return player.hre.refinement.gte(1) || hasMilestone("hre", 1) ? {width: "150px", height: "120px", backgroundColor: "#222", border: "2px solid white", margin: "5px", borderRadius: "10px"} : {display: "none !important"}}],
                         ["style-column", [
                             ["style-column", [
                                 ["raw-html", "Refiner 2", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -298,6 +306,7 @@ addLayer("hre", {
                 content: [
                     ["raw-html", "Milestones kept on later resets.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "5px"],
+                    ["milestone", 0],
                     ["milestone", 1],
                     ["milestone", 2],
                     ["milestone", 3],
@@ -332,7 +341,7 @@ addLayer("hre", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return player.hre.refinement.neq(1) ? "You are at <h3>" + formatWhole(player.hre.refinement) + "</h3> refinements." : "You are at <h3>" + formatWhole(player.hre.refinement) + "</h3> refinement." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasMilestone("hre", 1) ? "(+" + formatWhole(player.hre.refinementGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return hasMilestone("hre", 0) ? "(+" + formatWhole(player.hre.refinementGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
             ["raw-html", () => {return player.hre.refinement.gte(90) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],

@@ -95,6 +95,7 @@
         multAdd = multAdd.add(buyableEffect("rg", 11))
         multAdd = multAdd.mul(buyableEffect("gs", 18))
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[4])
+        multAdd = multAdd.mul(levelableEffect("pet", 307)[1])
         multAdd = multAdd.add(buyableEffect("fu", 23))
         if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 

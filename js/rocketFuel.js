@@ -66,6 +66,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 46))
         if (player.pol.pollinatorEffects.ant.enabled) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.pol.pollinatorEffects.ant.effects[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 1202)[1])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 306)[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.co.cores.rocket.effect[0])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.le.punchcardsPassiveEffect[7])
 

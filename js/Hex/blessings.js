@@ -37,7 +37,7 @@ addLayer("hbl", {
         if (hasMilestone("hpw", 6) && player.hbl.blessings.lt(1e6) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
         if (hasUpgrade("hpw", 71)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 71))
         if (hasUpgrade("hve", 31)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(3)
-        player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hrm.realmEssenceEffect[0][0])
+        player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.h.prePowerMult)
 
         // POWER AND AUTOMATION
         if (hasUpgrade("hve", 62)) player.hbl.blessingsGain = player.hbl.blessingsGain.pow(1.03)
@@ -53,6 +53,7 @@ addLayer("hbl", {
         player.hbl.boonsGain = player.hbl.boonsGain.mul(buyableEffect("hcu", 108))
         if (hasMilestone("hbl", 4)) player.hbl.boonsGain = player.hbl.boonsGain.mul(2)
         if (hasMilestone("hbl", 4) || inChallenge("hrm", 12)) player.hbl.boonsGain = player.hbl.boonsGain.mul(player.hpu.purifierEffects[1])
+        player.hbl.boonsGain = player.hbl.boonsGain.mul(player.h.prePowerMult)
 
         // POWER AND AUTOMATION
         if (inChallenge("hrm", 12)) player.hbl.boonsGain = player.hbl.boonsGain.pow(0.6)
@@ -98,10 +99,10 @@ addLayer("hbl", {
         }
 
         if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.5, player.hbl.boosterLevels[4])
-        if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.66, player.hbl.boosterLevels[4])
+        if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.6, player.hbl.boosterLevels[4])
         if (hasMilestone("hre", 2)) {
             if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.25).add(1))
-            if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.33).add(1))
+            if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = player.hbl.boosterEffects[4].mul(player.hbl.boosterXP[4].div(player.hbl.boosterReq[4]).mul(0.3).add(1))
         }
 
         if (!hasMilestone("hbl", 2)) player.hbl.boosterEffects[5] = Decimal.pow(2, player.hbl.boosterLevels[5])

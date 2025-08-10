@@ -79,17 +79,17 @@
             onClick() {
                 if (inChallenge("tad", 11))
                 {
-                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
+                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && (player.po.hex || hasUpgrade("s", 18)) && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
                     {
                         player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
                     }
-                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
+                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && (!player.po.hex || hasUpgrade("s", 18)) && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
                     {
                         player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
                     }
-                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
+                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && (!player.po.hex || hasUpgrade("s", 18)) && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
                     {
                         player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
                         player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
@@ -762,7 +762,7 @@
         17: {
             name: "Challenge VII",
             challengeDescription() { return "<h4>Clicking on a check back XP button resets the timer for all other check back XP buttons.</h4>" },
-            goalDescription() { return "Earning an evolution shard from an XP button." },
+            goalDescription() { return "Earning an evolution shard from a check back button." },
             goal() { return new Decimal("60") },
             canComplete: function () { return player.cb.IC7shardCount > 0 },
             rewardDescription: "Check back buyables.",
@@ -784,7 +784,7 @@
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "....???",
-            unlocked() { return hasChallenge("ip", 17) && !hasChallenge('ip', 18) },
+            unlocked() { return hasChallenge("ip", 16) && hasChallenge("ip", 17) && !hasChallenge('ip', 18) },
             onEnter() {
                 layers.in.bigCrunch()
             },
@@ -813,8 +813,6 @@
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["milestone", 1]]],
                     ["row", [["milestone", 11]]],
@@ -845,9 +843,9 @@
                         ["challenge", 14], ["challenge", 15], ["challenge", 16],
                         ["challenge", 17], ["challenge", 18]], {maxWidth: "1200px"}],
                     ["blank", "10px"],
-                    ["raw-html", function () { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(35) ? "Unlock Challenge VII by reaching Check Back Level 35" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(35) ? "Unlock Challenge VII by reaching Check Back Level 35" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["blank", "10px"],
                 ]
             },
@@ -871,8 +869,18 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain <h3>" + format(player.in.infinityPointsToGet) + "</h3> on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.in.infinityPointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.points.gt("1e308") || !player.in.breakInfinity) {look.color = "white"} else {look.color = "gray"} 
+                return look
+            }],
+        ]],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + format(player.in.infinitiesToGet) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}

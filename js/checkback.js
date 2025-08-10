@@ -24,6 +24,7 @@ addLayer("cb", {
         petsUnlocked: false,
         petPoints: new Decimal(0),
 
+        cbTickspeed: new Decimal(1),
 
         //petButtons
         petButtonTimersMax: [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(21600), new Decimal(7200), new Decimal(36000), new Decimal(86400)],
@@ -96,6 +97,10 @@ addLayer("cb", {
     update(delta) {
         let onepersec = new Decimal(1)
         onepersec = onepersec.mul(player.ev10.checkbackBoost)
+        onepersec = onepersec.mul(player.cb.cbTickspeed)
+
+        player.cb.cbTickspeed = new Decimal(1)
+        player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.hrm.realmEssenceEffects[1])
 
         if (player.cb.time.gt(0)) {
             layers.cb.offlineCooldown()
@@ -155,7 +160,6 @@ addLayer("cb", {
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.d.diceEffects[12])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("g", 25))
             if (hasUpgrade("hpw", 1011)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("hpw", 1011))
-            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.hrm.realmEssenceEffect[0][1])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cs.paragonScrapsEffect)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.co.cores.checkback.effect[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.le.punchcardsPassiveEffect[6])
@@ -181,7 +185,6 @@ addLayer("cb", {
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pet", 105)[1])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pet", 202)[2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("ev0", 12))
-            player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.hrm.realmEssenceEffect[4][1])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.co.cores.checkback.effect[2])
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.le.punchcardsPassiveEffect[1])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
@@ -218,7 +221,6 @@ addLayer("cb", {
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 1203)[1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 107)[0])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("cb", 13))
-            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.hrm.realmEssenceEffect[2][1])
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(player.co.cores.checkback.effect[1])
             if (hasUpgrade("ev8", 16)) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.2)
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 406)[1])
@@ -350,6 +352,7 @@ addLayer("cb", {
         player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))
 
         if (player.cb.pityEvoCurrent.gte(player.cb.pityMax)) {
+            if (inChallenge("ip", 17)) player.cb.IC7shardCount++
             player.cb.evolutionShards = player.cb.evolutionShards.add(1)
             player.cb.pityEvoCurrent = new Decimal(0)
             if (player.cb.alertToggle) callAlert("You gained an Evolution Shard! (Pity)", "resources/evoShard.png");
@@ -400,6 +403,7 @@ addLayer("cb", {
     },
     offlineCooldown() {
         let time = player.cb.time
+        time = time.mul(player.cb.cbTickspeed)
         player.cb.time = new Decimal(0)
 
         // XP Buttons
@@ -2097,6 +2101,7 @@ addLayer("cb", {
             }
             if (rng < 0.08) {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                 player.cb.pityEvoCurrent = new Decimal(0);
                 if (!(player.tab == "cb" && player.subtabs["cb"]['stuff'] == 'Pets' && player.subtabs["pet"]['Content'] == 'Pet Shop')) {
                     if (!(player.cb.petAutomationTimers[2].lt(1) && player.cb.petAutomationAllocation[2].gt(0)) && player.cb.alertToggle) callAlert("You gained an Evolution Shard! (8%)", "resources/evoShard.png");
@@ -2150,6 +2155,7 @@ addLayer("cb", {
             }
             if (rng < 0.05) {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(3);
+                if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                 player.cb.pityEvoCurrent = new Decimal(0);
                 if (!(player.tab == "cb" && player.subtabs["cb"]['stuff'] == 'Pets' && player.subtabs["pet"]['Content'] == 'Pet Shop')) {
                     if (!(player.cb.petAutomationTimers[3].lt(1) && player.cb.petAutomationAllocation[3].gt(0)) && player.cb.alertToggle) callAlert("You gained 3 Evolution Shards!", "resources/evoShard.png");

@@ -57,7 +57,7 @@
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
-        if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(player.hre.refinementEffect[2][1])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.t.treesToGet = player.t.treesToGet.mul(player.hre.refinementEffect[2][1])
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
@@ -160,23 +160,25 @@
     },
     bars: {
         treebar: {
-            unlocked() { return true },
+            unlocked: true,
             direction: RIGHT,
             width: 476,
             height: 50,
             progress() {
+                if (player.t.leavesPerSecond.div(20).gt(player.t.treeReq)) return new Decimal(1)
                 return player.t.leaves.div(player.t.treeReq)
             },
-            fillStyle: {
-                "background-color": "#0B6623",
-            },
+            fillStyle: {backgroundColor: "#0B6623"},
+            textStyle: {fontSize: "14px"},
             display() {
-                return "<h5>" + format(player.t.leaves) + "/" + format(player.t.treeReq) + "<h5> Leaves to gain a tree.</h5>";
+                if (player.t.leavesPerSecond.div(100).gt(player.t.treeReq)) return "There is currently an excess of leaves."
+                let str = format(player.t.leaves) + "/" + format(player.t.treeReq) + " (+" + format(player.t.leavesPerSecond) + "/s)<br>Leaves to gain a tree."
+                if (player.t.trees.gte(player.t.treeSoftcapStart)) str = str.concat("<br><small style='color:red;font-size:12px'>After " + formatWhole(player.t.treeSoftcapStart) + " trees, leaves are divided by " + format(player.t.treeSoftcap) + "</small>")
+                return str
             },
         },
     },
-    upgrades: {
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(100000) },
@@ -451,13 +453,9 @@
             style: { width: '275px', height: '150px', backgroundColor: "#3b844e"}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Trees": {
@@ -465,16 +463,19 @@
                 unlocked() { return true },
                 content:
                 [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", function () { return "<h2>You have " + formatWhole(player.t.trees) + "<h2> trees, which boost prestige point gain by x" + format(player.t.treeEffect) + "."}],
-                        ["raw-html", () => {return player.t.treeEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", paddingLeft: "10px"}]
-                    ]],
-                    ["raw-html", function () { return "<h2>You will gain " + format(player.t.treesToGet, 1) + "<h2> trees." }],
-                    ["raw-html", function () { return "<h2>You are making " + format(player.t.leavesPerSecond) + "<h2> leaves per second. " }],
-                    ["raw-html", function () { return player.t.trees.gte(player.t.treeSoftcapStart) ? "After " + formatWhole(player.t.treeSoftcapStart) + " trees, leaf gain is divided by " + format(player.t.treeSoftcap) + " (Based on trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["bar", "treebar"]]],
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["blank", "10px"],
+                        ["row", [
+                            ["raw-html", () => { return "You have " + formatWhole(player.t.trees) + " trees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return player.t.leavesPerSecond.div(20).gt(player.t.treeReq) ? "(+" + format(player.t.treesToGet, 1) + "/s)" : "(+" + format(player.t.treesToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return player.t.treeEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}]
+                        ]],
+                        ["raw-html", () => {return "Boosts prestige point gain by x" + format(player.t.treeEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["bar", "treebar"],
+                        ["blank", "10px"],
+                    ], {width: "550px", backgroundColor: "#021407", border: "3px solid #ccc", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
                         ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],

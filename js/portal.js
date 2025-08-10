@@ -16,7 +16,6 @@ addLayer("po", {
         hex: false,
         breakInfinity: false,
         realmMods: false,
-        gem: false,
 
         keepOTFS: false,
 
@@ -52,7 +51,6 @@ addLayer("po", {
 
         player.po.featureSlotsMax = new Decimal(1)
         if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
-        if (hasUpgrade("s", 18)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice) {
@@ -61,7 +59,7 @@ addLayer("po", {
         if (player.po.rocketFuel) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
-        if (player.po.hex) {
+        if (player.po.hex && !hasUpgrade("s", 18)) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
         if (player.po.breakInfinity) {
@@ -72,9 +70,6 @@ addLayer("po", {
         }
         if (player.po.realmMods) {
             player.po.featureSlots = player.po.featureSlots.sub(2)
-        }
-        if (player.po.gem) {
-            player.po.featureSlots = player.po.featureSlots.sub(1)
         }
 
         //IF ADDING NEW OTFS - REMEMBER TO EXIT THEM AFTER LEAVING TAVS DOMAIN
@@ -293,7 +288,7 @@ addLayer("po", {
                 return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off";
             },
             canClick() { return player.po.featureSlots.gte(1) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
-            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))  && (!inChallenge("ip", 16) && hasChallenge("ip", 13))     },
+            unlocked() { return hasChallenge("ip", 13) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) && !hasUpgrade("s", 18)},
             onClick() {
                 player.po.hex = true
             },
@@ -354,26 +349,6 @@ addLayer("po", {
                 borderRadius: "20px",
             },
         },
-        16: {
-            title() { return "<h1>Gems" },
-            display() {
-                return player.po.gem ? "<h1>Monetize everything.<br>On" : "<h1>Monetize everything.<br>Off<br><h2>Req: ???";
-            },
-            canClick() { return player.po.featureSlots.gte(1)},
-            unlocked() { return false },
-            onClick() {
-                player.po.gem = true
-            },
-            style: {
-                width: '200px',
-                minHeight: '200px',
-                borderColor: "#780af3",
-                backgroundImage: "linear-gradient(0deg, #ab66f9, #c18dfa)",
-                backgroundOrigin: "border-box",
-                color: "white",
-                borderRadius: "20px",
-            },
-        },
     },
     bars: {},
     upgrades: {},
@@ -393,7 +368,7 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]], {maxWidth: "1000px"}],
+                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]], {maxWidth: "1000px"}],
                 ]
             },
             "Halter": {

@@ -30,7 +30,7 @@
     tooltip: "Evolution",
     color: "#06366e",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         if (player.tab == "ev") {
             startRain('#4b79ff');
@@ -569,7 +569,7 @@ addLayer("ev0", {
     tooltip: "Goldsmith",
     color: "white",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(delta))
 
@@ -929,7 +929,7 @@ addLayer("ev1", {
     tooltip: "MrRedShark",
     color: "white",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
     },
     branches: ["branch"],
     clickables: {
@@ -1537,7 +1537,7 @@ addLayer("ev2", {
     tooltip: "Insane Face",
     color: "#106ccc",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         player.ev2.xpReward = new Decimal(150)
         player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(15).pow(.8))
@@ -1676,7 +1676,7 @@ addLayer("ev4", {
     tooltip: "Sun",
     color: "#febc06",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         player.ev4.offeringReq = player.cb.totalAutomationShards.mul(20).add(100)
 
@@ -1871,7 +1871,7 @@ addLayer("ev8", {
     tooltip: "Marcel",
     color: "grey",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         player.ev8.evoButtonTimersMax = [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),]
         player.ev8.evoButtonBase = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),]
@@ -2228,7 +2228,7 @@ addLayer("ev9", {
     tooltip: "Paragon Checkpoint",
     color: "#5cd4a6",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
         /*
         for (let i = 0; i < player.ev9.offeringsOnSacrifice.length; i++) {
             if (player.coa.coreStrengths[i].gte(0))  {
@@ -2348,10 +2348,10 @@ addLayer("ev10", {
     tooltip: "EYE",
     color: "grey",
     update(delta) {
-        let onepersec = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         if (player.ev10.checkbackBoostDuration.gt(0)) {
-        player.ev10.checkbackBoostDuration = player.ev10.checkbackBoostDuration.sub(onepersec.mul(delta))
+        player.ev10.checkbackBoostDuration = player.ev10.checkbackBoostDuration.sub(new Decimal(1).mul(delta))
         } else {
             player.ev10.checkbackBoostDuration = new Decimal(0)
             player.ev10.activeBoost = new Decimal(0)

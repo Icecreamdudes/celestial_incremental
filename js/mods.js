@@ -161,7 +161,7 @@
             onClick() {
                 player.m.modMax = true
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', minHeight: '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -170,7 +170,7 @@
             onClick() {
                 player.m.modMax = false
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', minHeight: '50px', }
         },
         11: {
             title() { return "<h3>Reset everything except grasshop and pent for code experience. <br>(Req: 10,000,000 trees and 1e65 celestial points)" },
@@ -180,7 +180,7 @@
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
             },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
+            style: { width: '400px', minHeight: '100px', borderRadius: '15px' },
         },
     },
     codeExperienceReset() {
@@ -271,18 +271,21 @@
     },
     bars: {
         modbar: {
-            unlocked() { return true },
+            unlocked: true,
             direction: RIGHT,
             width: 476,
             height: 50,
             progress() {
+                if (player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq)) return new Decimal(1)
                 return player.m.linesOfCode.div(player.m.modsReq)
             },
-            fillStyle: {
-                "background-color": "#1377BF",
-            },
+            fillStyle: {backgroundColor: "#1377BF"},
+            textStyle: {fontSize: "14px"},
             display() {
-                return "<h5>" + format(player.m.linesOfCode) + "/" + format(player.m.modsReq) + "<h5> Lines of code to make a mod.</h5>";
+                if (player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq)) return "There is currently an excess of code."
+                let str = format(player.m.linesOfCode) + "/" + format(player.m.modsReq) + " (+" + format(player.m.linesOfCodePerSecond) + "/s)<br>Lines of code to make a mod."
+                if (player.m.mods.gte(player.m.modSoftcapStart)) str = str.concat("<br><small style='color:red;font-size:12px'>After " + formatWhole(player.m.modSoftcapStart) + " mods, lines of code are divided by " + format(player.m.modSoftcap) + "</small>")
+                return str
             },
         },
     },
@@ -568,18 +571,29 @@
     infoboxes: {},
     microtabs: {},
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.m.codeExperience) + "</h3> Code Experience" }, { "color": "#1377BF", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.m.codeExperienceToGet.gt(1) ? "You will gain <h3>" + format(player.m.codeExperienceToGet) + "</h3> code experience on reset." : ""}, { "color": "#1377BF", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + format(player.m.codeExperience) + "</h3> Code Experience" }, {color: "#1377BF", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.m.codeExperienceToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.m.codeExperienceToGet.gt(1)) {look.color = "#1377BF"} else {look.color = "gray"}
+                return look
+            }],
+        ]],
+        ["blank", "15px"],
         ["clickable", 11],
         ["blank", "25px"],
-        ["raw-html", function () { return "<h2>You have " + formatWhole(player.m.mods) + "<h2> mods, which boost tree gain by x" + format(player.m.modEffect) + "."}],
-        ["raw-html", function () { return "<h2>You will gain " + format(player.m.modsToGet, 1) + "<h2> mods." }],
-        ["raw-html", function () { return "<h2>You are making " + format(player.m.linesOfCodePerSecond) + "<h2> lines of code per second. (Based on code experience)" }],
-        ["raw-html", function () { return player.m.mods.gte(player.m.modSoftcapStart) ? "After " + formatWhole(player.m.modSoftcapStart) + " mods, lines of code gain is divided by " + format(player.m.modSoftcap) + " (Based on mods)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["row", [["bar", "modbar"]]],
+        ["style-column", [
+            ["blank", "10px"],
+            ["row", [
+                ["raw-html", () => { return "You have " + formatWhole(player.m.mods) + " mods"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                ["raw-html", () => { return player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq) ? "(+" + format(player.m.modsToGet, 1) + "/s)" : "(+" + format(player.m.modsToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ]],
+            ["raw-html", () => {return "Boosts tree gain by x" + format(player.m.modEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["blank", "10px"],
+            ["bar", "modbar"],
+            ["blank", "10px"],
+        ], {width: "550px", backgroundColor: "#031726", border: "3px solid #ccc", borderRadius: "15px"}],
         ["blank", "25px"],
         ["style-row", [
             ["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],

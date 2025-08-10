@@ -18,7 +18,6 @@
 
         //buymax
         dimMax: false,
-        ipMax: false,
     }},
     automate() {
         if (hasMilestone("s", 13)) {
@@ -56,7 +55,6 @@
         player.id.infinityPowerEffect2 = player.id.infinityPower.mul(3).pow(1.6).add(1)
 
         // START OF INFINITY POWER GAIN
-        player.id.infinityPower = player.id.infinityPower.add(player.id.infinityPowerPerSecond.mul(delta))
 
         player.id.infinityPowerPerSecond = player.id.dimensionAmounts[0]
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(buyableEffect("id", 11))
@@ -67,13 +65,17 @@
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.sd.singularityPowerEffect2)
         if (hasMilestone("fa", 16)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.fa.milestoneEffect[5])
 
+        // SOFTCAP MODIFIER
+        let base = new Decimal(300)
+        if (player.id.infinityPowerPerSecond.gt(1e300)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.id.infinityPowerPerSecond.plus(1).log10())).mul(1e300)
+
         // POWER MODIFIERS
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.pow(buyableEffect("fu", 42))
 
+        // INFINITY POWER PER SECOND
+        player.id.infinityPower = player.id.infinityPower.add(player.id.infinityPowerPerSecond.mul(delta))
+
         // START OF INFINITY DIMENSION GAIN
-        for (let i = 0; i < player.id.dimensionAmounts.length; i++) {
-            player.id.dimensionAmounts[i] = player.id.dimensionAmounts[i].add(player.id.dimensionsPerSecond[i].mul(delta))
-        }
         for (let i = 0; i < player.id.dimensionAmounts.length-1; i++) {
             player.id.dimensionsPerSecond[i] = player.id.dimensionAmounts[i+1]
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("id", i+12).div(10))
@@ -84,9 +86,17 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.sd.singularityPowerEffect2)
             if (hasMilestone("fa", 16)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[5])
 
+            // SOFTCAP MODIFIER
+            if (player.id.dimensionsPerSecond[i].gt(1e300)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
+
             // POWER MODIFIERS
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].pow(buyableEffect("fu", 42))
 
+        }
+
+        // INFINITY DIMENSIONS PER SECOND
+        for (let i = 0; i < player.id.dimensionAmounts.length; i++) {
+            player.id.dimensionAmounts[i] = player.id.dimensionAmounts[i].add(player.id.dimensionsPerSecond[i].mul(delta))
         }
     },
     clickables: {
@@ -114,29 +124,9 @@
             },
             style: { width: '75px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
         },
-        4: {
-            title() { return "Buy Max On" },
-            canClick() { return player.id.ipMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.id.ipMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        5: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.id.ipMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.id.ipMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
     },
-    bars: {
-    },
-    upgrades: {
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         1: {
             purchaseLimit() { return new Decimal(8) },
@@ -175,7 +165,12 @@
             costGrowth() { return new Decimal(1e2) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -205,7 +200,12 @@
             costGrowth() { return new Decimal(1e3) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(2) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -235,7 +235,12 @@
             costGrowth() { return new Decimal(1e4) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(3) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -265,7 +270,12 @@
             costGrowth() { return new Decimal(1e5) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(4) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -295,7 +305,12 @@
             costGrowth() { return new Decimal(1e6) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(5) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -325,7 +340,12 @@
             costGrowth() { return new Decimal(1e7) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(6) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -355,7 +375,12 @@
             costGrowth() { return new Decimal(1e8) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(7) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -385,7 +410,12 @@
             costGrowth() { return new Decimal(1e9) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                let eff = new Decimal(1)
+                if (getBuyableAmount(this.layer, this.id).lt(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id))
+                if (getBuyableAmount(this.layer, this.id).gte(30)) eff = Decimal.pow(2, getBuyableAmount(this.layer, this.id).sub(30).pow(0.5)).mul(1073741824)
+                return eff
+            },
             unlocked() { return getBuyableAmount("id", 1).gte(8) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -413,6 +443,7 @@
         21: {
             costBase() { return new Decimal(100) },
             costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.id.infinityPower},
             pay(amt) { player.id.infinityPower = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(0.8).add(1) },
@@ -434,6 +465,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 13)) this.pay(cost)
 
@@ -445,6 +477,7 @@
         22: {
             costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.id.infinityPower},
             pay(amt) { player.id.infinityPower = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.75).add(1) },
@@ -466,6 +499,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 13)) this.pay(cost)
 
@@ -477,6 +511,7 @@
         23: {
             costBase() { return new Decimal(100000) },
             costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.id.infinityPower},
             pay(amt) { player.id.infinityPower = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).pow(0.75).add(1) },
@@ -498,6 +533,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 13)) this.pay(cost)
 
@@ -509,6 +545,7 @@
         24: {
             costBase() { return new Decimal(1e10) },
             costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(250) },
             currency() { return player.id.infinityPower},
             pay(amt) { player.id.infinityPower = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).pow(1.4).add(1) },
@@ -530,6 +567,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (!hasMilestone("s", 13)) this.pay(cost)
 
@@ -539,12 +577,9 @@
             style: { width: '275px', height: '150px', backgroundColor: "#FAB61D", backgroundImage: "linear-gradient(0deg, rgba(255, 129, 38,1) 0%, #f5ea14 100%)", backgroundOrigin: "border-box"}
         },
     },
-    milestones: {
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Dimensions": {
@@ -621,9 +656,8 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", function () { return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power (+" + format(player.id.infinityPowerPerSecond) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["raw-html", function () { return "Boosts antimatter dimensions by x" + format(player.id.infinityPowerEffect) + ", and points by x" + format(player.id.infinityPowerEffect2) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.id.infinityPowerPerSecond) + "</h3> infinity power per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 18)) || hasMilestone("s", 19)}

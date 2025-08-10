@@ -11,6 +11,9 @@ addLayer("h", {
         hexPoint: new Decimal(0),
         hexPointGain: new Decimal(0),
 
+        // Pre-Power Resources
+        prePowerMult: new Decimal(1),
+
         ragePower: new Decimal(1),
     }},
     nodeStyle() { return {color: "white", backgroundColor: "black", borderColor: "#0061ff"}},
@@ -21,7 +24,8 @@ addLayer("h", {
         let onepersec = new Decimal(1)
 
         // START OF HEX POINT GAIN
-        if (!hasChallenge("ip", 13)) player.h.hexPointGain = new Decimal(12)
+        player.h.hexPointGain = new Decimal(0)
+        if (!hasChallenge("ip", 13) && layerShown("h")) player.h.hexPointGain = new Decimal(12)
         if (hasChallenge("ip", 13)) player.h.hexPointGain = player.points.add(1).log(60).pow(0.6)
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[0][1])
         player.h.hexPointGain = player.h.hexPointGain.mul(player.hpr.rankEffect[1][1])
@@ -42,13 +46,17 @@ addLayer("h", {
         if (hasUpgrade("hve", 11)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 11))
         if (hasUpgrade("hve", 12)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 12))
         if (hasUpgrade("hve", 13)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hve", 13))
-        player.h.hexPointGain = player.h.hexPointGain.mul(player.hrm.realmEssenceEffect[1][0])
+        player.h.hexPointGain = player.h.hexPointGain.mul(player.h.prePowerMult)
 
         // POWER AND PER SECOND
         if (hasUpgrade("hve", 61)) player.h.hexPointGain = player.h.hexPointGain.pow(1.03)
 
         if (inChallenge("hrm", 13)) player.h.hexPointGain = player.h.hexPointGain.sub(player.h.hexPoint.mul(0.06))
         if (player.h.hexPoint.add(player.h.hexPointGain.mul(delta)).gt(0)) player.h.hexPoint = player.h.hexPoint.add(player.h.hexPointGain.mul(delta))
+
+        // PRE-POWER MULTIPLIER
+        player.h.prePowerMult = new Decimal(1)
+        player.h.prePowerMult = player.h.prePowerMult.mul(player.hrm.realmEssenceEffects[0])
     },
     hexReq(value, base, scale, div = new Decimal(1), add = new Decimal(1)) {
         return value.add(add).pow(scale).mul(base).div(div).ceil()
@@ -65,5 +73,5 @@ addLayer("h", {
         ["buttonless-microtabs", "hexes", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && (inChallenge("ip", 13) || player.po.hex) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
 })

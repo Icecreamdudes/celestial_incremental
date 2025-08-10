@@ -386,7 +386,7 @@ addLayer("co", {
 
         if (player.co.cores.infinity.level.gt(0)) {
             let effLevel = player.co.cores.infinity.level.pow(CORE_STRENGTH[player.co.cores.infinity.strength].buff)
-            player.co.cores.infinity.effect[0] = player.in.infinityPoints.pow(0.03).pow(effLevel.mul(0.1).add(1)).add(1).min("1e25000")
+            player.co.cores.infinity.effect[0] = player.in.infinityPoints.pow(0.03).pow(effLevel.mul(0.1).add(1)).add(1).min("1e5000")
             player.co.cores.infinity.effect[1] = effLevel.mul(0.01).add(1)
             player.co.cores.infinity.effect[2] = effLevel.pow(1.5).mul(0.5).add(1)
         }
@@ -638,6 +638,9 @@ addLayer("co", {
 
         if (!hasMilestone("s", 22)) {
             player.pol.pollinatorsIndex = 0
+            for (let prop in player.pol.pollinatorEffects) {
+                player.pol.pollinatorEffects[prop].enabled = false
+            }
 
             for (let i in player.pol.buyables) {
                 player.pol.buyables[i] = new Decimal(0)
@@ -683,7 +686,7 @@ addLayer("co", {
 
         if (!hasMilestone("s", 15)) {
             for (let i in player.ip.challenges) {
-                player.ip.challenges[i] = 0
+                if (i != 17) player.ip.challenges[i] = 0
             }
         }
                   
@@ -1402,6 +1405,7 @@ addLayer("co", {
                 player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
 
                 layers.co.singularityReset()
+                setTimeout(() => {layers.co.singularityReset()}, 100)
                 if (!hasMilestone("s", 18)) player.tab = "i"
             },
             style: { width: "500px", minHeight: "150px", background: "linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)", borderRadius: "25px"},

@@ -73,7 +73,6 @@
         let onepersec = new Decimal(1)
 
         player.rm.blankModsToGet = player.m.mods.pow(0.01)
-        player.rm.blankModsToGet = player.rm.blankModsToGet.mul(levelableEffect("pet", 307)[0])
 
         if (hasMilestone("s", 16)) player.rm.blankMods = player.rm.blankMods.add(player.rm.blankModsToGet.mul(Decimal.mul(0.1, delta)))
 

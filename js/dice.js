@@ -119,6 +119,7 @@
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 42))
         player.d.dicePointsMult = player.d.dicePointsMult.mul(buyableEffect("ta", 43))
         if (player.pol.pollinatorEffects.ant.enabled) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorEffects.ant.effects[0])
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pet", 306)[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.co.cores.dice.effect[0])
 
         // POWER MODIFIERS
@@ -212,7 +213,7 @@
                 }
                 while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
             }
-            player.d.boosterDiceCooldown = new Decimal(120)
+            player.d.boosterDiceCooldown = new Decimal(60)
 
             if (inChallenge("ip", 15) || player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)
         }
@@ -344,7 +345,7 @@
                     }
                     while (player.d.previousBoosterRoll == player.d.currentBoosterRoll)
                 }
-                player.d.boosterDiceCooldown = new Decimal(120)
+                player.d.boosterDiceCooldown = new Decimal(60)
 
                 let random = getRandomInt(100)
                 let prob = player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(4).floor()
@@ -695,7 +696,6 @@
             player.d.diceEffects[12] = player.d.diceEffects[12].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 13) {
             player.d.addDiceEffect = player.d.diceScore.pow(buyableEffect("cs", 28)).mul(0.00001)
-            if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[13] = player.d.diceEffects[13].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 14) {
             player.d.addDiceEffect = player.d.diceScore.add(1).log(60).pow(buyableEffect("cs", 28)).mul(0.006)
@@ -716,8 +716,7 @@
             player.d.diceEffects[18] = player.d.diceEffects[18].add(player.d.addDiceEffect)
         }
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
         11:
         {
@@ -820,7 +819,7 @@
         {
             title: "Dicey Dicey Dicey Dicey.",
             unlocked() { return hasUpgrade("s", 13) },
-            description: "Infinity points and rocket fuel dice effects are gained x100 more.",
+            description: "Gain 100x more infinity dice effect.",
             cost: new Decimal(1e32),
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",

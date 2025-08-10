@@ -91,7 +91,8 @@
         let base = new Decimal(1000)
         if (hasUpgrade("bi", 21)) base = base.mul(1.1)
         base = base.mul(buyableEffect("m", 15))
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log10())).mul(1e300)
+        let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(1e300)))
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log10()).min(max)).mul(1e300)
 
         // SOFTCAP IGNORING MODIFIERS
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))

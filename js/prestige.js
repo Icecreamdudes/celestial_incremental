@@ -62,7 +62,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(levelableEffect("pet", 102)[0])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.diceEffects[2])
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("ip", 21))
-        if (inChallenge("ip", 13) || player.po.hex) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.hre.refinementEffect[1][1])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.hre.refinementEffect[1][1])
            
         // CHALLENGE MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.pe.pestEffect[2])
@@ -112,7 +112,6 @@
         if (hasUpgrade("hpw", 1021)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1021))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 1106)[1])
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 306)[1])
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
         if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
@@ -720,7 +719,7 @@
                 unlocked() { return true },
                 content:
                 [
-                    ["blank", "25px"],
+                    ["blank", "15px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
@@ -747,9 +746,15 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.points.gt(100000) ? "You will gain <h3>" + format(player.p.prestigePointsToGet) + "</h3> prestige points on reset." : ""}, { "color": "#31aeb0", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, {color: "#31aeb0", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.p.prestigePointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.points.gt(100000)) {look.color = "#31aeb0"} else {look.color = "gray"}
+                return look
+            }],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 14) }

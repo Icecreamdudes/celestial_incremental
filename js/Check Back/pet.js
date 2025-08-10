@@ -68,8 +68,7 @@ addLayer("pet", {
     color: "#4e7cff",
     branches: [],
     update(delta) {
-        let onepersec = new Decimal(player.ev10.checkbackBoost)
-        let ops = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         // PET COOLDOWN DIVIDER
         player.pet.petCooldownDiv = new Decimal(1)
@@ -89,7 +88,7 @@ addLayer("pet", {
 
         // PET BUTTON COOLDOWN CALC
         for (let i = 0; i < player.pet.petButtonTimer.length; i++) {
-            player.pet.petButtonTimer[i] = player.pet.petButtonTimer[i].sub(onepersec.mul(delta))
+            player.pet.petButtonTimer[i] = player.pet.petButtonTimer[i].sub(onepersec.mul(player.ev10.checkbackBoost).mul(delta))
         }
 
         // DICE STUFF
@@ -98,7 +97,7 @@ addLayer("pet", {
         }
 
         // =- FRAGMENTATION START -=
-        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(ops.mul(delta))
+        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(onepersec.mul(delta))
         if (player.pet.bannerResetTimer.lte(0)) {
             layers.pet.refreshBanner();
         }
@@ -108,14 +107,14 @@ addLayer("pet", {
         for (let i = 0; i < player.pet.bannerButtonTimersMax.length; i++) {
             player.pet.bannerButtonTimersMax[i] = player.pet.bannerButtonTimersMax[i].div(buyableEffect("ep3", 13))
 
-            player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(ops.mul(delta))
+            player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(onepersec.mul(delta))
         }
 
         player.pet.singularityButtonTimersMax = [new Decimal(1800), new Decimal(10800),]
         for (let i = 0; i < player.pet.singularityButtonTimersMax.length; i++) {
             player.pet.singularityButtonTimersMax[i] = player.pet.singularityButtonTimersMax[i].div(buyableEffect("ep4", 13))
  
-            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(ops.mul(delta))
+            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(onepersec.mul(delta))
         }
 
         // =- LEGENDARY GEMS -=
@@ -131,7 +130,7 @@ addLayer("pet", {
 
         // =- PET SHOP START -=
         player.pet.shopResetTimerMax = new Decimal(21600)
-        player.pet.shopResetTimer = player.pet.shopResetTimer.sub(ops.mul(delta))
+        player.pet.shopResetTimer = player.pet.shopResetTimer.sub(onepersec.mul(delta))
 
         player.pet.commonPrices = [new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(20), new Decimal(20), new Decimal(30), new Decimal(30)]
         for (let i = 0; i < player.pet.commonPrices.length; i++) {
@@ -1302,13 +1301,13 @@ addLayer("pet", {
             lore() { return "A burning world that once was. Reduced to nothingness and ash. Smoke from that world made its way over here. The new world." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to all mastery points.<br>" +
-                    "x" + format(this.effect()[1]) + " to all hex points."
+                    "x" + format(this.effect()[1]) + " to jinx score."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(1.2).mul(0.7).add(1), // All Mastery Points
-                    getLevelableAmount(this.layer, this.id).pow(1.8).mul(1.2).add(1), // All Hex Points
+                    getLevelableAmount(this.layer, this.id).pow(0.6).mul(0.03).add(1), // Jinx Score
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -1867,6 +1866,7 @@ addLayer("pet", {
                 let random = getRandomInt(4)
                 if (random == 1) {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                     player.cb.pityEvoCurrent = new Decimal(0)
                     if (player.subtabs['cb']['stuff'] == "Pets") callAlert("You gained an Evolution Shard! (25%)", "resources/evoShard.png")
                 } else {
@@ -1947,14 +1947,14 @@ addLayer("pet", {
             title() { return "Hex Shadow" },
             lore() { return "Found halfway to the top of the hex staircase. Unwilling to talk or give any information. Has a strange odor." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to steel <small>(based on rage power)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to crystal <small>(based on rage power)</small>."
+                return "x" + format(this.effect()[0]) + " to dice points <small>(based on total hex power)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to rocket fuel <small>(based on total hex power)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.h.ragePower.pow(1.2).mul(0.3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.4)), // Steel (Based on Rage Power)
-                    player.h.ragePower.pow(1.01).mul(0.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Crystals (Based on Rage Power)
+                    player.hpw.totalPower.add(1).log(6).mul(0.25).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Dice Points (Based on power)
+                    player.hpw.totalPower.add(1).log(6).mul(0.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Rocket Fuel (Based on power)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2003,14 +2003,14 @@ addLayer("pet", {
             title() { return "Grass Square" },
             lore() { return "It was one ordinary of cutting grass, and one of the grass particles randomly grew a face. This is what we have now." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to blank mods <small>(based on golden grass)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to rage power <small>(based on golden grass)</small>."
+                return "x" + format(this.effect()[0]) + " to pollinators <small>(based on golden grass)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to repli-grass <small>(based on golden grass)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.g.goldGrass.pow(0.1).mul(0.01).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Blank Mods (Based on Golden Grass)
-                    player.g.goldGrass.pow(0.12).mul(0.015).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)), // Rage Power (Based on Golden Grass)
+                    player.g.goldGrass.add(1).log(10).mul(0.25).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)), // Pollinators (Based on Golden Grass)
+                    player.g.goldGrass.add(1).log(10).mul(0.025).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)), // Repli-Grass (Based on Golden Grass)
                 ]
             },
             sacValue() { return new Decimal(10)},

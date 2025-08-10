@@ -21,7 +21,7 @@ addLayer("hcu", {
         player.hcu.cursesGain = player.hcu.cursesGain.mul(buyableEffect("ta", 49))
         if (hasUpgrade("hbl", 4)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("hbl", 4))
         if (hasUpgrade("hpw", 22)) player.hcu.cursesGain = player.hcu.cursesGain.mul(upgradeEffect("hpw", 22))
-        player.hcu.cursesGain = player.hcu.cursesGain.mul(player.hrm.realmEssenceEffect[2][0])
+        player.hcu.cursesGain = player.hcu.cursesGain.mul(player.h.prePowerMult)
 
         // CURSE EXPONENT
         player.hcu.cursesGain = player.hcu.cursesGain.pow(buyableEffect("hcu", 106))
@@ -39,7 +39,7 @@ addLayer("hcu", {
             if (tmp["hcu"].buyables[i].extraAmount != null) player.hcu.jinxTotal = player.hcu.jinxTotal.add(tmp["hcu"].buyables[i].extraAmount)
         }
         player.hcu.jinxTotal = player.hcu.jinxTotal.mul(player.hve.vexEffects[1])
-        player.hcu.jinxTotal = player.hcu.jinxTotal.mul(player.hrm.realmEssenceEffect[5][0])
+        player.hcu.jinxTotal = player.hcu.jinxTotal.mul(levelableEffect("pet", 109)[1])
 
         // JINX ADD CAP
         player.hcu.jinxAddCap = new Decimal(0)
@@ -314,7 +314,11 @@ addLayer("hcu", {
                 if (hasUpgrade("hve", 51)) amt = amt.add(6)
                 return amt
             },
-            effect(x) { return Decimal.pow(Decimal.add(1.1, buyableEffect("hcu", 110)), getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount)) },
+            effect(x) {
+                let eff = Decimal.pow(Decimal.add(1.1, buyableEffect("hcu", 110)), getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount))
+                if (eff.gte(1e6)) eff = eff.div(1e6).pow(0.3).mul(1e6)
+                return eff
+            },
             unlocked() { return true },
             cost(x = getBuyableAmount(this.layer, this.id)) {
                 let cst = this.costGrowth().pow(x).mul(this.costBase())
@@ -325,7 +329,11 @@ addLayer("hcu", {
             canAfford() { return this.currency().gte(this.cost()) },
             title() { return "Η-Jinx" },
             display() { return "Hex Points are multiplied by " + format(buyableEffect("hcu", 110).add(1.1)) },
-            total() { return "(Total: " + format(tmp[this.layer].buyables[this.id].effect) + "x)"},
+            total() {
+                let str = "(Total: " + format(tmp[this.layer].buyables[this.id].effect) + "x)"
+                if (tmp[this.layer].buyables[this.id].effect.gte(1e6)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                return str
+            },
             buy(mult) {
                 if (mult != true) {
                     if (!hasMilestone("hpw", 5)) this.pay(this.cost())
@@ -354,7 +362,11 @@ addLayer("hcu", {
                 if (hasUpgrade("hve", 52)) amt = amt.add(3)
                 return amt
             },
-            effect(x) { return Decimal.pow(Decimal.add(1.1, buyableEffect("hcu", 111)), getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount)) },
+            effect(x) {
+                let eff = Decimal.pow(Decimal.add(1.1, buyableEffect("hcu", 111)), getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount))
+                if (eff.gte(1e6)) eff = eff.div(1e6).pow(0.3).mul(1e6)
+                return eff
+            },
             unlocked() { return true },
             cost(x = getBuyableAmount(this.layer, this.id)) {
                 let cst = this.costGrowth().pow(x).mul(this.costBase())
@@ -365,7 +377,11 @@ addLayer("hcu", {
             canAfford() { return this.currency().gte(this.cost()) },
             title() { return "Θ-Jinx" },
             display() { return "Boons are multiplied by " + format(buyableEffect("hcu", 111).add(1.1)) },
-            total() { return "(Total: " + format(tmp[this.layer].buyables[this.id].effect) + "x)"},
+            total() {
+                let str = "(Total: " + format(tmp[this.layer].buyables[this.id].effect) + "x)"
+                if (tmp[this.layer].buyables[this.id].effect.gte(1e6)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                return str
+            },
             buy(mult) {
                 if (mult != true) {
                     if (!hasMilestone("hpw", 5)) this.pay(this.cost())
@@ -415,7 +431,8 @@ addLayer("hcu", {
             total() {
                 let str = "(Total: " + format(tmp[this.layer].buyables[this.id].effect) + "x)"
                 if (tmp[this.layer].buyables[this.id].effect.gte(1e9)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
-                return str},
+                return str
+            },
             buy(mult) {
                 if (mult != true) {
                     if (!hasMilestone("hpw", 5)) this.pay(this.cost())

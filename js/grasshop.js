@@ -67,7 +67,7 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
         if (hasUpgrade("ip", 32) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ip", 32))
-        if (inChallenge("ip", 13) || player.po.hex) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.hre.refinementEffect[4][1])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.hre.refinementEffect[4][1])
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 15)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.85)
@@ -165,7 +165,6 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
         if (hasUpgrade("s", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("s", 14))
         player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 1106)[0])
-        player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 306)[0])
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.foundryEffect)
         if (player.pol.pollinatorEffects.mechanical.enabled) player.gh.steelToGet = player.gh.steelToGet.mul(player.pol.pollinatorEffects.mechanical.effects[0])
         if (hasMilestone("fa", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.milestoneEffect[3])
@@ -1177,9 +1176,8 @@
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
+                content: [
+                    ["blank", "15px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["style-column", [
@@ -1202,13 +1200,14 @@
             "Upgrade Tree": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
+                    ["blank", "5px"],
                     ["row", [
-                        ["raw-html", function () { return "You have <h3>" + format(player.gh.fertilizer) + "</h3> fertilizer, which boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, {color: "#19e04d", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return player.gh.fertilizerEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", paddingLeft: "10px"}],
+                        ["raw-html", () => { return "You have <h3>" + format(player.gh.fertilizer) + "</h3> fertilizer" }, {color: "#EFD4B9", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(+" + format(player.gh.fertilizerPerSecond) + "/s)"}, {color: "#EFD4B9", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return player.gh.fertilizerEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", function () { return "You are gaining <h3>" + format(player.gh.fertilizerPerSecond) + "</h3> fertilizer per second." }, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Boosts grass value by x" + format(player.gh.fertilizerEffect) + "." }, {color: "#EFD4B9", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "10px"],
@@ -1254,9 +1253,11 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.gh.steel) + "</h3> steel." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.gh.steelToGet) + "</h3> steel on reset."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Steel boosts grasshopper gain by <h3>" + format(player.gh.steelEffect) + "</h3>x."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", function () { return "You have <h3>" + format(player.gh.steel) + "</h3> steel." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", function () { return "(+" + format(player.gh.steelToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", function () { return "Steel boosts grasshopper gain by x" + format(player.gh.steelEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
@@ -1269,9 +1270,15 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.gh.grasshoppers) + "</h3> grasshoppers." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.gh.grasshoppersToGet.gt(1) ? "You will gain <h3>" + format(player.gh.grasshoppersToGet) + "</h3> grasshoppers on reset." : ""}, { "color": "#19e04d", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.g.grass) + "</h3> grass"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.gh.grasshoppers) + "</h3> grasshoppers"}, {color: "#19e04d", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.gh.grasshoppersToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.gh.grasshoppersToGet.gt(1)) {look.color = "#19e04d"} else {look.color = "gray"}
+                return look
+            }],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],

@@ -592,7 +592,7 @@
 
         //legendary
         player.leg.legendaryGemTimer = player.leg.legendaryGemTimer.sub(time);
-        player.leg.summonTimer = player.leg.summonTimer(time);
+        player.leg.summonTimer = player.leg.summonTimer.sub(time);
     },
     branches: ["m"],
     clickables: {

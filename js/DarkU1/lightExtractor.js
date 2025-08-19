@@ -199,8 +199,8 @@ addLayer("le", {
             player.le.punchcardsLevels[5].lt(11) ? Decimal.pow(50, player.le.punchcardsLevels[5].sub(1)) : Decimal.pow(5, player.le.punchcardsLevels[5].sub(10).log(2)).mul(9.77e16), //Charge
             player.le.punchcardsLevels[6].lt(11) ? player.le.punchcardsLevels[6].sub(1).mul(0.1).add(1).pow(0.7) : player.le.punchcardsLevels[1].sub(10).log(1.8).mul(0.1).add(1.62), //Check back XP
             player.le.punchcardsLevels[7].lt(11) ? Decimal.pow(333, player.le.punchcardsLevels[7].sub(1)) : Decimal.pow(33.3, player.le.punchcardsLevels[7].sub(10).log(2)).mul(1.68e25), //Dice points and rocket fuel
-            player.le.punchcardsLevels[8].lt(11) ? Decimal.pow(666, player.le.punchcardsLevels[8].sub(1)) : Decimal.pow(66.6, player.le.punchcardsLevels[8].sub(10).log(2)).mul(1.72e28), //All hex points
-            player.le.punchcardsLevels[9].lt(11) ? player.le.punchcardsLevels[9].sub(1).pow(0.85).add(1) : player.le.punchcardsLevels[9].sub(10).log(1.1).div(5).add(7.74), //Realm essence
+            player.le.punchcardsLevels[8].lt(11) ? player.le.punchcardsLevels[8].add(1) : player.le.punchcardsLevels[8].mul(0.5).add(6), // Pre-Power Resources
+            player.le.punchcardsLevels[9].lt(11) ? player.le.punchcardsLevels[9].mul(0.2).add(1) : player.le.punchcardsLevels[9].mul(0.1).add(2), // Hex Power
             player.le.punchcardsLevels[10].lt(11) ? player.le.punchcardsLevels[10].sub(1).mul(0.05).add(1) : player.le.punchcardsLevels[10].sub(10).log(2).mul(0.05).add(1.5), //Core Scraps
             player.le.punchcardsLevels[11].lt(11) ? Decimal.pow(200, player.le.punchcardsLevels[11].sub(1)) : Decimal.pow(20, player.le.punchcardsLevels[11].sub(10).log(2)).mul(1.02e23), //Golden Grass
             player.le.punchcardsLevels[12].lt(11) ? player.le.punchcardsLevels[12].sub(1).pow(0.6).add(1) : player.le.punchcardsLevels[12].sub(10).log(2).add(4.74), //Moonstone
@@ -219,8 +219,8 @@ addLayer("le", {
             "This card boosts charge by x",
             "This card boosts check back xp by x",
             "This card boosts dice points and rocket fuel by x",
-            "This card boosts all hex points by x",
-            "This card boosts realm essence by x",
+            "This card boosts pre-power resources by x",
+            "This card boosts hex power by x",
             "This card boosts main core scraps by x",
             "This card boosts golden grass by x",
             "This card boosts moonstone by x",

@@ -27,6 +27,12 @@ addLayer("in", {
             "border-color": "#333",
         }
     },
+    shouldNotify() {
+        if (player["ip"].activeChallenge && canCompleteChallenge("ip", player["ip"].activeChallenge)) {
+		    return true
+	    }
+        return false
+    },
     tooltip: "Roots",
     color: "#1b4",
     branches: ["ad", "ip"],

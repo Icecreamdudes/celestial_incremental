@@ -506,7 +506,7 @@ addLayer("ep1", {
         {
             title: "Dragon Upgrade II",
             unlocked() { return true },
-            description() { return "Boosts tickspeed base based on dragon points." },
+            description() { return "Boosts AD tickspeed base based on dragon points." },
             cost: new Decimal(250),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Dragon Points",

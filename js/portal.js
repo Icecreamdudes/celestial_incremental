@@ -15,7 +15,6 @@ addLayer("po", {
         rocketFuel: false,
         hex: false,
         breakInfinity: false,
-        realmMods: false,
 
         keepOTFS: false,
 
@@ -67,9 +66,6 @@ addLayer("po", {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         } else {
             player.in.breakInfinity = false
-        }
-        if (player.po.realmMods) {
-            player.po.featureSlots = player.po.featureSlots.sub(2)
         }
 
         //IF ADDING NEW OTFS - REMEMBER TO EXIT THEM AFTER LEAVING TAVS DOMAIN
@@ -321,34 +317,6 @@ addLayer("po", {
                 borderRadius: "20px",
             },
         },
-        15: {
-            title() { return "<h1>Realm Mods" },
-            display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.35)<br>On" : !hasMilestone("s", 15) ? "<h2>Feel the realms.<br>Off<br><h3>Req: 1 cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots" : "<h1>Feel the realms.<br>Off<br><h2>Takes up 2 OTF slots";
-            },
-            canClick() { return player.po.featureSlots.gte(2) && (player.ca.canteCores.gte(1) || hasMilestone("s", 15))},
-            unlocked() { return hasUpgrade("bi", 27) },
-            onClick() {
-                player.po.keepOTFS = true
-                player.po.realmMods = true
-
-                if (!hasMilestone("s", 15))
-                {
-                    player.ca.canteCores = player.ca.canteCores.sub(1)
-                }
-
-                layers.in.bigCrunch();
-            },
-            style: {
-                width: '200px',
-                "min-height": '200px',
-                "border-color": "white",
-                "background-image": "linear-gradient(0deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
-                "background-origin": "border-box",
-                "color": "white",
-                borderRadius: "20px",
-            },
-        },
     },
     bars: {},
     upgrades: {},
@@ -368,7 +336,7 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15]], {maxWidth: "1000px"}],
+                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]], {maxWidth: "1000px"}],
                 ]
             },
             "Halter": {

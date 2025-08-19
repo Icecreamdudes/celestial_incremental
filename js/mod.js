@@ -13,7 +13,8 @@
 	"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js",
 	"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js",
 	"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js",
-	"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js", "Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Singularity/core.js"],
+	"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js", "Hex/purity.js", "Hex/power.js", "Hex/realms.js",
+	"Hex/vex.js", "Hex/sacrifice.js", "Singularity/core.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -89,6 +90,9 @@ function updateStyles() {
 			break;
 		case "hrm":
 			layerBG = "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)"
+			break;
+		case "hsa":
+			layerBG = "#aa8"
 			break;
 		case "bigc":
 			layerBG = "#b87c34"

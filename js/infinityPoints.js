@@ -614,7 +614,6 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.realmMods = false
                 if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
@@ -658,7 +657,6 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.realmMods = false
                 if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
@@ -703,7 +701,6 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.realmMods = false
                 if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {
@@ -744,7 +741,6 @@
                 player.po.dice = false
                 player.po.rocketFuel = false
                 player.po.hex = false
-                player.po.realmMods = false
                 if (player.po.breakInfinity) {
                     player.po.featureSlots = player.po.featureSlotsMax.sub(1)
                 } else {

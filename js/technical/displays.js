@@ -105,7 +105,7 @@ function constructUniButtonStyle(layer){
 			style.push({'background-color': tmp[layer].color});
 	}
 	if(tmp[layer].notify && player[layer].unlocked)
-		style.push({'box-shadow': 'var(--hqProperty2a), 0 0 20px ' + tmp[layer].trueGlowColor})
+		style.push({boxShadow: 'inset 0 0 15px 0 ' + tmp[layer].trueGlowColor})
     return style
 }
 

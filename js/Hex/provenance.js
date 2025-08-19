@@ -13,6 +13,8 @@ addLayer("hpr", {
     }},
     update(delta) {
         player.hpr.divider = player.hre.refinementEffect[1][0]
+        if (hasUpgrade("hsa", 15)) player.hpr.divider = player.hpr.divider.mul(1.3)
+        if (hasUpgrade("hpw", 132)) player.hpr.divider = player.hpr.divider.mul(1.5)
 
         if (player.hpr.rank[0].lt(1200)) player.hpr.rankReq[0] = layers.h.hexReq(player.hpr.rank[0], 60, 1.6, player.hpr.divider)
         if (player.hpr.rank[0].gte(1200) && player.hpr.rank[0].lt(6000000)) player.hpr.rankReq[0] = layers.h.hexReq(player.hpr.rank[0], 60, 2.4, player.hpr.divider, -1087)
@@ -42,16 +44,22 @@ addLayer("hpr", {
             if (player.hpr.rankGain[i].lt(0)) player.hpr.rankGain[i] = new Decimal(0)
         }
 
-        if (hasMilestone("hre", 3)) player.hpr.rank[0] = player.hpr.rank[0].add(player.hpr.rankGain[0])
-        if (hasMilestone("hre", 6)) player.hpr.rank[1] = player.hpr.rank[1].add(player.hpr.rankGain[1])
-        if (hasMilestone("hre", 8)) player.hpr.rank[2] = player.hpr.rank[2].add(player.hpr.rankGain[2])
-        if (hasMilestone("hre", 11)) player.hpr.rank[3] = player.hpr.rank[3].add(player.hpr.rankGain[3])
-        if (hasMilestone("hre", 14)) player.hpr.rank[4] = player.hpr.rank[4].add(player.hpr.rankGain[4])
-        if (hasMilestone("hre", 18)) player.hpr.rank[5] = player.hpr.rank[5].add(player.hpr.rankGain[5])
+        if (!inChallenge("hrm", 15) && !inChallenge("hrm", 16)) {
+            if (hasMilestone("hre", 3)) player.hpr.rank[0] = player.hpr.rank[0].add(player.hpr.rankGain[0])
+            if (hasMilestone("hre", 6)) player.hpr.rank[1] = player.hpr.rank[1].add(player.hpr.rankGain[1])
+            if (hasMilestone("hre", 8)) player.hpr.rank[2] = player.hpr.rank[2].add(player.hpr.rankGain[2])
+            if (hasMilestone("hre", 11)) player.hpr.rank[3] = player.hpr.rank[3].add(player.hpr.rankGain[3])
+            if (hasMilestone("hre", 14)) player.hpr.rank[4] = player.hpr.rank[4].add(player.hpr.rankGain[4])
+            if (hasMilestone("hre", 18)) player.hpr.rank[5] = player.hpr.rank[5].add(player.hpr.rankGain[5])
+        }
 
         player.hpr.effectMult = player.hre.refinementEffect[2][0]
         if (hasUpgrade("hbl", 6)) player.hpr.effectMult = player.hpr.effectMult.mul(upgradeEffect("hbl", 6))
         if (hasMilestone("hbl", 5)) player.hpr.effectMult = player.hpr.effectMult.mul(1.3)
+        if (hasUpgrade("hpw", 102)) player.hpr.effectMult = player.hpr.effectMult.mul(upgradeEffect("hpw", 102))
+
+        // Disable effects
+        if (inChallenge("hrm", 16)) player.hpr.effectMult = new Decimal(0)
 
         player.hpr.rankEffect[0][0] = player.hpr.rank[0].pow(2.5).mul(player.hpr.effectMult).add(1)
         player.hpr.rankEffect[0][1] = player.hpr.rank[0].pow(1.1).mul(0.5).mul(player.hpr.effectMult).add(1)
@@ -73,14 +81,14 @@ addLayer("hpr", {
 
         if (hasUpgrade("tad", 11)) {
             for (let i = 0; i < 6; i++) {
-                player.hpr.rankEffect[i][0] = player.hpr.rankEffect[i][0].pow(upgradeEffect("tad", 11))
+                player.hpr.rankEffect[i][0] = player.hpr.rankEffect[i][0].pow(1.1)
             }
         }
     },
     clickables: {
         1: {
             title() { return "<h2>Reset hex points,<br>but gain α-Provenance.</h2><br><h3>Req: " + format(player.hpr.rankReq[0]) + " Hex Points</h3>"},
-            canClick() { return player.hpr.rankGain[0].gt(0) && !hasMilestone("hre", 3)},
+            canClick() { return player.hpr.rankGain[0].gt(0) && (!hasMilestone("hre", 3) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 player.hpr.rank[0] = player.hpr.rank[0].add(player.hpr.rankGain[0])
@@ -91,13 +99,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 3)) look.cursor = "default !important"
+                if (hasMilestone("hre", 3) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
         2: {
             title() { return "<h2>Reset prior provenances,<br>but gain β-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[1]) + " α-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[1].gt(0) && !hasMilestone("hre", 6)},
+            canClick() { return player.hpr.rankGain[1].gt(0) && (!hasMilestone("hre", 6) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 player.hpr.rank[1] = player.hpr.rank[1].add(player.hpr.rankGain[1])
@@ -113,13 +121,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 6)) look.cursor = "default !important"
+                if (hasMilestone("hre", 6) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
         3: {
             title() { return "<h2>Reset prior provenances,<br>but gain γ-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[2]) + " β-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[2].gt(0) && !hasMilestone("hre", 8)},
+            canClick() { return player.hpr.rankGain[2].gt(0) && (!hasMilestone("hre", 8) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 player.hpr.rank[2] = player.hpr.rank[2].add(player.hpr.rankGain[2])
@@ -135,13 +143,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 8)) look.cursor = "default !important"
+                if (hasMilestone("hre", 8) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
         4: {
             title() { return "<h2>Reset prior provenances,<br>but gain δ-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[3]) + " γ-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[3].gt(0) && !hasMilestone("hre", 11)},
+            canClick() { return player.hpr.rankGain[3].gt(0) && (!hasMilestone("hre", 11) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 player.hpr.rank[3] = player.hpr.rank[3].add(player.hpr.rankGain[3])
@@ -157,13 +165,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 11)) look.cursor = "default !important"
+                if (hasMilestone("hre", 11) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
         5: {
             title() { return "<h2>Reset prior provenances,<br>but gain ε-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[4]) + " δ-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[4].gt(0) && !hasMilestone("hre", 14)},
+            canClick() { return player.hpr.rankGain[4].gt(0) && (!hasMilestone("hre", 14) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 player.hpr.rank[4] = player.hpr.rank[4].add(player.hpr.rankGain[4])
@@ -179,13 +187,13 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 14)) look.cursor = "default !important"
+                if (hasMilestone("hre", 14) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
         6: {
             title() { return "<h2>Reset prior provenances,<br>but gain ζ-Provenance.</h2><br><h3>Req: " + formatWhole(player.hpr.rankReq[5]) + " ε-Provenance</h3>"},
-            canClick() { return player.hpr.rankGain[5].gt(0) && !hasMilestone("hre", 18)},
+            canClick() { return player.hpr.rankGain[5].gt(0) && (!hasMilestone("hre", 18) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 player.hpr.rank[5] = player.hpr.rank[5].add(player.hpr.rankGain[5])
@@ -201,7 +209,7 @@ addLayer("hpr", {
             },
             style() {
                 let look = {width: "250px", minHeight: "75px", fontSize: "7px", border: "0px", borderRadius: "0px 0px 8px 8px"}
-                if (hasMilestone("hre", 18)) look.cursor = "default !important"
+                if (hasMilestone("hre", 18) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
@@ -210,7 +218,9 @@ addLayer("hpr", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return (inChallenge("hrm", 14) || player.h.hexPointGain.gte(1e308)) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return inChallenge("hrm", 15) ? "Time Remaining: " + formatTime(player.hrm.dreamTimer) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Provenance", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
@@ -305,5 +315,5 @@ addLayer("hpr", {
         ]],
         ["blank", "25px"],
     ],
-    layerShown() { return true }, // Decides if this node is shown or not.
+    layerShown() { return !inChallenge("hrm", 16) }, // Decides if this node is shown or not.
 });

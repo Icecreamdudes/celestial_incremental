@@ -314,7 +314,7 @@ addLayer("s", {
         },
         13: {
             requirementDescription: "<h3>3 Singularities",
-            effectDescription: "Keep hex of refinement milestones on singularity resets, produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
+            effectDescription: "Produce 6% of blessings per second (excluding RC1), produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
             done() { return player.s.singularities.gte(3) },
             style: { width: '800px', "min-height": '85px' },
         },

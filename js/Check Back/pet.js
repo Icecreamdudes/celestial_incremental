@@ -185,6 +185,13 @@ addLayer("pet", {
             title() { return "<h3>Sacrifice one"},
             canClick() { return getLevelableXP("pet", layers.pet.levelables.index).gte(1)},
             unlocked() { return layers.pet.levelables.index < 1000 && layers.pet.levelables.index != 0 && player.ev.evolutionsUnlocked[4]},
+            tooltip() {
+                if (tmp.pet.levelables[layers.pet.levelables.index].sacValue == undefined) {
+                    return ""
+                } else {
+                    return "+" + format(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase)) + " Offerings"
+                }
+            },
             onClick() {
                 setLevelableXP("pet", layers.pet.levelables.index, getLevelableXP("pet", layers.pet.levelables.index).sub(1))
                 player.ev4.offerings = player.ev4.offerings.add(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase))
@@ -200,6 +207,13 @@ addLayer("pet", {
             title() {return "<h3>Sacrifice all" },
             canClick() { return getLevelableXP("pet", layers.pet.levelables.index).gte(1) },
             unlocked() { return layers.pet.levelables.index < 1000 && layers.pet.levelables.index != 0 && player.ev.evolutionsUnlocked[4] },
+            tooltip() {
+                if (tmp.pet.levelables[layers.pet.levelables.index].sacValue == undefined) {
+                    return ""
+                } else {
+                    return "+" + format(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase).mul(getLevelableXP("pet", layers.pet.levelables.index))) + " Offerings"
+                }
+            },
             onClick() {
                 let amount = getLevelableXP("pet", layers.pet.levelables.index)
                 setLevelableXP("pet", layers.pet.levelables.index, new Decimal(0))
@@ -1307,7 +1321,7 @@ addLayer("pet", {
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(1.2).mul(0.7).add(1), // All Mastery Points
-                    getLevelableAmount(this.layer, this.id).pow(0.6).mul(0.03).add(1), // Jinx Score
+                    getLevelableAmount(this.layer, this.id).pow(0.9).mul(0.03).add(1), // Jinx Score
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -2166,7 +2180,7 @@ addLayer("pet", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(25)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
                 }
@@ -2213,7 +2227,7 @@ addLayer("pet", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(25)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
                 }
@@ -2260,7 +2274,7 @@ addLayer("pet", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(25)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
                 }
@@ -2307,7 +2321,7 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(100)
+                    return new Decimal(50)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
                 }
@@ -2354,7 +2368,7 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(100)
+                    return new Decimal(50)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
                 }
@@ -2401,7 +2415,7 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(100)
+                    return new Decimal(50)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
                 }

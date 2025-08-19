@@ -303,8 +303,6 @@
         if (player.c.currentCutscene == 17) {
             player.tab = "c"
             layers.c.startCutscene17();
-            layers.ra.generateRadiationValue();
-            layers.ra.generateRadiationOutput();
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 17) {
             player.c.cutscenes[16] = false

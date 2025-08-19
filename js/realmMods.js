@@ -159,8 +159,8 @@
         player.rm.realmModsEffect[1] = player.rm.realmMods[1].pow(0.35).div(2).add(1)
         player.rm.realmModsEffect[2] = player.rm.realmMods[2].pow(0.65).add(1)
         player.rm.realmModsEffect[3] = player.rm.realmMods[3].pow(0.45).add(1)
-        player.rm.realmModsEffect[4] = player.rm.realmMods[4].pow(0.25).mul(2).div(2.5).add(1)
-        player.rm.realmModsEffect[5] = player.rm.realmMods[5].pow(0.45).mul(3).div(1.5).add(1)
+        player.rm.realmModsEffect[4] = player.rm.realmMods[4].pow(0.25).add(1)
+        player.rm.realmModsEffect[5] = player.rm.realmMods[5].pow(0.45).mul(2).add(1)
 
         //gain
         if (hasMilestone("s", 15))
@@ -1261,7 +1261,7 @@
         ["raw-html", function () { return "You will gain <h3>" + format(player.rm.blankModsToGet) + "</h3> blank mods on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.po.realmMods}
+    layerShown() { return player.startedGame == true && false}
 })
 /*        codeExperience: new Decimal(0),
         codeExperienceToGet: new Decimal(0),

@@ -354,12 +354,12 @@
             description() {
                 return formatWhole(player.cb.evolutionShards) + "/25 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" +
-                "<br>"  + format(player.ev4.offerings) + "/200 Pet Sacrifice Offerings" +
+                "<br>"  + formatWhole(player.cb.totalAutomationShards) + "/3 Total Automation Shards" +
                 "<br>"  + formatWhole(player.g.goldGrass) + "/1e12 Golden Grass" +
                 "<br>"  + formatWhole(player.rf.rocketFuel) + "/1e80 Rocket Fuel"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(2) && player.ev4.offerings.gte(200)
+                return (player.cb.evolutionShards.gte(25) && player.cb.paragonShards.gte(2) && player.cb.totalAutomationShards.gte(3)
                 && player.g.goldGrass.gte(1e12) && player.rf.rocketFuel.gte(1e80))
             },
             onClick() {
@@ -367,7 +367,6 @@
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(25)
                 player.cb.paragonShards = player.cb.paragonShards.sub(2)
-                player.ev4.offerings = player.ev4.offerings.sub(200)
                 player.g.goldGrass = player.g.goldGrass.sub(1e12)
                 player.rf.rocketFuel = player.rf.rocketFuel.sub(1e80)
 
@@ -381,13 +380,13 @@
                 return formatWhole(player.cb.evolutionShards) + "/40 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" +
                 "<br>"  + formatWhole(player.cb.level) + "/1,500 Check Back Levels" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 206)) + "/8 Clock Level" +
-                "<br>"  + formatWhole(getLevelableAmount("pet", 207)) + "/8 Trollface Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 206)) + "/6 Clock Level" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 207)) + "/6 Trollface Level" +
                 "<br>"  + formatWhole(player.ca.rememberanceCores) + "/5 Rememberance Cores"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(40) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
-                && getLevelableAmount("pet", 206).gte(8) && getLevelableAmount("pet", 207).gte(8) && player.ca.rememberanceCores.gte(5))
+                && getLevelableAmount("pet", 206).gte(6) && getLevelableAmount("pet", 207).gte(6) && player.ca.rememberanceCores.gte(5))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
@@ -440,11 +439,11 @@
                 "<br>"  + formatWhole(player.cb.level) + "/15,000 Check Back Levels" +
                 "<br>"  + formatWhole(player.cb.XPBoost) + "/1,000 XPBoost" +
                 "<br>"  + formatWhole(player.cb.petPoints) + "/10,000 Pet Points" +
-                "<br>"  + formatWhole(player.ev2.day) + "/24 Days of Daily Rewards"
+                "<br>"  + formatWhole(player.ev2.day) + "/12 Days of Daily Rewards"
             },
             canClick() {
                 return (player.cb.evolutionShards.gte(80) && player.cb.paragonShards.gte(5) && player.cb.level.gte(15000)
-                && player.cb.XPBoost.gte(1000) && player.cb.petPoints.gte(10000) && player.ev2.day.gte(24))
+                && player.cb.XPBoost.gte(1000) && player.cb.petPoints.gte(10000) && player.ev2.day.gte(12))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)

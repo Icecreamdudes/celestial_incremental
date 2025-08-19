@@ -140,15 +140,15 @@
                 } else if (getBuyableAmount(this.layer, this.id).eq(2)) {
                     return new Decimal("1e1500")
                 } else if (getBuyableAmount(this.layer, this.id).eq(3)) {
-                    return new Decimal("1e2500")
+                    return new Decimal("1e2200")
                 } else if (getBuyableAmount(this.layer, this.id).eq(4)) {
-                    return new Decimal("1e3300")
+                    return new Decimal("1e3000")
                 } else if (getBuyableAmount(this.layer, this.id).eq(5)) {
-                    return new Decimal("1e4400")
+                    return new Decimal("1e4000")
                 } else if (getBuyableAmount(this.layer, this.id).eq(6)) {
-                    return new Decimal("1e6000")
+                    return new Decimal("1e5000")
                 } else {
-                    return getBuyableAmount(this.layer, this.id).sub(6).mul("1e9000")
+                    return getBuyableAmount(this.layer, this.id).sub(6).mul("1e6000")
                 }
             },
             canAfford() { return this.currency().gte(this.cost()) },

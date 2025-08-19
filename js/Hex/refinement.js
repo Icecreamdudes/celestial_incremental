@@ -18,28 +18,42 @@ addLayer("hre", {
         player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hbl.boosterEffects[3])
         player.hre.refinementDiv = player.hre.refinementDiv.mul(buyableEffect("ta", 47))
         if (hasUpgrade("hbl", 3)) player.hre.refinementDiv = player.hre.refinementDiv.mul(upgradeEffect("hbl", 3))
+        if (inChallenge("hrm", 16)) player.hre.refinementDiv = player.hre.refinementDiv.mul(player.hre.refinementEffect[1][0])
         player.hre.refinementDiv = player.hre.refinementDiv.mul(player.h.prePowerMult)
 
         if (player.hre.refinement.lt(90)) player.hre.refinementReq = Decimal.pow(6, player.hre.refinement).mul(1e8).div(player.hre.refinementDiv)
         if (player.hre.refinement.gte(90)) player.hre.refinementReq = Decimal.pow(1000, player.hre.refinement).div(1e190).div(player.hre.refinementDiv)
         
-        if (player.h.hexPoint.lt(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).div(1e8).mul(player.hre.refinementDiv).ln().div(new Decimal(6).ln()).add(1).sub(player.hre.refinement).floor()
-        if (player.h.hexPoint.gte(1.08e78)) player.hre.refinementGain = player.h.hexPoint.add(1).mul(1e190).mul(player.hre.refinementDiv).ln().div(new Decimal(1000).ln()).add(1).sub(player.hre.refinement).floor()
+        if (player.h.hexPoint.lt(Decimal.div(1.08e78, player.hre.refinementDiv))) player.hre.refinementGain = player.h.hexPoint.add(1).div(1e8).mul(player.hre.refinementDiv).ln().div(new Decimal(6).ln()).add(1).sub(player.hre.refinement).floor()
+        if (player.h.hexPoint.gte(Decimal.div(1.08e78, player.hre.refinementDiv))) player.hre.refinementGain = player.h.hexPoint.add(1).mul(1e190).mul(player.hre.refinementDiv).ln().div(new Decimal(1000).ln()).add(1).sub(player.hre.refinement).floor()
         
         if (player.hre.refinementGain.lt(1)) player.hre.refinementGain = new Decimal(0)
 
-        if (hasMilestone("hre", 4)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
+        if (hasMilestone("hre", 4) && !inChallenge("hrm", 15)) player.hre.refinement = player.hre.refinement.add(player.hre.refinementGain)
 
         player.hre.refinementEffect = [[new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)], [new Decimal(1), new Decimal(1)]]
-        if (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) player.hre.refinementEffect[0][0] = Decimal.pow(1.3, player.hre.refinement.pow(0.8)).mul(2)
-        if (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) player.hre.refinementEffect[0][1] = Decimal.pow(2, player.hre.refinement).mul(2)
+        if (player.hre.refinement.gte(1) || hasMilestone("hre", 1)) {
+            if (!hasUpgrade("hpw", 81)) player.hre.refinementEffect[0][0] = Decimal.pow(1.3, player.hre.refinement.pow(0.8)).mul(2)
+            if (hasUpgrade("hpw", 81)) player.hre.refinementEffect[0][0] = Decimal.pow(1.4, player.hre.refinement.pow(0.8)).mul(3)
+            player.hre.refinementEffect[0][1] = Decimal.pow(2, player.hre.refinement).mul(2)
+        }
         if (inChallenge("hrm", 12)) {
             player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(player.hpu.purifierEffects[3])
             player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(player.hpu.purifierEffects[3])
         }
+        if (inChallenge("hrm", 16)) {
+            let effPow = player.hre.refinementEffect[2][0]
+            if (hasUpgrade("hbl", 6)) effPow = effPow.mul(upgradeEffect("hbl", 6))
+            if (hasMilestone("hbl", 5)) effPow = effPow.mul(1.3)
+            if (hasUpgrade("hpw", 102)) effPow = effPow.mul(upgradeEffect("hpw", 102))
+            if (hasUpgrade("hpw", 132)) effPow = effPow.mul(2)
+            player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(effPow)
+            player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(effPow)
+        }
 
         if (player.hre.refinement.gte(3) && player.hre.refinement.lt(60)) player.hre.refinementEffect[1][0] = Decimal.pow(1.15, player.hre.refinement.sub(2).pow(0.6)).pow(player.hpu.purifierEffects[0])
         if (player.hre.refinement.gte(60)) player.hre.refinementEffect[1][0] = Decimal.pow(1.1, player.hre.refinement.pow(0.3)).add(3.56).pow(player.hpu.purifierEffects[0])
+        if (inChallenge("hrm", 16)) player.hre.refinementEffect[1][0] = Decimal.pow(1.36, player.hre.refinement.sub(2).pow(0.8)).pow(player.hpu.purifierEffects[0])
         if (player.hre.refinement.gte(3)) player.hre.refinementEffect[1][1] = Decimal.pow(1.9, player.hre.refinement.sub(2)).pow(player.hpu.purifierEffects[0])
 
         if (player.hre.refinement.gte(9)) player.hre.refinementEffect[2][0] = Decimal.pow(1.06, player.hre.refinement.sub(4).pow(0.6))
@@ -48,16 +62,24 @@ addLayer("hre", {
         if (player.hre.refinement.gte(24)) player.hre.refinementEffect[3][0] = Decimal.pow(1.6, player.hre.refinement.sub(23).pow(0.6))
         if (player.hre.refinement.gte(24)) player.hre.refinementEffect[3][1] = Decimal.pow(1.7, player.hre.refinement.sub(12))
 
-        if (player.hre.refinement.gte(54)) player.hre.refinementEffect[4][0] = Decimal.pow(1.3, player.hre.refinement.sub(53).pow(0.6))
+        if (player.hre.refinement.gte(54) && !hasUpgrade("hpw", 91)) player.hre.refinementEffect[4][0] = Decimal.pow(1.3, player.hre.refinement.sub(53).pow(0.6))
+        if (player.hre.refinement.gte(54) && hasUpgrade("hpw", 91)) player.hre.refinementEffect[4][0] = Decimal.pow(1.6, player.hre.refinement.sub(53).pow(0.6))
         if (player.hre.refinement.gte(54)) player.hre.refinementEffect[4][1] = Decimal.pow(1.6, player.hre.refinement.sub(27))
 
         if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][0] = player.hre.refinement.sub(89).mul(0.1).add(1)
         if (player.hre.refinement.gte(90)) player.hre.refinementEffect[5][1] = Decimal.pow(1.1, player.hre.refinement.sub(45).pow(0.8))
+
+        for (let i = 0; i < 6; i++) {
+            player.hre.refinementEffect[i][1] = player.hre.refinementEffect[i][1].pow(player.hpu.purifierEffects[2])
+        }
     },
     clickables: {
         1: {
-            title() { return "<h2>Refine, but reset hex points and provenance.</h2><br><h3>Req: " + format(player.hre.refinementReq) + " Hex Points</h3>"},
-            canClick() { return player.hre.refinementGain.gte(1) && !hasMilestone("hre", 4)},
+            title() {
+                if (inChallenge("hrm", 16)) return "<h2>Refine, but reset hex points.</h2><br><h3>Req: " + format(player.hre.refinementReq) + " Hex Points</h3>"
+                return "<h2>Refine, but reset hex points and provenance.</h2><br><h3>Req: " + format(player.hre.refinementReq) + " Hex Points</h3>"
+            },
+            canClick() { return player.hre.refinementGain.gte(1) && (!hasMilestone("hre", 4) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 if (!hasMilestone("hre", 0)) player.hre.refinement = player.hre.refinement.add(1)
@@ -74,6 +96,7 @@ addLayer("hre", {
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "2px solid white", borderRadius: "15px"}
+                if (hasMilestone("hre", 4) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 this.canClick() ? look.color = "white" : look.color = "black"
                 return look
             },
@@ -102,7 +125,10 @@ addLayer("hre", {
         },
         3: {
             requirementDescription: "<h3>30 Refinements",
-            effectDescription: "Automate α-Provenance gain.",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
+                return "Automate α-Provenance gain."
+            },
             done() { return player.hre.refinement.gte(30)},
             unlocked() { return hasMilestone("hre", 2) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -123,7 +149,10 @@ addLayer("hre", {
         },
         6: {
             requirementDescription: "<h3>48 Refinements",
-            effectDescription: "Automate β-Provenance gain.",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
+                return "Automate β-Provenance gain."
+            },
             done() { return player.hre.refinement.gte(48)},
             unlocked() { return hasMilestone("hre", 5) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -137,7 +166,10 @@ addLayer("hre", {
         },
         8: {
             requirementDescription: "<h3>60 Refinements",
-            effectDescription: "Automate γ-Provenance gain.",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
+                return "Automate γ-Provenance gain."
+            },
             done() { return player.hre.refinement.gte(60)},
             unlocked() { return hasMilestone("hre", 7) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -158,7 +190,10 @@ addLayer("hre", {
         },
         11: {
             requirementDescription: "<h3>78 Refinements",
-            effectDescription: "Automate δ-Provenance gain.",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
+                return "Automate δ-Provenance gain."
+            },
             done() { return player.hre.refinement.gte(78)},
             unlocked() { return hasMilestone("hre", 10) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
@@ -178,37 +213,43 @@ addLayer("hre", {
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         14: {
-            requirementDescription: "<h3>96 Refinements",
-            effectDescription: "Automate ε-Provenance gain.",
-            done() { return player.hre.refinement.gte(96)},
+            requirementDescription: "<h3>102 Refinements",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
+                return "Automate ε-Provenance gain."
+            },
+            done() { return player.hre.refinement.gte(102)},
             unlocked() { return hasMilestone("hre", 13) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         15: {
-            requirementDescription: "<h3>102 Refinements",
+            requirementDescription: "<h3>114 Refinements",
             effectDescription: "Automate purity gain.",
-            done() { return player.hre.refinement.gte(102)},
+            done() { return player.hre.refinement.gte(114)},
             unlocked() { return hasMilestone("hre", 14) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         16: {
-            requirementDescription: "<h3>108 Refinements",
+            requirementDescription: "<h3>126 Refinements",
             effectDescription: "Unlock buy max vex.",
-            done() { return player.hre.refinement.gte(108)},
+            done() { return player.hre.refinement.gte(126)},
             unlocked() { return hasMilestone("hre", 15) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         17: {
-            requirementDescription: "<h3>114 Refinements",
-            effectDescription: "TEMP.",
-            done() { return player.hre.refinement.gte(114)},
+            requirementDescription: "<h3>138 Refinements",
+            effectDescription: "Automate jinxes.",
+            done() { return player.hre.refinement.gte(138)},
             unlocked() { return hasMilestone("hre", 16) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         18: {
-            requirementDescription: "<h3>120 Refinements",
-            effectDescription: "Automate ζ-Provenance gain.",
-            done() { return player.hre.refinement.gte(120)},
+            requirementDescription: "<h3>150 Refinements",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
+                return "Automate ζ-Provenance gain."
+            },
+            done() { return player.hre.refinement.gte(150)},
             unlocked() { return hasMilestone("hre", 17) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
@@ -245,7 +286,7 @@ addLayer("hre", {
                                 ["raw-html", "Refiner 2", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "36px", backgroundColor: "#333", borderBottom: "2px solid white", borderRadius: "10px 10px 0px 0px"}],
                             ["style-column", [
-                                ["raw-html", () => {return "/" + format(player.hre.refinementEffect[1][0]) + "<br>Provenance Req's"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return inChallenge("hrm", 16) ? "/" + format(player.hre.refinementEffect[1][0]) + "<br>Refinement Req" : "/" + format(player.hre.refinementEffect[1][0]) + "<br>Provenance Req's"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "40px", borderBottom: "2px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return "x" + format(player.hre.refinementEffect[1][1]) + "<br>Prestige Points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
@@ -256,7 +297,7 @@ addLayer("hre", {
                                 ["raw-html", "Refiner 3", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "150px", height: "36px", backgroundColor: "#333", borderBottom: "2px solid white", borderRadius: "10px 10px 0px 0px"}],
                             ["style-column", [
-                                ["raw-html", () => {return "x" + format(player.hre.refinementEffect[2][0]) + "<br>Provenance Effects"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return inChallenge("hrm", 16) ? "^" + format(player.hre.refinementEffect[2][0]) + "<br>Refiner 1 Effects" : "x" + format(player.hre.refinementEffect[2][0]) + "<br>Provenance Effects"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
                                 ], {width: "150px", height: "40px", borderBottom: "2px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {return "x" + format(player.hre.refinementEffect[2][1]) + "<br>Trees"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
@@ -333,7 +374,9 @@ addLayer("hre", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return (inChallenge("hrm", 14) || player.h.hexPointGain.gte(1e308)) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return inChallenge("hrm", 15) ? "Time Remaining: " + formatTime(player.hrm.dreamTimer) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Refinement", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

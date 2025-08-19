@@ -48,16 +48,13 @@
         player.fa.foundryEffectMax = player.fa.foundryEffectMax.mul(buyableEffect("fa", 101))
         player.fa.foundryEffectMax = player.fa.foundryEffectMax.mul(buyableEffect("fa", 102))
     
-        if (player.fa.foundryEffect.lt(player.fa.foundryEffectMax))
-        {
+        if (player.fa.foundryEffect.lt(player.fa.foundryEffectMax)) {
             player.fa.foundryEffect = player.fa.foundryEffect.add(player.fa.foundryEffectPerSecond.mul(delta))
-        } else
-        {
+        } else {
             player.fa.foundryEffect = player.fa.foundryEffectMax
         }
 
-        if (player.fa.charge.gte(player.fa.bestCharge))
-        {
+        if (player.fa.charge.gte(player.fa.bestCharge)) {
             player.fa.bestCharge = player.fa.charge
         }
 
@@ -65,7 +62,6 @@
         player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.buyables[12].add(1))
         player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.buyables[13].add(1))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 13))
-        player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 205))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 206))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 207))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 208))
@@ -86,66 +82,9 @@
         player.fa.milestoneEffect[9] = player.fa.charge.pow(0.1).add(1) //charge
         player.fa.milestoneEffect[10] = player.fa.charge.pow(0.015).add(1) //pre-otf
     },
-    clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.fa.factoryMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.fa.factoryMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.fa.factoryMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.fa.factoryMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        4: {
-            title() { return "Buy Max On" },
-            canClick() { return player.fa.foundryMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.fa.foundryMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        5: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.fa.foundryMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.fa.foundryMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        6: {
-            title() { return "Buy Max On" },
-            canClick() { return player.fa.generatorMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.fa.generatorMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        7: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.fa.generatorMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.fa.generatorMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-    },
-    bars: {
-    },
-    upgrades: {
-    },
+    clickables: {},
+    bars: {},
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(1e40) },
@@ -389,40 +328,6 @@
         },
 
         //generator
-        201: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(1.7) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.h.ragePower},
-            pay(amt) { player.h.ragePower = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return 'Rage Power Generator'
-            },
-            display() {
-                return 'which are producing ' + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + '% of rage power per second.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rage Power'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
         202: {
             costBase() { return new Decimal(1e12) },
             costGrowth() { return new Decimal(5) },
@@ -507,40 +412,6 @@
             display() {
                 return 'which are producing ' + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + '% of oil per second.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Oil'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        205: {
-            costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.h.ragePower},
-            pay(amt) { player.h.ragePower = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return player.fa.buyables[13].gte(1) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return 'Rage Power Charger'
-            },
-            display() {
-                return 'which are boosting charge rate by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rage Power'
             },
             buy(mult) {
                 if (mult != true) {
@@ -767,13 +638,12 @@
                 unlocked() { return player.fa.buyables[12].gte(1)  },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.h.ragePower) + "</h3> Rage Power" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.p.crystals) + "</h3> Crystals" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> Repli-Grass" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 201], ["ex-buyable", 202], ["ex-buyable", 203], ["ex-buyable", 204],
-                        ["ex-buyable", 205], ["ex-buyable", 206], ["ex-buyable", 207], ["ex-buyable", 208]], {maxWidth: "1200px"}],
+                    ["style-row", [["ex-buyable", 202], ["ex-buyable", 203], ["ex-buyable", 204],
+                        ["ex-buyable", 206], ["ex-buyable", 207], ["ex-buyable", 208]], {maxWidth: "900px"}],
                 ]
             },
             "Charger": {

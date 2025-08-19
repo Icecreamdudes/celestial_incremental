@@ -429,7 +429,7 @@
         },
         22: {
             title: "Grass Upgrade XII",
-            unlocked() { return hasMilestone('r', 11) && player.hrm.realmCompletions.gt(0) },
+            unlocked() { return hasMilestone('r', 11) && (player.hrm.realmCompletions.gt(0) || player.g.grass.gte("1e1000") || hasUpgrade("g", 22)) },
             description() { return "Raise golden grass effect by ^6." },
             cost: new Decimal("1e1200"),
             currencyLocation() { return player.g },

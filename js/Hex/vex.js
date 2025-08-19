@@ -11,19 +11,23 @@ addLayer("hve", {
         vexReq: new Decimal(300),
         vexGain: new Decimal(0),
         vexDiv: new Decimal(1),
-        vexEffects: [new Decimal(0), new Decimal(1)],
+        vexEffects: [new Decimal(0), new Decimal(1), new Decimal(1)],
 
         rowCurrent: [0, 0, 0, 0, 0, 0],
         rowSpent: [0, 0, 0, 0, 0, 0],
     }},
     update(delta) {
+        player.hve.vexDiv = new Decimal(1)
+        if (hasUpgrade("hpw", 112)) player.hve.vexDiv = player.hve.vexDiv.mul(1e6)
+
         player.hve.vexReq = Decimal.pow(1e6, player.hve.vexTotal).mul(1e60).div(player.hve.vexDiv)
         player.hve.vexGain = player.hcu.curses.add(1).div(1e60).mul(player.hve.vexDiv).ln().div(new Decimal(1e6).ln()).add(1).sub(player.hve.vexTotal).floor()
         if (player.hve.vexGain.lt(1)) player.hve.vexGain = new Decimal(0)
 
-        player.hve.vexEffects = [new Decimal(0), new Decimal(1)]
+        player.hve.vexEffects = [new Decimal(0), new Decimal(1), new Decimal(1)]
         player.hve.vexEffects[0] = player.hve.vexTotal.mul(2)
         if (hasUpgrade("hpw", 62)) player.hve.vexEffects[1] = player.hve.vexTotal.mul(0.05).add(1)
+        if (hasUpgrade("hpw", 92)) player.hve.vexEffects[2] = Decimal.pow(1.66, player.hve.vexTotal.pow(0.66))
     },
     clickables: {
         1: {
@@ -366,7 +370,9 @@ addLayer("hve", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return (inChallenge("hrm", 14) || player.h.hexPointGain.gte(1e308)) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return inChallenge("hrm", 15) ? "Time Remaining: " + formatTime(player.hrm.dreamTimer) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Vexes", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
@@ -439,6 +445,7 @@ addLayer("hve", {
                             ["blank", "10px"],
                             ["raw-html", () => {return "Jinx Cap: +" + formatWhole(player.hve.vexEffects[0])}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", () => {return hasUpgrade("hpw", 62) ? "Jinx Score: x" + format(player.hve.vexEffects[1]) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("hpw", 92) ? "Blessings: x" + format(player.hve.vexEffects[2]) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "300px", height: "330px"}],
                     ], {width: "300px", height: "380px", backgroundColor: "#101", border: "2px solid #808", borderRadius: "15px"}],
                 ], {width: "300px", height: "400px"}],

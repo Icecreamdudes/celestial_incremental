@@ -25,10 +25,12 @@ addLayer("hpu", {
 
         if (player.hpu.purityGain.lt(1)) player.hpu.purityGain = new Decimal(0)
 
-        if (hasMilestone("hre", 15)) {
+        if (hasMilestone("hre", 15) && !inChallenge("hrm", 15)) {
             player.hpu.purity = player.hpu.purity.add(player.hpu.purityGain)
             player.hpu.totalPurity = player.hpu.totalPurity.add(player.hpu.purityGain)
         }
+
+        if (hasUpgrade("hpw", 101)) player.hpu.purifier[2] = player.hpu.totalPurity
 
         player.hpu.purifierEffects[0] = player.hpu.purifier[0].mul(0.1).add(1)
         if (player.hpu.purifierEffects[0].gt(1.5)) player.hpu.purifierEffects[0] = player.hpu.purifierEffects[0].div(1.5).pow(0.6).mul(1.5)
@@ -36,8 +38,8 @@ addLayer("hpu", {
         player.hpu.purifierEffects[1] = Decimal.pow(1.5, player.hpu.purifier[1])
         if (player.hpu.purifierEffects[1].gt(8)) player.hpu.purifierEffects[1] = player.hpu.purifierEffects[1].div(8).pow(0.6).mul(8)
 
-        player.hpu.purifierEffects[2] = player.hpu.purifier[2].mul(0.1)
-        if (player.hpu.purifierEffects[2].gt(0.5)) player.hpu.purifierEffects[2] = player.hpu.purifierEffects[2].add(1).div(1.5).pow(0.6).mul(1.5).sub(1)
+        player.hpu.purifierEffects[2] = player.hpu.purifier[2].mul(0.1).add(1)
+        if (player.hpu.purifierEffects[2].gt(1.5)) player.hpu.purifierEffects[2] = player.hpu.purifierEffects[2].div(1.5).pow(0.6).mul(1.5)
 
         player.hpu.purifierEffects[3] = player.hpu.purifier[3].mul(0.1).add(1)
         if (player.hpu.purifierEffects[3].gt(1.5)) player.hpu.purifierEffects[3] = player.hpu.purifierEffects[3].div(1.5).pow(0.6).mul(1.5)
@@ -58,11 +60,15 @@ addLayer("hpu", {
 
         player.hpu.keptPurity = new Decimal(0)
         if (hasUpgrade("hpw", 21)) player.hpu.keptPurity = player.hpu.keptPurity.add(1)
+        if (hasUpgrade("hpw", 111)) player.hpu.keptPurity = player.hpu.keptPurity.add(3)
     },
     clickables: {
         1: {
-            title() { return "<h2>Purify, but reset hex points, provenance, and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"},
-            canClick() { return player.hpu.purityGain.gte(1) && !hasMilestone("hre", 15)},
+            title() {
+                if (inChallenge("hrm", 16)) return "<h2>Purify, but reset hex points and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"
+                return "<h2>Purify, but reset hex points, provenance, and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"
+            },
+            canClick() { return player.hpu.purityGain.gte(1) && (!hasMilestone("hre", 15) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 let amt = new Decimal(1)
@@ -82,7 +88,11 @@ addLayer("hpu", {
                 player.h.hexPointGain = new Decimal(0)
                 player.h.hexPoint = new Decimal(0)
             },
-            style: {width: "400px", minHeight: "100px", border: "2px solid black", borderRadius: "15px"},
+            style() {
+                let look = {width: "400px", minHeight: "100px", border: "2px solid black", borderRadius: "15px"}
+                if (hasMilestone("hre", 15) && !inChallenge("hrm", 15)) look.cursor = "default !important"
+                return look
+            },
         },
         2: {
             title() { return "Respec your purifiers"},
@@ -102,7 +112,7 @@ addLayer("hpu", {
         },
         3: {
             title() {
-                let str = "<h3>Purified Provenances</h3><br>Lv." + formatWhole(player.hpu.purifier[0]) + "<br>^" + format(player.hpu.purifierEffects[0]) + " 2nd Refiners Effects"
+                let str = "<h3>Purified Provenances</h3><br>Lv." + formatWhole(player.hpu.purifier[0]) + "<br>^" + format(player.hpu.purifierEffects[0]) + " Refiner 2's Effects"
                 if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
                 return str
             },
@@ -133,18 +143,25 @@ addLayer("hpu", {
         },
         5: {
             title() {
-                let str = "<h3>Elevated Exponent</h3><br>Lv." + formatWhole(player.hpu.purifier[2]) + "<br>+^" + format(player.hpu.purifierEffects[2]) + " 1st TAD Upgrade"
-                if (player.hpu.purifierEffects[2].gt(0.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                let str = "<h3>Elevated Exponent</h3><br>Lv." + formatWhole(player.hpu.purifier[2]) + "<br>^" + format(player.hpu.purifierEffects[2]) + " Non-Hex Refiner Effects"
+                if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1)},
+            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 101)},
             unlocked: true,
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
                 player.hpu.purifier[2] = player.hpu.purifier[2].add(amt)
             },
-            style: {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"},
+            style() {
+                let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
+                if (hasUpgrade("hpw", 101)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.cursor = "default !important"
+                }
+                return look
+            },
         },
         6: {
             title() {
@@ -231,7 +248,9 @@ addLayer("hpu", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return (inChallenge("hrm", 14) || player.h.hexPointGain.gte(1e308)) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return inChallenge("hrm", 15) ? "Time Remaining: " + formatTime(player.hrm.dreamTimer) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Purity", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

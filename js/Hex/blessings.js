@@ -33,8 +33,8 @@ addLayer("hbl", {
         if (hasMilestone("hbl", 1) || inChallenge("hrm", 12)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[1])
         if (hasUpgrade("hpw", 1)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 1))
         player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hre.refinementEffect[4][0])
-        if (hasMilestone("hpw", 3) && player.hbl.blessings.lt(1e6) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
-        if (hasMilestone("hpw", 6) && player.hbl.blessings.lt(1e6) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
+        if (hasMilestone("hpw", 3) && player.hbl.blessings.lt(6e5) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
+        if (hasMilestone("hpw", 6) && player.hbl.blessings.lt(6e5) && !inChallenge("hrm", 13)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
         if (hasUpgrade("hpw", 71)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(upgradeEffect("hpw", 71))
         if (hasUpgrade("hve", 31)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(3)
         player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.h.prePowerMult)
@@ -42,7 +42,9 @@ addLayer("hbl", {
         // POWER AND AUTOMATION
         if (hasUpgrade("hve", 62)) player.hbl.blessingsGain = player.hbl.blessingsGain.pow(1.03)
 
-        player.hbl.blessingPerSec = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4])
+        let bps = player.hpu.purifierEffects[4]
+        if (hasMilestone("s", 13) && !inChallenge("hrm", 11)) bps = bps.add(0.06)
+        player.hbl.blessingPerSec = player.hbl.blessingsGain.mul(bps)
         if (inChallenge("hrm", 13)) player.hbl.blessingPerSec = player.hbl.blessingPerSec.sub(player.hbl.blessings.mul(0.06))
         if (player.hbl.blessings.add(player.hbl.blessingPerSec.mul(delta)).gt(0)) player.hbl.blessings = player.hbl.blessings.add(player.hbl.blessingPerSec.mul(delta))
         
@@ -60,7 +62,7 @@ addLayer("hbl", {
 
         if (inChallenge("hrm", 13)) player.hbl.boonsGain = player.hbl.boonsGain.sub(player.hbl.boons.mul(0.06))
         if (player.hbl.boons.add(player.hbl.boonsGain.mul(delta)).gt(0)) player.hbl.boons = player.hbl.boons.add(player.hbl.boonsGain.mul(delta))
-        if (hasUpgrade("hpw", 51)) {
+        if (hasUpgrade("hpw", 51) && !inChallenge("hrm", 15)) {
             for (let i = 0; i < 6; i++) {
                 player.hbl.boosterXP[i] = player.hbl.boosterXP[i].add(player.hbl.boons.mul(0.1).mul(delta))
             }
@@ -82,6 +84,7 @@ addLayer("hbl", {
 
         player.hbl.boosterEffects[0] = Decimal.pow(1.3, player.hbl.boosterLevels[0])
         if (hasMilestone("hre", 2)) player.hbl.boosterEffects[0] = player.hbl.boosterEffects[0].mul(player.hbl.boosterXP[0].div(player.hbl.boosterReq[0]).mul(0.15).add(1))
+        if (player.hbl.boosterEffects[0].gte(1e9)) player.hbl.boosterEffects[0] = player.hbl.boosterEffects[0].div(1e9).pow(0.3).mul(1e9)
         if (!inChallenge("hrm", 12)) player.hbl.boosterEffects[0] = player.hbl.boosterEffects[0].pow(player.hpu.purifierEffects[3])
         
         player.hbl.boosterEffects[1] = Decimal.pow(1.6, player.hbl.boosterLevels[1])
@@ -97,6 +100,7 @@ addLayer("hbl", {
             if (!hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).mul(0.5).add(1))
             if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].mul(player.hbl.boosterXP[3].div(player.hbl.boosterReq[3]).add(1))
         }
+        if (player.hbl.boosterEffects[3].gte(1e12)) player.hbl.boosterEffects[3] = player.hbl.boosterEffects[3].div(1e12).pow(0.3).mul(1e12)
 
         if (!hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.5, player.hbl.boosterLevels[4])
         if (hasUpgrade("hve", 32)) player.hbl.boosterEffects[4] = Decimal.pow(1.6, player.hbl.boosterLevels[4])
@@ -119,7 +123,10 @@ addLayer("hbl", {
     },
     clickables: {
         1: {
-            title: "<h2>Bless, but reset hex points, provenance, and refinement.</h2><br><h3>Req: 18 Refinements.</h3>",
+            title() {
+                if (inChallenge("hrm", 16)) return "<h2>Bless, but reset hex points and refinement.</h2><br><h3>Req: 18 Refinements.</h3>"
+                return "<h2>Bless, but reset hex points, provenance, and refinement.</h2><br><h3>Req: 18 Refinements.</h3>"
+            },
             canClick() {
                 if (!inChallenge("hrm", 11)) return player.hre.refinement.gte(18)
                 if (inChallenge("hrm", 11)) return player.hre.refinement.gte(18) && player.hrm.blessLimit.lt(6)
@@ -144,7 +151,11 @@ addLayer("hbl", {
             style: {width: "400px", minHeight: "100px", border: "2px solid black", borderRadius: "15px"},
         },
         2: {
-            title() { return "<h3>Hex Point Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[0]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[0]) + "/" + formatWhole(player.hbl.boosterReq[0]) + ")<br>x" + format(player.hbl.boosterEffects[0]) + " Hex Points<br><small>(Hold to deposit boons)</small>" },
+            title() {
+                let str = "<h3>Hex Point Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[0]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[0]) + "/" + formatWhole(player.hbl.boosterReq[0]) + ")<br>x" + format(player.hbl.boosterEffects[0]) + " Hex Points<br><small>(Hold to deposit boons)</small>"
+                if (player.hbl.boosterEffects[0].pow(Decimal.div(1, player.hpu.purifierEffects[3])).gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                return str
+            },
             canClick: true,
             unlocked: true,
             onHold() {
@@ -208,7 +219,11 @@ addLayer("hbl", {
             },
         },
         5: {
-            title() { return "<h3>Refiner Req Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[3]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[3]) + "/" + formatWhole(player.hbl.boosterReq[3]) + ")<br>/" + format(player.hbl.boosterEffects[3]) + " Refinement Req<br><small>(Hold to deposit boons)</small>" },
+            title() {
+                let str = "<h3>Refiner Req Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[3]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[3]) + "/" + formatWhole(player.hbl.boosterReq[3]) + ")<br>/" + format(player.hbl.boosterEffects[3]) + " Refinement Req<br><small>(Hold to deposit boons)</small>"
+                if (player.hbl.boosterEffects[3].gte(1e12)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                return str
+            },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
             onHold() {
@@ -340,6 +355,7 @@ addLayer("hbl", {
                 if (upgradeEffect(this.layer, this.id).lt(9)) return "+" + formatWhole(upgradeEffect(this.layer, this.id))
                 if (upgradeEffect(this.layer, this.id).gte(9)) return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[SOFTCAPPED]</small>"
             }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },
         2: {
             title: "Grace II",
@@ -355,6 +371,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },
         3: {
             title: "Grace III",
@@ -370,6 +387,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },
         4: {
             title: "Grace IV",
@@ -387,6 +405,7 @@ addLayer("hbl", {
             effectDisplay() {
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },
         5: {
             title: "Grace V",
@@ -402,11 +421,15 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },
         6: {
             title: "Grace VI",
             unlocked() { return hasUpgrade("bi", 12) },
-            description: "Highest Dice Points boosts provenance effects.",
+            description() {
+                if (inChallenge("hrm", 16)) return "Highest Dice Points boosts refiner 1 effects."
+                return "Highest Dice Points boosts provenance effects."
+            },
             cost: new Decimal(2880),
             currencyLocation() { return player.hbl },
             currencyDisplayName: "Blessings",
@@ -416,7 +439,11 @@ addLayer("hbl", {
                 if (inChallenge("hrm", 12)) eff = eff.pow(0.3)
                 return eff
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (inChallenge("hrm", 16)) return "^" + format(upgradeEffect(this.layer, this.id))
+                return format(upgradeEffect(this.layer, this.id)) + "x"
+            }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },
     },
     milestones: {
@@ -446,7 +473,10 @@ addLayer("hbl", {
         },
         5: {
             requirementDescription: "<h3>120,000 Blessings",
-            effectDescription: "Boost provenenace effects by x1.3.",
+            effectDescription() {
+                if (inChallenge("hrm", 16)) return "Boost refiner 1 effects by ^1.3."
+                return "Boost provenenace effects by x1.3."
+            },
             done() { return player.hbl.blessings.gte(120000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
@@ -508,7 +538,7 @@ addLayer("hbl", {
             },
             "Autoclicker": {
                 buttonStyle() { return {borderRadius: "5px"}},
-                unlocked() {return hasMilestone("hre", 5)},
+                unlocked() {return hasMilestone("hre", 5) && !inChallenge("hrm", 15)},
                 content: [
                     ["blank", "10px"],
                     ["row", [
@@ -543,7 +573,9 @@ addLayer("hbl", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return player.h.hexPointGain.eq(0) ? "" : player.h.hexPointGain.gt(0) ? "(+" + format(player.h.hexPointGain) + "/s)" : "<span style='color:red'>(" + format(player.h.hexPointGain) + "/s)</span>"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return (inChallenge("hrm", 14) || player.h.hexPointGain.gte(1e308)) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
+        ["raw-html", () => {return inChallenge("hrm", 15) ? "Time Remaining: " + formatTime(player.hrm.dreamTimer) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],
         ["style-column", [
             ["raw-html", "Hex of Blessings", {color: "white", fontSize: "30px", fontFamily: "monospace"}],

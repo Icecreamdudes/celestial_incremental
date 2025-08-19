@@ -24,10 +24,8 @@
         pausedDimensions: false,
         producingDimensions: false,
         radiationUsage: new Decimal(0),
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #782424 0%, #8c1111 100%)",
@@ -37,7 +35,7 @@
         };
     },
     tooltip: "Singularity Dimensions",
-    branches: ["cop",],
+    branches: ["co",],
     color: "#3d1616",
     update(delta) {
         let onepersec = new Decimal(1)

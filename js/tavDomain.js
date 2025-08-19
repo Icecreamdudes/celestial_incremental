@@ -184,18 +184,14 @@
     },
     bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Productive Provenance",
             unlocked() { return true },
-            description() {return "First of each provenance's effects are boosted by ^" + format(upgradeEffect(this.layer, this.id), 1) + "."},
+            description() {return "First of each provenance's effects are boosted by ^1.1."},
             cost: new Decimal(20),
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
-            effect() {
-                return new Decimal(1.1).add(player.hpu.purifierEffects[2])
-            },
         },
         12:
         {

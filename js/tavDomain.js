@@ -78,6 +78,7 @@
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("om", 13)).floor()
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(buyableEffect("p", 18)).floor()
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(levelableEffect("pet", 209)[1]).floor()
+        if (hasUpgrade("hpw", 1062)) player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(10).floor()
         player.tad.shatteredInfinitiesToGet = player.tad.shatteredInfinitiesToGet.mul(levelableEffect("pet", 1101)[2]).floor()
 
         if (hasMilestone("s", 13)) player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(Decimal.mul(player.tad.shatteredInfinitiesToGet.mul(0.1), delta))
@@ -86,6 +87,7 @@
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("om", 13)).floor()
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(buyableEffect("p", 18)).floor()
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(levelableEffect("pet", 209)[1]).floor()
+        if (hasUpgrade("hpw", 1062)) player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(10).floor()
         player.tad.disfiguredInfinitiesToGet = player.tad.disfiguredInfinitiesToGet.mul(levelableEffect("pet", 1101)[2]).floor()
 
         if (hasMilestone("s", 13)) player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(Decimal.mul(player.tad.disfiguredInfinitiesToGet.mul(0.1), delta))
@@ -94,6 +96,7 @@
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("om", 13)).floor()
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(buyableEffect("p", 18)).floor()
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(levelableEffect("pet", 209)[1]).floor()
+        if (hasUpgrade("hpw", 1062)) player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(10).floor()
         player.tad.corruptedInfinitiesToGet = player.tad.corruptedInfinitiesToGet.mul(levelableEffect("pet", 1101)[2]).floor()
 
         if (hasMilestone("s", 13)) player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(Decimal.mul(player.tad.corruptedInfinitiesToGet.mul(0.1), delta))

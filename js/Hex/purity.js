@@ -34,6 +34,7 @@ addLayer("hpu", {
 
         player.hpu.purifierEffects[0] = player.hpu.purifier[0].mul(0.1).add(1)
         if (player.hpu.purifierEffects[0].gt(1.5)) player.hpu.purifierEffects[0] = player.hpu.purifierEffects[0].div(1.5).pow(0.6).mul(1.5)
+        if (inChallenge("hrm", 16) && player.hpu.purifierEffects[0].gt(3)) player.hpu.purifierEffects[0] = new Decimal(3)
 
         player.hpu.purifierEffects[1] = Decimal.pow(1.5, player.hpu.purifier[1])
         if (player.hpu.purifierEffects[1].gt(8)) player.hpu.purifierEffects[1] = player.hpu.purifierEffects[1].div(8).pow(0.6).mul(8)
@@ -60,6 +61,7 @@ addLayer("hpu", {
 
         player.hpu.keptPurity = new Decimal(0)
         if (hasUpgrade("hpw", 21)) player.hpu.keptPurity = player.hpu.keptPurity.add(1)
+        if (hasUpgrade("hve", 52)) player.hpu.keptPurity = player.hpu.keptPurity.add(2)
         if (hasUpgrade("hpw", 111)) player.hpu.keptPurity = player.hpu.keptPurity.add(3)
     },
     clickables: {

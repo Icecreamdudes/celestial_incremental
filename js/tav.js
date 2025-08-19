@@ -143,7 +143,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("m", 18))
-        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("rm", 32))
+        if (hasUpgrade("hpw", 1053)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(100)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(levelableEffect("pet", 208)[1])
         if (hasMilestone("fa", 15)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.fa.milestoneEffect[4])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.sd.singularityPowerEffect)

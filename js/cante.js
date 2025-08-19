@@ -72,7 +72,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 12))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 15))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 18))
-        player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
+        if (hasUpgrade("hpw", 1063)) player.ca.replicantiMult = player.ca.replicantiMult.add(3)
         player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))

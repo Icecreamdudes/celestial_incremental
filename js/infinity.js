@@ -134,7 +134,7 @@ addLayer("in", {
         if (hasUpgrade("bi", 23)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("bi", 23))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.ca.replicantiEffect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("id", 24))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rm.realmModsEffect[5])
+        if (hasUpgrade("hpw", 1061)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(upgradeEffect("hpw", 1061))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ca", 24))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 403)[1])
         if (hasMilestone("fa", 11)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.fa.milestoneEffect[0])
@@ -158,6 +158,7 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("tad", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
+        if (hasUpgrade("hpw", 1062)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(10)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
     },

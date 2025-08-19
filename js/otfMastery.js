@@ -57,7 +57,7 @@
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 19))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 23))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
+        if (hasUpgrade("hpw", 1051)) player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(upgradeEffect("hpw", 1051))
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
@@ -74,7 +74,7 @@
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 18))
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 23))
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
+        if (hasUpgrade("hpw", 1051)) player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(upgradeEffect("hpw", 1051))
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
@@ -91,7 +91,7 @@
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 17))
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 23))
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(player.rm.realmModsEffect[4])
+        if (hasUpgrade("hpw", 1051)) player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(upgradeEffect("hpw", 1051))
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("fu", 43))
 

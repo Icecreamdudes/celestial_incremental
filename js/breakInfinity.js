@@ -83,7 +83,7 @@
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("tad", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("om", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("p", 16))
-        player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("rm", 33))
+        if (hasUpgrade("hpw", 1062)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(10)
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(levelableEffect("pet", 208)[2])
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(levelableEffect("pet", 1101)[1])
         if (hasMilestone("fa", 13)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.fa.milestoneEffect[2])

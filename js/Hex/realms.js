@@ -181,7 +181,6 @@ addLayer("hrm", {
                 layers.hpw.powerReset(1)
             },
             onExit() {
-                console.log(format(player.hbl.blessings))
                 layers.hpw.powerReset(1)
             },
             style: {width: '250px', height: '184px', backgroundColor: "#44c", border: "6px solid #008", borderRadius: "13px"},
@@ -196,7 +195,7 @@ addLayer("hrm", {
             name() { return "Void Realm (" + challengeCompletions(this.layer, this.id) + "/" + this.completionLimit() + ")"},
             completionLimit() {return buyableEffect("hpw", 6).add(3)},
             marked: false,
-            goal() {return Decimal.mul(6, challengeCompletions(this.layer, this.id)).add(30)},
+            goal() {return Decimal.mul(6, challengeCompletions(this.layer, this.id)).add(90)},
             fullDisplay() {
                 let str = "<h4>The void has made you forget the concept of provenances.</h4>"
                 if (inChallenge("hrm", 16)) str = "<h4>The void has made you forget the concept of ███████████.</h4>"

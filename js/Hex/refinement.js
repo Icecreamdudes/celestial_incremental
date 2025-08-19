@@ -43,10 +43,10 @@ addLayer("hre", {
         }
         if (inChallenge("hrm", 16)) {
             let effPow = player.hre.refinementEffect[2][0]
-            if (hasUpgrade("hbl", 6)) effPow = effPow.mul(upgradeEffect("hbl", 6))
-            if (hasMilestone("hbl", 5)) effPow = effPow.mul(1.3)
-            if (hasUpgrade("hpw", 102)) effPow = effPow.mul(upgradeEffect("hpw", 102))
-            if (hasUpgrade("hpw", 132)) effPow = effPow.mul(2)
+            if (hasUpgrade("hbl", 6)) effPow = effPow.add(upgradeEffect("hbl", 6))
+            if (hasMilestone("hbl", 5)) effPow = effPow.add(0.3)
+            if (hasUpgrade("hpw", 102)) effPow = effPow.add(upgradeEffect("hpw", 102))
+            if (hasUpgrade("hpw", 132)) effPow = effPow.add(0.5)
             player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(effPow)
             player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(effPow)
         }

@@ -146,7 +146,7 @@
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
-            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("rm", 31))
+            if (hasUpgrade("hpw", 1052)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(1e8)
             if (hasMilestone("fa", 12)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[1])
 
             // POWER MODIFIERS

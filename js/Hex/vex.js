@@ -282,7 +282,7 @@ addLayer("hve", {
             style: {width: "110px", minHeight: "110px", margin: "5px", borderRadius: "50%"},
         },
         51: {
-            fullDisplay() { return "Gain 6 free<br>Η-Jinxes"},
+            fullDisplay() { return "Gain 1 free of each hexed jinx."},
             unlocked: true,
             cost() {return new Decimal(1)},
             canAfford() { return player.hve.rowCurrent[4] > 0},
@@ -296,11 +296,13 @@ addLayer("hve", {
             style: {width: "110px", minHeight: "110px", margin: "5px", borderRadius: "50%"},
         },
         52: {
-            fullDisplay() { return "Gain 3 free<br>Θ-Jinxes"},
+            fullDisplay() { return "Gain 2 free purities"},
             unlocked: true,
             cost() {return new Decimal(1)},
             canAfford() { return player.hve.rowCurrent[4] > 0},
             onPurchase() {
+                player.hpu.purity = player.hpu.purity.add(2)
+                player.hpu.totalPurity = player.hpu.totalPurity.add(2)
                 player.hve.rowSpent[4] = player.hve.rowSpent[4] + 1
                 player.hve.rowCurrent[4] = player.hve.rowCurrent[4] - 1
             },
@@ -310,7 +312,7 @@ addLayer("hve", {
             style: {width: "110px", minHeight: "110px", margin: "5px", borderRadius: "50%"},
         },
         53: {
-            fullDisplay() { return "Gain 3 free<br>Ι-Jinxes"},
+            fullDisplay() { return "Gain 3 free<br>Δ-Jinx"},
             unlocked: true,
             cost() {return new Decimal(1)},
             canAfford() { return player.hve.rowCurrent[4] > 0},

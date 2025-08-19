@@ -450,10 +450,11 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
+                if (inChallenge("hrm", 16)) return Decimal.pow(1.05, player.hbl.boons.add(1).log(1e6)).sub(1)
                 return Decimal.pow(1.1, player.hbl.boons.add(1).log(1e6))
             },
             effectDisplay() {
-                if (inChallenge("hrm", 16)) return "^" + format(upgradeEffect(this.layer, this.id))
+                if (inChallenge("hrm", 16)) return "^+" + format(upgradeEffect(this.layer, this.id))
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
@@ -539,7 +540,7 @@ addLayer("hpw", {
             title: "Might 14:2",
             unlocked: true,
             description() {
-                if (inChallenge("hrm", 16)) return "Raise refiner 1 effects by ^2"
+                if (inChallenge("hrm", 16)) return "Boost refiner 1 effects by ^+0.5"
                 return "Divide provenance req's by /1.5."
             },
             branches: [121],
@@ -1156,9 +1157,9 @@ addLayer("hpw", {
 
                     ]],
                     ["row", [
-                        ["blank", ["350px", "140px"]],
-                        ["upgrade", 121],
                         ["blank", ["210px", "140px"]],
+                        ["upgrade", 121],
+                        ["blank", ["70px", "140px"]],
                         ["style-row", [["upgrade", 1061]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
@@ -1169,9 +1170,9 @@ addLayer("hpw", {
                         ["style-row", [["upgrade", 1062]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
-                        ["blank", ["350px", "140px"]],
-                        ["style-row", [["upgrade", 141], ["buyable", 0]], {width: "140px", height: "140px"}],
                         ["blank", ["210px", "140px"]],
+                        ["style-row", [["upgrade", 141], ["buyable", 0]], {width: "140px", height: "140px"}],
+                        ["blank", ["70px", "140px"]],
                         ["style-row", [["upgrade", 1063]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [

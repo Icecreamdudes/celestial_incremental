@@ -589,6 +589,10 @@
         for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++) {
             player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(time)
         }
+
+        //legendary
+        player.leg.legendaryGemTimer = player.leg.legendaryGemTimer.sub(time);
+        player.leg.summonTimer = player.leg.summonTimer.sub(time);
     },
     branches: ["m"],
     clickables: {

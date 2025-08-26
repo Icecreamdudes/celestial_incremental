@@ -43,6 +43,7 @@ addLayer("au2", {
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("ma", 31)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pet", 501)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(player.le.punchcardsPassiveEffect[17]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("cof", 29)).floor()
     },
     clickables: {
         1: {

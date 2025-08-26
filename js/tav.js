@@ -163,6 +163,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.le.punchcardsPassiveEffect[2])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.r.pentMilestone13Effect)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("st", 301))
+        player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("cof", 22))
 
         player.ta.negativeInfinityPause = player.ta.negativeInfinityPause.sub(1)
         if (player.ta.negativeInfinityPause.gt(0)) {
@@ -644,6 +645,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: { width: '125px', "min-height": '120px' },
         },
         15:
         {

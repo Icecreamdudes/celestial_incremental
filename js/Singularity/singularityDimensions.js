@@ -58,6 +58,7 @@
             .mul(buyableEffect("sma", 14))
             .mul(levelableEffect("pet", 308)[1])
             .mul(player.st.starPowerEffect2) 
+            .pow(buyableEffect("cof", 25)) 
         // Dimension Gain
         for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
             player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))

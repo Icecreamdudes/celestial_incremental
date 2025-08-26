@@ -127,7 +127,9 @@
         }
         player.fu.funifyPause = player.fu.funifyPause.sub(1)
 
-        player.fu.funToGet = player.oi.oil.div(1e10).pow(0.4)
+        if (player.oi.oil.div(1e10).pow(0.4).lt(1e60)) player.fu.funToGet = player.oi.oil.div(1e10).pow(0.4)
+        if (player.oi.oil.div(1e10).pow(0.4).gte(1e60))  player.fu.funToGet = player.oi.oil.div(1e10).pow(0.1).mul(1e60)
+
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 15))
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 38))
         player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 1205)[1])

@@ -9,6 +9,8 @@
         diceRuns: new Decimal(0),
         rocketFuelRuns: new Decimal(0),
         hexRuns: new Decimal(0),
+
+        challenge7StartEvoShards: new Decimal(0),
     }
     },
     automate() {
@@ -807,18 +809,15 @@
         },
         17: {
             name: "Challenge VII",
-            challengeDescription() { return "<h4>Does an XPBoost-equivalent reset, and XP is being constantly drained. When XP reaches 0, you are sent back a level with very little XP. (RECOMMENDED AFTER FIRST XPBOOST)" },
-            goalDescription() { return "Level 60" },
-            goal() { return new Decimal("60") },
-            canComplete: function () { return player.cb.level.gte(60) },
+            challengeDescription() { return "<h4>Clicking on a check back button resets the timers for all other check back buttons." },
+            goalDescription() { return "Earning an evolution shard." },
+            canComplete: function () { return player.cb.evolutionShards.gt(player.ip.challenge7StartEvoShards) },
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) },
             onEnter() {
                 layers.in.bigCrunch()
 
-                player.cb.level = new Decimal(1)
-                player.cb.xp = new Decimal(0)
-                player.cb.totalxp = new Decimal(5.1)
+                player.ip.challenge7StartEvoShards = player.cb.evolutionShards
             },
             onExit() {
                 layers.in.bigCrunch()

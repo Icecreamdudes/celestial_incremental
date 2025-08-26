@@ -599,7 +599,7 @@ addLayer("ev0", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(delta))
+        if (player.ev.evolutionsUnlocked[0]) player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(delta))
 
         player.ev0.coinDustPerSecond = levelableEffect("pet", 1103)[1].div(3600)
         player.ev0.coinDustPerSecond = player.ev0.coinDustPerSecond.mul(buyableEffect("ev0", 11))
@@ -1731,6 +1731,7 @@ addLayer("ev4", {
         let onepersec = new Decimal(1)
 
         player.ev4.offeringReq = player.cb.totalAutomationShards.mul(20).add(100)
+        player.ev4.offeringReq = player.ev4.offeringReq.div(buyableEffect("cof", 32))
 
         player.ev4.offeringsBase = new Decimal(1)
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ev4", 11))

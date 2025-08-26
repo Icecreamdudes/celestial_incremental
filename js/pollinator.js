@@ -55,6 +55,7 @@ addLayer("pol", {
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.le.punchcardsPassiveEffect[13])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
+            if (hasUpgrade("s", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 14))
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(0.8)
@@ -62,12 +63,13 @@ addLayer("pol", {
             // POST-SOFTCAP MULTIPLIERS
             if (hasUpgrade("s", 14)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 14))
 
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("cof", 16))
+
             // GAIN FUNCTIONS
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
                 player.pol.pollinators = player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1)
             }
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
-            if (hasUpgrade("s", 13)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("s", 13))
 
         }
 

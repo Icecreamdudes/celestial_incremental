@@ -809,6 +809,7 @@
         }
 
         // REGULAR PENT MILESTONES
+        if (!hasUpgrade("sma", 108)) {
         if (!hasMilestone("s", 12)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if (+player.r.milestones[i] < 20) {
@@ -824,6 +825,8 @@
                 player.r.milestones.splice(i, 1);
                 i--;
             }
+        }
+
         }
 
         player.g.grass = new Decimal(0)
@@ -976,6 +979,7 @@
         //STUFF THAT GETS RESET ON SINGULARITY
 
         //check back
+        if (!hasUpgrade("sma", 107)) {
         player.cb.xp = new Decimal(0)
         player.cb.totalxp = new Decimal(0)
         player.cb.level = new Decimal(1)
@@ -987,6 +991,7 @@
         player.cb.buyables[12] = new Decimal(0)
         player.cb.buyables[13] = new Decimal(0)
         player.cb.buyables[14] = new Decimal(0)
+        }
         }
 
         //universe 1 such
@@ -1483,9 +1488,11 @@
             player.sd.dimensionAmounts[i] = getBuyableAmount("sd", i+11)
         }
 
-        for (let i = 0; i < player.po.halterEffects.length; i++)
-        {
-            player.po.halterEffects[i] = new Decimal(1)
+        if (!hasUpgrade("sma", 108)) {
+            for (let i = 0; i < player.po.halterEffects.length; i++)
+            {
+                player.po.halterEffects[i] = new Decimal(1)
+            }
         }
     },
     clickables: {
@@ -1791,6 +1798,8 @@
                 {
                     player.in.infinities = new Decimal(8)
                 }
+
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)', borderRadius: "25px" },

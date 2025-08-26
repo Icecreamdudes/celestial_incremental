@@ -69,6 +69,7 @@
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(levelableEffect("pet", 208)[0])
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.sd.singularityPowerEffect2)
         if (hasMilestone("fa", 16)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.fa.milestoneEffect[5])
+        if (hasUpgrade("bi", 29)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(upgradeEffect("bi", 29))
 
         // POWER MODIFIERS
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.pow(buyableEffect("fu", 42))
@@ -86,6 +87,7 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(levelableEffect("pet", 208)[0])
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.sd.singularityPowerEffect2)
             if (hasMilestone("fa", 16)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[5])
+        if (hasUpgrade("bi", 29)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(upgradeEffect("bi", 29))
 
             // POWER MODIFIERS
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].pow(buyableEffect("fu", 42))

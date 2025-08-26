@@ -50,6 +50,7 @@
             buyUpgrade("bi", 26)
             buyUpgrade("bi", 27)
             buyUpgrade("bi", 28)
+            buyUpgrade("bi", 29)
 
             buyUpgrade("bi", 101)
             buyUpgrade("bi", 102)
@@ -66,6 +67,7 @@
             buyUpgrade("bi", 114)
             buyUpgrade("bi", 115)
             buyUpgrade("bi", 116)
+            buyUpgrade("bi", 117)
         }
     },
     nodeStyle() {
@@ -504,6 +506,21 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
         },
+        29:
+        {
+            title: "BI IP Upgrade XVIII",
+            unlocked() { return player.ma.matosDefeated },
+            description() { return "Boost infinity dimensions based on galaxy dust." },
+            cost: new Decimal("1e4000"),
+            currencyLocation() { return player.in },
+            currencyDisplayName: "Infinity Points",
+            currencyInternalName: "infinityPoints",
+            effect() {
+                return player.ca.galaxyDust.pow(4).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
+        },
         //Negative Infinity Points
         101:
         {
@@ -681,6 +698,20 @@
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
         },
+        117 :{
+            title: "BI NIP Upgrade XVI",
+            unlocked() { return player.ma.matosDefeated },
+            description: "Tickspeed effect boosts antimatter gain.",
+            cost: new Decimal("1e1000"),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            effect() {
+                return buyableEffect("ad", 1).pow(0.2).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: { width: '150px', height: '100px', }
+        },
     },
     buyables: {
         11: {
@@ -812,11 +843,11 @@
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]]],
-                    ["row", [["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],]],
+                    ["row", [["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 29],]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]]],
-                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116]]],
+                    ["row", [["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117]]],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],

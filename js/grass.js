@@ -1286,6 +1286,7 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.pow(buyableEffect('rm', 25))
     player.g.grassVal = player.g.grassVal.pow(player.re.realmEssenceEffect)
     player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
+    player.g.grassVal = player.g.grassVal.pow(buyableEffect("cof", 14))
 
     // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
     player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
@@ -1384,6 +1385,7 @@ const updateGoldGrass = (delta) => {
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
     if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
+    player.g.goldGrassVal = player.g.goldGrassVal.mul(player.cof.coreFragmentEffects[1])
 
     // GOLDEN GRASS PER SECOND
     player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))

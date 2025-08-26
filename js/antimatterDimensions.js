@@ -95,6 +95,9 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("rm", 31))
         if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
         if (player.cop.processedCoreFuel.eq(9)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+        if (hasUpgrade("bi", 117)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("bi", 117))
+
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))

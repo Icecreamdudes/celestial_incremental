@@ -752,12 +752,12 @@ for (let i = 0; i < player.ma.health.length; i++) {
             player.ma.motivationCount  = new Decimal(0)
             player.ma.matosFightActive = false
 
-           player.ma.commonMatosFragments = player.ma.commonMatosFragments.add(700)
-           player.ma.rareMatosFragments = player.ma.rareMatosFragments.add(300)
-           player.ma.epicMatosFragments = player.ma.epicMatosFragments.add(50)
-           player.ma.legendaryMatosFragments = player.ma.legendaryMatosFragments.add(5)
+            player.ma.commonMatosFragments = player.ma.commonMatosFragments.add(700)
+            player.ma.rareMatosFragments = player.ma.rareMatosFragments.add(300)
+            player.ma.epicMatosFragments = player.ma.epicMatosFragments.add(50)
+            player.ma.legendaryMatosFragments = player.ma.legendaryMatosFragments.add(5)
 
-           player.subtabs["ma"]["stuff"] = "Win"
+            player.subtabs["ma"]["stuff"] = "Win"
                     }
                 }, 54000)
             }

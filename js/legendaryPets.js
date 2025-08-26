@@ -30,7 +30,9 @@
         let onepersec = new Decimal(1)
 
         player.leg.legendaryGemsToGetMin = player.cb.XPBoost.pow(0.2).div(2).floor()
+        player.leg.legendaryGemsToGetMin = player.leg.legendaryGemsToGetMin.mul(buyableEffect("cof", 33))
         player.leg.legendaryGemsToGetMax = player.cb.XPBoost.pow(0.25).div(2).floor()
+        player.leg.legendaryGemsToGetMax = player.leg.legendaryGemsToGetMax.mul(buyableEffect("cof", 33))
 
         player.leg.legendaryGemTimerMax = new Decimal(86400)
         player.leg.legendaryGemTimer = player.leg.legendaryGemTimer.sub(onepersec.mul(delta))

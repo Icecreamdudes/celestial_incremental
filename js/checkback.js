@@ -187,9 +187,7 @@
         {
             player.cb.effectActivate = false
         }
-        if (!inChallenge("ip", 17)) {
-            player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
-        } else {
+
             if (player.cb.level.lt(10000)) {
                 player.cb.req = player.cb.level.pow(1.2).add(4).floor()
             } else if (player.cb.level.lt(100000)) {
@@ -199,7 +197,7 @@
             }
             player.cb.req = player.cb.req.div(levelableEffect("pet", 203)[2])
             player.cb.req = player.cb.req.div(levelableEffect("pet", 304)[1])
-        }
+
 
         for (let i = 0; i < player.cb.buttonTimers.length; i++)
         {
@@ -247,8 +245,8 @@
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(1.25)
             if (player.ma.matosDefeated) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(2)
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cof.coreFragmentEffects[6])
         }
-
 
         player.cb.buttonTimersMax = [new Decimal(60),new Decimal(180),new Decimal(300),new Decimal(5),new Decimal(1200),new Decimal(3600),new Decimal(14400),new Decimal(86400),]
 
@@ -271,6 +269,7 @@
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
             if (player.cop.processedCoreFuel.eq(8)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(player.cop.processedCoreInnateEffects[2])
+            player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("cof", 31))
         }
 
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000), new Decimal(86400)]
@@ -329,10 +328,12 @@
         } else if (player.cb.XPBoost.gte(1000)) {
             player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(0.5).mul(10))
         }
-        
+
+        player.cb.evolutionShards = player.cb.evolutionShards.floor()
+        player.cb.paragonShards = player.cb.paragonShards.floor()
 
         //chal 7
-        if (inChallenge("ip", 17) && player.cb.level.gt(1)) {
+        /* if (inChallenge("ip", 17) && player.cb.level.gt(1)) {
             player.cb.lossRate = Decimal.add(0.1, player.cb.xp.div(666).pow(0.8))
             player.cb.xp = player.cb.xp.sub(player.cb.lossRate.mul(delta))
 
@@ -341,7 +342,7 @@
                 player.cb.level = player.cb.level.sub(2)
                 player.cb.xp = player.cb.req.sub(1)
             }
-        }
+        } */
 
         //automation
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++) {
@@ -507,19 +508,11 @@
     },
     levelup()
     {
-        if (!inChallenge("ip", 17)) {
-            let leftover = new Decimal(0)
-            player.cb.level = layers.cb.xpToLevel(player.cb.totalxp)
-            leftover = player.cb.totalxp - layers.cb.levelToXP(player.cb.level)
-            player.cb.xp = new Decimal(0)
-            player.cb.xp = player.cb.xp.add(leftover)
-        } else {
-            let leftover = new Decimal(0)
-            leftover = player.cb.xp.sub(player.cb.req)
-            player.cb.level = player.cb.level.add(1)
-            player.cb.xp = new Decimal(0)
-            player.cb.xp = player.cb.xp.add(leftover)
-        }
+        let leftover = new Decimal(0)
+        leftover = player.cb.xp.sub(player.cb.req)
+        player.cb.level = player.cb.level.add(1)
+        player.cb.xp = new Decimal(0)
+        player.cb.xp = player.cb.xp.add(leftover)
     },
     offlineCooldown() {
         let time = player.cb.time
@@ -657,6 +650,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[0].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -687,6 +688,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[1].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -717,6 +726,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[2].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -747,6 +764,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[3].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }                
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -777,6 +802,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[4].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }                    
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -807,6 +840,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[5].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }                    
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -837,6 +878,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[6].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }                    
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -868,6 +917,14 @@
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPButtonBase[7].mul(player.ca.canteEnergyMult))
+
+                if (inChallenge('ip', 17))
+                {
+                    for (i = 0; i < player.cb.buttonTimersMax.length; i++)
+                    {
+                        player.cb.buttonTimers[i] = player.cb.buttonTimersMax[i]
+                    }
+                }                    
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
@@ -3301,7 +3358,7 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],        
+        //["raw-html", function () { return inChallenge("ip", 17) ? "You are losing " + formatWhole(player.cb.lossRate) + " xp per second." : ""}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],        
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/level.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],

@@ -141,6 +141,7 @@
         // POWER MODIFIERS
         player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("rm", 28))
         player.m.modsToGet = player.m.modsToGet.pow(player.re.realmEssenceEffect)
+        player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("cof", 17))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])

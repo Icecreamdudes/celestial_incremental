@@ -169,6 +169,7 @@ addLayer("in", {
 
         // POWER MODIFIERS
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cof.coreFragmentEffects[3])
 
         //----------------------------------------
 
@@ -180,6 +181,7 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
         if (player.cop.processedCoreFuel.eq(10)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("cof", 23))
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17))

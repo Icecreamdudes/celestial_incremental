@@ -82,6 +82,7 @@
             {
                 player.in.infinities = new Decimal(8)
             }
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
 
         }
 
@@ -104,9 +105,12 @@
                 {
                     player.in.infinities = new Decimal(8)
                 }
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
 
         }
         }
+
+        player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
     },
     clickables: {
         1: {
@@ -560,7 +564,7 @@
             title: "Secondary Starmetal Upgrade VI",
             unlocked() { return hasUpgrade("sma", 105) && player.ma.secondAreaUnlock},
             description: "Number of dice sides is multiplied based on best depth 1 combo.",
-            cost: new Decimal("1111"),
+            cost: new Decimal("700"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
@@ -575,7 +579,54 @@
                 return look
             }
         },
-
+        107:
+        {
+            title: "Secondary Starmetal Upgrade VII",
+            unlocked() { return hasUpgrade("sma", 106) && player.ma.secondAreaUnlock},
+            description: "Singularity doesn't reset anything check back related.",
+            cost: new Decimal("1500"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
+        },
+        108:
+        {
+            title: "Secondary Starmetal Upgrade VIII",
+            unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
+            description: "Singularity preserves pent milestones and halter values.",
+            cost: new Decimal("3333"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
+        },
+        109:
+        {
+            title: "Secondary Starmetal Upgrade IX",
+            unlocked() { return hasUpgrade("sma", 108) && player.ma.matosDefeated},
+            description: "Unlocks auto starmetal (in starmetal essence).",
+            cost: new Decimal("8888"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {width: "150px", borderRadius: "10px"}
+                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                return look
+            }
+        },
         //eclipse shards
         201:
         {
@@ -862,6 +913,7 @@
                     ["row", [["upgrade", 17], ["upgrade", 18],]],
                     ["blank", "25px"],
                     ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
+                    ["row", [["upgrade", 107],["upgrade", 108],["upgrade", 109],]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]

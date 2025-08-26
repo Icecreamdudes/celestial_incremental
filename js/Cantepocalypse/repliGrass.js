@@ -16,6 +16,7 @@
         repliGrassMult: new Decimal(1.01),
         repliGrassReq: new Decimal(8),
         repliGrassTimer: new Decimal(0),
+        repliGrassTimer2: new Decimal(0),
 
         repliGrassSoftcapEffect: new Decimal(1),
         repliGrassSoftcapStart: new Decimal(1000),
@@ -62,7 +63,6 @@
                     player.rg.savedRepliGrass++;
                 }
                 player.rg.repliGrassTimer = new Decimal(0)
-                if (!inChallenge("fu", 11)) player.rg.repliGrass = player.rg.repliGrass.mul(Decimal.add(player.rg.repliGrassMult.sub(1).mul(buyableEffect("fa", 203)), 1))
             }
         } else if (!(player.tab == "rg"))
         {
@@ -72,7 +72,6 @@
             {
                 player.rg.savedRepliGrass++;
                 player.rg.repliGrassTimer = new Decimal(0)
-                if (!inChallenge("fu", 11)) player.rg.repliGrass = player.rg.repliGrass.mul(Decimal.add(player.rg.repliGrassMult.sub(1).mul(buyableEffect("fa", 203)), 1))
             } else if (player.rg.savedRepliGrass > player.rg.repliGrassCap) {
                 player.rg.savedRepliGrass = player.rg.repliGrassCap
             }
@@ -81,6 +80,14 @@
             player.rg.inRepliGrassTab = false
             if (player.rg.repliGrassCount < player.rg.repliGrassCap) player.rg.repliGrassTimer = player.rg.repliGrassTimer.add(onepersec.mul(delta))
         }
+
+        player.rg.repliGrassTimer2 = player.rg.repliGrassTimer2.add(onepersec.mul(delta))
+        if (player.rg.repliGrassTimer2.gt(player.rg.repliGrassReq))
+        {
+            player.rg.repliGrass = player.rg.repliGrass.mul(Decimal.add(player.rg.repliGrassMult.sub(1).mul(buyableEffect("fa", 203)), 1))
+            player.rg.repliGrassTimer2 = new Decimal(0)
+        }
+
         if (player.rg.repliGrassCount < 0)
         {
             player.rg.repliGrassCount = new Decimal(0)

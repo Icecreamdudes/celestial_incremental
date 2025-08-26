@@ -90,6 +90,7 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("fu", 34))
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.re.realmEssenceEffect)
         if (player.cop.processedCoreFuel.eq(5)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("cof", 15))
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.div(player.po.halterEffects[6])
@@ -179,6 +180,8 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
         if (player.cop.processedCoreFuel.eq(5)) player.gh.steelToGet = player.gh.steelToGet.mul(player.cop.processedCoreInnateEffects[3])
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
+    
+        player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
 
         // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))

@@ -117,7 +117,7 @@ addLayer("dp", {
                 return "Rank Req Divider"
             },
             display() {
-                return "which are diving rank requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing rank requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
@@ -151,7 +151,7 @@ addLayer("dp", {
                 return "Tier Req Divider"
             },
             display() {
-                return "which are diving tier requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing tier requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
@@ -185,7 +185,7 @@ addLayer("dp", {
                 return "Tetr Req Divider"
             },
             display() {
-                return "which are diving tetr requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing tetr requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {

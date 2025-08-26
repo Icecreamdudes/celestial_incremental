@@ -153,11 +153,16 @@ addLayer("i", {
         }
 
         //music control
-        if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) ) {
+        if (cutsceneActive == false) {
+                    if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) ) {
             playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) && options.musicToggle) {
-            playAndLoopAudio("music/tav.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 0 && options.musicToggle) {
+        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18)) && options.musicToggle) {
+            playAndLoopAudio("music/challenge.mp3", options.musicVolume/10);
+        } else if (inChallenge("tad", 11) && options.musicToggle)
+        {
+            playAndLoopAudio("music/tavDomain.mp3", options.musicVolume/10);
+        } 
+        else if (player.musuniverse == 0 && options.musicToggle) {
             playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
         } else if (player.musuniverse == 2 && options.musicToggle) {
             playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
@@ -216,6 +221,48 @@ addLayer("i", {
             playAndLoopAudio("music/space.mp3", options.musicVolume/10);
         }  else {
             stopAudio();
+        }
+        }
+
+        //cutscene music logic
+        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle)
+        {
+            //if (cutsceneID == 12345 && cutsceneIndex == 2) playAndLoopAudio("music/space.mp3", options.musicVolume/10); examples
+            //if (cutsceneID == 12345 && cutsceneIndex == 3) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+
+            if (cutsceneID == 1) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 9) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+            if (cutsceneID == 11) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 14) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 15) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 16) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 18) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+            if (cutsceneID == 19) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 24) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+            if (cutsceneID == 26) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 28) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 29) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 30) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+            if (cutsceneID == 31) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 32) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 33) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 37) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 39) playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
+            if (cutsceneID == 41) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 43) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 46) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 47) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 48) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 50) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 52) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 53) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 54) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 55) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 56) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+        }
+        if (window.cinematicCutsceneActive && options.musicToggle)
+        {
+            if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
         }
 
 
@@ -325,9 +372,12 @@ addLayer("i", {
         player.fa.chargeRate = player.fa.chargeRate.mul(postOTFMult)
         player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
         player.gain = player.gain.pow(player.st.starPowerEffect)
+        player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
+        player.gain = player.gain.pow(buyableEffect("cof", 12))
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
+        if (cutsceneID == 1 && cutsceneActive) player.points = new Decimal(0)
 
         // MAKE TAB WORK
         if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in") {

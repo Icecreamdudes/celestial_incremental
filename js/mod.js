@@ -1,6 +1,11 @@
 ﻿let modInfo = {
 	name: "Celestial Incremental",
-	id: "celestial",
+	id: "celestial", //PLEASE CHANGE THIS LATER PLEASE
+
+
+	//CHANGE THIS BACK TO THE ORIGINAL VERSION ^
+
+
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
@@ -13,7 +18,7 @@
 		"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
 		"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js", "DarkU1/boosters.js", "DarkU1/vaporizer.js",
 		"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", "Singularity/starmetalEssence.js",  
-		"legendaryPets.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "mining.js"],
+		"legendaryPets.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "mining.js", "cutsceneNew.js"],
 
 	discordName: "",
 	discordLink: "",

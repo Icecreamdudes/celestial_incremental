@@ -146,6 +146,7 @@ addLayer("le", {
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ma", 23))
         if (hasUpgrade("sma", 204)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(upgradeEffect("sma", 204))
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("cof", 26))
 
         //punchcards
         player.le.lockedPunchcard = "<img src='resources/Punchcards/lockedPunchcard.png'style='width:calc(132%);height:calc(132%);margin:-16%'></img>"
@@ -386,6 +387,18 @@ addLayer("le", {
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
+
+        //auto
+        if (player.sme.starmetalResetToggle)
+        {
+            if (player.du.points.gte(player.le.starmetalAlloyReq))
+            {
+                player.le.resetAmount = player.le.resetAmount.add(1)
+                player.le.starmetalAlloyPause = new Decimal(10)
+                player.le.storedSelections = player.le.storedSelections.add(1)
+                player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
+            }
+        }
 
     },
     generateSelection() {

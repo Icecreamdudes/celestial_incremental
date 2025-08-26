@@ -1,0 +1,1368 @@
+﻿let cutsceneActive = false;
+let cutsceneID = 0;
+let cutsceneIndex = 0;
+let cutsceneDialogue = null;
+let cutsceneOptions = null;
+
+// Save cutscene state to localStorage
+function saveCutsceneState() {
+    localStorage.setItem('cutsceneState', JSON.stringify({
+        cutsceneActive,
+        cutsceneID,
+        cutsceneIndex,
+        cutsceneDialogue,
+        cutsceneOptions
+    }));
+}
+
+// Load cutscene state from localStorage
+function loadCutsceneState() {
+    const state = localStorage.getItem('cutsceneState');
+    if (state) {
+        try {
+            const obj = JSON.parse(state);
+            cutsceneActive = !!obj.cutsceneActive;
+            cutsceneID = obj.cutsceneID || 0;
+            cutsceneIndex = obj.cutsceneIndex || 0;
+            cutsceneDialogue = obj.cutsceneDialogue || null;
+            cutsceneOptions = obj.cutsceneOptions || null;
+        } catch (e) {
+            cutsceneActive = false;
+            cutsceneID = 0;
+            cutsceneIndex = 0;
+            cutsceneDialogue = null;
+            cutsceneOptions = null;
+        }
+    } else {
+        cutsceneActive = false;
+        cutsceneID = 0;
+        cutsceneIndex = 0;
+        cutsceneDialogue = null;
+        cutsceneOptions = null;
+    }
+}
+
+// Call this on page load to restore state
+loadCutsceneState();
+
+// Restore cutscene if active
+if (cutsceneActive && cutsceneDialogue) {
+    showCutscene(cutsceneDialogue, Object.assign({}, cutsceneOptions, { resume: true }));
+}
+
+function showCutscene(dialogue, options = {}) {
+    cutsceneActive = true;
+    cutsceneDialogue = dialogue;
+    cutsceneOptions = options;
+    cutsceneID = (typeof options.cutsceneID !== 'undefined')
+        ? options.cutsceneID
+        : Date.now() + Math.floor(Math.random() * 1000000);
+
+    let idx = (options.resume && cutsceneIndex > 0) ? cutsceneIndex : 0;
+    cutsceneIndex = idx;
+    saveCutsceneState();
+
+    const old = document.getElementById('cutscene-overlay');
+    if (old) old.remove();
+
+    // --- UI creation (bigger) ---
+    const overlay = document.createElement('div');
+    overlay.id = 'cutscene-overlay';
+    Object.assign(overlay.style, {
+        position: 'fixed',
+        left: 0, top: 0, width: '100vw', height: '100vh',
+        background: options.background || 'rgba(0,0,0,0.7)',
+        zIndex: 99999,
+        pointerEvents: 'auto'
+    });
+
+    // Overlay image logic (supports per-dialogue overlayImage)
+    let overlayImg = null;
+    function setOverlayImage(src, opacity) {
+        if (!overlayImg) {
+            overlayImg = document.createElement('img');
+            Object.assign(overlayImg.style, {
+                display: 'block',
+                margin: '0 auto',
+                maxWidth: '60vw',
+                maxHeight: '30vh',
+                pointerEvents: 'none',
+            });
+            // Append image first so it is above the box visually (in DOM order)
+            overlay.appendChild(overlayImg);
+        }
+        overlayImg.src = src || '';
+        overlayImg.style.display = src ? 'block' : 'none';
+        overlayImg.style.opacity = (opacity !== undefined) ? opacity : 1;
+    }
+    if (options.overlayImage) {
+        setOverlayImage(options.overlayImage, options.overlayImageOpacity);
+    }
+
+    // --- Cutscene text box ---
+    const box = document.createElement('div');
+    Object.assign(box.style, {
+        background: '#222',
+        color: '#fff',
+        borderRadius: '24px',
+        margin: '0 auto',
+        padding: '48px 48px 36px 48px',
+        minWidth: '520px',
+        maxWidth: '900px',
+        minHeight: '160px',
+        fontFamily: 'monospace',
+        fontSize: '28px',
+        boxShadow: '0 0 48px #000',
+        position: 'relative',
+        top: '320px', // adds space between image and box
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-end'
+    });
+
+    overlay.appendChild(box);
+
+    const portrait = document.createElement('img');
+    if (options.portrait) {
+        portrait.src = options.portrait;
+        Object.assign(portrait.style, {
+            width: '128px',
+            height: '128px',
+            objectFit: 'cover',
+            borderRadius: '18px',
+            marginRight: '36px',
+            border: '3px solid #fff',
+            background: '#444'
+        });
+        box.appendChild(portrait);
+    }
+
+    const textArea = document.createElement('div');
+    textArea.style.flex = '1';
+    textArea.style.fontSize = '28px';
+    box.appendChild(textArea);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next';
+    Object.assign(nextBtn.style, {
+        position: 'absolute',
+        right: '36px',
+        bottom: '24px',
+        fontSize: '24px',
+        padding: '10px 28px',
+        borderRadius: '12px',
+        border: 'none',
+        background: '#047ce4',
+        color: '#fff',
+        cursor: 'pointer'
+    });
+    box.appendChild(nextBtn);
+
+    document.body.appendChild(overlay);
+
+    // --- Dialogue logic ---
+    let typing = false;
+    function typeLine(line, cb) {
+        typing = true;
+        textArea.innerHTML = ''; // Use innerHTML for HTML support
+        let i = 0;
+        // If the line contains HTML tags, skip typing effect and show instantly
+        if (/<[a-z][\s\S]*>/i.test(line)) {
+            textArea.innerHTML = line;
+            typing = false;
+            if (cb) cb();
+            return;
+        }
+        function typeChar() {
+            if (i <= line.length) {
+                textArea.textContent = line.slice(0, i);
+                i++;
+                setTimeout(typeChar, 18);
+            } else {
+                typing = false;
+                if (cb) cb();
+            }
+        }
+        typeChar();
+    }
+
+    function showNext() {
+        if (typing) return;
+        if (idx < dialogue.length) {
+            cutsceneIndex = idx + 1;
+            saveCutsceneState();
+            let entry = dialogue[idx];
+            // --- Overlay image per dialogue ---
+            if (typeof entry === 'object' && entry.overlayImage) {
+                setOverlayImage(entry.overlayImage, entry.overlayImageOpacity);
+            } else if (options.overlayImage) {
+                setOverlayImage(options.overlayImage, options.overlayImageOpacity);
+            } else {
+                setOverlayImage('', 1);
+            }
+            if (typeof entry === 'object') {
+                if (entry.portrait) {
+                    portrait.src = entry.portrait;
+                    portrait.style.display = '';
+                } else if (portrait) {
+                    portrait.style.display = 'none';
+                }
+                typeLine(entry.text, null);
+            } else {
+                typeLine(entry, null);
+            }
+            idx++;
+        } else {
+            overlay.remove();
+            cutsceneActive = false;
+            cutsceneID = 0;
+            cutsceneIndex = 0;
+            cutsceneDialogue = null;
+            cutsceneOptions = null;
+            saveCutsceneState();
+            if (typeof stopAudio === 'function') stopAudio();
+            if (options.onEnd) options.onEnd();
+        }
+    }
+
+    nextBtn.onclick = showNext;
+    overlay.onclick = (e) => {
+        if (e.target === overlay) showNext();
+    };
+
+    // Start at the correct index
+    if (idx < dialogue.length) {
+        let entry = dialogue[idx];
+        // --- Overlay image per dialogue (initial) ---
+        if (typeof entry === 'object' && entry.overlayImage) {
+            setOverlayImage(entry.overlayImage, entry.overlayImageOpacity);
+        } else if (options.overlayImage) {
+            setOverlayImage(options.overlayImage, options.overlayImageOpacity);
+        } else {
+            setOverlayImage('', 1);
+        }
+        if (typeof entry === 'object') {
+            if (entry.portrait) {
+                portrait.src = entry.portrait;
+                portrait.style.display = '';
+            } else if (portrait) {
+                portrait.style.display = 'none';
+            }
+            typeLine(entry.text, null);
+        } else {
+            typeLine(entry, null);
+        }
+        idx++;
+    }
+    showNext();
+}
+
+function showCinematicCutscene(dialogue, options = {}) {
+    // dialogue: [{ text: "...", duration: 2000, style: { ... } }, ...]
+    // options: { background, overlayImage, onEnd, cutsceneID }
+    let idx = (options.resume && typeof options.cutsceneIndex === 'number') ? options.cutsceneIndex : 0;
+
+    // Cinematic cutscene state
+    window.cinematicCutsceneActive = true;
+    cutsceneActive = true;
+    window.cinematicCutsceneID = (typeof options.cutsceneID !== 'undefined')
+        ? options.cutsceneID
+        : Date.now() + Math.floor(Math.random() * 1000000);
+    window.cinematicCutsceneIndex = idx;
+    window.cinematicCutsceneDialogue = dialogue;
+    window.cinematicCutsceneOptions = options;
+
+    // Save cinematic cutscene state to localStorage
+    function saveCinematicCutsceneState() {
+        localStorage.setItem('cinematicCutsceneState', JSON.stringify({
+            cinematicCutsceneActive: window.cinematicCutsceneActive,
+            cinematicCutsceneID: window.cinematicCutsceneID,
+            cinematicCutsceneIndex: window.cinematicCutsceneIndex,
+            cinematicCutsceneDialogue: window.cinematicCutsceneDialogue,
+            cinematicCutsceneOptions: window.cinematicCutsceneOptions
+        }));
+    }
+
+    // Remove previous overlay if exists
+    let overlay = document.getElementById('cinematic-cutscene-overlay');
+    if (overlay) overlay.remove();
+
+    overlay = document.createElement('div');
+    overlay.id = 'cinematic-cutscene-overlay';
+    Object.assign(overlay.style, {
+        position: 'fixed',
+        left: 0, top: 0, width: '100vw', height: '100vh',
+        background: options.background || 'rgba(0,0,0,1)',
+        zIndex: 100000,
+        pointerEvents: 'auto',
+        overflow: 'hidden'
+    });
+
+    // Overlay image (optional)
+    let overlayImg = null;
+    if (options.overlayImage) {
+        overlayImg = document.createElement('img');
+        overlayImg.src = options.overlayImage;
+        Object.assign(overlayImg.style, {
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            maxWidth: '80vw',
+            maxHeight: '80vh',
+            pointerEvents: 'none',
+            opacity: options.overlayImageOpacity !== undefined ? options.overlayImageOpacity : 1
+        });
+        overlay.appendChild(overlayImg);
+    }
+
+    // Cinematic text area
+    const textArea = document.createElement('div');
+    Object.assign(textArea.style, {
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '90vw',
+        minHeight: '60px',
+        color: '#fff',
+        textAlign: 'center',
+        fontFamily: 'monospace',
+        fontSize: '3vw',
+        fontWeight: 'bold',
+        textShadow: '0 0 24px #000, 0 0 8px #222',
+        pointerEvents: 'none',
+        userSelect: 'none',
+        whiteSpace: 'pre-line'
+    });
+    overlay.appendChild(textArea);
+
+    document.body.appendChild(overlay);
+
+    function showEntry(entry) {
+        textArea.innerHTML = '';
+        // Support HTML in text
+        if (entry.style) Object.assign(textArea.style, entry.style);
+        else Object.assign(textArea.style, {
+            fontSize: '3vw',
+            color: '#fff'
+        });
+        textArea.innerHTML = entry.text;
+        // Overlay image per entry
+        if (overlayImg) overlayImg.style.display = 'none';
+        if (entry.overlayImage) {
+            if (!overlayImg) {
+                overlayImg = document.createElement('img');
+                overlay.appendChild(overlayImg);
+            }
+            overlayImg.src = entry.overlayImage;
+            overlayImg.style.display = '';
+            overlayImg.style.opacity = entry.overlayImageOpacity !== undefined ? entry.overlayImageOpacity : 1;
+        } else if (overlayImg) {
+            overlayImg.style.display = options.overlayImage ? '' : 'none';
+            overlayImg.style.opacity = options.overlayImageOpacity !== undefined ? options.overlayImageOpacity : 1;
+        }
+    }
+
+    function nextEntry() {
+        if (idx >= dialogue.length) {
+            overlay.remove();
+            window.cinematicCutsceneActive = false;
+            cutsceneActive = false;
+            window.cinematicCutsceneID = 0;
+            window.cinematicCutsceneIndex = 0;
+            window.cinematicCutsceneDialogue = null;
+            window.cinematicCutsceneOptions = null;
+            saveCinematicCutsceneState();
+            if (typeof options.onEnd === 'function') options.onEnd();
+            return;
+        }
+        let entry = dialogue[idx];
+        showEntry(entry);
+        window.cinematicCutsceneIndex = idx;
+        saveCinematicCutsceneState();
+        let duration = entry.duration !== undefined ? entry.duration : 2000;
+        idx++;
+        setTimeout(nextEntry, duration);
+    }
+
+    nextEntry();
+}
+
+// Restore cinematic cutscene if active (call this on page load)
+(function restoreCinematicCutscene() {
+    const state = localStorage.getItem('cinematicCutsceneState');
+    if (state) {
+        try {
+            const obj = JSON.parse(state);
+            if (obj.cinematicCutsceneActive && obj.cinematicCutsceneDialogue) {
+                showCinematicCutscene(
+                    obj.cinematicCutsceneDialogue,
+                    Object.assign({}, obj.cinematicCutsceneOptions, {
+                        resume: true,
+                        cutsceneID: obj.cinematicCutsceneID,
+                        cutsceneIndex: obj.cinematicCutsceneIndex
+                    })
+                );
+            }
+        } catch (e) {
+            // Ignore restore errors
+        }
+    }
+})();
+
+// showCinematicCutscene(cinematicDialogue, { background: "#000"
+
+// Example usage:
+const cutsceneDialogue1 = [
+    { text: "You wake up and feel sand under your skin.", },
+    { text: "You find yourself in a vast desert of black sand.", },
+    { text: "When you stood up, a dark, cloaked figure stood in front of you.", },
+    { text: "Great. You're finally awake.", portrait: "resources/secret.png" },
+    { text: "The figure's voice startled you.", },
+    { text: "Where am I? Why couldn't I remember anything...", portrait: "resources/player.png" },
+    { text: "You are in the overworld. A place where you have the freedom to control superphysical values as you wish.", portrait: "resources/secret.png" },
+    { text: "As for your memories, they are gone. However, it is for the best.", portrait: "resources/secret.png" },
+    { text: "Okay...? I'm kinda confused. I don't even know who I am...", portrait: "resources/player.png" },
+    { text: "You are our creation. A being with the power to destroy all celestials.", portrait: "resources/secret.png" },
+    { text: "Would I be able to learn about my past eventually?", portrait: "resources/player.png" },
+    { text: "Yes, but it's complicated. You must follow our mission, and destroy all celestials.", portrait: "resources/secret.png" },
+    { text: "As you go on in this mission, you will gradually learn more and more about your past.", portrait: "resources/secret.png" },
+    { text: "Yeah.......", portrait: "resources/player.png" },
+    { text: "I'm still confused.", portrait: "resources/player.png" },
+    { text: "What is a celestial?", portrait: "resources/player.png" },
+    { text: "Celestials are powerful beings that wreak havoc and destroy worlds.", portrait: "resources/secret.png" },
+    { text: "They are a threat to the safety of this multiverse.", portrait: "resources/secret.png" },
+    { text: "For ages we have had numerous attempts at destroying celestials...", portrait: "resources/secret.png" },
+    { text: "...but they just kept on getting stronger, and stronger.", portrait: "resources/secret.png" },
+    { text: "You are the ONLY chance we have at defeating the celestials.", portrait: "resources/secret.png " },
+    { text: "So... Will you follow me on this mission?", portrait: "resources/secret.png" },
+    { text: "Sure.", portrait: "resources/player.png" },
+    { text: "Very well then. I know you will do a great job!", portrait: "resources/secret.png" },
+    { text: "Remember: You are our creation.", portrait: "resources/secret.png" },
+    { text: "For some strange reason, you have been given a strange sense of purpose.", },
+    { text: "You don't know why, but you feel as though a number inside you is growing.", },
+];
+const cutsceneDialogue2 = [
+    { text: "You notice the number reset back to zero.", },
+    { text: "Congratulations. You have just performed your first reset.", portrait: "resources/secret.png" },
+    { text: "You will be doing a lot of resets as you go on in this mission.", portrait: "resources/secret.png" },
+    { text: "Your three primary sources of gaining power is by waiting, upgrading, and by resetting.", portrait: "resources/secret.png" },
+    { text: "Patience is key to gaining power in this world.", portrait: "resources/secret.png" },
+];
+const cutsceneDialogue3 = [ //at tetr unlock
+    { text: "What are these numbers that keep increasing?", portrait: "resources/player.png" },
+    { text: "These are called superphysical values.", portrait: "resources/secret.png" },
+    { text: "Superphysical values aren't able to be interacted with physically...", portrait: "resources/secret.png" },
+    { text: "...but people with special powers called FORESIGHT can detect the presence of superphysical values.", portrait: "resources/secret.png" },
+    { text: "It takes even more skill to utilize them to your advantage.", portrait: "resources/secret.png" },
+    { text: "Only a select few non-celestials have the power to utilize superphysical values to their advantage.", portrait: "resources/secret.png" },
+    { text: "You are one of those few.", portrait: "resources/secret.png" },
+    { text: "I am also one as well...", portrait: "resources/secret.png" },
+    { text: 'Cool. Glad to have been blessed with this "crazy" power then.', portrait: "resources/player.png" },
+    { text: 'What can these "superphysical values" even do?', portrait: "resources/player.png" },
+    { text: "Well, it would take a while until they will start affecting your physical strength.", portrait: "resources/secret.png" },
+    { text: "However, it is very useful, especially for your mission.", portrait: "resources/secret.png" },
+    { text: "Some celestials' cores have a certain superphysical barrier that can only be destroyed with superphysical values.", portrait: "resources/secret.png" },
+    { text: "Destroying a celestial's core is the only known documented way of killing a celestial.", portrait: "resources/secret.png" },
+    { text: "You will also be able to travel between worlds seamlessly using the power of superphysical values.", portrait: "resources/secret.png" },
+    { text: "Multiple universes exist? That's nice.", portrait: "resources/player.png" },
+    { text: "This endless desert seems kinda boring after all.", portrait: "resources/player.png" },
+    { text: "Yep. There's plenty of worlds to travel to for your mission.", portrait: "resources/secret.png" },
+    { text: "We will worry about that later though...", portrait: "resources/secret.png" },
+];
+const cutsceneDialogue4 = [ //at prestige
+    { text: "Woah. That was one big reset.", portrait: "resources/player.png" },
+    { text: "Yeah... Unfortunately there will be a lot more reset layers to go through...", portrait: "resources/secret.png" },
+    { text: "To be honest, I don't really know if I have the patience to do this...", portrait: "resources/player.png" },
+    { text: "You want to learn about your past, right...?", portrait: "resources/secret.png" },
+    { text: "Yeah.", portrait: "resources/player.png" },
+    { text: "You want a purpose to live... right???", portrait: "resources/secret.png" },
+    { text: "Also yeah...", portrait: "resources/player.png" },
+    { text: "Then lock in. I gotta go. You'll be alone for a bit.", portrait: "resources/secret.png" },
+    { text: "I will return.", portrait: "resources/secret.png" },
+];
+const cutsceneDialogue5 = [ //factor power
+    { text: "You notice the exponentially growing number of points.", },
+    { text: "It gives you a twisted sense of pleasure.", },
+    { text: "It is almost as if your sense of clarity has improved.", },
+    { text: "However, you feel weary about this entire situation.", },
+    { text: "Should you really trust this strange being?", },
+    { text: "Either way, you seem to be trapped in this desert.", },
+    { text: "You must proceed.", },
+];
+const cutsceneDialogue6 = [ //when you gain 1 tree
+    { text: "A tree appears right in front of you.", },
+    { text: "You sense a mild superphysical force eminate from the tree.", },
+    { text: "The cloaked being reappears.", },
+    { text: "I have returned. Looks like you made it to the trees.", portrait: "resources/secret.png"  },
+    { text: "Are these trees superphysical? I can clearly see it right in front of me.", portrait: "resources/player.png" },
+    { text: "These trees are physically visible, but are superphysical in nature.", portrait: "resources/secret.png"  },
+    { text: "Only those with foresight can see and interact with this tree.", portrait: "resources/secret.png"  },
+    { text: "Well, it's about time I tell you something.", portrait: "resources/secret.png"  },
+    { text: "There have been many creations before you.", portrait: "resources/secret.png"  },
+    { text: "They all failed. Some did well, but never really made it past a few celestials.", portrait: "resources/secret.png"  },
+    { text: "However, our research has improved quite a bit. We genuinely believe you can defeat all the celestials.", portrait: "resources/secret.png"  },
+    { text: "These trees that are growing... they are only there because of the works of your predecessor from a long, long, time ago.", portrait: "resources/secret.png"  },
+    { text: "A lot of superphysical values you interact with have been utilized by many others just like you.", portrait: "resources/secret.png"  },
+    { text: "What makes you special is that you can interact with ALL the superphysical values from countless universes.", portrait: "resources/secret.png"  },
+    { text: "YOU are our only hope. You can't let us down.", portrait: "resources/secret.png"  },
+    { text: "So you are forcing me to do this mission...", portrait: "resources/player.png" },
+    { text: "You don't know it, but this is something you WANT to do.", portrait: "resources/secret.png"  },
+    { text: "Trust me.", portrait: "resources/secret.png"  },
+
+];
+const cutsceneDialogue7 = [ //Grass
+    { text: "You notice a small patch of grass appear near you.", },
+    { text: "The grass slowly transforms into a forest, which looms over you.", },
+    { text: "Many superphysical values you will encounter follow a specific theme.", portrait: "resources/secret.png"  },
+    { text: "Trees... Forest... Grass... All of these are related to nature.", portrait: "resources/player.png"  },
+    { text: "Yes. These would all be considered NATURAL superphysical values.", portrait: "resources/secret.png"  },
+    { text: "What about points, and prestige points?", portrait: "resources/player.png"  },
+    { text: "Those superphysical values would be considered ANCIENT superphysical values.", portrait: "resources/secret.png"  },
+
+];
+const cutsceneDialogue8 = [ //Grasshop
+    { text: "You see grasshoppers spawn in front of you.", },
+    { text: "They appear to be fertilizing the surrounding soil, and helping grass grow.", },
+    { text: "Aren't grasshoppers supposed to eat the grass...", portrait: "resources/player.png"  },
+    { text: "Well, these aren't supposed to be realistic.", portrait: "resources/secret.png"  },
+    { text: "As a matter of fact, most superphysical values are abstract.", portrait: "resources/secret.png"  },
+    { text: "That's why most people wouldn't even notice them.", portrait: "resources/secret.png"  },
+    { text: "Can you create living beings from superphysical values?", portrait: "resources/player.png"  },
+    { text: "Good question...", portrait: "resources/secret.png"  },
+
+];
+const cutsceneDialogue9 = [ //Check Back (plays marcel's song)
+    { text: "Another being appears in the distance.", },
+    { text: "It appears to be a man in a mech-suit, with a small white head appearing out. He is carrying a lot of clocks.", },
+    { text: "Hello there. I am a friend of the cloak person. I don't know why they have to be so mysterious...", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'You can call me Marcel. I have a special "Gift" for you, if you can call it that.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "What's up with all the clocks?", portrait: "resources/player.png"  },
+    { text: 'Those are the check back clocks. Devices that can channel special superphysical values.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'They produce XP at regular intervals, but you must claim them manually by resetting the clock.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'And this will all help me, right?', portrait: "resources/player.png"  },
+    { text: 'Yeah. They would be able to aid in speeding up all your other superphysical values.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Isn't it kinda strange how superphysical values affect other superphysical values?", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Yeah...', portrait: "resources/player.png"  },
+    { text: "Usually, superphysical values would be almost impossible to grow. Even with foresight.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "However, DEVELOPERS can create FRAMEWORKS to aid in the growth of superphysical values.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "I am one of those developers.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "We have foresight, but we couldn't really use superphysical values for our own benefit.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Instead, we find connections between superphysical values that others, like you, can use.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "For your mission, dozens and dozens of developers has aided in the creation of your framework.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "A framework is the guideline that guides your superphysical value gain.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Marcel... You're here.", portrait: "resources/secret.png"  },
+    { text: "We have something to discuss.", portrait: "resources/secret.png"  },
+    { text: "Alright. I'll help you out later. There's a lot more to explain.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Marcel hands you the clocks.", },
+    { text: "Good luck. Make sure to take a break whenever you need it. Don't forget to check back.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Anyways, Marcel...", portrait: "resources/secret.png"  },
+    { text: "The two dissapear through a portal.", },
+    { text: "Your sense of purpose increases yet again.", },
+    { text: "Countless amounts of people have worked to make this mission happen.", },
+    { text: "Your predecessors. The developers. All put their life's effort into helping you destroy celestials.", },
+    { text: "Now you are determined to complete this mission.", },
+
+];
+const cutsceneDialogue10 = [ //Portal
+    { text: "The ground begins to shake violently.", },
+    { text: "Sand gets blasted everywhere. A strange obelisk is revealed.", },
+    { text: "There is writing on top of the obelisk that you cannot decipher.", },
+    { text: "Additionally, also appears to be a filling orange bar on top as well.", },
+    { text: "At eye level, there appears to be four buttons with symbols.", },
+    { text: "The third and fourth button appear to be completely blacked out.", },
+    { text: 'Marcel? Cloaked Man? Anyone there?', portrait: "resources/player.png"  },
+    { text: "There was no response.", },
+    { text: "You are all alone.", },
+
+];
+const cutsceneDialogue11 = [ //OTF Selection (Have it black out and play the cutscene piano music)
+    { text: "Right as you click one of the buttons on the obelisk, the cloaked being reappears.", },
+    { text: "I'm back. Sorry for the inconvenience.", portrait: "resources/secret.png"  },
+    { text: "Me and Marcel had some serious business to take care of.", portrait: "resources/secret.png"  },
+    { text: "The cloaked being takes a look at the obelisk."  },
+    { text: "Interesting... I don't know what this is.", portrait: "resources/secret.png"  },
+    { text: "You don't know what this is???", portrait: "resources/player.png"  },
+    { text: "I thought you knew everything!", portrait: "resources/player.png"  },
+    { text: "Well usually, combining multiple frameworks into one can have some unexpected results.", portrait: "resources/secret.png"  },
+    { text: "Many new and strange superphysical values arise that I am unaware of.", portrait: "resources/secret.png"  },
+    { text: "This could also be the work of a celestial, but that is pretty unlikely.", portrait: "resources/secret.png"  },
+    { text: "Well damn, I thought you were omniscient this entire time.", portrait: "resources/player.png"  },
+    { text: "I don't think that kind of power is attainable in this multiverse.", portrait: "resources/secret.png"  },
+    { text: "This multiverse is so large, with so much history, it would be impossible to know everything.", portrait: "resources/secret.png"  },
+    { text: "Celestials are only a mere fraction of this multiverse's problems.", portrait: "resources/secret.png"  },
+    { text: "I'll tell you the story later.", portrait: "resources/secret.png"  },
+    { text: "Oh, I do know what that giant bar is!", portrait: "resources/secret.png"  },
+    { text: "What is it?", portrait: "resources/player.png"  },
+    { text: "It shows your progress to reaching INFINITY.", portrait: "resources/secret.png"  },
+    { text: "Woah woah woah. That doesn't really make any sense. Infinity???", portrait: "resources/player.png"  },
+    { text: "The powers of a specific celestial have made it hard for you to get past a certain amount of points.", portrait: "resources/secret.png"  },
+    { text: "That number is 2 raised to the 1024th power. In other words, 1.79e308.", portrait: "resources/secret.png"  },
+    { text: "That's oddly specific...", portrait: "resources/player.png"  },
+    { text: "You can break past that barrier once you defeat that celestial...", portrait: "resources/secret.png"  },
+    { text: "The very first celestial you will fight.", portrait: "resources/secret.png"  },
+    { text: "Once that bar reaches its capacity, you will be able to shift to the next universe.", portrait: "resources/secret.png"  },
+    { text: "Celestials will be waiting for you.", portrait: "resources/secret.png"  },
+
+
+];
+const cutsceneDialogue12 = [ //Dice
+   { text: "The obelisk changes form, and turns into a dice.", },
+   { text: "You notice a strange superphysical energy eminate from the dice.", },
+   { text: "The ticking from the check back clocks become significantly louder.", },
+   { text: "Isn't that just so strange...", },
+
+];
+const cutsceneDialogue13 = [ //Rocket Fuel
+   { text: "The obelisk changes form, and a giant canister takes place.", },
+   { text: "A strange dark black liquid starts filling up the canister by a little bit.", },
+   { text: "The grass glimmers ever so shinier.", },
+   { text: "Isn't that just so strange...", },
+
+];
+const cutsceneDialogue14 = [ //infinity (orange bg)
+   { text: "The bar fills up to it's limit, and a giant ray of light forms.", },
+   { text: "You feel all your superphysical values get drained out completely.", },
+   { text: "You notice everything around you turn transparent.", },
+   { text: "The sky turns bright orange. A small glowing orb is presented in front of you.", },
+   { text: "The cloaked being appears.", },
+    { text: "What is going on???", portrait: "resources/player.png"  },
+    { text: "This is a big crunch.", portrait: "resources/secret.png"  },
+    { text: "A big crunch is happening because your celestial point amount has just exceeded the limit.", portrait: "resources/secret.png"  },
+    { text: "Well that took long enough.", portrait: "resources/player.png"  },
+    { text: "What is this orb then?", portrait: "resources/player.png"  },
+    { text: "That, my friend, is an infinity point.", portrait: "resources/secret.png"  },
+    { text: "An extremely powerful superphysical value if you use it right.", portrait: "resources/secret.png"  },
+    { text: "The superphysical power from the infinity point feels familiar."  },
+    { text: "When you go grab it, a flash fills your entire field of vision."  },
+];
+const cutsceneDialogue15 = [ //flashback (white bg, music box music)
+   { text: "You see yourself in a large hall.", },
+   { text: "Marcel is talking to two beings with a white fog over their head.", },
+   { text: "This appears to be a flashback. You are being presented with a vision of the past.", },
+   { text: "My masters... We have lost another creation to ????.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "I am sorry, but this job is just way too hard.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "Don't worry. We have developed a new framework.", portrait: "resources/fogGuy1.png"  },
+   { text: "oh really? What will it contain?", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "It will contain everything. Every single superphysical value.", portrait: "resources/fogGuy1.png"  },
+   { text: "Well I mean not really all of them...", portrait: "resources/fogGuy2.png"  }, 
+   { text: "Be quiet... it contains all of the relevant ones.", portrait: "resources/fogGuy1.png"  },
+   { text: "Well this has not been done before...", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "How do you think the next creation will handle every single superphysical value?", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "We channeled the power of ### ######## ##### into a vessel.", portrait: "resources/fogGuy2.png"  }, 
+   { text: "This should give the next creation the ability to seamlessly traverse universes.", portrait: "resources/fogGuy2.png"  }, 
+   { text: "We made this a deal with the infinity keeper. They should be working with us now.", portrait: "resources/fogGuy2.png"  }, 
+   { text: "I told you they were a good pick!", portrait: "resources/fogGuy1.png"  },
+   { text: "Bro... We legit only need them for their level of foresight.", portrait: "resources/fogGuy2.png"  }, 
+   { text: "Otherwise there's no way I'd trust them.", portrait: "resources/fogGuy2.png"  }, 
+   { text: "Whatever you say...", portrait: "resources/fogGuy1.png"  },
+   { text: "Anyways Marcel. Are you interested in providing us with the check back framework?", portrait: "resources/fogGuy1.png"  },
+   { text: "Sure. Why not.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "Thanks. You are such a goated developer.", portrait: "resources/fogGuy1.png"  },
+   { text: "Wait what??? The check back framework is horrible! Too much waiting in my opinion...", portrait: "resources/fogGuy2.png"  }, 
+   { text: "That's very mean ######...", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+   { text: "Well I guess we can use it, since some celestials have certain barriers that require that much waiting anyways.", portrait: "resources/fogGuy2.png"  }, 
+   { text: "Anyways... Time to take the framework.", portrait: "resources/fogGuy1.png"  },
+   { text: "One of the white fog beings raises their hand.", },
+   { text: "Extremely powerful superphysical energy streams out of Marcel's body.", },
+   { text: "He is left unconcious.", },
+   { text: "He needed that nap anyways... Spent too much time awake staring at clocks all day long.", portrait: "resources/fogGuy1.png"  },
+   { text: "The other fog guy chuckles.", },
+   { text: "Alright. Time to work on the vessel.", portrait: "resources/fogGuy2.png"  },
+   { text: "Another white flash hits you.", },
+];
+const cutsceneDialogue16 = [ //antimatter
+    { text: "You find yourself in a vast, empty space, surrounded by an empty green sky.", },
+    { text: "Ah, so you're awake!", portrait: "resources/secret.png"  },
+    { text: "Yeah... I had a weird dream.", portrait: "resources/player.png"  },
+    { text: "Looks like you are starting to connect with the past.", portrait: "resources/secret.png"  },
+    { text: "I didn't really see myself though.", portrait: "resources/player.png"  },
+    { text: "Marcel was talking to two beings whose face I wasn't able to see.", portrait: "resources/player.png"  },
+    { text: "Well that's strange... Do you know what they were talking about?", portrait: "resources/secret.png"  },
+    { text: "It's hard to remember.", portrait: "resources/player.png"  },
+    { text: "Apparently, I will handle every single superphysical value out there.", portrait: "resources/player.png"  },
+    { text: 'And then they started talking about some "Infinity Keeper".', portrait: "resources/player.png"  },
+    { text: 'And that the "Infinity Keeper" couldn\'t be trusted...', portrait: "resources/player.png"  },
+    { text: "The cloaked being is startled by your words.", },
+    { text: "Couldn't be trusted?? After everything?", portrait: "resources/secret.png"  },
+    { text: "Sorry... What else did they talk about?", portrait: "resources/secret.png"  },
+    { text: 'They did some strange magic to Marcel. After that was done, I woke up.', portrait: "resources/player.png"  },
+    { text: 'Who is the Infinity Keeper anyways?', portrait: "resources/player.png"  },
+    { text: "The Infinity Keeper was the most powerful celestial hunter of all time...", portrait: "resources/secret.png"  },
+    { text: "Defeating the original seven celestials. The celestials that once resided in this very universe.", portrait: "resources/secret.png"  },
+    { text: "What is this world exactly? It seems different.", portrait: "resources/player.png"  },
+    { text: "This is the second universe you will encounter in this mission.", portrait: "resources/secret.png"  },
+    { text: "A world where seven celestials used to hide.", portrait: "resources/secret.png"  },
+    { text: "Filled to the brim with antimatter, a very destructive superphysical force.", portrait: "resources/secret.png"  },
+    { text: "Two celestials remain to be awakened.", portrait: "resources/secret.png"  },
+    { text: "Good luck.", portrait: "resources/secret.png"  },
+];
+const cutsceneDialogue17 = [ //universe switching (gain rank 1 + inf milestone 1)
+    { text: "A white flash of light strikes your eyes.", },
+    { text: "You return to the vast desert of sand.", },
+    { text: "The overworld.", },
+    { text: "The place where you started your mission.", },
+    { text: "You have just awakened the power of universe shifting.", },
+    { text: "As long as you control superphysical values in that universe,", },
+    { text: "Thinking about that universe can make you travel there.", },
+];
+const cutsceneDialogue18 = [ //pets
+    { text: "A box appears from the sky. A pet is spawned from the crate.", },
+    { text: "Marcel appears.", },
+    { text: 'Well I guess that answers your question.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Yes, life can indeed be formed from superphysical values.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'However, it\'s different that what you may think.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'These pets gain life from the ultimate superphysical value: time itself.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Woah. Time is a superphysical value?', portrait: "resources/player.png" },
+    { text: 'Yes it is. That is what I based my entire framework on.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Many have criticized the check back framework, due to the extremely long waits.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'I believe that time builds the strongest people.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Time exists everywhere. It can strengthen. It can kill. It can lead to decay. It can lead to growth.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Time is the ultimate superphysical value.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+];
+const cutsceneDialogue19 = [ //8 infinities (challenges)
+    { text: "The cloaked being appears.", },
+    { text: "You notice your sense of duty increase rapidly.", },
+    { text: "You are ready to face the the challenges of infinity.", portrait: "resources/secret.png" },
+    { text: "Eight challenges that test your mastery of superphysical values.", portrait: "resources/secret.png" },
+    { text: 'Woah. What would my reward be?', portrait: "resources/player.png" },
+    { text: "There is no reward. Unless if you call meeting your first celestial an award...", portrait: "resources/secret.png" },
+    { text: 'Great...', portrait: "resources/player.png" },
+    { text: 'And beating this celestial will let me break the point limit, and that\'s a pretty good reward I guess.', portrait: "resources/player.png" },
+    { text: "Very well then...", portrait: "resources/secret.png" },
+    { text: "The cloaked being claps his hands, and a pillar appears.", },
+    { text: "You go up to the pillar, and writings start to carve itself.", },
+    { text: '"Challenge I: You can\'t pick an otherworldly feature."', },
+    { text: "It's time to lock in.", },
+];
+const cutsceneDialogue20 = [ //beating first challenge
+    { text: "The pillar glows yellow, and shoots a giant beam of light towards the sky.", },
+    { text: "Another pillar appears.", },
+    { text: "You feel your sense of duty increase again.", },
+];
+const cutsceneDialogue21 = [ //second challenge (pests, activates on grasshop reset)
+    { text: "You notice a swarm of pests congregate all over the grass field.", },
+    { text: "They start BRUTALLY MURDERING YOUR GRASSHOPPERS.", },
+    { text: "They don't waste time. They literally grab their heads with their small hands and rip them right off.", },
+    { text: "You realize that superphysical values can also harm you.", },
+];
+const cutsceneDialogue22 = [ //hex
+    { text: "A veil of darkness stirs above your head.", },
+    { text: "An invisible staircase made out of black fog is formed.", },
+    { text: "Climbing the staircase brings you to a strange world above the clouds.", },
+    { text: "It could possibly even be a new universe...", },
+    { text: "It is dark, but also vibrant.", },
+    { text: "You feel the presence of an entire world watch you.", },
+    { text: "Isn't that just so strange...", },
+];
+const cutsceneDialogue23 = [ //challenge 5
+    { text: "You can feel the presence of a new superphysical value: Challenge Dice Points.", },
+    { text: "It makes you feel uneasy.", },
+    { text: "It's almost as if you feel the presence of a higher being through this superphysical value.", },
+    { text: "You start to feel dizzy and nauseous.", },
+];
+const cutsceneDialogue24 = [ //evo shard
+    { text: "After constantly checking back at the check back clocks, you find a medium-sized shard.", },
+    { text: "It glew purple and blue, and was slightly transparent.", },
+    { text: "Marcel visits you.", },
+    { text: 'So you finally found your first evolution shard.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'These physical items hold immense superphysical power.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Cool. I wanna make armor out of these!', portrait: "resources/player.png"  },
+    { text: "Well that won't really help you....", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'So what do they do?', portrait: "resources/player.png"  },
+    { text: "You can EVOLVE pets with these, hence the name.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Evolving pets will grant them with immense power.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "You will also gain new segments of the check back framework.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Just collect a little more and you'll be able to evolve your first pet.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+];
+const cutsceneDialogue25 = [ //challenge 6
+    { text: "You feel a very powerful wave of superphysical energy hit you.", },
+    { text: "Your point gain has been halted to an extreme amount.", },
+    { text: "You feel as if the gravity in the overworld has increased ten-fold.", },
+    { text: "These challenges really are getting harder...", },
+    { text: "A celestial is waiting for you...", },
+    { text: "(Also big misconception: This challenge requires you to get PRESTIGE POINTS instead of POINTS.)", },
+];
+const cutsceneDialogue26 = [ //challenge 7 (plays when you gain an evolution shard while in c7) (also a flashback, so white bg + music box)
+    { text: "A white flash brings you back to the large hall.", },
+    { text: "This is yet another flashback.", },
+    { text: "You see Marcel walk into the hall.", },
+    { text: "We have made countless changes to the check back framework.", portrait: "resources/fogGuy1.png"  },
+    { text: "Like what?", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "First, we have introduced the power of evolution shards.", portrait: "resources/fogGuy1.png"  },
+    { text: "I've heard of those before. They are hard to come by, aren't they?", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "I know a woman who's foresight lets her create an almost unlimited supply of them.", portrait: "resources/fogGuy2.png"  },
+    { text: "With evolution shards, you can evolve the check back pets. This would help superphysical value production.", portrait: "resources/fogGuy1.png"  },
+    { text: "There's also paragon shards, and the one that comes after that, and after that as well...", portrait: "resources/fogGuy2.png"  },
+    { text: "What else did you guys change?", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "That's up to you now, Marcel.", portrait: "resources/fogGuy2.png"  },
+    { text: "Figure something out. Make us proud.", portrait: "resources/fogGuy2.png"  },
+];
+const cutsceneDialogue27 = [ //challenge 7 completion
+    { text: "As you complete the seventh challenge, you can feel the floor vibrate rapidly.", },
+    { text: "The final pillar rises up above the ground.", },
+    { text: "This is it. After this, a celestial will visit.", },
+];
+const cutsceneDialogue28 = [ //challenge 8 completion (Tav music, tav color background)
+    { text: "As the final pillar glows yellow and shoots a beam of light into the sky,", },
+    { text: "The lights merge, and you feel an intense presence.", },
+    { text: "The presence of a celestial.", },
+    { text: "You brace yourself for the encounter, but are underwhelmed when you see the celestial.", },
+    { text: "You see a humanoid being made of pure superphysical energy.", },
+    { text: "He appears to be an teenage child with pale-blue skin, short height, and medium-length hair.", },
+    { text: 'Hello...? Are you a celestial?', portrait: "resources/player.png"  },
+    { text: "The being doesn't speak. He just looks at you, half in confusion, and half in awe.", },
+    { text: 'Hello.......?', portrait: "resources/player.png"  },
+    { text: "The being speaks.", },
+    { text: "I have been waiting for you.", portrait: "resources/tav.png"  },
+    { text: 'Yes... Hello. I am wondering if you are a celestial.', portrait: "resources/player.png"  },
+    { text: "I am Tav, the Celestial of Limits. The weakest celestial in the entire multiverse.", portrait: "resources/tav.png"  },
+    { text: "You are confused. You were fully expecting your first encounter with a celestial to be a fight with a godly being.", },
+    { text: "This celestial is calm, and collected. The complete opposite of what you expected.", },
+    { text: 'So... You\'re not going to fight me?', portrait: "resources/player.png"  },
+    { text: "No. I only serve one purpose.", portrait: "resources/tav.png"  },
+    { text: "I must protect this universe from a single celestial.", portrait: "resources/tav.png"  },
+    { text: "Cante. My mortal enemy.", portrait: "resources/tav.png"  },
+    { text: "I've been doing this job for far too long.", portrait: "resources/tav.png"  },
+    { text: "Every single day, I've been suffering.", portrait: "resources/tav.png"  },
+    { text: "Every single day, I've been feeling my superphysical form deteriorate.", portrait: "resources/tav.png"  },
+    { text: "I am not like the other celestials. My entire existence has been spent as a celestial.", portrait: "resources/tav.png"  },
+    { text: "I was created to only serve my one sworn duty. To protect this universe from Cante.", portrait: "resources/tav.png"  },
+    { text: "The truth is... I'm tired of doing this job.", portrait: "resources/tav.png"  },
+    { text: "I want to kill myself...", portrait: "resources/tav.png"  },
+    { text: "And you are the only one that can help me do that...", portrait: "resources/tav.png"  },
+    { text: "His speech moves you. You almost feel bad for the poor guy.", },
+    { text: "Your sense of duty has increased yet again. You must help Tav.", },
+
+];
+const cutsceneDialogue29 = [ //negative infinity point
+    { text: "You sense your antimatter reach the limit: 1.79e308.", },
+    { text: "A light blue flash of light covers your entire field of vision.", },
+    { text: "A small blue orb appears in front of you.", },
+    { text: "So you've made a negative infinity point.", portrait: "resources/tav.png"  },
+    { text: "Yeah... That's one of a few superphysical values linked to my power.", portrait: "resources/tav.png"  },
+    { text: 'How is it different than an infinity point?', portrait: "resources/player.png"  },
+    { text: "I'm not sure...", portrait: "resources/tav.png"  },
+    { text: "None of this superphysical value stuff really makes any sense to me.", portrait: "resources/tav.png"  },
+    { text: "Sorry......", portrait: "resources/tav.png"  },
+    { text: "Bro it's okay... I was also confused as well.", portrait: "resources/player.png"  },
+    { text: "I just realized something.", portrait: "resources/tav.png"  },
+    { text: "Once you get past me, you'll have to face... HIM.", portrait: "resources/tav.png"  },
+    { text: 'Cante?', portrait: "resources/player.png"  },
+    { text: "Well... He won't be as powerful as he was before...", portrait: "resources/tav.png"  },
+    { text: "However, he isn't friendly at all.", portrait: "resources/tav.png"  },
+    { text: 'Tav. Don\'t worry. I gotcha.', portrait: "resources/player.png"  },
+    { text: "I know I'm capable. Every single person I've met have been nonstop glazing me since day one.", portrait: "resources/player.png"  },
+    { text: "I'm the greatest creation or something like that.", portrait: "resources/player.png"  },
+    { text: "You know what Tav, I'm kinda confused too.", portrait: "resources/player.png"  },
+    { text: "But it's okay to be confused. You will never understand anything.", portrait: "resources/player.png"  },
+    { text: "Not even the cloaked person knows everything...", portrait: "resources/player.png"  },
+    { text: "Tav looks at you.", },
+    { text: "Thanks...", portrait: "resources/tav.png"  },
+
+];
+const cutsceneDialogue30 = [ //evolve unsmith
+    { text: "You place the four evolution shards in a square-like pattern.", },
+    { text: "You gather the lifeless bodies of superphysical pets and pile them on the middle.", },
+    { text: "All of a sudden, a giant purple flame emerges.", },
+    { text: "The evolution shards and pets dissapear.", },
+    { text: "In front of you, is a golden unsmith. Your very own evolved pet.", },
+    { text: "Marcel visits you.", },
+    { text: 'Would ya look at that. An evolved pet.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Unsmith is an interesting case for sure.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'A long, long time ago, a developer by the name of Platonic created this little fella.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Some foresight users who followed Platonic\'s framework had an unsmith by their side.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Those foresight users fought against an ancient diety called THE ANT GOD.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'I used to be one of those foresight users.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'After a severe injury, I had my physical body merged with a mech-suit, and an unsmith.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'I had lost my ability to manipulate superphysical values, so I just became a developer.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'Nothing for you to worry about, just some cool history.', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'I do wish to meet Platonic one day...', portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: 'That\'s a very cool story you got there Marcel.', portrait: "resources/player.png"  },
+    { text: "Don't worry. You'll be able to meet Platonic one day... Maybe if I keep evolving this unsmith...", portrait: "resources/player.png"  },
+
+];
+const cutsceneDialogue31 = [ //negative upgrade v (music box)
+    { text: "You walk up to Tav, while he's sitting on the floor with his head down.", },
+    { text: "Hey... are you okay?", portrait: "resources/player.png"  },
+    { text: "When have I ever been okay...", portrait: "resources/tav.png"  },
+    { text: "Look. I get it. The world is a messed up place.", portrait: "resources/player.png"  },
+    { text: "I am trapped in this universe forever.", portrait: "resources/tav.png"  },
+    { text: "There are many things I want to do, to experience.", portrait: "resources/tav.png"  },
+    { text: "I want to live a life like the rest of you guys.", portrait: "resources/tav.png"  },
+    { text: "But my entire existence is a lie.", portrait: "resources/tav.png"  },
+    { text: "You have a soul, and I know you're a good person.", portrait: "resources/player.png"  },
+    { text: "Good souls will always be free eventually. I know it.", portrait: "resources/player.png"  },
+    { text: "The cloaked being appears.", },
+    { text: 'I\'m late... Damn it.', portrait: "resources/secret.png"  },
+    { text: 'Looks like you beat all 8 challenges, and found the celestial.', portrait: "resources/secret.png"  },
+    { text: "Tav takes one look at the cloaked being, jolts up, and runs away, freightened.", },
+    { text: "What's his deal...", portrait: "resources/secret.png"  },
+    { text: "Tav's action confuses you.", },
+    { text: "You don't want to act friendly to the celestials.", portrait: "resources/secret.png"  },
+    { text: "You don't know what they are capable of. Remember that.", portrait: "resources/secret.png"  },
+    { text: "Celestials are dangerous creatures. Menaces to the multiverse.", portrait: "resources/secret.png"  },
+    { text: "I know, but Tav is different.", portrait: "resources/player.png"  },
+    { text: "He's struggling....", portrait: "resources/player.png"  },
+    { text: "He-", portrait: "resources/player.png"  },
+    { text: "He wants to die.", portrait: "resources/player.png"  },
+    { text: "Then just kill him. Killing a celestial is freeing the soul that lies within it.", portrait: "resources/secret.png"  },
+    { text: "Yeah... You're right. I need to figure out how though.", portrait: "resources/player.png"  },
+    { text: "You got this. There isn't a single thing our creation can't do.", portrait: "resources/secret.png"  },
+
+];
+const cutsceneDialogue32 = [ //negative upgrade vii
+    { text: "Tav walks towards you slowly.", },
+    { text: "Is that THING GONE???", portrait: "resources/tav.png"  },
+    { text: "The cloaked person?", portrait: "resources/player.png"  },
+    { text: "That being is very dangerous...", portrait: "resources/tav.png"  },
+    { text: "You want answers about the cloaked being's identity.", },
+    { text: "Do you know who that cloaked being is?", portrait: "resources/player.png"  },
+    { text: "No idea... I just sense something dangerous coming from them.", portrait: "resources/tav.png"  },
+    { text: "You shouldn't trust anyone. Not even if that cloaked being is your mentor.", portrait: "resources/tav.png"  },
+    { text: "Tav's comments on the cloaked guy makes you think a little bit.", },
+    { text: "Who could the cloaked person possibly be?", },
+    { text: "What could they possibly have done in the past?", },
+    { text: "You shouldn't trust me either.", portrait: "resources/tav.png"  },
+    { text: "I may be friendly now, but you don't know what the more powerful celestials can do.", portrait: "resources/tav.png"  },
+    { text: "The way people can change as they become more and more powerful.", portrait: "resources/tav.png"  },
+    { text: "But if you kill me...", portrait: "resources/tav.png"  },
+    { text: "I won't ever have to worry about becoming a bad person...", portrait: "resources/tav.png"  },
+    { text: "Tav tries to put on his best smile.", },
+    { text: "Who did this to you...", portrait: "resources/player.png"  },
+    { text: "......", portrait: "resources/tav.png"  },
+
+];
+const cutsceneDialogue33 = [ //tavs domain unlock
+    { text: "I think you're ready.", portrait: "resources/tav.png"  },
+    { text: "Ready for what?", portrait: "resources/player.png"  },
+    { text: "My challenge.", portrait: "resources/tav.png"  },
+    { text: "You'll be able to destroy my core...", portrait: "resources/tav.png"  },
+    { text: "...and kill me along with it.", portrait: "resources/tav.png"  },
+    { text: "Sure.", portrait: "resources/player.png"  },
+    { text: "Tav pulls out a small, glowing blue circle.", },
+    { text: "This is my core.", portrait: "resources/tav.png"  },
+    { text: "All it takes to destroy it is the power of the alternate broken infinities.", portrait: "resources/tav.png"  },
+    { text: "Breaking infinities turns it into broken infinities. Going through my domain will create the alternate versions.", portrait: "resources/tav.png"  },
+    { text: "I gotcha bud. Don't worry. You'll find your freedom.", portrait: "resources/player.png"  },
+    { text: "You and Tav dap each other up.", },
+    { text: "Despite the cloaked being's words, you still decide to be friendly to this celestial.", },
+    { text: "Despite the Tav's words, you still decide to put some trust into him.", },
+    { text: "You found a friend within a celestial.", },
+
+];
+const cutsceneDialogue34 = [ //tavs domain
+    { text: "Tav's core splits off into pure energy and surrounds you.", },
+    { text: "You notice your superphysical value gain drop significantly.", },
+    { text: "It feels very similar to the eighth infinity challenge.", },
+];
+const cutsceneDialogue35 = [ //tavs points
+    { text: "Tav notices you struggle gaining any superphysical values.", },
+    { text: "Dang, you really are a celestial after all!", portrait: "resources/player.png"  },
+    { text: "Don't worry. I can help you.", portrait: "resources/tav.png"  },
+    { text: "I've saved this one superphysical value: Tav points. It will certainly help you get infinities.", portrait: "resources/tav.png"  },
+    { text: "Thanks Tav!", portrait: "resources/player.png"  },
+];
+const cutsceneDialogue36 = [ //broken infinities
+    { text: "You channel your superphysical energy through your fingers, and point it at the infinities.", },
+    { text: "You stomp your foot, and all the infinities form a massive crack in the center of them.", },
+    { text: "The infinities also stop glowing.", },
+    { text: "You feel the superphysical energy from the infinities get converted into a new one.", },
+];
+const cutsceneDialogue37 = [ //reunlock antidebuff (Tav flashback)
+    { text: "A white flash hits your vision.", },
+    { text: "You are brought to another flashback.", },
+    { text: "You appear to be in a more vibrant version of the antimatter world.", },
+    { text: "The sky is filled with galaxies, stars, and bright lights.", },
+    { text: "You see Tav, kneeling on the ground.", },
+    { text: "He is looking at a man and a woman.", },
+    { text: "For some reason, by instinct, you know who those two are.", },
+    { text: "They are a part of THE ORIGINAL SEVEN.", },
+    { text: "The woman is Teresa, the celestial of reality.", },
+    { text: "The man is Effarig, the celestial of glyphs.", },
+    { text: "You don't know why you know that, you just do.", },
+    { text: "Tav... We need to talk about your performance.", portrait: "resources/effarig.png",  },
+    { text: "We heard complaints of you getting distracted while on duty.", portrait: "resources/teresa.png"  },
+    { text: "Do you understand how many lives will be at stake if Cante is let loose???", portrait: "resources/teresa.png"  },
+    { text: "We need you to keep a better eye on him.", portrait: "resources/effarig.png"  },
+    { text: "Look. If you're ever tired, just give me a call. I don't mind taking over for a couple hours every day.", portrait: "resources/effarig.png"  },
+    { text: "I'm sorry... I'll do it... My creators......", portrait: "resources/tav.png"  },
+    { text: "You see Tav walk off into the distance, towards a tall building.", },
+    { text: "Effarig... I thought you were on glyph duty...", portrait: "resources/teresa.png"  },
+    { text: "I don't think Tav deserves a break. He's a celestial. He's capable enough.", portrait: "resources/teresa.png"  },
+    { text: "We can't ever run the risk of leaving Cante unattended.", portrait: "resources/teresa.png"  },
+    { text: "Especially after what he did...", portrait: "resources/teresa.png"  },
+    { text: "We MUST keep him locked up in his little dimension.", portrait: "resources/teresa.png"  },
+    { text: "And the only one who can do that is Tav.", portrait: "resources/teresa.png"  },
+    { text: "We worked so hard to create him...", portrait: "resources/teresa.png"  },
+    { text: "Just because you're new doesn't mean you get to have full control over Tav.", portrait: "resources/effarig.png"  },
+    { text: "Lai'Tela told us to take good care of him.", portrait: "resources/effarig.png"  },
+    { text: "We should treat him like a person...", portrait: "resources/effarig.png"  },
+    { text: "Teresa starts cackling.", },
+    { text: "You really do believe us celestials are people???", portrait: "resources/teresa.png"  },
+    { text: "That's so funny... We are all doomed. Stripped of our humanity.", portrait: "resources/teresa.png"  },
+    { text: "What's the point of all of this anyways. You guys confuse me.", portrait: "resources/teresa.png"  },
+    { text: "Teresa walks away, and Effarig just stands there, speechless.", },
+    { text: "Everything starts to make sense now.", },
+    { text: "Tav was built by the original seven.", },
+
+];
+const cutsceneDialogue38 = [ //alt broken infinities
+    { text: "You take the broken infinities, and step infront of the otherworldly feature altar.", },
+    { text: '"Just like what Tav said...", You thought to yourself.', },
+    { text: "The superphysical energy from Tav's core mixes with the energy from the altar.", },
+    { text: "The energy forms a ball, which merges with the broken infinity.", },
+    { text: "The infinity glows with a light you haven't seen before.", },
+    { text: "You have created an alternate broken infinity.", },
+];
+const cutsceneDialogue39 = [ //tav's death
+    { text: "You did it. You have gained 1,000 of each alternate broken infinity type.", },
+    { text: "You are filled with dread. You will defeat your first celestial, but you will have to kill your friend.", },
+    { text: "You did it... I'm so proud of you.", portrait: "resources/tav.png"  },
+    { text: "Now I'll finally be put to rest. Thank you.", portrait: "resources/tav.png"  },
+    { text: "They made you a slave...", portrait: "resources/player.png"  },
+    { text: "The original seven... THEY did this to you.", portrait: "resources/player.png"  },
+    { text: "Tav looks at you, with tears in his eyes.", },
+    { text: "I know... I don't regret it though.", portrait: "resources/tav.png"  },
+    { text: "For all this time, I have protected countless lives from Cante.", portrait: "resources/tav.png"  },
+    { text: "I know I had a positive impact on the multiverse.", portrait: "resources/tav.png"  },
+    { text: "Once I'm gone, you will have to deal with Cante.", portrait: "resources/tav.png"  },
+    { text: "Cante used to be a part of the original seven, but an incident got him replaced.", portrait: "resources/tav.png"  },
+    { text: "But don't worry. He's far less powerful than he used to be. I've made sure of that.", portrait: "resources/tav.png"  },
+    { text: "Don't worry. I'll take care of him.", portrait: "resources/player.png"  },
+    { text: "Thanks... I haven't asked this question yet...", portrait: "resources/tav.png"  },
+    { text: "What's your name?", portrait: "resources/tav.png"  },
+    { text: "Now that you think about it, you don't even know your own name.", },
+    { text: "That question boggles you.", },
+    { text: "That's a good question Tav...", portrait: "resources/player.png"  },
+    { text: "I don't even know.", portrait: "resources/player.png"  },
+    { text: "Damn. That sucks man.", portrait: "resources/tav.png"  },
+    { text: "Oh well, time for you to kill me now.", portrait: "resources/tav.png"  },
+    { text: "It was nice meeting you and getting to know you as well.", portrait: "resources/tav.png"  },
+    { text: "I don't wanna do it.", portrait: "resources/player.png"  },
+    { text: "Is there any way I can turn you back? To get rid of your celestiality?", portrait: "resources/player.png"  },
+    { text: "It's impossible. Turning into a celestial will permanently alter the infrastructure of your soul.", portrait: "resources/tav.png"  },
+    { text: "This would especially be hard in my case... I was born a celestial.", portrait: "resources/tav.png"  },
+    { text: "My soul was stitched together from fragments of lost souls.", portrait: "resources/tav.png"  },
+    { text: "I'm so sorry. I want to live a normal life, in a normal universe.", portrait: "resources/tav.png"  },
+    { text: "I stopped chasing those desires long ago...", portrait: "resources/tav.png"  },
+    { text: "Nowadays, I only crave death.", portrait: "resources/tav.png"  },
+    { text: "My job is done. You may kill me now.", portrait: "resources/tav.png"  },
+    { text: "Tears stream down Tav's face. You feel sad, but for some reason you won't cry.", },
+    { text: "Thanks for everything.", portrait: "resources/tav.png"  },
+    { text: "You give Tav a hug, as you prepare to shoot a beam of superphysical energy.", },
+    { text: "I'm sorry that this had to ever happen to you.", portrait: "resources/player.png"  },
+    { text: "You will find your freedom. I know you will.", portrait: "resources/player.png"  },
+    { text: "Goodbye...", portrait: "resources/tav.png"  },
+    { text: "Goodbye...", portrait: "resources/player.png"  },
+    { text: "The energy from the alternate broken infinities are converted into one powerful beam of energy.", },
+    { text: "The beam strikes through Tav's core, immediately disintegrating it.", },
+    { text: "Tav's physical form fades away into dust.", },
+    { text: "You have defeated your first celestial.", },
+];
+//showCinematicCutscene(credits1, { background: "#000", cinematicCutsceneID: 1 });
+const cutsceneDialogue40 = [
+    { text: "<h1>Hello.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>I am the narrator.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>The one guiding you through this mission.</h1>", duration: 7000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>Now, now, don't go looking for me. I am inside you.</h1>", duration: 7000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>Thank you.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>Thank you for giving me another chance at living.</h1>", duration: 7000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>You will face many dangers in your future. I know it.</h1>", duration: 7000, style: { color: "#ffffff", fontSize: "4vw" } },
+    { text: "<h1>Good luck.</h1>", duration: 5000, style: { color: "#ffffff", fontSize: "4vw" } },
+];
+const cutsceneDialogue41 = [ //break infinity
+    { text: "You see a new button appear on the altar.", },
+    { text: '"Break Infinity"', },
+    { text: "The cloaked being appears.", },
+    { text: "Congratulations. You defeated your very first celestial.", portrait: "resources/secret.png"  },
+    { text: "Now you can gain more than 1.79e308 celestial points.", portrait: "resources/secret.png"  },
+    { text: "Good job.", portrait: "resources/secret.png"  },
+    { text: "This didn't need to happen...", portrait: "resources/player.png"  },
+    { text: "Tav was innocent... He didn't deserve this.", portrait: "resources/player.png"  },
+    { text: "So you're still attatched to that celestial aren't ya.", portrait: "resources/secret.png"  },
+    { text: "Don't let that happen again.", portrait: "resources/secret.png"  },
+    { text: "You've freed Tav from his eternal mistery. You did the right thing.", portrait: "resources/secret.png"  },
+    { text: "You look down at the floor.", },
+    { text: "Hey look. If you feel bad for what you have done... You can talk to me or Marcel. We're here for you.", portrait: "resources/secret.png"  },
+    { text: "The cloaked being pats you on your head and walks away.", },
+];
+const cutsceneDialogue42 = [ //gwa evolution
+    { text: "Ah. So you're finally evolving the GWA now.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "I know an organization that has worshipped this being for millenia.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "psst... they're more like a cult, but don't tell them I said that.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Keep evolving it, and you will see them eventually.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+];
+const cutsceneDialogue43 = [ //break infinity upgrade IV (otf mastery)
+    { text: "I think I know what's behind this altar...", portrait: "resources/secret.png"  },
+    { text: "It might be the work of certain celestials.", portrait: "resources/secret.png"  },
+    { text: "That's strange. Why would a celestial want to help me like that?", portrait: "resources/player.png"  },
+    { text: "It all comes down to classic manipulation.", portrait: "resources/secret.png"  },
+    { text: "Certain celestials want you to gain their superphysical values.", portrait: "resources/secret.png"  },
+    { text: "It makes them stronger, and can also provide your information to the celestial.", portrait: "resources/secret.png"  },
+    { text: "Yes, you can avoid those superphysical values entirely, but you will need them to progress in this framework.", portrait: "resources/secret.png"  },
+    { text: "Yeah... It's pretty hard to progress without otherworldy features.", portrait: "resources/player.png"  },
+    { text: "Exactly. You will face these celestials sooner or later.", portrait: "resources/secret.png"  },
+    { text: "It just kinda sucks that some higher celestial power already knows about your existence.", portrait: "resources/secret.png"  },
+    { text: "Someone must have snitched...", portrait: "resources/secret.png"  },
+    { text: "We should probably figure that out.", portrait: "resources/player.png"  },
+];
+const cutsceneDialogue44 = [ //steel
+    { text: "You see your grasshoppers form a coagulated blob.",  },
+    { text: "The blob turns into what appears to be molten metal.",  },
+    { text: "Eventually, the metal cools down into steel ingots.",  },
+    { text: "Voices begin to enter your head.",  },
+    { text: '"Cut the grass... cut the grass... cut the grass..."',  },
+    { text: "The voices fade as you walk away from the steel.",  },
+    { text: "What could this possibly mean?",  },
+];
+const cutsceneDialogue45 = [ //crystal
+    { text: "The voices intensify.",  },
+    { text: "You don't even know what they are saying anymore.",  },
+    { text: "The voices all stop when the cloaked being appears.",  },
+    { text: "I wonder what went wrong with this framework...", portrait: "resources/secret.png"  },
+    { text: "Crystallize was supposed to be unlocked a long, long time ago.", portrait: "resources/secret.png"  },
+    { text: "Oh well... This is nothing out of the ordinary anyways.", portrait: "resources/secret.png"  },
+    { text: "Just be careful.", portrait: "resources/secret.png"  },
+];
+const cutsceneDialogue46 = [ //time reversal
+    { text: "The time stops around you.",  },
+    { text: "Everything superphysical freezes.",  },
+    { text: "You notice all your production stop.",  },
+    { text: "So... do you know what is happening right now?", portrait: "resources/player.png"  },
+    { text: "You are performing a time reversal.", portrait: "resources/secret.png"  },
+    { text: "Well that name isn't very accurate...", portrait: "resources/secret.png"  },
+    { text: "It usually stops time, and drains your celestial points.", portrait: "resources/secret.png"  },
+    { text: "These cubes look very cool.", portrait: "resources/player.png"  },
+    { text: "Ah, time cubes. A version of time that could be stored in space.", portrait: "resources/secret.png"  },
+    { text: "You know, this was taken from one of the very first frameworks ever made.", portrait: "resources/secret.png"  },
+    { text: "The distance incremental framework— the one created by Jacorb.", portrait: "resources/secret.png"  },
+    { text: "Jacorb was special, because he was a developer who was able to utilize his own framework.", portrait: "resources/secret.png"  },
+    { text: "Cases like his are very rare, that's why he was considered one of the four heroes of the incremental clan.", portrait: "resources/secret.png"  },
+    { text: "That name sounded very familiar to you.",  },
+    { text: "Jacorb... You learned about him in school???",  },
+    { text: "Your memories start swirling in an endless fuzz of confusion.",  },
+    { text: '"Wait a minute...", you think to yourself.',  },
+    { text: 'School??? You used to live a normal life???',  },
+    { text: 'And why would you learn about Jacorb in school??????',  },
+    { text: 'Jacorb... His name sounds familiar.', portrait: "resources/player.png"  },
+    { text: "Jacorb died a few years ago.", portrait: "resources/secret.png"  },
+    { text: "We managed to get him out of his prison in the death realm, but...", portrait: "resources/secret.png"  },
+    { text: "He sacrified himself to save the entire clan from destruction.", portrait: "resources/secret.png"  },
+    { text: 'He must have been one hell of a guy that\'s for sure.', portrait: "resources/player.png"  },
+    { text: "Now that you think about it, the world is a lot larger than it seems.",  },
+    { text: "What is the clan?",  },
+    { text: "What truly happened to Jacorb?",  },
+    { text: "You want the answers to these questions.",  },
+];
+const cutsceneDialogue47 = [ //cante
+    { text: "Out of nowhere, you feel an immense force shake the ground.",  },
+    { text: "Cracks start to form in the ground.",  },
+    { text: "It must be HIM. HE has arrived.",  },
+    { text: "It's CANTE...",  },
+    { text: "An opening forms on the ground, and a disfigured humanoid creature emerges.",  },
+    { text: "Why did you do it.... WHY.......", portrait: "resources/cante.png"  },
+    { text: "The creature's head seems to be made out of pure light.",  },
+    { text: "His body looks extremely frail and weak.",  },
+    { text: "You remain speechless.",  },
+    { text: "They're all gone... THEY'RE ALL GONE...", portrait: "resources/cante.png"  },
+    { text: "The being falls on the floor unconcious.",  },
+    { text: "That must be Cante.",  },
+    { text: "A being feared by the original seven.",  },
+    { text: "Then why is Cante so weak?",  },
+];
+const cutsceneDialogue48 = [ //e308 replicanti
+    { text: "You sense the presence of a strange new superphysical value.",  },
+    { text: "The cloaked being appears.",  },
+    { text: "This is replicanti. One of Cante's superphysical values.", portrait: "resources/secret.png"  },
+    { text: "The original seven still utilized replicanti even after they kicked him out.", portrait: "resources/secret.png"  },
+    { text: "The cloaked being looks at Cante's unconcious body.",  },
+    { text: "Damn.", portrait: "resources/secret.png"  },
+    { text: "Do you know why he's like this?", portrait: "resources/player.png"  },
+    { text: "I'm pretty sure Tav's restrictions must have put immense strain on him.", portrait: "resources/secret.png"  },
+    { text: "And since Cante was so powerful, Tav must have used a majority of his power to keep him in this state.", portrait: "resources/secret.png"  },
+    { text: "Just imagine how powerful Tav must've been if he didn't have to do this job.", portrait: "resources/secret.png"  },
+    { text: "Tav must've worked hard then. He died with no regrets because kept us all safe from Cante.", portrait: "resources/player.png"  },
+    { text: "Just keep making more replicanti. Pretty sure you'll find his core eventually.", portrait: "resources/secret.png"  },
+
+];
+const cutsceneDialogue49 = [ //replicanti galaxy
+    { text: "You see the replicanti shoot up into the sky and burst into a beautiful display of light.",  },
+    { text: "The sky of the antimatter world fills up again with brightness.",  },
+    { text: "It doesn't make any sense. How could such an evil celestial be responsible for such beautiful sights?",  },
+
+];
+const cutsceneDialogue50 = [ //cantepocalypse puzzles (on tab switch)
+    { text: "All of a sudden, a temple rises in front of you.",  },
+    { text: "As you walk inside, you are greeted with Cante's voice.",  },
+    { text: "They're all gone. THEY'RE ALL GONE.", portrait: "resources/cante.png"  },
+    { text: "I should have stayed locked up! I don't deserve to see our world like this!!", portrait: "resources/cante.png"  },
+    { text: "It was you... it must have been you... The one who killed all of them.", portrait: "resources/cante.png"  },
+    { text: "DAMN YOU!!!", portrait: "resources/cante.png"  },
+    { text: "EVEN IF THEY ALL HATED ME, THEY DIDN'T DESERVE DEATH.", portrait: "resources/cante.png"  },
+    { text: "And I know you want to kill me as well.", portrait: "resources/cante.png"  },
+    { text: "I have built this temple for this very moment.", portrait: "resources/cante.png"  },
+    { text: "Solve 4 puzzles, and I will let you kill me.", portrait: "resources/cante.png"  },
+    { text: "What's the point in even living if they are all gone.", portrait: "resources/cante.png"  },
+    { text: "There's nothing for me to do.", portrait: "resources/cante.png"  },
+    { text: "Absolutely nothing.", portrait: "resources/cante.png"  },
+    { text: "You stay silent. You know you weren't the one who killed the original seven, but you still feel immense guilt.",  },
+    { text: "And what's even more strange, is that you don't feel the same guilt for killing Tav.",  },
+    { text: "Why do you feel this way?",  },
+];
+
+//more pet evolution cutscenes
+const cutsceneDialogue51 = [ //marcel evolution
+    { text: "As you prepare your next pet evolution, you notice nothing change.",  },
+    { text: "You are confused.",  },
+    { text: "Oh congrats. The evolution for the clock pet is just me haha.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Wait what?", portrait: "resources/player.png"  },
+    { text: "Marcel gives you a couple of special clocks.",  },
+    { text: "These clocks will give you evolution and paragon shards.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "I just made them earlier. Hope they help.", portrait: "resources/marcelAcoplaoEvoPet.png"  },
+    { text: "Thanks bud.", portrait: "resources/player.png"  },
+];
+
+//first puzzle complete 
+const cutsceneDialogue52 = [ 
+    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "A white flash hits your eyes.",  },
+    { text: "You are presented with a flashback.",  },
+    { text: "You find yourself in the vibrant antimatter world again.",  },
+    { text: "Two beings stand in front of you.",  },
+    { text: "A stronger, less disfigured looking Cante, and another celestial.",  },
+    { text: "Lai'Tela, the Celestial of Dimensions.",  },
+    { text: "So you must be Cante. You are our fourth member. Welcome to the team.", portrait: "resources/laitela.png"  },
+    { text: "I am overjoyed to be joining you.", portrait: "resources/cante.png"  },
+    { text: "So Pelle must have already told you everything, right?", portrait: "resources/laitela.png"  },
+    { text: "Yes he has. We must keep the ?????????? ?????? safe.", portrait: "resources/cante.png"  }, //retrograde elixir
+    { text: "Exactly. If ANYONE finds out about the ??????, it is over.", portrait: "resources/laitela.png"  },
+    { text: "We must find the rest of the ???????. Right now, we only have one. There are many more throughout the multiverse.", portrait: "resources/laitela.png"  },
+    { text: "If any celestial gets a hold of the ??????, we will be generationally screwed.", portrait: "resources/laitela.png"  },
+    { text: "I know where one of the ?????????? ??????? are...", portrait: "resources/cante.png"  },
+    { text: "That would help a lot.", portrait: "resources/laitela.png"  },
+    { text: "Information comes at a price. I know about that power of yours...", portrait: "resources/cante.png"  },
+    { text: "Annhilation: The power to destroy all matter into it's most fundamental state.", portrait: "resources/cante.png"  },
+    { text: "A power that is the polar opposite of mine, as I can create anything with the power of replicanti.", portrait: "resources/cante.png"  },
+    { text: "If we team up, we will be unstoppable!", portrait: "resources/cante.png"  },
+    { text: "Forget about Pelle. Forget about Ra. Together, we will find all of the ??????? and rule the celestials!", portrait: "resources/cante.png"  },
+    { text: "Cante extends his arm out for a handshake, but Lai'Tela refuses to shake his hand.",  },
+    { text: "The smirk on Cante's face vanishes.",  },
+    { text: "We're trying to protect the celestials, not harm them.", portrait: "resources/laitela.png"  },
+    { text: "Lai'Tela walks away, and you are left with many questions.",  },
+    { text: "What is that item they are talking about? What could it do?",  },
+    { text: "You need to figure out more.",  },
+    { text: "You need to understand what truly happened to the original seven.",  },
+];
+//second puzzle complete 
+const cutsceneDialogue53 = [ 
+    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "A white flash hits your eyes.",  },
+    { text: "You are presented with a flashback.",  },
+    { text: "You find yourself in a vibrant city. Bright lights, noise, and cars.",  },
+    { text: "This world feels a little bit familiar.",  },
+    { text: "All of a sudden, a giant rift opens up in the sky.",  },
+    { text: "Spaceships fly through the rift, and bombs drop on the city.",  },
+    { text: "Humans plead for their lives. Buildings fall to the ground.",  },
+    { text: "The destruction is endless.",  },
+    { text: "You notice a young man run away from the chaos.",  },
+    { text: "That man looked very familiar.",  },
+    { text: "It was Cante... before turning into a celestial.",  },
+    { text: "He holds his family tight: His mother, and his sister.",  },
+    { text: "However, the force was too powerful. They both got caught in the destruction.",  },
+    { text: "The man kept on running and running, until a portal suddenly appeared and captured him.",  },
+    { text: "Very interesting...",  },
+    { text: "A few thoughts come to your mind.",  },
+    { text: "A secret organization is destroying universes and converting people into celestials?",  },
+    { text: "You'll have to figure it all out...",  },
+];
+//third puzzle complete 
+const cutsceneDialogue54 = [ 
+    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "A white flash hits your eyes.",  },
+    { text: "You are presented with a flashback.",  },
+    { text: "You are in what appears to be an office room.",  },
+    { text: "Lai'Tela was sorting out papers, until Effarig bursted into the room abruptly.",  },
+    { text: "WHERE'S PELLE??? WHERE IS HE!!!", portrait: "resources/effarig.png"  },
+    { text: "Woah woah woah calm down. What's the problem???", portrait: "resources/laitela.png"  },
+    { text: "IT'S GONE. IT'S GONE. THE ??????. THE ?????? IS GONE!!!", portrait: "resources/effarig.png"  },
+    { text: "Oh god...", portrait: "resources/laitela.png"  },
+    { text: "Calm down. Have you double checked?", portrait: "resources/laitela.png"  },
+    { text: "Yes I have... What do we do??? We need Pelle!", portrait: "resources/effarig.png"  },
+    { text: "I thought there were eyes on the ?????? at all times...", portrait: "resources/laitela.png"  },
+    { text: "Who was the last person that was watching it?", portrait: "resources/effarig.png"  },
+    { text: "Let me check...", portrait: "resources/laitela.png"  },
+    { text: "It was.......", portrait: "resources/laitela.png"  },
+    { text: "........Cante", portrait: "resources/laitela.png"  },
+    { text: "The walls around you shake, and a loud glitching noise plays in yoru head.",  },
+    { text: "Cante must have stole something very important.",  },
+    { text: "This must have caused Cante's removal from the original seven.",  },
+    { text: "Very interesting...",  },
+];
+//fourth puzzle complete 
+const cutsceneDialogue55 = [ 
+    { text: "You complete the puzzle, and the floor underneath you breaks, revealing another room.",  },
+    { text: "A white flash hits your eyes.",  },
+    { text: "You are presented with a flashback.",  }, //laitela created cante's prison
+    { text: "You find yourself in a black and white void, surrounded by dark energy.",  },
+    { text: "You see Cante in the center get restrained by superphysical chains.",  },
+    { text: "Tav enters your vision.",  },
+    { text: "Who are you... What do you want from me???", portrait: "resources/cante.png"  },
+    { text: "I am Tav. It is my sole responsibility to keep you locked here.", portrait: "resources/tav.png"  },
+    { text: "I am currently taking away your power away from you.", portrait: "resources/tav.png"  },
+    { text: "You don't deserve your power. What you did is unforgivable.", portrait: "resources/tav.png"  },
+    { text: "I will make sure that no more lives are in danger because of your existence.", portrait: "resources/tav.png"  },
+    { text: "Whatever you say... Tav.", portrait: "resources/cante.png"  },
+    { text: "Lai'Tela did one hell of a job creating this prison.", portrait: "resources/cante.png"  },
+    { text: "Too bad they are more worried about keeping me locked up instead of finding the ??????.", portrait: "resources/cante.png"  },
+    { text: "Oh well... That isn't my problem at all.", portrait: "resources/tav.png"  },
+    { text: "You'll stay here for eternity. You will eventually lose your sanity.", portrait: "resources/tav.png"  },
+    { text: "This is all your fault.", portrait: "resources/tav.png"  },
+];
+//cantepocalypse 
+const cutsceneDialogue56 = [ 
+    { text: "As all 4 puzzles are completed, you find yourself in one final room.",  },
+    { text: "There is a hole in the center of the room, and the hole is pulling everything in towards it.",  },
+    { text: "My core is in here. You can kill me now.", portrait: "resources/cante.png"  },
+    { text: "You get an uneasy feeling about jumping in the hole, but notice the walls around you start to shrink.",  },
+    { text: "There is no escape. You must enter the hole.",  },
+    { text: "Once you enter the hole, you fall down an endless abyss.",  },
+    { text: "YOU IDIOT!!!", portrait: "resources/cante.png"  },
+    { text: "Cante starts laughing maniacally, and you realize the situation you're in.",  },
+    { text: "You're cooked.",  },
+    { text: "Welcome to my prison... I was here for an eternity and now you will be too!!!", portrait: "resources/cante.png"  },
+    { text: "The core... Where is it??", portrait: "resources/player.png"  },
+    { text: "Good luck finding it. You will need a lot of superphysical power.", portrait: "resources/cante.png"  },
+    { text: "When you land on the ground, you observe your surroundings.",  },
+    { text: "It looks eerily similar to the overworld... but disfigured.",  },
+    { text: "Everything here is replicanti!", portrait: "resources/cante.png"  },
+    { text: "Everything here multiplies!!!", portrait: "resources/cante.png"  },
+    { text: "Isn't it just so amazing???", portrait: "resources/cante.png"  },
+];
+//also make flashback music for cante, and flashback cutscenes
+
+// Example with custom background:
+// showCutscene(cutsceneDialogue1, {
+//     background: \"url('img/bg.png') center/cover\", // or any valid CSS background
+//     portrait: \"resources/matos.png\"
+// });
+
+/*
+showCutscene(cutsceneDialogue1, {
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)", // blue gradient
+    portrait: "resources/matos.png"
+});
+
+const test4 = [ //reunlock antidebuff (Tav flashback)
+    { text: "<h1>A white flash hits your vision.", portrait: "resources/teresa.png",  },
+    { text: "<img src=resources/teresa.png width=500 height=500>", },
+
+];
+
+showCutscene(cutsceneDialogue1, {
+    background: "#000000", // blue gradient
+    cutsceneID: 12345,
+    portrait: "resources/matos.png"
+});
+*/

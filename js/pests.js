@@ -80,7 +80,7 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h2>Your pests are killing the grasshoppers, so -" + format(player.pe.pestEffect[7]*100) + "% grasshoppers per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>Grasshops remove 10% of your pests." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "<h2>Grasshop resets remove 10% of your pests." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                 ]
             },
         },

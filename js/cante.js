@@ -80,6 +80,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
         if (hasUpgrade("bi", 116)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("bi", 116))
+        player.ca.replicantiMult = player.ca.replicantiMult.mul(player.cof.coreFragmentEffects[5])
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
@@ -132,10 +133,12 @@
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(levelableEffect("pet", 108)[1])
         if (hasMilestone("fa", 19)) player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(player.fa.milestoneEffect[8])
         player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("fu", 44))
+        player.ca.galaxyDustToGet = player.ca.galaxyDustToGet.mul(buyableEffect("cof", 28))
 
         if (hasMilestone("s", 13)) player.ca.galaxyDust = player.ca.galaxyDust.add(Decimal.mul(player.ca.galaxyDustToGet.mul(0.01), delta))
 
         player.ca.galaxyDustEffect = player.ca.galaxyDust.plus(1).log10().mul(0.1).add(1)
+        player.ca.galaxyDustEffect = player.ca.galaxyDustEffect.pow(buyableEffect("cof", 27))
 
         //rep galax
         player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
@@ -796,7 +799,7 @@
                     ["raw-html", function () { return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + format(player.ca.galaxyDust) + "</h3> galaxy dust." }, { "color": "#979EE8", "font-size": "26px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Galaxy dust multiplies antimatter galaxy effect base by <h3>" + format(player.ca.galaxyDustEffect) + "</h3>x." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will <h3>" + format(player.ca.galaxyDustToGet) + "</h3> galaxy dust on reset." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain <h3>" + format(player.ca.galaxyDustToGet) + "</h3> galaxy dust on reset." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],

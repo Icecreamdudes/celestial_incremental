@@ -225,6 +225,7 @@
 
                 player.cop.processedCoreStrength = player.coa.coreStrengths[player.coa.coreIndex]
                 player.cop.processedCoreFuel = player.coa.coreFuelSources[player.coa.coreIndex]
+                player.cop.processedCoreInnateEffects = layers.coa.determineEffect(player.cop.processedCoreFuel, player.cop.processedCoreStrength)
                 player.cop.processedCorePrime = player.coa.corePrimes[player.coa.coreIndex]
                 player.cop.processingCore = true
                 

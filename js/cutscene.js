@@ -1523,7 +1523,7 @@ player.c.cutsceneText = [
 'However, Nova needed a bigger team. He searched the multiverse for other celestials who wanted to join his cause. ',
 'He stumbled upon ???????, the ?????? Celestial.',
 '??????? also had a deep-rooted hatred for celestial hunters, so she joined the team.',
-'??????? became the first of three Novasent—Nova\'s three most trusted celestials.',
+'??????? became the first of three Novasent-Nova\'s three most trusted celestials.',
 ]
 },
 startCutscene31()

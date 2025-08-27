@@ -580,7 +580,7 @@
         }
 
         for (let i = 0; i < player.pet.singularityButtonTimers.length; i++) {
-            player.pet.singularityButtonTimers[i].sub(time);
+            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(time);
         }
 
         // Daily Reward (Insane Face Evo)
@@ -598,7 +598,7 @@
         player.leg.legendaryGemTimer = player.leg.legendaryGemTimer.sub(time);
         player.leg.summonTimer = player.leg.summonTimer.sub(time);
         for (let i = 0; i < player.pet.legendaryPetAbilityCooldowns.length; i++) {
-            player.pet.legendaryPetAbilityCooldowns[i].sub(time);
+            player.pet.legendaryPetAbilityCooldowns[i].sub(time) = player.pet.legendaryPetAbilityCooldowns[i].sub(time);
         }
 
         //rocket

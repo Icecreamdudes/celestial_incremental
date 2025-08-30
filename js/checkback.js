@@ -579,6 +579,10 @@
             player.ep2.cookiePointButtonTimers[i] = player.ep2.cookiePointButtonTimers[i].sub(time)
         }
 
+        for (let i = 0; i < player.pet.singularityButtonTimers.length; i++) {
+            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(time);
+        }
+
         // Daily Reward (Insane Face Evo)
         player.ev2.cooldown = player.ev2.cooldown.sub(time)
 
@@ -593,6 +597,12 @@
         //legendary
         player.leg.legendaryGemTimer = player.leg.legendaryGemTimer.sub(time);
         player.leg.summonTimer = player.leg.summonTimer.sub(time);
+        for (let i = 0; i < player.pet.legendaryPetAbilityCooldowns.length; i++) {
+            player.pet.legendaryPetAbilityCooldowns[i] = player.pet.legendaryPetAbilityCooldowns[i].sub(time);
+        }
+
+        //rocket
+        player.ro.rocketCooldown = player.ro.rocketCooldown.sub(time);
     },
     branches: ["m"],
     clickables: {

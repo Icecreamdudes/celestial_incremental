@@ -115,11 +115,14 @@ addLayer("in", {
 
         //----------------------------------------
 
-        // START OF INFINITY POINT MODIFIERS
+        // INFINITY POINT BASE
         if (!player.in.breakInfinity) player.in.infinityPointsToGet = new Decimal(1)
         if (player.in.breakInfinity && !hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(10)
         if (player.in.breakInfinity && hasUpgrade("bi", 111)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().div(2).pow(1.25)
         if (player.in.breakInfinity && hasUpgrade("bi", 115)) player.in.infinityPointsToGet = player.points.div(1e308).plus(1).log10().pow(1.5)
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cs.scraps.infinity.effect)
+
+        // START OF INFINITY POINT MODIFIERS
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosterEffects[2])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
@@ -146,6 +149,7 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.le.punchcardsPassiveEffect[0])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(levelableEffect("pet", 404)[0])
         if (hasMilestone("r", 21)) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.r.pentMilestone11Effect)
+        if (player.pol.pollinatorEffects.water.enabled) player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.pol.pollinatorEffects.water.effects[0])
 
         // POWER MODIFIERS
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.co.cores.infinity.effect[1])
@@ -406,6 +410,7 @@ addLayer("in", {
         ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter (+" + format(player.ad.antimatterPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
 })
@@ -477,6 +482,7 @@ addLayer("bigc", {
         ["raw-html", function () { return "<h2>1e308 celestial points- impossible." }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
         ["blank", "150px"],
         ["row", [["clickable", 11]]],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true }
 })

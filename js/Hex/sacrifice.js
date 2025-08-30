@@ -294,6 +294,7 @@ addLayer("hsa", {
             ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26],
             ["buyable", 1], ["buyable", 2],
         ], {maxWidth: "800px"}],
+        ["blank", "25px"],
     ],
     layerShown() { return inChallenge("hrm", 14)}, // Decides if this node is shown or not.
 });

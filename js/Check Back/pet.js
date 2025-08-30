@@ -2111,7 +2111,7 @@ addLayer("pet", {
             lore() { return "The first core ever produced by the celestials of the domain of singularity. It has lived for so long it developed a conciousness." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to radiation <small>(based on singularities)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to resource core scraps <small>(based on starmetal alloys)</small>."
+                    "x" + format(this.effect()[1]) + " to core scraps <small>(based on starmetal alloys)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
@@ -2548,7 +2548,7 @@ addLayer("pet", {
             evoCan() { return true },
             evoTooltip() { return ""},
             evoClick() {
-                player.tab = "ev9"
+                player.tab = "cs"
             },
             // CLICK CODE
             unlocked() { return hasMilestone("s", 12) },

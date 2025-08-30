@@ -1039,6 +1039,7 @@ addLayer("savebank", {
             ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ], {border: "2px solid white"}],
 
+        ["blank", "25px"],
     ],
     layerShown() { return false }
 })

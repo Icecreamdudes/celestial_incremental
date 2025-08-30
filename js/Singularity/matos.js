@@ -44,6 +44,7 @@
     }, 
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && player.le.punchcardsUnlocked[15]  }
 })

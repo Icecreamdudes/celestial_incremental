@@ -10,6 +10,7 @@
         grassSkipToGet: new Decimal(0),
         grassSkipReq: new Decimal(1e40),
         grassSkipEffect: new Decimal(1),
+        grassSkipEffect2: new Decimal(1),
         grassSkipPause: new Decimal(0),
 
         //grassSkippers
@@ -52,7 +53,9 @@
         if (player.gs.grassSkip.lt(15)) player.gs.grassSkipReq = Decimal.pow(1e2, player.gs.grassSkip).pow(1.5).add(1).mul(1e40)
         if (player.gs.grassSkip.gte(15)) player.gs.grassSkipReq = Decimal.pow(1e3, player.gs.grassSkip).pow(1.5).add(1).mul(1e35)
         player.gs.grassSkipReq = player.gs.grassSkipReq.div(buyableEffect("fu", 72))
+
         player.gs.grassSkipEffect = player.gs.grassSkip.add(buyableEffect("fu", 24)).pow(2.4).add(1)
+        player.gs.grassSkipEffect2 = Decimal.pow(4, player.gs.grassSkip.add(buyableEffect("fu", 24)))
 
         player.gs.grassSkipToGet = new Decimal(1)
         if (hasUpgrade("fu", 18)) {
@@ -193,6 +196,7 @@
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -203,8 +207,7 @@
             },
         },
     },
-    upgrades: {
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(10) },
@@ -524,7 +527,7 @@
         },
         18: {
             requirementDescription: "<h3>Grass-Skip 20",
-            effectDescription() { return "Grass-Skips (ignoring additive) boost pollinator gain.<br>Currently: " + format(player.gs.milestone8Effect)+"x" },
+            effectDescription() { return "Grass-Skips above 19 (ignoring additive) boost pollinator gain.<br>Currently: " + format(player.gs.milestone8Effect)+"x" },
             done() { return player.gs.grassSkip.gte(20) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -536,7 +539,7 @@
         },
         20: {
             requirementDescription: "<h3>Grass-Skip 40",
-            effectDescription() { return "Grass-Skips (ignoring additive) boost linking power gain.<br>Currently: " + format(player.gs.milestone10Effect)+"x" },
+            effectDescription() { return "Grass-Skips above 39 (ignoring additive) boost linking power gain.<br>Currently: " + format(player.gs.milestone10Effect)+"x" },
             done() { return player.gs.grassSkip.gte(40) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -567,8 +570,9 @@
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", function () { return !player.fu.buyables[24].gte(1) ? "Grass-skip " + formatWhole(player.gs.grassSkip) + " (+" + formatWhole(player.gs.grassSkipToGet) + ")" : "Grass-skip " + formatWhole(player.gs.grassSkip) + " + " + formatWhole(buyableEffect("fu", 24)) + " (+" + formatWhole(player.gs.grassSkipToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", function () { return "x" + format(player.gs.grassSkipEffect) + " Replicanti Point Mult" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return !player.fu.buyables[24].gte(1) ? "Grass-skip " + formatWhole(player.gs.grassSkip) + " (+" + formatWhole(player.gs.grassSkipToGet) + ")" : "Grass-skip " + formatWhole(player.gs.grassSkip) + " + " + formatWhole(buyableEffect("fu", 24)) + " (+" + formatWhole(player.gs.grassSkipToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return "x" + format(player.gs.grassSkipEffect) + " Replicanti Point Mult" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return hasUpgrade("cs", 602) ? "x" + format(player.gs.grassSkipEffect2) + " Grasshoppers" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 11],
                     ], {width: "800px", height: "100px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderRadius: "15px"}],
@@ -586,7 +590,6 @@
                     ["milestone", 20],
                     ["milestone", 21],
                     ["milestone", 22],
-                    ["blank", "25px"],
                 ]
             },
             "Grass-Skippers": {
@@ -595,9 +598,11 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.gs.grassSkippers) + "</h3> grass-skippers." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You are gaining <h3>" + format(player.gs.grassSkippersPerSecond) + "</h3> grass-skippers per second." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Your grass-skippers are boosting rank, tier, and tetr points by x<h3>" + format(player.gs.grassSkippersEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.gs.grassSkippers) + "</h3> grass-skippers."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.gs.grassSkippersPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}]
+                    ]],
+                    ["raw-html", () => {return "Boosts rank, tier, and tetr points by x" + format(player.gs.grassSkippersEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
                         ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
@@ -607,10 +612,11 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 17) }
 })

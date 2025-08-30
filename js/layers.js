@@ -41,6 +41,7 @@ addLayer("i", {
             buyUpgrade("i", 27)
             buyUpgrade("i", 28)
             buyUpgrade("i", 29)
+            buyUpgrade("i", 30)
             buyUpgrade("i", 31)
             buyUpgrade("i", 32)
             buyUpgrade("i", 33)
@@ -51,6 +52,7 @@ addLayer("i", {
             buyUpgrade("i", 38)
             buyUpgrade("i", 39)
             buyUpgrade("i", 41)
+            buyUpgrade("i", 101)
     }},
     nodeStyle: {
         background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
@@ -95,15 +97,16 @@ addLayer("i", {
         player.gain = player.gain.mul(buyableEffect("f", 16))
         player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(buyableEffect("f", 18))
+        player.gain = player.gain.mul(buyableEffect("f", 101))
         player.gain = player.gain.mul(player.r.tetrEffect)
         if (hasUpgrade("p", 11)) player.gain = player.gain.mul(3)
-        if (hasUpgrade("p", 12)) player.gain = player.gain.mul(upgradeEffect("p", 12))
+        if (hasUpgrade("p", 12)) player.gain = player.gain.mul(player.p.prestigeEffect)
         player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(player.f.factorPowerEffect)
         player.gain = player.gain.mul(buyableEffect("t", 15))
         player.gain = player.gain.mul(buyableEffect("g", 14))
         player.gain = player.gain.mul(player.gh.grasshopperEffects[0])
-        if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.r.pentMilestone3Effect)
+        if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.g.grassEffect2)
         player.gain = player.gain.mul(buyableEffect("m", 14))
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(levelableEffect("pet", 101)[0])
@@ -142,6 +145,7 @@ addLayer("i", {
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
         player.gain = player.gain.mul(player.i.preOTFMult)
         player.gain = player.gain.mul(player.co.cores.point.effect[0])
+        if (hasUpgrade("cs", 301)) player.gain = player.gain.mul(1e308)
 
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
@@ -471,7 +475,6 @@ addLayer("i", {
                         ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],
                         ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
                         ["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]], {maxWidth: "800px"}],
-                    ["blank", "25px"],
                 ],
             },
             "Lore": {
@@ -491,6 +494,7 @@ addLayer("i", {
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() {
         if (player.startedGame == false) return true

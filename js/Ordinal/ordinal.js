@@ -116,6 +116,7 @@ addLayer("od", {
         ], {width: "577px", border: "2px solid white", borderRadius: "20px"}],
         ["blank", "25px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return /* player.startedGame == true */ false },
     deactivated() { return true},

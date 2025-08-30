@@ -45,27 +45,39 @@
         player.sd.singularityPowerEffect2 = player.sd.singularityPower.pow(1.1).add(1)
         
         if (player.sd.pausedDimensions && player.sd.producingDimensions) {
-        // Singularity Power Gain
-        player.sd.singularityPower = player.sd.singularityPower.add(player.sd.singularityPowerPerSecond.mul(delta))
+            // Singularity Power Gain
+            player.sd.singularityPowerPerSecond = player.sd.dimensionAmounts[0]
+                .mul(buyableEffect("sd", 11))
+                .mul(player.co.cores.radioactive.effect[2])
+                .mul(buyableEffect("fu", 54))
+                .mul(buyableEffect("sma", 14))
+                .mul(levelableEffect("pet", 308)[1])
 
-        player.sd.singularityPowerPerSecond = player.sd.dimensionAmounts[0]
-            .mul(buyableEffect("sd", 11))
-            .mul(player.co.cores.singularity.effect[2])
-            .mul(buyableEffect("sma", 14))
-            .mul(levelableEffect("pet", 308)[1])
-        // Dimension Gain
-        for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
-            player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
-        }
-        for (let i = 0; i < player.sd.dimensionAmounts.length-1; i++) {
-            player.sd.dimensionsPerSecond[i] = player.sd.dimensionAmounts[i+1]
-            .mul(buyableEffect("sd", i+12))
-            .mul(buyableEffect("fu", 53))
-            .mul(buyableEffect("sma", 14))
-            .mul(player.co.cores.singularity.effect[2])
-        }
+            // Singularity Power Softcap
+            let base = new Decimal(300)
+            if (player.sd.singularityPowerPerSecond.gt(1e300)) player.sd.singularityPowerPerSecond = player.sd.singularityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.sd.singularityPowerPerSecond.plus(1).log10())).mul(1e300)
+            
+            // Singularity Power Per Second Calc
+            player.sd.singularityPower = player.sd.singularityPower.add(player.sd.singularityPowerPerSecond.mul(delta))
 
-        player.ra.storedRadiation = player.ra.storedRadiation.sub(player.sd.radiationUsage.mul(delta))
+            // Dimension Gain
+            for (let i = 0; i < player.sd.dimensionAmounts.length-1; i++) {
+                player.sd.dimensionsPerSecond[i] = player.sd.dimensionAmounts[i+1]
+                .mul(buyableEffect("sd", i+12))
+                .mul(buyableEffect("fu", 53))
+                .mul(buyableEffect("sma", 14))
+                .mul(player.co.cores.radioactive.effect[2])
+
+                // Dimension Softcap
+                if (player.sd.dimensionsPerSecond[i].gt(1e300)) player.sd.dimensionsPerSecond[i] = player.sd.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
+            }
+
+            // Dimension Per Second Calc
+            for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
+                player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
+            }
+
+            player.ra.storedRadiation = player.ra.storedRadiation.sub(player.sd.radiationUsage.mul(delta))
         }
 
         player.sd.radiationUsage = player.sd.buyables[11]
@@ -78,7 +90,6 @@
             .mul(player.sd.buyables[18].add(1))
             .mul(3)
             .pow(0.5)
-            .div(buyableEffect("fu", 54))
 
 
         if (player.ra.storedRadiation.gt(player.sd.radiationUsage.mul(0.1))) {
@@ -412,13 +423,9 @@
             style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
     },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -483,16 +490,25 @@
                         ], {width: "700px"}], 
                         ["buyable", 18],
                     ]],
-                    ["blank", "25px"],
                 ]
             },
         },
     }, 
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.sd.singularityPower) + "</h3> singularity power, which boosts infinity and negative infinity points by x" + format(player.sd.singularityPowerEffect) + ", and infinity dimensions by x" + format(player.sd.singularityPowerEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.sd.singularityPowerPerSecond) + "</h3> singularity power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have " + format(player.sd.singularityPower) + " singularity power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.sd.singularityPowerPerSecond) + "/s)"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.sd.pausedDimensions && player.sd.producingDimensions) {look.color = "white"} else {look.color = "gray"}
+                return look
+            }],
+            ["raw-html", () => {return player.sd.singularityPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => {return "Boosts infinity and negative infinity points by x" + format(player.sd.singularityPowerEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Boosts infinity dimensions by x" + format(player.sd.singularityPowerEffect2)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasMilestone("s", 14)  }
 })

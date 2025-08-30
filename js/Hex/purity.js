@@ -19,8 +19,10 @@ addLayer("hpu", {
         player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(6)).sub(42).div(6).add(1).sub(player.hpu.totalPurity).floor()
 
         if (inChallenge("hrm", 12)) {
-            player.hpu.purityReq = player.hpu.totalPurity.mul(4).add(28).sub(player.hpu.keptPurity.mul(4)).ceil()
-            player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(4)).sub(28).div(4).add(1).sub(player.hpu.totalPurity).floor()
+            if (player.hpu.totalPurity.lt(10)) player.hpu.purityReq = player.hpu.totalPurity.mul(4).add(28).sub(player.hpu.keptPurity.mul(4)).ceil()
+            if (player.hpu.totalPurity.gte(10)) player.hpu.purityReq = player.hpu.totalPurity.mul(6).add(12).sub(player.hpu.keptPurity.mul(6)).ceil()
+            if (player.hre.refinement.lt(60)) player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(4)).sub(28).div(4).add(1).sub(player.hpu.totalPurity).floor()
+            if (player.hre.refinement.gte(60)) player.hpu.purityGain = player.hre.refinement.add(player.hpu.keptPurity.mul(6)).sub(12).div(6).add(1).sub(player.hpu.totalPurity).floor()
         }
 
         if (player.hpu.purityGain.lt(1)) player.hpu.purityGain = new Decimal(0)

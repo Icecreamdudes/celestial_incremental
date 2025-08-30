@@ -198,7 +198,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -206,7 +206,7 @@
                 return "Dotknight Scraps"
             },
             display() {
-                return 'which are boosting main core scrap gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting core scrap gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dotknight Points'
             },
             buy(mult) {
@@ -295,13 +295,9 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -336,6 +332,7 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 401).gte(1) }
 })
@@ -637,13 +634,9 @@ addLayer("ep1", {
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -678,6 +671,7 @@ addLayer("ep1", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 402).gte(1) }
 })
@@ -865,7 +859,7 @@ addLayer("ep2", {
             currencyDisplayName: "Cookie Points",
             currencyInternalName: "cookiePoints",
             effect() {
-                return player.ep2.cookiePoints.pow(0.15).div(80).add(1)
+                return player.ep2.cookiePoints.add(1).log(10).pow(0.5).div(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
@@ -1042,6 +1036,7 @@ addLayer("ep2", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep2.cookiePoints) + "</h3> cookie points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 403).gte(1) }
 })
@@ -1321,6 +1316,7 @@ addLayer("ep3", {
         ["raw-html", function () { return "You have <h3>" + format(player.ep3.kresPoints) + "/" + format(player.ep3.kresPointsMax) + "</h3> kres points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ep3.kresPointsPerSecond) + "</h3> kres points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 404).gte(1) }
 })
@@ -1599,6 +1595,7 @@ addLayer("ep4", {
         ["raw-html", function () { return "You have <h3>" + format(player.ep4.navPoints) + "/" + format(player.ep4.navPointsMax) + "</h3> nav points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ep4.navPointsPerSecond) + "</h3> nav points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 405).gte(1) }
 })
@@ -1878,6 +1875,7 @@ addLayer("ep5", {
         ["raw-html", function () { return "You have <h3>" + format(player.ep5.selPoints) + "/" + format(player.ep5.selPointsMax) + "</h3> sel points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ep5.selPointsPerSecond) + "</h3> sel points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 406).gte(1) }
 })

@@ -85,8 +85,6 @@ addLayer("h", {
             ["raw-html", () => {return (inChallenge("hrm", 14) || player.h.hexPointGain.gte(1e308)) ? "[SOFTCAPPED]" : "" }, {color: "red", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return inChallenge("hrm", 15) ? "Time Remaining: " + formatTime(player.hrm.dreamTimer) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-        ["blank", "10px"],
-        ["buttonless-microtabs", "hexes", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}

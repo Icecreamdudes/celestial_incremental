@@ -332,17 +332,17 @@
             title() { return "Spider" },
             description() {
                 return formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
-                "<br>"  + formatWhole(player.cb.paragonShards) + "/2 Paragon Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" +
                 "<br>"  + formatWhole(player.cb.XPBoost) + "/25 XPBoost"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(10) && player.cb.paragonShards.gte(2) && player.cb.XPBoost.gte(25))
+                return (player.cb.evolutionShards.gte(10) && player.cb.paragonShards.gte(1) && player.cb.XPBoost.gte(25))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
                 player.cb.evolutionShards = player.cb.evolutionShards.sub(10)
-                player.cb.paragonShards = player.cb.paragonShards.sub(2)
+                player.cb.paragonShards = player.cb.paragonShards.sub(1)
                 player.cb.XPBoost = player.cb.XPBoost.sub(25)
 
                 player.ev.evolutionsUnlocked[6] = true
@@ -377,7 +377,7 @@
         8: {
             title() { return "Clock" },
             description() {
-                return formatWhole(player.cb.evolutionShards) + "/40 Evolution Shards" +
+                return formatWhole(player.cb.evolutionShards) + "/30 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" +
                 "<br>"  + formatWhole(player.cb.level) + "/1,500 Check Back Levels" +
                 "<br>"  + formatWhole(getLevelableAmount("pet", 206)) + "/6 Clock Level" +
@@ -385,13 +385,13 @@
                 "<br>"  + formatWhole(player.ca.rememberanceCores) + "/5 Rememberance Cores"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(40) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
+                return (player.cb.evolutionShards.gte(30) && player.cb.paragonShards.gte(1) && player.cb.level.gte(1500)
                 && getLevelableAmount("pet", 206).gte(6) && getLevelableAmount("pet", 207).gte(6) && player.ca.rememberanceCores.gte(5))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(40)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(30)
                 player.cb.paragonShards = player.cb.paragonShards.sub(1)
                 player.cb.level = player.cb.level.sub(1500)
                 player.ca.rememberanceCores = player.ca.rememberanceCores.sub(5)
@@ -403,29 +403,29 @@
         9: {
             title() { return "Gd Checkpoint" },
             description() {
-                return formatWhole(player.cb.evolutionShards) + "/100 Evolution Shards" +
-                "<br>"  + formatWhole(player.cb.paragonShards) + "/20 Paragon Shards" +
+                return formatWhole(player.cb.evolutionShards) + "/60 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/10 Paragon Shards" +
                 "<br>"  + format(player.points) + "/1e120,000 Celestial Points" +
-                "<br>"  + formatWhole(player.g.goldGrass) + "/1e40 Golden Grass" +
+                "<br>"  + formatWhole(player.g.goldGrass) + "/1e30 Golden Grass" +
                 "<br>"  + formatWhole(player.g.moonstone) + "/2,000 Moonstone" +
                 "<br>"  + formatWhole(player.cp.replicantiPoints) + "/1e250 Replicanti Points" +
                 "<br>"  + formatWhole(player.ca.replicantiGalaxies) + "/15 Replicanti Galaxies" + 
-                "<br>"  + formatWhole(player.cs.paragonScraps) + "/100 Paragon Scraps"
+                "<br>"  + formatWhole(player.cs.scraps.checkback.amount) + "/100 Check Back Core Scraps"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(100) && player.cb.paragonShards.gte(20) && player.points.gte("1e120000")
-                && player.g.goldGrass.gte(1e40) && player.g.moonstone.gte(2000) && player.cp.replicantiPoints.gte(1e250)
-                && player.ca.replicantiGalaxies.gte(15) && player.cs.paragonScraps.gte(100))
+                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(10) && player.points.gte("1e120000")
+                && player.g.goldGrass.gte(1e30) && player.g.moonstone.gte(2000) && player.cp.replicantiPoints.gte(1e250)
+                && player.ca.replicantiGalaxies.gte(15) && player.cs.scraps.checkback.amount.gte(100))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(100)
-                player.cb.paragonShards = player.cb.paragonShards.sub(20)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(60)
+                player.cb.paragonShards = player.cb.paragonShards.sub(10)
                 player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.sub(15)
-                player.g.goldGrass = player.g.goldGrass.sub(1e40)
+                player.g.goldGrass = player.g.goldGrass.sub(1e30)
                 player.g.moonstone = player.g.moonstone.sub(2000)
-                player.cs.paragonScraps = player.cs.paragonScraps.sub(100)
+                player.cs.scraps.checkback.amount = player.cs.scraps.checkback.amount.sub(100)
 
                 player.ev.evolutionsUnlocked[9] = true
                 setLevelableAmount("pet", 1104, new Decimal(1))
@@ -434,7 +434,7 @@
         10: {
             title() { return "THE WATCHING EYE" },
             description() {
-                return formatWhole(player.cb.evolutionShards) + "/80 Evolution Shards" +
+                return formatWhole(player.cb.evolutionShards) + "/40 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/5 Paragon Shards" +
                 "<br>"  + formatWhole(player.cb.level) + "/15,000 Check Back Levels" +
                 "<br>"  + formatWhole(player.cb.XPBoost) + "/1,000 XPBoost" +
@@ -442,13 +442,13 @@
                 "<br>"  + formatWhole(player.ev2.day) + "/12 Days of Daily Rewards"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(80) && player.cb.paragonShards.gte(5) && player.cb.level.gte(15000)
+                return (player.cb.evolutionShards.gte(40) && player.cb.paragonShards.gte(5) && player.cb.level.gte(15000)
                 && player.cb.XPBoost.gte(1000) && player.cb.petPoints.gte(10000) && player.ev2.day.gte(12))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(80)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(40)
                 player.cb.paragonShards = player.cb.paragonShards.sub(5)
                 player.cb.level = player.cb.level.sub(15000)
                 player.cb.XPBoost = player.cb.XPBoost.sub(1000)
@@ -863,7 +863,6 @@ addLayer("ev0", {
                 content: [
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
-                    ["blank", "25px"],
                 ]
             },
             "Coin Shards": {
@@ -908,6 +907,7 @@ addLayer("ev0", {
         ], () => { return player.cb.highestLevel.gte(250) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.ev.evolutionsUnlocked[0] }
 })
@@ -1507,6 +1507,7 @@ addLayer("ev1", {
                 ["buyable", 14], ["buyable", 16], ["buyable", 18], ["buyable", 12], ["buyable", 22], ["buyable", 24], ["buyable", 26], ["buyable", 28]
             ], {width: "200px"}],
         ], {width: "775px"}],
+        ["blank", "25px"],
     ],
     layerShown() { return player.ev.evolutionsUnlocked[1] }
 })
@@ -1625,21 +1626,13 @@ addLayer("ev2", {
             callAlert("You gained 5 Slaxes!", "resources/slaxCommonPet.png");
         }
     },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {},
-
     tabFormat: [
         ["blank", "10px"],
         ["style-row", [
@@ -1651,6 +1644,7 @@ addLayer("ev2", {
             ["blank", "25px"],
             ["clickable", 11],
         ], {width: "350px", height: "125px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "10px"}],
+        ["blank", "25px"],
     ],
     layerShown() { return player.ev.evolutionsUnlocked[2]  }
 })
@@ -1837,7 +1831,8 @@ addLayer("ev4", {
         ["row", [["ex-buyable", 11], ["ex-buyable", 12]]],
         ["blank", "10px"],
         ["raw-html", function () { return "Offering multiplier: <h3>" + format(player.ev4.offeringsBase) + "</h3>x" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame && player.ev.evolutionsUnlocked[4]  }
 })
 addLayer("ev8", {
@@ -2203,111 +2198,9 @@ addLayer("ev8", {
         ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
         ["blank", "25px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.ev.evolutionsUnlocked[8]  }
-})
-addLayer("ev9", {
-    name: "Paragon Checkpoint", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "Pc", // This appears on the layer's node. Default is the id with the first letter capitalized
-    row: 1,
-    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-    startData() { return {
-        unlocked: true,
-
-        coreIndex: new Decimal(0),
-        offeringsOnSacrifice: [new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),new Decimal(0), new Decimal(0),],
-    }},
-    automate() {},
-    nodeStyle: {
-        background: "linear-gradient(90deg, #e75753, #e1843c, #fff463, #90f32d, #5cd4a6)",
-		backgroundOrigin: "border-box",
-		borderColor: "black",
-		color: "black",
-    },
-    tooltip: "Paragon Checkpoint",
-    color: "#5cd4a6",
-    update(delta) {
-        let onepersec = player.cb.cbTickspeed
-        /*
-        for (let i = 0; i < player.ev9.offeringsOnSacrifice.length; i++) {
-            if (player.coa.coreStrengths[i].gte(0))  {
-                player.ev9.offeringsOnSacrifice[i] = player.coa.coreStrengths[i].add(1).pow(1.7).mul(player.ev4.offeringsBase)
-            } else {
-                player.ev9.offeringsOnSacrifice[i] = new Decimal(0)
-            }
-        }*/
-    },
-    branches: ["branch"],
-    clickables: {
-        11: {
-            title() { return "Sacrifice this core." },
-            canClick() { return true },
-            unlocked() { return true },
-            onClick() {
-                /*
-                if (player.ev.evolutionsUnlocked[9]) player.ev4.offerings = player.ev4.offerings.add(player.ev9.offeringsOnSacrifice[player.ev9.coreIndex])
-
-                    if (player.coa.coreOccupied[player.ev9.coreIndex])
-                {
-                    player.coa.coreCount = player.coa.coreCount.sub(1)
-                }
-                player.coa.coreFuelSources[player.ev9.coreIndex] = new Decimal(-1)
-                player.coa.coreStrengths[player.ev9.coreIndex] = new Decimal(-1)
-                player.coa.coreOccupied[player.ev9.coreIndex] = false
-                */
-            },
-            style: { width: "140px", minHeight: "70px", borderRadius: "10px" },
-        },
-    },
-    bars: {
-        bar: {
-            unlocked() { return true },
-            direction: RIGHT,
-            width: 500,
-            height: 50,
-            progress() {
-                return player.ev4.offerings.div(player.ev4.offeringReq)
-            },
-            fillStyle: {
-                "background-color": "#f38004",
-            },
-            display() {
-                return "<h5>" + format(player.ev4.offerings) + "/" + formatWhole(player.ev4.offeringReq) + "<h5> Offerings to gain an automation shard.</h5>";
-            },
-        },
-    },
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
-    tabFormat: [
-        ["blank", "10px"],
-        ["clickable", 1],
-        ["blank", "10px"],
-        ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/automationShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.automationShards)}, {width: "95px", height: "50px", color: "grey", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", () => {
-                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatWhole(player.cb.totalAutomationShards) + ")</small></div>"
-                }],
-            ], {width: "150px", height: "50px"}],
-        ], {width: "150px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
-        ["blank", "10px"],
-        ["bar", "bar"],
-        ["blank", "25px"],
-        ["raw-html", function () { return "Offerings on sacrifice: <h3>" + format(player.ev9.offeringsOnSacrifice[player.ev9.coreIndex]) + "."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["blank", "25px"],
-        ["clickable", 11],
-        ["blank", "25px"],
-        ["row", [["clickable", 101],["clickable", 102],["clickable", 103],["clickable", 104],["clickable", 105],["clickable", 106],["clickable", 107],["clickable", 108],["clickable", 109],["clickable", 111]]],
-        ["blank", "10px"],
-        ["raw-html", function () { return "Offerings will be gained when you remove cores out of the tab."  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "New Check Back buyable unlocked!"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-    ],
-    layerShown() { return player.ev.evolutionsUnlocked[9]  }
 })
 addLayer("ev10", {
     name: "Eye", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -2443,6 +2336,7 @@ addLayer("ev10", {
             border: "2px solid #ffffff17",
             background: "var(--background)",
         }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.ev.evolutionsUnlocked[10]  }
 })

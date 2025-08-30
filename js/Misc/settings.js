@@ -96,6 +96,7 @@ addLayer("settings", {
         ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["blank", "25px"],
         ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["blank", "25px"],
     ],
     layerShown() { return false }
 })

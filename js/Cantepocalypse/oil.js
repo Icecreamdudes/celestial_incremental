@@ -234,6 +234,7 @@
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -587,13 +588,9 @@
             style: { width: '275px', height: '150px'},
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -602,9 +599,11 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> oil." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Your oil boosts repli-trees and extends repli-tree softcap by <h3>x" + format(player.oi.oilEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.oi.oilToGet) + "</h3> oil on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],,
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.oi.oil) + "</h3> oil."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.oi.oilToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => {return "Boosts repli-trees and extends repli-tree softcap by x" + format(player.oi.oilEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                 ]
@@ -615,7 +614,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> oil." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + format(player.oi.oil) + "</h3> oil."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", () => { return "Linking Powers"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
@@ -775,12 +774,12 @@
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasMilestone("gs", 17) }
 })

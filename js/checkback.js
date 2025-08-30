@@ -1,4 +1,4 @@
-﻿var treeCB = [["cb"], ["ev0", "ev1", "ev2", "ev4", "ev8", "ev9", "ev10"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]]
+﻿var treeCB = [["cb"], ["ev0", "ev1", "ev2", "ev4", "ev8", "ev10"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]]
 addLayer("cb", {
     name: "Check Back", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CB", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -160,7 +160,7 @@ addLayer("cb", {
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.d.diceEffects[12])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("g", 25))
             if (hasUpgrade("hpw", 1011)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("hpw", 1011))
-            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cs.paragonScrapsEffect)
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cs.scraps.checkback.effect)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.co.cores.checkback.effect[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.le.punchcardsPassiveEffect[6])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pet", 406)[0])
@@ -3288,6 +3288,7 @@ addLayer("cb", {
         ["raw-html", function () { return player.cb.highestLevel.lt(25000) && player.cb.highestLevel.gte(3000) && hasUpgrade("s", 23) ?  "You will unlock something at level 25,000! <small>[PET TAB]</small>" : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14) }
 })

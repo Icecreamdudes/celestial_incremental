@@ -59,7 +59,7 @@
                 player.uniTab = 1
                 layers.le.generateSelection();
             },
-            style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%,#eb6077 50%, #d460eb, 75%,  #60cfeb 100%)', borderRadius: "15px" },
+            style: {width: "600px", minHeight: "200px", backgroundImage: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)", border: "3px solid black", borderRadius: "15px"},
         },
         13: {
             title() { return "<h2>Auto Singularity Toggle: On" },
@@ -98,54 +98,53 @@
             style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: { 
-        11:
-        {
-            title: "Starmetal Upgrade I",
-            unlocked() { return true},
-            description: "Improve dark ranks and tiers effects.",
-            cost: new Decimal("2"),
+        10: {
+            title: "Dark Starmetal Upgrade I",
+            unlocked: true,
+            description: "Double dark point gain.",
+            cost: new Decimal("1"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
-        12:
-        {
-            title: "Starmetal Upgrade II",
+        11: {
+            title: "Dark Starmetal Upgrade II",
+            unlocked() { return hasUpgrade("sma", 10)},
+            description: "Improve dark ranks and tiers effects.",
+            cost: new Decimal("3"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
+                return look
+            }
+        },
+        12: {
+            title: "Dark Starmetal Upgrade III",
             unlocked() { return hasUpgrade("sma", 11)},
-            description: "Unlock generators.",
+            description: "Unlock dark generators.",
             cost: new Decimal("5"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
-        13:
-        {
-            title: "Starmetal Upgrade III",
+        13: {
+            title: "Dark Starmetal Upgrade IV",
             unlocked() { return hasUpgrade("sma", 12)},
             description: "Dark prestige points boost dark celestial point gain.",
             cost: new Decimal("8"),
@@ -155,22 +154,15 @@
             effect() {
                 return player.dp.prestigePoints.pow(0.2).add(1)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {width: "150px", borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {width: "150px", borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {width: "150px", borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
-        14:
-        {
-            title: "Starmetal Upgrade IV",
+        14: {
+            title: "Dark Starmetal Upgrade V",
             unlocked() { return hasUpgrade("sma", 13)},
             description: "Unlock starmetal punchcards.",
             cost: new Decimal("15"),
@@ -178,20 +170,13 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
-        15:
-        {
-            title: "Starmetal Upgrade V",
+        15: {
+            title: "Dark Starmetal Upgrade VI",
             unlocked() { return hasUpgrade("sma", 14)},
             description: "Gain an extra card selection at the start of a run.",
             cost: new Decimal("22"),
@@ -199,20 +184,13 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
-        16:
-        {
-            title: "Starmetal Upgrade VI",
+        16: {
+            title: "Dark Starmetal Upgrade VII",
             unlocked() { return hasUpgrade("sma", 15)},
             description: "Unlock dark grass.",
             cost: new Decimal("30"),
@@ -220,20 +198,13 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
-        17:
-        {
-            title: "Starmetal Upgrade VII",
+        17: {
+            title: "Dark Starmetal Upgrade VIII",
             unlocked() { return hasUpgrade("sma", 16)},
             description: "Unlock epic punchcards.",
             cost: new Decimal("45"),
@@ -241,104 +212,88 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                if (!player.sma.inStarmetalChallenge) {
-                    let look = {borderRadius: "10px"}
-                    !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"    
-                    hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                    return look
-                } 
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
 
         //other
-        101:
-        {
-            title: "Secondary Starmetal Upgrade I",
+        101: {
+            title: "Light Starmetal Upgrade I",
             unlocked() { return true},
             description: "Unspent starmetal alloy boosts singularity point gain.",
+            cost: new Decimal("3"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            effect() {
+                return player.sma.starmetalAlloy.add(1).pow(1.2)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
+                return look
+            }
+        },
+        102: {
+            title: "Light Starmetal Upgrade II",
+            unlocked() { return hasUpgrade("sma", 101)},
+            description: "Unspent starmetal alloy boosts core scrap gain.",
             cost: new Decimal("6"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             effect() {
-                return player.sma.starmetalAlloy.pow(1.2).add(1)
+                return Decimal.pow(1.05, player.sma.starmetalAlloy.add(1).log(10))
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
-        102:
-        {
-            title: "Secondary Starmetal Upgrade II",
-            unlocked() { return hasUpgrade("sma", 101)},
-            description: "Unspent starmetal alloy boosts all core scrap types gain.",
+        103: {
+            title: "Light Starmetal Upgrade III",
+            unlocked() { return hasUpgrade("sma", 102)},
+            description: "Gain 10% of steel per second.",
             cost: new Decimal("12"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
-            effect() {
-                return player.sma.starmetalAlloy.mul(0.02).add(1).pow(0.5)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
-        103:
-        {
-            title: "Secondary Starmetal Upgrade III",
-            unlocked() { return hasUpgrade("sma", 102)},
-            description: "Gain 10% of steel per second.",
-            cost: new Decimal("20"),
+        104: {
+            title: "Light Starmetal Upgrade IV",
+            unlocked() { return hasUpgrade("sma", 103)},
+            description: "Unlock auto singularity.",
+            cost: new Decimal("24"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
-        104:
-        {
-            title: "Secondary Starmetal Upgrade IV",
-            unlocked() { return hasUpgrade("sma", 103)},
-            description: "Unlock auto singularity.",
+        105: {
+            title: "Light Starmetal Upgrade V",
+            unlocked() { return hasUpgrade("sma", 104)},
+            description: "Unlock starmetal buyables.",
             cost: new Decimal("36"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
-                return look
-            }
-        },
-        105:
-        {
-            title: "Secondary Starmetal Upgrade V",
-            unlocked() { return hasUpgrade("sma", 104)},
-            description: "Unlock starmetal buyables.",
-            cost: new Decimal("54"),
-            currencyLocation() { return player.sma },
-            currencyDisplayName: "Starmetal Alloy",
-            currencyInternalName: "starmetalAlloy",
-            style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
@@ -415,10 +370,10 @@
         13: {
             costBase() { return new Decimal(15) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(1.5) },
             unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -449,10 +404,10 @@
         14: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(2) },
             unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -501,10 +456,18 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
-                        ["upgrade", 17]], {maxWidth: "800px"}],
-                    ["blank", "25px"],
-                    ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105]], {maxWidth: "800px"}],
+                    ["style-column", [
+                        ["blank", "5px"],
+                        ["row", [["upgrade", 10], ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                            ["upgrade", 17]]],
+                        ["blank", "5px"],
+                    ], {width: "800px", backgroundColor: "rgba(0,0,0,0.8)", border: "2px solid rgba(255,255,255,0.8)", borderRadius: "15px"}],
+                    ["blank", "20px"],
+                    ["style-column", [
+                        ["blank", "5px"],
+                        ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105]], {maxWidth: "800px"}],
+                        ["blank", "5px"],
+                    ], {width: "800px", backgroundColor: "rgba(255,255,255,0.2)", border: "2px solid rgba(0,0,0,0.8)", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                 ]
@@ -533,10 +496,10 @@
             },
         },
     }, 
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("s", 21)  }
 })

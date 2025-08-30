@@ -135,6 +135,11 @@
             layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(3, player.rf.rocketFuel)
         }
+        if (hasUpgrade("cs", 902) && layerShown("rf")) {
+            layers.rf.rocketFuelAbility(5, player.rf.rocketFuel)
+            layers.rf.rocketFuelAbility(6, player.rf.rocketFuel)
+            layers.rf.rocketFuelAbility(7, player.rf.rocketFuel)
+        }
     },
     clickables: {
         2: {
@@ -340,19 +345,19 @@
     rocketFuelAbility(type, amount = new Decimal(0)) {
         switch (type) {
             case 0:
-                player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1).pow(buyableEffect("cs", 29))
+                player.rf.abilityEffects[0] = amount.pow(1.15).mul(100).add(1).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[0] = amount.pow(0.14).mul(100)
                 break;
             case 1:
-                player.rf.abilityEffects[1] = amount.pow(1.1).mul(10).add(1).pow(buyableEffect("cs", 29))
+                player.rf.abilityEffects[1] = amount.pow(1.1).mul(10).add(1).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[1] = amount.pow(0.12).mul(80)
             break;
             case 2:
-                player.rf.abilityEffects[2] = amount.pow(0.9).mul(6).add(1).pow(buyableEffect("cs", 29))
+                player.rf.abilityEffects[2] = amount.pow(0.9).mul(6).add(1).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[2] = amount.pow(0.1).mul(60)
             break;
             case 3:
-                player.rf.abilityEffects[3] = amount.pow(0.7).mul(3).add(1).pow(buyableEffect("cs", 29))
+                player.rf.abilityEffects[3] = amount.pow(0.7).mul(3).add(1).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[3] = amount.pow(0.08).mul(45)
             break;
             case 4:
@@ -369,14 +374,15 @@
                 }
             break;
             case 5:
-                player.rf.abilityEffects[5] = amount.add(1).log10().add(1).div(66).add(1).pow(buyableEffect("cs", 29))
+                if (!hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).div(66).add(1).pow(player.cs.scraps.rocket.effect)
+                if (hasUpgrade("cs", 901)) player.rf.abilityEffects[5] = amount.add(1).log(10).add(1).pow(2).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[5] = amount.add(1).log10().add(1).mul(20)
             break;
             case 6:
                 player.rf.abilityTimers[6] = amount.add(1).log10().add(1).mul(20)
             break;
             case 7:
-                player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(buyableEffect("cs", 29))
+                player.rf.abilityEffects[7] = amount.add(1).log(6).add(1).div(36).add(1).pow(player.cs.scraps.rocket.effect)
                 player.rf.abilityTimers[7] = amount.add(1).log(6).add(1).mul(60)
             break;
         }
@@ -592,9 +598,12 @@
     microtabs: {},
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel, which boost grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, { "color": "#949494", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.rf.rocketFuel.lt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset." : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.rf.rocketFuel.gt(1e20) ? "You will gain <h3>" + format(player.rf.rocketFuelToGet) + "</h3> rocket fuel on reset. (softcapped)" : ""}, { "color": "#949494", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.rf.rocketFuel) + "</h3 rocket fuel"}, {color: "#949494", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.rf.rocketFuelToGet) + ")"}, {color: "#949494", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["style-column", [
             ["style-row", [
@@ -626,6 +635,7 @@
         ], {backgroundColor: "#161616", border: "3px solid white", borderRadius: "15px", width: "600px"}],
         ["blank", "25px"],
         ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17]]],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (player.po.rocketFuel || inChallenge("ip", 16)) }
 })

@@ -100,7 +100,7 @@ const CORE_INFO = {
         effect: [
             "Boost rocket fuel based on itself: x",
             "Boost rocket fuel: ^",
-            "Boost pollinators: x",
+            "Boost pollinators (post-softcap): x",
         ],
     },
     antimatter: {
@@ -130,9 +130,9 @@ const CORE_INFO = {
             "Divide xp and pet button cooldowns: /",
         ],
     },
-    singularity: {
-        name: "Singularity Core",
-        color: "#440000",
+    radioactive: {
+        name: "Radioactive Core",
+        color: "#45ff17",
         effect: [
             "Boost singularity points: x",
             "Boost radiation: x",
@@ -149,6 +149,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -160,6 +161,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -171,6 +173,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -182,6 +185,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -193,6 +197,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -204,6 +209,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -215,6 +221,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -226,6 +233,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -237,6 +245,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -248,6 +257,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -259,6 +269,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -270,6 +281,7 @@ addLayer("co", {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -277,10 +289,11 @@ addLayer("co", {
                     new Decimal(1),
                 ],
             },
-            singularity: {
+            radioactive: {
                 strength: 0,
                 level: new Decimal(0),
                 xp: new Decimal(0),
+                totalxp: new Decimal(0),
                 req: new Decimal(1),
                 effect: [
                     new Decimal(1),
@@ -301,8 +314,9 @@ addLayer("co", {
         for (let prop in player.co.cores) {
             player.co.cores[prop].req = Decimal.pow(10, player.co.cores[prop].level)
             if (player.co.cores[prop].xp.gte(player.co.cores[prop].req)) {
-                player.co.cores[prop].level = player.co.cores[prop].level.add(1)
-                player.co.cores[prop].xp = player.co.cores[prop].xp.sub(player.co.cores[prop].req)
+                let gain = player.co.cores[prop].totalxp.ln().div(Decimal.ln(10)).add(1).sub(player.co.cores[prop].level).floor()
+                player.co.cores[prop].level = player.co.cores[prop].level.add(gain)
+                player.co.cores[prop].xp = player.co.cores[prop].totalxp.sub(Decimal.pow(10, player.co.cores[prop].level.sub(1)))
             }
         }
 
@@ -324,7 +338,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.factor.effect[0] = player.f.factorPower.pow(Decimal.mul(0.015, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.factor.effect[1] = effLevel.mul(0.04).add(1)
-            player.co.cores.factor.effect[2] = effLevel.pow(1.5).mul(1.5).add(1)
+            player.co.cores.factor.effect[2] = Decimal.pow(1.4, effLevel)
         }
 
         if (player.co.cores.prestige.level.gt(0)) {
@@ -332,7 +346,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.prestige.effect[0] = player.p.prestigePoints.pow(Decimal.mul(0.015, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.prestige.effect[1] = effLevel.mul(0.025).add(1)
-            player.co.cores.prestige.effect[2] = effLevel.pow(1.5).mul(2).add(1)
+            player.co.cores.prestige.effect[2] = Decimal.pow(1.6, effLevel)
         }
 
         if (player.co.cores.tree.level.gt(0)) {
@@ -347,8 +361,8 @@ addLayer("co", {
             let effLevel = player.co.cores.grass.level.pow(CORE_STRENGTH[player.co.cores.grass.strength].buff)
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.grass.effect[0] = player.g.grass.pow(Decimal.mul(0.0125, effLevel.mul(0.05).add(1))).add(1).min("1e2000")
-            player.co.cores.grass.effect[1] = effLevel.pow(2).mul(10).add(1)
-            player.co.cores.grass.effect[2] = effLevel.pow(1.5).mul(0.2).add(1)
+            player.co.cores.grass.effect[1] = Decimal.pow(2, effLevel)
+            player.co.cores.grass.effect[2] = Decimal.pow(1.2, effLevel)
         }
 
         if (player.co.cores.grasshopper.level.gt(0)) {
@@ -356,7 +370,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.grasshopper.effect[0] = player.gh.grasshoppers.pow(Decimal.mul(0.0125, effLevel.mul(0.05).add(1))).add(1).min("1e500")
             player.co.cores.grasshopper.effect[1] = player.gh.fertilizer.pow(Decimal.mul(0.01, effLevel.mul(0.05).add(1))).add(1).min("1e500")
-            player.co.cores.grasshopper.effect[2] = effLevel.pow(2).mul(5).add(1)
+            player.co.cores.grasshopper.effect[2] = Decimal.pow(1.9, effLevel)
         }
 
         if (player.co.cores.code.level.gt(0)) {
@@ -364,7 +378,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.code.effect[0] = player.m.codeExperience.pow(Decimal.mul(0.015, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.code.effect[1] = effLevel.mul(0.025).add(1)
-            player.co.cores.code.effect[2] = effLevel.pow(2).mul(10).add(1)
+            player.co.cores.code.effect[2] = Decimal.pow(2, effLevel)
         }
 
         if (player.co.cores.dice.level.gt(0)) {
@@ -372,7 +386,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.dice.effect[0] = player.d.dicePoints.pow(Decimal.mul(0.0175, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.dice.effect[1] = effLevel.mul(0.02).add(1)
-            player.co.cores.dice.effect[2] = effLevel.pow(1.5).mul(3).add(1)
+            player.co.cores.dice.effect[2] = Decimal.pow(1.6, effLevel)
         }
 
         if (player.co.cores.rocket.level.gt(0)) {
@@ -380,7 +394,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.rocket.effect[0] = player.rf.rocketFuel.pow(Decimal.mul(0.0175, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.rocket.effect[1] = effLevel.mul(0.02).add(1)
-            player.co.cores.rocket.effect[2] = effLevel.pow(1.5).mul(0.5).add(1)
+            player.co.cores.rocket.effect[2] = Decimal.pow(1.3, effLevel)
         }
 
         if (player.co.cores.antimatter.level.gt(0)) {
@@ -388,7 +402,7 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.antimatter.effect[0] = player.ad.antimatter.pow(Decimal.mul(0.02, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.antimatter.effect[1] = effLevel.mul(0.025).add(1)
-            player.co.cores.antimatter.effect[2] = effLevel.pow(1.5).mul(0.2).add(1)
+            player.co.cores.antimatter.effect[2] = Decimal.pow(1.2, effLevel)
         }
 
         if (player.co.cores.infinity.level.gt(0)) {
@@ -396,23 +410,23 @@ addLayer("co", {
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
             player.co.cores.infinity.effect[0] = player.in.infinityPoints.pow(Decimal.mul(0.03, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.infinity.effect[1] = effLevel.mul(0.01).add(1)
-            player.co.cores.infinity.effect[2] = effLevel.pow(1.5).mul(0.5).add(1)
+            player.co.cores.infinity.effect[2] = Decimal.pow(1.3, effLevel)
         }
 
         if (player.co.cores.checkback.level.gt(0)) {
             let effLevel = player.co.cores.checkback.level.pow(CORE_STRENGTH[player.co.cores.checkback.strength].buff)
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
-            player.co.cores.checkback.effect[0] = effLevel.pow(0.5).mul(0.7).add(1)
-            player.co.cores.checkback.effect[1] = effLevel.pow(0.5).mul(0.145).add(1)
-            player.co.cores.checkback.effect[2] = effLevel.pow(0.5).mul(0.045).add(1)
+            player.co.cores.checkback.effect[0] = Decimal.pow(1.125, effLevel)
+            player.co.cores.checkback.effect[1] = Decimal.pow(1.04, effLevel)
+            player.co.cores.checkback.effect[2] = Decimal.pow(1.02, effLevel)
         }
 
-        if (player.co.cores.singularity.level.gt(0)) {
-            let effLevel = player.co.cores.singularity.level.pow(CORE_STRENGTH[player.co.cores.singularity.strength].buff)
+        if (player.co.cores.radioactive.level.gt(0)) {
+            let effLevel = player.co.cores.radioactive.level.pow(CORE_STRENGTH[player.co.cores.radioactive.strength].buff)
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
-            player.co.cores.singularity.effect[0] = effLevel.mul(10).pow(3.5).add(1)
-            player.co.cores.singularity.effect[1] = effLevel.pow(1.5).add(1)
-            player.co.cores.singularity.effect[2] = effLevel.mul(8).pow(1.7).add(1)
+            player.co.cores.radioactive.effect[0] = Decimal.pow(5, effLevel)
+            player.co.cores.radioactive.effect[1] = Decimal.pow(1.4, effLevel)
+            player.co.cores.radioactive.effect[2] = Decimal.pow(2, effLevel)
         }
     },
     coreXPCalc(type, singularity) {
@@ -454,11 +468,16 @@ addLayer("co", {
             case "checkback":
                 curr = player.cb.level.add(1).log(10).div(10).add(1)
                 break;
+            case "radioactive":
+                curr = player.ra.radiation.add(10).log(10).log(10).div(6).add(1)
+                break;
             default:
                 curr = new Decimal(1)
                 break;
         }
-        return Decimal.pow(5, singularity.add(1).log(10)).pow(curr)
+        if (type == "checkback" || type == "radioactive") return singularity.div(1e15).pow(0.3).pow(curr)
+        if (singularity.gte(1e10)) return singularity.pow(0.3).mul(10000).pow(curr)
+        return singularity.pow(0.7).pow(curr)
     },
     singularityReset() {
         //     <----     U1 STUFF     ---->
@@ -479,7 +498,7 @@ addLayer("co", {
         player.r.pentToGet = new Decimal(0)
 
         for (let i = 0; i < player.r.milestones.length; i++) {
-            if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] > 20) {
+            if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
                 player.r.milestones.splice(i, 1);
                 i--;
             }
@@ -714,7 +733,7 @@ addLayer("co", {
         }
 
         for (let i in player.id.buyables) {
-            player.id.buyables[i] = new Decimal(0)
+            if (i != 1) player.id.buyables[i] = new Decimal(0)
         }
         
         //     <----     TAV LAYER     ---->
@@ -910,7 +929,7 @@ addLayer("co", {
 
         //     <----     TAB MANAGEMENT     ---->
         player.subtabs["r"]['stuff'] = 'Main'
-        player.subtabs["f"]['stuff'] = 'Main'
+        if (!hasUpgrade("cs", 201)) player.subtabs["f"]['stuff'] = 'Main'
         player.subtabs["p"]['stuff'] = 'Main'
         player.subtabs["g"]['stuff'] = 'Grass'
         player.subtabs["gh"]['stuff'] = 'Main'
@@ -935,6 +954,19 @@ addLayer("co", {
             player.po.halterEffects[i] = new Decimal(1)
         }
 
+        //     <----     HEX OF SACRIFICE LAYER     ---->
+        player.hsa.sacredEnergy = new Decimal(0)
+        player.hsa.sacredEnergyGain = new Decimal(0)
+        player.hsa.sacredEffect = new Decimal(0)
+
+        for (let i = 0; i < player.hsa.upgrades.length; i++) {
+            player.hsa.upgrades.splice(i, 1);
+            i--;
+        }
+
+        player.hsa.buyables[1] = new Decimal(0)
+        player.hsa.buyables[2] = new Decimal(0)
+
         //     <----     HEX OF REALMS LAYER     ---->
         player.hrm.blessLimit = new Decimal(0)
         player.hrm.dreamTimer = new Decimal(60)
@@ -954,7 +986,7 @@ addLayer("co", {
         for (let i = 0; i < player.hpw.upgScale.length; i++) {
             player.hpw.upgScale[i] = 1
         }
-        player.hpw.vigor = 0
+        if (!hasMilestone("s", 16)) player.hpw.vigor = 0
 
         player.hpw.upgrades.splice(0, player.hpw.upgrades.length)
         if (!hasMilestone("s", 16)) player.hpw.milestones.splice(0, player.hpw.milestones.length)
@@ -971,9 +1003,13 @@ addLayer("co", {
         player.hcu.curses = new Decimal(0)
         player.hcu.cursesGain = new Decimal(0)
 
-        for (let i in player.hcu.buyables) {
+        for (let i = 101; i < 109; i++) {
             player.hcu.buyables[i] = new Decimal(0)
         }
+        if (!hasMilestone("s", 20)) player.hcu.buyables[109] = new Decimal(0)
+        player.hcu.buyables[110] = new Decimal(0)
+        player.hcu.buyables[111] = new Decimal(0)
+        if (!hasMilestone("s", 20)) player.hcu.buyables[112] = new Decimal(0)
 
         //     <----     HEX OF VEXES LAYER     ---->
         player.hve.vex = new Decimal(0)
@@ -994,7 +1030,12 @@ addLayer("co", {
         player.hbl.minRefineInput = new Decimal(18)
         player.hbl.minRefine = new Decimal(18)
         player.hbl.boosterDeposit = 0.05
-        player.hbl.boosterLevels = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
+        player.hbl.boosterLevels[0] = new Decimal(0)
+        player.hbl.boosterLevels[1] = new Decimal(0)
+        if (!hasMilestone("s", 20)) player.hbl.boosterLevels[2] = new Decimal(0)
+        player.hbl.boosterLevels[3] = new Decimal(0)
+        player.hbl.boosterLevels[4] = new Decimal(0)
+        if (!hasMilestone("s", 20)) player.hbl.boosterLevels[5] = new Decimal(0)
         player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
 
@@ -1031,8 +1072,8 @@ addLayer("co", {
                 return player.sma.starmetalAlloy.gte(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1))
             },
             tooltip() {
-                if (layerShown("sma") && player.co.cores[player.co.coreIndex].strength >= 5) {
-                    return "Enhance your core: " + formatWhole(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1)) + " SMA"
+                if (layerShown("sma") && player.co.cores[player.co.coreIndex].strength < 5) {
+                    return "Enhance core:<br>" + formatWhole(player.sma.starmetalAlloy) + "/" + formatWhole(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1)) + " SMA"
                 }
                 return ""
             },
@@ -1211,9 +1252,9 @@ addLayer("co", {
                 return look
             },
         },
-        113: {
+        112: {
             canClick: true,
-            unlocked: true,
+            unlocked() {return hasUpgrade("s", 20)},
             onClick() {
                 player.co.coreIndex = "checkback"
             },
@@ -1224,21 +1265,21 @@ addLayer("co", {
                 return look
             },
         },
-        112: {
+        113: {
             canClick: true,
             unlocked: true,
             onClick() {
-                player.co.coreIndex = "singularity"
+                player.co.coreIndex = "radioactive"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
-                look.backgroundColor = CORE_INFO.singularity.color
-                look.borderColor = CORE_STRENGTH[player.co.cores.singularity.strength].color
+                look.backgroundColor = CORE_INFO.radioactive.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.radioactive.strength].color
                 return look
             },
         },
         201: {
-            title: "Point<br>Core",
+            title() {return "Point<br>Core<br><small>Lv." + player.co.cores.point.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1251,7 +1292,7 @@ addLayer("co", {
             },
         },
         202: {
-            title: "Factor<br>Core",
+            title() {return "Factor<br>Core<br><small>Lv." + player.co.cores.factor.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1264,7 +1305,7 @@ addLayer("co", {
             },
         },
         203: {
-            title: "Prestige<br>Core",
+            title() {return "Prestige<br>Core<br><small>Lv." + player.co.cores.prestige.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1277,7 +1318,7 @@ addLayer("co", {
             },
         },
         204: {
-            title: "Tree<br>Core",
+            title() {return "Tree<br>Core<br><small>Lv." + player.co.cores.tree.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1290,7 +1331,7 @@ addLayer("co", {
             },
         },
         205: {
-            title: "Grass<br>Core",
+            title() {return "Grass<br>Core<br><small>Lv." + player.co.cores.grass.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1303,7 +1344,7 @@ addLayer("co", {
             },
         },
         206: {
-            title: "<h2 style='font-size:14px'>Grasshopper</h2><br>Core",
+            title() {return "<h2 style='font-size:14px'>Grasshopper</h2><br>Core<br><small>Lv." + player.co.cores.grasshopper.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1316,7 +1357,7 @@ addLayer("co", {
             },
         },
         207: {
-            title: "Code<br>Core",
+            title() {return "Code<br>Core<br><small>Lv." + player.co.cores.code.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1329,7 +1370,7 @@ addLayer("co", {
             },
         },
         208: {
-            title: "Dice<br>Core",
+            title() {return "Dice<br>Core<br><small>Lv." + player.co.cores.dice.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1342,7 +1383,7 @@ addLayer("co", {
             },
         },
         209: {
-            title: "Rocket<br>Core",
+            title() {return "Rocket<br>Core<br><small>Lv." + player.co.cores.rocket.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1355,7 +1396,7 @@ addLayer("co", {
             },
         },
         210: {
-            title: "<h2 style='font-size:14px'>Antimatter</h2><br>Core",
+            title() {return "<h2 style='font-size:14px'>Antimatter</h2><br>Core<br><small>Lv." + player.co.cores.antimatter.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1368,7 +1409,7 @@ addLayer("co", {
             },
         },
         211: {
-            title: "Infinity<br>Core",
+            title() {return "Infinity<br>Core<br><small>Lv." + player.co.cores.infinity.level},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -1381,9 +1422,9 @@ addLayer("co", {
             },
         },
         212: {
-            title: "Check Back<br>Core",
+            title() {return "<h2 style='font-size:14px'>Check Back</h2><br>Core<br><small>Lv." + player.co.cores.checkback.level},
             canClick: true,
-            unlocked: true,
+            unlocked() {return hasUpgrade("s", 20)},
             onClick() {
                 player.co.resetIndex = "checkback"
             },
@@ -1394,24 +1435,25 @@ addLayer("co", {
             },
         },
         213: {
-            title: "Singularity<br>Core",
+            title() {return "Radioactive<br>Core<br><small>Lv." + player.co.cores.radioactive.level},
             canClick: true,
             unlocked: true,
             onClick() {
-                player.co.resetIndex = "singularity"
+                player.co.resetIndex = "radioactive"
             },
             style() {
                 let look = {width: "100px", minHeight: "75px", fontSize: "12px", color: "rgba(0,0,0,0.6)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "0"}
-                look.backgroundColor = CORE_INFO.singularity.color
+                look.backgroundColor = CORE_INFO.radioactive.color
                 return look
             },
         },
         1000: {
-            title: "<h1>Condense all of your power into a core.<br><small>(Req: 1e40 infinity points)</small>",
+            title: "<h1>Condense all of your power into a core.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3 style='font-size:'>(Singularity gain based on infinity points)</h3>",
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked: true,
             onClick() {
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
+                player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
                 player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
                 player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
                 player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
@@ -1454,7 +1496,7 @@ addLayer("co", {
                             ["raw-html", "Core Fueling", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
                         ], {width: "700px", height: "50px", borderBottom: "3px solid white"}],
                         ["style-column", [
-                            ["raw-html", () => {return "Currently Fueling: " + CORE_INFO[player.co.resetIndex].name}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Currently Fueling: " + CORE_INFO[player.co.resetIndex].name + " (Lv." + formatWhole(player.co.cores[player.co.resetIndex].level) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["blank", "5px"],
                             ["raw-html", () => {return "Which will give +" + format(layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)) + " XP"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", height: "80px", backgroundColor: "#411", borderBottom: "3px solid white"} : {width: "700px", height: "80px", backgroundColor: "#411", borderRadius: "0 0 12px 12px"}}],
@@ -1462,7 +1504,7 @@ addLayer("co", {
                             ["row", [
                                 ["clickable", 201], ["clickable", 202], ["clickable", 203], ["clickable", 204], ["clickable", 205],
                                 ["clickable", 206], ["clickable", 207], ["clickable", 208], ["clickable", 209], ["clickable", 210],
-                                ["clickable", 211]
+                                ["clickable", 211], ["clickable", 212],
                             ]],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", backgroundColor: "black", borderRadius: "0 0 12px 12px"} : {display: "none !important"}}],
                     ], {width: "700px", backgroundColor: "#611", border: "3px solid white", borderRadius: "15px"}],
@@ -1502,7 +1544,7 @@ addLayer("co", {
                         ["row", [
                             ["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], 
                             ["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 110],
-                            ["clickable", 111],
+                            ["clickable", 111], ["clickable", 112],
                         ]],
                         ["blank", "10px"],
                     ], {width: "800px", backgroundColor: "#411", borderLeft: "3px solid white", borderRight: "3px solid white", borderBottom: "3px solid white", borderRadius: "0 0 15px 15px"}],
@@ -1532,10 +1574,14 @@ addLayer("co", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true },
 })

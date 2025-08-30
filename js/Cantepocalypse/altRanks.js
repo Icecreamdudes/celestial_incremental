@@ -124,6 +124,7 @@
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -175,11 +176,12 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 11) }
 })
 

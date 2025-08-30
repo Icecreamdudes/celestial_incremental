@@ -20,6 +20,7 @@ addLayer("hpw", {
         player.hpw.powerGain = player.hpw.powerGain.mul(player.hrm.realmEffect)
         if (hasUpgrade("hpw", 72)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         if (hasUpgrade("hpw", 131)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
+        if (hasUpgrade("cs", 202)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         player.hpw.powerGain = player.hpw.powerGain.mul(player.le.punchcardsLevels[9])
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
@@ -31,16 +32,17 @@ addLayer("hpw", {
     },
     powerReset(type) {
         // SACRIFICE
-        if (type != 2) {
-            player.hsa.sacredEnergy = new Decimal(0)
-            player.hsa.sacredEnergyGain = new Decimal(0)
-            player.hsa.sacredEffect = new Decimal(0)
+        player.hsa.sacredEnergy = new Decimal(0)
+        player.hsa.sacredEnergyGain = new Decimal(0)
+        player.hsa.sacredEffect = new Decimal(0)
 
-            for (let i = 0; i < player.hsa.upgrades.length; i++) {
-                player.hsa.upgrades.splice(i, 1);
-                i--;
-            }
+        for (let i = 0; i < player.hsa.upgrades.length; i++) {
+            player.hsa.upgrades.splice(i, 1);
+            i--;
         }
+
+        player.hsa.buyables[1] = new Decimal(0)
+        player.hsa.buyables[2] = new Decimal(0)
         
         // TEMP REALM
         player.hrm.blessLimit = new Decimal(0)
@@ -801,7 +803,7 @@ addLayer("hpw", {
         1051: {
             title: "Might E:1",
             unlocked() {return challengeCompletions("hrm", 15) >= 1},
-            description: "Boost mastery points based on power.",
+            description: "Boost mastery point effects based on power.",
             branches: [1005],
             cost() {return new Decimal(1679616)},
             canAfford() { return hasUpgrade("hpw", 1005)},
@@ -809,15 +811,15 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return player.hpw.power.pow(0.2).add(1)
+                return Decimal.pow(1.06, player.hpw.power.add(1).log(6))
             },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #00f"},
         },
         1052: {
             title: "Might E:2",
             unlocked() {return challengeCompletions("hrm", 15) >= 2},
-            description: "Multiply AD (post softcap) by x1e8.",
+            description: "Raise AD and antimatter by ^1.05.",
             branches: [1005],
             cost() {return new Decimal(10077696)},
             canAfford() { return hasUpgrade("hpw", 1005)},

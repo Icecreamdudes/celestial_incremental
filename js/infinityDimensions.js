@@ -67,7 +67,9 @@
 
         // SOFTCAP MODIFIER
         let base = new Decimal(300)
-        if (player.id.infinityPowerPerSecond.gt(1e300)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.id.infinityPowerPerSecond.plus(1).log10())).mul(1e300)
+        if (hasUpgrade("cs", 1102)) base = base.mul(1.3)
+        let max = Decimal.div(1, Decimal.pow(1.05, player.id.infinityPowerPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
+        if (player.id.infinityPowerPerSecond.gt(1e300)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.id.infinityPowerPerSecond.plus(1).log(10)).min(max)).mul(1e300)
 
         // POWER MODIFIERS
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.pow(buyableEffect("fu", 42))
@@ -641,7 +643,6 @@
                         ], {width: "700px"}], 
                         ["buyable", 18],
                     ]],
-                    ["blank", "25px"],
                 ]
             },
             "Buyables": {
@@ -656,9 +657,15 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power (+" + format(player.id.infinityPowerPerSecond) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "Boosts antimatter dimensions by x" + format(player.id.infinityPowerEffect) + ", and points by x" + format(player.id.infinityPowerEffect2) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.id.infinityPowerPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.id.infinityPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "Boosts antimatter dimensions by x" + format(player.id.infinityPowerEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "Boosts points by x" + format(player.id.infinityPowerEffect2)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 18)) || hasMilestone("s", 19)}
 })

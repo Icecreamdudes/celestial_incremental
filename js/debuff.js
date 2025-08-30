@@ -816,7 +816,6 @@
                     ["raw-html", function () { return "^0.5 to tree gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "^0.5 to leaf gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "^0.55 to all antimatter dimensions." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
                 ]
             },
             "Upgrades": {
@@ -877,6 +876,7 @@
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) },
     deactivated() { return !(inChallenge("ip", 18) || inChallenge("tad", 11))},

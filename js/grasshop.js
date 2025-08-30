@@ -9,11 +9,12 @@
         grasshoppersToGet: new Decimal(0),
         grasshopPause: new Decimal(0),
 
-        grasshopperEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),],
+        grasshopperEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
         fertilizer: new Decimal(0),
         fertilizerEffect: new Decimal(0),
         fertilizerPerSecond: new Decimal(0),
+
 
         steel: new Decimal(0),
         steelEffect: new Decimal(0),
@@ -82,6 +83,7 @@
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gh.steelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.i.preOTFMult)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.co.cores.grasshopper.effect[0])
+        if (hasUpgrade("cs", 602)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.gs.grassSkipEffect2)
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1042)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(1.1)
@@ -105,19 +107,19 @@
 
         // GRASSHOPPER EFFECTS
         player.gh.grasshopperEffects[0] = player.gh.grasshoppers.pow(1.1).pow(1.25).add(1)
-        if (player.gh.grasshopperEffects[0].gte("1e27500")) player.gh.grasshopperEffects[0] = player.gh.grasshopperEffects[0].div("1e27500").pow(0.1).mul("1e27500")
+        if (player.gh.grasshopperEffects[0].gte("1e27500")) player.gh.grasshopperEffects[0] = player.gh.grasshopperEffects[0].div("1e27500").pow(Decimal.add(0.1, player.cs.scraps.grasshopper.effect)).mul("1e27500")
 
         player.gh.grasshopperEffects[1] = player.gh.grasshoppers.div(1.2).pow(1.2).add(1)
-        if (player.gh.grasshopperEffects[1].gte("1e24000")) player.gh.grasshopperEffects[1] = player.gh.grasshopperEffects[1].div("1e24000").pow(0.2).mul("1e24000")
+        if (player.gh.grasshopperEffects[1].gte("1e24000")) player.gh.grasshopperEffects[1] = player.gh.grasshopperEffects[1].div("1e24000").pow(Decimal.add(0.1, player.cs.scraps.grasshopper.effect)).mul("1e24000")
 
         player.gh.grasshopperEffects[2] = player.gh.grasshoppers.div(1.7).pow(1.15).add(1)
-        if (player.gh.grasshopperEffects[2].gte("1e23000")) player.gh.grasshopperEffects[2] = player.gh.grasshopperEffects[2].div("1e23000").pow(0.2).mul("1e23000")
+        if (player.gh.grasshopperEffects[2].gte("1e23000")) player.gh.grasshopperEffects[2] = player.gh.grasshopperEffects[2].div("1e23000").pow(Decimal.add(0.1, player.cs.scraps.grasshopper.effect)).mul("1e23000")
 
         player.gh.grasshopperEffects[3] = player.gh.grasshoppers.div(2).pow(1.1).add(1)
-        if (player.gh.grasshopperEffects[3].gte("1e22000")) player.gh.grasshopperEffects[3] = player.gh.grasshopperEffects[3].div("1e22000").pow(0.2).mul("1e22000")
+        if (player.gh.grasshopperEffects[3].gte("1e22000")) player.gh.grasshopperEffects[3] = player.gh.grasshopperEffects[3].div("1e22000").pow(Decimal.add(0.1, player.cs.scraps.grasshopper.effect)).mul("1e22000")
 
         player.gh.grasshopperEffects[4] = player.gh.grasshoppers.div(4).pow(0.5).add(1)
-        if (player.gh.grasshopperEffects[4].gte("1e10000")) player.gh.grasshopperEffects[4] = player.gh.grasshopperEffects[4].div("1e10000").pow(0.2).mul("1e10000")
+        if (player.gh.grasshopperEffects[4].gte("1e10000")) player.gh.grasshopperEffects[4] = player.gh.grasshopperEffects[4].div("1e10000").pow(Decimal.add(0.1, player.cs.scraps.grasshopper.effect)).mul("1e10000")
 
 
         //----------------------------------------
@@ -445,15 +447,14 @@
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(buyableEffect("cs", 25)).mul(0.1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/5<br/>Grass Study I"
-            },
             display() {
-                return "<h4>which produce " + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of grass value per second.\n\
+                return "<h3>Grass Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/5)\n\
+                    Produce " + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of grass value per second.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy() {
@@ -471,7 +472,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         12: {
             costBase() { return new Decimal(50) },
@@ -483,11 +484,10 @@
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[11].gte(1) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/8<br/>Grass Study II"
-            },
             display() {
-                return "<h4>which are dividing golden grass time requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Grass Study II</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/8)\n\
+                    Divide golden grass time requirement by /" + format(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [11],
@@ -506,7 +506,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         13: {
             costBase() { return new Decimal(100) },
@@ -514,15 +514,14 @@
             purchaseLimit() { return new Decimal(40) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(2.5).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(2.5).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[11].gte(1) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/40<br/>Tree Study I"
-            },
             display() {
-                return "<h4>which are extending tree softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Tree Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/40)\n\
+                    Extends tree softcap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [11],
@@ -541,7 +540,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         14: {
             costBase() { return new Decimal(250) },
@@ -549,15 +548,14 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(buyableEffect("cs", 25)).mul(0.01) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01) },
             unlocked() { return true},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[13].gte(1) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Prestige Study I"
-            },
             display() {
-                return "<h4>which produce " + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of prestige points per second.\n\
+                return "<h3>Prestige Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
+                    Produce " + formatWhole(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of prestige points per second.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [13],
@@ -576,7 +574,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         15: {
             costBase() { return new Decimal(300) },
@@ -588,11 +586,10 @@
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[12].gte(1) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/8<br/>Grass Study III"
-            },
             display() {
-                return "<h4>Unlocks the next grass factor.\n\
+                return "<h3>Grass Study III</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/8)\n\
+                    Unlock the next grass factor.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [12],
@@ -611,7 +608,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         16: {
             costBase() { return new Decimal(100000) },
@@ -619,16 +616,15 @@
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(buyableEffect("cs", 25)).mul(0.01) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[14].gte(1) && player.gh.buyables[15].gte(1) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/20<br/>Factor Study I"
-            },
             display() {
-                return "<h4>which add +" + format(tmp[this.layer].buyables[this.id].effect) + " to the factor effect base.\n\
-                Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
+                return "<h3>Factor Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
+                    Add +" + format(tmp[this.layer].buyables[this.id].effect) + " to the factor effect base.\n\ \n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [14, 15],
             buy() {
@@ -646,7 +642,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         17: {
             costBase() { return new Decimal(1e8) },
@@ -654,15 +650,14 @@
             purchaseLimit() { return new Decimal(200) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(2).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(2).add(1) },
             unlocked() { return hasMilestone("r", 14) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[13].gte(1) },
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/200<br/>Tree Study II"
-            },
             display() {
-                return "<h4>which are boosting leaf gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Tree Study II</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/200)\n\
+                    Boosts leaf gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [13],
@@ -681,7 +676,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         18: {
             costBase() { return new Decimal(2e8) },
@@ -689,15 +684,14 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(buyableEffect("cs", 25)).mul(0.005) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.005) },
             unlocked() { return hasMilestone("r", 14) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[16].gte(1) && player.gh.buyables[15].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Grass Study IV"
-            },
             display() {
-                return "<h4>which produce " + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + "% of golden grass value per second.\n\
+                return "<h3>Grass Study IV</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
+                    Produce " + format(tmp[this.layer].buyables[this.id].effect.mul(100), 1) + "% of golden grass value per second.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [16, 15],
@@ -716,7 +710,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         19: {
             costBase() { return new Decimal(5e8) },
@@ -724,15 +718,14 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(buyableEffect("cs", 25)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5) },
             unlocked() { return hasMilestone("r", 14) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[14].gte(1) && player.gh.buyables[18].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/1,000<br/>Mod Study I"
-            },
             display() {
-                return "<h4>which are extending mod softcap by +" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Mod Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/1,000)\n\
+                    Extends mod softcap by +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [14, 18],
@@ -751,7 +744,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         21: {
             costBase() { return new Decimal(1e16) },
@@ -763,11 +756,10 @@
             unlocked() { return hasMilestone("r", 18) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[18].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/200<br/>Check Back Study I"
-            },
             display() {
-                return "<h4>which multiplying check back xp gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Check Back Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/200)\n\
+                    Multiplies check back xp gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [18],
@@ -786,7 +778,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         22: {
             costBase() { return new Decimal(1e19) },
@@ -798,11 +790,10 @@
             unlocked() { return hasMilestone("r", 18) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[21].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Check Back Study II"
-            },
             display() {
-                return "<h4>which dividing xp button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Check Back Study II</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Divides xp button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [21],
@@ -821,7 +812,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         23: {
             costBase() { return new Decimal(1e30) },
@@ -829,15 +820,14 @@
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return hasChallenge("ip", 11) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[19].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/50<br/>Antimatter Study I"
-            },
             display() {
-                return "<h4>which are boosting antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Antimatter Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/50)\n\
+                    Boosts antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [19],
@@ -856,7 +846,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
         24: {
             costBase() { return new Decimal(1e40) },
@@ -864,15 +854,14 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
             unlocked() { return hasChallenge("ip", 11) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[23].gte(1)},
-            title() {
-                return format(getBuyableAmount(this.layer, this.id), 0) + "/100<br/>Antimatter Study II"
-            },
             display() {
-                return "<h4>which are boosting antimatter by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "<h3>Antimatter Study II</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
+                    Boosts antimatter by x" + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [23],
@@ -891,7 +880,75 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: '150px', height: '150px', margin: "10px"}
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
+        },
+        25: {
+            costBase() { return new Decimal("1e5000") },
+            costGrowth() { return new Decimal("1e1000") },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.gh.fertilizer},
+            pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return hasUpgrade("cs", 601) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[18].gte(1) && player.gh.buyables[19].gte(1)},
+            display() {
+                return "<h3>Pollinator Study I</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
+                    Boosts pollinators by x" + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
+            },
+            branches: [18, 19],
+            buy() {
+                if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
+        },
+        26: {
+            costBase() { return new Decimal("1e10000") },
+            costGrowth() { return new Decimal("1e2000") },
+            purchaseLimit() { return new Decimal(10) },
+            currency() { return player.gh.fertilizer},
+            pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
+            unlocked() { return hasUpgrade("cs", 601) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[25].gte(1)},
+            display() {
+                return "<h3>Pollinator Study II</h3>\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/10)\n\
+                    Raise pollinator gain by ^" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
+            },
+            branches: [25],
+            buy() {
+                if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"}
         },
 
         //Steel
@@ -901,7 +958,7 @@
             purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(7).pow(1.3).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(7).pow(1.3).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -935,7 +992,7 @@
             purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(1.6).pow(1.2).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(1.6).pow(1.2).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -969,7 +1026,7 @@
             purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(1.15).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(4).pow(1.15).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1003,7 +1060,7 @@
             purchaseLimit() { return new Decimal(5000) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.1).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1037,7 +1094,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(8).pow(1.3).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(8).pow(1.3).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1071,7 +1128,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.26).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.26).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1105,7 +1162,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.6).pow(1.05).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.6).pow(1.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1139,7 +1196,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.gh.steel},
             pay(amt) { player.gh.steel = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).pow(0.8).add(1).pow(buyableEffect("cs", 25)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).pow(0.8).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1197,7 +1254,7 @@
                 ]
 
             },
-            "Upgrade Tree": {
+            "Studies": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
@@ -1218,30 +1275,30 @@
                         ]],
                         ["row", [
                             ["buyable", 12],
-                            ["blank", ["170px", "170px"]],
+                            ["blank", ["140px", "140px"]],
                             ["buyable", 13]
                         ]],
                         ["row", [
                             ["buyable", 15],
-                            ["style-row", [["buyable", 17]], {width: "170px", height: "170px"}],
+                            ["style-row", [["buyable", 17]], {width: "140px", height: "140px"}],
                             ["buyable", 14],
                         ]],
                         ["row", [
                             ["buyable", 16],
                         ]],
                         ["row", [
-                            ["style-row", [["buyable", 18]], {width: "170px", height: "170px"}],
-                            ["style-row", [["buyable", 19]], {width: "170px", height: "170px"}],
+                            ["style-row", [["buyable", 18]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 19]], {width: "140px", height: "140px"}],
                         ]],
                         ["row", [
-                            ["style-row", [["buyable", 21]], {width: "170px", height: "170px"}],
-                            ["blank", ["170px", "170px"]],
-                            ["style-row", [["buyable", 23]], {width: "170px", height: "170px"}],
+                            ["style-row", [["buyable", 21]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 25]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 23]], {width: "140px", height: "140px"}],
                         ]],
                         ["row", [
-                            ["style-row", [["buyable", 22]], {width: "170px", height: "170px"}],
-                            ["blank", ["170px", "170px"]],
-                            ["style-row", [["buyable", 24]], {width: "170px", height: "170px"}],
+                            ["style-row", [["buyable", 22]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 26]], {width: "140px", height: "140px"}],
+                            ["style-row", [["buyable", 24]], {width: "140px", height: "140px"}],
                         ]],
                         ["blank", "10px"],
                     ], {width: "650px", backgroundColor: "rgba(0,0,0,0.3)", border: "3px solid #031d3b", borderRadius: "15px"}],
@@ -1264,7 +1321,6 @@
                     ["style-row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34],
                         ["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]], {maxWidth: "1200px"}],
                 ]
-
             },
         },
     },

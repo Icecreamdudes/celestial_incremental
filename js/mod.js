@@ -6,7 +6,7 @@
 	modFiles: ["layers.js", "cutscene.js", "tree.js", "ranks.js", "factors.js", "prestige.js", "trees.js", "grass.js",
 	"grasshop.js", "mods.js", "checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js", "infinity.js",
 	"antimatterDimensions.js", "infinityPoints.js", "pests.js", "debuff.js", "tav.js", "tavDomain.js", "breakInfinity.js",
-	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "realmMods.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
+	"lore.js", "otfMastery.js", "infinityDimensions.js", "cante.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js",
 	"Cantepocalypse/altRanks.js", "Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js",
 	"Cantepocalypse/grassSkip.js","Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js",
 	"factory.js", "Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js",
@@ -119,9 +119,12 @@ function updateStyles() {
 			layerBG = "#204387"
 			break;
 		case "s": case "co": case "ra": case "sd":
-		case "cs": case "sma": case "ma": case "u3u": case "u3m":
+		case "cs": case "ma": case "u3u": case "u3m":
 		case "u3b": case "u3l": case "u3t":
 			layerBG = "#260300"
+			break;
+		case "sma":
+			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "dut": 
@@ -837,8 +840,8 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
 
-		if (player.d.diceEffects[14].gt(1e3)) player.d.diceEffects[14] = new Decimal(1e3)
-		if (player.rf.abilityEffects[7].gt(1e3)) player.rf.abilityEffects[7] = new Decimal(1e3)
+		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
 	}
 	if (oldVersion < 161) {
 		if (player.points.gt("1e100000")) {
@@ -846,8 +849,8 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 170) {
-		if (player.d.diceEffects[14].gt(1e3)) player.d.diceEffects[14] = new Decimal(1e3)
-		if (player.rf.abilityEffects[7].gt(1e3)) player.rf.abilityEffects[7] = new Decimal(1e3)
+		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
 	}
 }
 

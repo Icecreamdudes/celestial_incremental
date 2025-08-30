@@ -281,6 +281,7 @@ addLayer("cap", {
 
     tabFormat: [
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)}
 })

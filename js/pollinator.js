@@ -56,6 +56,13 @@ const POLLINATOR_INFO = {
         effect1: "Steel: x",
         effect2: "Oil: x",
     },
+    water: {
+        name: "Water",
+        image: "resources/pollinators/water.png",
+        fact: "Many under-water plants rely on water to pollinate.",
+        effect1: "Infinity Points: x",
+        effect2: "Negative Infinity Points: x",
+    },
 }
 addLayer("pol", {
     name: "Pollinators", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -102,6 +109,10 @@ addLayer("pol", {
                 enabled: false,
                 effects: [new Decimal(1), new Decimal(1)]
             },
+            water: {
+                enabled: false,
+                effects: [new Decimal(1), new Decimal(1)]
+            },
         },
 
         currCount: new Decimal(0),
@@ -115,6 +126,8 @@ addLayer("pol", {
             buyBuyable("pol", 12)
             buyBuyable("pol", 13)
             buyBuyable("pol", 14)
+            buyBuyable("pol", 15)
+            buyBuyable("pol", 16)
         }
         if (hasMilestone("s", 17)) {
             buyUpgrade("pol", 11)
@@ -146,12 +159,16 @@ addLayer("pol", {
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.le.punchcardsPassiveEffect[13])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("gh", 25))
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
 
             // POST-SOFTCAP MULTIPLIERS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.co.cores.rocket.effect[2])
+
+            // EXPONENTS
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("gh", 26))
 
             // GAIN FUNCTIONS
             if (player.pol.pollinators.lt(player.pol.pollinatorsPerSecond.mul(buyableEffect("pol", 11)).add(1))) {
@@ -165,31 +182,34 @@ addLayer("pol", {
         }
 
         // POLLINATOR EFFECTS
-        player.pol.pollinatorEffects.beetle.effects[0] = player.pol.pollinators.pow(2.7).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Celestial Points
-        player.pol.pollinatorEffects.beetle.effects[1] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Factor Base
+        player.pol.pollinatorEffects.beetle.effects[0] = player.pol.pollinators.pow(2.7).div(10).add(1).pow(buyableEffect("pol", 14)) // Celestial Points
+        player.pol.pollinatorEffects.beetle.effects[1] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Factor Base
 
-        player.pol.pollinatorEffects.fly.effects[0] = player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Factor Power
-        player.pol.pollinatorEffects.fly.effects[1] = player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Prestige Points
+        player.pol.pollinatorEffects.fly.effects[0] = player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)) // Factor Power
+        player.pol.pollinatorEffects.fly.effects[1] = player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)) // Prestige Points
 
-        player.pol.pollinatorEffects.bat.effects[0] = player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Leafs
-        player.pol.pollinatorEffects.bat.effects[1] = player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Trees
+        player.pol.pollinatorEffects.bat.effects[0] = player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)) // Leafs
+        player.pol.pollinatorEffects.bat.effects[1] = player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)) // Trees
 
-        player.pol.pollinatorEffects.wind.effects[0] = player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Grass Value
-        player.pol.pollinatorEffects.wind.effects[1] = player.pol.pollinators.add(1).log(2).pow(2).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Golden Grass Value
+        player.pol.pollinatorEffects.wind.effects[0] = player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)) // Grass Value
+        player.pol.pollinatorEffects.wind.effects[1] = player.pol.pollinators.add(1).log(2).pow(2).add(1).pow(buyableEffect("pol", 14)) // Golden Grass Value
 
-        player.pol.pollinatorEffects.bee.effects[0] = player.pol.pollinators.pow(0.7).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Grasshoppers
-        player.pol.pollinatorEffects.bee.effects[1] = player.pol.pollinators.pow(1.3).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Fertilizer
+        player.pol.pollinatorEffects.bee.effects[0] = player.pol.pollinators.pow(0.7).div(10).add(1).pow(buyableEffect("pol", 14)) // Grasshoppers
+        player.pol.pollinatorEffects.bee.effects[1] = player.pol.pollinators.pow(1.3).div(10).add(1).pow(buyableEffect("pol", 14)) // Fertilizer
 
-        player.pol.pollinatorEffects.butterfly.effects[0] = player.pol.pollinators.pow(2.3).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Lines of Code
-        if (player.pol.pollinators.lt(1e15)) player.pol.pollinatorEffects.butterfly.effects[1] = player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Mods
-        if (player.pol.pollinators.gte(1e15)) player.pol.pollinatorEffects.butterfly.effects[1] = player.pol.pollinators.div(1e15).pow(0.1).mul(1e15).pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Mod Softcap
+        player.pol.pollinatorEffects.butterfly.effects[0] = player.pol.pollinators.pow(2.3).div(10).add(1).pow(buyableEffect("pol", 14)) // Lines of Code
+        if (player.pol.pollinators.lt(1e15)) player.pol.pollinatorEffects.butterfly.effects[1] = player.pol.pollinators.pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)) // Mods
+        if (player.pol.pollinators.gte(1e15)) player.pol.pollinatorEffects.butterfly.effects[1] = player.pol.pollinators.div(1e15).pow(0.1).mul(1e15).pow(2.1).div(10).add(1).pow(buyableEffect("pol", 14)) // Mod Softcap
 
-        player.pol.pollinatorEffects.ant.effects[0] = player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Dice Points
-        player.pol.pollinatorEffects.ant.effects[1] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Rocket Fuel
-        player.pol.pollinatorEffects.ant.effects[2] = player.pol.pollinators.add(1).log(60).add(1).log(6).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) // Hex Points
+        player.pol.pollinatorEffects.ant.effects[0] = player.pol.pollinators.add(1).log(10).mul(1.5).add(1).pow(buyableEffect("pol", 14)) // Dice Points
+        player.pol.pollinatorEffects.ant.effects[1] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Rocket Fuel
+        player.pol.pollinatorEffects.ant.effects[2] = player.pol.pollinators.add(1).log(60).add(1).log(6).add(1).pow(buyableEffect("pol", 14)) // Hex Points
 
-        player.pol.pollinatorEffects.mechanical.effects[0] = player.pol.pollinators.add(1).log(10).pow(1.75).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) //steel
-        player.pol.pollinatorEffects.mechanical.effects[1] = player.pol.pollinators.add(1).log(65).pow(0.75).div(1.5).add(1).pow(buyableEffect("pol", 14)).pow(buyableEffect("cs", 28)) //oil
+        player.pol.pollinatorEffects.mechanical.effects[0] = player.pol.pollinators.add(1).log(10).pow(1.75).add(1).pow(buyableEffect("pol", 14)) // steel
+        player.pol.pollinatorEffects.mechanical.effects[1] = player.pol.pollinators.add(1).log(65).pow(0.75).div(1.5).add(1).pow(buyableEffect("pol", 14)) // oil
+
+        player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinators.add(1).log(100).pow(1.5).add(1).pow(buyableEffect("pol", 14)) // IP
+        player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinators.add(1).log(100).pow(1.25).add(1).pow(buyableEffect("pol", 14)) // NIP
 
         player.pol.currCount = new Decimal(0)
         for (let prop in player.pol.pollinatorEffects) {
@@ -372,6 +392,26 @@ addLayer("pol", {
             style() {
                 let look = {width: '100px', minHeight: '100px', borderRadius: "0px", background: "linear-gradient(45deg, #919191, #545454)", borderColor: "gray", borderWidth: "4px"}
                 if (!player.pol.pollinatorEffects.mechanical.enabled) look.filter = "brightness(0.5)"
+                return look
+            },
+        },
+        19: {
+            title() { return "<img src='resources/pollinators/water.png' style='width:80px;height:80px;transform:translateY(3px)'></img>"},
+            canClick() { return player.pol.currCount.lt(player.pol.maxCount) || player.pol.pollinatorEffects.water.enabled },
+            unlocked() { return hasUpgrade("cs", 1101) },
+            onClick() {
+                if (player.pol.pollinatorEffects.water.enabled) {
+                    player.pol.pollinatorEffects.water.enabled = false
+                } else {
+                    player.pol.pollinatorEffects.water.enabled = true
+                }
+            },
+            onHover() {
+                player.pol.pollinatorsIndex = "water"
+            },
+            style() {
+                let look = {width: '100px', minHeight: '100px', borderRadius: "0px", background: "linear-gradient(45deg, #FFBF00 5%, #b2d8d8 95%)", borderColor: "#26C9FC", borderWidth: "4px"}
+                if (!player.pol.pollinatorEffects.water.enabled) look.filter = "brightness(0.5)"
                 return look
             },
         },
@@ -627,6 +667,7 @@ addLayer("pol", {
                 if (hasUpgrade("pol", 16)) amt = amt.add(1)
                 if (hasUpgrade("pol", 18)) amt = amt.add(1)
                 if (hasUpgrade("bi", 116)) amt = amt.add(1)
+                if (hasUpgrade("cs", 1101)) amt = amt.add(1)
                 return amt
             },
             currency() { return player.pol.pollinators},
@@ -702,8 +743,7 @@ addLayer("pol", {
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-column", [
                         ["style-row", [
@@ -772,7 +812,7 @@ addLayer("pol", {
                         ], {borderBottom: "3px solid #cb8e00"}],
                         ["style-column", [
                             ["left-row", [["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15]]],
-                            ["left-row", [["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18]]],
+                            ["left-row", [["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18], ["hoverless-clickable", 19]]],
                         ], {width: "500px", backgroundColor: "#281c00", borderBottom: "3px solid #cb8e00"}],
                         ["style-row", [
                             ["style-column", [
@@ -790,14 +830,12 @@ addLayer("pol", {
                             ], {width: "400px", height: "75px", padding: "0px 10px"}],
                         ], {width: "500px", height: "75px", backgroundColor: "#3c2a00", borderRadius: "0px 0px 12px 12px"}],
                     ], {width: "500px", backgroundColor: "#654700", border: "3px solid #cb8e00", borderRadius: "15px"}],
-                    ["blank", "25px"],
                 ]
             },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]], {maxWidth: "600px"}],
@@ -811,8 +849,7 @@ addLayer("pol", {
             "???": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return false /*player.pol.unlockHive == 1*/ },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Unlock ???:" }, { color: "white", fontSize: "36px", fontFamily: "monospace" }],
                     ["blank", "25px"],
@@ -838,6 +875,7 @@ addLayer("pol", {
             ["raw-html", () => { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["microtabs", "stuff", { borderWidth: '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 22) && !(inChallenge("ip", 12) || inChallenge("ip", 18)) }
 })

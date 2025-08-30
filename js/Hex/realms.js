@@ -19,14 +19,14 @@ addLayer("hrm", {
         player.hrm.realmCompletions = new Decimal(0)
         for (let i in player.hrm.challenges) {
             let amt = new Decimal(challengeCompletions("hrm", i))
-            if (amt.gt(3)) amt = amt.div(3).pow(0.6).mul(3)
+            if (amt.gt(3)) amt = amt.sub(3).mul(2/3).add(3)
+            if (amt.gt(5)) amt = amt.sub(5).div(2).add(5)
             player.hrm.realmCompletions = player.hrm.realmCompletions.add(amt)
         }
 
         player.hrm.realmEffect = Decimal.pow(1.5, player.hrm.realmCompletions)
 
-        player.hrm.realmEssenceGain = player.hrm.realmCompletions.pow(2).div(6)
-        player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(player.le.punchcardsPassiveEffect[9])
+        player.hrm.realmEssenceGain = Decimal.pow(1.35, player.hrm.realmCompletions).sub(1)
 
         player.hrm.realmEssenceEffects = [new Decimal(1), new Decimal(1)]
         player.hrm.realmEssenceEffects[0] = Decimal.pow(2.5, player.hrm.realmEssence.add(1).log(6))
@@ -47,7 +47,7 @@ addLayer("hrm", {
             goal() {return Decimal.pow(10, challengeCompletions(this.layer, this.id)).mul(1e4)},
             fullDisplay() {
                 let str = "<h4>You can only reset blessing 6 times. Amended Automation is also locked.</h4>"
-                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatWhole(this.goal()) + " Blessings")
+                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatShortWhole(this.goal()) + " Blessings")
                 if (Decimal.gte(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>COMPLETED")
                 return str
             },
@@ -77,7 +77,7 @@ addLayer("hrm", {
             goal() {return Decimal.pow(30, challengeCompletions(this.layer, this.id)).mul(1e6)},
             fullDisplay() {
                 let str = "<h4>Blessing and curse features are nerfed. Purity features are heavily buffed.</h4>"
-                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatWhole(this.goal()) + " Blessings")
+                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatShortWhole(this.goal()) + " Blessings")
                 if (Decimal.gte(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>COMPLETED")
                 return str
             },
@@ -107,7 +107,7 @@ addLayer("hrm", {
             goal() {return Decimal.mul(3, challengeCompletions(this.layer, this.id)).add(3)},
             fullDisplay() {
                 let str = "<h4>Hex points, blessings, and boons now decay. Base curse formula is buffed.</h4>"
-                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatWhole(this.goal()) + " Vexes")
+                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatShortWhole(this.goal()) + " Vexes")
                 if (Decimal.gte(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>COMPLETED")
                 return str
             },
@@ -137,7 +137,7 @@ addLayer("hrm", {
             goal() {return Decimal.pow(100, challengeCompletions(this.layer, this.id)).mul(10000)},
             fullDisplay() {
                 let str = "<h4>Hex points are heavily softcapped, but unlock hex of sacrifice.</h4>"
-                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatWhole(this.goal()) + " Sacred Energy")
+                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatShortWhole(this.goal()) + " Sacred Energy")
                 if (Decimal.gte(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>COMPLETED")
                 return str
             },
@@ -167,7 +167,7 @@ addLayer("hrm", {
             goal() {return Decimal.pow(10, challengeCompletions(this.layer, this.id)).mul(6e6)},
             fullDisplay() {
                 let str = "<h4>Challenge ends after 60 seconds. Most automation is turned off.</h4>"
-                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatWhole(this.goal()) + " Blessings")
+                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatShortWhole(this.goal()) + " Blessings")
                 if (Decimal.gte(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>COMPLETED")
                 return str
             },
@@ -199,7 +199,7 @@ addLayer("hrm", {
             fullDisplay() {
                 let str = "<h4>The void has made you forget the concept of provenances.</h4>"
                 if (inChallenge("hrm", 16)) str = "<h4>The void has made you forget the concept of ███████████.</h4>"
-                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatWhole(this.goal()) + " Refinements")
+                if (Decimal.lt(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>Goal: " + formatShortWhole(this.goal()) + " Refinements")
                 if (Decimal.gte(challengeCompletions(this.layer, this.id), this.completionLimit())) str = str.concat("<br>COMPLETED")
                 return str
             },

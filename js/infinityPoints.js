@@ -251,9 +251,15 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinityPoints.mul(0.5).pow(0.7).add(1)
+                if (player.in.infinityPoints.lt(1e200)) return player.in.infinityPoints.mul(0.5).pow(0.7).add(1)
+                if (player.in.infinityPoints.lt("1e2000")) return player.in.infinityPoints.div(1e200).pow(0.075).mul(1e140)
+                return new Decimal(1e275)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (player.in.infinityPoints.lt(1e200)) return format(upgradeEffect(this.layer, this.id))+"x"
+                if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
+            }, // Add formatting to the effect
             style: {width: "130px", height: "130px"},
         },
         33:
@@ -266,9 +272,15 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinityPoints.mul(0.65).pow(0.65).add(1)
+                if (player.in.infinityPoints.lt(1e200)) return player.in.infinityPoints.mul(0.65).pow(0.65).add(1)
+                if (player.in.infinityPoints.lt("1e2000")) return player.in.infinityPoints.div(1e200).pow(0.05).mul(1e130)
+                return new Decimal(1e220)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (player.in.infinityPoints.lt(1e200)) return format(upgradeEffect(this.layer, this.id))+"x"
+                if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
+            }, // Add formatting to the effect
             style: {width: "130px", height: "130px"},
         },
         34:
@@ -281,9 +293,15 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinityPoints.mul(0.3).pow(0.5).add(1)
+                if (player.in.infinityPoints.lt(1e200)) return player.in.infinityPoints.mul(0.3).pow(0.5).add(1)
+                if (player.in.infinityPoints.lt("1e2000")) return player.in.infinityPoints.div(1e200).pow(0.04).mul(1e100)
+                return new Decimal(1e172)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            effectDisplay() {
+                if (player.in.infinityPoints.lt(1e200)) return format(upgradeEffect(this.layer, this.id))+"x"
+                if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
+            }, // Add formatting to the effect
             style: {width: "130px", height: "130px"},
         },
         41:
@@ -311,7 +329,8 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
+                if (!hasUpgrade("cs", 1103)) return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.2).mul(0.2).add(1)
+                return player.ta.negativeInfinityPoints.pow(0.08).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {width: "130px", height: "130px"},
@@ -388,7 +407,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 32)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() {return hasUpgrade("ta", 11)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -422,7 +441,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(1.1).add(1).pow(buyableEffect("cs", 32)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).pow(1.1).add(1) },
             unlocked() {return hasUpgrade("ta", 11)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -456,7 +475,7 @@
             purchaseLimit() { return new Decimal(2500) },
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 32)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1) },
             unlocked() {return hasUpgrade("ta", 11)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -530,7 +549,7 @@
         },
         17: {
             requirementDescription: "<h3>15 Infinities",
-            effectDescription: "Autobuys grass studies and mod buyables.",
+            effectDescription: "Autobuys grasshopper studies and mod buyables.",
             done() { return player.in.infinities.gte(15) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: { width: '800px', "min-height": '75px' },
@@ -608,7 +627,7 @@
             challengeDescription() { return "<h4>You can't pick an otherworldy feature." },
             goal() { return new Decimal("1.79e308") },
             canComplete: function () { return player.points.gte(1.79e308) },
-            rewardDescription: "Unlock new grass studies.",
+            rewardDescription: "Unlock new grasshopper studies.",
             onEnter() {
                 //OTF is reset here and not in crunch to prevent a bug
                 player.po.dice = false
@@ -827,7 +846,6 @@
                     ["row", [["milestone", 25]]],
                     ["row", [["milestone", 26]]],
                     ["row", [["milestone", 27]]],
-                    ["blank", "25px"],
                 ]
             },
             "Challenges": {
@@ -842,7 +860,6 @@
                     ["raw-html", () => { return player.in.unlockedBreak ? "Break Infinity works in all challenges." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", () => { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(35) ? "Unlock Challenge VII by reaching Check Back Level 35" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", () => { return hasChallenge("ip", 18) ? "CHALLENGE VIII HAS BEEN TERMINATED." : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["blank", "10px"],
                 ]
             },
             "Buyables": {
@@ -878,6 +895,7 @@
             ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + format(player.in.infinitiesToGet) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity) || hasMilestone("s", 19)}
 })

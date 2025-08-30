@@ -78,6 +78,7 @@
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -363,13 +364,9 @@
             style: { width: '275px', height: '150px'},
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -377,10 +374,12 @@
                 unlocked() { return true },
                 content:
                 [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.pr.perkPoints) + "</h3> perk points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.pr.perkPointsToGet) + "</h3> perk points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Chance to gain perk points: <h3>" + format(player.pr.perkPointsChance.mul(100)) + "</h3>%" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "20px"],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.pr.perkPoints) + "</h3> perk points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.pr.perkPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => { return "Chance to gain perk points: <h3>" + format(player.pr.perkPointsChance.mul(100)) + "</h3>%" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
                         ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
@@ -388,12 +387,12 @@
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 12) }
 })

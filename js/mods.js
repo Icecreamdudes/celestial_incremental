@@ -9,6 +9,7 @@
         codeExperience: new Decimal(0),
         codeExperienceToGet: new Decimal(0),
         codeExperiencePause: new Decimal(0),
+        codeExperienceEffect: new Decimal(1),
 
         linesOfCode: new Decimal(0),
         linesOfCodePerSecond: new Decimal(0),
@@ -29,6 +30,12 @@
             buyBuyable("m", 12)
             buyBuyable("m", 13)
             buyBuyable("m", 14)
+        }
+        if (hasMilestone("s", 17)) {
+            buyBuyable("m", 15)
+            buyBuyable("m", 16)
+            buyBuyable("m", 17)
+            buyBuyable("m", 18)
         }
     },
     branches: ["gh"],
@@ -74,6 +81,9 @@
             layers.m.codeExperienceReset();
         }
         player.m.codeExperiencePause = player.m.codeExperiencePause.sub(1)
+
+        // CODE EXPERIENCE EFFECT
+        player.m.codeExperienceEffect = player.m.codeExperience.add(1).log(1e100).add(1).pow(1.2)
 
         //----------------------------------------
 
@@ -130,6 +140,9 @@
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
         player.m.modsToGet = player.m.modsToGet.mul(player.i.preOTFMult)
         player.m.modsToGet = player.m.modsToGet.mul(player.co.cores.code.effect[2])
+        player.m.modsToGet = player.m.modsToGet.mul(player.cs.scraps.code.effect)
+        if (hasUpgrade("cs", 702)) player.m.modsToGet = player.m.modsToGet.mul(1e15)
+        if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.mul(1e10)
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1043)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
@@ -146,6 +159,7 @@
         // MOD REQUIREMENT
         player.m.modsReq = player.m.mods.pow(1.45).add(100)
         player.m.modsReq = player.m.modsReq.div(levelableEffect("pet", 203)[1])
+        if (hasUpgrade("cs", 702)) player.m.modsReq = player.m.modsReq.pow(5)
 
         // MOD GAIN CODE
         if (player.m.linesOfCode.gte(player.m.modsReq)) {
@@ -279,6 +293,7 @@
                 if (player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq)) return new Decimal(1)
                 return player.m.linesOfCode.div(player.m.modsReq)
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#1377BF"},
             textStyle: {fontSize: "14px"},
             display() {
@@ -297,7 +312,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.25).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.25).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -331,7 +346,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.25).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.25).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -365,7 +380,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -399,7 +414,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -580,6 +595,7 @@
                 return look
             }],
         ]],
+        ["raw-html", () => {return hasUpgrade("cs", 701) ? "Boosts factor base by x" + format(player.m.codeExperienceEffect) : ""}, {color: "#1377BF", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "15px"],
         ["clickable", 11],
         ["blank", "25px"],

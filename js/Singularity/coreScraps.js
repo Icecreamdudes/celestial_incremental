@@ -1,10 +1,134 @@
-﻿addLayer("cs", {
+﻿const CORE_SCRAP = {
+    point: {
+        name: "Point Core Scrap",
+        effect: "Boosts time cube effects by ^",
+    },
+    factor: {
+        name: "Factor Core Scrap",
+        effect: "Increases factor power effect softcap by +^",
+    },
+    prestige: {
+        name: "Prestige Core Scrap",
+        effect: "Increases prestige effect softcaps by +^",
+    },
+    tree: {
+        name: "Tree Core Scrap",
+        effect: "Increases tree effect softcap by +^",
+    },
+    grass: {
+        name: "Grass Core Scrap",
+        effect: "Increases grass effect softcaps by +^",
+    },
+    grasshopper: {
+        name: "Grasshopper Core Scrap",
+        effect: "Increases grasshopper effect softcaps by ^",
+    },
+    code: {
+        name: "Code Core Scrap",
+        effect: "Boosts mod gain by x",
+    },
+    dice: {
+        name: "Dice Core Scrap",
+        effect: "Boosts tier 1 booster dice effects by ^",
+    },
+    rocket: {
+        name: "Rocket Core Scrap",
+        effect: "Boosts rocket fuel effects by ^",
+    },
+    antimatter: {
+        name: "Antimatter Core Scrap",
+        effect: "Boosts antimatter softcap base by x",
+    },
+    infinity: {
+        name: "Infinity Core Scrap",
+        effect: "Boosts base infinity point gain by ^",
+    },
+    checkback: {
+        name: "Check Back Core Scrap",
+        effect: "Boosts check back xp by x",
+    },
+    radioactive: {
+        name: "Radioactive Core Scrap",
+        effect: "Boosts radiation gain by x",
+    },
+}
+addLayer("cs", {
     name: "Core Scraps", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CS", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+
+        scraps: {
+            point: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            factor: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(0),
+            },
+            prestige: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            tree: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            grass: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            grasshopper: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            code: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            dice: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            rocket: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            antimatter: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            infinity: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            checkback: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            radioactive: {
+                amount: new Decimal(0),
+                gain: new Decimal(0),
+                effect: new Decimal(1),
+            },
+        },
+
+        scrapIndex: "point",
 
         coreScraps: new Decimal(0),
         coreScrapsToGet: new Decimal(0),
@@ -36,140 +160,821 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        //ALL SCRAP GAINS ARE INTEGERS
-        /*
-        if (player.cop.processedCoreFuel.neq(-1)) {
-            player.cs.coreScrapsToGet = player.cop.processedCoreStrength.pow(1.4).add(1).mul(10).add(20).floor()
-            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(player.le.punchcardsPassiveEffect[10]).floor()
-            if (hasUpgrade("sma", 102)) player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
-            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(buyableEffect("ep0", 11)).floor()
-            player.cs.coreScrapsToGet = player.cs.coreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
-        } else {
-            player.cs.coreScrapsToGet = new Decimal(0)
+        // SCRAP GAIN
+        for (let prop in player.cs.scraps) {
+            player.cs.scraps[prop].gain = Decimal.pow(1.15, player.co.cores[prop].level).sub(1)
+            if (hasUpgrade("fu", 19)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.s.singularitiesEffect)
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.le.punchcardsPassiveEffect[10])
+            if (hasUpgrade("sma", 102)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(upgradeEffect("sma", 102))
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(buyableEffect("ep0", 11))
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pet", 309)[1])
+
+            // FLOOR SCRAP GAIN
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.floor()
         }
 
-        if (player.cop.processedCoreFuel.eq(0))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.points.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(1))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.f.factorPower.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(2))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.p.prestigePoints.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(3))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.t.trees.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(4))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.g.grass.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(5))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.gh.grasshoppers.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(6))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.m.codeExperience.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(7))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.d.dicePoints.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(8))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.rf.rocketFuel.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(9))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.ad.antimatter.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        }
-        if (player.cop.processedCoreFuel.eq(10))
-        {   
-            player.cs.resourceCoreScrapsToGet = player.in.infinityPoints.plus(10).log10().log10().add(1).mul(player.cop.processedCoreStrength.add(1)).floor()
-        } 
-        if (player.cop.processedCoreFuel.eq(-1))
-        {
-            player.cs.resourceCoreScrapsToGet = new Decimal(0)
-        }
-        */
-        if (hasUpgrade("sma", 102)) player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(upgradeEffect("sma", 102)).floor()
-        player.cs.resourceCoreScrapsToGet = player.cs.resourceCoreScrapsToGet.mul(levelableEffect("pet", 309)[1]).floor()
+        player.cs.scraps.point.effect = player.cs.scraps.point.amount.add(1).log(10).mul(0.5).add(1)
+        if (player.cs.scraps.point.effect.gte(1e10)) player.cs.scraps.point.effect = player.cs.scraps.point.amount.add(1).log(10).mul(0.2).add(4)
 
-        for (let i = 0; i < player.cs.resourceCoreScraps.length; i++)
-        {
-            if (player.cs.resourceCoreScraps[i].gte(2))
-            {
-                player.cs.canBuyParagonScraps = true
-            } else
-            {
-                player.cs.canBuyParagonScraps = false
-                break;
-            }
-        }
+        player.cs.scraps.factor.effect = player.cs.scraps.factor.amount.add(1).log(10).mul(0.02)
+        if (player.cs.scraps.factor.amount.gte(1e10)) player.cs.scraps.factor.effect = player.cs.scraps.factor.amount.add(1).log(10).mul(0.002).add(0.18).min(0.4)
 
-        player.cs.paragonScrapsEffect = player.cs.paragonScraps.mul(0.6).pow(0.3).add(1)
-    },
-    scrapCore() {
-        /*player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.cop.processedCoreStarmetalValue)
-        player.cop.processedCoreStarmetalValue = new Decimal(0)
+        player.cs.scraps.prestige.effect = player.cs.scraps.prestige.amount.add(1).log(10).mul(0.02)
+        if (player.cs.scraps.prestige.amount.gte(1e10)) player.cs.scraps.prestige.effect = player.cs.scraps.prestige.amount.add(1).log(10).mul(0.002).add(0.18).min(0.4)
 
-        player.cs.coreScraps = player.cs.coreScraps.add(player.cs.coreScrapsToGet)
-        player.cs.resourceCoreScraps[player.cop.processedCoreFuel] = player.cs.resourceCoreScraps[player.cop.processedCoreFuel].add(player.cs.resourceCoreScrapsToGet)
+        player.cs.scraps.tree.effect = player.cs.scraps.tree.amount.add(1).log(10).mul(0.02)
+        if (player.cs.scraps.tree.amount.gte(1e10)) player.cs.scraps.tree.effect = player.cs.scraps.tree.amount.add(1).log(10).mul(0.002).add(0.18).min(0.4)
 
-        player.cop.processingCore = false
-        player.cop.processedCoreStrength = new Decimal(-1)
-        player.cop.processedCoreFuel = new Decimal(-1)
-        player.cop.processedCorePrime = new Decimal(0)
+        player.cs.scraps.grass.effect = player.cs.scraps.grass.amount.add(1).log(10).mul(0.02)
+        if (player.cs.scraps.grass.amount.gte(1e10)) player.cs.scraps.grass.effect = player.cs.scraps.grass.amount.add(1).log(10).mul(0.002).add(0.18).min(0.4)
 
-        player.ra.equippedRadiationValue = new Decimal(0)
-        player.ra.equippedRadiationOutput = new Decimal(0)
+        player.cs.scraps.grasshopper.effect = player.cs.scraps.grasshopper.amount.add(1).log(10).mul(0.01)
+        if (player.cs.scraps.grasshopper.amount.gte(1e10)) player.cs.scraps.grasshopper.effect = player.cs.scraps.grasshopper.amount.add(1).log(10).mul(0.001).add(0.09).min(0.2)
 
-        player.cop.processedCoreInnateEffects = []
-        player.cop.processedCoreInnateEffectsText = ""*/
+        player.cs.scraps.code.effect = Decimal.pow(5, player.cs.scraps.code.amount.add(1).log(10))
+        if (player.cs.scraps.code.effect.gte(1e10)) player.cs.scraps.code.effect = Decimal.pow(1.5, player.cs.scraps.code.amount.add(1).log(10)).mul(169351)
+
+        player.cs.scraps.dice.effect = player.cs.scraps.dice.amount.add(1).log(10).pow(2).add(1)
+        if (player.cs.scraps.dice.amount.gte(1e10)) player.cs.scraps.dice.effect = player.cs.scraps.dice.amount.add(1).log(10).mul(0.2).add(18)
+
+        player.cs.scraps.rocket.effect = player.cs.scraps.rocket.amount.add(1).log(10).mul(0.1).add(1)
+        if (player.cs.scraps.rocket.amount.gte(1e10)) player.cs.scraps.rocket.effect = player.cs.scraps.rocket.amount.add(1).log(10).mul(0.01).add(1.9)
+
+        player.cs.scraps.antimatter.effect = player.cs.scraps.antimatter.amount.add(1).log(10).mul(0.05).add(1)
+        if (player.cs.scraps.antimatter.amount.gte(1e10)) player.cs.scraps.antimatter.effect = player.cs.scraps.antimatter.amount.add(1).log(10).mul(0.005).add(1.45)
+
+        player.cs.scraps.infinity.effect = player.cs.scraps.infinity.amount.add(1).log(10).mul(0.2).add(1)
+        if (player.cs.scraps.infinity.amount.gte(1e10)) player.cs.scraps.infinity.effect = player.cs.scraps.infinity.amount.add(1).log(10).mul(0.02).add(2.8)
+
+        player.cs.scraps.checkback.effect = player.cs.scraps.checkback.amount.add(1).log(10).mul(0.7).add(1)
+        if (player.cs.scraps.checkback.amount.gte(1e10)) player.cs.scraps.checkback.effect = player.cs.scraps.checkback.amount.add(1).log(10).mul(0.07).add(7.3)
+
+        player.cs.scraps.radioactive.effect = Decimal.pow(2, player.cs.scraps.radioactive.amount.add(1).log(10))
+        if (player.cs.scraps.radioactive.effect.gte(1e10)) player.cs.scraps.radioactive.effect = Decimal.pow(1.2, player.cs.scraps.radioactive.amount.add(1).log(10)).mul(165.4)
     },
     clickables: {
-        4: {
-            title() { return "Scrap Core" },
-            canClick() { return player.cs.scrapCoreOnReset == false },
-            unlocked() { return true },
+        1: {
+            title: "Scrap Core",
+            canClick() { return player.cs.scraps[player.cs.scrapIndex].gain.gte(1) },
+            unlocked: true,
             onClick() {
-                player.cs.scrapCoreOnReset = true
+                player.cs.scraps[player.cs.scrapIndex].amount = player.cs.scraps[player.cs.scrapIndex].amount.add(player.cs.scraps[player.cs.scrapIndex].gain)
+                player.co.cores[player.cs.scrapIndex].xp = new Decimal(0)
+                player.co.cores[player.cs.scrapIndex].totalxp = new Decimal(0)
+                player.co.cores[player.cs.scrapIndex].level = new Decimal(0)
             },
-            style: { width: '100px', "min-height": '50px', borderRadius: "10px 0px 0px 10px"}
-        },
-        5: {
-            title() { return "Don't Scrap Core" },
-            canClick() { return player.cs.scrapCoreOnReset == true  },
-            unlocked() { return true },
-            onClick() {
-                player.cs.scrapCoreOnReset = false
-            },
-            style: { width: '100px', "min-height": '50px', borderRadius: "0px 10px 10px 0px"}
-        },
-        6: {
-            title() { return "Convert Existing Scraps to Paragon Scraps<br>(Req: 25 core scraps, 2 of each resource specific scraps)" },
-            canClick() { return player.cs.canBuyParagonScraps == true && player.cs.coreScraps.gte(25) },
-            unlocked() { return true },
-            onClick() {
-                for (let i = 0; i < player.cs.resourceCoreScraps.length; i++)
-                {
-                    player.cs.resourceCoreScraps[i] = player.cs.resourceCoreScraps[i].sub(2)
+            style() {
+                let look = {width: "274px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                if (!this.canClick()) {
+                    look.color = "rgba(0,0,0,0.8)"
+                    look.backgroundColor = "#bf8f8f"
+                } else {
+                    look.color = "white"
+                    look.backgroundColor = "#666"
                 }
-                player.cs.coreScraps = player.cs.coreScraps.sub(25)
-
-                player.cs.paragonScraps = player.cs.paragonScraps.add(1)
+                return look
             },
-            style: { width: '300px', "min-height": '150px', borderRadius: "15px"}
+        },
+        2: {
+            title() {
+                if (!player.ev.evolutionsUnlocked[9]) return "LOCKED"
+                return "Sacrifice Core"
+            },
+            tooltip() {
+                let str = "+" + format(player.co.cores[player.cs.scrapIndex].level.pow(0.5).mul(player.ev4.offeringsBase)) + " Offerings"
+                str = str.concat("<br><small>(" + format(player.ev4.offerings) + "/" + formatWhole(player.ev4.offeringReq) + ")</small>")
+                if (player.ev.evolutionsUnlocked[9]) return str
+                return ""
+            },
+            canClick() { return player.co.cores[player.cs.scrapIndex].level.gte(1) && player.ev.evolutionsUnlocked[9]},
+            unlocked: true,
+            onClick() {
+                player.ev4.offerings = player.ev4.offerings.add(player.co.cores[player.cs.scrapIndex].level.pow(0.5).mul(player.ev4.offeringsBase))
+                player.co.cores[player.cs.scrapIndex].xp = new Decimal(0)
+                player.co.cores[player.cs.scrapIndex].totalxp = new Decimal(0)
+                player.co.cores[player.cs.scrapIndex].level = new Decimal(0)
+            },
+            style() {
+                let look = {width: "273px", minHeight: "47px", color: "white", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                if (!player.ev.evolutionsUnlocked[9]) {
+                    look.backgroundColor = "#333"
+                    look.cursor = "default"
+                } else if (!this.canClick()) {
+                    look.backgroundColor = "#bf8f8f"
+                } else {
+                    look.backgroundColor = "#666"
+                }
+                return look
+            },
+        },
+        101: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "point"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.point.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.point.strength].color
+                return look
+            },
+        },
+        102: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "factor"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.factor.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.factor.strength].color
+                return look
+            },
+        },
+        103: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "prestige"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.prestige.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.prestige.strength].color
+                return look
+            },
+        },
+        104: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "tree"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.tree.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.tree.strength].color
+                return look
+            },
+        },
+        105: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "grass"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.grass.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.grass.strength].color
+                return look
+            },
+        },
+        106: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "grasshopper"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.grasshopper.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.grasshopper.strength].color
+                return look
+            },
+        },
+        107: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "code"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.code.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.code.strength].color
+                return look
+            },
+        },
+        108: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "dice"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.dice.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.dice.strength].color
+                return look
+            },
+        },
+        109: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "rocket"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.rocket.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.rocket.strength].color
+                return look
+            },
+        },
+        110: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "antimatter"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.antimatter.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.antimatter.strength].color
+                return look
+            },
+        },
+        111: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "infinity"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.infinity.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.infinity.strength].color
+                return look
+            },
+        },
+        112: {
+            canClick: true,
+            unlocked() {return hasUpgrade("s", 20)},
+            onClick() {
+                player.cs.scrapIndex = "checkback"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.checkback.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.checkback.strength].color
+                return look
+            },
+        },
+        113: {
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.cs.scrapIndex = "radioactive"
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                look.backgroundColor = CORE_INFO.radioactive.color
+                look.borderColor = CORE_STRENGTH[player.co.cores.radioactive.strength].color
+                return look
+            },
         },
     },
-    bars: {
-    },
-    upgrades: { 
+    bars: {},
+    upgrades: {
+        101: {
+            title: "Properly Ranked",
+            unlocked() {return player.cs.scrapIndex == "point"},
+            description: "Replace ranks hardcap with a heavy softcap.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.point },
+            currencyDisplayName: "Point Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.point.color}
+                return look
+            },
+        },
+        102: {
+            title: "Pent up",
+            unlocked() {return player.cs.scrapIndex == "point"},
+            description: "Improve pent effect formula.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.point },
+            currencyDisplayName: "Point Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.point.color}
+                return look
+            },
+        },
+        103: {
+            title: "Time Tesseract",
+            unlocked() {return player.cs.scrapIndex == "point"},
+            description: "Raise time cube gain by ^1.1.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.point },
+            currencyDisplayName: "Point Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.point.color}
+                return look
+            },
+        },
+        201: {
+            title: "Factored Factors",
+            unlocked() {return player.cs.scrapIndex == "factor"},
+            description: "Fuse factors and improve factor effects.",
+            cost: new Decimal(1e3),
+            onPurchase() {
+                for (let i in player.f.buyables) {
+                    player.f.buyables[i] = new Decimal(0)
+                }
+                player.subtabs["f"]['stuff'] = 'Factored'
+            },
+            currencyLocation() { return player.cs.scraps.factor },
+            currencyDisplayName: "Factor Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.factor.color}
+                return look
+            },
+        },
+        202: {
+            title: "Powered Power",
+            unlocked() {return player.cs.scrapIndex == "factor"},
+            description: "Double hex power gain.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.factor },
+            currencyDisplayName: "Factor Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.factor.color}
+                return look
+            },
+        },
+        203: {
+            title: "Fitted Factors",
+            unlocked() {return player.cs.scrapIndex == "factor"},
+            description: "Multiply factor base by x80.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.factor },
+            currencyDisplayName: "Factor Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.factor.color}
+                return look
+            },
+        },
+        301: {
+            title: "Predictable Prestige",
+            unlocked() {return player.cs.scrapIndex == "prestige"},
+            description: "Multiply celestial points by x1e308.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.prestige },
+            currencyDisplayName: "Prestige Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.prestige.color}
+                return look
+            },
+        },
+        302: {
+            title: "Prestige Parallels",
+            unlocked() {return player.cs.scrapIndex == "prestige"},
+            description: "Boost anonymity based on prestige.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.prestige },
+            currencyDisplayName: "Prestige Core Scraps",
+            currencyInternalName: "amount",
+            effect() {return Decimal.pow(2, player.p.prestigePoints.add(1).log("1e10000"))},
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.prestige.color}
+                return look
+            },
+        },
+        303: {
+            title: "Clearer Crystals",
+            unlocked() {return player.cs.scrapIndex == "prestige"},
+            description: "Square crystal buyable effects.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.prestige },
+            currencyDisplayName: "Prestige Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.prestige.color}
+                return look
+            },
+        },
+        401: {
+            title: "Unbefitting Branches",
+            unlocked() {return player.cs.scrapIndex == "tree"},
+            description: "Raise tree gain by ^1.2, but square tree requirement.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.tree },
+            currencyDisplayName: "Tree Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.tree.color}
+                return look
+            },
+        },
+        402: {
+            title: "Cloned Cotyledons",
+            unlocked() {return player.cs.scrapIndex == "tree"},
+            description: "Centuple repli-leaf multiplier.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.tree },
+            currencyDisplayName: "Tree Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.tree.color}
+                return look
+            },
+        },
+        403: {
+            title: "Pruning Power",
+            unlocked() {return player.cs.scrapIndex == "tree"},
+            description: "Cube tree buyable effects.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.tree },
+            currencyDisplayName: "Tree Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.tree.color}
+                return look
+            },
+        },
+        501: {
+            title: "Mowed Grass",
+            unlocked() {return player.cs.scrapIndex == "grass"},
+            description: "Boost grass value by x1e450, but divide grass capacity by /45.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.grass },
+            currencyDisplayName: "Grass Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.grass.color}
+                return look
+            },
+        },
+        502: {
+            title: "Golden Seeds",
+            unlocked() {return player.cs.scrapIndex == "grass"},
+            description: "Square golden grass effect.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.grass },
+            currencyDisplayName: "Grass Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.grass.color}
+                return look
+            },
+        },
+        503: {
+            title: "Masterful Moon",
+            unlocked() {return player.cs.scrapIndex == "grass"},
+            description: "Improve third moonstone level effect.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.grass },
+            currencyDisplayName: "Grass Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.grass.color}
+                return look
+            },
+        },
+        601: {
+            title: "Symbiotic Studies",
+            unlocked() {return player.cs.scrapIndex == "grasshopper"},
+            description: "Unlock new grasshopper studies.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.grasshopper },
+            currencyDisplayName: "Grasshopper Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.grasshopper.color}
+                return look
+            },
+        },
+        602: {
+            title: "Skip-hop-jump",
+            unlocked() {return player.cs.scrapIndex == "grasshopper"},
+            description: "Unlock a new grass-skip effect that boosts grasshoppers.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.grasshopper },
+            currencyDisplayName: "Grasshopper Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.grasshopper.color}
+                return look
+            },
+        },
+        603: {
+            title: "Cubic Casting",
+            unlocked() {return player.cs.scrapIndex == "grasshopper"},
+            description: "Cube foundry buyables.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.grasshopper },
+            currencyDisplayName: "Grasshopper Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.grasshopper.color}
+                return look
+            },
+        },
+        701: {
+            title: "Updating Base",
+            unlocked() {return player.cs.scrapIndex == "code"},
+            description: "Unlock a code experience effect that buffs factor base.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.code },
+            currencyDisplayName: "Code Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.code.color}
+                return look
+            },
+        },
+        702: {
+            title: "Sloppy Code",
+            unlocked() {return player.cs.scrapIndex == "code"},
+            description: "Multiply mod gain by x1e15, but raise mod requirement by ^5.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.code },
+            currencyDisplayName: "Code Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.code.color}
+                return look
+            },
+        },
+        703: {
+            title: "Lazy Coding",
+            unlocked() {return player.cs.scrapIndex == "code"},
+            description: "Idk man.<br>Here's x1e10 mods<br>I guess.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.code },
+            currencyDisplayName: "Code Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.code.color}
+                return look
+            },
+        },
+        801: {
+            title: "Boosted Boosters",
+            unlocked() {return player.cs.scrapIndex == "dice"},
+            description: "Dice score is doubled.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.dice },
+            currencyDisplayName: "Dice Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.dice.color}
+                return look
+            },
+        },
+        802: {
+            title: "Truly Rigged",
+            unlocked() {return player.cs.scrapIndex == "dice"},
+            description: "Booster dice always land on the rigged option.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.dice },
+            currencyDisplayName: "Dice Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.dice.color}
+                return look
+            },
+        },
+        803: {
+            title: "Counted Challenges",
+            unlocked() {return player.cs.scrapIndex == "dice"},
+            description: "Gain a challenge dice effect that boosts dice score.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.dice },
+            currencyDisplayName: "Dice Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.dice.color}
+                return look
+            },
+        },
+        901: {
+            title: "Undiluted fuel",
+            unlocked() {return player.cs.scrapIndex == "rocket"},
+            description: "Improve infinity point boosts formula.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.rocket },
+            currencyDisplayName: "Rocket Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.rocket.color}
+                return look
+            },
+        },
+        902: {
+            title: "Self-fueling boosts",
+            unlocked() {return player.cs.scrapIndex == "rocket"},
+            description: "Auto-activate the last three rocket fuel abilities.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.rocket },
+            currencyDisplayName: "Rocket Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.rocket.color}
+                return look
+            },
+        },
+        903: {
+            title: "Fueled Generators",
+            unlocked() {return player.cs.scrapIndex == "rocket"},
+            description: "Square generator and charger buyables.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.rocket },
+            currencyDisplayName: "Rocket Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.rocket.color}
+                return look
+            },
+        },
+        1001: {
+            title: "Dimensional Squared",
+            unlocked() {return player.cs.scrapIndex == "antimatter"},
+            description: "Square dimension boost base.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.antimatter },
+            currencyDisplayName: "Antimatter Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.antimatter.color}
+                return look
+            },
+        },
+        1002: {
+            title: "Brighter Stars",
+            unlocked() {return player.cs.scrapIndex == "antimatter"},
+            description: "Increase galaxy cap and double galaxy effect base.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.antimatter },
+            currencyDisplayName: "Antimatter Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.antimatter.color}
+                return look
+            },
+        },
+        1003: {
+            title: "Self-Replicating Stars",
+            unlocked() {return player.cs.scrapIndex == "antimatter"},
+            description: "Automate Replicanti Galaxy gain.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.antimatter },
+            currencyDisplayName: "Antimatter Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.antimatter.color}
+                return look
+            },
+        },
+        1101: {
+            title: "Boundless Pollination",
+            unlocked() {return player.cs.scrapIndex == "infinity"},
+            description: "Unlock the water pollinator.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.infinity },
+            currencyDisplayName: "Infinity Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.infinity.color}
+                return look
+            },
+        },
+        1102: {
+            title: "Infinitier Dimensions",
+            unlocked() {return player.cs.scrapIndex == "infinity"},
+            description: "Multiply ID softcap base by x1.3.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.infinity },
+            currencyDisplayName: "Infinity Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.infinity.color}
+                return look
+            },
+        },
+        1103: {
+            title: "Opposites Attract",
+            unlocked() {return player.cs.scrapIndex == "infinity"},
+            description: "Improve IP Upgrade (4, 2).",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.infinity },
+            currencyDisplayName: "Infinity Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.infinity.color}
+                return look
+            },
+        },
     },
     buyables: {
         //core scraps boost radiation stuff (radiation output, softcap, gain, etc)
@@ -275,389 +1080,10 @@
             },
             style: { width: '275px', height: '150px', }
         },
-        //resource specific scraps boost the effect of buyables
-        21: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[0]},
-            pay(amt) { player.cs.resourceCoreScraps[0] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.25).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Point Scrap Buyable Booster"
-            },
-            display() {
-                return "which are raising time cube's effects and buyable effects by ^" + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rank Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        22: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[1]},
-            pay(amt) { player.cs.resourceCoreScraps[1] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.25).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Factor Power Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising factor buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Factor Power Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        23: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[2]},
-            pay(amt) { player.cs.resourceCoreScraps[2] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.4).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Prestige Point Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising crystal buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Prestige Point Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        24: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[3]},
-            pay(amt) { player.cs.resourceCoreScraps[3] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Tree Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising tree buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Tree Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        25: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[4]},
-            pay(amt) { player.cs.resourceCoreScraps[4] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Grass Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising grass and golden grass buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        26: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[5]},
-            pay(amt) { player.cs.resourceCoreScraps[5] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.35).mul(0.4).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Grasshopper Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising SOME grass study and steel buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grasshopper Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        27: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[6]},
-            pay(amt) { player.cs.resourceCoreScraps[6] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Code Experience Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising mod buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Code Experience Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        28: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[7]},
-            pay(amt) { player.cs.resourceCoreScraps[7] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.28).mul(1.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Dice Point Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising booster dice and pollinator effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dice Point Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        29: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[8]},
-            pay(amt) { player.cs.resourceCoreScraps[8] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.15).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Rocket Fuel Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising rocket fuel effects and OTF mastery buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rocket Fuel Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        31: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[9]},
-            pay(amt) { player.cs.resourceCoreScraps[9] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.15).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Antimatter Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising the antimatter effect and OTF synergizer and NIP buyable effects by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Antimatter Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        32: {
-            costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.resourceCoreScraps[10]},
-            pay(amt) { player.cs.resourceCoreScraps[10] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.15).mul(0.5).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Infinity Point Scrap Buyable Booster"
-            },
-            display() {
-                return 'which are raising the IP buyable (except doubler) and broken infinity buyables by ^' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Infinity Point Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
     },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -665,67 +1091,67 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Current core being processed: Lv." + formatWhole(player.co.cores[player.co.coreIndex].level) + " " + CORE_STRENGTH[player.co.cores[player.co.coreIndex].strength].name + " " + CORE_INFO[player.co.coreIndex].name}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<div id=processedCore class=singularityCore><div class=centerCircle></div>" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cs.coreScrapsToGet) + "</h3> core scraps on singularity reset. (Based on strength)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.cs.resourceCoreScrapsToGet) + "</h3> resource specific core scraps on singularity reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Type is determined from fuel type, and based on amount of said fuel source and strength.)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                ]
-            },
-            "Resource Specific Core Scraps": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[0]) + "</h3> point core scraps." }, { "color": "#5c5c5c", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[1]) + "</h3> factor power core scraps." }, { "color": "#83cecf", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[2]) + "</h3> prestige point core scraps." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[3]) + "</h3> tree core scraps." }, { "color": "#0B6623", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[4]) + "</h3> grass core scraps." }, { "color": "#119B35", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[5]) + "</h3> grasshopper core scraps." }, { "color": "#19e04d", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[6]) + "</h3> code experience core scraps." }, { "color": "#0951a6", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[7]) + "</h3> dice point core scraps." }, { "color": "#363636", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[8]) + "</h3> rocket fuel core scraps." }, { "color": "#2f4f57", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[9]) + "</h3> antimatter core scraps." }, { "color": "#0FFFCA", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.resourceCoreScraps[10]) + "</h3> infinity point core scraps." }, { "color": "#FFBF00", "font-size": "24px", "font-family": "monospace" }],
-                ]
-            },
-            "Buyables": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
-                    ["style-row", [["ex-buyable", 21],["ex-buyable", 22],["ex-buyable", 23],["ex-buyable", 24],
-                        ["ex-buyable", 25],["ex-buyable", 26],["ex-buyable", 27],["ex-buyable", 28],
-                        ["ex-buyable", 29],["ex-buyable", 31],["ex-buyable", 32]], {maxWidth: "1200px"}],
-                ]
-            },
-            "Paragon Scraps": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("s", 20) },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.paragonScraps) + "</h3> paragon scraps, which boosts check back xp gain by x" + format(player.cs.paragonScrapsEffect) + "." }, { "color": "#2842eb", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.cs.coreScraps) + "</h3> core scraps." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 6],]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "Lv." + formatWhole(player.co.cores[player.cs.scrapIndex].level) + "<br>" + CORE_INFO[player.cs.scrapIndex].name}, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
+                            ], {width: "247px", height: "50px", borderBottom: "3px solid #ababab"}],
+                            ["style-row", [], () => {
+                                let look = {boxSizing: "border-box", width: "150px", height: "150px", border: "22px solid", borderRadius: "50%", margin: "25px auto"}
+                                look.backgroundColor = CORE_INFO[player.cs.scrapIndex].color
+                                look.borderColor = CORE_STRENGTH[player.co.cores[player.cs.scrapIndex].strength].color
+                                return look
+                            }],
+                        ], {width: "247px", height: "250px"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", () => {return "<small>You have</small> " + formatWhole(player.cs.scraps[player.cs.scrapIndex].amount) + " <small>" + CORE_SCRAP[player.cs.scrapIndex].name + "</small> (+" + formatWhole(player.cs.scraps[player.cs.scrapIndex].gain) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return CORE_SCRAP[player.cs.scrapIndex].effect + format(player.cs.scraps[player.cs.scrapIndex].effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return player.cs.scraps[player.cs.scrapIndex].amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+                                ]],
+                            ], {width: "530px", height: "60px"}],
+                            ["style-row", [
+                                ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
+                                ["upgrade", 201], ["upgrade", 202], ["upgrade", 203],
+                                ["upgrade", 301], ["upgrade", 302], ["upgrade", 303],
+                                ["upgrade", 401], ["upgrade", 402], ["upgrade", 403],
+                                ["upgrade", 501], ["upgrade", 502], ["upgrade", 503],
+                                ["upgrade", 601], ["upgrade", 602], ["upgrade", 603],
+                                ["upgrade", 701], ["upgrade", 702], ["upgrade", 703],
+                                ["upgrade", 801], ["upgrade", 802], ["upgrade", 803],
+                                ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
+                                ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
+                                ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
+                            ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                            ["style-row", [
+                                ["clickable", 1], ["style-row", [], {width: "3px", height: "47px", backgroundColor: "#ababab"}], ["clickable", 2]
+                            ], {width: "550px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"}],
+                        ], {width: "550px", height: "250px", borderLeft: "3px solid #ababab"}],
+                    ], {width: "800px", height: "250px", backgroundColor: "#4f4b45", border: "3px solid #ababab", borderRadius: "15px 15px 0 0"}],
+                    ["style-column", [
+                        ["blank", "10px"],
+                        ["row", [
+                            ["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], 
+                            ["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 110],
+                            ["clickable", 111], ["clickable", 112],
+                        ]],
+                        ["blank", "10px"],
+                    ], {width: "800px", backgroundColor: "#2b2522", borderLeft: "3px solid #ababab", borderRight: "3px solid #ababab", borderBottom: "3px solid #ababab", borderRadius: "0 0 15px 15px"}],
                 ]
             },
         },
     }, 
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("s", 19)  }
 })

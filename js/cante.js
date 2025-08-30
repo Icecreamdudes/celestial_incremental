@@ -132,6 +132,7 @@
 
         //rep galax
         player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
+        if (hasUpgrade("cs", 1003)) player.ca.replicantiGalaxies = player.ca.replicantiGalaxiesCap
 
         //rememberance
         player.ca.rememberanceCoreCost = player.ca.rememberanceCores.add(1).pow(1.5).mul(1000)
@@ -262,9 +263,8 @@
             progress() {
                 return player.ca.canteEnergy.div(player.ca.canteEnergyReq)
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 return "<h5>" + format(player.ca.canteEnergy) + "/" + formatWhole(player.ca.canteEnergyReq) + "<h5> Cante energy to gain a cante core.</h5>";
             },
@@ -275,12 +275,13 @@
             width: 476,
             height: 50,
             progress() {
+                if (player.ca.replicantiTimerReq.lte(0.05)) return new Decimal(1)
                 return player.ca.replicantiTimer.div(player.ca.replicantiTimerReq)
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
+                if (player.ca.replicantiTimerReq.lte(0.05)) return "Interval Maxed"
                 return "Time: " + formatTime(player.ca.replicantiTimer) + "/" + formatTime(player.ca.replicantiTimerReq);
             },
         },
@@ -665,7 +666,7 @@
         23: {
             costBase() { return new Decimal(50) },
             costGrowth() { return new Decimal(3) },
-            purchaseLimit() { return new Decimal(50) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.ca.galaxyDust},
             pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
@@ -842,7 +843,8 @@
         ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)) || hasMilestone("s", 19)}
 })
 

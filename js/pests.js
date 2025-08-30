@@ -81,6 +81,7 @@
         ["raw-html", function () { return "There are <h3>" + format(player.pe.pests) + "</h3> pests." }, { "color": "#770022", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.pe.pestsPerSecond) + "</h3> pests per second." }, { "color": "#770022", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) },
     deactivated() { return !(inChallenge("ip", 12) || inChallenge("ip", 18))},

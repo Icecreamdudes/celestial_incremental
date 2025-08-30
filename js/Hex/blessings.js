@@ -348,12 +348,13 @@ addLayer("hbl", {
             effect() {
                 let eff = player.ta.negativeInfinityPoints.add(1).log(6).pow(0.6).ceil()
                 if (inChallenge("hrm", 12)) eff = eff.pow(0.3).ceil()
-                if (eff.gte(9)) eff = eff.div(9).pow(0.3).mul(9).ceil()
+                if (eff.gte(9)) eff = eff.div(9).pow(0.3).mul(9).ceil().min(18)
                 return eff
             },
             effectDisplay() {
                 if (upgradeEffect(this.layer, this.id).lt(9)) return "+" + formatWhole(upgradeEffect(this.layer, this.id))
-                if (upgradeEffect(this.layer, this.id).gte(9)) return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[SOFTCAPPED]</small>"
+                if (upgradeEffect(this.layer, this.id).lt(18)) return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[SOFTCAPPED]</small>"
+                return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
         },

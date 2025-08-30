@@ -73,6 +73,8 @@ addLayer("changelog", {
         ["blank", "50px"],
 
         ["raw-html", () => changelog, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        
+        ["blank", "25px"],
     ],
     layerShown() { return false }
 })

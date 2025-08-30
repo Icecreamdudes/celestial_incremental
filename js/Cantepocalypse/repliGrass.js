@@ -150,10 +150,8 @@
             style: { width: '75px', "min-height": '50px', }
         },
     },
-    bars: {
-    },
-    upgrades: {
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(1.5) },
@@ -428,35 +426,27 @@
             style: { width: '275px', height: '150px'},
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["raw-html", function () { return "<h3>" + formatWhole(player.rg.repliGrassCount) + "/" + formatWhole(player.rg.repliGrassCap) + " Repli-Grass (Hover over the grass)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h3>" + format(player.rg.repliGrassTimer) + "/" + format(player.rg.repliGrassReq) + " Seconds to spawn repli-grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Repli-Grass mult: x" + format(player.rg.repliGrassMult) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Repli-Grass boosts repli-leaf mult by x" + format(player.rg.repliGrassEffect) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Repli-Grass boosts replicanti point mult by x" + format(player.rg.repliGrassEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart) ? "After " + formatWhole(player.rg.repliGrassSoftcapStart) + " repli-grass, repli-grass mult is divided by " + format(player.rg.repliGrassSoftcapEffect) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+                content: [
+                    ["raw-html", () => { return "<h3>" + formatWhole(player.rg.repliGrassCount) + "/" + formatWhole(player.rg.repliGrassCap) + " Repli-Grass (Hover over the grass)" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "<h3>" + format(player.rg.repliGrassTimer) + "/" + format(player.rg.repliGrassReq) + " Seconds to spawn repli-grass." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Repli-Grass mult: x" + format(player.rg.repliGrassMult) + "." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart) ? "After " + formatWhole(player.rg.repliGrassSoftcapStart) + " repli-grass, repli-grass mult is divided by " + format(player.rg.repliGrassSoftcapEffect) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", "<div id=repli-spawn-area class=menu-spawn-area></div>", { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "<div id=repli-spawn-area class=menu-spawn-area></div>", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ]
             },
             "Buyables": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
                         ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
@@ -464,14 +454,15 @@
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> repli-grass." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.rg.repliGrass) + "</h3> repli-grass."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "Boosts repli-leaf mult by x" + format(player.rg.repliGrassEffect) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "Boosts replicanti point mult by x" + format(player.rg.repliGrassEffect2) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 16) }
 })
-
 function createRepliGrass(quantity) {
     const spawnArea = document.getElementById('repli-spawn-area');
     const spawnAreaRect = spawnArea?.getBoundingClientRect();
@@ -537,7 +528,6 @@ function createRepliGrass(quantity) {
     }
 }
 
-
 function isCollision(x, y) {
     const existingRepliCircles = document.querySelectorAll('.repli-circle');
     for (let i = 0; i < existingRepliCircles.length; i++) {
@@ -592,7 +582,6 @@ function moveRepliCircle(circle, spawnAreaRect) {
 
     requestAnimationFrame(move);
 }
-
 
 function removeRepliGrass(circle) {
     circle.parentNode.removeChild(circle);

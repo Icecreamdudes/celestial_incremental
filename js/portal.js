@@ -359,13 +359,13 @@ addLayer("po", {
                     ["blank", "25px"],
                     ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
                     ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)"],
-                    ["blank", "25px"],
                 ]
             },
         },
     },
     tabFormat: [
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true }
 })

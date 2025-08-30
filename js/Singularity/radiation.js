@@ -37,7 +37,8 @@
         if (hasUpgrade("ev8", 19)) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(upgradeEffect("ev8", 19))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("fu", 52))
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 1205)[0])
-        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.co.cores.singularity.effect[1])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.co.cores.radioactive.effect[1])
+        player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cs.scraps.radioactive.effect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
@@ -49,7 +50,7 @@
 
         player.ra.radiationSoftcapEffect = new Decimal(1)
         if (player.ra.radiation.gte(player.ra.radiationSoftcapStart)) {
-            player.ra.radiationSoftcapEffect = player.ra.radiation.sub(player.ra.radiationSoftcapStart).pow(0.345)
+            player.ra.radiationSoftcapEffect = player.ra.radiation.div(player.ra.radiationSoftcapStart).mul(5).pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.5).log(player.ra.radiationSoftcapStart).add(1))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("ra", 12))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("cs", 12))
         }
@@ -284,16 +285,19 @@
                     ], {maxWidth: "840px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Radiation gain is based on core progress." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
                 ],
             },
         },
     }, 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasMilestone("s", 13)  }
 })

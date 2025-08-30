@@ -45,6 +45,7 @@
         let preLeavesMult = buyableEffect("rt", 11)
         preLeavesMult = preLeavesMult.mul(player.rg.repliGrassEffect2)
         preLeavesMult = preLeavesMult.mul(levelableEffect("pet", 402)[2])
+        if (hasUpgrade("cs", 402)) preLeavesMult = preLeavesMult.mul(100)
 
         // REPLI-TREE SOFTCAP START (NEEDED FOR NERFS)
         player.rt.repliTreeSoftcapStart = new Decimal(10)
@@ -129,8 +130,10 @@
             width: 476,
             height: 50,
             progress() {
+                if (player.rt.repliTreeReq.gte(1e9)) return player.rt.repliLeaves.add(1).log(10).div(player.rt.repliTreeReq.add(1).log(10))
                 return player.rt.repliLeaves.div(player.rt.repliTreeReq)
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#7734eb"},
             borderStyle: {borderBottom: "0px", borderRadius: "10px 10px 0px 0px"},
             display() {
@@ -145,6 +148,7 @@
             progress() {
                 return player.rt.repliLeavesTimer.div(player.rt.repliLeavesTimerReq)
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#7734eb"},
             borderStyle: {borderRadius: "0px 0px 10px 10px"},
             display() {
@@ -152,8 +156,7 @@
             },
         },
     },
-    upgrades: {
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(10000) },
@@ -436,13 +439,15 @@
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>You have " + formatWhole(player.rt.repliTrees) + "<h2> repli-trees, which boost anonymity gain by x" + format(player.rt.repliTreesEffect) + "."}],
-                    ["raw-html", function () { return "<h2>You will gain " + format(player.rt.repliTreesToGet, 1) + "<h2> repli-trees." }],
-                    ["raw-html", function () { return "<h2>Repli-Leaves mult: x" + format(player.rt.repliLeavesMult, 4) + "<h2>." }],
-                    ["raw-html", function () { return player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) + " (Based on repli-trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "You have " + formatWhole(player.rt.repliTrees) + " repli-trees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.rt.repliTreesToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => {return "Boosts anonymity gain by x" + format(player.rt.repliTreesEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Repli-Leaves mult: x" + format(player.rt.repliLeavesMult, 4)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return player.rt.repliTrees.gte(player.rt.repliTreeSoftcapStart) ? "After " + formatWhole(player.rt.repliTreeSoftcapStart) + " repli-trees, repli-leaf mult is divided by " + format(player.rt.repliTreeSoftcapEffect) : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["bar", "repliTreeBar"]]],
                     ["row", [["bar", "repliLeafBar"]]],
@@ -454,8 +459,12 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.an.anonymity) + "</h3> anonymity." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + format(player.an.anonymity) + "</h3> anonymity." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.an.anonymityToGet) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 15) }
 })

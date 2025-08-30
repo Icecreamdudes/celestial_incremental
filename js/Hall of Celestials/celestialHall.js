@@ -161,13 +161,13 @@ addLayer("ch", {
                     ["infobox", 1],
                     ["infobox", 2],
                     ["infobox", 3],
-                    //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
                 ]
             },
         },
     },
     tabFormat: [
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge}
 })

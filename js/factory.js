@@ -196,7 +196,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.r.timeCubes},
             pay(amt) { player.r.timeCubes = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -230,7 +234,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -264,7 +272,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.an.anonymity},
             pay(amt) { player.an.anonymity = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -298,7 +310,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.oi.oil},
             pay(amt) { player.oi.oil = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -334,7 +350,11 @@
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12))
+                if (hasUpgrade("cs", 903)) eff = eff.add(1).pow(2).sub(1)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -368,7 +388,11 @@
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.rg.repliGrass},
             pay(amt) { player.rg.repliGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.04).mul(buyableEffect("fa", 12)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.04).mul(buyableEffect("fa", 12))
+                if (hasUpgrade("cs", 903)) eff = eff.add(1).pow(2).sub(1)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -402,7 +426,11 @@
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.oi.oil},
             pay(amt) { player.oi.oil = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12))
+                if (hasUpgrade("cs", 903)) eff = eff.add(1).pow(2).sub(1)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -436,7 +464,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 903)) eff = eff.pow(2)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -470,7 +502,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.rg.repliGrass},
             pay(amt) { player.rg.repliGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 903)) eff = eff.pow(2)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -504,7 +540,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.oi.oil},
             pay(amt) { player.oi.oil = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 903)) eff = eff.pow(2)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -670,7 +710,6 @@
                     ["milestone", 19],
                     ["milestone", 21],
                     ["milestone", 22],
-                    ["blank", "25px"],
                 ]
             },
         },
@@ -679,6 +718,7 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.gh.steel) + "</h3> Steel" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 101)}
 })

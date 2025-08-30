@@ -91,15 +91,18 @@
         let base = new Decimal(1000)
         if (hasUpgrade("bi", 21)) base = base.mul(1.1)
         base = base.mul(buyableEffect("m", 15))
-        let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(1e300)))
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log10()).min(max)).mul(1e300)
+        base = base.mul(player.cs.scraps.antimatter.effect)
+        let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log(10)).min(max)).mul(1e300)
 
         // SOFTCAP IGNORING MODIFIERS
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("rm", 31))
         if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.co.cores.antimatter.effect[0])
+
+        // POWER MODIFIERS
+        if (hasUpgrade("hpw", 1052)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
@@ -110,7 +113,6 @@
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
-        player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("cs", 31))
 
         //----------------------------------------
 
@@ -146,11 +148,11 @@
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
-            if (hasUpgrade("hpw", 1052)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(1e8)
             if (hasMilestone("fa", 12)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[1])
 
             // POWER MODIFIERS
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.co.cores.antimatter.effect[1])
+            if (hasUpgrade("hpw", 1052)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(1.05)
         }
         
         // SPECIALIZED MODIFIERS
@@ -466,7 +468,7 @@
             style: { width: '400px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         2: {
-            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : new Decimal(Infinity) },
+            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : new Decimal(160) },
             currency() {
                 if (getBuyableAmount(this.layer, this.id).eq(0)) {
                     return player.ad.dimensionAmounts[3]
@@ -483,6 +485,8 @@
             effect(x) {
                 let mult = new Decimal(2).mul(buyableEffect("ca", 21))
                 if (hasUpgrade("ev2", 11)) mult = mult.mul(upgradeEffect("ev2", 11))
+
+                if (hasUpgrade("cs", 1001)) mult = mult.pow(2)
                 return mult.pow(getBuyableAmount(this.layer, this.id))
             },
             unlocked() { return true },
@@ -494,13 +498,7 @@
                 }
             },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                if (hasChallenge("ip", 18)) {
-                    return "<h3>" + getBuyableAmount(this.layer, this.id) + " Dimension Boosts"
-                } else {
-                    return "<h3>" + getBuyableAmount(this.layer, this.id) + "/" + this.purchaseLimit() + " Dimension Boosts"
-                }
-            },
+            title() {return "<h3>" + getBuyableAmount(this.layer, this.id) + "/" + this.purchaseLimit() + " Dimension Boosts"},
             display() {
                 let dimtext = ""
                 if (getBuyableAmount(this.layer, this.id).eq(0)) {
@@ -527,10 +525,18 @@
         3: {
             costBase() { return new Decimal(1) },
             costMult() { return new Decimal(4) },
-            effectBase() {return new Decimal(0.01)},
-            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(1) : new Decimal(16) },
+            purchaseLimit() {
+                if (!hasChallenge("ip", 18)) return new Decimal(1)
+                if (!hasUpgrade("cs", 1002)) return new Decimal(16)
+                return new Decimal(80)
+            },
             currency() { return player.ad.dimensionAmounts[7]},
-            effect(x) { return this.effectBase().mul(player.ca.galaxyDustEffect).mul(getBuyableAmount(this.layer, this.id).add(player.ca.replicantiGalaxies)) },
+            effect(x) {
+                let eff = new Decimal(0.01)
+                eff = eff.mul(player.ca.galaxyDustEffect)
+                if (hasUpgrade("cs", 1002)) eff = eff.mul(2)
+                return eff.mul(getBuyableAmount(this.layer, this.id).add(player.ca.replicantiGalaxies))
+            },
             unlocked() { return true },
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(this.costBase()).mul(this.costMult())},
             canAfford() { return this.currency().gte(this.cost()) },
@@ -884,6 +890,7 @@
         ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter (+" + format(player.ad.antimatterPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)) || hasMilestone("s", 19)}
 })

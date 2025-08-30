@@ -796,6 +796,7 @@
         ], {width: "750px", border: "3px solid #122727", backgroundColor: "#7AA6A6", borderRadius: "0px 0px 15px 15px"}],
         ["blank", "10px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("ta", 21) || hasMilestone("s", 19)}
 })

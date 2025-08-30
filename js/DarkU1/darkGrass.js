@@ -414,6 +414,7 @@ addLayer("dgr", {
             ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("le", 22) },
     deactivated() { return !player.sma.inStarmetalChallenge},

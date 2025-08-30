@@ -62,6 +62,7 @@
             buyUpgrade("bi", 113)
             buyUpgrade("bi", 114)
             buyUpgrade("bi", 115)
+            buyUpgrade("bi", 116)
         }
     },
     nodeStyle() {
@@ -180,24 +181,6 @@
         player.in.infinities = new Decimal(0)
     },
     clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         11: {
             title() { return "<h2>Break Your Infinities" },
             canClick() { return player.bi.brokenInfinitiesToGet.gt(0) },
@@ -661,7 +644,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.bi.brokenInfinities},
             pay(amt) { player.bi.brokenInfinities = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 32)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -695,7 +678,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.bi.brokenInfinities},
             pay(amt) { player.bi.brokenInfinities = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 32)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -729,7 +712,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.bi.brokenInfinities},
             pay(amt) { player.bi.brokenInfinities = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.25).add(1).pow(buyableEffect("cs", 32)) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.25).add(1) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -793,7 +776,6 @@
                         ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116]], {maxWidth: "1100px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
                 ]
 
             },
@@ -841,6 +823,7 @@
         ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.in.infinitiesToGet) + "</h3> infinities on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ta", 21)) || hasMilestone("s", 19)}
 })

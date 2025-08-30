@@ -93,7 +93,8 @@ function formatShort(decimal, precision = 2, small) {
     }
     else if (decimal.gte("1e1000000")) return exponentialFormat(decimal, 0, false)
     else if (decimal.gte("1e10000")) return exponentialFormat(decimal, 0)
-    else if (decimal.gte(1e3)) return exponentialFormat(decimal, precision)
+    else if (decimal.gte(1e6)) return exponentialFormat(decimal, precision)
+    else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
     else if (decimal.gte(0.0001) || !small) return regularFormat(decimal, precision)
     else if (decimal.eq(0)) return (0).toFixed(precision)
 
@@ -109,7 +110,8 @@ function formatShort(decimal, precision = 2, small) {
 
 function formatShortWhole(decimal) {
     decimal = new Decimal(decimal)
-    if (decimal.gte(1e3)) return formatShort(decimal, 2)
+    if (decimal.gte(1e6)) return exponentialFormat(decimal, 2)
+    if (decimal.gte(1e3)) return commaFormat(decimal, 0)
     if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
     return formatShort(decimal, 0)
 }

@@ -453,6 +453,7 @@ addLayer("hve", {
                 ], {width: "300px", height: "400px"}],
             ], {width: "325px", height: "600px"}],
         ], {backgroundColor: "#202", border: "3px solid white", borderRadius: "15px"}],
+        ["blank", "25px"],
     ],
     layerShown() { return hasUpgrade("hpw", 42) }, // Decides if this node is shown or not.
 });

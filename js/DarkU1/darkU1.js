@@ -31,18 +31,13 @@ addLayer("du", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.subtabs["du"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'du'
-            player.tab = "settings"
-            player.subtabs["du"]['stuff'] = 'Features'
-        }
-
         if (player.sma.inStarmetalChallenge && (player.tab == "i" || player.tab == "in" || player.tab == "s" || player.tab == "cp")) {
             player.tab = "du"
         } 
 
         //Celestial Point boosts
         player.du.pointGain = new Decimal(1)
+        if (hasUpgrade("sma", 10)) player.du.pointGain = player.du.pointGain.mul(2)
         player.du.pointGain = player.du.pointGain.mul(player.dr.rankEffect)
         player.du.pointGain = player.du.pointGain.mul(player.dr.tierEffect)
         player.du.pointGain = player.du.pointGain.mul(player.dr.tetrEffect)
@@ -78,46 +73,31 @@ addLayer("du", {
         // SOFTCAP 2 STARTING VARIABLE
         player.du.secondSoftcapStart = new Decimal(1.79e308)
     },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-
-    },
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Features": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["tree", treeD],
                 ]
-
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.sma.inStarmetalChallenge },
     deactivated() { return !player.sma.inStarmetalChallenge},

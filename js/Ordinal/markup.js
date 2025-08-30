@@ -133,6 +133,7 @@ addLayer("mu", {
         ["raw-html", () => {return "You have " + format(player.mu.cp) + " Ordinal Power."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["microtabs", "Content", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && layerShown("od") },
     deactivated() { return true},

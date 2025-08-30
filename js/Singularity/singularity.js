@@ -13,6 +13,7 @@ addLayer("s", {
 
         singularities: new Decimal(0),
         singularitiesToGet: new Decimal(0),
+        singularitiesEffect: new Decimal(1),
 
         highestSingularityPoints: new Decimal(0),
 
@@ -32,31 +33,31 @@ addLayer("s", {
 
         player.s.singularitiesToGet = new Decimal(1)
 
-        if (player.in.infinityPoints.pow(0.125).div(15000).lt(1e20)) {
+        if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
         } else {
-            player.s.singularityPointsToGet = Decimal.mul(1e20, player.in.infinityPoints.pow(0.02).div(55000))
+            player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.05).mul(2.13e10)
         }
-
 
         if (hasUpgrade("ev8", 22)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ev8", 22))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("s", 11))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("fu", 16))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.fu.angerEffect2)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 1104)[1])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.co.cores.singularity.effect[0])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.co.cores.radioactive.effect[0])
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
 
-        if (player.s.singularityPoints.gte(player.s.highestSingularityPoints))
-        {
+        if (player.s.singularityPoints.gte(player.s.highestSingularityPoints)) {
             player.s.highestSingularityPoints = player.s.singularityPoints
         }
 
         player.s.singularityTime = player.s.singularityTime.add(onepersec.mul(delta))
+
+        player.s.singularitiesEffect = Decimal.pow(1.175, player.s.singularities.add(1).log(10))
     },
     clickables: {},
     bars: {},
@@ -157,7 +158,7 @@ addLayer("s", {
         20: {
             title: "Singularity Upgrade X",
             unlocked() { return true},
-            description: "Unlock paragon scraps (in core scraps).",
+            description: "Unlock checkback core.",
             cost: new Decimal("1e27"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
@@ -338,7 +339,7 @@ addLayer("s", {
         },
         17: {
             requirementDescription: "<h3>7 Singularities",
-            effectDescription: "Autobuy infinity dimensions and all pre-singularity upgrades, no longer reset RBI toggle, keep one of every AD autobuyer, and unlock a new alt-uni 1 upgrade.",
+            effectDescription: "Autobuy infinity dimensions, T2 mod buyables, and all pre-singularity upgrades, no longer reset RBI toggle, keep one of every AD autobuyer, and unlock a new alt-uni 1 upgrade.",
             done() { return player.s.singularities.gte(7) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -352,6 +353,12 @@ addLayer("s", {
             requirementDescription: "<h3>25 Singularities",
             effectDescription: "Start each singularity with every universe 2 layer unlocked, and autoroll cooldown is 10x shorter.",
             done() { return player.s.singularities.gte(25) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        20: {
+            requirementDescription: "<h3>60 Singularities",
+            effectDescription: "Keep IP related blessing boosters and NIP related jinxes on singularity reset.",
+            done() { return player.s.singularities.gte(60) },
             style: { width: '800px', "min-height": '75px' },
         },
         21: {
@@ -401,9 +408,12 @@ addLayer("s", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.s.singularities) + "</h3> singularities." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.s.singularitiesToGet) + "</h3> singularities on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["blank", "20px"],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.s.singularities) + "</h3> singularities" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + formatWhole(player.s.singularitiesToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => {return hasUpgrade("fu", 19) ? "Boosts core scraps by x" + format(player.s.singularitiesEffect) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["milestone", 11],
                     ["milestone", 12],
@@ -414,9 +424,9 @@ addLayer("s", {
                     ["milestone", 17],
                     ["milestone", 18],
                     ["milestone", 19],
+                    ["milestone", 20],
                     ["milestone", 21],
                     ["milestone", 22],
-                    ["blank", "25px"],
                 ]
             },
             "Buyables": {
@@ -446,11 +456,14 @@ addLayer("s", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["microtabs", "stuff", { 'border-width': '0px' }], 
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
 })

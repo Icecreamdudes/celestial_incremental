@@ -25,8 +25,7 @@
         steelMax: false,
     }},
     automate() {
-        if (hasMilestone("ip", 17))
-        {
+        if (hasMilestone("ip", 17)) {
             buyBuyable("gh", 11)
             buyBuyable("gh", 12)
             buyBuyable("gh", 13)
@@ -41,8 +40,7 @@
             buyBuyable("gh", 23)
             buyBuyable("gh", 24)
         }
-        if (hasMilestone("s", 16))
-        {
+        if (hasMilestone("s", 16)) {
             buyBuyable("gh", 31)
             buyBuyable("gh", 32)
             buyBuyable("gh", 33)
@@ -174,6 +172,8 @@
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("fu", 18))
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
         player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
+        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
+        player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
 
         // STEEL PER SECOND
         if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))

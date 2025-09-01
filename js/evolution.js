@@ -21,22 +21,13 @@
         9 - Gd Checkpoint
         10 - Eye
         */
-    }
-    },
-    automate() {
-    },
-    nodeStyle() {
-    },
+    }},
+    automate() {},
+    nodeStyle() {},
     tooltip: "Evolution",
     color: "#06366e",
     update(delta) {
         let onepersec = player.cb.cbTickspeed
-
-        if (player.tab == "ev") {
-            startRain('#4b79ff');
-        }  else if (player.tab == "eva") {
-            stopRain('#4b79ff');
-        }
     },
     branches: ["branch"],
     clickables: {
@@ -405,7 +396,7 @@
             description() {
                 return formatWhole(player.cb.evolutionShards) + "/60 Evolution Shards" +
                 "<br>"  + formatWhole(player.cb.paragonShards) + "/10 Paragon Shards" +
-                "<br>"  + format(player.points) + "/1e120,000 Celestial Points" +
+                "<br>"  + format(player.points) + "/1e200,000 Celestial Points" +
                 "<br>"  + formatWhole(player.g.goldGrass) + "/1e30 Golden Grass" +
                 "<br>"  + formatWhole(player.g.moonstone) + "/2,000 Moonstone" +
                 "<br>"  + formatWhole(player.cp.replicantiPoints) + "/1e250 Replicanti Points" +
@@ -413,7 +404,7 @@
                 "<br>"  + formatWhole(player.cs.scraps.checkback.amount) + "/100 Check Back Core Scraps"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(10) && player.points.gte("1e120000")
+                return (player.cb.evolutionShards.gte(60) && player.cb.paragonShards.gte(10) && player.points.gte("1e200000")
                 && player.g.goldGrass.gte(1e30) && player.g.moonstone.gte(2000) && player.cp.replicantiPoints.gte(1e250)
                 && player.ca.replicantiGalaxies.gte(15) && player.cs.scraps.checkback.amount.gte(100))
             },
@@ -2125,11 +2116,11 @@ addLayer("ev8", {
             style: { width: '135px', "min-height": '120px' },
 
         },
-     /*   23: {
+      /*  23: {
             title: "Shard Research XII",
-            unlocked() { return hasMilestone("s", 14) && hasUpgrade("ev8", 19) && hasUpgrade("ev8", 21) && hasUpgrade("ev8", 22)},
-            description: "Unlocks the TIME MACHINE.",
-            cost: new Decimal(15),
+            unlocked() { return player.au2.au2Unlocked && hasUpgrade("ev8", 19) && hasUpgrade("ev8", 21) && hasUpgrade("ev8", 22)},
+            description: "Unlocks MINING (In AU2).",
+            cost: new Decimal(20),
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",

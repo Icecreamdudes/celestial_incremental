@@ -38,7 +38,7 @@
 </head>
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
-		<div class="uiHolder" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
+		<div class="uiHolder" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
 			<div class="uniHolder">
 				<button class="uniButton" v-if="layerShown('i') && player.uniTab==1" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe=1"><span class="buttonText">1</span></button>
 				<button class="uniButton" v-if="layerShown('h') && player.uniTab==0" v-bind:style="constructUniButtonStyle('h') " onclick="player.universe=-666"><span class="buttonText">H</span></button>
@@ -47,6 +47,7 @@
  				<button class="uniButton" v-if="layerShown('s') && player.uniTab==1" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe=3"><span class="buttonText">3</span></button>
 				<button class="uniButton" v-if="layerShown('ch') && player.uniTab==1" v-bind:style="constructUniButtonStyle('ch') " onclick="player.universe=-0.5"><span class="buttonText">γ</span></button>
  				<button class="uniButton" v-if="layerShown('du') && player.uniTab==1" v-bind:style="constructUniButtonStyle('du') " onclick="player.universe=-0.1"><span class="buttonText">D1</span></button>
+				<button class="uniButton" v-if="layerShown('au2') && player.uniTab==2" v-bind:style="constructUniButtonStyle('au2') " onclick="player.universe=2.5"><span class="buttonText">A2</span></button>
 				<div class="arrowHolder">
 					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab-1" :disabled="player.uniTab<=player.minUniTab" style="border-bottom:1.5px solid"><span class="buttonText">▲</span></button>
 					<button v-bind:class="{arrowButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="player.uniTab = player.uniTab+1" :disabled="player.uniTab>=player.maxUniTab" style="border-top:1.5px solid"><span class="buttonText">▼</span></button>
@@ -61,6 +62,7 @@
 					<p v-if="player.universe == 3">Universe 3<br>Domain of Singularity</p>
 					<p v-if="player.universe == -0.5">Universe γ<br>Hall of Celestials</p>
 					<p v-if="player.universe == -0.1">Dark Universe 1<br>Shadow Overworld</p>
+					<p v-if="player.universe == 2.5">Alt-Universe 2<br>Cosmic Cosmos</p>
 					<p v-if="player.universe == 0.5">Check Back</p>
 				</div>
 				<span v-if="options.menuType == 'Tree'">
@@ -71,6 +73,7 @@
 					<tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tree>
 					<tree :layer="'ch'" :data="treeCH" v-if="player.universe == -0.5"></tree>
 					<tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tree>
+					<tree :layer="'au2'" :data="treeAU2" v-if="player.universe == 2.5"></tree>
 					<tree :layer="'cb'" :data="treeCB" v-if="player.universe == 0.5"></tree>
 				</span>
 				<span v-if="options.menuType == 'Tab'">
@@ -81,6 +84,7 @@
 					<tab-tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tab-tree>
 					<tab-tree :layer="'ch'" :data="treeCH" v-if="player.universe == -0.5"></tab-tree>
 					<tab-tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tab-tree>
+					<tab-tree :layer="'au2'" :data="treeAU2" v-if="player.universe == 2.5"></tab-tree>
 					<tab-tree :layer="'cb'" :data="treeCB" v-if="player.universe == 0.5"></tab-tree>
 				</span>
 			</div>

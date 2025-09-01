@@ -7,7 +7,8 @@ addLayer("i", {
     startData() { return {
         unlocked: true,
 
-        PreOTFMult: new Decimal(1),
+        preOTFMult: new Decimal(1),
+        postOTFMult: new Decimal(1),
     }},
     automate() {
         if (player.i.auto == true && hasMilestone("ip", 19)) {
@@ -82,6 +83,12 @@ addLayer("i", {
 
         //----------------------------------------
 
+        // START OF POST-OTF-MULT MODIFIERS
+        player.i.postOTFMult = new Decimal(1)
+        player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+
+        //----------------------------------------
+
         // START OF CELESTIAL POINT MODIFIERS
         if (player.startedGame == true && player.c.cutscene1 == false) {
             player.gain = new Decimal(1)
@@ -150,6 +157,8 @@ addLayer("i", {
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
         player.gain = player.gain.pow(player.co.cores.point.effect[1])
+        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
+        player.gain = player.gain.pow(player.st.starPowerEffect)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -422,7 +431,7 @@ addLayer("i", {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e8000"),
+            cost: new Decimal("1e7000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
@@ -570,17 +579,3 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 81 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
-        player.universe = 1
-    }
-    if(event.keyCode == 65 && hasUpgrade("cp", 18) && options.toggleHotkey) {
-        player.universe = 1.5
-    }
-    if(event.keyCode == 87 && (hasUpgrade("cp", 18) || player.universe != 1.5) && options.toggleHotkey) {
-        player.universe = 2
-    }
-    if(event.keyCode == 69 && (hasUpgrade("cp", 18) || player.universe != 1.5) && player.ca.defeatedCante && options.toggleHotkey) {
-        player.universe = 3
-    }
-});

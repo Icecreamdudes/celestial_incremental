@@ -73,8 +73,18 @@ function constructUniButtonStyle(layer){
 				background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",
 				backgroundOrigin: "border-box",
 				color: "#ffffff",
-				borderColor: "#555555",});
+				borderColor: "#555555",
+			});
 			if (player.universe == -0.1) style.push({borderColor: "#444"})
+			break;
+		case 'au2':
+			style.push({
+            	background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
+            	backgroundOrigin: "border-box",
+				color: "#ffffff",
+            	borderColor: "#270052",
+			});
+			if (player.universe == 2.5) style.push({borderColor: "white"})
 			break;
 		case 'od':
 			style.push({

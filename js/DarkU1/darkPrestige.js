@@ -1,5 +1,4 @@
-﻿
-addLayer("dp", {
+﻿addLayer("dp", {
     name: "Prestige", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -11,9 +10,13 @@ addLayer("dp", {
         prestigePointsEffect: new Decimal(0),
         prestigePointsToGet: new Decimal(0),
         prestigePause: new Decimal(0),
-    }
-    },
+    }},
     automate() {
+        if (hasUpgrade("dn", 11)) {
+            buyBuyable("dp", 11)
+            buyBuyable("dp", 12)
+            buyBuyable("dp", 13)
+        }
     },
     nodeStyle() {
         return {
@@ -36,6 +39,8 @@ addLayer("dp", {
         if (player.le.punchcards[10]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[10])
         if (player.le.punchcards[14]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[14])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
+        player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
+        if (player.pet.activeAbilities[0]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)
 
         // PRESTIGE SOFTCAP
         if (player.dp.prestigePointsToGet.gte(1e250)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.div(1e250).pow(0.2).mul(1e250)
@@ -48,9 +53,11 @@ addLayer("dp", {
         player.dp.prestigePointsEffect = player.dp.prestigePoints.pow(0.4).add(1)
 
         player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet.mul(buyableEffect("dn", 12)).mul(delta))
+        if (hasUpgrade("sma", 202)) {
+            player.dp.prestigePoints = player.dp.prestigePoints.add(player.dp.prestigePointsToGet.mul(0.01).mul(delta))
+        }
     },
-    bars: {
-    },
+    bars: {},
     clickables: {
         11: {
             title() { return "<h2>Reset previous content for prestige points." },
@@ -67,8 +74,7 @@ addLayer("dp", {
             }
         },
     },
-    prestigeReset()
-    {
+    prestigeReset() {
         player.du.points = new Decimal(0)
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)
@@ -78,9 +84,7 @@ addLayer("dp", {
         player.dr.tierPoints = new Decimal(0)
         player.dr.tetrPoints = new Decimal(0)
     },
-    upgrades: {
-
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(1) },
@@ -100,7 +104,7 @@ addLayer("dp", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -109,7 +113,7 @@ addLayer("dp", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -134,7 +138,7 @@ addLayer("dp", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -143,7 +147,7 @@ addLayer("dp", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -168,7 +172,7 @@ addLayer("dp", {
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
-                if (mult != true) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
@@ -177,7 +181,7 @@ addLayer("dp", {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -185,14 +189,9 @@ addLayer("dp", {
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -215,15 +214,15 @@ addLayer("dp", {
             },
         },
     },
-
     tabFormat: [
-         ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-         ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-         ["microtabs", "stuff", { 'border-width': '0px' }],
-         ["blank", "25px"],
-        ],
+        ["raw-html", () => { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
     layerShown() { return hasUpgrade("le", 13) },
     deactivated() { return !player.sma.inStarmetalChallenge},
 })

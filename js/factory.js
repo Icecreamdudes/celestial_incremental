@@ -67,8 +67,7 @@
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 208))
         if (hasMilestone("fa", 21)) player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.milestoneEffect[9])
         player.fa.chargeRate = player.fa.chargeRate.mul(player.le.punchcardsPassiveEffect[5])
-
-        if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
+        player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("st", 105))
 
         player.fa.milestoneEffect[0] = player.fa.charge.pow(0.3).div(3).add(1) //ip
         player.fa.milestoneEffect[1] = player.fa.charge.pow(3).add(1) //ad

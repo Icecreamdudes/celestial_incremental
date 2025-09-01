@@ -1,5 +1,4 @@
-﻿
-addLayer("dr", {
+﻿addLayer("dr", {
     name: "Dark Ranks", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -65,12 +64,15 @@ addLayer("dr", {
         // Rank/Tier/Tetr/Pent Dividers
         player.dr.rankDiv = new Decimal(1)
         player.dr.rankDiv = player.dr.rankDiv.mul(buyableEffect("dp", 11))
+        player.dr.rankDiv = player.dr.rankDiv.mul(levelableEffect("st", 202)[0])
 
         player.dr.tierDiv = new Decimal(1)
         player.dr.tierDiv = player.dr.tierDiv.mul(buyableEffect("dp", 12))
+        player.dr.tierDiv = player.dr.tierDiv.mul(levelableEffect("st", 203)[0])
 
         player.dr.tetrDiv = new Decimal(1)
         player.dr.tetrDiv = player.dr.tetrDiv.mul(buyableEffect("dp", 13))
+        player.dr.tetrDiv = player.dr.tetrDiv.mul(levelableEffect("st", 204)[0])
 
         player.dr.pentDiv = new Decimal(1)
 
@@ -88,6 +90,7 @@ addLayer("dr", {
         if (hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.5).add(1).pow(1.08)
         if (player.le.punchcards[3]) player.dr.rankEffect = player.dr.rank.mul(0.7).add(1).pow(Decimal.mul(0.5, player.le.punchcardsLevelsEffect[3]).add(1))
         player.dr.rankReq = layers.dr.getRankReq()
+        if (player.pet.activeAbilities[0]) player.dr.rankReq = player.dr.rankReq.pow(1.4)
         if (!hasUpgrade("le", 14)) player.dr.ranksToGet = new Decimal(1)
 
 
@@ -116,6 +119,7 @@ addLayer("dr", {
         if (hasUpgrade("sma", 11)) player.dr.tierEffect = player.dr.tier.mul(0.65).add(1).pow(1.15)
         if (player.le.punchcards[4]) player.dr.tierEffect = player.dr.tier.mul(0.8).add(1).pow(Decimal.mul(0.5, player.le.punchcardsLevelsEffect[4]).add(1.2))
         player.dr.tierReq = layers.dr.getTierReq()
+        if (player.pet.activeAbilities[0]) player.dr.tierReq = player.dr.tierReq.pow(1.4)
 
         if (!hasUpgrade("le", 15)) player.dr.tiersToGet = new Decimal(1)
         if (player.dr.rank.gte(player.dr.tierReq) && hasUpgrade("le", 15)) {
@@ -133,6 +137,7 @@ addLayer("dr", {
         player.dr.tetrEffect = player.dr.tetr.add(1).pow(1.2)
         if (player.le.punchcards[5]) player.dr.tetrEffect = player.dr.tetr.add(1).pow(Decimal.mul(0.5, player.le.punchcardsLevelsEffect[5]).add(1.4))
         player.dr.tetrReq = layers.dr.getTetrReq()
+        if (player.pet.activeAbilities[0]) player.dr.tetrReq = player.dr.tetrReq.pow(1.4)
 
         if (!hasUpgrade("le", 18)) player.dr.tetrsToGet = new Decimal(1)
         if (player.dr.tier.gte(player.dr.tetrReq) && hasUpgrade("le", 18)) {
@@ -169,6 +174,9 @@ addLayer("dr", {
         if (player.le.punchcards[6]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.le.punchcardsEffect[6])
         if (player.le.punchcards[14]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.le.punchcardsEffect[14])
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(buyableEffect("dgr", 15))
+        player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("st", 102)[0])
+        if (player.pet.activeAbilities[0]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.pow(0.6)
+        if (hasMilestone("db", 13)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(1000)
 
 
         player.dr.tierPoints = player.dr.tierPoints.add(player.dr.tierPointsPerSecond.mul(delta))   
@@ -182,6 +190,9 @@ addLayer("dr", {
         if (player.le.punchcards[6]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.le.punchcardsEffect[6])
         if (player.le.punchcards[14]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.le.punchcardsEffect[14])
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(buyableEffect("dgr", 15))
+        player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("st", 103)[0])
+        if (player.pet.activeAbilities[0]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.pow(0.6)
+        if (hasMilestone("db", 13)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(100)
 
 
         player.dr.tetrPoints = player.dr.tetrPoints.add(player.dr.tetrPointsPerSecond.mul(delta))
@@ -195,12 +206,16 @@ addLayer("dr", {
         if (player.le.punchcards[6]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.le.punchcardsEffect[6])
         if (player.le.punchcards[14]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.le.punchcardsEffect[14])
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(buyableEffect("dgr", 15))
+        player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("st", 104)[0])
+        if (player.pet.activeAbilities[0]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.pow(0.6)
+        if (hasMilestone("db", 13)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(10)
 
 
         player.dr.pentPoints = player.dr.pentPoints.add(player.dr.pentPointsPerSecond.mul(delta))
         player.dr.pentPointsEffect = player.dr.pentPoints.pow(0.5).div(25).add(1)
 
         player.dr.pentPointsPerSecond = Decimal.pow(5, player.dr.pent).sub(1).div(5)
+        player.dr.pentPointsPerSecond = player.dr.pentPointsPerSecond.mul(levelableEffect("st", 205)[0])
 
     },
     bars: {},
@@ -419,10 +434,11 @@ addLayer("dr", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

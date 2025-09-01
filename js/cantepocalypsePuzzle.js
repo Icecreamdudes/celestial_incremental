@@ -28,10 +28,8 @@ addLayer("cap", {
 
         cantepocalypseUnlock: false,
         cantepocalypsePrep: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
@@ -39,32 +37,25 @@ addLayer("cap", {
             "border-color": "#0f354c",
         };
     },
-
     tooltip: "Cante, the Celestial of Replicanti",
     color: "#727884",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.cap.reqDisplayIndex.eq(0))
-        {
+        if (player.cap.reqDisplayIndex.eq(0)) {
             player.cap.reqDisplay = "Recall the challenges and reach further like you never have before."
-        } else if (player.cap.reqDisplayIndex.eq(1))
-        {
+        } else if (player.cap.reqDisplayIndex.eq(1)) {
             player.cap.reqDisplay = "Be removed from all of your friendly companions."
-        } else if (player.cap.reqDisplayIndex.eq(2))
-        {
+        } else if (player.cap.reqDisplayIndex.eq(2)) {
             player.cap.reqDisplay = "Revisit the previous celestial and go beyond."
-        } else if (player.cap.reqDisplayIndex.eq(3))
-        {
+        } else if (player.cap.reqDisplayIndex.eq(3)) {
             player.cap.reqDisplay = "Answer questions about your journey so far."
         }
 
-        if (hasUpgrade("i", 37) && hasUpgrade("i", 38) && hasUpgrade("i", 39) && hasUpgrade("i", 41))
-        {
+        if (hasUpgrade("i", 37) && hasUpgrade("i", 38) && hasUpgrade("i", 39) && hasUpgrade("i", 41)) {
             player.cap.passingReqs[0] = true
         }
-        if (hasUpgrade("tad", 14) && hasUpgrade("tad", 15) && hasUpgrade("tad", 16))
-        {
+        if (hasUpgrade("tad", 14) && hasUpgrade("tad", 15) && hasUpgrade("tad", 16)) {
             player.cap.passingReqs[2] = true
         }
 
@@ -82,22 +73,22 @@ addLayer("cap", {
             ""
         ]
 
-        if (player.cap.quizIndex.eq(8))
-        {
+        if (player.cap.quizIndex.eq(8)) {
             player.cap.passingReqs[3] = true
             player.subtabs["cap"]['stuff'] = 'Main'
         }
-        if (player.cap.cantepocalypseUnlock)
-        {
+        if (player.cap.cantepocalypseUnlock) {
             player.subtabs["cap"]['stuff'] = 'CANTEPOCALYPSE'
         }
 
         if (player.tab == 'cap' && player.subtabs["cap"]['stuff'] == 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
             player.cap.cantepocalypsePrep = true
         }
+        if (player.universe == 1.5) {
+            player.cap.cantepocalypsePrep = false
+        }
 
-        player.cap.quizAnswers =
-        [
+        player.cap.quizAnswers = [
             new Decimal(4).abs(),
             new Decimal(200).abs(),
             new Decimal(0.04).abs(),
@@ -112,8 +103,7 @@ addLayer("cap", {
         if (player.cap.quizIndex.lt(8)) player.cap.quizLower = player.cap.quizAnswers[player.cap.quizIndex].sub(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
         if (player.cap.quizIndex.lt(8)) player.cap.quizHigher = player.cap.quizAnswers[player.cap.quizIndex].add(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
 
-        if (player.cap.reqsPassed[0] && player.cap.reqsPassed[1] && player.cap.reqsPassed[2] && player.cap.reqsPassed[3])
-        {
+        if (player.cap.reqsPassed[0] && player.cap.reqsPassed[1] && player.cap.reqsPassed[2] && player.cap.reqsPassed[3]) {
             player.cap.cantepocalypseUnlock = true
         }
     },

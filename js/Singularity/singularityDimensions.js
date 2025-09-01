@@ -52,6 +52,7 @@
                 .mul(buyableEffect("fu", 54))
                 .mul(buyableEffect("sma", 14))
                 .mul(levelableEffect("pet", 308)[1])
+                .mul(player.st.starPowerEffect2) 
 
             // Singularity Power Softcap
             let base = new Decimal(300)
@@ -67,6 +68,7 @@
                 .mul(buyableEffect("fu", 53))
                 .mul(buyableEffect("sma", 14))
                 .mul(player.co.cores.radioactive.effect[2])
+                .mul(player.st.starPowerEffect2) 
 
                 // Dimension Softcap
                 if (player.sd.dimensionsPerSecond[i].gt(1e300)) player.sd.dimensionsPerSecond[i] = player.sd.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
@@ -94,8 +96,7 @@
 
         if (player.ra.storedRadiation.gt(player.sd.radiationUsage.mul(0.1))) {
             player.sd.producingDimensions = true
-        } else
-        {
+        } else {
             player.sd.producingDimensions = false
             player.ra.storedRadiation = new Decimal(0)
         }
@@ -175,7 +176,7 @@
             },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Next ID: " + format(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
+                return "Next SD: " + format(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
             },
             buy() {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))

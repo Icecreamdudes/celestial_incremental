@@ -1,4 +1,4 @@
-﻿var tree3 = [["s"], ["co"], ["ra", "cs", "sd"], ["sma"], ["ma"]]
+﻿var tree3 = [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]]
 addLayer("s", {
     name: "Genesis", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "GE", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -35,8 +35,10 @@ addLayer("s", {
 
         if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
-        } else {
+        } else if (player.in.infinityPoints.lt(2.71e3793)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.05).mul(2.13e10)
+        } else {
+            player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.02).mul(1.35e124)
         }
 
         if (hasUpgrade("ev8", 22)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("ev8", 22))
@@ -50,6 +52,10 @@ addLayer("s", {
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
+        if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints)) {
             player.s.highestSingularityPoints = player.s.singularityPoints
@@ -167,7 +173,7 @@ addLayer("s", {
         },
         21: {
             title: "Singularity Upgrade X",
-            unlocked() { return hasUpgrade("s", 20)},
+            unlocked() { return true},
             description: "Unlock starmetal alloy.",
             cost: new Decimal("1e30"),
             currencyLocation() { return player.s },
@@ -177,8 +183,8 @@ addLayer("s", {
         },
         22: {
             title: "Singularity Upgrade XI",
-            unlocked() { return hasUpgrade("s", 21)},
-            description: "Automate fun and sfrgt buyables.",
+            unlocked() { return true},
+            description: "Autobuy fun and sfrgt buyables.",
             cost: new Decimal("1e38"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
@@ -187,9 +193,49 @@ addLayer("s", {
         },
         23: {
             title: "Singularity Upgrade XII",
-            unlocked() { return hasUpgrade("s", 22)},
+            unlocked() { return true},
             description: "Unlock more check back content.<br>(CB Level 25,000)",
             cost: new Decimal("1e44"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        24: {
+            title: "Singularity Upgrade XIII",
+            unlocked() { return true},
+            description: "Gain 100% of IP per second.",  
+            cost: new Decimal("1e100"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        25: {
+            title: "Singularity Upgrade XIV",
+            unlocked() { return true},
+            description: "Gain 100% of NIP per second.",  
+            cost: new Decimal("1e120"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        26: {
+            title: "Singularity Upgrade XV",
+            unlocked() { return true},
+            description: "Unlocks rockets (in universe 2).",  
+            cost: new Decimal("1e160"),
+            currencyLocation() { return player.s },
+            currencyDisplayName: "Singularity Points",
+            currencyInternalName: "singularityPoints",
+            style: { width: '125px', "min-height": '120px' },
+        },
+        27: {
+            title: "Singularity Upgrade XVI",
+            unlocked() { return true},
+            description: "Autobuys all emotion buyables.",  
+            cost: new Decimal("1e300"),
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
@@ -401,7 +447,8 @@ addLayer("s", {
                 content: [
                     ["blank", "25px"],
                     ["style-row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
-                        ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23]], {maxWidth: "1000px"}],
+                        ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],
+                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27]], {maxWidth: "1000px"}],
                 ]
             },
             "Milestones": {
@@ -459,7 +506,7 @@ addLayer("s", {
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
-            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],

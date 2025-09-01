@@ -54,24 +54,6 @@
         let onepersec = new Decimal(1)
     },
     clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         11: {
             title() { return "<h2>BIG CRUNCH" },
             canClick() { return player.points.gte('1e308') },

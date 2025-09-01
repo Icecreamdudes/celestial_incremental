@@ -160,6 +160,7 @@ addLayer("pol", {
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.le.punchcardsPassiveEffect[13])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("gh", 25))
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
@@ -527,7 +528,7 @@ addLayer("pol", {
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.pol.pollinators},
             pay(amt) { player.pol.pollinators = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5).div(player.pol.pollinators.plus(1).log10()) },
             unlocked() { return hasUpgrade("pol", 13) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -535,7 +536,7 @@ addLayer("pol", {
                 return "Promised Pollinators"
             },
             display() {
-                return "which guarantees you have at least " + format(tmp[this.layer].buyables[this.id].effect) + " seconds worth of pollinators.\n\
+                return "which guarantees you have at least " + format(tmp[this.layer].buyables[this.id].effect) + " seconds worth of pollinators (scales down based on pollinators).\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Pollinators"
             },
             buy(mult) {

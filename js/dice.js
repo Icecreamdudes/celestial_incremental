@@ -122,6 +122,7 @@
         if (player.pol.pollinatorEffects.ant.enabled) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorEffects.ant.effects[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pet", 306)[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.co.cores.dice.effect[0])
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(player.st.starPowerEffect2)
 
         // POWER MODIFIERS
         player.d.dicePointsMult = player.d.dicePointsMult.pow(player.co.cores.dice.effect[1])
@@ -154,6 +155,7 @@
         player.d.diceSides = new Decimal(6)
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
+        if (hasUpgrade("sma", 106)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 106)).floor()
 
         // LOWEST ROLL
         player.d.lowestRoll = buyableEffect("d", 14)

@@ -61,6 +61,14 @@ addLayer("pet", {
 
         cratePrices: [new Decimal(10), new Decimal(20), new Decimal(40), new Decimal(150), new Decimal(75), new Decimal(300)],
         crateBought: [0, 0, 0, 0, 0, 0],
+
+        //leg
+        legendaryPetAbilityTimers: [new Decimal(0),],
+        legendaryPetAbilityTimersMax: [new Decimal(600),],
+        legendaryPetAbilityCooldowns: [new Decimal(0),],
+        legendaryPetAbilityCooldownsMax: [new Decimal(36000),],
+
+        activeAbilities: [false,],
     }},
     automate() {},
     nodeStyle() {},
@@ -85,6 +93,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 406)[2])
         player.pet.petPointMult = player.pet.petPointMult.mul(player.pet.gemEffects[1])
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("ep4", 12))
+        player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
 
         // PET BUTTON COOLDOWN CALC
         for (let i = 0; i < player.pet.petButtonTimer.length; i++) {
@@ -158,6 +167,62 @@ addLayer("pet", {
         player.pet.cratePrices[3] = player.pet.cratePrices[3].add(new Decimal(100).mul(player.pet.crateBought[3]))
         player.pet.cratePrices[4] = player.pet.cratePrices[4].add(new Decimal(50).mul(player.pet.crateBought[4]))
         player.pet.cratePrices[5] = player.pet.cratePrices[5].add(new Decimal(250).mul(player.pet.crateBought[5]))
+
+        //legendary pets
+        player.pet.legendaryPetAbilityCooldownsMax = [new Decimal(36000),]
+        for (let i = 0; i < player.pet.legendaryPetAbilityCooldownsMax.length; i++) {
+            player.pet.legendaryPetAbilityCooldowns[i] = player.pet.legendaryPetAbilityCooldowns[i].sub(ops.mul(delta))
+        }
+
+        player.pet.legendaryPetAbilityTimersMax = [new Decimal(600),]
+        player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(player.le.punchcardsPassiveEffect[18])
+
+        if (player.le.punchcards[18]) player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(player.le.punchcardsEffect[18])
+        
+        let abilityTimeDecrease = ops
+        if (player.le.punchcards[18]) abilityTimeDecrease = abilityTimeDecrease.div(player.le.punchcardsEffect[18])
+        player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimers[0].sub(abilityTimeDecrease.mul(delta))
+
+        for (let i = 0; i < player.pet.legendaryPetAbilityTimers.length; i++) {
+            if (player.pet.legendaryPetAbilityTimers[i].gt(0)) {
+                player.pet.activeAbilities[i] = true
+            }  else
+            {
+                player.pet.activeAbilities[i] = false
+            }
+        }
+
+        if (player.pet.legendaryPetAbilityTimers[0].lte(0) && player.pet.activeAbilities[0]) {
+            player.pet.activeAbilities[0] = false
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
+                player.le.starmetalAlloyPauseAgain = new Decimal(10)
+                for (let i = 0; i < player.le.punchcards.length; i++)
+                    {
+                        if (player.le.punchcards[i] == true)
+                        {
+                            player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.starmetalAlloyToGetTrue.floor())
+                        }
+                        player.le.punchcards[i] = false
+                    }
+                    player.le.starmetalAlloyToGet = new Decimal(0)
+                    player.le.resetAmount = new Decimal(0)
+        
+                    player.le.activePunchcards = []
+                    player.le.activePunchcardIndex = new Decimal(0)
+                    if (!hasUpgrade("sma", 15)) player.le.storedSelections = new Decimal(0)
+                    if (hasUpgrade("sma", 15)) player.le.storedSelections = new Decimal(1)
+        
+                    player.sma.inStarmetalChallenge = false
+                    player.universe = 3
+                    player.tab = "sma"
+        
+                    for (let i = 0; i < player.le.punchcardSelections.length; i++)
+                    {
+                        player.le.punchcardSelections[i] = false
+                    }
+        
+                    layers.le.generateSelection();
+        }
     },
     clickables: {
         2: {
@@ -284,7 +349,7 @@ addLayer("pet", {
             title() { return "<h3>???"},
             tooltip() { return "Coming in<br>future update"},
             canClick() { return false },
-            unlocked() { return false /*layers.pet.levelables.index >= 100 && layers.pet.levelables.index < 200*/ },
+            unlocked() { return /*layers.pet.levelables.index >= 200 && layers.pet.levelables.index < 300*/ },
             onClick () {},
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -292,12 +357,12 @@ addLayer("pet", {
                 this.canClick() ? look.color = "white" : look.color = "black"
                 return look
             },
-        },
+        },      
         8: {
             title() { return "<h3>???"},
             tooltip() { return "Coming in<br>future update"},
             canClick() { return false },
-            unlocked() { return /*layers.pet.levelables.index >= 200 && layers.pet.levelables.index < 300*/ },
+            unlocked() { return /*layers.pet.levelables.index >= 100 && layers.pet.levelables.index < 200*/ },
             onClick () {},
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -389,6 +454,33 @@ addLayer("pet", {
                 let look = {width: '200px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
                 this.canClick() ? look.backgroundColor = "#222222" : look.backgroundColor = "#bf8f8f"
                 this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
+        },
+
+        //legendary pet skills
+        31: {
+            title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h3>Activate Skill" : 
+                player.pet.legendaryPetAbilityTimers[0].lte(0) ? "Check back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "." 
+                : "<h3>Skill Active<br>for " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "."},
+            tooltip() { return "Activates the eclipse in DU1 for 10 minutes, unlocking alternate gameplay mechanics. (Also throws you into DU1 cause why not)"},
+            canClick() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) },
+            unlocked() { return layers.pet.levelables.index == 501 },
+            onClick () {
+                player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
+                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+
+                player.sma.inStarmetalChallenge = true
+                player.universe = -0.1
+                player.tab = "dut"
+                layers.le.generateSelection();
+
+                player.subtabs["le"]["stuff"] = "Shards"
+            },
+            style() {
+                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#bf8f8f"
+                this.canClick() ? look.color = "black" : look.color = "black"
                 return look
             },
         },
@@ -1717,7 +1809,7 @@ addLayer("pet", {
             effect() { 
                 return [
                     player.g.grass.pow(0.02).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.4)), // Fertilizer (Based on Grass)
-                    player.cb.level.mul(0.0007).mul(getLevelableAmount(this.layer, this.id)).pow(0.5).add(1), // Check Back XP (Based on Check Back Level)
+                    player.cb.level.pow(0.8).mul(0.0014).mul(getLevelableAmount(this.layer, this.id)).pow(0.5).add(1), // Check Back XP (Based on Check Back Level)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2434,7 +2526,53 @@ addLayer("pet", {
                 return look
             } 
         },
-
+        //legendary
+        501: {
+            image() { return this.canClick() ? "resources/eclipseLegendaryPet.png" : "resources/secret.png"},
+            title() { return "Eclipse" },
+            lore() { return "The true story of eclipse is extremely mysterious and shrouded in secrecy. Kres, Nav, and Sel only found him during their first encounter with Matos. Eclipse doesn't speak. They only listen. But Eclipse is an extremely powerful being, that helps the trio during their ventures." }, 
+            description() {
+                return "x" + format(this.effect()[0]) + " to stars <small>(based on stars)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to activated fuel <small>(based on stars)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to rocket parts <small>(based on stars)</small>."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.au2.stars.pow(0.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // stars (Based on Stars)
+                    player.au2.stars.pow(0.15).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // fuel (Based on Stars)
+                    player.au2.stars.pow(0.1).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // rocket parts (Based on Stars)
+                ]
+            },
+            sacValue() { return new Decimal(100)},
+            // CLICK CODE
+            unlocked() { return player.cb.highestLevel.gte(1000000) },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).eq(0)) {
+                    return new Decimal(1)
+                } else {
+                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(2).floor()
+                }
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
         // START OF EVOLVED PETS
         1101: {
             image() { return this.canClick() ? "resources/voidGwaEvoPet.png" : "resources/secret.png"},
@@ -3103,7 +3241,7 @@ addLayer("pet", {
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
-                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
+                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
                                 ["style-row", [["clickable", 3], ["clickable", 4], ["clickable", 22]], {width: '200px', height: '40px'}],
                             ]],
                         ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
@@ -3144,7 +3282,7 @@ addLayer("pet", {
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(1000000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", []],
+                                ["row", [["levelable", 501]]],
                             ], () => { return player.cb.highestLevel.gte(1000000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
 
                         ], {width: "550px", height: "522px"}],

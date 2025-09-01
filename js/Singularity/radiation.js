@@ -40,6 +40,7 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.co.cores.radioactive.effect[1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cs.scraps.radioactive.effect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
+        if (player.ma.matosDefeated) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(100)
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
 

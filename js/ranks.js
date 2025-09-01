@@ -1,4 +1,4 @@
-﻿addLayer("r", {
+﻿﻿addLayer("r", {
     name: "Ranks", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -178,7 +178,7 @@
 
         //Time reversal
 
-        if (!player.r.timeReversed) {
+        if (!player.r.timeReversed && !hasUpgrade("ma", 14)) {
             player.r.timeCubesPerSecond = new Decimal(0)
         } else {
             player.r.timeCubesPerSecond = player.points.plus(1).log10().pow(0.3)
@@ -188,6 +188,7 @@
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
             if (hasUpgrade("s", 14)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("s", 14))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.d.diceEffects[17])
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.i.postOTFMult)
 
             // EXPONENTS
             if (hasUpgrade("cs", 103)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.pow(1.1)
@@ -686,9 +687,9 @@
             style: { width: '800px', "min-height": '75px' },
         },
         29: {
-            requirementDescription: "<h3>Pent 100,000",
-            effectDescription() { return "Replaces the Replicanti hardcap with a softcap." },
-            done() { return player.r.pent.gte(100000) && this.unlocked() },
+            requirementDescription: "<h3>Pent 50,000",
+            effectDescription() { return "Produce 0.2% of moonstone value per second." },
+            done() { return player.r.pent.gte(50000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 28) },
             style: { width: '800px', "min-height": '75px' },
         },

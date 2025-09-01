@@ -54,18 +54,8 @@ addLayer("pl", {
 
         player.pl.spaceDustPerSecond = player.pl.planets.mul(0.01).mul(player.pl.planets.pow(0.5).mul(0.1))
     },
-    bars: {
-    },
+    bars: {},
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "au2"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #0d515a"  },
-        },
         11: {
             title() { return "<h2>Sacrifice your stars" },
             canClick() { return true },
@@ -105,8 +95,7 @@ addLayer("pl", {
             style: { width: '300px', "min-height": '52px', borderRadius: '2px' },
         },
     },
-    levelables: {
-    },
+    levelables: {},
     upgrades: {},
     buyables: {
           11: {
@@ -305,10 +294,9 @@ addLayer("pl", {
         },
     },
     tabFormat: [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.pl.planets) + "</h3> planets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-        ["row", [["clickable", 1]]],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.pl.planets) + "</h3> planets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.st.buyables[202].gte(1) }
 })

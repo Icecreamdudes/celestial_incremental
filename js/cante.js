@@ -93,8 +93,7 @@
 
         if (player.ca.unlockedCante && hasUpgrade("bi", 24)) player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
 
-        if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq))
-        {
+        if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq)) {
             layers.ca.replicantiMultiply();
         }
 
@@ -102,15 +101,21 @@
         if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.add(1).log(10).pow(1.17).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
         player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
         
-        if (hasUpgrade("bi", 116))
-        {
+        if (hasUpgrade("bi", 116)) {
             player.ca.replicantiEffect = player.ca.replicantiEffect.pow(player.ca.replicanti.plus(1).log10().pow(0.4))
             player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(player.ca.replicanti.plus(1).log10().pow(0.35))
             player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(player.ca.replicanti.plus(1).log10().pow(0.75))
-
         }
-        if (player.ca.replicanti.gt("1e2000"))
-        {
+
+        // EFFECT INCREASE POST SOFTCAP
+        /*if (player.ca.replicanti.gte(1.79e308) && hasMilestone("r", 29)) {
+            let magnitude = player.ca.replicanti.div(1.79e308).add(1).log(1e100).add(1)
+            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(magnitude)
+            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(magnitude)
+            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(magnitude)
+        }*/
+
+        if (player.ca.replicanti.gt("1e2000")) {
             player.ca.replicantiEffect3 = Decimal.mul("1e300000", player.ca.replicantiEffect3.plus(1).log10().pow(10))
         }
 
@@ -144,40 +149,32 @@
         player.ca.rememberanceCoreCost = player.ca.rememberanceCores.add(1).pow(1.5).mul(1000)
         player.ca.rememberanceCoresEffect = player.ca.rememberanceCores.mul(0.05).add(1)
 
-        if (player.ca.replicanti.gte("1.8e308"))
-        {
+        if (player.ca.replicanti.gte("1.8e308")) {
             if (player.ca.replicanti.lt("1e2000")) player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.3).plus(1)
             if (player.ca.replicanti.gte("1e2000")) player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.6).plus(1)
-            } else
-        {
+        } else {
             player.ca.replicantiSoftcap = new Decimal(1)
         }
     },
-    gainCanteCore()
-    {
+    gainCanteCore() {
         let leftover = new Decimal(0)
         leftover = player.ca.canteEnergy.sub(player.ca.canteEnergyReq)
         player.ca.canteCores = player.ca.canteCores.add(1)
         player.ca.canteEnergy = new Decimal(0)
         player.ca.canteEnergy = player.ca.canteEnergy.add(leftover)
     },
-    convertRememberanceCore()
-    {
+    convertRememberanceCore() {
         player.ca.canteCores = player.ca.canteCores.sub(1)
         player.oi.protoMemories = player.oi.protoMemories.sub(player.ca.rememberanceCoreCost)
         player.ca.rememberanceCores = player.ca.rememberanceCores.add(1)
     },
-    replicantiMultiply()
-    {
+    replicantiMultiply() {
         let random = new Decimal(0)
         random = Math.random()
-        if (random < player.ca.replicateChance)
-        {
-            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21))
-            {
+        if (random < player.ca.replicateChance) {
+            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21)) {
                 player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult)
-            } else 
-            {
+            } else {
                 player.ca.replicanti = new Decimal(1.79e308)
             }
         }

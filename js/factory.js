@@ -36,7 +36,6 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-
         player.fa.foundryEffectPerSecond = new Decimal(0)
         if (player.fa.buyables[11].gte(1)) player.fa.foundryEffectPerSecond = new Decimal(1)
         player.fa.foundryEffectPerSecond = player.fa.foundryEffectPerSecond.mul(buyableEffect("fa", 11))
@@ -68,6 +67,10 @@
         if (hasMilestone("fa", 21)) player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.milestoneEffect[9])
         player.fa.chargeRate = player.fa.chargeRate.mul(player.le.punchcardsPassiveEffect[5])
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("st", 105))
+        player.fa.chargeRate = player.fa.chargeRate.mul(player.i.postOTFMult)
+
+        // AUTOMATION
+        if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
 
         player.fa.milestoneEffect[0] = player.fa.charge.pow(0.3).div(3).add(1) //ip
         player.fa.milestoneEffect[1] = player.fa.charge.pow(3).add(1) //ad

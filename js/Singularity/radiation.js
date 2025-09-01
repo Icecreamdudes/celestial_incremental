@@ -32,6 +32,7 @@
         for (let i in player.co.cores) {
             player.ra.radiationPerSecond = player.ra.radiationPerSecond.add(player.co.cores[i].level.pow(CORE_STRENGTH[player.co.cores[i].strength].buff).pow(0.8).div(4))
         }
+        if (player.ma.matosDefeated) player.ra.radiationPerSecond = player.ra.radiationPerSecond.add(1000)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.div(player.ra.radiationSoftcapEffect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(buyableEffect("ra", 13))
         if (hasUpgrade("ev8", 19)) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(upgradeEffect("ev8", 19))
@@ -40,7 +41,6 @@
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.co.cores.radioactive.effect[1])
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(player.cs.scraps.radioactive.effect)
         player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(levelableEffect("pet", 309)[0])
-        if (player.ma.matosDefeated) player.ra.radiationPerSecond = player.ra.radiationPerSecond.mul(100)
         
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
 
@@ -285,7 +285,7 @@
                         ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]
                     ], {maxWidth: "840px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Radiation gain is based on core progress." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return !player.ma.matosDefeated ? "Radiation gain is based on core progress." : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ],
             },
         },

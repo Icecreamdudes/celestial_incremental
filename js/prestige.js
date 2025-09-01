@@ -125,6 +125,7 @@
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.co.cores.prestige.effect[2])
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.i.postOTFMult)
 
         // CRYSTALS PER SECOND
         player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))

@@ -1,5 +1,4 @@
-﻿
-addLayer("db", {
+﻿addLayer("db", {
     name: "Boosters", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "B", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -47,17 +46,7 @@ addLayer("db", {
         player.db.milestone2Effect = player.du.points.add(1).pow(0.15).div(30).add(1)
     },
     bars: {},
-
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #0a593c" },
-        },
         11: {
             title() { return "<h2>Reset previous content for boosters.<br>Req: " + format(player.db.boosterReq) + " points</h2>" },
             canClick() { return player.du.points.gte(player.db.boosterReq) },
@@ -75,12 +64,9 @@ addLayer("db", {
                 return look
             }
         },
-        
     },
     upgrades: {},
-    buyables: {
-   
-    },
+    buyables: {},
     milestones: {
         11: {
             requirementDescription: "<h3>1 Booster",
@@ -100,7 +86,6 @@ addLayer("db", {
             done() { return player.db.boosters.gte(7) },
             style: { width: '800px', "min-height": '75px' },
         },
-
         101: {
             requirementDescription: "<h3>1 Best Booster",
             effectDescription: "x1.25 to check back XP gain.",
@@ -114,32 +99,26 @@ addLayer("db", {
             style: { width: '800px', "min-height": '75px' },
         },
     },
-    challenges: {
-    },
-    infoboxes: {
-
-    },
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { border: "2px solid #6e64c4", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ['blank', '25px'],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.db.boosters) + "</h3> boosters, which boost point gain by x" + format(player.db.boosterEffect) + "." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", function () { return "(Best boosters: " + formatWhole(player.db.bestBoosters) + ")" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ['blank', '25px'],
                     ["row", [["clickable", 11]]],
                     ['blank', '25px'],
-
                 ]
             },
             "Milestones": {
                 buttonStyle() { return { border: "2px solid #6e64c4", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ['blank', '25px'],
                     ["raw-html", function () { return "<h3>Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["milestone", 11]]],
@@ -149,20 +128,17 @@ addLayer("db", {
                     ["raw-html", function () { return "<h3>Permanent Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [["milestone", 101]]],
                     ["row", [["milestone", 102]]],
-
                 ]
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["raw-html", () => { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+        ["raw-html", () => { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace" }],
+        ["raw-html", () => { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+    ],
     layerShown() { return hasUpgrade("le", 101) }
 })

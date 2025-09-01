@@ -54,10 +54,8 @@
         
         rocketCooldown: new Decimal(0),
         rocketCooldownMax: new Decimal(21600),
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(50deg,rgb(34, 34, 34) 0%,rgb(29, 23, 56) 50%,rgb(30, 13, 97) 100%)",
@@ -132,8 +130,7 @@
 
         player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
     },
-    starReset()
-    {
+    starReset() {
         layers.coa.singularityPause = new Decimal(10)
 
         player.ro.activatedFuel = new Decimal(0)
@@ -151,15 +148,6 @@
     },
     branches: ["tad", 'ca'],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h2>Make Activated Fuel" },
             canClick() { return player.ro.activatedFuelToGet.gte('1') },
@@ -675,21 +663,13 @@
     },
 },
     },
-    levelables: {
-    },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    levelables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Activated Fuel": {
@@ -838,14 +818,11 @@
                 ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
                     ], {width: "1000px", border: "3px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "0px 0px 15px 15px"}],
                 ]
-
             },
         },
     },
-
     tabFormat: [
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("s", 26)}
 })

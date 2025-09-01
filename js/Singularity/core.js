@@ -141,8 +141,14 @@ const CORE_INFO = {
     },
 }
 addLayer("co", {
-    name: "Cores", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "Co", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name() {
+        if (!player.ma.matosDefeated) return "Cores"
+        return "<s>Cores</s>"
+    }, // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol() {
+        if (!player.ma.matosDefeated) return "Co"
+        return "<s>CA</s>"
+    }, // This appears on the layer's node. Default is the id with the first letter capitalized
     startData() { return {
         cores: {
             point: {
@@ -305,10 +311,31 @@ addLayer("co", {
         resetIndex: "point",
         coreIndex: "point",
     }},
-    nodeStyle: {background: "linear-gradient(0deg, #000000 -10%, #6b1919 100%)", backgroundOrigin: "border-box", borderColor: "#260300", color: "#8c3129"},
+    nodeStyle() {
+        if (!player.ma.matosDefeated) return {background: "linear-gradient(0deg, #000000 -10%, #6b1919 100%)", backgroundOrigin: "border-box", borderColor: "#260300", color: "#8c3129"}
+        return {background: "linear-gradient(0deg, #000000 -10%, #1a1a1a 100%)", backgroundOrigin: "border-box", borderColor: "#000000", color: "grey"}
+    },
     tooltip: "Cores",
-    color: "#8c3129",
+    color() {
+        if (!player.ma.matosDefeated) return "#8c3129"
+        return "#000000"
+    },
     update(delta) {
+        //     <---------     CORE PREVENTION     -------->
+        if (player.ma.matosDefeated) {
+            if (player.subtabs["co"]["stuff"] == "Cores") player.subtabs["co"]["stuff"] = "Fuel"
+
+            for (let prop in player.co.cores) {
+                player.co.cores[prop].strength = 0
+                player.co.cores[prop].level = new Decimal(0)
+                player.co.cores[prop].xp = new Decimal(0)
+                player.co.cores[prop].totalxp = new Decimal(0)
+                player.co.cores[prop].req = new Decimal(1)
+                player.co.resetIndex = "point"
+                player.co.coreIndex = "point"
+            }
+        }
+
         //     <---------     CORE LEVEL CODE     --------->
 
         for (let prop in player.co.cores) {
@@ -1453,8 +1480,10 @@ addLayer("co", {
             unlocked: true,
             onClick() {
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
-                player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
-                player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                if (!player.ma.matosDefeated) {
+                    player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
+                    player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                }
                 player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
                 player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
                 player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
@@ -1507,14 +1536,14 @@ addLayer("co", {
                                 ["clickable", 211], ["clickable", 212],
                             ]],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", backgroundColor: "black", borderRadius: "0 0 12px 12px"} : {display: "none !important"}}],
-                    ], {width: "700px", backgroundColor: "#611", border: "3px solid white", borderRadius: "15px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "700px", backgroundColor: "#611", border: "3px solid white", borderRadius: "15px"} : {display: "none !important"}}],
                     ["blank", "50px"],
                     ["clickable", 1000],
                 ],
             },
             "Cores": {
                 buttonStyle: {color: "white", borderRadius: "5px"},
-                unlocked() {return player.s.highestSingularityPoints.gt(0)},
+                unlocked() {return player.s.highestSingularityPoints.gt(0) && !player.ma.matosDefeated},
                 content: [
                     ["blank", "25px"],
                     ["style-row", [
@@ -1580,6 +1609,13 @@ addLayer("co", {
             ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["style-column", [
+
+        ], () => {
+            let look = {}
+            if (!player.ma.matosDefeated) {look.opacity = "1"} else {look.opacity = "0.5"}
+            return look
+        }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

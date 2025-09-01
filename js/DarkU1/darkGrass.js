@@ -1,5 +1,4 @@
-﻿
-addLayer("dgr", {
+﻿addLayer("dgr", {
     name: "Dark Grass", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "DG", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -19,8 +18,7 @@ addLayer("dgr", {
         lastPickedText: "",
     }},
     automate() {
-        if (hasUpgrade("dn", 13))
-        {
+        if (hasUpgrade("dn", 13)) {
             buyBuyable("dgr", 11)
             buyBuyable("dgr", 12)
             buyBuyable("dgr", 13)
@@ -371,8 +369,7 @@ addLayer("dgr", {
             "Main": {
                 buttonStyle() { return { border: "2px solid #006a44", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-column", [
                         ["style-row", [
@@ -409,8 +406,7 @@ addLayer("dgr", {
             "Buyables": {
                 buttonStyle() { return { border: "2px solid #006a44", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],
                         ["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16]], {maxWidth: "900px"}],
@@ -425,8 +421,8 @@ addLayer("dgr", {
             ["raw-html", () => { return (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
         ]],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

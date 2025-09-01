@@ -473,6 +473,7 @@ addLayer("cb", {
 
         // Legendary Pet Timer
         player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(time)
+        player.pet.summonTimer = player.pet.summonTimer.sub(time)
 
         // Goldsmith Evo
         player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(time))
@@ -488,10 +489,6 @@ addLayer("cb", {
         for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++) {
             player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(time)
         }
-
-        //legendary
-        player.leg.legendaryGemTimer = player.leg.legendaryGemTimer.sub(time);
-        player.leg.summonTimer = player.leg.summonTimer.sub(time);
     },
     branches: ["m"],
     clickables: {

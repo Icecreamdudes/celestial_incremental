@@ -1110,7 +1110,31 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 180) {
+		if (player.d.diceEffects[13].gt(10000)) player.d.diceEffects[13] = new Decimal(10000)
 		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
 		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
+
+		setLevelableXP("pu", 101, new Decimal(player.le.punchcardsXP[0]))
+		setLevelableXP("pu", 201, new Decimal(player.le.punchcardsXP[1]))
+		setLevelableXP("pu", 102, new Decimal(player.le.punchcardsXP[2]))
+		setLevelableXP("pu", 103, new Decimal(player.le.punchcardsXP[3]))
+
+		setLevelableAmount("pu", 101, new Decimal(player.le.punchcardsLevels[0]).sub(1).min(10))
+		setLevelableAmount("pu", 201, new Decimal(player.le.punchcardsLevels[1]).sub(1).min(10))
+		setLevelableAmount("pu", 102, new Decimal(player.le.punchcardsLevels[2]).sub(1).min(10))
+		setLevelableAmount("pu", 103, new Decimal(player.le.punchcardsLevels[3]).sub(1).min(10))
+		
+		player.cs.scraps.point.amount = player.cs.resourceCoreScraps[0]
+		player.cs.scraps.factor.amount = player.cs.resourceCoreScraps[1]
+		player.cs.scraps.prestige.amount = player.cs.resourceCoreScraps[2]
+		player.cs.scraps.tree.amount = player.cs.resourceCoreScraps[3]
+		player.cs.scraps.grass.amount = player.cs.resourceCoreScraps[4]
+		player.cs.scraps.grasshopper.amount = player.cs.resourceCoreScraps[5]
+		player.cs.scraps.code.amount = player.cs.resourceCoreScraps[6]
+		player.cs.scraps.dice.amount = player.cs.resourceCoreScraps[7]
+		player.cs.scraps.rocket.amount = player.cs.resourceCoreScraps[8]
+		player.cs.scraps.antimatter.amount = player.cs.resourceCoreScraps[9]
+		player.cs.scraps.infinity.amount = player.cs.resourceCoreScraps[10]
+		player.cs.scraps.checkback.amount = player.cs.paragonScraps
 	}
 }

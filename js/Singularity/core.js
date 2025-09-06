@@ -6,19 +6,19 @@ const CORE_STRENGTH = [
     }, {
         name: "Weak",
         color: "#ebcc6e",
-        buff: 1.03,
+        buff: 1.025,
     }, {
         name: "Average",
         color: "#cf7429",
-        buff: 1.06,
+        buff: 1.05,
     }, {
         name: "Strong",
         color: "#cf3a29",
-        buff: 1.09,
+        buff: 1.075,
     }, {
         name: "Pinnacle",
-        color: "#4a1616",
-        buff: 1.12,
+        color: "#8c3129",
+        buff: 1.1,
     },
 ]
 const CORE_INFO = {
@@ -1104,22 +1104,22 @@ addLayer("co", {
         100: {
             title() {
                 if (!layerShown("sma")) return "LOCKED"
-                if (player.co.cores[player.co.coreIndex].strength >= 5) return "MAXED"
+                if (player.co.cores[player.co.coreIndex].strength >= 4) return "MAXED"
                 return "ENHANCE"
             },
             canClick() {
-                if (!layerShown("sma") || player.co.cores[player.co.coreIndex].strength >= 5) return false
+                if (!layerShown("sma") || player.co.cores[player.co.coreIndex].strength >= 4) return false
                 return player.sma.starmetalAlloy.gte(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1))
             },
             tooltip() {
-                if (layerShown("sma") && player.co.cores[player.co.coreIndex].strength < 5) {
+                if (layerShown("sma") && player.co.cores[player.co.coreIndex].strength < 4) {
                     return "Enhance core:<br>" + formatWhole(player.sma.starmetalAlloy) + "/" + formatWhole(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1)) + " SMA"
                 }
                 return ""
             },
             unlocked: true,
             onClick() {
-                player.sma.starmetalAlloy.sub(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1))
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(Decimal.pow(5, player.co.cores[player.co.coreIndex].strength + 1))
                 player.co.cores[player.co.coreIndex].strength = player.co.cores[player.co.coreIndex].strength + 1
             },
             style() {
@@ -1127,7 +1127,7 @@ addLayer("co", {
                 if (!layerShown("sma")) {
                     look.backgroundColor = "#333"
                     look.cursor = "default"
-                } else if (player.co.cores[player.co.coreIndex].strength >= 5) {
+                } else if (player.co.cores[player.co.coreIndex].strength >= 4) {
                     look.backgroundColor = "#77bf5f"
                     look.cursor = "default"
                 } else if (!this.canClick()) {
@@ -1293,26 +1293,28 @@ addLayer("co", {
             },
         },
         112: {
-            canClick: true,
+            canClick() {return player.co.cores.checkback.level.gt(0)},
             unlocked() {return hasUpgrade("s", 20)},
             onClick() {
                 player.co.coreIndex = "checkback"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                if (!this.canClick()) look.opacity = "0.3"
                 look.backgroundColor = CORE_INFO.checkback.color
                 look.borderColor = CORE_STRENGTH[player.co.cores.checkback.strength].color
                 return look
             },
         },
         113: {
-            canClick: true,
+            canClick() {return player.co.cores.radioactive.level.gt(0)},
             unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
                 player.co.coreIndex = "radioactive"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
+                if (!this.canClick()) look.opacity = "0.3"
                 look.backgroundColor = CORE_INFO.radioactive.color
                 look.borderColor = CORE_STRENGTH[player.co.cores.radioactive.strength].color
                 return look
@@ -1475,7 +1477,7 @@ addLayer("co", {
             },
         },
         213: {
-            title() {return "Radioactive<br>Core<br><small>Lv." + player.co.cores.radioactive.level},
+            title() {return "<h2 style='font-size:14px'>Radioactive</h2><br>Core<br><small>Lv." + player.co.cores.radioactive.level},
             canClick: true,
             unlocked() {return hasUpgrade("sma", 106)},
             onClick() {

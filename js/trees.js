@@ -47,7 +47,7 @@
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 34))
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 35))
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 36))
-        player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 104))
+        if (hasUpgrade("cs", 201)) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 104))
         player.t.treesToGet = player.t.treesToGet.mul(player.m.modEffect)
         player.t.treesToGet = player.t.treesToGet.mul(levelableEffect("pet", 102)[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])

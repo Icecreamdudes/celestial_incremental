@@ -116,9 +116,16 @@ function formatShortWhole(decimal) {
     return formatShort(decimal, 0)
 }
 
-function formatShortestWhole(decimal) {
+function formatShorterWhole(decimal) {
     decimal = new Decimal(decimal)
     if (decimal.gte(1e3)) return exponentialFormat(decimal, 2)
+    if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
+    return formatShort(decimal, 0)
+}
+
+function formatShortestWhole(decimal) {
+    decimal = new Decimal(decimal)
+    if (decimal.gte(1e3)) return exponentialFormat(decimal, 0)
     if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
     return formatShort(decimal, 0)
 }

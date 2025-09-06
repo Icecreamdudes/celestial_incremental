@@ -3504,17 +3504,17 @@ addLayer("pet", {
                         ["left-row", [
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.legendaryPetGems[0])}, {width: "93px", height: "50px", color: "#ff5555", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[0])}, {width: "93px", height: "50px", color: "#ff5555", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Red Legendary Gem<hr><small>x" + format(player.pet.gemEffects[0]) + " XP</small></div>"}],
                             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.legendaryPetGems[1])}, {width: "93px", height: "50px", color: "#aa55aa", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[1])}, {width: "93px", height: "50px", color: "#aa55aa", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Purple Legendary Gem<hr><small>x" + format(player.pet.gemEffects[1]) + " Pet Points</small></div>"}],
                             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
                             ["tooltip-row", [
                                 ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                ["raw-html", () => { return formatWhole(player.cb.legendaryPetGems[2])}, {width: "95px", height: "50px", color: "#55ff55", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[2])}, {width: "95px", height: "50px", color: "#55ff55", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ["raw-html", () => { return "<div class='bottomTooltip'>Green Legendary Gem<hr><small>x" + format(player.pet.gemEffects[2]) + " XPBoost</small></div>"}],
                             ], {width: "150px", height: "50px"}],
                         ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
@@ -3524,35 +3524,38 @@ addLayer("pet", {
                         ["row", [["clickable", 201]]],
                         ["blank", "25px"],
                         ["style-column", [
-                            ["raw-html", function () { return "Summoning Altar" }, { "color": "black", "font-size": "36px", "font-family": "monospace" }],
-                            ["raw-html", function () { return "(Gems requirements are dependent on the current time of day)" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                            ["raw-html", "Summoning Altar", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", "(Gems requirements are dependent on the current time of day)", {color: "black", fontSize: "14px", fontFamily: "monospace"}],
                             ["blank", "25px"],
-                            ["raw-html", function () { return "Current Requirements:" }, { "color": "black", "font-size": "24px", "font-family": "monospace" }],
+                            ["raw-html", "Current Requirements:", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ["blank", "10px"],
                             ["left-row", [
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatWhole(player.pet.summonReqs[0])}, {width: "93px", height: "50px", color: "red", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[0])}, {width: "93px", height: "50px", color: "red", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatWhole(player.pet.summonReqs[1])}, {width: "93px", height: "50px", color: "purple", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[1])}, {width: "93px", height: "50px", color: "purple", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatWhole(player.pet.summonReqs[2])}, {width: "95px", height: "50px", color: "green", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[2])}, {width: "95px", height: "50px", color: "green", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
+                            ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                            ["left-row", [
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatWhole(player.pet.summonReqs[3])}, {width: "95px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[3])}, {width: "95px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
                                 ["tooltip-row", [
                                     ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                                    ["raw-html", () => { return formatWhole(player.pet.summonReqs[4]) }, {width: "95px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[4]) }, {width: "95px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                                 ], {width: "150px", height: "50px"}],
-                            ], {width: "450px", height: "100px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                            ], {width: "300px", height: "50px", backgroundColor: "black", borderLeft: "2px solid white", borderRight: "2px solid white", borderBottom: "2px solid white", borderRadius: "0 0 10px 10px", userSelect: "none"}],
                             ["blank", "25px"],
                             ["row", [["clickable", 202]]],
-                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 15px 15px"} : {display: "none !important"}}],
+                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "20px", borderRadius: "15px"} : {display: "none !important"}}],
                     ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
                 ],
             },

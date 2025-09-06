@@ -104,7 +104,7 @@ addLayer("i", {
         player.gain = player.gain.mul(buyableEffect("f", 16))
         player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(buyableEffect("f", 18))
-        player.gain = player.gain.mul(buyableEffect("f", 101))
+        if (hasUpgrade("cs", 201)) player.gain = player.gain.mul(buyableEffect("f", 101))
         player.gain = player.gain.mul(player.r.tetrEffect)
         if (hasUpgrade("p", 11)) player.gain = player.gain.mul(3)
         if (hasUpgrade("p", 12)) player.gain = player.gain.mul(player.p.prestigeEffect)

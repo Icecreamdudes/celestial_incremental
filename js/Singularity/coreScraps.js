@@ -253,13 +253,16 @@ addLayer("cs", {
                 player.cs.scraps[player.cs.scrapIndex].amount = new Decimal(0)
             },
             style() {
-                let look = {width: "273px", minHeight: "47px", color: "white", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                let look = {width: "273px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
                 if (!player.ev.evolutionsUnlocked[9]) {
+                    look.color = "white"
                     look.backgroundColor = "#333"
                     look.cursor = "default"
                 } else if (!this.canClick()) {
+                    look.color = "rgba(0,0,0,0.8)"
                     look.backgroundColor = "#bf8f8f"
                 } else {
+                    look.color = "white"
                     look.backgroundColor = "#666"
                 }
                 return look
@@ -1149,7 +1152,7 @@ addLayer("cs", {
                         ], {width: "247px", height: "250px"}],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "<small>You have</small> " + formatWhole(player.cs.scraps[player.cs.scrapIndex].amount) + " <small>" + CORE_SCRAP[player.cs.scrapIndex].name + "</small> (+" + formatWhole(player.cs.scraps[player.cs.scrapIndex].gain) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].amount) + " <small>" + CORE_SCRAP[player.cs.scrapIndex].name + "</small> (+" + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                                 ["row", [
                                     ["raw-html", () => {return CORE_SCRAP[player.cs.scrapIndex].effect + format(player.cs.scraps[player.cs.scrapIndex].effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", () => {return player.cs.scraps[player.cs.scrapIndex].amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],

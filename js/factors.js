@@ -73,7 +73,7 @@
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 25))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 26))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 27))
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 102))
+        if (hasUpgrade("cs", 201)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("f", 102))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("t", 16))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("g", 15))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.gh.grasshopperEffects[1])

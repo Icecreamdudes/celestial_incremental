@@ -1188,7 +1188,7 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 6))
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 7))
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 8))
-    player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 104))
+    if (hasUpgrade("cs", 201)) player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 104))
     player.g.grassVal = player.g.grassVal.mul(levelableEffect("pet", 104)[0])
     player.g.grassVal = player.g.grassVal.mul(player.d.diceEffects[5])
     player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])

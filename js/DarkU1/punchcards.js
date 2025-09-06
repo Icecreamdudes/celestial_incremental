@@ -221,7 +221,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to infinity points",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -275,7 +275,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to negative infinity points",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -329,7 +329,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to anonymity",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -384,7 +384,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to oil",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -439,7 +439,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to charge",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -493,7 +493,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to dice points and rocket fuel",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -546,7 +546,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to pre-hex power resources",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -599,7 +599,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to golden grass",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -654,7 +654,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "/" + format(this.effect()[2]) + " to check back xp button cooldowns",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -709,7 +709,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[2]) + " to check back xp",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -763,7 +763,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to hex power",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -816,7 +816,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to core scraps",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -869,7 +869,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to moonstone",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -918,12 +918,12 @@ addLayer("pu", {
                 let str = [
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "Unlock a new prestige buyable",
+                    "Unlock a new prestige buyable<br>",
                     "x" + format(this.effect()[0]) + " to grass cap and value <small>(Based on prestige)</small><br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to pollinators",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -977,7 +977,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to time cubes",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -1030,7 +1030,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to stars",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -1080,11 +1080,11 @@ addLayer("pu", {
                 let str = [
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "x" + format(this.effect()[0]) + " to points and rank/prestige/generator/grass<br>layer currencies <small>(Based on starmetal alloy)</small><br>",
+                    "x" + formatShort(this.effect()[0]) + " to points and rank/prestige/generator/grass<br>layer currencies <small>(Based on starmetal alloy)</small><br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to pre-otf currencies",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -1138,7 +1138,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to starmetal alloy",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -1191,7 +1191,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to eclipse's effect duration",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },
@@ -1244,7 +1244,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to eclipse shards",
-                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><small style='color:darkred'>[EFFECTS SOFTCAPPED]</small>" : "",
+                    getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
             },

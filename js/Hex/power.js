@@ -21,7 +21,8 @@ addLayer("hpw", {
         if (hasUpgrade("hpw", 72)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         if (hasUpgrade("hpw", 131)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         if (hasUpgrade("cs", 202)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
-        player.hpw.powerGain = player.hpw.powerGain.mul(player.le.punchcardsLevels[9])
+        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[1])
+        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
 
@@ -891,7 +892,7 @@ addLayer("hpw", {
             purchaseLimit() { return new Decimal(27) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return challengeCompletions("hrm", 11) >= 3},
+            unlocked() { return hasUpgrade("bi", 27) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && hasUpgrade("hpw", 141)},
             branches: [0],
@@ -911,7 +912,7 @@ addLayer("hpw", {
             purchaseLimit() { return new Decimal(27) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return challengeCompletions("hrm", 12) >= 3},
+            unlocked() { return hasUpgrade("bi", 27) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("hpw", 1).gte(1)},
             branches: [1],
@@ -926,12 +927,12 @@ addLayer("hpw", {
             style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
         },
         3: {
-            costBase() { return new Decimal(1e12) },
-            costGrowth() { return new Decimal(18) },
+            costBase() { return new Decimal(1e13) },
+            costGrowth() { return new Decimal(24) },
             purchaseLimit() { return new Decimal(27) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return challengeCompletions("hrm", 13) >= 3},
+            unlocked() { return hasUpgrade("bi", 27) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("hpw", 2).gte(1)},
             branches: [2],
@@ -946,12 +947,12 @@ addLayer("hpw", {
             style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
         },
         4: {
-            costBase() { return new Decimal(1e13) },
-            costGrowth() { return new Decimal(24) },
+            costBase() { return new Decimal(1e16) },
+            costGrowth() { return new Decimal(48) },
             purchaseLimit() { return new Decimal(27) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return challengeCompletions("hrm", 14) >= 3},
+            unlocked() { return hasUpgrade("bi", 27) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("hpw", 3).gte(1)},
             branches: [3],
@@ -966,12 +967,12 @@ addLayer("hpw", {
             style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
         },
         5: {
-            costBase() { return new Decimal(1e14) },
-            costGrowth() { return new Decimal(30) },
+            costBase() { return new Decimal(1e20) },
+            costGrowth() { return new Decimal(96) },
             purchaseLimit() { return new Decimal(27) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return challengeCompletions("hrm", 15) >= 3},
+            unlocked() { return hasUpgrade("bi", 27) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("hpw", 4).gte(1)},
             branches: [4],
@@ -986,12 +987,12 @@ addLayer("hpw", {
             style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
         },
         6: {
-            costBase() { return new Decimal(1e15) },
-            costGrowth() { return new Decimal(36) },
+            costBase() { return new Decimal(1e25) },
+            costGrowth() { return new Decimal(192) },
             purchaseLimit() { return new Decimal(27) },
             currency() { return player.hpw.power},
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return challengeCompletions("hrm", 16) >= 3},
+            unlocked() { return hasUpgrade("bi", 27) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && getBuyableAmount("hpw", 5).gte(1)},
             branches: [5],

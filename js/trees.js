@@ -73,7 +73,7 @@
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1023)) player.t.treesToGet = player.t.treesToGet.pow(1.24)
         player.t.treesToGet = player.t.treesToGet.pow(player.co.cores.tree.effect[1])
-        if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.2)
+        if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.1)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
@@ -132,7 +132,7 @@
         player.t.treeReq = player.t.trees.pow(1.35).add(10)
         player.t.treeReq = player.t.treeReq.div(buyableEffect("t", 14))
         player.t.treeReq = player.t.treeReq.div(levelableEffect("pet", 203)[0])
-        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(2)
+        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(1.6)
 
         if (player.t.leaves.gte(player.t.treeReq)) {
             player.t.trees = player.t.trees.add(player.t.treesToGet)

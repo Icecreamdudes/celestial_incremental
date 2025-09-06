@@ -53,6 +53,8 @@
         }
         if (hasUpgrade("p", 15) && hasUpgrade("cs", 201)) buyBuyable("f", 101)
         if (hasUpgrade("p", 21) && hasUpgrade("cs", 201)) buyBuyable("f", 102)
+        if (hasMilestone("r", 16) && hasUpgrade("cs", 201)) buyBuyable("f", 103)
+        if (hasMilestone("r", 16) && hasUpgrade("cs", 201)) buyBuyable("f", 104)
     },
     nodeStyle() {},
     tooltip: "Factors",
@@ -116,7 +118,7 @@
         if (player.pol.pollinatorEffects.beetle.enabled) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorEffects.beetle.effects[1])
         if (hasUpgrade("hpw", 1013)) player.f.factorBase = player.f.factorBase.mul(120)
         player.f.factorBase = player.f.factorBase.mul(player.co.cores.factor.effect[2])
-        if (hasUpgrade("cs", 203)) player.f.factorBase = player.f.factorBase.mul(80)
+        if (hasUpgrade("cs", 203)) player.f.factorBase = player.f.factorBase.mul(8000)
         if (hasUpgrade("cs", 701)) player.f.factorBase = player.f.factorBase.mul(player.m.codeExperienceEffect)
     },
     clickables: {},
@@ -1317,7 +1319,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.points},
             pay(amt) { player.points = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(player.f.factorBase.add(1), getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(4), getBuyableAmount(this.layer, this.id)).mul(1e40) },
             unlocked() { return hasUpgrade("cs", 201) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1351,7 +1353,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(player.f.factorBase.add(1), getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(4), getBuyableAmount(this.layer, this.id)).mul(1e20) },
             unlocked() { return hasUpgrade("cs", 201) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1385,7 +1387,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.g.grass},
             pay(amt) { player.g.grass = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(player.f.factorBase.pow(0.5).add(1), getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(2), getBuyableAmount(this.layer, this.id)).mul(1e15) },
             unlocked() { return hasUpgrade("cs", 201) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1419,7 +1421,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.gh.fertilizer},
             pay(amt) { player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(player.f.factorBase.pow(0.5).add(1), getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(player.f.factorBase.add(1).pow(2), getBuyableAmount(this.layer, this.id)).mul(1e15) },
             unlocked() { return hasUpgrade("cs", 201) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

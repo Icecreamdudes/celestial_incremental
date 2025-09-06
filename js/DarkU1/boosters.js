@@ -34,7 +34,7 @@
         if (player.db.boosters.gte(3)) player.db.boosterReq = Decimal.floor(Decimal.pow(6, player.db.boosters.pow(1.25).add(1)).mul(1e10)).floor()
         if (player.db.boosters.gte(7)) player.db.boosterReq = Decimal.floor(Decimal.pow(9, player.db.boosters.pow(1.4).add(1)).mul(1e10)).floor()
 
-        if (player.le.punchcards[17]) player.db.boosterReq = player.db.boosterReq.div(player.le.punchcardsEffect[17])
+        if (getLevelableBool("pu", 208)) player.db.boosterReq = player.db.boosterReq.mul(levelableEffect("pu", 208)[0])
 
         player.db.boosterEffect = Decimal.pow(5, player.db.boosters)
 

@@ -57,49 +57,60 @@
             onClick() {
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1
-                player.tab = "dut"
+                player.tab = "le"
                 player.uniTab = 1
-                layers.le.generateSelection();
+
+                layers.le.starmetalResetAgain()
+                
+                layers.pu.generateSelection();
 
                 player.subtabs["le"]["stuff"] = "Main"
+                player.subtabs.pu["stuff"] = "Selection"
             },
             style: {width: "600px", minHeight: "200px", backgroundImage: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)", border: "3px solid black", borderRadius: "15px"},
         },
         13: {
-            title() { return "<h2>Auto Singularity Toggle: On" },
-            canClick() { return true },
-            unlocked() { return player.sma.toggle },
+            title() {return player.sma.toggle ? "Auto-Singularity: ON" : "Auto-Singularity: OFF"},
+            canClick: true,
+            unlocked: true,
             onClick() {
-                player.sma.toggle = false
+                if (player.sma.toggle) {
+                    player.sma.toggle = false
+                } else {
+                    player.sma.toggle = true
+                }
             },
-            style: { width: '300px', minHeight: '80px', borderRadius: '0px 0px 15px 15px' },
+            style() {
+                let look = {width: "400px", minHeight: "60px", fontSize: "18px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.sma.toggle) {look.backgroundColor = "#AA0000"} else {look.backgroundColor = "#760000"}
+                return look
+            },
         },
         14: {
-            title() { return "<h2>Auto Singularity Toggle: Off" },
-            canClick() { return true },
-            unlocked() { return !player.sma.toggle },
-            onClick() {
-                player.sma.toggle = true
-            },
-            style: { width: '300px', minHeight: '80px', borderRadius: '0px 0px 15px 15px' },
-        },
-        15: {
             title() { return "Amount" },
             canClick() { return player.sma.type },
             unlocked() { return true },
             onClick() {
                 player.sma.type = false
             },
-            style: { width: '150px', minHeight: '40px', borderRadius: '15px 0px 0px 0px' },
+            style() {
+                let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.sma.type) {look.backgroundColor = "#AA0000"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
-        16: {
+        15: {
             title() { return "Time" },
             canClick() { return !player.sma.type },
             unlocked() { return true },
             onClick() {
                 player.sma.type = true
             },
-            style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
+            style() {
+                let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!player.sma.type) {look.backgroundColor = "#AA0000"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
     },
     bars: {},
@@ -107,13 +118,21 @@
         10: {
             title: "Dark Starmetal Upgrade I",
             unlocked: true,
-            description: "Double dark point gain.",
+            description: "Buff DCP based on dark starmetal upgrades.",
             cost: new Decimal("1"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
+            effect() {
+                let amt = new Decimal(1)
+                for (let i = 0; i < player.sma.upgrades.length; i++) {
+                    if (+player.sma.upgrades[i] < 100) amt = amt.add(1)
+                }
+                return amt
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
                 if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
@@ -128,7 +147,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -142,7 +162,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -160,7 +181,8 @@
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
-                let look = {width: "150px", borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {width: "150px", borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -174,7 +196,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -183,12 +206,14 @@
             title: "Dark Starmetal Upgrade VI",
             unlocked() { return hasUpgrade("sma", 14)},
             description: "Gain an extra card selection at the start of a run.",
+            onPurchase() {player.pu.storedSelections = player.pu.storedSelections.add(1)},
             cost: new Decimal("22"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -202,7 +227,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -216,13 +242,14 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
         },
         18: {
-            title: "Starmetal Upgrade VIII",
+            title: "Dark Starmetal Upgrade IX",
             unlocked() { return hasUpgrade("sma", 17)},
             description: "Unlock normality upgrades.",
             cost: new Decimal("5000"),
@@ -230,7 +257,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {borderRadius: "15px", color: "rgba(255,255,255,0.8)", border: "2px solid #384166", margin: "2px"}
+                let look = {borderRadius: "15px", color: "white", border: "2px solid", margin: "2px"}
+                if (player.sma.inStarmetalChallenge) {look.borderColor = "#384166"} else {look.borderColor = "rgba(255,255,255,0.5)"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#361e1e" : look.background = "linear-gradient(120deg, #2e2f11 0%, #261e0a 25%, #2f1317 50%, #2a132f, 75%,  #13292f 100%)"
                 return look
             }
@@ -264,7 +292,7 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             effect() {
-                return Decimal.pow(1.05, player.sma.starmetalAlloy.add(1).log(10))
+                return Decimal.pow(2, player.sma.starmetalAlloy.add(1).log(10))
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -291,7 +319,7 @@
             title: "Light Starmetal Upgrade IV",
             unlocked() { return hasUpgrade("sma", 103)},
             description: "Unlock auto singularity.",
-            cost: new Decimal("24"),
+            cost: new Decimal("25"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
@@ -305,7 +333,7 @@
             title: "Light Starmetal Upgrade V",
             unlocked() { return hasUpgrade("sma", 104)},
             description: "Unlock starmetal buyables.",
-            cost: new Decimal("36"),
+            cost: new Decimal("50"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
@@ -316,8 +344,22 @@
             }
         },
         106: {
-            title: "Secondary Starmetal Upgrade VI",
-            unlocked() { return hasUpgrade("sma", 105) && player.ma.secondAreaUnlock},
+            title: "Light Starmetal Upgrade VI",
+            unlocked() { return hasUpgrade("sma", 105)},
+            description: "Unlock radioactive core.",
+            cost: new Decimal("100"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Starmetal Alloy",
+            currencyInternalName: "starmetalAlloy",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
+                return look
+            }
+        },
+        107: {
+            title: "Light Starmetal Upgrade VII",
+            unlocked() { return hasUpgrade("sma", 106) && player.ma.secondAreaUnlock},
             description: "Number of dice sides is multiplied based on best depth 1 combo.",
             cost: new Decimal("1111"),
             currencyLocation() { return player.sma },
@@ -459,15 +501,15 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: {width: '275px', height: '150px'}
         },
         12: {
             costBase() { return new Decimal(8) },
-            costGrowth() { return new Decimal(1.6) },
-            purchaseLimit() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(40) },
             currency() { return player.sma.starmetalAlloy},
             pay(amt) { player.sma.starmetalAlloy = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.15).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075).add(1) },
             unlocked() { return hasUpgrade("sma", 105) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -493,7 +535,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', }
+            style: {width: '275px', height: '150px'}
         },
         13: {
             costBase() { return new Decimal(15) },
@@ -570,63 +612,71 @@
     microtabs: {
         stuff: {
             "ENTER": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() {return {color: "white", borderRadius: "10px"}},
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["clickable", 11],
                 ]
             },
             "Starmetal Upgrades": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() {return {color: "white", borderRadius: "10px"}},
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-column", [
                         ["blank", "5px"],
                         ["row", [["upgrade", 10], ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                             ["upgrade", 17], ["upgrade", 18]]],
                         ["blank", "5px"],
-                    ], {width: "800px", backgroundColor: "rgba(0,0,0,0.8)", border: "2px solid rgba(255,255,255,0.8)", borderRadius: "15px"}],
+                    ], {width: "800px", background: "linear-gradient(120deg, #171708 0%, #130f05 25%, #17090b 50%, #150917, 75%, #091417 100%)", border: "3px solid #ccc", borderRadius: "15px"}],
                     ["blank", "20px"],
                     ["style-column", [
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106]], {maxWidth: "800px"}],
                         ["blank", "5px"],
-                    ], {width: "800px", backgroundColor: "rgba(255,255,255,0.2)", border: "2px solid rgba(0,0,0,0.8)", borderRadius: "15px"}],
+                    ], {width: "800px", background: "linear-gradient(120deg, #b8bc45 0%, #987b28 25%, #bc4c5f 50%, #a94cbc, 75%, #4ca5bc 100%)", border: "3px solid #222", borderRadius: "15px"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
                 ]
             },
+            "Punchcards": {
+                buttonStyle() {return {color: "white", borderRadius: "10px"}},
+                unlocked() { return hasUpgrade("sma", 14) },
+                embedLayer: 'pu',
+            },
             "Auto Singularity": {
-                buttonStyle() { return { 'color': 'white' } },
+                buttonStyle() {return {color: "white", borderRadius: "10px"}},
                 unlocked() { return hasUpgrade("sma", 104) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return !player.sma.type ? "Autocrunch amount: " + formatWhole(player.sma.amount) + " singularity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.sma.type ? "Autocrunch time: " + formatTime(player.sma.time) + "/" + formatTime(player.sma.amount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["text-input", "input", {
-                        color: "var(--color)",
-                        width: "400px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 15], ["clickable", 16]]],
-                    ["row", [["clickable", 13], ["clickable", 14]]],
+                    ["style-column", [
+                        ["style-column", [
+                            ["row", [
+                                ["raw-html", () => {return format(player.s.singularityPoints) + " SP"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, () => {
+                                    let look = {fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}
+                                    if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
+                                    return look
+                                }],
+                            ]],
+                        ], {width: "400px", height: "30px", backgroundColor: "#550000"}],
+                        ["style-column", [
+                            ["raw-html", () => {return player.sma.type ? "Auto-Crunch Time" : "Auto-Crunch Amount"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.sma.type ? formatTime(player.sma.time) + "/" + formatTime(player.sma.amount) + " until reset." : formatWhole(player.sma.amount) + " SP on reset."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ], {width: "400px", height: "70px"}],
+                        ["text-input", "input", {width: "350px", height: "50px", backgroundColor: "#220000", color: "white", fontSize: "32px", textAlign: "left", border: "0px", padding: "0px 25px"}],
+                        ["style-column", [
+                            ["row", [["clickable", 14], ["clickable", 15]]],
+                            ["clickable", 13],
+                        ], {width: "400px", height: "100px"}],
+                    ], {width: "400px", height: "250px", backgroundColor: "#440000", border: "3px solid #ccc"}],
                 ]
             },
             "Eclipse Shop": {
-                buttonStyle() { return { 'border-color': 'rgb(245, 255, 104)' } },
+                buttonStyle() {return {color: "white", borderColor: "rgb(245, 255, 104)", borderRadius: "10px"}},
                 unlocked() { return player.pet.levelables[501][0].gte(1) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
                     ["blank", "25px"],

@@ -116,6 +116,13 @@ function formatShortWhole(decimal) {
     return formatShort(decimal, 0)
 }
 
+function formatShortestWhole(decimal) {
+    decimal = new Decimal(decimal)
+    if (decimal.gte(1e3)) return exponentialFormat(decimal, 2)
+    if (decimal.lte(0.99) && !decimal.eq(0)) return formatShort(decimal, 2)
+    return formatShort(decimal, 0)
+}
+
 function formatTime(s) {
     if (s < 60) return format(s) + "s"
     else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"

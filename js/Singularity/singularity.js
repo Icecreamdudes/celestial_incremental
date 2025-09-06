@@ -403,7 +403,7 @@ addLayer("s", {
         },
         20: {
             requirementDescription: "<h3>60 Singularities",
-            effectDescription: "Keep IP related blessing boosters and NIP related jinxes on singularity reset.",
+            effectDescription: "Keep IP related blessing boosters, NIP related jinxes, and graces on singularity reset.",
             done() { return player.s.singularities.gte(60) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -414,6 +414,12 @@ addLayer("s", {
             style: { width: '800px', "min-height": '75px' },
         },
         22: {
+            requirementDescription: "<h3>250 Singularities",
+            effectDescription: "Keep highest OTF values on singularity reset.",
+            done() { return player.s.singularities.gte(250) },
+            style: { width: '800px', "min-height": '75px' },
+        },
+        23: {
             requirementDescription: "<h3>1000 Singularities",
             effectDescription: "Keep pollinator selection, upgrades, and buyables on singularity resets.",
             done() { return player.s.singularities.gte(1000) },
@@ -474,16 +480,13 @@ addLayer("s", {
                     ["milestone", 20],
                     ["milestone", 21],
                     ["milestone", 22],
+                    ["milestone", 23],
                 ]
             },
             "Buyables": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return hasMilestone("s", 15) },
                 content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain " + format(player.s.singularityPointsToGet) + " singularity points on reset. (Based on infinity points)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.s.singularityPointsToGet.gte(1e20) ? "(softcapped)" : "" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
@@ -505,7 +508,11 @@ addLayer("s", {
     tabFormat: [
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
+                return look
+            }],
             ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],

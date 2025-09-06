@@ -63,6 +63,12 @@ const POLLINATOR_INFO = {
         effect1: "Infinity Points: x",
         effect2: "Negative Infinity Points: x",
     },
+    plant: {
+        name: "Plant",
+        image: "resources/pollinators/plant.png",
+        fact: "10-15% of plants self-pollinate.",
+        effect1: "Pollinators: x",
+    },
 }
 addLayer("pol", {
     name: "Pollinators", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -113,6 +119,10 @@ addLayer("pol", {
                 enabled: false,
                 effects: [new Decimal(1), new Decimal(1)]
             },
+            plant: {
+                enabled: false,
+                effects: [new Decimal(1)]
+            },
         },
 
         currCount: new Decimal(0),
@@ -157,16 +167,17 @@ addLayer("pol", {
             if (hasUpgrade("bi", 17)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("bi", 17))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(levelableEffect("pet", 307)[0])
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
-            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.le.punchcardsPassiveEffect[13])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(levelableEffect("pu", 206)[1])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
-            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("gh", 25))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
+            if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
 
             // SOFTCAP
             if (player.pol.pollinators.gt(1e15)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.div(1e15).pow(Decimal.add(0.5, buyableEffect("pol", 16))).mul(1e15)
 
             // POST-SOFTCAP MULTIPLIERS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.co.cores.rocket.effect[2])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(buyableEffect("gh", 25))
 
             // EXPONENTS
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.pow(buyableEffect("gh", 26))
@@ -184,7 +195,8 @@ addLayer("pol", {
 
         // POLLINATOR EFFECTS
         player.pol.pollinatorEffects.beetle.effects[0] = player.pol.pollinators.pow(2.7).div(10).add(1).pow(buyableEffect("pol", 14)) // Celestial Points
-        player.pol.pollinatorEffects.beetle.effects[1] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Factor Base
+        if (player.pol.pollinators.lt(1e40)) player.pol.pollinatorEffects.beetle.effects[1] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Factor Base
+        if (player.pol.pollinators.gte(1e40)) player.pol.pollinatorEffects.beetle.effects[1] = player.pol.pollinators.div(1e40).pow(0.5).mul(1e40).add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Factor Base Softcap
 
         player.pol.pollinatorEffects.fly.effects[0] = player.pol.pollinators.pow(2.9).div(10).add(1).pow(buyableEffect("pol", 14)) // Factor Power
         player.pol.pollinatorEffects.fly.effects[1] = player.pol.pollinators.pow(3.1).div(10).add(1).pow(buyableEffect("pol", 14)) // Prestige Points
@@ -209,8 +221,10 @@ addLayer("pol", {
         player.pol.pollinatorEffects.mechanical.effects[0] = player.pol.pollinators.add(1).log(10).pow(1.75).add(1).pow(buyableEffect("pol", 14)) // steel
         player.pol.pollinatorEffects.mechanical.effects[1] = player.pol.pollinators.add(1).log(65).pow(0.75).div(1.5).add(1).pow(buyableEffect("pol", 14)) // oil
 
-        player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinators.add(1).log(100).pow(1.5).add(1).pow(buyableEffect("pol", 14)) // IP
-        player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinators.add(1).log(100).pow(1.25).add(1).pow(buyableEffect("pol", 14)) // NIP
+        player.pol.pollinatorEffects.water.effects[0] = player.pol.pollinators.add(1).log(10).pow(3).add(1).pow(buyableEffect("pol", 14)) // IP
+        player.pol.pollinatorEffects.water.effects[1] = player.pol.pollinators.add(1).log(10).pow(2).add(1).pow(buyableEffect("pol", 14)) // NIP
+
+        player.pol.pollinatorEffects.plant.effects[0] = player.pol.pollinators.add(1).log(10).add(1).pow(buyableEffect("pol", 14)) // Pollinators
 
         player.pol.currCount = new Decimal(0)
         for (let prop in player.pol.pollinatorEffects) {
@@ -413,6 +427,26 @@ addLayer("pol", {
             style() {
                 let look = {width: '100px', minHeight: '100px', borderRadius: "0px", background: "linear-gradient(45deg, #FFBF00 5%, #b2d8d8 95%)", borderColor: "#26C9FC", borderWidth: "4px"}
                 if (!player.pol.pollinatorEffects.water.enabled) look.filter = "brightness(0.5)"
+                return look
+            },
+        },
+        20: {
+            title() { return "<img src='resources/pollinators/plant.png' style='width:80px;height:80px;transform:translateY(3px)'></img>"},
+            canClick() { return player.pol.currCount.lt(player.pol.maxCount) || player.pol.pollinatorEffects.plant.enabled },
+            unlocked() { return false },
+            onClick() {
+                if (player.pol.pollinatorEffects.plant.enabled) {
+                    player.pol.pollinatorEffects.plant.enabled = false
+                } else {
+                    player.pol.pollinatorEffects.plant.enabled = true
+                }
+            },
+            onHover() {
+                player.pol.pollinatorsIndex = "plant"
+            },
+            style() {
+                let look = {width: '100px', minHeight: '100px', borderRadius: "0px", background: "#cb8e00", borderWidth: "4px"}
+                if (!player.pol.pollinatorEffects.plant.enabled) look.filter = "brightness(0.5)"
                 return look
             },
         },
@@ -813,7 +847,7 @@ addLayer("pol", {
                         ], {borderBottom: "3px solid #cb8e00"}],
                         ["style-column", [
                             ["left-row", [["hoverless-clickable", 11], ["hoverless-clickable", 12], ["hoverless-clickable", 13], ["hoverless-clickable", 14], ["hoverless-clickable", 15]]],
-                            ["left-row", [["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18], ["hoverless-clickable", 19]]],
+                            ["left-row", [["hoverless-clickable", 16], ["hoverless-clickable", 17], ["hoverless-clickable", 18], ["hoverless-clickable", 19], ["hoverless-clickable", 20]]],
                         ], {width: "500px", backgroundColor: "#281c00", borderBottom: "3px solid #cb8e00"}],
                         ["style-row", [
                             ["style-column", [

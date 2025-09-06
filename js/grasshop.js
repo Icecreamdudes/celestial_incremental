@@ -39,6 +39,8 @@
             buyBuyable("gh", 22)
             buyBuyable("gh", 23)
             buyBuyable("gh", 24)
+            buyBuyable("gh", 25)
+            buyBuyable("gh", 26)
         }
         if (hasMilestone("s", 16)) {
             buyBuyable("gh", 31)
@@ -164,7 +166,6 @@
         if (hasUpgrade("hpw", 1021)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("hpw", 1021))
         player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
         if (hasUpgrade("s", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("s", 14))
-        player.gh.steelToGet = player.gh.steelToGet.mul(levelableEffect("pet", 1106)[0])
         player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.foundryEffect)
         if (player.pol.pollinatorEffects.mechanical.enabled) player.gh.steelToGet = player.gh.steelToGet.mul(player.pol.pollinatorEffects.mechanical.effects[0])
         if (hasMilestone("fa", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.milestoneEffect[3])
@@ -888,14 +889,14 @@
             purchaseLimit() { return new Decimal(25) },
             currency() { return player.gh.fertilizer},
             pay(amt) { if (!hasMilestone("ip", 17)) player.gh.fertilizer = this.currency().sub(amt) },
-            effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return Decimal.pow(1.5, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return hasUpgrade("cs", 601) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) && player.gh.buyables[18].gte(1) && player.gh.buyables[19].gte(1)},
             display() {
                 return "<h3>Pollinator Study I</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/25)\n\
-                    Boosts pollinators by x" + formatWhole(tmp[this.layer].buyables[this.id].effect) + ".\n\ \n\
+                    Boosts pollinators post softcap by x" + format(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [18, 19],
@@ -1301,7 +1302,7 @@
                             ["style-row", [["buyable", 24]], {width: "140px", height: "140px"}],
                         ]],
                         ["blank", "10px"],
-                    ], {width: "650px", backgroundColor: "rgba(0,0,0,0.3)", border: "3px solid #031d3b", borderRadius: "15px"}],
+                    ], {width: "500px", backgroundColor: "rgba(0,0,0,0.3)", border: "3px solid #031d3b", borderRadius: "15px"}],
                 ]
             },
             "Steelie": {

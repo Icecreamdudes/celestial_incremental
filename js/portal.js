@@ -340,8 +340,14 @@ addLayer("po", {
                 ]
             },
             "Halter": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true},
+                buttonStyle() {return { color: "white", borderRadius: "5px" } },
+                unlocked() {
+                    let halt = false
+                    for (i = 0; i < player.po.halterEffects.length; i++) {
+                        if (player.po.halterEffects[0].gt(0)) halt = true
+                    }
+                    return hasMilestone("ip", 23) || halt
+                },
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>" + player.po.halterText[player.po.halterIndex]}],

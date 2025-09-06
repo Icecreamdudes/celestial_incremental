@@ -122,6 +122,7 @@
         if (player.pol.pollinatorEffects.ant.enabled) player.d.dicePointsMult = player.d.dicePointsMult.mul(player.pol.pollinatorEffects.ant.effects[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pet", 306)[0])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.co.cores.dice.effect[0])
+        player.d.dicePointsMult = player.d.dicePointsMult.mul(levelableEffect("pu", 106)[1])
         player.d.dicePointsMult = player.d.dicePointsMult.mul(player.st.starPowerEffect2)
 
         // POWER MODIFIERS
@@ -155,7 +156,7 @@
         player.d.diceSides = new Decimal(6)
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 12))
         player.d.diceSides = player.d.diceSides.add(buyableEffect("d", 22))
-        if (hasUpgrade("sma", 106)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 106)).floor()
+        if (hasUpgrade("sma", 107)) player.d.diceSides = player.d.diceSides.mul(upgradeEffect("sma", 107)).floor()
 
         // LOWEST ROLL
         player.d.lowestRoll = buyableEffect("d", 14)
@@ -249,7 +250,6 @@
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("d", 24))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(buyableEffect("g", 28))
         player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.co.cores.dice.effect[2])
-        player.d.challengeDicePointsToGet = player.d.challengeDicePointsToGet.mul(player.le.punchcardsPassiveEffect[7])
 
         // CHALLENGE DICE PER SECOND
         if (hasUpgrade("i", 31)) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet.mul(0.05).mul(delta))
@@ -258,8 +258,8 @@
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
         if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
         
-        player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e100).add(1)
-        if (player.d.challengeDicePoints.gte("1e900")) player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e1000).add(9.1)
+        player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e10).add(1)
+        if (player.d.challengeDicePoints.gte("1e1000")) player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e100).add(90)
     },
     diceRoll() {
         let max = new Decimal(1)
@@ -361,8 +361,8 @@
 
                 if (new Decimal(random).lte(prob)) {
                     addLevelableXP("pet", 302, 1);
-                    if (player.cb.highestLevel.lt(35)) callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/diceRarePet.png");
-                    if (player.cb.highestLevel.gte(35)) callAlert("You gained a Dice!", "resources/diceRarePet.png");
+                    if (player.cb.highestLevel.lt(35)) callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/Pets/diceRarePet.png");
+                    if (player.cb.highestLevel.gte(35)) callAlert("You gained a Dice!", "resources/Pets/diceRarePet.png");
                 }
 
                 if (inChallenge("ip", 15))
@@ -651,11 +651,12 @@
         for (let i = 0; i < player.d.diceRolls.length; i++) {
             player.d.diceScore = player.d.diceScore.add(player.d.diceRolls[i])
         }
-        if (hasUpgrade("cs", 801)) player.d.diceScore = player.d.diceScore.mul(2)
+        if (hasUpgrade("cs", 801)) player.d.diceScore = player.d.diceScore.mul(10)
         if (hasUpgrade("cs", 803)) player.d.diceScore = player.d.diceScore.mul(player.d.challengeDicePointsEffect2)
 
         if (player.d.currentBoosterRoll == 0) {
                 player.d.addDiceEffect = player.d.diceScore.mul(0.0025).pow(1.1)
+                if (player.d.addDiceEffect.gte(1)) player.d.addDiceEffect = player.d.addDiceEffect.pow(player.cs.scraps.dice.effect)
                 player.d.diceEffects[0] = player.d.diceEffects[0].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll  == 1) {
                 player.d.addDiceEffect = player.d.diceScore.mul(0.002).pow(0.95)
@@ -700,7 +701,7 @@
             player.d.diceEffects[10] = player.d.diceEffects[10].add(player.d.addDiceEffect)
         // TIER 2 EFFECTS
         } else if (player.d.currentBoosterRoll == 11) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).mul(0.0003)
+            player.d.addDiceEffect = player.d.diceScore.pow(0.5).mul(0.00002)
             if (hasUpgrade("d", 18)) player.d.addDiceEffect = player.d.addDiceEffect.mul(100)
             player.d.diceEffects[11] = player.d.diceEffects[11].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 12) {
@@ -715,17 +716,17 @@
             player.d.diceEffects[14] = player.d.diceEffects[14].add(player.d.addDiceEffect)
         // PENT UNLOCKED EFFECTS
         } else if (player.d.currentBoosterRoll == 15) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).mul(0.01).div(player.d.diceEffects[15])
+            player.d.addDiceEffect = player.d.diceScore.pow(0.5).mul(0.00005).div(player.d.diceEffects[15])
             player.d.diceEffects[15] = player.d.diceEffects[15].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 16) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).mul(0.001)
+            player.d.addDiceEffect = player.d.diceScore.pow(0.5).mul(0.00001)
             player.d.diceEffects[16] = player.d.diceEffects[16].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 17) {
-            player.d.addDiceEffect = player.d.diceScore.pow(0.1).mul(0.1)
+            player.d.addDiceEffect = player.d.diceScore.pow(0.5).mul(0.0005)
             player.d.diceEffects[17] = player.d.diceEffects[17].add(player.d.addDiceEffect)
         } else if (player.d.currentBoosterRoll == 18) {
-            if (player.d.diceEffects[18].lt(10)) player.d.addDiceEffect = player.d.diceScore.pow(0.1).div(1e4).div(player.d.diceEffects[18])
-            if (player.d.diceEffects[18].gte(10)) player.d.addDiceEffect = player.d.diceScore.pow(0.1).div(1e4).div(player.d.diceEffects[18].pow(2))
+            if (player.d.diceEffects[18].lt(10)) player.d.addDiceEffect = player.d.diceScore.pow(0.5).mul(0.00001).div(player.d.diceEffects[18])
+            if (player.d.diceEffects[18].gte(10)) player.d.addDiceEffect = player.d.diceScore.pow(0.5).mul(0.00001).div(player.d.diceEffects[18].pow(2))
             player.d.diceEffects[18] = player.d.diceEffects[18].add(player.d.addDiceEffect)
         }
     },
@@ -1008,9 +1009,9 @@
             pay(amt) { player.d.challengeDicePoints = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.05)
-                eff = eff.add(1).pow(player.cs.scraps.dice.effect).sub(1)
-                if (hasUpgrade("cs", 801)) eff = eff.mul(2)
+                if (hasUpgrade("cs", 801)) eff = eff.mul(10)
                 if (hasUpgrade("cs", 803)) eff = eff.mul(player.d.challengeDicePointsEffect2)
+                eff = eff.add(1).pow(player.cs.scraps.dice.effect).sub(1)
                 return eff
             },
             unlocked() { return true },
@@ -1223,7 +1224,8 @@
                         ["raw-html", () => { return "You have <h3>" + format(player.d.challengeDicePoints) + "</h3> challenge dice points" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "(+" + format(player.d.challengeDicePointsToGet) + " on BDR)" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", () => { return "Boosts dice point gain by x" + format(player.d.challengeDicePointsEffect) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts dice point gain by x" + format(player.d.challengeDicePointsEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return hasUpgrade("cs", 803) ? "Boosts dice score by x" + format(player.d.challengeDicePointsEffect2) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],

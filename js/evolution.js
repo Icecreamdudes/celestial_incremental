@@ -109,7 +109,7 @@
         106: {
             title() { return "<img src='" + tmp.pet.levelables[106].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
-            unlocked() { return tmp.pet.levelables[106].canClick && !player.ev.evolutionsUnlocked[6] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
+            unlocked() { return tmp.pet.levelables[106].canClick && !player.ev.evolutionsUnlocked[6] && (player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23))},
             tooltip() { return "██████ ███ halt ███████ options" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(6)
@@ -322,19 +322,19 @@
         6: {
             title() { return "Spider" },
             description() {
-                return formatWhole(player.cb.evolutionShards) + "/10 Evolution Shards" +
-                "<br>"  + formatWhole(player.cb.paragonShards) + "/1 Paragon Shards" +
-                "<br>"  + formatWhole(player.cb.XPBoost) + "/25 XPBoost"
+                return formatWhole(player.cb.evolutionShards) + "/100 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/25 Paragon Shards" +
+                "<br>"  + formatWhole(player.cb.XPBoost) + "/10,000 XPBoost"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(10) && player.cb.paragonShards.gte(1) && player.cb.XPBoost.gte(25))
+                return (player.cb.evolutionShards.gte(100) && player.cb.paragonShards.gte(25) && player.cb.XPBoost.gte(10000))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(10)
-                player.cb.paragonShards = player.cb.paragonShards.sub(1)
-                player.cb.XPBoost = player.cb.XPBoost.sub(25)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(100)
+                player.cb.paragonShards = player.cb.paragonShards.sub(25)
+                player.cb.XPBoost = player.cb.XPBoost.sub(10000)
 
                 player.ev.evolutionsUnlocked[6] = true
                 setLevelableAmount("pet", 1106, new Decimal(1))
@@ -510,7 +510,11 @@
                 ["blank", "10px"],
                 ["raw-html", function () { return "Current Evolutions"}, {color: "#4b79ff", fontSize: "36px", fontFamily: "monospace"}],
                 ["blank", "10px"],
-                ["row", [["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104], ["bt-clickable", 105], ["bt-clickable", 106], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110]]],
+                ["row", [
+                    ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
+                    ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
+                    ["bt-clickable", 106]
+                ]],
                 ["blank", "10px"],
                 ["raw-html", function () {
                     if (player.ev.evolutionDisplayIndex == -1) {
@@ -571,7 +575,7 @@ addLayer("ev0", {
 
         if (player.ev0.coinDust.lt(1)) player.ev0.coinDustEffect = player.ev0.coinDust.mul(0.05).add(1)
         if (player.ev0.coinDust.gte(1)) player.ev0.coinDustEffect = player.ev0.coinDust.pow(0.3).mul(0.05).add(1)
-
+        if (hasUpgrade("cs", 1201)) player.ev0.coinDustEffect = player.ev0.coinDust.pow(0.35).mul(0.05).add(1)
 
         player.ev0.coinShardsPerSecond = buyableEffect("ev0", 15)
         player.ev0.coinShardsPerSecond = player.ev0.coinShardsPerSecond.mul(buyableEffect("ev0", 16))
@@ -873,26 +877,26 @@ addLayer("ev0", {
                 ["raw-html", "<img src='resources/coinDust.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
                 ["raw-html", () => {
                     if (player.ev0.coinDustPerSecond.lt(0.01)) {
-                        return format(player.ev0.coinDust) + "<br>" + format(player.ev0.coinDustPerSecond.mul(3600)) + "/h"
+                        return formatShort(player.ev0.coinDust) + "<br>" + formatShort(player.ev0.coinDustPerSecond.mul(3600)) + "/h"
                     } else {
-                        return format(player.ev0.coinDust) + "<br>" + format(player.ev0.coinDustPerSecond) + "/s"
+                        return formatShort(player.ev0.coinDust) + "<br>" + formatShort(player.ev0.coinDustPerSecond) + "/s"
                     }
                 }, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
-                ["raw-html", () => { return "<div class='bottomTooltip'>Coin Dust<hr><small>x" + format(player.ev0.coinDustEffect) + " Check Back XP</small></div>"}],
+                ["raw-html", () => { return "<div class='bottomTooltip'>Coin Dust<hr><small>x" + formatShort(player.ev0.coinDustEffect) + " Check Back XP</small></div>"}],
             ], () => {return !player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px"} : {width: "148px", height: "50px", borderRight: "2px solid white"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/coinShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return format(player.ev0.coinShards) + "<br>" + format(player.ev0.coinShardsPerSecond) + "/s"}, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShort(player.ev0.coinShards) + "<br>" + formatShort(player.ev0.coinShardsPerSecond) + "/s"}, {width: "93px", height: "50px", color: "#e7c97c", display: "inline-flex", alignItems: "center", textAlign: "start", paddingLeft: "5px"}],
                 ["raw-html", () => { return "<div class='bottomTooltip'>Coin Shards<hr><small>x" + format(player.ev0.coinShardEffect) + " Coin Dust</small></div>"}],
             ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
             ], () => {return player.cb.highestLevel.gte(250) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], () => {return player.cb.highestLevel.gte(250) ? {width: "150px", height: "50px"} : {display: "none !important"}}],
         ], () => { return player.cb.highestLevel.gte(250) ? {width: "600px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} : {width: "148px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"} }],
@@ -1450,7 +1454,7 @@ addLayer("ev1", {
         ["blank", "10px"],
         ["tooltip-row", [
             ["raw-html", "<img src='resources/petPoint.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-            ["raw-html", () => { return format(player.cb.petPoints)}, {width: "95px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+            ["raw-html", () => { return formatShort(player.cb.petPoints)}, {width: "95px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
             ["raw-html", "<div class='bottomTooltip'>Pet Points<hr><small>(Gained from rare pet buttons)</small></div>"],
         ], {width: "150px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
         ["blank", "25px"],
@@ -1581,40 +1585,40 @@ addLayer("ev2", {
 
         if (rng > 0.95) {
             addLevelableXP("pet", 301, 1);
-            callAlert("You gained a Nova!", "resources/novaRarePet.png");
+            callAlert("You gained a Nova!", "resources/Pets/novaRarePet.png");
         } else if (rng > 0.9) {
             addLevelableXP("pet", 304, 1);
-            callAlert("You gained a Goofy Ahh Thing!", "resources/goofyAhhThingRarePet.png");
+            callAlert("You gained a Goofy Ahh Thing!", "resources/Pets/goofyAhhThingRarePet.png");
         } else if (rng > 0.8) {
             addLevelableXP("pet", 201, 2);
-            callAlert("You gained 2 Testes!", "resources/testeUncommonPet.png");
+            callAlert("You gained 2 Testes!", "resources/Pets/testeUncommonPet.png");
         } else if (rng > 0.7) {
             addLevelableXP("pet", 202, 2);
-            callAlert("You gained 2 Stars!", "resources/starUncommonPet.png");
+            callAlert("You gained 2 Stars!", "resources/Pets/starUncommonPet.png");
         } else if (rng > 0.6) {
             addLevelableXP("pet", 203, 2);
-            callAlert("You gained 2 Normal Faces!", "resources/normalFaceUncommonPet.png");
+            callAlert("You gained 2 Normal Faces!", "resources/Pets/normalFaceUncommonPet.png");
         } else if (rng > 0.5) {
             addLevelableXP("pet", 204, 2);
-            callAlert("You gained 2 Sharks!", "resources/sharkUncommonPet.png");
+            callAlert("You gained 2 Sharks!", "resources/Pets/sharkUncommonPet.png");
         } else if (rng > 0.4) {
             addLevelableXP("pet", 205, 2);
-            callAlert("You gained 2 WATCHING EYES!", "resources/eyeUncommonPet.png");
+            callAlert("You gained 2 WATCHING EYES!", "resources/Pets/eyeUncommonPet.png");
         } else if (rng > 0.32) {
             addLevelableXP("pet", 101, 5);
-            callAlert("You gained 5 Gwas!", "resources/gwaCommonPet.png");
+            callAlert("You gained 5 Gwas!", "resources/Pets/gwaCommonPet.png");
         } else if (rng > 0.24) {
             addLevelableXP("pet", 102, 5);
-            callAlert("You gained 5 Egg Guys!", "resources/eggCommonPet.png");
+            callAlert("You gained 5 Egg Guys!", "resources/Pets/eggCommonPet.png");
         } else if (rng > 0.16) {
             addLevelableXP("pet", 103, 5);
-            callAlert("You gained 5 Unsmith!", "resources/unsmithCommonPet.png");
+            callAlert("You gained 5 Unsmith!", "resources/Pets/unsmithCommonPet.png");
         } else if (rng > 0.08) {
             addLevelableXP("pet", 104, 5);
-            callAlert("You gained 5 Gd Checkpoints!", "resources/checkpointCommonPet.png");
+            callAlert("You gained 5 Gd Checkpoints!", "resources/Pets/checkpointCommonPet.png");
         } else {
             addLevelableXP("pet", 105, 5);
-            callAlert("You gained 5 Slaxes!", "resources/slaxCommonPet.png");
+            callAlert("You gained 5 Slaxes!", "resources/Pets/slaxCommonPet.png");
         }
     },
     bars: {},
@@ -1670,6 +1674,7 @@ addLayer("ev4", {
         if (hasUpgrade("ev8", 14)) player.ev4.offeringsBase = player.ev4.offeringsBase.mul(1.2)
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(levelableEffect("pet", 1205)[2])
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ep0", 12))
+        if (hasUpgrade("cs", 1202)) player.ev4.offeringsBase = player.ev4.offeringsBase.mul(1.5)
 
         if (player.ev4.offerings.gte(player.ev4.offeringReq))
         {
@@ -1801,19 +1806,19 @@ addLayer("ev4", {
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "93px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "93px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/automationShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.automationShards)}, {width: "95px", height: "50px", color: "grey", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.automationShards)}, {width: "95px", height: "50px", color: "grey", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
-                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatWhole(player.cb.totalAutomationShards) + ")</small></div>"
+                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatShortWhole(player.cb.totalAutomationShards) + ")</small></div>"
                 }],
             ], {width: "150px", height: "50px"}],
         ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
@@ -2178,12 +2183,12 @@ addLayer("ev8", {
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], {width: "150px", height: "50px"}],
         ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
@@ -2301,12 +2306,12 @@ addLayer("ev10", {
         ["left-row", [
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShortWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], {width: "150px", height: "50px"}],
         ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
@@ -2317,7 +2322,7 @@ addLayer("ev10", {
         ["blank", "25px"],
         ["row", [["clickable", 11], ["clickable", 12]]],    
         ["blank", "25px"],
-        ["raw-html", function () { return "You will sacrifice " + formatWhole(player.ev10.shardsInputAmount) + " shards."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You will sacrifice " + formatShortWhole(player.ev10.shardsInputAmount) + " shards."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["text-input", "shardsInput", {
             color: "var(--color)",
             width: "400px",

@@ -101,10 +101,11 @@
 
         // PRESTIGE EFFECTS
         player.p.prestigeEffect = player.p.prestigePoints.pow(0.2).add(1)
-        if (player.p.prestigeEffect.gte("1e20000")) player.p.prestigeEffect = player.p.prestigeEffect.div("1e20000").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e20000")
+        if (player.p.prestigePoints.gte("1e100000")) player.p.prestigeEffect = player.p.prestigeEffect.div("1e20000").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e20000")
+        if (hasUpgrade("cs", 301)) player.p.prestigeEffect = player.p.prestigeEffect.pow(1.05)
 
         player.p.prestigeEffect2 = player.p.prestigePoints.pow(0.05).div(9).add(1)
-        if (player.p.prestigeEffect2.gte("1e7500")) player.p.prestigeEffect2 = player.p.prestigeEffect2.div("1e7500").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e7500")
+        if (player.p.prestigePoints.gte("1e150020")) player.p.prestigeEffect2 = player.p.prestigeEffect2.div("1e7500").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e7500")
         //----------------------------------------
 
         // CRYSTAL RESET CODE
@@ -119,7 +120,6 @@
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
         if (hasUpgrade("hpw", 1021)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1021))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 1106)[1])
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
         if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
@@ -131,7 +131,8 @@
         player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))
 
         // CRYSTAL EFFECT
-        player.p.crystalEffect = player.p.crystals.plus(1).log10().pow(0.265).mul(0.045).add(1)
+        player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
+        if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
     },
     prestigeReset()
     {
@@ -430,11 +431,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -468,11 +465,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -506,11 +499,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.05).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.05).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -544,11 +533,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -582,11 +567,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.02).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.02).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -620,11 +601,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.03).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -658,11 +635,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -696,11 +669,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {
-                let eff = getBuyableAmount(this.layer, this.id).mul(0.03).add(1)
-                if (hasUpgrade("cs", 303)) eff = eff.pow(2)
-                return eff
-            },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -780,11 +749,11 @@
         ]],
         ["row", [
             ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigeEffect.gte("1e20000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["row", [
             ["raw-html", () => {return hasUpgrade("g", 11) ? "Boosts grass value by x" + format(player.p.prestigeEffect2) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasUpgrade("g", 11) && player.p.prestigeEffect2.gte("1e7500") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return hasUpgrade("g", 11) && player.p.prestigePoints.gte("1e150020") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

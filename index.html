@@ -97,9 +97,9 @@
 					<img class="miscImg" src="resources/ui/universe.png" v-if="hasUpgrade('i', 21) || hasUpgrade('ad', 13)"></img>
 					<div class="miscText" v-if="!(hasUpgrade('i', 21) || hasUpgrade('ad', 13))">?</div>
 				</button>
-				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!(hasMilestone('ip', 23))" onclick="showTab('po');player.subtabs['po']['stuff'] = 'Halter'">
-					<img class="miscImg" src="resources/ui/halter.png" v-if="hasMilestone('ip', 23)"></img>
-					<div class="miscText" v-if="!hasMilestone('ip', 23)">?</div>
+				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!tmp.po.microtabs.stuff.Halter.unlocked" onclick="showTab('po');player.subtabs['po']['stuff'] = 'Halter'">
+					<img class="miscImg" src="resources/ui/halter.png" v-if="tmp.po.microtabs.stuff.Halter.unlocked"></img>
+					<div class="miscText" v-if="!tmp.po.microtabs.stuff.Halter.unlocked">?</div>
 				</button>
 				<button v-bind:class="{miscButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="showTab('settings')" style="border-right:0px">
 					<img class="miscImg" src="resources/ui/settings.png"></img>

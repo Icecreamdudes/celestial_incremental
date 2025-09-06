@@ -31,14 +31,14 @@
         };
     },
     tooltip: "Generators",
-    branches: [["le", "#309"]],
+    branches: [["dp", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
 
         player.dg.generatorsToGet = player.dp.prestigePoints.pow(0.35).floor()
-        if (player.le.punchcards[7]) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.le.punchcardsEffect[7])
-        if (player.le.punchcards[15]) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(player.le.punchcardsEffect[15])
+        if (getLevelableBool("pu", 106)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 106)[0])
+        if (getLevelableBool("pu", 301)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
         
         // GENERATOR SOFTCAP
@@ -48,20 +48,20 @@
 
         player.dg.generatorPower = player.dg.generatorPower.add(player.dg.generatorPowerPerSecond.mul(delta))
         player.dg.generatorPowerPerSecond = player.dg.generatorEffect
-        if (player.le.punchcards[8]) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(player.le.punchcardsEffect[8])
-        if (player.le.punchcards[15]) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(player.le.punchcardsEffect[15])
+        if (getLevelableBool("pu", 107)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 107)[0])
+        if (getLevelableBool("pu", 301)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("st", 107)[0])
 
         // GENERATOR POWER SOFTCAP
         if (player.dg.generatorPowerPerSecond.gte(1e250)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.div(1e250).pow(0.1).mul(1e250)
 
-        if (player.dg.generatorPause.gte(0))
-        {
+        if (player.dg.generatorPause.gte(0)) {
             layers.dg.generatorReset();
         }
         player.dg.generatorPause = player.dg.generatorPause.sub(1)
 
-        player.dg.generatorPowerEffect = player.dg.generatorPower.pow(0.25).add(1).pow(player.dgr.grassEffect)
+        if (player.dg.generatorPower.lt(1e9)) player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.5).pow(player.dgr.grassEffect)
+        if (player.dg.generatorPower.gte(1e9)) player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.25).mul(177.83).pow(player.dgr.grassEffect)
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
         if (hasUpgrade("sma", 205)) player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(0.01).mul(delta))
@@ -81,6 +81,8 @@
         player.dp.buyables[11] = new Decimal(0)
         player.dp.buyables[12] = new Decimal(0)
         player.dp.buyables[13] = new Decimal(0)
+        player.dp.buyables[14] = new Decimal(0)
+        player.dp.buyables[15] = new Decimal(0)
 
         player.dg.generatorPower = new Decimal(0)
     },
@@ -108,7 +110,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.2).mul(0.3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -142,7 +144,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.22).mul(0.3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.25) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -176,7 +178,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.24).mul(0.3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -214,19 +216,22 @@
                 buttonStyle() { return { border: "2px solid #0a593c", borderRadius: "10px" } },
                 unlocked() { return true },
                 content: [
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["row", [
-                        ["raw-html", () => { return "You will gain <h3>" + formatWhole(player.dg.generatorsToGet) + "</h3> generators on reset." }, { color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px" }],
-                        ["raw-html", () => { return (player.dg.generatorsToGet.gte(1e100)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + formatWhole(player.dg.generatorsToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return (player.dg.generatorsToGet.gte(1e100)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", function () { return "Generators provide a base generator power gain of <h3>" + format(player.dg.generatorEffect) + "</h3>." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => {return "Provides a base generator power gain of +" + format(player.dg.generatorEffect) + "/s"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.dg.generatorPower) + "</h3> generator power." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["row", [
-                        ["raw-html", () => { return "You are generating <h3>" + format(player.dg.generatorPowerPerSecond) + "</h3> generator power per second." }, { color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px" }],
-                        ["raw-html", () => { return (player.dg.generatorPowerPerSecond.gte(1e250)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have <h3>" + format(player.dg.generatorPower) + "</h3> generator power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.dg.generatorPowerPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return (player.dg.generatorPowerPerSecond.gte(1e250)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", function () { return "Generator power boosts point gain by x<h3>" + format(player.dg.generatorPowerEffect) + "</h3>." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "Boosts point gain by x" + format(player.dg.generatorPowerEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return (player.dg.generatorPower.gte(1e9)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],

@@ -124,7 +124,7 @@
     },
     tooltip: "Matos, Celestial of Machinery",
     branches: ["sma",],
-    color: "rgb(138, 14, 121)",
+    color: "#8a0e79",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -838,51 +838,87 @@ for (let i = 0; i < player.ma.health.length; i++) {
             onClick() {
                 player.ma.matosUnlock = true
             },
-            style: { width: '175px', "min-height": '175px' },
+            style: {width: "175px", minHeight: "175px", border: "5px solid #8a0e79", borderRadius: "15px"},
         },
         5: {
-            title() { return !player.ma.matosUnlockConditions[0] ? "<h2>Max Strength Core" : "<h1>YOU"},
+            title() {
+                return !player.ma.matosUnlockConditions[0] ? "<h2>Max Strength Core</h2>" : "<h1>YOU"
+            },
             canClick() { return player.ma.hasMaxStrengthCore == true && player.ma.matosUnlockConditions[0] == false },
             unlocked() { return true },
             onClick() {
                 player.ma.matosUnlockConditions[0] = true
                 player.ma.matosUnlockConditionCount += 1
             },
-            style: { width: '150px', "min-height": '150px' },
-            branches: [4]
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.ma.matosUnlockConditions[0]) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [[4, "#8a0e79"]]
         },
         6: {
-            title() { return !player.ma.matosUnlockConditions[1] ? "<h2>Check Back Level 30,000" : "<h1>HAVE" },
-            canClick() { return player.cb.level.gte(30000) && player.ma.matosUnlockConditions[1] == false },
-            unlocked() { return true },
+            title() {
+                return !player.ma.matosUnlockConditions[1] ? "<h2>Check Back Level</h2><br>" + formatShortWhole(player.cb.level) + "/20,000" : "<h1>HAVE"
+            },
+            canClick() { return player.cb.level.gte(20000) && player.ma.matosUnlockConditions[1] == false },
+            unlocked: true,
             onClick() {
-                player.ma.matosUnlockConditions[1] = true     
+                player.ma.matosUnlockConditions[1] = true
                 player.ma.matosUnlockConditionCount += 1
             },
-            style: { width: '150px', "min-height": '150px' },
-            branches: [4]
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.ma.matosUnlockConditions[1]) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [[4, "#8a0e79"]]
         },
         7: {
-            title() { return !player.ma.matosUnlockConditions[2] ? "<h2>1e280 Replicanti Points" : "<h1>BEEN" },
+            title() { return !player.ma.matosUnlockConditions[2] ? "<h2>Replicanti Points</h2><br>" + formatWhole(player.cp.replicantiPoints) + "/1e280" : "<h1>BEEN" },
             canClick() { return player.cp.replicantiPoints.gte(1e280) && player.ma.matosUnlockConditions[2] == false },
             unlocked() { return true },
             onClick() {
                 player.ma.matosUnlockConditions[2] = true
                 player.ma.matosUnlockConditionCount += 1
             },
-            style: { width: '150px', "min-height": '150px' },
-            branches: [4]
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.ma.matosUnlockConditions[2]) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [[4, "#8a0e79"]]
         },
         8: {
-            title() { return !player.ma.matosUnlockConditions[3] ? "<h2>1e500,000 Points" : "<h1>WARNED" },
+            title() { return !player.ma.matosUnlockConditions[3] ? "<h2>Points</h2><br>" + formatWhole(player.points) + "<br>/1e500,000" : "<h1>WARNED" },
             canClick() { return player.points.gte("1e500000") && player.ma.matosUnlockConditions[3] == false },
             unlocked() { return true },
             onClick() {
                 player.ma.matosUnlockConditions[3] = true
                 player.ma.matosUnlockConditionCount += 1
             },
-            style: { width: '150px', "min-height": '150px' },
-            branches: [4]
+            style() {
+                let look = {width: "150px", minHeight: "150px", border: "5px solid #8a0e79", borderRadius: "15px"}
+                if (player.ma.matosUnlockConditions[3]) {
+                    look.backgroundColor = "#45073c"
+                    look.color = "white"
+                    look.cursor = "default"
+                } else if (this.canClick()) {look.backgroundColor = "#8a0e79"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
+            branches: [[4, "#8a0e79"]]
         },
         11: {
             title() { return "<h1>Enter the black heart" },
@@ -3930,11 +3966,19 @@ for (let i = 0; i < player.ma.deadCharacters.length; i++)
         },
     }, 
     tabFormat: [
-        ["raw-html", () => { return !player.ma.inBlackHeart ? "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return !player.ma.inBlackHeart ? "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points": ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return !player.ma.inBlackHeart ? "(+" + format(player.s.singularityPointsToGet) + ")" : ""}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
+                return look
+            }],
+            ["raw-html", () => {return player.ma.inBlackHeart ? "" : player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.le.punchcardsUnlocked[15]  }
+    layerShown() { return player.startedGame == true && tmp.pu.levelables[302].canClick }
 })
 function logPrint(line) {
     player.ma.log.push(line); // Push the raw HTML string directly

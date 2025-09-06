@@ -68,7 +68,7 @@
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 1202)[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 306)[1])
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.co.cores.rocket.effect[0])
-        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.le.punchcardsPassiveEffect[7])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pu", 106)[1])
 
         // POWER MODIFIERS
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.pow(player.co.cores.rocket.effect[1])
@@ -135,10 +135,10 @@
             layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(3, player.rf.rocketFuel)
         }
-        if (hasUpgrade("cs", 902) && layerShown("rf")) {
-            layers.rf.rocketFuelAbility(5, player.rf.rocketFuel)
-            layers.rf.rocketFuelAbility(6, player.rf.rocketFuel)
-            layers.rf.rocketFuelAbility(7, player.rf.rocketFuel)
+        if (hasUpgrade("cs", 902)) {
+            layers.rf.rocketFuelAbility(5, player.ta.highestRocketFuel)
+            layers.rf.rocketFuelAbility(6, player.ta.highestRocketFuel)
+            layers.rf.rocketFuelAbility(7, player.ta.highestRocketFuel)
         }
     },
     clickables: {
@@ -370,7 +370,7 @@
 
                 if (new Decimal(random).lte(prob)) {
                     addLevelableXP("pet", 303, 1);
-                    callAlert("You gained a Drippy Ufo!", "resources/ufoRarePet.png");
+                    callAlert("You gained a Drippy Ufo!", "resources/Pets/ufoRarePet.png");
                 }
             break;
             case 5:

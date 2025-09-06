@@ -65,7 +65,7 @@
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 207))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 208))
         if (hasMilestone("fa", 21)) player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.milestoneEffect[9])
-        player.fa.chargeRate = player.fa.chargeRate.mul(player.le.punchcardsPassiveEffect[5])
+        player.fa.chargeRate = player.fa.chargeRate.mul(levelableEffect("pu", 105)[2])
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("st", 105))
         player.fa.chargeRate = player.fa.chargeRate.mul(player.i.postOTFMult)
 

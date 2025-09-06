@@ -83,7 +83,7 @@
         player.m.codeExperiencePause = player.m.codeExperiencePause.sub(1)
 
         // CODE EXPERIENCE EFFECT
-        player.m.codeExperienceEffect = player.m.codeExperience.add(1).log(1e100).add(1).pow(1.2)
+        player.m.codeExperienceEffect = player.m.codeExperience.add(1).log(1e100).add(1).pow(2)
 
         //----------------------------------------
 
@@ -140,12 +140,12 @@
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
         player.m.modsToGet = player.m.modsToGet.mul(player.i.preOTFMult)
         player.m.modsToGet = player.m.modsToGet.mul(player.co.cores.code.effect[2])
-        player.m.modsToGet = player.m.modsToGet.mul(player.cs.scraps.code.effect)
         if (hasUpgrade("cs", 702)) player.m.modsToGet = player.m.modsToGet.mul(1e15)
-        if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.mul(1e10)
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1043)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
+        player.m.modsToGet = player.m.modsToGet.pow(player.cs.scraps.code.effect)
+        if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])

@@ -16,6 +16,8 @@
             buyBuyable("dp", 11)
             buyBuyable("dp", 12)
             buyBuyable("dp", 13)
+            buyBuyable("dp", 14)
+            buyBuyable("dp", 15)
         }
     },
     nodeStyle() {
@@ -35,10 +37,12 @@
         if (player.du.points.div(1000).pow(0.25).lt(1e7)) player.dp.prestigePointsToGet = player.du.points.div(1000).pow(0.25)
         if (player.du.points.div(1000).pow(0.25).gte(1e7)) player.dp.prestigePointsToGet = player.du.points.div(10000).pow(0.01).mul(5e6)
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dg", 13))
-        if (player.le.punchcards[2]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[2])
-        if (player.le.punchcards[10]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[10])
-        if (player.le.punchcards[14]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(player.le.punchcardsEffect[14])
+        if (getLevelableBool("pu", 102)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 102)[0])
+        if (getLevelableBool("pu", 102)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dp", 14))
+        if (getLevelableBool("pu", 204)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 204)[0])
+        if (getLevelableBool("pu", 301)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 301)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
+        if (hasUpgrade("cs", 302)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(10)
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
         if (player.pet.activeAbilities[0]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)
 
@@ -100,7 +104,7 @@
                 return "Rank Req Divider"
             },
             display() {
-                return "which are diving rank requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing rank requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
@@ -134,7 +138,7 @@
                 return "Tier Req Divider"
             },
             display() {
-                return "which are diving tier requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing tier requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
@@ -168,7 +172,75 @@
                 return "Tetr Req Divider"
             },
             display() {
-                return "which are diving tetr requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing tetr requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
+        },
+        14: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.dp.prestigePoints},
+            pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.25, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getLevelableBool("pu", 102) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Prestige Multiplier"
+            },
+            display() {
+                return "which are multiplying prestige points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
+        },
+        15: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.dp.prestigePoints},
+            pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getLevelableBool("pu", 206) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Grass Multiplier"
+            },
+            display() {
+                return "which are multiplying grass value and capacity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
@@ -197,19 +269,19 @@
             "Main": {
                 buttonStyle() { return { border: "2px solid #102e67", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.dp.prestigePoints) + "</h3> prestige points, which boosts rank, tier, and tetr point gain by x" + format(player.dp.prestigePointsEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["row", [
-                        ["raw-html", () => {return "You will gain <h3>" + format(player.dp.prestigePointsToGet) + "</h3> prestige points on reset." }, {color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px"}],
-                        ["raw-html", () => { return (player.du.points.div(1000).pow(0.25).gte(1e7) && player.dp.prestigePointsToGet.lt(1e250)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have <h3>" + format(player.dp.prestigePoints) + "</h3> prestige points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.dp.prestigePointsToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : player.du.points.div(1000).pow(0.25).gte(1e7) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
+                    ["raw-html", () => {return "Boosts rank, tier, and tetr point gain by x" + format(player.dp.prestigePointsEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]], {maxWidth: "900px"}],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],
+                        ["dark-buyable", 14], ["dark-buyable", 15]], {maxWidth: "900px"}],
                 ]
             },
         },

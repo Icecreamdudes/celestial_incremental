@@ -1,4 +1,4 @@
-const VEXROW = [1, 2, 1, 3, 2, 1, 4, 3, 2, 4, 5, 3, 4, 6, 5, 6, 5, 6]
+const VEXROW = [1, 2, 1, 3, 2, 1, 4, 3, 2, 4, 5, 3, 6, 4, 5, 6, 5, 6]
 addLayer("hve", {
     name: "Hex of Vexes",
     symbol: "Ve", // Decides what text appears on the node.
@@ -20,8 +20,10 @@ addLayer("hve", {
         player.hve.vexDiv = new Decimal(1)
         if (hasUpgrade("hpw", 112)) player.hve.vexDiv = player.hve.vexDiv.mul(1e6)
 
-        player.hve.vexReq = Decimal.pow(1e6, player.hve.vexTotal).mul(1e60).div(player.hve.vexDiv)
-        player.hve.vexGain = player.hcu.curses.add(1).div(1e60).mul(player.hve.vexDiv).ln().div(new Decimal(1e6).ln()).add(1).sub(player.hve.vexTotal).floor()
+        if (player.hve.vexTotal.lt(12)) player.hve.vexReq = Decimal.pow(1e6, player.hve.vexTotal).mul(1e60).div(player.hve.vexDiv)
+        if (player.hve.vexTotal.gte(12)) player.hve.vexReq = Decimal.pow(1e12, player.hve.vexTotal).div(1e6).div(player.hve.vexDiv)
+        if (player.hcu.curses.lt(1e132)) player.hve.vexGain = player.hcu.curses.add(1).div(1e60).mul(player.hve.vexDiv).ln().div(new Decimal(1e6).ln()).add(1).sub(player.hve.vexTotal).floor()
+        if (player.hcu.curses.gte(1e132)) player.hve.vexGain = player.hcu.curses.add(1).mul(1e6).mul(player.hve.vexDiv).ln().div(new Decimal(1e12).ln()).add(1).sub(player.hve.vexTotal).floor()
         if (player.hve.vexGain.lt(1)) player.hve.vexGain = new Decimal(0)
 
         player.hve.vexEffects = [new Decimal(0), new Decimal(1), new Decimal(1)]
@@ -31,7 +33,11 @@ addLayer("hve", {
     },
     clickables: {
         1: {
-            title() { return "<h3>Vex, but reset pre-power content.<br><small>Req: " + format(player.hve.vexReq) + " curses</small></h3>"},
+            title() {
+                let str = "<h3>Vex, but reset pre-power content.<br><small>Req: " + format(player.hve.vexReq) + " curses</small></h3>"
+                if (player.hve.vexTotal.gte(12)) str = str.concat("<br><small style='color:red'>[SOFTCAPPED]</small>")
+                return str
+            },
             canClick() { return player.hve.vexGain.gte(1)},
             unlocked: true,
             onClick() {
@@ -54,7 +60,7 @@ addLayer("hve", {
                 layers.hpw.powerReset(2)
             },
             style() {
-                let look = {width: "300px", minHeight: "80px", border: "2px solid black", borderRadius: "15px"}
+                let look = {width: "300px", minHeight: "80px", fontSize: "9px", border: "2px solid black", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#404" : look.backgroundColor = "#bf8f8f"
                 this.canClick() ? look.color = "white" : look.color = "black"
                 return look

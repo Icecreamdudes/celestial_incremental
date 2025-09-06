@@ -25,7 +25,7 @@
     },
     code: {
         name: "Code Core Scrap",
-        effect: "Boosts mod gain by x",
+        effect: "Boosts mod gain by ^",
     },
     dice: {
         name: "Dice Core Scrap",
@@ -164,7 +164,7 @@ addLayer("cs", {
         for (let prop in player.cs.scraps) {
             player.cs.scraps[prop].gain = Decimal.pow(1.15, player.co.cores[prop].level).sub(1)
             if (hasUpgrade("fu", 19)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.s.singularitiesEffect)
-            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.le.punchcardsPassiveEffect[10])
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pu", 204)[1])
             if (hasUpgrade("sma", 102)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(upgradeEffect("sma", 102))
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(buyableEffect("ep0", 11))
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pet", 309)[1])
@@ -191,8 +191,8 @@ addLayer("cs", {
         player.cs.scraps.grasshopper.effect = player.cs.scraps.grasshopper.amount.add(1).log(10).mul(0.01)
         if (player.cs.scraps.grasshopper.amount.gte(1e10)) player.cs.scraps.grasshopper.effect = player.cs.scraps.grasshopper.amount.add(1).log(10).mul(0.001).add(0.09).min(0.2)
 
-        player.cs.scraps.code.effect = Decimal.pow(5, player.cs.scraps.code.amount.add(1).log(10))
-        if (player.cs.scraps.code.effect.gte(1e10)) player.cs.scraps.code.effect = Decimal.pow(1.5, player.cs.scraps.code.amount.add(1).log(10)).mul(169351)
+        player.cs.scraps.code.effect = player.cs.scraps.code.amount.add(1).log(10).mul(0.01).add(1)
+        if (player.cs.scraps.code.amount.gte(1e10)) player.cs.scraps.code.effect = player.cs.scraps.code.amount.add(1).log(10).mul(0.001).add(1.09)
 
         player.cs.scraps.dice.effect = player.cs.scraps.dice.amount.add(1).log(10).pow(2).add(1)
         if (player.cs.scraps.dice.amount.gte(1e10)) player.cs.scraps.dice.effect = player.cs.scraps.dice.amount.add(1).log(10).mul(0.2).add(18)
@@ -238,21 +238,19 @@ addLayer("cs", {
         2: {
             title() {
                 if (!player.ev.evolutionsUnlocked[9]) return "LOCKED"
-                return "Sacrifice Core"
+                return "Sacrifice Scrap"
             },
             tooltip() {
-                let str = "+" + format(player.co.cores[player.cs.scrapIndex].level.pow(0.5).mul(player.ev4.offeringsBase)) + " Offerings"
+                let str = "+" + format(player.cs.scraps[player.cs.scrapIndex].amount.add(1).log(10).mul(player.ev4.offeringsBase)) + " Offerings"
                 str = str.concat("<br><small>(" + format(player.ev4.offerings) + "/" + formatWhole(player.ev4.offeringReq) + ")</small>")
                 if (player.ev.evolutionsUnlocked[9]) return str
                 return ""
             },
-            canClick() { return player.co.cores[player.cs.scrapIndex].level.gte(1) && player.ev.evolutionsUnlocked[9]},
+            canClick() { return player.cs.scraps[player.cs.scrapIndex].amount.gt(0) && player.ev.evolutionsUnlocked[9]},
             unlocked: true,
             onClick() {
-                player.ev4.offerings = player.ev4.offerings.add(player.co.cores[player.cs.scrapIndex].level.pow(0.5).mul(player.ev4.offeringsBase))
-                player.co.cores[player.cs.scrapIndex].xp = new Decimal(0)
-                player.co.cores[player.cs.scrapIndex].totalxp = new Decimal(0)
-                player.co.cores[player.cs.scrapIndex].level = new Decimal(0)
+                player.ev4.offerings = player.ev4.offerings.add(player.cs.scraps[player.cs.scrapIndex].amount.add(1).log(10).mul(player.ev4.offeringsBase))
+                player.cs.scraps[player.cs.scrapIndex].amount = new Decimal(0)
             },
             style() {
                 let look = {width: "273px", minHeight: "47px", color: "white", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
@@ -425,7 +423,7 @@ addLayer("cs", {
         },
         113: {
             canClick: true,
-            unlocked: true,
+            unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
                 player.cs.scrapIndex = "radioactive"
             },
@@ -528,7 +526,7 @@ addLayer("cs", {
         203: {
             title: "Fitted Factors",
             unlocked() {return player.cs.scrapIndex == "factor"},
-            description: "Multiply factor base by x80.",
+            description: "Multiply factor base by x8,000.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.factor },
             currencyDisplayName: "Factor Core Scraps",
@@ -542,9 +540,9 @@ addLayer("cs", {
             },
         },
         301: {
-            title: "Predictable Prestige",
+            title: "Practical Prestige",
             unlocked() {return player.cs.scrapIndex == "prestige"},
-            description: "Multiply celestial points by x1e308.",
+            description: "Raise 1st prestige effect by ^1.05. (Ignoring softcap)",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.prestige },
             currencyDisplayName: "Prestige Core Scraps",
@@ -558,15 +556,13 @@ addLayer("cs", {
             },
         },
         302: {
-            title: "Prestige Parallels",
+            title: "Dark Duplicate",
             unlocked() {return player.cs.scrapIndex == "prestige"},
-            description: "Boost anonymity based on prestige.",
+            description: "Multiply dark prestige by x10.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.prestige },
             currencyDisplayName: "Prestige Core Scraps",
             currencyInternalName: "amount",
-            effect() {return Decimal.pow(2, player.p.prestigePoints.add(1).log("1e10000"))},
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style() {
                 let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
@@ -578,7 +574,7 @@ addLayer("cs", {
         303: {
             title: "Clearer Crystals",
             unlocked() {return player.cs.scrapIndex == "prestige"},
-            description: "Square crystal buyable effects.",
+            description: "Improve crystal effect.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.prestige },
             currencyDisplayName: "Prestige Core Scraps",
@@ -594,7 +590,7 @@ addLayer("cs", {
         401: {
             title: "Unbefitting Branches",
             unlocked() {return player.cs.scrapIndex == "tree"},
-            description: "Raise tree gain by ^1.2, but square tree requirement.",
+            description: "Raise tree gain by ^1.1, but raise tree requirement by ^1.5.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.tree },
             currencyDisplayName: "Tree Core Scraps",
@@ -770,7 +766,7 @@ addLayer("cs", {
         703: {
             title: "Lazy Coding",
             unlocked() {return player.cs.scrapIndex == "code"},
-            description: "Idk man.<br>Here's x1e10 mods<br>I guess.",
+            description: "Idk man.<br>Heres ^1.1 mods<br>I guess.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.code },
             currencyDisplayName: "Code Core Scraps",
@@ -786,7 +782,7 @@ addLayer("cs", {
         801: {
             title: "Boosted Boosters",
             unlocked() {return player.cs.scrapIndex == "dice"},
-            description: "Dice score is doubled.",
+            description: "Multiply Dice score by x10.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.dice },
             currencyDisplayName: "Dice Core Scraps",
@@ -802,7 +798,7 @@ addLayer("cs", {
         802: {
             title: "Truly Rigged",
             unlocked() {return player.cs.scrapIndex == "dice"},
-            description: "Booster dice always land on the rigged option.",
+            description: "Booster dice always lands on the rigged option.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.dice },
             currencyDisplayName: "Dice Core Scraps",
@@ -834,7 +830,7 @@ addLayer("cs", {
         901: {
             title: "Undiluted fuel",
             unlocked() {return player.cs.scrapIndex == "rocket"},
-            description: "Improve infinity point boosts formula.",
+            description: "Improve infinity point ability formula.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.rocket },
             currencyDisplayName: "Rocket Core Scraps",
@@ -850,7 +846,7 @@ addLayer("cs", {
         902: {
             title: "Self-fueling boosts",
             unlocked() {return player.cs.scrapIndex == "rocket"},
-            description: "Auto-activate the last three rocket fuel abilities.",
+            description: "Auto-activate the last three rocket fuel abilities.<br>(With highest RF)",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.rocket },
             currencyDisplayName: "Rocket Core Scraps",
@@ -880,9 +876,9 @@ addLayer("cs", {
             },
         },
         1001: {
-            title: "Dimensional Squared",
+            title: "Developed Dimensions",
             unlocked() {return player.cs.scrapIndex == "antimatter"},
-            description: "Square dimension boost base.",
+            description: "Raise dimension boost by ^10.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.antimatter },
             currencyDisplayName: "Antimatter Core Scraps",
@@ -896,9 +892,9 @@ addLayer("cs", {
             },
         },
         1002: {
-            title: "Brighter Stars",
+            title: "Denser Galaxies",
             unlocked() {return player.cs.scrapIndex == "antimatter"},
-            description: "Increase galaxy cap and double galaxy effect base.",
+            description: "Increase galaxy cap and triple galaxy effect base.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.antimatter },
             currencyDisplayName: "Antimatter Core Scraps",
@@ -912,7 +908,7 @@ addLayer("cs", {
             },
         },
         1003: {
-            title: "Self-Replicating Stars",
+            title: "Galactic Replication",
             unlocked() {return player.cs.scrapIndex == "antimatter"},
             description: "Automate Replicanti Galaxy gain.",
             cost: new Decimal(1e9),
@@ -946,7 +942,7 @@ addLayer("cs", {
         1102: {
             title: "Infinitier Dimensions",
             unlocked() {return player.cs.scrapIndex == "infinity"},
-            description: "Multiply ID softcap base by x1.3.",
+            description: "Double ID softcap base.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.infinity },
             currencyDisplayName: "Infinity Core Scraps",
@@ -963,7 +959,7 @@ addLayer("cs", {
             title: "Opposites Attract",
             unlocked() {return player.cs.scrapIndex == "infinity"},
             description: "Improve IP Upgrade (4, 2).",
-            cost: new Decimal(1e6),
+            cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.infinity },
             currencyDisplayName: "Infinity Core Scraps",
             currencyInternalName: "amount",
@@ -972,6 +968,54 @@ addLayer("cs", {
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.infinity.color}
+                return look
+            },
+        },
+        1201: {
+            title: "Gilded Dust",
+            unlocked() {return player.cs.scrapIndex == "checkback"},
+            description: "Improve coin dust effect formula.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.checkback },
+            currencyDisplayName: "Check Back Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.checkback.color}
+                return look
+            },
+        },
+        1202: {
+            title: "Altered Altar",
+            unlocked() {return player.cs.scrapIndex == "checkback"},
+            description: "Multiply offering gain by x1.5.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.checkback },
+            currencyDisplayName: "Check Back Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.checkback.color}
+                return look
+            },
+        },
+        1203: {
+            title: "Check Sooner",
+            unlocked() {return player.cs.scrapIndex == "checkback"},
+            description: "Multiply checkback tickspeed by x1.1.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.checkback },
+            currencyDisplayName: "Check Back Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.checkback.color}
                 return look
             },
         },
@@ -1123,6 +1167,7 @@ addLayer("cs", {
                                 ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
                                 ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
                                 ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
+                                ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
                             ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
                             ["style-row", [
                                 ["clickable", 1], ["style-row", [], {width: "3px", height: "47px", backgroundColor: "#ababab"}], ["clickable", 2]
@@ -1134,7 +1179,7 @@ addLayer("cs", {
                         ["row", [
                             ["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], 
                             ["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 110],
-                            ["clickable", 111], ["clickable", 112],
+                            ["clickable", 111], ["clickable", 112], ["clickable", 113],
                         ]],
                         ["blank", "10px"],
                     ], {width: "800px", backgroundColor: "#2b2522", borderLeft: "3px solid #ababab", borderRight: "3px solid #ababab", borderBottom: "3px solid #ababab", borderRadius: "0 0 15px 15px"}],
@@ -1146,8 +1191,12 @@ addLayer("cs", {
     tabFormat: [
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
-            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
+                return look
+            }],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],

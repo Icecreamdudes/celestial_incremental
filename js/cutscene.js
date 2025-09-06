@@ -449,9 +449,9 @@
         }
 
         //27
-        if (player.c.cutscenes[26] && player.le.punchcardsUnlocked[15]) {
+        if (player.c.cutscenes[26] && tmp.pu.levelables[302].canClick) {
             player.c.currentCutscene = 27
-        } else if (player.tab != "c" && player.le.punchcardsUnlocked[15]) {
+        } else if (player.tab != "c" && tmp.pu.levelables[302].canClick) {
             player.c.currentCutscene = 0
         }
         if (player.c.currentCutscene == 27) {
@@ -460,7 +460,7 @@
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 27) {
             player.c.cutscenes[26] = false
-            player.tab = "du" 
+            player.tab = "le" 
             player.c.cutscenes[26] = false
         }
 

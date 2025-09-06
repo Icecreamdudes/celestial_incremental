@@ -211,76 +211,90 @@
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
         14: {
-            title() { return "<h2>Autocrunch Toggle: On" },
-            canClick() { return true },
-            unlocked() { return player.bi.IACtoggle },
+            title() {return player.bi.IACtoggle ? "Auto-Crunch: ON" : "Auto-Crunch: OFF"},
+            canClick: true,
+            unlocked: true,
             onClick() {
-                player.bi.IACtoggle = false
+                if (player.bi.IACtoggle) {
+                    player.bi.IACtoggle = false
+                } else {
+                    player.bi.IACtoggle = true
+                }
             },
-            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
+            style() {
+                let look = {width: "400px", minHeight: "60px", fontSize: "18px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.bi.IACtoggle) {look.backgroundColor = "#ffbf00"} else {look.backgroundColor = "#b28500"}
+                return look
+            },
         },
         15: {
-            title() { return "<h2>Autocrunch Toggle: Off" },
-            canClick() { return true },
-            unlocked() { return !player.bi.IACtoggle },
-            onClick() {
-                player.bi.IACtoggle = true
-            },
-            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
-        },
-        16: {
-            title() { return "<h2>Auto Reverse Crunch Toggle: On" },
-            canClick() { return true },
-            unlocked() { return player.bi.NACtoggle },
-            onClick() {
-                player.bi.NACtoggle = false
-            },
-            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
-        },
-        17: {
-            title() { return "<h2>Auto Reverse Crunch Toggle: Off" },
-            canClick() { return true },
-            unlocked() { return !player.bi.NACtoggle },
-            onClick() {
-                player.bi.NACtoggle = true
-            },
-            style: { width: '300px', "min-height": '80px', borderRadius: '0px 0px 15px 15px' },
-        },
-        18: {
             title() { return "Amount" },
             canClick() { return player.bi.IACtype },
             unlocked() { return true },
             onClick() {
                 player.bi.IACtype = false
             },
-            style: { width: '150px', "min-height": '40px', borderRadius: '15px 0px 0px 0px' },
+            style() {
+                let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.bi.IACtype) {look.backgroundColor = "#ffbf00"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
-        19: {
+        16: {
             title() { return "Time" },
             canClick() { return !player.bi.IACtype },
             unlocked() { return true },
             onClick() {
                 player.bi.IACtype = true
             },
-            style: { width: '150px', "min-height": '40px', borderRadius: '0px 15px 0px 0px' },
+            style() {
+                let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!player.bi.IACtype) {look.backgroundColor = "#ffbf00"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
-        21: {
+        17: {
+            title() {return player.bi.NACtoggle ? "Auto-Rev-Crunch: ON" : "Auto-Rev-Crunch: OFF"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                if (player.bi.NACtoggle) {
+                    player.bi.NACtoggle = false
+                } else {
+                    player.bi.NACtoggle = true
+                }
+            },
+            style() {
+                let look = {width: "400px", minHeight: "60px", fontSize: "18px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.bi.NACtoggle) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#7c9797"}
+                return look
+            },
+        },
+        18: {
             title() { return "Amount" },
             canClick() { return player.bi.NACtype },
             unlocked() { return true },
             onClick() {
                 player.bi.NACtype = false
             },
-            style: { width: '150px', minHeight: '40px', borderRadius: '15px 0px 0px 0px' },
+            style() {
+                let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (player.bi.NACtype) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
-        22: {
+        19: {
             title() { return "Time" },
             canClick() { return !player.bi.NACtype },
             unlocked() { return true },
             onClick() {
                 player.bi.NACtype = true
             },
-            style: { width: '150px', minHeight: '40px', borderRadius: '0px 15px 0px 0px' },
+            style() {
+                let look = {width: "200px", minHeight: "40px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0px"}
+                if (!player.bi.NACtype) {look.backgroundColor = "#b2d8d8"} else {look.backgroundColor = "#bf8f8f"}
+                return look
+            },
         },
     },
     bars: {},
@@ -638,9 +652,9 @@
             style: { width: '125px', height: '100px', }
         },
         117: {
-            title: "BI NIP Upgrade XV",
-            unlocked() { return hasMilestone("s", 12) },
-            description: "Replicate chance boosts replicanti mult, and replicanti effects are heavily buffed.",
+            title: "BI NIP Upgrade XVI",
+            unlocked() {return hasMilestone("s", 12) && hasUpgrade("ma", 21)},
+            description: "Triple replicanti mult, and replicanti effects are buffed.",
             cost: new Decimal(1e188),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
@@ -792,43 +806,57 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
-
             },
             "Autocruncher(s)": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("ip", 27) || (player.s.highestSingularityPoints.gt(0) && player.ev.evolutionsUnlocked[3]) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return !player.bi.IACtype ? "Autocrunch amount: " + formatWhole(player.bi.IACamount) + " infinity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.bi.IACtype ? "Autocrunch time: " + formatTime(player.bi.IACtime) + "/" + formatTime(player.bi.IACamount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["text-input", "IACinput", {
-                        color: "var(--color)",
-                        width: "400px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 18], ["clickable", 19]]],
-                    ["row", [["clickable", 14], ["clickable", 15]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return !player.bi.NACtype ? "Autocrunch amount: " + formatWhole(player.bi.NACamount) + " negative infinity points on reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return player.bi.NACtype ? "Autocrunch time: " + formatTime(player.bi.NACtime) + "/" + formatTime(player.bi.NACamount) + " until reset." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["text-input", "NACinput", {
-                        color: "var(--color)",
-                        width: "400px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 21], ["clickable", 22]]],
-                    ["row", [["clickable", 16], ["clickable", 17]]],
+                    ["style-row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["row", [
+                                    ["raw-html", () => { return format(player.in.infinityPoints) + " IP" }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["raw-html", () => { return "(+" + format(player.in.infinityPointsToGet) + ")"}, () => {
+                                        let look = {fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}
+                                        if (player.points.gt("1e308") || !player.in.breakInfinity) {look.color = "white"} else {look.color = "gray"} 
+                                        return look
+                                    }],
+                                ]],
+                            ], {width: "400px", height: "30px", backgroundColor: "#7f5f00"}],
+                            ["style-column", [
+                                ["raw-html", () => {return player.bi.IACtype ? "Auto-Crunch Time" : "Auto-Crunch Amount"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.bi.IACtype ? formatTime(player.bi.IACtime) + "/" + formatTime(player.bi.IACamount) + " until reset." : formatWhole(player.bi.IACamount) + " IP on reset."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "400px", height: "70px"}],
+                            ["text-input", "IACinput", {width: "350px", height: "50px", backgroundColor: "#332600", color: "white", fontSize: "32px", textAlign: "left", border: "0px", padding: "0px 25px"}],
+                            ["style-column", [
+                                ["row", [["clickable", 15], ["clickable", 16]]],
+                                ["clickable", 14],
+                            ], {width: "400px", height: "100px"}],
+                        ], {width: "400px", height: "250px", backgroundColor: "#664c00"}],
+                        ["style-column", [], {width: "3px", height: "250px", backgroundColor: "#ccc"}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["row", [
+                                    ["raw-html", () => { return format(player.ta.negativeInfinityPoints) + " NIP"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                                    ["raw-html", () => { return "(+" + format(player.ta.negativeInfinityPointsToGet) + ")"}, () => {
+                                        let look = {fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}
+                                        if (player.ad.antimatter.gt("1e308") || !player.ta.unlockedReverseBreak) {look.color = "white"} else {look.color = "gray"}
+                                        return look
+                                    }],
+                                ]],
+                            ], {width: "400px", height: "30px", backgroundColor: "#596c6c"}],
+                            ["style-column", [
+                                ["raw-html", () => {return player.bi.NACtype ? "Auto-Rev-Crunch Time" : "Auto-Rev-Crunch Amount"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.bi.NACtype ? formatTime(player.bi.NACtime) + "/" + formatTime(player.bi.NACamount) + " until reset." : formatWhole(player.bi.NACamount) + " NIP on reset."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "400px", height: "70px"}],
+                            ["text-input", "NACinput", {width: "350px", height: "50px", backgroundColor: "#232b2b", color: "white", fontSize: "32px", textAlign: "left", border: "0px", padding: "0px 25px"}],
+                            ["style-column", [
+                                ["row", [["clickable", 18], ["clickable", 19]]],
+                                ["clickable", 17],
+                            ], {width: "400px", height: "100px"}],
+                        ], {width: "400px", height: "250px", backgroundColor: "#475656"}],
+                    ], {width: "803px", height: "250px", border: "3px solid #ccc"}],
                 ]
             },
         },

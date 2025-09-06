@@ -455,11 +455,11 @@ addLayer("hcu", {
                 if (x.gte(30)) cst = cst.pow(3).div(1e125)
                 return cst
             },
-            canAfford() { return this.currency().gte(this.cost()) && !inChallenge("hrm", 13)},
+            canAfford() { return this.currency().gte(this.cost()) && !player.hrm.activeChallenge},
             title() { return "Ι-Jinx" },
             display() {
                 let str = "Negative infinity points are multiplied by " + format(buyableEffect("hcu", 112).add(1.2))
-                if (inChallenge("hrm", 13)) str = str.concat("<br><small style='color:red'>[UNBUYABLE IN DEATH REALM]</small>")
+                if (player.hrm.activeChallenge) str = str.concat("<br><small style='color:red'>[UNBUYABLE IN REALM CHALLENGES]</small>")
                 return str },
             total() {
                 let str = "(Total: " + format(tmp[this.layer].buyables[this.id].effect) + "x)"
@@ -483,7 +483,7 @@ addLayer("hcu", {
             },
             style() {
                 let look = {width: '200px', height: '125px', fontSize: "12px"}
-                if (inChallenge("hrm", 13)) look.opacity = 0.5
+                if (player.hrm.activeChallenge) look.opacity = 0.5
                 return look
             },
         },
@@ -589,11 +589,11 @@ addLayer("hcu", {
                 if (x.gte(16)) cst = cst.pow(3).div(1e140)
                 return cst
             },
-            canAfford() { return this.currency().gte(this.cost()) && !inChallenge("hrm", 13)},
+            canAfford() { return this.currency().gte(this.cost()) && !player.hrm.activeChallenge},
             title() { return "Μ-Jinx" },
             display() {
                 let str = "Increase Ι-Jinx's effect by +0.1x"
-                if (inChallenge("hrm", 13)) str = str.concat("<br><small style='color:red'>[UNBUYABLE IN DEATH REALM]</small>")
+                if (player.hrm.activeChallenge) str = str.concat("<br><small style='color:red'>[UNBUYABLE IN REALM CHALLENGES]</small>")
                 return str
             },
             total() { return "(Total: +" + format(tmp[this.layer].buyables[this.id].effect) + "x)"},
@@ -614,7 +614,7 @@ addLayer("hcu", {
             },
             style() {
                 let look = {width: '200px', height: '125px', fontSize: "12px"}
-                if (inChallenge("hrm", 13)) look.opacity = 0.5
+                if (player.hrm.activeChallenge) look.opacity = 0.5
                 return look
             },
         },

@@ -20,7 +20,7 @@
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
-		"mining.js",
+		"mining.js", "DarkU1/punchcards.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -147,7 +147,7 @@ function updateStyles() {
 			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "db": case "dv":
+		case "dgr": case "dn": case "db": case "dv": case "pu":
 			layerBG = "black"
 			break;
 		case "ch":
@@ -390,6 +390,7 @@ function updateStyles() {
 	}
 	if (options.menuType == "Tab") {
 		sideBG = "#161616"
+		if (player.universe == -0.1) sideBG = "black"
 	}
 
 	// Set background color

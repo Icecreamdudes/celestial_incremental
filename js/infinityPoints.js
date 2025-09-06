@@ -207,7 +207,7 @@
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.in.infinities.add(1)
+                return player.in.infinities.pow(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {width: "130px", height: "130px"},
@@ -865,7 +865,7 @@
 
     tabFormat: [
         ["row", [
-            ["raw-html", () => { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => { return "(+" + format(player.in.infinityPointsToGet) + ")"}, () => {
                 let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                 if (player.points.gt("1e308") || !player.in.breakInfinity) {look.color = "white"} else {look.color = "gray"} 

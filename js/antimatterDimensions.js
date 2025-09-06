@@ -487,7 +487,7 @@
                 let mult = new Decimal(2).mul(buyableEffect("ca", 21))
                 if (hasUpgrade("ev2", 11)) mult = mult.mul(upgradeEffect("ev2", 11))
 
-                if (hasUpgrade("cs", 1001)) mult = mult.pow(2)
+                if (hasUpgrade("cs", 1001)) mult = mult.pow(10)
                 return mult.pow(getBuyableAmount(this.layer, this.id))
             },
             unlocked() { return true },
@@ -535,7 +535,7 @@
             effect(x) {
                 let eff = new Decimal(0.01)
                 eff = eff.mul(player.ca.galaxyDustEffect)
-                if (hasUpgrade("cs", 1002)) eff = eff.mul(2)
+                if (hasUpgrade("cs", 1002)) eff = eff.mul(3)
                 return eff.mul(getBuyableAmount(this.layer, this.id).add(player.ca.replicantiGalaxies))
             },
             unlocked() { return true },

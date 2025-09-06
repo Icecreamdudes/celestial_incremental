@@ -83,10 +83,10 @@
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt(100) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPostS2.sub(player.r.rank).add(98)
         }
-        if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt("1e4000") && hasUpgrade("p", 14) && !hasUpgrade("cs", 100)) {
+        if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt("1e4000") && hasUpgrade("p", 14) && !hasUpgrade("cs", 101)) {
             player.r.ranksToGet = ranksGainHardcap.sub(player.r.rank).add("1e4000")
         }
-        if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt("1e4000") && hasUpgrade("p", 14) && hasUpgrade("cs", 100)) {
+        if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).gt("1e4000") && hasUpgrade("p", 14) && hasUpgrade("cs", 101)) {
             player.r.ranksToGet = ranksGainPostS3.sub(player.r.rank)
         }
         if (!hasUpgrade("p", 14)) player.r.ranksToGet = new Decimal(1)
@@ -188,6 +188,7 @@
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
             if (hasUpgrade("s", 14)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("s", 14))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.d.diceEffects[17])
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(levelableEffect("pu", 207)[1])
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.i.postOTFMult)
 
             // EXPONENTS
@@ -228,7 +229,7 @@
         } else if (player.r.rank.gte("1e4000") && !hasUpgrade("cs", 101)) {
             return Decimal.pow(10, player.r.rank.pow(50).mul(10)).div(levelableEffect("pet", 204)[0]).sub(1)
         } else if (player.r.rank.gte("1e4000") && hasUpgrade("cs", 101)) {
-            return Decimal.pow("1e100", player.r.rank.div("1e4000").ln(10).div(ln(10))).div(levelableEffect("pet", 204)[0]).mul("1e100000")
+            return Decimal.pow("1e100", player.r.rank.div("1e4000").ln(10).div(Decimal.ln(10))).div(levelableEffect("pet", 204)[0]).mul("1e100000")
         }
     },
     getTierReq() {

@@ -352,10 +352,8 @@ h1, h2, h3, b, input {
 }
 
 .levelableImg {
-	width: 108%;
-	height: 108%;
-	margin: -4%;
-	clip-path: inset(4%);
+	width: 100%;
+	height: 100%;
 }
 
 .levelableText {
@@ -385,15 +383,11 @@ h1, h2, h3, b, input {
 }
 
 .levelableBarText {
-	z-index: 3;
+	position: absolute;
 	width: 90%;
 	height: calc(15% - 4px);
 	font-size: 14px;
-	vertical-align: middle;
-	display: flex;
-	justify-content: center;
-	align-items: left;
-	position: absolute;
+	z-index: 3;
 }
 
 .levelableBarProgress {
@@ -486,7 +480,7 @@ h1, h2, h3, b, input {
 	height: 35px;
 	border-bottom: 2px solid white;
 	color: white;
-	font-size: 20px;
+	font-size: 18px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -541,6 +535,7 @@ h1, h2, h3, b, input {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition-duration: 0ms;
 }
 
 .levelableDisplayRow {
@@ -613,7 +608,8 @@ h1, h2, h3, b, input {
 	}
 
 .hide {
-	display: none !important
+	display: none !important;
+	margin: 0px !important;
 }
 
 .resetNotify {

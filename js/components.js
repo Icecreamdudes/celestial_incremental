@@ -659,12 +659,12 @@ function loadVue() {
 				<div class="levelableTop">
 					<img v-bind:src="tmp[layer].levelables[data].image" class="levelableImg"></img>
 					<div v-bind:class="{levelableText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)}">
-						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatWhole(player[layer].levelables[data][0]) : 'Lv ' + formatWhole(player[layer].levelables[data][0])+'/'+formatWhole(tmp[layer].levelables[data].levelLimit)"></span>
+						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
 					</div>
 				</div>
 				<div class="levelableBottom">
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
-						<span v-html="player[layer].levelables[data][0].eq(tmp[layer].levelables[data].levelLimit) ? formatWhole(tmp[layer].levelables[data].currency) : formatWhole(tmp[layer].levelables[data].currency)+'/'+formatWhole(tmp[layer].levelables[data].xpReq)"></span>
+						<span v-html="player[layer].levelables[data][0].eq(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
 					</div>
 					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
@@ -681,16 +681,16 @@ function loadVue() {
 		template: `
 		<div class="levelableDisplayHolder">
 			<div class="levelableDisplayCol1">
-				<div class="levelableDisplayCard">
+				<div class="levelableDisplayCard" v-bind:style="{width: tmp[layer].levelables[layers[layer].levelables.index].style.width, height: tmp[layer].levelables[layers[layer].levelables.index].style.height}">
 					<div class="levelableDisplayImgHolder">
 						<img v-bind:src="tmp[layer].levelables[layers[layer].levelables.index].image" class="levelableImg"></img>
 						<div v-bind:class="{levelableText: true, hide: layers[layer].levelables.index==0}">
-							<span v-html="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.eq(Infinity) ? 'Lv ' + formatWhole(player[layer].levelables[layers[layer].levelables.index][0]) : 'Lv ' + formatWhole(player[layer].levelables[layers[layer].levelables.index][0])+'/'+formatWhole(tmp[layer].levelables[layers[layer].levelables.index].levelLimit)"></span>
+							<span v-html="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][0])+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].levelLimit)"></span>
 						</div>
 					</div>
 					<div class="levelableDisplayBarHolder">
 						<div v-bind:class="{levelableBarText: true, hide: layers[layer].levelables.index==0}">
-							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].eq(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
+							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].eq(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
 						</div>
 						<div v-bind:class="{levelableBarProgress: true, hide: layers[layer].levelables.index==0}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[layers[layer].levelables.index].currency.div(tmp[layer].levelables[layers[layer].levelables.index].xpReq).mul(100))+'%'}, tmp[layer].levelables[layers[layer].levelables.index].barStyle]"></div>
 					</div>
@@ -701,16 +701,16 @@ function loadVue() {
 					<div class="levelableDisplayTitle">
 						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].title"></span>
 					</div>
-					<div class="levelableDisplayButtonHolder">
-						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: layers[layer].levelables.toggle}"
+					<div class="levelableDisplayButtonHolder" v-bind:class="{hide: (tmp[layer].levelables[layers[layer].levelables.index].lore == null)}">
+						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: layers[layer].levelables.toggle, hide: (tmp[layer].levelables[layers[layer].levelables.index].lore == null)}"
 						v-on:click="(layers[layer].levelables.toggle=true)">Effects</button>
-						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: !layers[layer].levelables.toggle}"
+						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: !layers[layer].levelables.toggle, hide: (tmp[layer].levelables[layers[layer].levelables.index].lore == null)}"
 						v-on:click="(layers[layer].levelables.toggle=false)">Description</button>
 					</div>
-					<div v-bind:class="{levelableDisplayDescription: true, hide: !layers[layer].levelables.toggle}">
+					<div v-bind:class="{levelableDisplayDescription: true, hide: (!layers[layer].levelables.toggle && tmp[layer].levelables[layers[layer].levelables.index].lore != null)}"  v-bind:style="[(tmp[layer].levelables[layers[layer].levelables.index].lore == null) ? {'height': '96px'} : {'height': '79px'}]">
 						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].description"></span>
 					</div>
-					<div v-bind:class="{levelableDisplayLore: true, hide: layers[layer].levelables.toggle}">
+					<div v-bind:class="{levelableDisplayLore: true, hide: (layers[layer].levelables.toggle || tmp[layer].levelables[layers[layer].levelables.index].lore == null)}">
 						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].lore"></span>
 					</div>
 				</div>

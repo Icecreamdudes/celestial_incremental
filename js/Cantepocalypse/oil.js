@@ -60,7 +60,7 @@
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("ra", 15))
         player.oi.oilToGet = player.oi.oilToGet.mul(player.fu.funEffect)
         if (hasUpgrade("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("fu", 12))
-        player.oi.oilToGet = player.oi.oilToGet.mul(player.le.punchcardsPassiveEffect[4])
+        player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pu", 104)[2])
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 405)[1])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("st", 107))
 

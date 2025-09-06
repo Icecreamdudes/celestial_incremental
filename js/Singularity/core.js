@@ -6,19 +6,19 @@ const CORE_STRENGTH = [
     }, {
         name: "Weak",
         color: "#ebcc6e",
-        buff: 1.025,
+        buff: 1.03,
     }, {
         name: "Average",
         color: "#cf7429",
-        buff: 1.05,
+        buff: 1.06,
     }, {
         name: "Strong",
         color: "#cf3a29",
-        buff: 1.075,
+        buff: 1.09,
     }, {
         name: "Pinnacle",
         color: "#4a1616",
-        buff: 1.1,
+        buff: 1.12,
     },
 ]
 const CORE_INFO = {
@@ -353,104 +353,117 @@ addLayer("co", {
         }
 
         if (player.co.cores.point.level.gt(0)) {
-            let effLevel = player.co.cores.point.level.pow(CORE_STRENGTH[player.co.cores.point.strength].buff)
+            let effLevel = player.co.cores.point.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.point.strength].buff)
             player.co.cores.point.effect[0] = player.points.pow(Decimal.mul(0.035, effLevel.mul(0.05).add(1))).add(1).min("1e25000")
             player.co.cores.point.effect[1] = effLevel.mul(0.035).add(1)
             player.co.cores.point.effect[2] = effLevel.mul(0.5).add(1)
         }
 
         if (player.co.cores.factor.level.gt(0)) {
-            let effLevel = player.co.cores.factor.level.pow(CORE_STRENGTH[player.co.cores.factor.strength].buff)
+            let effLevel = player.co.cores.factor.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.factor.strength].buff)
             player.co.cores.factor.effect[0] = player.f.factorPower.pow(Decimal.mul(0.015, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.factor.effect[1] = effLevel.mul(0.04).add(1)
             player.co.cores.factor.effect[2] = Decimal.pow(1.4, effLevel)
         }
 
         if (player.co.cores.prestige.level.gt(0)) {
-            let effLevel = player.co.cores.prestige.level.pow(CORE_STRENGTH[player.co.cores.prestige.strength].buff)
+            let effLevel = player.co.cores.prestige.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.prestige.strength].buff)
             player.co.cores.prestige.effect[0] = player.p.prestigePoints.pow(Decimal.mul(0.015, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.prestige.effect[1] = effLevel.mul(0.025).add(1)
             player.co.cores.prestige.effect[2] = Decimal.pow(1.6, effLevel)
         }
 
         if (player.co.cores.tree.level.gt(0)) {
-            let effLevel = player.co.cores.tree.level.pow(CORE_STRENGTH[player.co.cores.tree.strength].buff)
+            let effLevel = player.co.cores.tree.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.tree.strength].buff)
             player.co.cores.tree.effect[0] = player.t.trees.pow(Decimal.mul(0.0175, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.tree.effect[1] = effLevel.mul(0.02).add(1)
             player.co.cores.tree.effect[2] = effLevel.mul(0.02).add(1)
         }
 
         if (player.co.cores.grass.level.gt(0)) {
-            let effLevel = player.co.cores.grass.level.pow(CORE_STRENGTH[player.co.cores.grass.strength].buff)
+            let effLevel = player.co.cores.grass.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.grass.strength].buff)
             player.co.cores.grass.effect[0] = player.g.grass.pow(Decimal.mul(0.0125, effLevel.mul(0.05).add(1))).add(1).min("1e2000")
             player.co.cores.grass.effect[1] = Decimal.pow(2, effLevel)
             player.co.cores.grass.effect[2] = Decimal.pow(1.2, effLevel)
         }
 
         if (player.co.cores.grasshopper.level.gt(0)) {
-            let effLevel = player.co.cores.grasshopper.level.pow(CORE_STRENGTH[player.co.cores.grasshopper.strength].buff)
+            let effLevel = player.co.cores.grasshopper.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.grasshopper.strength].buff)
             player.co.cores.grasshopper.effect[0] = player.gh.grasshoppers.pow(Decimal.mul(0.0125, effLevel.mul(0.05).add(1))).add(1).min("1e500")
             player.co.cores.grasshopper.effect[1] = player.gh.fertilizer.pow(Decimal.mul(0.01, effLevel.mul(0.05).add(1))).add(1).min("1e500")
             player.co.cores.grasshopper.effect[2] = Decimal.pow(1.9, effLevel)
         }
 
         if (player.co.cores.code.level.gt(0)) {
-            let effLevel = player.co.cores.code.level.pow(CORE_STRENGTH[player.co.cores.code.strength].buff)
+            let effLevel = player.co.cores.code.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.code.strength].buff)
             player.co.cores.code.effect[0] = player.m.codeExperience.pow(Decimal.mul(0.015, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.code.effect[1] = effLevel.mul(0.025).add(1)
             player.co.cores.code.effect[2] = Decimal.pow(2, effLevel)
         }
 
         if (player.co.cores.dice.level.gt(0)) {
-            let effLevel = player.co.cores.dice.level.pow(CORE_STRENGTH[player.co.cores.dice.strength].buff)
+            let effLevel = player.co.cores.dice.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.dice.strength].buff)
             player.co.cores.dice.effect[0] = player.d.dicePoints.pow(Decimal.mul(0.0175, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.dice.effect[1] = effLevel.mul(0.02).add(1)
             player.co.cores.dice.effect[2] = Decimal.pow(1.6, effLevel)
         }
 
         if (player.co.cores.rocket.level.gt(0)) {
-            let effLevel = player.co.cores.rocket.level.pow(CORE_STRENGTH[player.co.cores.rocket.strength].buff)
+            let effLevel = player.co.cores.rocket.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.rocket.strength].buff)
             player.co.cores.rocket.effect[0] = player.rf.rocketFuel.pow(Decimal.mul(0.0175, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.rocket.effect[1] = effLevel.mul(0.02).add(1)
             player.co.cores.rocket.effect[2] = Decimal.pow(1.3, effLevel)
         }
 
         if (player.co.cores.antimatter.level.gt(0)) {
-            let effLevel = player.co.cores.antimatter.level.pow(CORE_STRENGTH[player.co.cores.antimatter.strength].buff)
+            let effLevel = player.co.cores.antimatter.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.antimatter.strength].buff)
             player.co.cores.antimatter.effect[0] = player.ad.antimatter.pow(Decimal.mul(0.02, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.antimatter.effect[1] = effLevel.mul(0.025).add(1)
             player.co.cores.antimatter.effect[2] = Decimal.pow(1.2, effLevel)
         }
 
         if (player.co.cores.infinity.level.gt(0)) {
-            let effLevel = player.co.cores.infinity.level.pow(CORE_STRENGTH[player.co.cores.infinity.strength].buff)
+            let effLevel = player.co.cores.infinity.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.infinity.strength].buff)
             player.co.cores.infinity.effect[0] = player.in.infinityPoints.pow(Decimal.mul(0.03, effLevel.mul(0.05).add(1))).add(1).min("1e5000")
             player.co.cores.infinity.effect[1] = effLevel.mul(0.01).add(1)
             player.co.cores.infinity.effect[2] = Decimal.pow(1.3, effLevel)
         }
 
         if (player.co.cores.checkback.level.gt(0)) {
-            let effLevel = player.co.cores.checkback.level.pow(CORE_STRENGTH[player.co.cores.checkback.strength].buff)
+            let effLevel = player.co.cores.checkback.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.checkback.strength].buff)
             player.co.cores.checkback.effect[0] = Decimal.pow(1.125, effLevel)
             player.co.cores.checkback.effect[1] = Decimal.pow(1.04, effLevel)
             player.co.cores.checkback.effect[2] = Decimal.pow(1.02, effLevel)
         }
 
         if (player.co.cores.radioactive.level.gt(0)) {
-            let effLevel = player.co.cores.radioactive.level.pow(CORE_STRENGTH[player.co.cores.radioactive.strength].buff)
+            let effLevel = player.co.cores.radioactive.level
             if (effLevel.gte(10)) effLevel = effLevel.div(10).pow(0.5).mul(10)
+            effLevel = effLevel.pow(CORE_STRENGTH[player.co.cores.radioactive.strength].buff)
             player.co.cores.radioactive.effect[0] = Decimal.pow(5, effLevel)
             player.co.cores.radioactive.effect[1] = Decimal.pow(1.4, effLevel)
             player.co.cores.radioactive.effect[2] = Decimal.pow(2, effLevel)
@@ -692,7 +705,7 @@ addLayer("co", {
         player.pol.pollinators = new Decimal(0)
         player.pol.pollinatorsPerSecond = new Decimal(0)
 
-        if (!hasMilestone("s", 22)) {
+        if (!hasMilestone("s", 23)) {
             player.pol.pollinatorsIndex = 0
             for (let prop in player.pol.pollinatorEffects) {
                 player.pol.pollinatorEffects[prop].enabled = false
@@ -768,9 +781,9 @@ addLayer("co", {
         player.ta.negativeInfinityPointsToGet = new Decimal(0)
         player.ta.dimBoostLimit = new Decimal(1)
         player.ta.galaxyLimit = new Decimal(1)
-        player.ta.highestDicePoints = new Decimal(0)
-        player.ta.highestRocketFuel = new Decimal(0)
-        player.ta.highestHexPoints = new Decimal(0)
+        if (!hasMilestone("s", 22)) player.ta.highestDicePoints = new Decimal(0)
+        if (!hasMilestone("s", 22)) player.ta.highestRocketFuel = new Decimal(0)
+        if (!hasMilestone("s", 22)) player.ta.highestHexPoints = new Decimal(0)
 
         for (let i = 0; i < player.ta.dimensionPower.length; i++) {
             player.ta.dimensionPower[i] = new Decimal(0)
@@ -1066,7 +1079,7 @@ addLayer("co", {
         player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
 
-        player.hbl.upgrades.splice(0, player.hbl.upgrades.length)
+        if (!hasMilestone("s", 20)) player.hbl.upgrades.splice(0, player.hbl.upgrades.length)
 
         player.hbl.milestones.splice(0, player.hbl.milestones.length)
 
@@ -1294,7 +1307,7 @@ addLayer("co", {
         },
         113: {
             canClick: true,
-            unlocked: true,
+            unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
                 player.co.coreIndex = "radioactive"
             },
@@ -1464,7 +1477,7 @@ addLayer("co", {
         213: {
             title() {return "Radioactive<br>Core<br><small>Lv." + player.co.cores.radioactive.level},
             canClick: true,
-            unlocked: true,
+            unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
                 player.co.resetIndex = "radioactive"
             },
@@ -1533,7 +1546,7 @@ addLayer("co", {
                             ["row", [
                                 ["clickable", 201], ["clickable", 202], ["clickable", 203], ["clickable", 204], ["clickable", 205],
                                 ["clickable", 206], ["clickable", 207], ["clickable", 208], ["clickable", 209], ["clickable", 210],
-                                ["clickable", 211], ["clickable", 212],
+                                ["clickable", 211], ["clickable", 212], ["clickable", 213],
                             ]],
                         ], () => {return player.s.highestSingularityPoints.gt(0) ? {width: "700px", backgroundColor: "black", borderRadius: "0 0 12px 12px"} : {display: "none !important"}}],
                     ], () => {return !player.ma.matosDefeated ? {width: "700px", backgroundColor: "#611", border: "3px solid white", borderRadius: "15px"} : {display: "none !important"}}],
@@ -1573,7 +1586,7 @@ addLayer("co", {
                         ["row", [
                             ["clickable", 101], ["clickable", 102], ["clickable", 103], ["clickable", 104], ["clickable", 105], 
                             ["clickable", 106], ["clickable", 107], ["clickable", 108], ["clickable", 109], ["clickable", 110],
-                            ["clickable", 111], ["clickable", 112],
+                            ["clickable", 111], ["clickable", 112], ["clickable", 113],
                         ]],
                         ["blank", "10px"],
                     ], {width: "800px", backgroundColor: "#411", borderLeft: "3px solid white", borderRight: "3px solid white", borderBottom: "3px solid white", borderRadius: "0 0 15px 15px"}],
@@ -1605,18 +1618,21 @@ addLayer("co", {
     tabFormat: [
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.s.singularityPoints) + "</h3> singularity points"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
-            ["raw-html", () => {return player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.s.singularityPointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
+                return look
+            }],
+            ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["style-column", [
-
+            ["microtabs", "stuff", { 'border-width': '0px' }],
         ], () => {
             let look = {}
             if (!player.ma.matosDefeated) {look.opacity = "1"} else {look.opacity = "0.5"}
             return look
         }],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true },

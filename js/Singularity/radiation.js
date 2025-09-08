@@ -45,15 +45,17 @@
         if (hasMilestone("s", 13)) player.ra.radiation = player.ra.radiation.add(player.ra.radiationPerSecond.mul(delta))
 
         player.ra.radiationSoftcapStart = new Decimal(10000)
-        player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("ra", 11)) 
-        player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("cs", 12))
+        player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("ra", 11))
         player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(buyableEffect("sma", 13)) 
+        if (hasUpgrade("cs", 1301)) player.ra.radiationSoftcapStart = player.ra.radiationSoftcapStart.mul(10)
 
         player.ra.radiationSoftcapEffect = new Decimal(1)
         if (player.ra.radiation.gte(player.ra.radiationSoftcapStart)) {
-            player.ra.radiationSoftcapEffect = player.ra.radiation.div(player.ra.radiationSoftcapStart).mul(5).pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.5).log(player.ra.radiationSoftcapStart).add(1))
+            player.ra.radiationSoftcapEffect = player.ra.radiation.div(player.ra.radiationSoftcapStart).mul(5)
+            if (!hasUpgrade("cs", 1303)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.5).log(player.ra.radiationSoftcapStart).add(1))
+            if (hasUpgrade("cs", 1303)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.pow(player.ra.radiation.div(player.ra.radiationSoftcapStart).add(1).pow(0.45).log(player.ra.radiationSoftcapStart).add(1))
             player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("ra", 12))
-            player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.div(buyableEffect("cs", 12))
+            if (hasUpgrade("cs", 1301)) player.ra.radiationSoftcapEffect = player.ra.radiationSoftcapEffect.mul(10)
         }
     },
     clickables: {},

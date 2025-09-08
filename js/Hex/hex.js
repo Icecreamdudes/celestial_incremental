@@ -60,6 +60,7 @@ addLayer("h", {
         if (hasUpgrade("hsa", 13)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hsa", 13))
         if (hasUpgrade("hsa", 21)) player.h.hexPointGain = player.h.hexPointGain.mul(upgradeEffect("hsa", 21))
         player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("hsa", 2))
+        player.h.hexPointGain = player.h.hexPointGain.mul(buyableEffect("hrm", 4))
 
         // PER SECOND CALCULATIONS
         if (inChallenge("hrm", 13)) player.h.hexPointGain = player.h.hexPointGain.sub(player.h.hexPoint.mul(0.06))

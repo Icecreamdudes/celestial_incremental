@@ -1,23 +1,23 @@
 const CORE_STRENGTH = [
     {
         name: "Faulty",
-        color: "#b5b5b5",
+        color: "#bbb",
         buff: 1,
     }, {
         name: "Weak",
-        color: "#ebcc6e",
+        color: "#b88",
         buff: 1.025,
     }, {
         name: "Average",
-        color: "#cf7429",
+        color: "#b55",
         buff: 1.05,
     }, {
         name: "Strong",
-        color: "#cf3a29",
+        color: "#bb3838",
         buff: 1.075,
     }, {
         name: "Pinnacle",
-        color: "#8c3129",
+        color: "#b11",
         buff: 1.1,
     },
 ]
@@ -515,7 +515,8 @@ addLayer("co", {
                 curr = new Decimal(1)
                 break;
         }
-        if (type == "checkback" || type == "radioactive") return singularity.div(1e15).pow(0.3).pow(curr)
+        if (type == "checkback") return singularity.div(1e5).pow(0.2).pow(curr)
+        if (type == "radioactive") return singularity.div(1e30).pow(0.1).pow(curr)
         if (singularity.gte(1e10)) return singularity.pow(0.3).mul(10000).pow(curr)
         return singularity.pow(0.7).pow(curr)
     },
@@ -1020,8 +1021,8 @@ addLayer("co", {
         if (getBuyableAmount("hpw", 6).lt(1)) player.hrm.challenges[16] = 0
 
         //     <----     HEX OF POWER LAYER     ---->
-        player.hpw.totalPower = new Decimal(0)
-        player.hpw.power = new Decimal(0)
+        if (player.hpw.totalPower.gte(buyableEffect("hrm", 1))) player.hpw.totalPower = buyableEffect("hrm", 1)
+        player.hpw.power = player.hpw.totalPower
         player.hpw.powerGain = new Decimal(0)
         for (let i = 0; i < player.hpw.upgScale.length; i++) {
             player.hpw.upgScale[i] = 1
@@ -1081,7 +1082,12 @@ addLayer("co", {
 
         if (!hasMilestone("s", 20)) player.hbl.upgrades.splice(0, player.hbl.upgrades.length)
 
-        player.hbl.milestones.splice(0, player.hbl.milestones.length)
+        for (let i = 0; i < player.hbl.milestones.length; i++) {
+            if (+player.hbl.milestones[i] > getBuyableAmount("hrm", 2)) {
+                player.hbl.milestones.splice(i, 1);
+                i--;
+            }
+        }
 
         //     <----     HEX OF REFINEMENT LAYER     ---->
         player.hre.refinement = new Decimal(0)
@@ -1502,6 +1508,7 @@ addLayer("co", {
                 player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
                 player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
                 player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
+                player.hrm.totalRealmEssence = player.hrm.totalRealmEssence.add(player.hrm.realmEssenceGain)
                 player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
 
                 layers.co.singularityReset()

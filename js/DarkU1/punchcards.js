@@ -218,9 +218,10 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to points <small>(Based on points)</small><br>",
+                    "x" + format(this.effect()[1]) + " to points <small>(Based on starmetal alloy on leave)</small><br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to infinity points",
+                    "x" + format(this.effect()[2]) + " to infinity points",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -234,9 +235,10 @@ addLayer("pu", {
             },
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.du.points.pow(0.1).add(1).pow(this.effectScale())
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(1000, getLevelableAmount(this.layer, this.id))
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(30, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e30)
+                eff[0] = player.du.points.pow(0.08).add(1).pow(this.effectScale())
+                eff[1] = player.le.starmetalAlloyToGetTrue.floor().add(1).pow(this.effectScale())
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(1000, getLevelableAmount(this.layer, this.id))
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(30, getLevelableAmount(this.layer, this.id).sub(10)).mul(1e30)
                 return eff
             },
             // CLICK CODE
@@ -270,8 +272,8 @@ addLayer("pu", {
                 let str = [
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "Unlock a new prestige buyable<br>",
                     "x" + format(this.effect()[0]) + " to prestige points <small>(Based on prestige points)</small><br>",
+                    "Unlock a new prestige buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to negative infinity points",
@@ -490,6 +492,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to generators <small>(Based on generators)</small><br>",
+                    "Unlock a new generator buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to dice points and rocket fuel",
@@ -543,6 +546,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to gen-power <small>(Based on gen-power)</small><br>",
+                    "Unlock a new generator buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to pre-hex power resources",
@@ -595,10 +599,11 @@ addLayer("pu", {
                 let str = [
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "x" + format(this.effect()[0]) + " to grass cap and value <small>(Based on grass)</small><br>",
+                    "x" + format(this.effect()[1]) + " to grass cap and value <small>(Based on grass)</small><br>",
+                    "^" + format(this.effect()[0]) + " to first two grass buyables<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to golden grass",
+                    "x" + format(this.effect()[2]) + " to golden grass",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -611,10 +616,11 @@ addLayer("pu", {
                 return scale
             },
             effect() {
-                let eff = [new Decimal(1), new Decimal(1)]
-                eff[0] = player.dgr.grass.pow(0.2).add(1).pow(this.effectScale())
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = Decimal.pow(4, getLevelableAmount(this.layer, this.id))
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = Decimal.pow(2, getLevelableAmount(this.layer, this.id).sub(10)).mul(1048576)
+                let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
+                eff[0] = Decimal.pow(1.5, this.effectScale())
+                eff[1] = player.dgr.grass.pow(0.2).add(1).pow(this.effectScale())
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = Decimal.pow(4, getLevelableAmount(this.layer, this.id))
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = Decimal.pow(2, getLevelableAmount(this.layer, this.id).sub(10)).mul(1048576)
                 return eff
             },
             // CLICK CODE
@@ -760,9 +766,10 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to points <small>(Based on generators)</small><br>",
+                    "^" + format(this.effect()[1]) + " to first generator buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to hex power",
+                    "x" + format(this.effect()[2]) + " to hex power",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -775,10 +782,11 @@ addLayer("pu", {
                 return scale
             },
             effect() {
-                let eff = [new Decimal(1), new Decimal(1)]
+                let eff = [new Decimal(1), new Decimal(1), new Decimal(1)]
                 eff[0] = player.dg.generators.pow(0.6).add(1).pow(this.effectScale())
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.2).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.1).add(2)
+                eff[1] = Decimal.pow(1.5, this.effectScale())
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.2).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.1).add(2)
                 return eff
             },
             // CLICK CODE
@@ -813,9 +821,10 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to prestige points <small>(Based on generators)</small><br>",
+                    "^" + format(this.effect()[1]) + " to third generator buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
-                    "x" + format(this.effect()[1]) + " to core scraps",
+                    "x" + format(this.effect()[2]) + " to core scraps",
                     getLevelableAmount(this.layer, this.id).gte(10) ? "<br><div style='font-size:10px;color:red'>[EFFECTS SOFTCAPPED]</div>" : "",
                 ]
                 return str.join("")
@@ -830,8 +839,9 @@ addLayer("pu", {
             effect() {
                 let eff = [new Decimal(1), new Decimal(1)]
                 eff[0] = player.dg.generators.pow(0.4).add(1).pow(this.effectScale())
-                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.4).add(1)
-                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[1] = getLevelableAmount(this.layer, this.id).mul(0.2).add(3)
+                eff[1] = Decimal.pow(1.5, this.effectScale())
+                if (getLevelableAmount(this.layer, this.id).lt(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.4).add(1)
+                if (getLevelableAmount(this.layer, this.id).gte(10)) eff[2] = getLevelableAmount(this.layer, this.id).mul(0.2).add(3)
                 return eff
             },
             // CLICK CODE
@@ -866,6 +876,7 @@ addLayer("pu", {
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
                     "x" + format(this.effect()[0]) + " to grass cap and value <small>(Based on generators)</small><br>",
+                    "Unlock a new generator buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to moonstone",
@@ -918,8 +929,8 @@ addLayer("pu", {
                 let str = [
                     !getLevelableBool(this.layer, this.id) ? "<span style='color:gray'>" : "",
                     "<u>Active</u><br>",
-                    "Unlock a new prestige buyable<br>",
                     "x" + format(this.effect()[0]) + " to grass cap and value <small>(Based on prestige)</small><br>",
+                    "Unlock a new prestige buyable<br>",
                     !getLevelableBool(this.layer, this.id) ? "</span>" : "",
                     "<u>Passive</u><br>",
                     "x" + format(this.effect()[1]) + " to pollinators",
@@ -1331,7 +1342,7 @@ addLayer("pu", {
                         ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", "Common", {color: "#7f7f7f", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return hasUpgrade("sma", 17) ? "Common (65%)" : "Common (75%)"}, {color: "#7f7f7f", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#323232", borderBottom: "3px solid #7f7f7f", userSelect: "none"}],
                             ["style-row", [
                                 ["levelable", 101], ["levelable", 102], ["levelable", 103], ["levelable", 104],
@@ -1339,7 +1350,7 @@ addLayer("pu", {
                             ], {width: "525px", backgroundColor: "#191919", padding: "5px"}],
 
                             ["style-column", [
-                                ["raw-html", "Rare", {color: "#7f5f00", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "Rare (25%)", {color: "#7f5f00", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#322600", borderTop: "3px solid #7f5f00", borderBottom: "3px solid #7f5f00", userSelect: "none"}],
                             ["style-row", [
                                 ["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204],
@@ -1347,7 +1358,7 @@ addLayer("pu", {
                             ], () => {return hasUpgrade("sma", 17) ? {width: "525px", backgroundColor: "#191300", padding: "5px"} : {width: "525px", backgroundColor: "#191300", padding: "5px", borderBottom: "3px solid #7f5f00"}}],
 
                             ["style-column", [
-                                ["raw-html", "Epic", {color: "#003f7f", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "Epic (10%)", {color: "#003f7f", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => {return hasUpgrade("sma", 17) ? {width: "535px", height: "40px", backgroundColor: "#001932", borderTop: "3px solid #003f7f", borderBottom: "3px solid #003f7f", userSelect: "none"} : {display: "none !important"}}],
                             ["style-row", [
                                 ["levelable", 301], ["levelable", 302], ["levelable", 303], ["levelable", 304],
@@ -1368,5 +1379,5 @@ addLayer("pu", {
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return true},
+    layerShown() { return player.startedGame == true },
 })

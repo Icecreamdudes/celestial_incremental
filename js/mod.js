@@ -1117,6 +1117,9 @@ function fixOldSave(oldVersion){
 		if (player.sd.singularityPower.gte(1e300)) player.sd.singularityPower = new Decimal(1e300)
 		if (player.m.mods.gte(1e100)) player.m.mods = new Decimal(1e100)
 		if (player.pol.pollinators.gte(1e100)) player.pol.pollinators = new Decimal(1e100)
+		player.cb.evolutionShards = player.cb.evolutionShards.floor()
+		player.cb.paragonShards = player.cb.paragonShards.floor()
+		player.re.realmEssence = player.hrm.realmEssence
 		for (let prop in player.ta.buyables) {
 			if (prop != 19 && prop != 39) {
 				if (getBuyableAmount("ta", prop).gt(tmp.ta.buyables[prop].purchaseLimit)) setBuyableAmount("ta", prop, tmp.ta.buyables[prop].purchaseLimit)

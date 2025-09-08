@@ -2234,14 +2234,14 @@ addLayer("pet", {
             title() { return "Impossible Triangle" },
             lore() { return "An anomaly of a shape, but is only a mere illusion. Celestials love their illusions." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to singularity points <small>(based on core scraps)</small>.<br>" +
+                return "x" + format(this.effect()[0]) + " to singularity points <small>(based on radiation)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to singularity dimensions <small>(based on singularity points)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.cs.coreScraps.pow(0.8).mul(0.4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Singularity Points (Based on Core Scraps)
-                    player.s.singularityPoints.plus(1).log10().pow(1.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)) // Singularity Dimenstions (Based on Singularity Points)
+                    player.ra.radiation.pow(0.6).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Singularity Points (Based on Radiation)
+                    player.s.singularityPoints.add(1).log(10).pow(1.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)) // Singularity Dimenstions (Based on Singularity Points)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2286,8 +2286,8 @@ addLayer("pet", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.s.singularities.pow(0.5).mul(0.1).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Radiation (Based on Singularities)
-                    player.sma.starmetalAlloy.pow(0.3).mul(0.05).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)) // Core Scraps (Based on Starmetal Alloys)
+                    player.s.singularities.add(1).log(10).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Radiation (Based on Singularities)
+                    player.sma.starmetalAlloy.add(1).log(10).mul(0.5).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)) // Core Scraps (Based on Starmetal Alloys)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2515,16 +2515,16 @@ addLayer("pet", {
             title() { return "Nav" },
             lore() { return "Nav, another member of the corporation, has mastered the art of superphysical magic. She was born from a line of talented superphysical wizards that worked for the corporation." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to anonymity <small>(based on core scraps)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to oil <small>(based on core scraps)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to fun <small>(based on core scraps)</small>."
+                return "x" + format(this.effect()[0]) + " to anonymity <small>(based on radiation)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to oil <small>(based on radiation)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to fun <small>(based on radiation)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.cs.coreScraps.pow(1.5).mul(4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.6)), // Anonymity (Based on Core Scraps)
-                    player.cs.coreScraps.pow(1.2).mul(3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.55)), // Oil (Based on Core Scraps)
-                    player.cs.coreScraps.pow(0.9).mul(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Fun (Based on Core Scraps)
+                    player.ra.radiation.pow(1.3).mul(4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.6)), // Anonymity (Based on Radiation)
+                    player.ra.radiation.mul(3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.55)), // Oil (Based on Radiation)
+                    player.ra.radiation.pow(0.7).mul(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Fun (Based on Radiation)
                 ]
             },
             sacValue() { return new Decimal(25)},

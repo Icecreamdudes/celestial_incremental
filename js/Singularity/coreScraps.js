@@ -163,14 +163,17 @@ addLayer("cs", {
         // SCRAP GAIN
         for (let prop in player.cs.scraps) {
             player.cs.scraps[prop].gain = Decimal.pow(1.15, player.co.cores[prop].level).sub(1)
+            if (player.cs.scraps[prop].gain.gte(1000)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.div(1000).pow(0.5).mul(1000) // BASE SOFTCAP
+
             if (hasUpgrade("fu", 19)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.s.singularitiesEffect)
-            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pu", 204)[1])
+            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pu", 204)[2])
             if (hasUpgrade("sma", 102)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(upgradeEffect("sma", 102))
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(buyableEffect("ep0", 11))
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pet", 309)[1])
 
             // FLOOR SCRAP GAIN
-            player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.floor()
+            if (hasUpgrade("sma", 107)) player.cs.scraps[prop].amount = player.cs.scraps[prop].amount.add(player.cs.scraps[prop].gain.mul(0.01).mul(delta))
+            if (!hasUpgrade("sma", 107)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.floor()
         }
 
         player.cs.scraps.point.effect = player.cs.scraps.point.amount.add(1).log(10).mul(0.5).add(1)
@@ -216,7 +219,7 @@ addLayer("cs", {
         1: {
             title: "Scrap Core",
             canClick() { return player.cs.scraps[player.cs.scrapIndex].gain.gte(1) },
-            unlocked: true,
+            unlocked() {return !hasUpgrade("sma", 107)},
             onClick() {
                 player.cs.scraps[player.cs.scrapIndex].amount = player.cs.scraps[player.cs.scrapIndex].amount.add(player.cs.scraps[player.cs.scrapIndex].gain)
                 player.co.cores[player.cs.scrapIndex].xp = new Decimal(0)
@@ -254,6 +257,7 @@ addLayer("cs", {
             },
             style() {
                 let look = {width: "273px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                if (hasUpgrade("sma", 107)) look.width = "550px"
                 if (!player.ev.evolutionsUnlocked[9]) {
                     look.color = "white"
                     look.backgroundColor = "#333"
@@ -561,7 +565,7 @@ addLayer("cs", {
         302: {
             title: "Dark Duplicate",
             unlocked() {return player.cs.scrapIndex == "prestige"},
-            description: "Multiply dark prestige by x10.",
+            description: "Improve Dark Starmetal Upgrade IV.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.prestige },
             currencyDisplayName: "Prestige Core Scraps",
@@ -703,7 +707,7 @@ addLayer("cs", {
             },
         },
         602: {
-            title: "Skip-hop-jump",
+            title: "Hopscotch",
             unlocked() {return player.cs.scrapIndex == "grasshopper"},
             description: "Unlock a new grass-skip effect that boosts grasshoppers.",
             cost: new Decimal(1e6),
@@ -1022,112 +1026,56 @@ addLayer("cs", {
                 return look
             },
         },
-    },
-    buyables: {
-        //core scraps boost radiation stuff (radiation output, softcap, gain, etc)
-        11: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.cs.coreScraps},
-            pay(amt) { player.cs.coreScraps = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Radiation Output Increaser"
+        1301: {
+            title: "Reduced Exposure",
+            unlocked() {return player.cs.scrapIndex == "radioactive"},
+            description: "Divide and extend the radiation softcap by /10.",
+            cost: new Decimal(1e3),
+            currencyLocation() { return player.cs.scraps.radioactive },
+            currencyDisplayName: "Radioactive Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.radioactive.color}
+                return look
             },
-            display() {
-                return 'which are increasing the radiation output of new cores by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
         },
-        12: {
-            costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(1500) },
-            currency() { return player.cs.coreScraps},
-            pay(amt) { player.cs.coreScraps = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.25).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Radiation Increaser"
+        1302: {
+            title: "Controlled Reactions",
+            unlocked() {return player.cs.scrapIndex == "radioactive"},
+            description: "Reduce SD radiation usage by /5.",
+            cost: new Decimal(1e6),
+            currencyLocation() { return player.cs.scraps.radioactive },
+            currencyDisplayName: "Radioactive Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.radioactive.color}
+                return look
             },
-            display() {
-                return 'which are dividing and extending the radiation softcap by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
         },
-        13: {
-            costBase() { return new Decimal(40) },
-            costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(500) },
-            currency() { return player.cs.coreScraps},
-            pay(amt) { player.cs.coreScraps = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1)},
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gt(this.cost()) },
-            title() {
-                return "Radiation Value Increaser"
+        1303: {
+            title: "Non-ionizing Radiation",
+            unlocked() {return player.cs.scrapIndex == "radioactive"},
+            description: "Slightly reduce the radiation softcap.",
+            cost: new Decimal(1e9),
+            currencyLocation() { return player.cs.scraps.radioactive },
+            currencyDisplayName: "Radioactive Core Scraps",
+            currencyInternalName: "amount",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
+                else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
+                else {look.backgroundColor = CORE_INFO.radioactive.color}
+                return look
             },
-            display() {
-                return 'which are increasing the radiation value of new cores by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Core Scraps'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
         },
     },
+    buyables: {},
     milestones: {},
     challenges: {},
     infoboxes: {},
@@ -1152,7 +1100,10 @@ addLayer("cs", {
                         ], {width: "247px", height: "250px"}],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].amount) + " <small>" + CORE_SCRAP[player.cs.scrapIndex].name + "</small> (+" + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].amount) + " <small>" + CORE_SCRAP[player.cs.scrapIndex].name + "</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps[player.cs.scrapIndex].gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                                ]],
                                 ["row", [
                                     ["raw-html", () => {return CORE_SCRAP[player.cs.scrapIndex].effect + format(player.cs.scraps[player.cs.scrapIndex].effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                                     ["raw-html", () => {return player.cs.scraps[player.cs.scrapIndex].amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
@@ -1171,9 +1122,12 @@ addLayer("cs", {
                                 ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
                                 ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
                                 ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
+                                ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303],
                             ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
                             ["style-row", [
-                                ["clickable", 1], ["style-row", [], {width: "3px", height: "47px", backgroundColor: "#ababab"}], ["clickable", 2]
+                                ["clickable", 1],
+                                ["style-row", [], () => {return !hasUpgrade("sma", 107) ? {width: "3px", height: "47px", backgroundColor: "#ababab"} : {display: "none !important"}}],
+                                ["clickable", 2]
                             ], {width: "550px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"}],
                         ], {width: "550px", height: "250px", borderLeft: "3px solid #ababab"}],
                     ], {width: "800px", height: "250px", backgroundColor: "#4f4b45", border: "3px solid #ababab", borderRadius: "15px 15px 0 0"}],

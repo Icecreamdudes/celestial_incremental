@@ -416,6 +416,9 @@
         player.dg.buyables[11] = new Decimal(0)
         player.dg.buyables[12] = new Decimal(0)
         player.dg.buyables[13] = new Decimal(0)
+        player.dg.buyables[14] = new Decimal(0)
+        player.dg.buyables[15] = new Decimal(0)
+        player.dg.buyables[16] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {
@@ -490,6 +493,9 @@
         player.dg.buyables[11] = new Decimal(0)
         player.dg.buyables[12] = new Decimal(0)
         player.dg.buyables[13] = new Decimal(0)
+        player.dg.buyables[14] = new Decimal(0)
+        player.dg.buyables[15] = new Decimal(0)
+        player.dg.buyables[16] = new Decimal(0)
 
         player.dgr.grass = new Decimal(0)
         for (let i = 1; i < (tmp.dgr.grid.cols + "0" + (tmp.dgr.grid.rows + 1)); ) {

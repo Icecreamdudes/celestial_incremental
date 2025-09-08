@@ -21,7 +21,7 @@ addLayer("hpw", {
         if (hasUpgrade("hpw", 72)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         if (hasUpgrade("hpw", 131)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         if (hasUpgrade("cs", 202)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
-        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[1])
+        player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[2])
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
@@ -103,18 +103,20 @@ addLayer("hpw", {
         player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
         for (let i = 0; i < player.hbl.upgrades.length; i++) {
-            if (type != 1 && +player.hbl.upgrades[i] > player.hpw.vigor) {
+            if ((type != 1 || hasMilestone("s", 20)) && +player.hbl.upgrades[i] > player.hpw.vigor) {
                 player.hbl.upgrades.splice(i, 1);
                 i--;
             }
-            if (type == 1) {
+            if (type == 1 && !hasMilestone("s", 20)) {
                 player.hbl.upgrades.splice(i, 1);
                 i--;
             }
         }
         for (let i = 0; i < player.hbl.milestones.length; i++) {
-            player.hbl.milestones.splice(i, 1);
-            i--;
+            if (+player.hbl.milestones[i] > getBuyableAmount("hrm", 2)) {
+                player.hbl.milestones.splice(i, 1);
+                i--;
+            }
         }
 
         // REFINEMENT
@@ -191,7 +193,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                if (hasUpgrade("hpw", 1031)) return player.hpw.power.add(1).pow(3).log(1.6).add(1).mul(6)
+                if (hasUpgrade("hpw", 1031)) return player.hpw.power.add(1).pow(3).pow(buyableEffect("hrm", 5)).log(1.6).add(1).mul(6)
                 return player.hpw.power.add(1).log(2).add(1).mul(3)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
@@ -656,7 +658,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return player.hpw.power.add(1).log(10).mul(0.05).add(1)
+                return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f00"},
@@ -696,7 +698,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return player.hpw.power.pow(0.2).add(1)
+                return player.hpw.power.pow(0.2).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f80"},
@@ -772,7 +774,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return player.hpw.power.pow(0.3).add(1)
+                return player.hpw.power.pow(0.3).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
@@ -812,7 +814,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return Decimal.pow(1.06, player.hpw.power.add(1).log(6))
+                return Decimal.pow(1.06, player.hpw.power.add(1).log(6)).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #00f"},
@@ -852,7 +854,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                return player.hpw.power.pow(0.24).add(1)
+                return player.hpw.power.pow(0.24).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #80f"},

@@ -92,7 +92,7 @@ addLayer("hbl", {
 
         player.hbl.boosterEffects[2] = Decimal.pow(Decimal.mul(0.06, player.hbl.boosterEffects[5]).add(1), player.hbl.boosterLevels[2])
         if (hasMilestone("hre", 2)) player.hbl.boosterEffects[2] = player.hbl.boosterEffects[2].mul(player.hbl.boosterXP[2].div(player.hbl.boosterReq[2]).mul(Decimal.mul(0.03, player.hbl.boosterEffects[5])).add(1))
-        if (player.hbl.boosterEffects[2].gte(1e9)) player.hbl.boosterEffects[2] = player.hbl.boosterEffects[2].div(1e9).pow(0.3).mul(1e9)
+        if (player.hbl.boosterEffects[2].gte(1e9)) player.hbl.boosterEffects[2] = player.hbl.boosterEffects[2].div(1e9).pow(Decimal.add(0.3, buyableEffect("hrm", 3))).mul(1e9)
 
         if (!hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = Decimal.pow(2, player.hbl.boosterLevels[3])
         if (hasUpgrade("hpw", 12)) player.hbl.boosterEffects[3] = Decimal.pow(3, player.hbl.boosterLevels[3])

@@ -136,7 +136,7 @@
         ]
 
         for (let prop in player.co.cores) {
-            if (player.co.cores[prop].strength == 5) {
+            if (player.co.cores[prop].strength == 4) {
                 player.ma.hasMaxStrengthCore = true
             }
         }
@@ -902,8 +902,8 @@ for (let i = 0; i < player.ma.health.length; i++) {
             branches: [[4, "#8a0e79"]]
         },
         8: {
-            title() { return !player.ma.matosUnlockConditions[3] ? "<h2>Points</h2><br>" + formatWhole(player.points) + "<br>/1e500,000" : "<h1>WARNED" },
-            canClick() { return player.points.gte("1e500000") && player.ma.matosUnlockConditions[3] == false },
+            title() { return !player.ma.matosUnlockConditions[3] ? "<h2>Points</h2><br>" + formatWhole(player.points) + "<br>/1e300,000" : "<h1>WARNED" },
+            canClick() { return player.points.gte("1e300000") && player.ma.matosUnlockConditions[3] == false },
             unlocked() { return true },
             onClick() {
                 player.ma.matosUnlockConditions[3] = true

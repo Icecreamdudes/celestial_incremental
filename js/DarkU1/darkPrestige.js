@@ -42,7 +42,6 @@
         if (getLevelableBool("pu", 204)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 204)[0])
         if (getLevelableBool("pu", 301)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("pu", 301)[0])
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(buyableEffect("dgr", 16))
-        if (hasUpgrade("cs", 302)) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(10)
         player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.mul(levelableEffect("st", 105)[0])
         if (player.pet.activeAbilities[0]) player.dp.prestigePointsToGet = player.dp.prestigePointsToGet.pow(0.8)
 

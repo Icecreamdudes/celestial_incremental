@@ -92,6 +92,7 @@
             .mul(player.sd.buyables[18].add(1))
             .mul(3)
             .pow(0.5)
+        if (hasUpgrade("cs", 1302)) player.sd.radiationUsage = player.sd.radiationUsage.div(5)
 
 
         if (player.ra.storedRadiation.gt(player.sd.radiationUsage.mul(0.1))) {

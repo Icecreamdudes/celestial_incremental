@@ -43,6 +43,7 @@ addLayer("du", {
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dg", 11))
         if (hasUpgrade("sma", 13)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("sma", 13))
         if (getLevelableBool("pu", 101)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[0])
+        if (getLevelableBool("pu", 101)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[1])
         if (getLevelableBool("pu", 203)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 203)[0])
         if (getLevelableBool("pu", 301)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 301)[0])
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgr", 14))

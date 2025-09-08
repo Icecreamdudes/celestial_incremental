@@ -403,7 +403,7 @@ addLayer("s", {
         },
         20: {
             requirementDescription: "<h3>60 Singularities",
-            effectDescription: "Keep IP related blessing boosters, NIP related jinxes, and graces on singularity reset.",
+            effectDescription: "Keep IP related blessing boosters, NIP related jinxes, and graces on all resets.",
             done() { return player.s.singularities.gte(60) },
             style: { width: '800px', "min-height": '75px' },
         },

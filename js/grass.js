@@ -1313,7 +1313,7 @@ const updateGoldGrass = (delta) => {
     player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pet", 305)[1])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('r', 11))
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.co.cores.grass.effect[1])
-    player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pu", 108)[1])
+    player.g.goldGrassVal = player.g.goldGrassVal.mul(levelableEffect("pu", 108)[2])
     player.g.goldGrassVal = player.g.goldGrassVal.mul(player.ro.activatedFuelEffect)
     player.g.goldGrassVal = player.g.goldGrassVal.mul(buyableEffect('st', 103))
     if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)

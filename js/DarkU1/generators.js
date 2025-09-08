@@ -20,6 +20,9 @@
             buyBuyable("dg", 11)
             buyBuyable("dg", 12)
             buyBuyable("dg", 13)
+            buyBuyable("dg", 14)
+            buyBuyable("dg", 15)
+            buyBuyable("dg", 16)
         }
     },
     nodeStyle() {
@@ -38,6 +41,7 @@
 
         player.dg.generatorsToGet = player.dp.prestigePoints.pow(0.35).floor()
         if (getLevelableBool("pu", 106)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 106)[0])
+        if (getLevelableBool("pu", 106)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("dg", 14))
         if (getLevelableBool("pu", 301)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
         
@@ -49,19 +53,27 @@
         player.dg.generatorPower = player.dg.generatorPower.add(player.dg.generatorPowerPerSecond.mul(delta))
         player.dg.generatorPowerPerSecond = player.dg.generatorEffect
         if (getLevelableBool("pu", 107)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 107)[0])
+        if (getLevelableBool("pu", 107)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(buyableEffect("dg", 15))
         if (getLevelableBool("pu", 301)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("st", 107)[0])
 
         // GENERATOR POWER SOFTCAP
-        if (player.dg.generatorPowerPerSecond.gte(1e250)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.div(1e250).pow(0.1).mul(1e250)
+        if (player.dg.generatorPowerPerSecond.gte(1e250)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.div(1e250).pow(0.2).mul(1e250)
 
         if (player.dg.generatorPause.gte(0)) {
             layers.dg.generatorReset();
         }
         player.dg.generatorPause = player.dg.generatorPause.sub(1)
 
-        if (player.dg.generatorPower.lt(1e9)) player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.5).pow(player.dgr.grassEffect)
-        if (player.dg.generatorPower.gte(1e9)) player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.25).mul(177.83).pow(player.dgr.grassEffect)
+        if (player.dg.generatorPower.lt(1e9)) {
+            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.5).pow(player.dgr.grassEffect)
+        } else if (player.dg.generatorPower.lt(1e25)) {
+            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.25).mul(177.83).pow(player.dgr.grassEffect)
+        } else if (player.dg.generatorPower.lt(1e100)) {
+            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.1).mul(1e6).pow(player.dgr.grassEffect)
+        } else {
+            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.05).mul(1e11).pow(player.dgr.grassEffect)
+        }
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
         if (hasUpgrade("sma", 205)) player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(0.01).mul(delta))
@@ -110,7 +122,11 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2)
+                if (getLevelableBool("pu", 203)) eff = eff.pow(levelableEffect("pu", 203)[1])
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -178,7 +194,11 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3)
+                if (getLevelableBool("pu", 204)) eff = eff.pow(levelableEffect("pu", 204)[1])
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -187,6 +207,108 @@
             },
             display() {
                 return "which are boosting prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("dn", 12)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
+        },
+        14: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.dg.generatorPower},
+            pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getLevelableBool("pu", 106) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Generator Gen Booster"
+            },
+            display() {
+                return "which are multiplying generators by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("dn", 12)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
+        },
+        15: {
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(25) },
+            purchaseLimit() { return new Decimal(150) },
+            currency() { return player.dg.generatorPower},
+            pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.15, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getLevelableBool("pu", 107) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Gen-Power Gen Booster"
+            },
+            display() {
+                return "which are multiplying generator power by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 12)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("dn", 12)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#052c1e", borderColor: "#0a593c" }
+        },
+        16: {
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(200) },
+            currency() { return player.dg.generatorPower},
+            pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getLevelableBool("pu", 205) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Grass Gen Booster"
+            },
+            display() {
+                return "which are multiplying grass value and cap by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Generator Power"
             },
             buy(mult) {
@@ -230,12 +352,23 @@
                     ]],
                     ["row", [
                         ["raw-html", () => {return "Boosts point gain by x" + format(player.dg.generatorPowerEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return (player.dg.generatorPower.gte(1e9)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {
+                            if (player.dg.generatorPower.lt(1e9)) {
+                                return ""
+                            } else if (player.dg.generatorPower.lt(1e25)) {
+                                return "[SOFTCAPPED]"
+                            } else if (player.dg.generatorPower.lt(1e100)) {
+                                return "[SOFTCAPPED<sup>2</sup>]"
+                            } else {
+                                return "[SOFTCAPPED<sup>3</sup>]"
+                            }
+                        }, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]], {maxWidth: "900px"}],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],
+                        ["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
         },

@@ -52,8 +52,9 @@
         // MAX GRASS
         player.dgr.maxGrass = new Decimal(1)
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgr", 11))
-        if (getLevelableBool("pu", 108)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 108)[0])
+        if (getLevelableBool("pu", 108)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 108)[1])
         if (getLevelableBool("pu", 205)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 205)[0])
+        if (getLevelableBool("pu", 205)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dg", 16))
         if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 206)[0])
         if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dp", 15))
         if (getLevelableBool("pu", 301)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 301)[0])
@@ -65,10 +66,11 @@
         // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
-        if (getLevelableBool("pu", 108)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 108)[0])
+        if (getLevelableBool("pu", 108)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 108)[1])
         if (getLevelableBool("pu", 205)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 205)[0])
+        if (getLevelableBool("pu", 205)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dg", 16))
         if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 206)[0])
-            if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dp", 15))
+        if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dp", 15))
         if (getLevelableBool("pu", 301)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 301)[0])
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
 
@@ -85,16 +87,16 @@
             player.dgr.grassTimer = new Decimal(0)
         }
 
-        if (player.dgr.grass.lt(1e10)) {
-            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.1).add(1)
-        } else if (player.dgr.grass.lt(1e50) && player.dgr.grass.gte(1e10)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e10).add(1).log(10).mul(0.05).add(2)
-        } else if (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e50).add(1).log(10).mul(0.02).add(4)
-        } else if (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e100).add(1).log(10).mul(0.005).add(5)
-        } else if (player.dgr.grass.gte("1e1000")) {
-            player.dgr.grassEffect = player.dgr.grass.div("1e1000").add(1).log(10).pow(0.5).mul(0.05).add(9.5)
+        if (player.dgr.grass.lt(1e5)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.2).add(1)
+        } else if (player.dgr.grass.lt(1e15)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.1).add(1.5)
+        } else if (player.dgr.grass.lt(1e35)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.05).add(2.25)
+        } else if (player.dgr.grass.lt(1e75)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.025).add(3.125)
+        } else {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).sub(75).pow(0.5).mul(0.01).add(5)
         }
         
     },
@@ -164,7 +166,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(1.3) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(1.3)
+                if (getLevelableBool("pu", 108)) eff = eff.pow(levelableEffect("pu", 108)[0])
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -198,7 +204,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(1.25) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).add(1).pow(1.25)
+                if (getLevelableBool("pu", 108)) eff = eff.pow(levelableEffect("pu", 108)[0])
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -417,14 +427,14 @@
         },
     },
     tabFormat: [
+        ["raw-html", () => { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["row", [
-            ["raw-html", () => { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass"}, {color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px"}],
-            ["raw-html", () => { return (player.dgr.grass.lt(1e50) && player.dgr.grass.gte(1e10)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "Boosts generator power effect by ^" + format(player.dgr.grassEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace", paddingRight: "10px"}],
+            ["raw-html", () => { return (player.dgr.grass.lt(1e15) && player.dgr.grass.gte(1e5)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => { return (player.dgr.grass.lt(1e35) && player.dgr.grass.gte(1e15)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => { return (player.dgr.grass.lt(1e75) && player.dgr.grass.gte(1e35)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => { return player.dgr.grass.gte(1e75) ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
         ]],
-        ["raw-html", () => {return "Boosts generator power effect by ^" + format(player.dgr.grassEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

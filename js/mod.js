@@ -65,25 +65,27 @@ function updateStyles() {
 
 	// ===------   CHANGE LAYER SIZE   ------=== //
 	const LAYERHOLDER = document.getElementById('layerHolder')
-	if (!player.startedGame || player.hideMenu) {
-		LAYERHOLDER.style.setProperty("top", "0", "important")
-		LAYERHOLDER.style.setProperty("left", "0", "important")
-		LAYERHOLDER.style.setProperty("width", "100%", "important")
-		LAYERHOLDER.style.setProperty("min-width", "100%", "important")
-		LAYERHOLDER.style.setProperty("height", "100%", "important")
-	} else {
-		if (window.innerWidth > 1250) {
-			LAYERHOLDER.style.setProperty("top", "0", "important")
-			LAYERHOLDER.style.setProperty("left", "400px", "important")
-			LAYERHOLDER.style.setProperty("width", "calc(100% - 400px)", "important")
-			LAYERHOLDER.style.setProperty("min-width", "calc(100% - 400px)", "important")
-			LAYERHOLDER.style.setProperty("height", "100%", "important")
-		} else {
-			LAYERHOLDER.style.setProperty("top", "calc(7% + 307px)", "important")
-			LAYERHOLDER.style.setProperty("left", "0", "important")
+	if (LAYERHOLDER) {
+		if (!player.startedGame || player.hideMenu) {
+			LAYERHOLDER.style.setProperty("top", "0px", "important")
+			LAYERHOLDER.style.setProperty("left", "0px", "important")
 			LAYERHOLDER.style.setProperty("width", "100%", "important")
 			LAYERHOLDER.style.setProperty("min-width", "100%", "important")
-			LAYERHOLDER.style.setProperty("height", "calc(86% - 312px)", "important")
+			LAYERHOLDER.style.setProperty("height", "100%", "important")
+		} else {
+			if (window.innerWidth > 1250) {
+				LAYERHOLDER.style.setProperty("top", "0px", "important")
+				LAYERHOLDER.style.setProperty("left", "400px", "important")
+				LAYERHOLDER.style.setProperty("width", "calc(100% - 400px)", "important")
+				LAYERHOLDER.style.setProperty("min-width", "calc(100% - 400px)", "important")
+				LAYERHOLDER.style.setProperty("height", "100%", "important")
+			} else {
+				LAYERHOLDER.style.setProperty("top", "calc(7% + 307px)", "important")
+				LAYERHOLDER.style.setProperty("left", "0px", "important")
+				LAYERHOLDER.style.setProperty("width", "100%", "important")
+				LAYERHOLDER.style.setProperty("min-width", "100%", "important")
+				LAYERHOLDER.style.setProperty("height", "calc(86% - 313px)", "important")
+			}
 		}
 	}
 

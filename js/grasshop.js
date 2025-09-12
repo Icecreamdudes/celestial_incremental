@@ -204,7 +204,7 @@
             onClick() {
                 player.gh.studyMax = true
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px'}
+            style: { width: '80px', "min-height": '50px', borderRadius: '10px 0px 0px 10px'}
         },
         3: {
             title() { return "Buy Max Off" },
@@ -213,7 +213,7 @@
             onClick() {
                 player.gh.studyMax = false
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px 10px 10px 0px'}
+            style: { width: '80px', "min-height": '50px', borderRadius: '0px 10px 10px 0px'}
         },
         4: {
             title() { return "Buy Max On" },

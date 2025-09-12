@@ -352,7 +352,7 @@ addLayer("pet", {
                 if (tmp.pet.levelables[layers.pet.levelables.index].pointValue == undefined) {
                     return ""
                 } else if (player.pet.petButtonTimer[layers.pet.levelables.index - 301].gt(0)) {
-                    return "<h3>Check back in<br>" + formatTime(player.pet.petButtonTimer[layers.pet.levelables.index - 301]) + "."
+                    return "<h3 style='font-size:7px'>Check back in<br>" + formatTime(player.pet.petButtonTimer[layers.pet.levelables.index - 301]) + "."
                 } else if (layers.pet.levelables.index == 302) {
                     return "<h3>Roll for<br>Pet Points!"
                 } else {

@@ -85,6 +85,10 @@ button {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(122, 122, 122)'><polygon points='0,0 100,0 50,50'/></svg>");
 }
 
+::-webkit-scrollbar-corner {
+	background-color: #7a7a7a;
+}
+
 td {
 	padding: 0
 }

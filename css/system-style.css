@@ -57,7 +57,7 @@
 .layerBG {
 	z-index: -2000;
 	width: 400px;
-	height: calc(86% - 9px);
+	height: calc(86% - 10px);
 	position: absolute;
 	top: calc(7% + 5px);
 	left: 0px;
@@ -79,7 +79,7 @@
 }
 .miscMenu {
 	position: absolute;
-	bottom: 0px;
+	bottom: 1px;
 	left: 0px;
 	width: 400px;
 	height: 7%;

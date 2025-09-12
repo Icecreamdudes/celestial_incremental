@@ -227,7 +227,7 @@ addLayer("st", {
                 player.st.dimMax = true
             },
             style() {
-                let look = {width: "75px", minHeight: "50px", borderRadius: "15px 0px 0px 15px"}
+                let look = {width: "80px", minHeight: "50px", borderRadius: "15px 0px 0px 15px"}
                 this.canClick() ? look.color = "white" : look.color = "black"
                 return look
             },
@@ -240,7 +240,7 @@ addLayer("st", {
                 player.st.dimMax = false
             },
             style() {
-                let look = {width: "75px", minHeight: "50px", borderRadius: "0"}
+                let look = {width: "80px", minHeight: "50px", borderRadius: "0"}
                 this.canClick() ? look.color = "white" : look.color = "black"
                 return look
             },
@@ -1749,7 +1749,7 @@ addLayer("st", {
                     ["raw-html", () => { return "Boosts dice points and rocket fuel by x" + format(player.st.starPowerEffect2)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "Boosts singularity dimensions by x" + format(player.st.starPowerEffect3)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 3], ["clickable", 4], ["buyable", 1]], {width: "400px", border: "2px solid white", borderRadius: "17px"}],
+                    ["style-row", [["clickable", 3], ["clickable", 4], ["buyable", 1]], {width: "410px", border: "2px solid white", borderRadius: "17px"}],
                     ["blank", "25px"],
                     ["row", [
                         ["column", [

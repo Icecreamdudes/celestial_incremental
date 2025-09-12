@@ -36,7 +36,7 @@
 }
 .layerHolder {
 	position: absolute;
-	top: 75.5px;
+	top: calc(7% + 5px);
 	left: 0px;
 	display: block;
 	flex-direction: column;
@@ -45,7 +45,7 @@
 	justify-content: center;
 	align-items: start;
 	width: 400px;
-	height: calc(100% - 203px);
+	height: calc(86% - 63px);
 	border-left: 3px solid #7a7a7a;
 	border-right: 3px solid #7a7a7a;
 	border-bottom: 3px solid #7a7a7a;
@@ -57,9 +57,9 @@
 .layerBG {
 	z-index: -2000;
 	width: 400px;
-	height: calc(100% - 149px);
+	height: calc(86% - 9px);
 	position: absolute;
-	top: 75px;
+	top: calc(7% + 5px);
 	left: 0px;
 	background: #0f0f0f
 }
@@ -68,7 +68,7 @@
 	top: 0px;
 	left: 0px;
 	width: 400px;
-	height: 70px;
+	height: 7%;
 	display: flex;
 	justify-content: left;
 	align-items: center;
@@ -82,7 +82,7 @@
 	bottom: 0px;
 	left: 0px;
 	width: 400px;
-	height: 70px;
+	height: 7%;
 	display: flex;
 	flex-direction: row;
 	justify-content: auto;
@@ -97,7 +97,7 @@
 	height: 100%;
 	flex-grow: 1;
 	color: rgba(0, 0, 0, 0.9);
-	font-size: 30px;
+	font-size: 3vh;
 	cursor: pointer;
 	pointer-events: auto;
 	background: #a3a3a3;
@@ -121,7 +121,7 @@
 	width: 100%;
 	height: 50%;
 	color: rgba(255, 255, 255, 0.6);
-	font-size: 20px;
+	font-size: 2vh;
 	background-color: #444;
 	border-width: 0px;
 	cursor: pointer;
@@ -158,12 +158,12 @@
 	cursor: default;
 }
 .miscImg {
-	width: 60px;
-	height: 60px;
+	width: 6vh;
+	height: 6vh;
 }
 .miscText {
 	color: white;
-	font-size: 60px;
+	font-size: 6vh;
 }
 .treeRow {
 	margin: 0px 0px 10px 0px;

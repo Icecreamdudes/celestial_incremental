@@ -79,11 +79,11 @@ function updateStyles() {
 			LAYERHOLDER.style.setProperty("min-width", "calc(100% - 400px)", "important")
 			LAYERHOLDER.style.setProperty("height", "100%", "important")
 		} else {
-			LAYERHOLDER.style.setProperty("top", "377px", "important")
+			LAYERHOLDER.style.setProperty("top", "calc(7% + 307px)", "important")
 			LAYERHOLDER.style.setProperty("left", "0", "important")
 			LAYERHOLDER.style.setProperty("width", "100%", "important")
 			LAYERHOLDER.style.setProperty("min-width", "100%", "important")
-			LAYERHOLDER.style.setProperty("height", "calc(100% - 452px)", "important")
+			LAYERHOLDER.style.setProperty("height", "calc(86% - 312px)", "important")
 		}
 	}
 

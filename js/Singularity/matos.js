@@ -101,6 +101,8 @@
         bestComboDepth3Effect: new Decimal(1),
         bestComboDepth3Effect2: new Decimal(1),
 
+        comboSoftcapMult: new Decimal(1.015),
+
         //kept kill combo percentage
         keptCombo: [new Decimal(0), new Decimal(0), new Decimal(0)],
 
@@ -335,12 +337,11 @@
         player.ma.depth2CooldownMax = new Decimal(600)
         player.ma.depth3CooldownMax = new Decimal(900)
 
-        if (player.subtabs["ma"]["stuff"] == "Bullet Hell")
-        {
+        if (player.subtabs["ma"]["stuff"] == "Bullet Hell") {
             player.ma.celestialiteTimer = player.ma.celestialiteCooldown;
         }
         if (player.ma.celestialiteTimer.lt(0) && player.subtabs["ma"]["stuff"] != "Bullet Hell") {
-        player.ma.celestialiteTimer = player.ma.celestialiteCooldown;
+            player.ma.celestialiteTimer = player.ma.celestialiteCooldown;
             
             // Filter out dead characters
             let aliveCharacters = player.ma.deadCharacters
@@ -359,18 +360,18 @@
                     if (player.ma.currentCelestialiteType != 25) logPrint("<span style='color: hsl(308, 81.70%, 30.00%);'>The " + player.ma.celestialiteNames[player.ma.currentCelestialiteType] + " Celestialite is cursed, dealing " + format(damage) + " self damage.");
                     if (player.ma.currentCelestialiteType == 25) logPrint("<span style='color: rgb(139, 14, 52);'>Matos is cursed, dealing " + format(damage) + " self damage.");
                     if (player.ma.cursedCelestialite) {
-                    // 30% chance to reflect damage to attacker
-                    if (Math.random() < 0.3) {
-                    player.ma.health[character] = player.ma.health[character].sub(damage);
-                    logPrint(
-                    "<span style='color: hsl(308, 81.70%, 30.00%);'>Cursed celestialite reflects " +
-                    format(damage) +
-                    " damage back to " +
-                    player.ma.characterNames[character] +
-                    "! (Double curse lmao)</span>"
-                     );
-                }
-                }
+                        // 30% chance to reflect damage to attacker
+                        if (Math.random() < 0.3) {
+                            player.ma.health[character] = player.ma.health[character].sub(damage);
+                            logPrint(
+                                "<span style='color: hsl(308, 81.70%, 30.00%);'>Cursed celestialite reflects " +
+                                format(damage) +
+                                " damage back to " +
+                                player.ma.characterNames[character] +
+                                "! (Double curse lmao)</span>"
+                            );
+                        }
+                    }
                 }
                 player.ma.health[character] = player.ma.health[character].sub(damage);
                 if (player.ma.currentCelestialiteType != 25) { logPrint(
@@ -382,8 +383,7 @@
             }
             player.ma.celestialiteTimer = player.ma.celestialiteCooldown;
         }
-        if (player.ma.respawnTimer.lt(0) && player.ma.currentCelestialiteType == 5)
-        {
+        if (player.ma.respawnTimer.lt(0) && player.ma.currentCelestialiteType == 5) {
             layers.ma.generateCelestialite()
             player.ma.respawnTimer = new Decimal(-1e100)
         }
@@ -399,26 +399,25 @@
             player.ma.currentCelestialiteType = 5
             player.ma.combo = player.ma.combo.add(1)
 
-                    // --- EXPLOSIVE CELESTIALITES (Phi, Chi, Psi, Omega: types 21, 22, 23, 25) ---
-        // Place this in lootCelestialite() after a celestialite dies:
-        if (player.ma.explosiveCelestialite) 
-            {
-            // Random explosion damage between 10% and 15% of max health
-let explosionPercent = 0.10 + Math.random() * 0.05;
-for (let i = 0; i < player.ma.health.length; i++) {
-    if (!player.ma.deadCharacters[i]) {
-        let explosionDmg = player.ma.healthMax[i].mul(explosionPercent);
-        player.ma.health[i] = player.ma.health[i].sub(explosionDmg);
-        logPrint(
-            "<span style='color:rgb(238, 135, 0);'>Explosion! " +
-            player.ma.characterNames[i] +
-            " takes " +
-            format(explosionDmg) +
-            " damage!</span>"
-        );
-    }
-}
-        }
+            // --- EXPLOSIVE CELESTIALITES (Phi, Chi, Psi, Omega: types 21, 22, 23, 25) ---
+            // Place this in lootCelestialite() after a celestialite dies:
+            if (player.ma.explosiveCelestialite) {
+                // Random explosion damage between 10% and 15% of max health
+                let explosionPercent = 0.10 + Math.random() * 0.05;
+                for (let i = 0; i < player.ma.health.length; i++) {
+                    if (!player.ma.deadCharacters[i]) {
+                        let explosionDmg = player.ma.healthMax[i].mul(explosionPercent);
+                        player.ma.health[i] = player.ma.health[i].sub(explosionDmg);
+                        logPrint(
+                            "<span style='color:rgb(238, 135, 0);'>Explosion! " +
+                            player.ma.characterNames[i] +
+                            " takes " +
+                            format(explosionDmg) +
+                            " damage!</span>"
+                        );
+                    }
+                }
+            }
         }
         if (player.ma.currentDepth.eq(1) && player.ma.combo.gt(player.ma.bestComboDepth1)) {
             player.ma.bestComboDepth1 = player.ma.combo
@@ -452,8 +451,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
         if (player.ma.deadCharacters[0] && player.ma.deadCharacters[1] && player.ma.deadCharacters[2] && player.ma.deadCharacters[3] && player.subtabs["ma"]["stuff"] == "Fight") {
             player.subtabs["ma"]["stuff"] = "Dead"
 
-            for (let i = 0; i < player.ma.deadCharacters.length; i++) 
-            {
+            for (let i = 0; i < player.ma.deadCharacters.length; i++) {
                 player.ma.health[i] = player.ma.healthMax[i]
                 player.ma.deadCharacters[i] = false
             }
@@ -469,59 +467,47 @@ for (let i = 0; i < player.ma.health.length; i++) {
             player.ma.motivationCount  = new Decimal(0)
             player.ma.matosFightActive = false
         }
-        if (player.ma.epsilonCelestialitesKilled.gte(5) && !player.ma.secondAreaUnlock)
-        {
+        if (player.ma.epsilonCelestialitesKilled.gte(5) && !player.ma.secondAreaUnlock) {
             player.ma.secondAreaUnlock = true
             logPrint("<span style='color: white;'>You have killed 5 epsilon celestialites! The next depth is now unlocked!")
         }
-        if (player.ma.omegaCelestialitesKilled.gte(5))
-        {
+        if (player.ma.omegaCelestialitesKilled.gte(5)) {
             player.ma.matosFightActive = true
         }
 
         //special celestialites
-        if (player.ma.currentCelestialiteType == 6 || player.ma.currentCelestialiteType == 7 || player.ma.currentCelestialiteType == 8)
-        {
+        if (player.ma.currentCelestialiteType == 6 || player.ma.currentCelestialiteType == 7 || player.ma.currentCelestialiteType == 8) {
             player.ma.regenCelestialite = true
         } else {
             player.ma.regenCelestialite = false
             player.ma.regenRate = new Decimal(0)
         }
-        if (player.ma.currentCelestialiteType == 9 || player.ma.currentCelestialiteType == 10 || player.ma.currentCelestialiteType == 11)
-        {
+        if (player.ma.currentCelestialiteType == 9 || player.ma.currentCelestialiteType == 10 || player.ma.currentCelestialiteType == 11) {
             player.ma.airCelestialite = true
         } else {
             player.ma.airCelestialite = false
         }
-        if (player.ma.currentCelestialiteType == 12 || player.ma.currentCelestialiteType == 13 || player.ma.currentCelestialiteType == 14)
-        {
+        if (player.ma.currentCelestialiteType == 12 || player.ma.currentCelestialiteType == 13 || player.ma.currentCelestialiteType == 14) {
             player.ma.shieldCelestialite = true
-        } else
-        {
+        } else {
             player.ma.shieldCelestialite = false
             player.ma.shieldHealth = new Decimal(0)
             player.ma.shieldMaxHealth = new Decimal(0)
 
         }
-        if (player.ma.currentCelestialiteType == 15 || player.ma.currentCelestialiteType == 16 || player.ma.currentCelestialiteType == 17)
-        {
+        if (player.ma.currentCelestialiteType == 15 || player.ma.currentCelestialiteType == 16 || player.ma.currentCelestialiteType == 17) {
             player.ma.stealthyCelestialite = true
-        }  else
-        {
+        }  else {
             player.ma.stealthyCelestialite = false
         }
-        if (player.ma.currentCelestialiteType == 18 || player.ma.currentCelestialiteType == 19 || player.ma.currentCelestialiteType == 20)
-        {
+        if (player.ma.currentCelestialiteType == 18 || player.ma.currentCelestialiteType == 19 || player.ma.currentCelestialiteType == 20) {
             player.ma.cursedCelestialite = true
-        }  else
-        {
+        }  else {
             player.ma.cursedCelestialite = false
         }
-        if (player.ma.currentCelestialiteType == 21 || player.ma.currentCelestialiteType == 22 || player.ma.currentCelestialiteType == 23)
-        { 
+        if (player.ma.currentCelestialiteType == 21 || player.ma.currentCelestialiteType == 22 || player.ma.currentCelestialiteType == 23) {
             player.ma.explosiveCelestialite = true
-        } else
-        {
+        } else {
             player.ma.explosiveCelestialite = false
         }
         player.ma.celestialiteHealth = player.ma.celestialiteHealth.add(player.ma.regenRate.mul(delta))
@@ -542,6 +528,12 @@ for (let i = 0; i < player.ma.health.length; i++) {
         if (hasMilestone("ma", 202)) player.ma.bestComboDepth2Effect2 = player.ma.bestComboDepth2.mul(0.01).max(1).pow(0.9)
         player.ma.bestComboDepth3Effect2 = new Decimal(1)
         if (hasMilestone("ma", 302)) player.ma.bestComboDepth3Effect2 = player.ma.bestComboDepth3.mul(0.01).max(1).pow(0.8)
+
+        // COMBO SOFTCAP MULTIPLIER PER COMBO POST 100
+        player.ma.comboSoftcapMult = new Decimal(1.015)
+        if (hasMilestone("ma", 106)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
+        if (hasMilestone("ma", 206)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
+        if (hasMilestone("ma", 306)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
 
         //Kept code
         player.ma.keptCombo[0] = new Decimal(0.1)
@@ -593,32 +585,28 @@ for (let i = 0; i < player.ma.health.length; i++) {
             }
         }
 
-       if (player.tab == "c")
-       {
+        if (player.tab == "c") {
             player.ma.health[0] = player.ma.healthMax[0]
             player.ma.health[1] = player.ma.healthMax[1]
             player.ma.health[2] = player.ma.healthMax[2]
             player.ma.health[3] = player.ma.healthMax[3]
             player.ma.celestialiteHealth = player.ma.celestialiteMaxHealth
-       }
-        if (player.ma.inBlackHeart)
-        {
-        player.ma.health[0] = player.ma.health[0].add(player.ma.healthRegen[0].mul(delta))
-        player.ma.health[1] = player.ma.health[1].add(player.ma.healthRegen[1].mul(delta))
-        player.ma.health[2] = player.ma.health[2].add(player.ma.healthRegen[2].mul(delta))
-        player.ma.health[3] = player.ma.health[3].add(player.ma.healthRegen[3].mul(delta))
+        }
+        if (player.ma.inBlackHeart) {
+            player.ma.health[0] = player.ma.health[0].add(player.ma.healthRegen[0].mul(delta))
+            player.ma.health[1] = player.ma.health[1].add(player.ma.healthRegen[1].mul(delta))
+            player.ma.health[2] = player.ma.health[2].add(player.ma.healthRegen[2].mul(delta))
+            player.ma.health[3] = player.ma.health[3].add(player.ma.healthRegen[3].mul(delta))
         }
 
         for (let i = 0; i < player.ma.health.length; i++) {
-        if (player.ma.health[i].gt(player.ma.healthMax[i])) {
-            player.ma.health[i] = player.ma.healthMax[i].plus(0);
-        }
+            if (player.ma.health[i].gt(player.ma.healthMax[i])) {
+                player.ma.health[i] = player.ma.healthMax[i].plus(0);
+            }
         }    
 
-        if (player.ma.matosFightActive && player.ma.currentCelestialiteType == 25)
-        {
-            if (player.ma.celestialiteHealth.lt(7000) && player.ma.attacksDone.eq(0))   
-            {
+        if (player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) {
+            if (player.ma.celestialiteHealth.lt(7000) && player.ma.attacksDone.eq(0)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("This is what Nova wanted all along!", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -628,8 +616,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(6500) && player.ma.attacksDone.eq(1))
-            {
+            if (player.ma.celestialiteHealth.lt(6500) && player.ma.attacksDone.eq(1)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("He is our lord. He will save us all from this torture.", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -639,8 +626,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(6000) && player.ma.attacksDone.eq(2))
-            {
+            if (player.ma.celestialiteHealth.lt(6000) && player.ma.attacksDone.eq(2)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("Once he comes back, so will civilization!", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -650,8 +636,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(5500) && player.ma.attacksDone.eq(3))
-            {
+            if (player.ma.celestialiteHealth.lt(5500) && player.ma.attacksDone.eq(3)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("And it is too late for you guys... I have enough power!", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -661,8 +646,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(5000) && player.ma.attacksDone.eq(4))
-            {
+            if (player.ma.celestialiteHealth.lt(5000) && player.ma.attacksDone.eq(4)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("I can bring Nova and the Novasent back!", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -672,8 +656,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(4500) && player.ma.attacksDone.eq(5))
-            {
+            if (player.ma.celestialiteHealth.lt(4500) && player.ma.attacksDone.eq(5)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("Our great civilization will fluorish! The sun will shine! The sky will be clear!", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -683,8 +666,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(4000) && player.ma.attacksDone.eq(6))
-            {
+            if (player.ma.celestialiteHealth.lt(4000) && player.ma.attacksDone.eq(6)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("My hopes. My dreams. They will all become true.", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -694,8 +676,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(3500) && player.ma.attacksDone.eq(7))
-            {
+            if (player.ma.celestialiteHealth.lt(3500) && player.ma.attacksDone.eq(7)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("NOVA WILL SAVE US ALL.", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -705,8 +686,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(3000) && player.ma.attacksDone.eq(8))
-            {
+            if (player.ma.celestialiteHealth.lt(3000) && player.ma.attacksDone.eq(8)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("NOVA WILL BRING US PEACE.", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -716,8 +696,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(2500) && player.ma.attacksDone.eq(9))
-            {
+            if (player.ma.celestialiteHealth.lt(2500) && player.ma.attacksDone.eq(9)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("NOVA WILL BRING US GLORY.", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -727,8 +706,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(2000) && player.ma.attacksDone.eq(10))
-            {
+            if (player.ma.celestialiteHealth.lt(2000) && player.ma.attacksDone.eq(10)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("NOVA WILL BRING US GREATNESS.", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -738,8 +716,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(1500) && player.ma.attacksDone.eq(11))
-            {
+            if (player.ma.celestialiteHealth.lt(1500) && player.ma.attacksDone.eq(11)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("Nova will....", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -749,8 +726,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(1000) && player.ma.attacksDone.eq(12))
-            {
+            if (player.ma.celestialiteHealth.lt(1000) && player.ma.attacksDone.eq(12)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("Nova will.......", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -760,8 +736,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(500) && player.ma.attacksDone.eq(13))
-            {
+            if (player.ma.celestialiteHealth.lt(500) && player.ma.attacksDone.eq(13)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("looks like my time is up...", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -771,8 +746,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(50) && player.ma.attacksDone.eq(14))
-            {
+            if (player.ma.celestialiteHealth.lt(50) && player.ma.attacksDone.eq(14)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("BUT I CAN'T LET YOU GUYS CONTINUE", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
@@ -782,32 +756,30 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
                 }
                 setTimeout(() => {
-                    if (player.subtabs["ma"]["stuff"] == "Bullet Hell" && player.ma.currentCelestialiteType == 25)
-                    {
-                                    player.ma.matosDefeated = true
-                                    player.ma.inBlackHeart = false
-                                    player.ma.matosFightActive = false
-                        for (let i = 0; i < player.ma.deadCharacters.length; i++) 
-            {
-                player.ma.health[i] = player.ma.healthMax[i]
-                player.ma.deadCharacters[i] = false
-            }
-            player.ma.fightingCelestialites = false
-            player.ma.currentDepth = new Decimal(0)
-            player.ma.combo = new Decimal(0)
+                    if (player.subtabs["ma"]["stuff"] == "Bullet Hell" && player.ma.currentCelestialiteType == 25) {
+                        player.ma.matosDefeated = true
+                        player.ma.inBlackHeart = false
+                        player.ma.matosFightActive = false
+                        for (let i = 0; i < player.ma.deadCharacters.length; i++) {
+                            player.ma.health[i] = player.ma.healthMax[i]
+                            player.ma.deadCharacters[i] = false
+                        }
+                        player.ma.fightingCelestialites = false
+                        player.ma.currentDepth = new Decimal(0)
+                        player.ma.combo = new Decimal(0)
 
-            player.ma.attacksDone = new Decimal(0)
-            player.ma.epsilonCelestialitesKilled = new Decimal(0)
-            player.ma.omegaCelestialitesKilled = new Decimal(0)
-            player.ma.motivationCount  = new Decimal(0)
-            player.ma.matosFightActive = false
+                        player.ma.attacksDone = new Decimal(0)
+                        player.ma.epsilonCelestialitesKilled = new Decimal(0)
+                        player.ma.omegaCelestialitesKilled = new Decimal(0)
+                        player.ma.motivationCount  = new Decimal(0)
+                        player.ma.matosFightActive = false
 
-           player.ma.commonMatosFragments = player.ma.commonMatosFragments.add(Decimal.mul(700, player.ma.matosFragmentMult[0]))
-           player.ma.rareMatosFragments = player.ma.rareMatosFragments.add(Decimal.mul(300, player.ma.matosFragmentMult[1]))
-           player.ma.epicMatosFragments = player.ma.epicMatosFragments.add(Decimal.mul(50, player.ma.matosFragmentMult[2]))
-           player.ma.legendaryMatosFragments = player.ma.legendaryMatosFragments.add(Decimal.mul(5, player.ma.matosFragmentMult[3]))
+                        player.ma.commonMatosFragments = player.ma.commonMatosFragments.add(Decimal.mul(700, player.ma.matosFragmentMult[0]))
+                        player.ma.rareMatosFragments = player.ma.rareMatosFragments.add(Decimal.mul(300, player.ma.matosFragmentMult[1]))
+                        player.ma.epicMatosFragments = player.ma.epicMatosFragments.add(Decimal.mul(50, player.ma.matosFragmentMult[2]))
+                        player.ma.legendaryMatosFragments = player.ma.legendaryMatosFragments.add(Decimal.mul(5, player.ma.matosFragmentMult[3]))
 
-           player.subtabs["ma"]["stuff"] = "Win"
+                        player.subtabs["ma"]["stuff"] = "Win"
                     }
                 }, 54000)
             }
@@ -1134,6 +1106,23 @@ for (let i = 0; i < player.ma.health.length; i++) {
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", border: "3px solid #8a0e79", borderRadius: "0 20px 20px 0", margin: "-1.5px"}
                 player.ma.depth3Cooldown.gte(0) ? look.backgroundColor = "#361e1e" : look.backgroundColor = "black"
+                return look
+            },
+        },
+        22: {
+            title() {return player.ma.matosToggle ? "<small>Matos Toggle</small><br>ON" : "<small>Matos Toggle</small><br>OFF"},
+            canClick: true,
+            unlocked() { return player.ma.matosDefeated },
+            onClick() {
+                if (player.ma.matosToggle) {
+                    player.ma.matosToggle = false
+                } else {
+                    player.ma.matosToggle = true
+                }
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", color: "white", border: "3px solid #8a0e79", borderRadius: "20px"}
+                player.ma.matosToggle ? look.backgroundColor = "black" : look.backgroundColor = "#361e1e"
                 return look
             },
         },
@@ -1559,6 +1548,54 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 return look
             },
         },
+        1001: {
+            title() {return "↑"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'w', code: 'KeyW', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'w', code: 'KeyW', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1002: {
+            title() {return "←"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', code: 'KeyA', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'a', code: 'KeyA', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1003: {
+            title() {return "↓"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 's', code: 'KeyS', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 's', code: 'KeyS', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
+        1004: {
+            title() {return "→"},
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                document.dispatchEvent(new KeyboardEvent('keydown', {key: 'd', code: 'KeyD', bubbles: true}))
+                setTimeout(() => {
+                    document.dispatchEvent(new KeyboardEvent('keyup', {key: 'd', code: 'KeyD', bubbles: true}))
+                }, 100)
+            },
+            style: {width: "50px", minHeight: "50px", fontSize: "12px", color: "white", backgroundColor: "#222", border: "2px solid white", margin: "-1px"}
+        },
     },
     generateCelestialite() {
         let random = Math.random()
@@ -1783,11 +1820,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
             player.ma.celestialiteTimer = player.ma.celestialiteCooldown
         }
         if (player.ma.combo.gte(100) && player.ma.currentCelestialiteType != 25) { // STAT INCREASE POST 100 COMBO
-            let mult = new Decimal(1.015)
-            if (hasMilestone("ma", 106)) mult = mult.sub(0.001)
-            if (hasMilestone("ma", 206)) mult = mult.sub(0.001)
-            if (hasMilestone("ma", 306)) mult = mult.sub(0.001)
-            let statSoftcap = Decimal.pow(mult, player.ma.combo.sub(100))
+            let statSoftcap = Decimal.pow(player.ma.comboSoftcapMult, player.ma.combo.sub(100))
             player.ma.celestialiteMaxHealth = player.ma.celestialiteMaxHealth.mul(statSoftcap)
             player.ma.celestialiteHealth = player.ma.celestialiteMaxHealth
             player.ma.shieldMaxHealth = player.ma.shieldMaxHealth.mul(statSoftcap)
@@ -2619,7 +2652,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
             title: "Kres Upgrade II",
             unlocked: true,
             description: "Kres' pet level boosts his strength and defense.",
-            cost: new Decimal("2500"),
+            cost: new Decimal("1000"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -2686,8 +2719,8 @@ for (let i = 0; i < player.ma.health.length; i++) {
         19: {
             title: "Old Formula",
             unlocked: true,
-            description: "Buff the antimatter formula by ^10.",
-            cost: new Decimal("5000"),
+            description: "Buff the antimatter formula by ^20.",
+            cost: new Decimal("2000"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -2817,7 +2850,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
             title: "New Formula",
             unlocked: true,
             description: "Singularity gain is boosted based on SP gain.",
-            cost: new Decimal("7500"),
+            cost: new Decimal("3500"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -2836,8 +2869,8 @@ for (let i = 0; i < player.ma.health.length; i++) {
             currencyDisplayName: "Rare Matos Fragments",
             currencyInternalName: "rareMatosFragments",
             effect() {
-                let amt = player.ma.commonMatosFragments.mul(player.ma.rareMatosFragments).mul(player.ma.epicMatosFragments).mul(player.ma.legendaryMatosFragments)
-                amt = amt.add(1).log(10000).pow(0.5).add(1)
+                let amt = player.ma.commonMatosFragments.add(1).mul(player.ma.rareMatosFragments.add(1)).mul(player.ma.epicMatosFragments.add(1)).mul(player.ma.legendaryMatosFragments.add(1))
+                amt = amt.add(1).log(1e4).pow(0.5).add(1)
                 if (amt.gte(10)) amt = amt.div(10).pow(0.1).mul(10)
                 return amt
             },
@@ -2852,7 +2885,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
             title: "Combo Consummation",
             unlocked: true,
             description: "Unlock combo milestones.",
-            cost: new Decimal("10000"),
+            cost: new Decimal("5000"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -4077,7 +4110,9 @@ for (let i = 0; i < player.ma.health.length; i++) {
                     ], {width: "750px", height: "110px", backgroundColor: "#1b0218", border: "3px solid #8a0e79", borderRadius: "20px"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 12], ["clickable", 13], ["clickable", 15], ["clickable", 21]]],
-                    ["blank", "25px"],
+                    ["blank", "5px"],
+                    ["clickable", 22],
+                    ["blank", "20px"],
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
@@ -4140,10 +4175,17 @@ for (let i = 0; i < player.ma.health.length; i++) {
                 buttonStyle: {color: "white", borderRadius: "15px"},
                 unlocked() { return false },
                 content: [
-                    ["blank", "25px"],
+                    ["blank", "10px"],
                     ["row", [["bar", "kresHealth"], ["bar", "navHealth"], ["bar", "selHealth"], ["bar", "eclipseHealth"]]],
-                    ["blank", "25px"],
-                    ["raw-html", "Use WASD to dodge the attacks.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [
+                        ["raw-html", "You can use WASD<br>to dodge the attacks.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["blank", ["25px", "25px"]],
+                        ["style-column", [
+                            ["clickable", 1001],
+                            ["row", [["clickable", 1002], ["clickable", 1003], ["clickable", 1004]]],
+                        ], {width: "150px", height: "100px"}],
+                    ]],
                 ]
             },
             "Fight": {
@@ -4216,6 +4258,7 @@ for (let i = 0; i < player.ma.health.length; i++) {
                                 if (player.ma.currentDepth.eq(3)) return "Kill Combo: " + formatShortestWhole(player.ma.combo) + "/" + formatShortestWhole(player.ma.bestComboDepth3)
                                 return "Kill Combo: " + formatShortestWhole(player.ma.combo)
                             }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.ma.combo.gte(100) ? "[SOFTCAP: x" + formatShort(Decimal.pow(player.ma.comboSoftcapMult, player.ma.combo.sub(100))) + " Celestialite Stats]" : ""}, {color: "red", fontSize: "12px", fontFamily: "monospace"}],
                             ["blank", "10px"],
                             ["style-row", [
                                 ["bar", "celestialiteHealth"],

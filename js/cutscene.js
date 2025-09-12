@@ -562,7 +562,7 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 33) {
             player.c.cutscenes[32] = false
             player.tab = "ma"
-            player.subtabs["ma"]['stuff'] = 'Main'
+            player.subtabs["ma"]['stuff'] = 'Stats'
             player.c.cutscenes[32] = false
         }
 

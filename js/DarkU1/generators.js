@@ -74,7 +74,7 @@
         }
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
-        if (hasUpgrade("sma", 205)) player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(0.01).mul(delta))
+        if (hasUpgrade("sma", 205) && !player.pet.activeAbilities[0]) player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(0.01).mul(delta))
     },
     bars: {},
     generatorReset() {

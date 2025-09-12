@@ -52,8 +52,8 @@
     clickables: {
         11: {
             title() { return "<h1>START ABSORBING LIGHT<br><h3>And enter darkness..." },
-            canClick() { return true },
-            unlocked() { return true },
+            canClick: true,
+            unlocked: true,
             onClick() {
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1
@@ -67,7 +67,28 @@
                 player.subtabs["le"]["stuff"] = "Main"
                 player.subtabs.pu["stuff"] = "Selection"
             },
-            style: {width: "600px", minHeight: "200px", backgroundImage: "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)", border: "3px solid black", borderRadius: "15px"},
+            style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
+        },
+        12: {
+            title() { return "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." },
+            canClick: true,
+            unlocked: true,
+            onClick() {
+                player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
+                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+
+                player.sma.inStarmetalChallenge = true
+                player.universe = -0.1
+                player.tab = "le"
+                player.uniTab = 1
+
+                layers.le.starmetalResetAgain()
+                layers.pu.generateSelection();
+
+                player.subtabs.le["stuff"] = "Shards"
+                player.subtabs.pu["stuff"] = "Selection"                
+            },
+            style: {width: "600px", minHeight: "200px", color: "#ffe066", backgroundImage: "radial-gradient(circle, #222 80%, #664900 95%, #b29c47 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
         13: {
             title() {return player.sma.toggle ? "Auto-Singularity: ON" : "Auto-Singularity: OFF"},
@@ -632,6 +653,8 @@
                 content: [
                     ["blank", "25px"],
                     ["clickable", 11],
+                    ["blank", "50px"],
+                    ["clickable", 12],
                 ]
             },
             "Starmetal Upgrades": {

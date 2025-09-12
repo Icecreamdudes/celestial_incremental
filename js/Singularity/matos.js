@@ -1532,19 +1532,19 @@
         },
         212: {
             title() { return "Motivate" },
-            tooltip() { return "Repeating this skill will keep boosting the team's damage.<br>Currently: x" + format(player.ma.motivationEffect) + "." },
+            tooltip() { return "Repeating this skill will keep boosting the team's damage.<br>Currently: +" + format(player.ma.motivationEffect.sub(1).mul(100)) + "%." },
             canClick() { return !player.ma.deadCharacters[3] },
             unlocked() { return (player.ma.attackTimer[3].lte(0) || !this.canClick()) && hasUpgrade("sma", 221) && player.ma.selectedCharacters[3] },
             onClick() {
                 player.ma.motivationCount = player.ma.motivationCount.add(1)
-                logPrint("<span style='color: #b68c18;'>Eclipse motivates the team, now the effect is x" + format(player.ma.motivationEffect) + ".");
+                logPrint("<span style='color: #b68c18;'>Eclipse motivates the team, now the effect is +" + format(player.ma.motivationEffect.sub(1).mul(100)) + "%.");
 
                 // Reset Eclipse' attack timer
                 player.ma.attackTimer[3] = player.ma.cooldown[3];
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
-                player.ma.deadCharacters[3] == false ? look.backgroundColor = "#361e1e" : look.backgroundColor = "#b68c18"
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = "#b68c18"
                 return look
             },
         },
@@ -2318,7 +2318,7 @@
             },
         },
         celestialiteShield: {
-            unlocked() { return player.ma.currentCelestialiteType != 5 && player.ma.shieldHealth.gte(0) && player.ma.shieldCelestialite },
+            unlocked() { return player.ma.currentCelestialiteType != 5 && player.ma.shieldHealth.gte(0.01) && player.ma.shieldCelestialite },
             direction: RIGHT,
             width: 200,
             height: 50,
@@ -2498,7 +2498,7 @@
             unlocked() { return player.ma.teamBuffDuration.gt(0) && hasUpgrade("ma", 23) && player.ma.selectedCharacters[0] }, 
             direction: RIGHT,
             width: 100,
-            height: 50,
+            height: 48,
             progress() {
                 return player.ma.teamBuffDuration.div(9); // Divide by the total team buff duration (9 seconds)
             },
@@ -2530,7 +2530,7 @@
             unlocked() { return player.ma.curseSpellDuration.gt(0) && hasUpgrade("ma", 24) && player.ma.selectedCharacters[1] }, 
             direction: RIGHT,
             width: 100,
-            height: 50,
+            height: 48,
             progress() {
                 return player.ma.curseSpellDuration.div(10); // Divide by the total curse duration (10 seconds)
             },
@@ -2562,7 +2562,7 @@
             unlocked() { return player.ma.energyBoostDuration.gt(0) && hasUpgrade("ma", 25) && player.ma.selectedCharacters[2] }, 
             direction: RIGHT,
             width: 100,
-            height: 50,
+            height: 48,
             progress() {
                 return player.ma.energyBoostDuration.div(6); // Divide by the total energy boost duration (6 seconds)
             },
@@ -3658,7 +3658,7 @@
             currency() { return player.sma.eclipseShards},
             pay(amt) { player.sma.eclipseShards = this.currency().sub(amt).floor() },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.pet.levelables[501][0].gte(1) },
+            unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -3692,7 +3692,7 @@
             currency() { return player.sma.eclipseShards},
             pay(amt) { player.sma.eclipseShards = this.currency().sub(amt).floor() },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.pet.levelables[501][0].gte(1) },
+            unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -3726,7 +3726,7 @@
             currency() { return player.sma.eclipseShards},
             pay(amt) { player.sma.eclipseShards = this.currency().sub(amt).floor() },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return player.pet.levelables[501][0].gte(1) },
+            unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -4030,7 +4030,7 @@
                     ], {width: "250px", height: "130px", backgroundColor: "#8a0e79", border: "3px solid #8a0e79", borderRadius: "20px"}],
                     ["blank", "10px"],
                     ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards"}, {color: "#f5ff68", fontSize: "24px", fontFamily: "monospace"}],
-                    ["blank", "10px"]
+                    ["blank", "10px"],
                     ["row", [["ex-buyable", 201], ["ex-buyable", 202], ["ex-buyable", 203]]],
                 ]
             },
@@ -4159,8 +4159,8 @@
                         ], {width: "250px", height: "40px", backgroundColor: "#5b460c", borderBottom: "3px solid #8a0e79"}],
                         ["style-column", [
                             ["raw-html", () => {return "Max Health: <h3>" + format(player.ma.healthMax[3])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return "Average Damage: <h3>" + format(player.ma.damage[3])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return "Attack Cooldown: <h3>" + formatTime(player.ma.cooldown[3])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Average Damage: <h3>" + format(player.ma.damage[3]) + "/s"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "2nd Skill Cooldown: <h3>" + formatTime(player.ma.cooldown[3])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", () => {return hasUpgrade("ma", 28) ? "Health Regen: <h3>" + format(player.ma.healthRegen[3]) + "/s" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "250px", height: "104px", backgroundColor: "#241c04", borderBottom: "3px solid #8a0e79"}],
                         ["clickable", 19],

@@ -268,6 +268,7 @@ addLayer("pet", {
             player.sma.inStarmetalChallenge = false
             player.universe = 3
             player.tab = "sma"
+            player.subtabs.pu["stuff"] = "Collection"
 
             layers.pu.generateSelection();
         }
@@ -528,10 +529,14 @@ addLayer("pet", {
 
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1
-                player.tab = "dut"
-                layers.le.generateSelection();
+                player.tab = "le"
+                player.uniTab = 1
 
-                player.subtabs["le"]["stuff"] = "Shards"
+                layers.le.starmetalResetAgain()
+                layers.pu.generateSelection();
+
+                player.subtabs.le["stuff"] = "Shards"
+                player.subtabs.pu["stuff"] = "Selection"                
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -723,7 +728,6 @@ addLayer("pet", {
                 player.cb.xp = new Decimal(0)
                 player.cb.totalxp = new Decimal(0)
                 player.cb.level = new Decimal(0)
-                player.cb.highestLevel = new Decimal(0)
                 player.cb.XPBoost = new Decimal(1)
             },
             onHold() { clickClickable(this.layer, this.id) },

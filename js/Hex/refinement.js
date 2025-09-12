@@ -213,43 +213,43 @@ addLayer("hre", {
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         14: {
-            requirementDescription: "<h3>102 Refinements",
+            requirementDescription: "<h3>96 Refinements",
             effectDescription() {
                 if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
                 return "Automate ε-Provenance gain."
             },
-            done() { return player.hre.refinement.gte(102)},
+            done() { return player.hre.refinement.gte(96)},
             unlocked() { return hasMilestone("hre", 13) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         15: {
-            requirementDescription: "<h3>114 Refinements",
+            requirementDescription: "<h3>102 Refinements",
             effectDescription: "Automate purity gain.",
-            done() { return player.hre.refinement.gte(114)},
+            done() { return player.hre.refinement.gte(102)},
             unlocked() { return hasMilestone("hre", 14) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         16: {
-            requirementDescription: "<h3>126 Refinements",
+            requirementDescription: "<h3>108 Refinements",
             effectDescription: "Unlock buy max vex.",
-            done() { return player.hre.refinement.gte(126)},
+            done() { return player.hre.refinement.gte(108)},
             unlocked() { return hasMilestone("hre", 15) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         17: {
-            requirementDescription: "<h3>138 Refinements",
+            requirementDescription: "<h3>114 Refinements",
             effectDescription: "Automate jinxes.",
-            done() { return player.hre.refinement.gte(138)},
+            done() { return player.hre.refinement.gte(114)},
             unlocked() { return hasMilestone("hre", 16) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },
         18: {
-            requirementDescription: "<h3>150 Refinements",
+            requirementDescription: "<h3>120 Refinements",
             effectDescription() {
                 if (inChallenge("hrm", 16)) return "Automate █-██████████ gain."
                 return "Automate ζ-Provenance gain."
             },
-            done() { return player.hre.refinement.gte(150)},
+            done() { return player.hre.refinement.gte(120)},
             unlocked() { return hasMilestone("hre", 17) },
             style: {width: '500px', height: "50px", borderRadius: "10px"},
         },

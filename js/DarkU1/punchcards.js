@@ -516,7 +516,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3)},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -570,7 +570,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3)},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -791,7 +791,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3)},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -846,7 +846,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3)},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -900,7 +900,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(4) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(4)},
+            canSelect() {return player.le.resetAmount.gte(4) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1116,7 +1116,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return hasUpgrade("sma", 17) || this.canClick()},
-            canSelect() {return hasUpgrade("sma", 17)},
+            canSelect() {return hasUpgrade("sma", 17) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1169,7 +1169,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return hasUpgrade("sma", 17) || this.canClick()},
-            canSelect() {return hasUpgrade("sma", 17)},
+            canSelect() {return hasUpgrade("sma", 17) && !player.pet.activeAbilities[0]},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE

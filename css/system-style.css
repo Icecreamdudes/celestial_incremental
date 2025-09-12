@@ -171,6 +171,9 @@
 .darkTitle {
 	background: linear-gradient(90deg, #0f011c 0%, #000000 50%, #0f011c 100%);
 }
+.darkTabTitle {
+	background: #0f011c !important;
+}
 .darkButton {
 	background-color: #111;
 }

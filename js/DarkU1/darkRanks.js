@@ -77,14 +77,16 @@
         player.dr.pentDiv = new Decimal(1)
 
         //Rank and Tier effects/costs
-        let ranksGainPreS = player.du.points.mul(player.dr.rankDiv).div(10).pow(Decimal.div(20, 29)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPreS = player.du.points.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(20, 29)).floor()
-        let ranksGainPostS = player.du.points.mul(player.dr.rankDiv).div(10).pow(0.25).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS =  player.du.points.mul(player.dr.rankDiv).mul(2).pow(0.25).floor()
-        let ranksGainPostS2 = player.du.points.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 10)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS2 = player.du.points.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 10)).floor()
-        let ranksGainPostS3 = player.du.points.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 100)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS3 = player.du.points.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 100)).floor()
+        let pointExponent = player.du.points
+        if (player.pet.activeAbilities[0]) pointExponent = pointExponent.pow(1/1.4)
+        let ranksGainPreS = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(20, 29)).floor()
+        if (hasUpgrade("le", 12)) ranksGainPreS = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(20, 29)).floor()
+        let ranksGainPostS = pointExponent.mul(player.dr.rankDiv).div(10).pow(0.25).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS =  pointExponent.mul(player.dr.rankDiv).mul(2).pow(0.25).floor()
+        let ranksGainPostS2 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 10)).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS2 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 10)).floor()
+        let ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 100)).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 100)).floor()
 
         if (!hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.3).add(1).pow(1.055)
         if (hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.5).add(1).pow(1.08)

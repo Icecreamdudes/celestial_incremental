@@ -428,13 +428,13 @@
     },
     tabFormat: [
         ["raw-html", () => { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["row", [
+        ["style-row", [
             ["raw-html", () => {return "Boosts generator power effect by ^" + format(player.dgr.grassEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace", paddingRight: "10px"}],
             ["raw-html", () => { return (player.dgr.grass.lt(1e15) && player.dgr.grass.gte(1e5)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return (player.dgr.grass.lt(1e35) && player.dgr.grass.gte(1e15)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return (player.dgr.grass.lt(1e75) && player.dgr.grass.gte(1e35)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
             ["raw-html", () => { return player.dgr.grass.gte(1e75) ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-        ]],
+        ], () => {return player.pet.legendaryPetAbilityTimers[0].gt(0) ? {display: "none !important"} : {}}],
         ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

@@ -21,10 +21,9 @@ addLayer("pl", {
     nodeStyle() {
         return {
             background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)",
-            "background-origin": "border-box",
-            "border-color": "#59c2ff",
-            "color": "#eaf6f7",
-            "font-size": "48px",
+            backgroundOrigin: "border-box",
+            borderColor: "#59c2ff",
+            color: "#eaf6f7",
         };
     },
     tooltip: "Planets",

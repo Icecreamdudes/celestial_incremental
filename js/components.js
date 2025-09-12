@@ -1093,7 +1093,7 @@ function loadVue() {
 		<div class="tabHolder">
 			<div class="tabRow" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
 				<div class="tabTitleHolder">
-					<div class="tabTitle">
+					<div v-bind:class="{tabTitle:true,darkTabTitle:player.sma.inStarmetalChallenge}">
 						<span v-html="'Row ' + r"></span>
 					</div>
 				</div>

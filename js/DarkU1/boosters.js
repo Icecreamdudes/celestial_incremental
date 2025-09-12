@@ -72,31 +72,51 @@
             requirementDescription: "<h3>1 Booster",
             effectDescription() { return "Boosters divide the eclipse shard requirement<br>Currently: /" + format(player.db.milestone1Effect) + "." },
             done() { return player.db.boosters.gte(1) },
-            style: { width: '800px', "min-height": '75px' },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
         },
         12: {
             requirementDescription: "<h3>3 Boosters",
             effectDescription() { return "Point gain is boosted by itself<br>Currently: x" + format(player.db.milestone2Effect) + "." },
             done() { return player.db.boosters.gte(3) },
-            style: { width: '800px', "min-height": '75px' },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
         },
         13: {
             requirementDescription: "<h3>7 Boosters",
             effectDescription() { return "Boost rank points by x1000, tier points by x100, tetr points by x10." },
             done() { return player.db.boosters.gte(7) },
-            style: { width: '800px', "min-height": '75px' },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
         },
         101: {
             requirementDescription: "<h3>1 Best Booster",
             effectDescription: "x1.25 to check back XP gain.",
             done() { return player.db.bestBoosters.gte(1) },
-            style: { width: '800px', "min-height": '75px' },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
         },
         102: {
             requirementDescription: "<h3>8 Best Booster",
             effectDescription: "x1.2 to starmetal alloy and eclipse shard gain.",
             done() { return player.db.bestBoosters.gte(8) },
-            style: { width: '800px', "min-height": '75px' },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
         },
     },
     challenges: {},
@@ -108,8 +128,9 @@
                 unlocked() { return true },
                 content: [
                     ['blank', '25px'],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.db.boosters) + "</h3> boosters, which boost point gain by x" + format(player.db.boosterEffect) + "." }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return "(Best boosters: " + formatWhole(player.db.bestBoosters) + ")" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.db.boosters) + "</h3> boosters"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(Best boosters: " + formatWhole(player.db.bestBoosters) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts point gain by x" + format(player.db.boosterEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ['blank', '25px'],
                     ["row", [["clickable", 11]]],
                     ['blank', '25px'],
@@ -120,12 +141,12 @@
                 unlocked() { return true },
                 content: [
                     ['blank', '25px'],
-                    ["raw-html", function () { return "<h3>Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "<h3>Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [["milestone", 11]]],
                     ["row", [["milestone", 12]]],
                     ["row", [["milestone", 13]]],
                     ['blank', '25px'],
-                    ["raw-html", function () { return "<h3>Permanent Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "<h3>Permanent Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [["milestone", 101]]],
                     ["row", [["milestone", 102]]],
                 ]

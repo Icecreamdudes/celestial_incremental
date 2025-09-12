@@ -10,9 +10,9 @@
     nodeStyle() {
         return {
             background: "linear-gradient(150deg,rgb(122, 122, 122) 0%,rgb(233, 233, 233) 50%,rgb(122, 122, 122) 100%)",
-            "background-origin": "border-box",
-            "border-color": "rgb(255, 255, 255)",
-            "color": "black",
+            backgroundOrigin: "border-box",
+            borderColor: "rgb(255, 255, 255)",
+            color: "black",
         };
     },
     tooltip: "Normality",
@@ -35,7 +35,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "COMING SOON! (How did you even get here?)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "COMING SOON! (How did you even get here?)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
         },

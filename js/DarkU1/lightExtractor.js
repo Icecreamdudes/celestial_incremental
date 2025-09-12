@@ -728,7 +728,7 @@
         },
     },
     buyables: {
-            11: {
+        11: {
             costBase() { return new Decimal(5) },
             costGrowth() { return new Decimal(1.2) },
             purchaseLimit() { return new Decimal(50) },
@@ -760,7 +760,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', color: "#384166", "border-color": "#384166" }
+            style: {width: '275px', height: '150px', color: "white", backgroundColor: "#1c2033", borderColor: "#384166" }
         },
     },
     milestones: {},
@@ -903,8 +903,10 @@
                     ["row", [["clickable", 14]]],
                     ["blank", "25px"],
                     ["raw-html", () => { return "(Eclipse shards are worth " + formatWhole(player.le.eclipseShardsValue) + " XP each for leveling punchcards.)" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["buyable", 11]]],
+                    ["blank", "10px"],
+                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["row", [["dark-buyable", 11]]],
                 ]
             },
             "Effects": {

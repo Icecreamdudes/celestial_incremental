@@ -422,8 +422,13 @@ function updateStyles() {
 		}
 	}
 	if (options.menuType == "Tab") {
-		sideBG = "#161616"
-		if (player.universe == -0.1) sideBG = "black"
+		if (window.innerWidth > 1250) {
+			sideBG = "linear-gradient(to right, #444 103px, #7a7a7a 103px, #7a7a7a 106px, #161616 106px)"
+			if (player.universe == -0.1) sideBG = "linear-gradient(to right, #0f011c 103px, #7a7a7a 103px, #7a7a7a 106px, black 106px)"
+		} else {
+			sideBG = "linear-gradient(to bottom, #444 80px, #7a7a7a 80px, #7a7a7a 83px, #161616 83px)"
+			if (player.universe == -0.1) sideBG = "linear-gradient(to bottom, #0f011c 80px, #7a7a7a 80px, #7a7a7a 83px, black 83px)"
+		}
 	}
 
 	// Set background color

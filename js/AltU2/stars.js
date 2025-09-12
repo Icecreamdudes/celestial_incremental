@@ -31,10 +31,9 @@ addLayer("st", {
     nodeStyle() {
         return {
             background: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)",
-            "background-origin": "border-box",
-            "border-color": "#eaf6f7",
-            "color": "#eaf6f7",
-            "font-size": "48px",
+            backgroundOrigin: "border-box",
+            borderColor: "#eaf6f7",
+            color: "#eaf6f7",
         };
     },
     tooltip: "Stars",

@@ -94,7 +94,6 @@
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
-
     },
     bars: {},
     clickables: {

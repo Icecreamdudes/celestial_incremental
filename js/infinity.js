@@ -1,4 +1,4 @@
-var tree2 = [["in"], ["ad", "ip"], ["ta", "tad"], ["bi", "id", "om"], ["ro", "ca"/*, ["mi"]*/]]
+var tree2 = [["in"], ["ad", "ip"], ["ta", "tad"], ["bi", "id", "om"], ["ca", "ro"/*, ["mi"]*/]]
 addLayer("in", {
     name: "Roots", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "RO", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -169,9 +169,10 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("tad", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("om", 11))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("p", 15))
-        if (hasUpgrade("hpw", 1062)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(10)
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
+
+        if (hasUpgrade("hpw", 1062)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.mul(0.1).mul(delta))
     },
     bigCrunch() {
         if (hasUpgrade("ta", 17)) {

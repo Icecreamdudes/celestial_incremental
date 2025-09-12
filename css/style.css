@@ -1410,7 +1410,7 @@ button > * {
     opacity: 90%;
     position: absolute;
     bottom: 10vh; /* Distance from the bottom of the viewport */
-    left: calc(50% + 200px); /* Center horizontally */
+    left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Ensure it's centered */
     border: 2px solid black;
     box-sizing: border-box;
@@ -1422,7 +1422,6 @@ button > * {
     .menu-spawn-area {
         width: 90vw; /* Make it slightly wider for small screens */
         height: 35vh; /* Reduce height on smaller screens */
-		left: 50%;
         bottom: 5vh;  /* Adjust position to keep elements on screen */
     }
 }
@@ -1479,7 +1478,7 @@ button > * {
     border-radius: 50%;
     position: absolute;
     top: 50%;
-    left: calc(50% + 200px);
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10; /* Ensure the circle appears above the spawn area */
 	border: 2px solid black; /* Add a black border */

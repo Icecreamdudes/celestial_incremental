@@ -63,42 +63,41 @@ addLayer("pl", {
             onClick() {
                 let starsToSacrifice = player.pl.starInputAmount;
                 player.au2.stars = player.au2.stars.sub(starsToSacrifice);
-                
-    if (starsToSacrifice.gt(500)) {
-        // Predict planet gain (expected value, fast)
-        let planetsGained = new Decimal(0);
-        let planets = player.pl.planets;
-        let stars = new Decimal(starsToSacrifice);
 
-        while (stars.gt(0)) {
-            let chance = Decimal.div(0.1, planets.add(1));
-            planetsGained = planetsGained.add(chance);
-            planets = planets.add(chance);
-            stars = stars.sub(1);
-        }
-        player.pl.planets = player.pl.planets.add(planetsGained.floor());
-    } else {
-        // Simulate each star individually (random, slow)
-        let planets = player.pl.planets;
-        let gained = new Decimal(0);
-        for (let i = 0; i < starsToSacrifice.toNumber(); i++) {
-            let chance = Decimal.div(0.1, planets.add(1)).toNumber();
-            if (Math.random() < chance) {
-                gained = gained.add(1);
-                planets = planets.add(1);
-            }
-        }
-        player.pl.planets = player.pl.planets.add(gained.floor());
-    }
+                if (starsToSacrifice.gt(500)) {
+                    // Predict planet gain (expected value, fast)
+                    let planetsGained = new Decimal(0);
+                    let planets = player.pl.planets;
+                    let stars = new Decimal(starsToSacrifice);
+
+                    while (stars.gt(0)) {
+                        let chance = Decimal.div(0.1, planets.add(1));
+                        planetsGained = planetsGained.add(chance);
+                        planets = planets.add(chance);
+                        stars = stars.sub(1);
+                    }
+                    player.pl.planets = player.pl.planets.add(planetsGained.floor());
+                } else {
+                    // Simulate each star individually (random, slow)
+                    let planets = player.pl.planets;
+                    let gained = new Decimal(0);
+                    for (let i = 0; i < starsToSacrifice.toNumber(); i++) {
+                        let chance = Decimal.div(0.1, planets.add(1)).toNumber();
+                        if (Math.random() < chance) {
+                            gained = gained.add(1);
+                            planets = planets.add(1);
+                        }
+                    }
+                    player.pl.planets = player.pl.planets.add(gained.floor());
+                }
             },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '300px', "min-height": '52px', borderRadius: '2px' },
+            style: {width: "300px", minHeight: "50px", borderRadius: "0 15px 15px 0"},
         },
     },
     levelables: {},
     upgrades: {},
     buyables: {
-          11: {
+        11: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.1) },
             purchaseLimit() { return new Decimal(1000) },
@@ -243,34 +242,23 @@ addLayer("pl", {
             "Main": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "You will sacrifice <h3>" + formatWhole(player.pl.starInputAmount) + "</h3> stars to find planets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Planet find chance: " + formatWhole(player.pl.planetChance.mul(100)) + "%. (Increases with planets)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [
-                    ["text-input", "starInput", {
-                        color: "var(--color)",
-                        width: "400px",
-                        height: "48px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["clickable", 11],
-                    ]],
+                    ["style-row", [
+                        ["text-input", "starInput", {width: "300px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px", padding: "0 25px 0 25px"}],
+                        ["clickable", 11],
+                    ], {width: "652px", border: "2px solid white", borderRadius: "17px"}],
                 ]
             },
             "Space Dust": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + format(player.pl.spaceDust) + "/" + format(player.pl.spaceDustCapacity) + "</h3> space dust." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You are gaining <h3>" + format(player.pl.spaceDustPerSecond) + "</h3> space dust per second. (based on planets)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -282,12 +270,11 @@ addLayer("pl", {
                     ]],
                     ["style-column", [
                         ["row", [
-                    ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], 
+                            ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14], 
                         ]],
-                                                ["row", [
-                    ["ex-buyable", 11], 
+                        ["row", [
+                            ["ex-buyable", 11], 
                         ]],
-                        
                     ], {width: "1000px", height: "400px", background: "linear-gradient(15deg, #411bb3 0%, #279ccf 50%, #34eb86 100%)", border: "3px solid rgb(149, 243, 255)", borderRadius: "0px 0px 10px 10px"}],
                 ]
             },

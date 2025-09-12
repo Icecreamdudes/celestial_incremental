@@ -67,12 +67,10 @@
 
         if (player.dg.generatorPower.lt(1e9)) {
             player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.5).pow(player.dgr.grassEffect)
-        } else if (player.dg.generatorPower.lt(1e25)) {
-            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.25).mul(177.83).pow(player.dgr.grassEffect)
         } else if (player.dg.generatorPower.lt(1e100)) {
-            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.1).mul(1e6).pow(player.dgr.grassEffect)
+            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.25).mul(177.83).pow(player.dgr.grassEffect)
         } else {
-            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.05).mul(1e11).pow(player.dgr.grassEffect)
+            player.dg.generatorPowerEffect = player.dg.generatorPower.add(1).pow(0.1).mul(1.78e17).pow(player.dgr.grassEffect)
         }
 
         player.dg.generators = player.dg.generators.add(player.dg.generatorsToGet.mul(buyableEffect("dn", 13)).mul(delta))
@@ -355,12 +353,10 @@
                         ["raw-html", () => {
                             if (player.dg.generatorPower.lt(1e9)) {
                                 return ""
-                            } else if (player.dg.generatorPower.lt(1e25)) {
-                                return "[SOFTCAPPED]"
                             } else if (player.dg.generatorPower.lt(1e100)) {
-                                return "[SOFTCAPPED<sup>2</sup>]"
+                                return "[SOFTCAPPED]"
                             } else {
-                                return "[SOFTCAPPED<sup>3</sup>]"
+                                return "[SOFTCAPPED<sup>2</sup>]"
                             }
                         }, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],

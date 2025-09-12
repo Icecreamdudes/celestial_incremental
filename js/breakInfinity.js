@@ -85,7 +85,6 @@
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("tad", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("om", 12))
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(buyableEffect("p", 16))
-        if (hasUpgrade("hpw", 1062)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(10)
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(levelableEffect("pet", 208)[2])
         player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(levelableEffect("pet", 1101)[1])
         if (hasMilestone("fa", 13)) player.bi.brokenInfinitiesToGet = player.bi.brokenInfinitiesToGet.mul(player.fa.milestoneEffect[2])
@@ -655,14 +654,10 @@
             title: "BI NIP Upgrade XVI",
             unlocked() {return hasMilestone("s", 12) && hasUpgrade("ma", 21)},
             description: "Triple replicanti mult, and replicanti effects are buffed.",
-            cost: new Decimal(1e188),
+            cost: new Decimal(1e300),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
-            effect() {
-                return player.ca.replicateChance.mul(0.3).add(1).pow(0.5)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: { width: '150px', height: '100px', }
         },
     },

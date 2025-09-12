@@ -52,11 +52,11 @@
                 .mul(buyableEffect("fu", 54))
                 .mul(buyableEffect("sma", 14))
                 .mul(levelableEffect("pet", 308)[1])
-                .mul(player.st.starPowerEffect2) 
+                .mul(player.st.starPowerEffect3) 
 
             // Singularity Power Softcap
             let base = new Decimal(300)
-            if (player.sd.singularityPowerPerSecond.gt(1e300)) player.sd.singularityPowerPerSecond = player.sd.singularityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.sd.singularityPowerPerSecond.plus(1).log10())).mul(1e300)
+            if (player.sd.singularityPowerPerSecond.gt(1e300)) player.sd.singularityPowerPerSecond = player.sd.singularityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.sd.singularityPowerPerSecond.plus(1).log(10))).mul(1e300)
             
             // Singularity Power Per Second Calc
             player.sd.singularityPower = player.sd.singularityPower.add(player.sd.singularityPowerPerSecond.mul(delta))
@@ -68,7 +68,7 @@
                 .mul(buyableEffect("fu", 53))
                 .mul(buyableEffect("sma", 14))
                 .mul(player.co.cores.radioactive.effect[2])
-                .mul(player.st.starPowerEffect2) 
+                .mul(player.st.starPowerEffect3) 
 
                 // Dimension Softcap
                 if (player.sd.dimensionsPerSecond[i].gt(1e300)) player.sd.dimensionsPerSecond[i] = player.sd.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
@@ -111,21 +111,24 @@
                 player.sd.dimMax = true
             },
             style() {
-                if (getBuyableAmount('sd', 1).lt(8)) {
-                    return { width: '75px', "min-height": '50px', borderRadius: '0px' }
-                } else {
-                    return { width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
-                }
-            } 
+                let look = {width: "80px", minHeight: "50px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                if (getBuyableAmount('sd', 1).lt(8)) {look.borderRadius = "0px"} else {look.borderRadius = "10px 0 0 10px"}
+                return look
+            },
         },
         3: {
             title() { return "Buy Max Off" },
-            canClick() { return player.sd.dimMax == true  },
+            canClick() { return player.sd.dimMax == true},
             unlocked() { return true },
             onClick() {
                 player.sd.dimMax = false
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px' }
+            style() {
+                let look = {width: "80px", minHeight: "50px", borderRadius: "0px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         4: {
             title() { return "Unpause Dimension Production" },
@@ -134,7 +137,11 @@
             onClick() {
                 player.sd.pausedDimensions = true
             },
-            style: { width: '200px', "min-height": '50px', borderRadius: '0px' }
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "0px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            }
         },
         5: {
             title() { return "Pause Dimension Production" },
@@ -143,14 +150,15 @@
             onClick() {
                 player.sd.pausedDimensions = false
             },
-            style: { width: '200px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "0px 10px 10px 0px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            }
         },
-
     },
-    bars: {
-    },
-    upgrades: { 
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         1: {
             purchaseLimit() { return new Decimal(8) },
@@ -180,9 +188,13 @@
                 return "Next SD: " + format(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
             },
             buy() {
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
-            style: { width: '250px', height: '50px', borderRadius: '10px 0px 0px 10px' }
+            style() {
+                let look = {width: "250px", height: "50px", borderRadius: "10px 0px 0px 10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         11: {
             costBase() { return new Decimal(10) },
@@ -212,7 +224,11 @@
                     player.sd.dimensionAmounts[0] = player.sd.dimensionAmounts[0].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         12: {
             costBase() { return new Decimal(100) },
@@ -242,7 +258,11 @@
                     player.sd.dimensionAmounts[1] = player.sd.dimensionAmounts[1].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         13: {
             costBase() { return new Decimal(1000) },
@@ -272,7 +292,11 @@
                     player.sd.dimensionAmounts[2] = player.sd.dimensionAmounts[2].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         14: {
             costBase() { return new Decimal(100000) },
@@ -302,7 +326,11 @@
                     player.sd.dimensionAmounts[3] = player.sd.dimensionAmounts[3].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         15: {
             costBase() { return new Decimal(1e7) },
@@ -332,7 +360,11 @@
                     player.sd.dimensionAmounts[4] = player.sd.dimensionAmounts[4].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         16: {
             costBase() { return new Decimal(1e10) },
@@ -362,7 +394,11 @@
                     player.sd.dimensionAmounts[5] = player.sd.dimensionAmounts[5].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         17: {
             costBase() { return new Decimal(1e14) },
@@ -392,7 +428,11 @@
                     player.sd.dimensionAmounts[6] = player.sd.dimensionAmounts[6].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         18: {
             costBase() { return new Decimal(1e18) },
@@ -422,7 +462,11 @@
                     player.sd.dimensionAmounts[7] = player.sd.dimensionAmounts[7].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
     },
     milestones: {},

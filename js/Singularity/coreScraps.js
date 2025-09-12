@@ -1,58 +1,4 @@
-﻿const CORE_SCRAP = {
-    point: {
-        name: "Point Core Scrap",
-        effect: "Boosts time cube effects by ^",
-    },
-    factor: {
-        name: "Factor Core Scrap",
-        effect: "Increases factor power effect softcap by +^",
-    },
-    prestige: {
-        name: "Prestige Core Scrap",
-        effect: "Increases prestige effect softcaps by +^",
-    },
-    tree: {
-        name: "Tree Core Scrap",
-        effect: "Increases tree effect softcap by +^",
-    },
-    grass: {
-        name: "Grass Core Scrap",
-        effect: "Increases grass effect softcaps by +^",
-    },
-    grasshopper: {
-        name: "Grasshopper Core Scrap",
-        effect: "Increases grasshopper effect softcaps by ^",
-    },
-    code: {
-        name: "Code Core Scrap",
-        effect: "Boosts mod gain by ^",
-    },
-    dice: {
-        name: "Dice Core Scrap",
-        effect: "Boosts tier 1 booster dice effects by ^",
-    },
-    rocket: {
-        name: "Rocket Core Scrap",
-        effect: "Boosts rocket fuel effects by ^",
-    },
-    antimatter: {
-        name: "Antimatter Core Scrap",
-        effect: "Boosts antimatter softcap base by x",
-    },
-    infinity: {
-        name: "Infinity Core Scrap",
-        effect: "Boosts base infinity point gain by ^",
-    },
-    checkback: {
-        name: "Check Back Core Scrap",
-        effect: "Boosts check back xp by x",
-    },
-    radioactive: {
-        name: "Radioactive Core Scrap",
-        effect: "Boosts radiation gain by x",
-    },
-}
-addLayer("cs", {
+﻿addLayer("cs", {
     name: "Core Scraps", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CS", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -163,7 +109,7 @@ addLayer("cs", {
         // SCRAP GAIN
         for (let prop in player.cs.scraps) {
             player.cs.scraps[prop].gain = Decimal.pow(1.15, player.co.cores[prop].level).sub(1)
-            if (player.cs.scraps[prop].gain.gte(1000)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.div(1000).pow(0.5).mul(1000) // BASE SOFTCAP
+            if (player.cs.scraps[prop].gain.gte(1000)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.div(1000).pow(0.1).mul(1000) // BASE SOFTCAP
 
             if (hasUpgrade("fu", 19)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.s.singularitiesEffect)
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pu", 204)[2])
@@ -277,6 +223,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "point"
+                player.subtabs["cs"]["scrap"] = "point"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -290,6 +237,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "factor"
+                player.subtabs["cs"]["scrap"] = "factor"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -303,6 +251,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "prestige"
+                player.subtabs["cs"]["scrap"] = "prestige"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -316,6 +265,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "tree"
+                player.subtabs["cs"]["scrap"] = "tree"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -329,6 +279,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "grass"
+                player.subtabs["cs"]["scrap"] = "grass"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -342,6 +293,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "grasshopper"
+                player.subtabs["cs"]["scrap"] = "grasshopper"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -355,6 +307,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "code"
+                player.subtabs["cs"]["scrap"] = "code"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -368,6 +321,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "dice"
+                player.subtabs["cs"]["scrap"] = "dice"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -381,6 +335,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "rocket"
+                player.subtabs["cs"]["scrap"] = "rocket"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -394,6 +349,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "antimatter"
+                player.subtabs["cs"]["scrap"] = "antimatter"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -407,6 +363,7 @@ addLayer("cs", {
             unlocked: true,
             onClick() {
                 player.cs.scrapIndex = "infinity"
+                player.subtabs["cs"]["scrap"] = "infinity"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -420,6 +377,7 @@ addLayer("cs", {
             unlocked() {return hasUpgrade("s", 20)},
             onClick() {
                 player.cs.scrapIndex = "checkback"
+                player.subtabs["cs"]["scrap"] = "checkback"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -433,6 +391,7 @@ addLayer("cs", {
             unlocked() {return hasUpgrade("sma", 106)},
             onClick() {
                 player.cs.scrapIndex = "radioactive"
+                player.subtabs["cs"]["scrap"] = "radioactive"
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", border: "15px solid", borderRadius: "50%", margin: "5px"}
@@ -446,7 +405,7 @@ addLayer("cs", {
     upgrades: {
         101: {
             title: "Properly Ranked",
-            unlocked() {return player.cs.scrapIndex == "point"},
+            unlocked: true,
             description: "Replace ranks hardcap with a heavy softcap.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.point },
@@ -462,7 +421,7 @@ addLayer("cs", {
         },
         102: {
             title: "Pent up",
-            unlocked() {return player.cs.scrapIndex == "point"},
+            unlocked: true,
             description: "Improve pent effect formula.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.point },
@@ -478,7 +437,7 @@ addLayer("cs", {
         },
         103: {
             title: "Time Tesseract",
-            unlocked() {return player.cs.scrapIndex == "point"},
+            unlocked: true,
             description: "Raise time cube gain by ^1.1.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.point },
@@ -494,7 +453,7 @@ addLayer("cs", {
         },
         201: {
             title: "Factored Factors",
-            unlocked() {return player.cs.scrapIndex == "factor"},
+            unlocked: true,
             description: "Fuse factors and improve factor effects.",
             cost: new Decimal(1e3),
             onPurchase() {
@@ -516,7 +475,7 @@ addLayer("cs", {
         },
         202: {
             title: "Powered Power",
-            unlocked() {return player.cs.scrapIndex == "factor"},
+            unlocked: true,
             description: "Double hex power gain.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.factor },
@@ -532,7 +491,7 @@ addLayer("cs", {
         },
         203: {
             title: "Fitted Factors",
-            unlocked() {return player.cs.scrapIndex == "factor"},
+            unlocked: true,
             description: "Multiply factor base by x8,000.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.factor },
@@ -548,7 +507,7 @@ addLayer("cs", {
         },
         301: {
             title: "Practical Prestige",
-            unlocked() {return player.cs.scrapIndex == "prestige"},
+            unlocked: true,
             description: "Raise 1st prestige effect by ^1.05. (Ignoring softcap)",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.prestige },
@@ -564,7 +523,7 @@ addLayer("cs", {
         },
         302: {
             title: "Dark Duplicate",
-            unlocked() {return player.cs.scrapIndex == "prestige"},
+            unlocked: true,
             description: "Improve Dark Starmetal Upgrade IV.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.prestige },
@@ -580,7 +539,7 @@ addLayer("cs", {
         },
         303: {
             title: "Clearer Crystals",
-            unlocked() {return player.cs.scrapIndex == "prestige"},
+            unlocked: true,
             description: "Improve crystal effect.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.prestige },
@@ -596,7 +555,7 @@ addLayer("cs", {
         },
         401: {
             title: "Unbefitting Branches",
-            unlocked() {return player.cs.scrapIndex == "tree"},
+            unlocked: true,
             description: "Raise tree gain by ^1.1, but raise tree requirement by ^1.5.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.tree },
@@ -612,7 +571,7 @@ addLayer("cs", {
         },
         402: {
             title: "Cloned Cotyledons",
-            unlocked() {return player.cs.scrapIndex == "tree"},
+            unlocked: true,
             description: "Centuple repli-leaf multiplier.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.tree },
@@ -628,7 +587,7 @@ addLayer("cs", {
         },
         403: {
             title: "Pruning Power",
-            unlocked() {return player.cs.scrapIndex == "tree"},
+            unlocked: true,
             description: "Cube tree buyable effects.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.tree },
@@ -644,7 +603,7 @@ addLayer("cs", {
         },
         501: {
             title: "Mowed Grass",
-            unlocked() {return player.cs.scrapIndex == "grass"},
+            unlocked: true,
             description: "Boost grass value by x1e450, but divide grass capacity by /45.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.grass },
@@ -660,7 +619,7 @@ addLayer("cs", {
         },
         502: {
             title: "Golden Seeds",
-            unlocked() {return player.cs.scrapIndex == "grass"},
+            unlocked: true,
             description: "Square golden grass effect.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.grass },
@@ -676,7 +635,7 @@ addLayer("cs", {
         },
         503: {
             title: "Masterful Moon",
-            unlocked() {return player.cs.scrapIndex == "grass"},
+            unlocked: true,
             description: "Improve third moonstone level effect.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.grass },
@@ -692,7 +651,7 @@ addLayer("cs", {
         },
         601: {
             title: "Symbiotic Studies",
-            unlocked() {return player.cs.scrapIndex == "grasshopper"},
+            unlocked: true,
             description: "Unlock new grasshopper studies.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.grasshopper },
@@ -708,7 +667,7 @@ addLayer("cs", {
         },
         602: {
             title: "Hopscotch",
-            unlocked() {return player.cs.scrapIndex == "grasshopper"},
+            unlocked: true,
             description: "Unlock a new grass-skip effect that boosts grasshoppers.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.grasshopper },
@@ -724,7 +683,7 @@ addLayer("cs", {
         },
         603: {
             title: "Cubic Casting",
-            unlocked() {return player.cs.scrapIndex == "grasshopper"},
+            unlocked: true,
             description: "Cube foundry buyables.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.grasshopper },
@@ -740,7 +699,7 @@ addLayer("cs", {
         },
         701: {
             title: "Updating Base",
-            unlocked() {return player.cs.scrapIndex == "code"},
+            unlocked: true,
             description: "Unlock a code experience effect that buffs factor base.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.code },
@@ -756,7 +715,7 @@ addLayer("cs", {
         },
         702: {
             title: "Sloppy Code",
-            unlocked() {return player.cs.scrapIndex == "code"},
+            unlocked: true,
             description: "Multiply mod gain by x1e15, but raise mod requirement by ^5.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.code },
@@ -772,7 +731,7 @@ addLayer("cs", {
         },
         703: {
             title: "Lazy Coding",
-            unlocked() {return player.cs.scrapIndex == "code"},
+            unlocked: true,
             description: "Idk man.<br>Heres ^1.1 mods<br>I guess.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.code },
@@ -788,7 +747,7 @@ addLayer("cs", {
         },
         801: {
             title: "Boosted Boosters",
-            unlocked() {return player.cs.scrapIndex == "dice"},
+            unlocked: true,
             description: "Multiply Dice score by x10.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.dice },
@@ -804,7 +763,7 @@ addLayer("cs", {
         },
         802: {
             title: "Truly Rigged",
-            unlocked() {return player.cs.scrapIndex == "dice"},
+            unlocked: true,
             description: "Booster dice always lands on the rigged option.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.dice },
@@ -820,7 +779,7 @@ addLayer("cs", {
         },
         803: {
             title: "Counted Challenges",
-            unlocked() {return player.cs.scrapIndex == "dice"},
+            unlocked: true,
             description: "Gain a challenge dice effect that boosts dice score.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.dice },
@@ -836,7 +795,7 @@ addLayer("cs", {
         },
         901: {
             title: "Undiluted fuel",
-            unlocked() {return player.cs.scrapIndex == "rocket"},
+            unlocked: true,
             description: "Improve infinity point ability formula.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.rocket },
@@ -852,7 +811,7 @@ addLayer("cs", {
         },
         902: {
             title: "Self-fueling boosts",
-            unlocked() {return player.cs.scrapIndex == "rocket"},
+            unlocked: true,
             description: "Auto-activate the last three rocket fuel abilities.<br>(With highest RF)",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.rocket },
@@ -868,7 +827,7 @@ addLayer("cs", {
         },
         903: {
             title: "Fueled Generators",
-            unlocked() {return player.cs.scrapIndex == "rocket"},
+            unlocked: true,
             description: "Square generator and charger buyables.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.rocket },
@@ -884,7 +843,7 @@ addLayer("cs", {
         },
         1001: {
             title: "Developed Dimensions",
-            unlocked() {return player.cs.scrapIndex == "antimatter"},
+            unlocked: true,
             description: "Raise dimension boost by ^10.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.antimatter },
@@ -900,7 +859,7 @@ addLayer("cs", {
         },
         1002: {
             title: "Denser Galaxies",
-            unlocked() {return player.cs.scrapIndex == "antimatter"},
+            unlocked: true,
             description: "Increase galaxy cap and triple galaxy effect base.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.antimatter },
@@ -916,7 +875,7 @@ addLayer("cs", {
         },
         1003: {
             title: "Galactic Replication",
-            unlocked() {return player.cs.scrapIndex == "antimatter"},
+            unlocked: true,
             description: "Automate Replicanti Galaxy gain.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.antimatter },
@@ -932,7 +891,7 @@ addLayer("cs", {
         },
         1101: {
             title: "Boundless Pollination",
-            unlocked() {return player.cs.scrapIndex == "infinity"},
+            unlocked: true,
             description: "Unlock the water pollinator.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.infinity },
@@ -948,7 +907,7 @@ addLayer("cs", {
         },
         1102: {
             title: "Infinitier Dimensions",
-            unlocked() {return player.cs.scrapIndex == "infinity"},
+            unlocked: true,
             description: "Double ID softcap base.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.infinity },
@@ -964,7 +923,7 @@ addLayer("cs", {
         },
         1103: {
             title: "Opposites Attract",
-            unlocked() {return player.cs.scrapIndex == "infinity"},
+            unlocked: true,
             description: "Improve IP Upgrade (4, 2).",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.infinity },
@@ -980,7 +939,7 @@ addLayer("cs", {
         },
         1201: {
             title: "Gilded Dust",
-            unlocked() {return player.cs.scrapIndex == "checkback"},
+            unlocked: true,
             description: "Improve coin dust effect formula.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.checkback },
@@ -996,7 +955,7 @@ addLayer("cs", {
         },
         1202: {
             title: "Altered Altar",
-            unlocked() {return player.cs.scrapIndex == "checkback"},
+            unlocked: true,
             description: "Multiply offering gain by x1.5.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.checkback },
@@ -1012,7 +971,7 @@ addLayer("cs", {
         },
         1203: {
             title: "Check Sooner",
-            unlocked() {return player.cs.scrapIndex == "checkback"},
+            unlocked: true,
             description: "Multiply checkback tickspeed by x1.1.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.checkback },
@@ -1028,7 +987,7 @@ addLayer("cs", {
         },
         1301: {
             title: "Reduced Exposure",
-            unlocked() {return player.cs.scrapIndex == "radioactive"},
+            unlocked: true,
             description: "Divide and extend the radiation softcap by /10.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.radioactive },
@@ -1044,7 +1003,7 @@ addLayer("cs", {
         },
         1302: {
             title: "Controlled Reactions",
-            unlocked() {return player.cs.scrapIndex == "radioactive"},
+            unlocked: true,
             description: "Reduce SD radiation usage by /5.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.radioactive },
@@ -1060,7 +1019,7 @@ addLayer("cs", {
         },
         1303: {
             title: "Non-ionizing Radiation",
-            unlocked() {return player.cs.scrapIndex == "radioactive"},
+            unlocked: true,
             description: "Slightly reduce the radiation softcap.",
             cost: new Decimal(1e9),
             currencyLocation() { return player.cs.scraps.radioactive },
@@ -1080,6 +1039,229 @@ addLayer("cs", {
     challenges: {},
     infoboxes: {},
     microtabs: {
+        scrap: {
+            "point": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.point.amount) + " <small>Point Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.point.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.point.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts time cube effects by ^" + formatShort(player.cs.scraps.point.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.point.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "factor": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.factor.amount) + " <small>Factor Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.factor.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.factor.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Increases factor power effect softcap by +^" + formatShort(player.cs.scraps.factor.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.factor.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 201], ["upgrade", 202], ["upgrade", 203],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "prestige": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.prestige.amount) + " <small>Prestige Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.prestige.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.prestige.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Increases prestige effect softcaps by +^" + formatShort(player.cs.scraps.prestige.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.prestige.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 301], ["upgrade", 302], ["upgrade", 303],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "tree": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.tree.amount) + " <small>Tree Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.tree.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.tree.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Increases tree effect softcap by +^" + formatShort(player.cs.scraps.tree.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.tree.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 401], ["upgrade", 402], ["upgrade", 403],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "grass": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.grass.amount) + " <small>Grass Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.grass.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.grass.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Increases grass effect softcaps by +^" + formatShort(player.cs.scraps.grass.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.grass.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 501], ["upgrade", 502], ["upgrade", 503],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "grasshopper": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.grasshopper.amount) + " <small>Grasshopper Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.grasshopper.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.grasshopper.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Increases grasshopper effect softcaps by +^" + formatShort(player.cs.scraps.grasshopper.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.grasshopper.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 601], ["upgrade", 602], ["upgrade", 603],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "code": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.code.amount) + " <small>Code Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.code.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.code.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts mod gain by ^" + formatShort(player.cs.scraps.code.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.code.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 701], ["upgrade", 702], ["upgrade", 703],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "dice": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.dice.amount) + " <small>Dice Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.dice.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.dice.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts tier 1 booster dice effects by ^" + formatShort(player.cs.scraps.dice.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.dice.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 801], ["upgrade", 802], ["upgrade", 803],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "rocket": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.rocket.amount) + " <small>Rocket Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.rocket.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.rocket.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts rocket fuel effects by ^" + formatShort(player.cs.scraps.rocket.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.rocket.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "antimatter": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.antimatter.amount) + " <small>Antimatter Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.antimatter.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.antimatter.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts antimatter softcap base by x" + formatShort(player.cs.scraps.antimatter.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.antimatter.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "infinity": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.infinity.amount) + " <small>Infinity Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.infinity.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.infinity.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts base infinity point gain by ^" + formatShort(player.cs.scraps.infinity.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.infinity.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "checkback": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.checkback.amount) + " <small>Check Back Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.checkback.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.checkback.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts check back xp by x" + formatShort(player.cs.scraps.checkback.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.checkback.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+            "radioactive": {
+                content: [
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.radioactive.amount) + " <small>Radioactive Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.radioactive.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.radioactive.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts radiation gain by x" + formatShort(player.cs.scraps.radioactive.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.cs.scraps.radioactive.amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "8px"}],
+                        ]],
+                    ], {width: "530px", height: "60px"}],
+                    ["style-row", [
+                        ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303],
+                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                ]
+            },
+        },
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -1099,31 +1281,7 @@ addLayer("cs", {
                             }],
                         ], {width: "247px", height: "250px"}],
                         ["style-column", [
-                            ["style-column", [
-                                ["row", [
-                                    ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].amount) + " <small>" + CORE_SCRAP[player.cs.scrapIndex].name + "</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps[player.cs.scrapIndex].gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps[player.cs.scrapIndex].gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
-                                ]],
-                                ["row", [
-                                    ["raw-html", () => {return CORE_SCRAP[player.cs.scrapIndex].effect + format(player.cs.scraps[player.cs.scrapIndex].effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ["raw-html", () => {return player.cs.scraps[player.cs.scrapIndex].amount.gte(1e10) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
-                                ]],
-                            ], {width: "530px", height: "60px"}],
-                            ["style-row", [
-                                ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
-                                ["upgrade", 201], ["upgrade", 202], ["upgrade", 203],
-                                ["upgrade", 301], ["upgrade", 302], ["upgrade", 303],
-                                ["upgrade", 401], ["upgrade", 402], ["upgrade", 403],
-                                ["upgrade", 501], ["upgrade", 502], ["upgrade", 503],
-                                ["upgrade", 601], ["upgrade", 602], ["upgrade", 603],
-                                ["upgrade", 701], ["upgrade", 702], ["upgrade", 703],
-                                ["upgrade", 801], ["upgrade", 802], ["upgrade", 803],
-                                ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
-                                ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
-                                ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
-                                ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
-                                ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303],
-                            ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                            ["buttonless-microtabs", "scrap", {borderWidth: "0px"}],
                             ["style-row", [
                                 ["clickable", 1],
                                 ["style-row", [], () => {return !hasUpgrade("sma", 107) ? {width: "3px", height: "47px", backgroundColor: "#ababab"} : {display: "none !important"}}],
@@ -1153,7 +1311,7 @@ addLayer("cs", {
                 if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
                 return look
             }],
-            ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.in.infinityPoints.gte("2.71e3793") ? "[SOFTCAPPED<sup>2</sup>]" : player.in.infinityPoints.gte(2.5e193) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],

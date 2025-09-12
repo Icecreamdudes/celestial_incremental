@@ -2795,13 +2795,15 @@ addLayer("pet", {
             lore() { return "The poor spider ate too many paragon shards and this is what it looks like now." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to pre-power resources.<br>" +
-                    "x" + format(this.effect()[1]) + " to hex power.<br>"
+                    "x" + format(this.effect()[1]) + " to hex power.<br>" +
+                    "x" + format(this.effect()[2]) + " to realm essence."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2).add(1), // Pre-Power Resources
-                    getLevelableAmount(this.layer, this.id).mul(0.5).add(1), // Hex Power
+                    getLevelableAmount(this.layer, this.id).mul(6).max(1), // Pre-Power Resources
+                    getLevelableAmount(this.layer, this.id).mul(2).max(1), // Hex Power
+                    getLevelableAmount(this.layer, this.id).mul(0.5).add(1), // Realm Essence
                 ]
             },
             levelTooltip() { return "Costs Paragon Shards." },

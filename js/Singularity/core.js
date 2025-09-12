@@ -1036,7 +1036,7 @@ addLayer("co", {
         player.hpu.purity = new Decimal(0)
         player.hpu.totalPurity = new Decimal(0)
         player.hpu.purityGain = new Decimal(0)
-        player.hpu.purifierAssign = 1
+        if (!hasMilestone("s", 20)) player.hpu.purifierAssign = 1
         player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
 
@@ -1070,7 +1070,7 @@ addLayer("co", {
         player.hbl.blessAutomation = false
         player.hbl.minRefineInput = new Decimal(18)
         player.hbl.minRefine = new Decimal(18)
-        player.hbl.boosterDeposit = 0.05
+        if (!hasMilestone("s", 20)) player.hbl.boosterDeposit = 0.05
         player.hbl.boosterLevels[0] = new Decimal(0)
         player.hbl.boosterLevels[1] = new Decimal(0)
         if (!hasMilestone("s", 20)) player.hbl.boosterLevels[2] = new Decimal(0)
@@ -1632,7 +1632,7 @@ addLayer("co", {
                 if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
                 return look
             }],
-            ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.in.infinityPoints.gte("2.71e3793") ? "[SOFTCAPPED<sup>2</sup>]" : player.in.infinityPoints.gte(2.5e193) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["style-column", [

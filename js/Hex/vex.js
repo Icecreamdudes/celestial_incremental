@@ -22,8 +22,8 @@ addLayer("hve", {
 
         if (player.hve.vexTotal.lt(12)) player.hve.vexReq = Decimal.pow(1e6, player.hve.vexTotal).mul(1e60).div(player.hve.vexDiv)
         if (player.hve.vexTotal.gte(12)) player.hve.vexReq = Decimal.pow(1e12, player.hve.vexTotal).div(1e6).div(player.hve.vexDiv)
-        if (player.hcu.curses.lt(1e132)) player.hve.vexGain = player.hcu.curses.add(1).div(1e60).mul(player.hve.vexDiv).ln().div(new Decimal(1e6).ln()).add(1).sub(player.hve.vexTotal).floor()
-        if (player.hcu.curses.gte(1e132)) player.hve.vexGain = player.hcu.curses.add(1).mul(1e6).mul(player.hve.vexDiv).ln().div(new Decimal(1e12).ln()).add(1).sub(player.hve.vexTotal).floor()
+        if (player.hcu.curses.lt(1e120)) player.hve.vexGain = player.hcu.curses.add(1).div(1e60).mul(player.hve.vexDiv).ln().div(new Decimal(1e6).ln()).add(1).sub(player.hve.vexTotal).floor()
+        if (player.hcu.curses.gte(1e120)) player.hve.vexGain = player.hcu.curses.add(1).mul(1e6).mul(player.hve.vexDiv).ln().div(new Decimal(1e12).ln()).add(1).sub(player.hve.vexTotal).floor()
         if (player.hve.vexGain.lt(1)) player.hve.vexGain = new Decimal(0)
 
         player.hve.vexEffects = [new Decimal(0), new Decimal(1), new Decimal(1)]

@@ -376,12 +376,12 @@
             title: "Light Starmetal Upgrade VIII",
             unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
             description: "Number of dice sides is multiplied based on best depth 1 combo.",
-            cost: new Decimal("1111"),
+            cost: new Decimal("11111"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             effect() {
-                return player.ma.bestComboDepth1.div(10).add(1)
+                return player.ma.bestComboDepth1.mul(0.01).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {

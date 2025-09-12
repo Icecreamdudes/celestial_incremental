@@ -56,6 +56,37 @@ function miscCode() {
 }
 
 function updateStyles() {
+	// ===------   HIDE MENUS   ------=== //
+	player.hideMenu = false
+	if (player.tab == 'bigc') player.hideMenu = true
+	if (player.tab == 'revc') player.hideMenu = true
+	if (player.tab == 'c') player.hideMenu = true
+	if (player.ma.inBlackHeart) player.hideMenu = true
+
+	// ===------   CHANGE LAYER SIZE   ------=== //
+	const LAYERHOLDER = document.getElementById('layerHolder')
+	if (!player.startedGame || player.hideMenu) {
+		LAYERHOLDER.style.setProperty("top", "0", "important")
+		LAYERHOLDER.style.setProperty("left", "0", "important")
+		LAYERHOLDER.style.setProperty("width", "100%", "important")
+		LAYERHOLDER.style.setProperty("min-width", "100%", "important")
+		LAYERHOLDER.style.setProperty("height", "100%", "important")
+	} else {
+		if (window.innerWidth > 1250) {
+			LAYERHOLDER.style.setProperty("top", "0", "important")
+			LAYERHOLDER.style.setProperty("left", "400px", "important")
+			LAYERHOLDER.style.setProperty("width", "calc(100% - 400px)", "important")
+			LAYERHOLDER.style.setProperty("min-width", "calc(100% - 400px)", "important")
+			LAYERHOLDER.style.setProperty("height", "100%", "important")
+		} else {
+			LAYERHOLDER.style.setProperty("top", "377px", "important")
+			LAYERHOLDER.style.setProperty("left", "0", "important")
+			LAYERHOLDER.style.setProperty("width", "100%", "important")
+			LAYERHOLDER.style.setProperty("min-width", "100%", "important")
+			LAYERHOLDER.style.setProperty("height", "calc(100% - 452px)", "important")
+		}
+	}
+
 	// ===------   LAYER BACKGROUND   ------=== //
 	let layerBG = ""
 
@@ -154,7 +185,7 @@ function updateStyles() {
 			layerBG = "linear-gradient(90deg, #260b36, #0920b5)"
 			break;
 		case "ro": case "mi":
-			layerBG = "#3d3d3d"
+			layerBG = "radial-gradient(circle, #1d1738, #1e0d61)"
 			break;
 		case "au2":
 			layerBG = "#151230"
@@ -204,7 +235,7 @@ function updateStyles() {
     	    galaxyBackground.style.width = "100%";
 	        galaxyBackground.style.height = "100%";
         	galaxyBackground.style.overflow = "hidden";
-    	    galaxyBackground.style.zIndex = "-2222"; // Ensure it stays in the background
+    	    galaxyBackground.style.zIndex = "-2003"; // Ensure it stays in the background
 	        galaxyBackground.style.background = "radial-gradient(circle, #151230, #000000)"; // Galaxy gradient
         	document.body.appendChild(galaxyBackground);
 
@@ -240,7 +271,7 @@ function updateStyles() {
     	    embersBg.style.width = "100vw";
 	        embersBg.style.height = "100vh";
         	embersBg.style.pointerEvents = "none";
-    	    embersBg.style.zIndex = "-2220";
+    	    embersBg.style.zIndex = "-2002";
 	        embersBg.style.overflow = "hidden";
         	document.body.appendChild(embersBg);
 
@@ -292,7 +323,7 @@ function updateStyles() {
         	eclipse.style.left = "0";
     	    eclipse.style.width = "100vw";
 	        eclipse.style.height = "100vh";
-        	eclipse.style.zIndex = "-2221";
+        	eclipse.style.zIndex = "-2001";
     	    eclipse.style.pointerEvents = "none";
 	        eclipse.style.background = "radial-gradient(circle at 50% 40%, #222 0%, #111 40%, #000 70%, #000c 100%)";
         	eclipse.style.transition = "opacity 1s";
@@ -586,7 +617,7 @@ let changelog = `<h1>Changelog:</h1><br>
 
 		Bugfixes:<br>
 			- Fixed the darn AU1 bug.<br>
-			- I lost track lmao.<br>
+			- I lost track lmao.<br><br>
 
 	<h3>v1.6.1 - Bug Fixes and Balancing</h3><br>
 	(Contains all the hotfixes from the past week)<br>
@@ -986,6 +1017,7 @@ function addedPlayerData() { return {
 	uniTab: 1,
 	minUniTab: 1,
 	maxUniTab: 2,
+	hideMenu: true,
 }}
 
 // Display extra things at the top of the page
@@ -1117,9 +1149,17 @@ function fixOldSave(oldVersion){
 		if (player.sd.singularityPower.gte(1e300)) player.sd.singularityPower = new Decimal(1e300)
 		if (player.m.mods.gte(1e100)) player.m.mods = new Decimal(1e100)
 		if (player.pol.pollinators.gte(1e100)) player.pol.pollinators = new Decimal(1e100)
+		if (player.cb.level.gte(100000)) player.cb.level = new Decimal(100000)
+		if (player.cb.highestLevel.gte(100000)) player.cb.level = new Decimal(100000)
+		if (player.cb.XPBoost.gte(100000)) player.cb.XPBoost = new Decimal(100000)
+		if (player.cb.xp.gte(50000000)) player.cb.xp = new Decimal(50000000)
+		if (player.cb.totalxp.gte(2.23e12)) player.cb.totalxp = new Decimal(2.23e12)
+		if (player.ma.bestComboDepth1.gte(100)) player.ma.bestComboDepth1 = new Decimal(100)
+		if (player.ma.bestComboDepth2.gte(100)) player.ma.bestComboDepth2 = new Decimal(100)
+		if (player.ma.bestComboDepth3.gte(100)) player.ma.bestComboDepth3 = new Decimal(100)
 		player.cb.evolutionShards = player.cb.evolutionShards.floor()
 		player.cb.paragonShards = player.cb.paragonShards.floor()
-		player.re.realmEssence = player.hrm.realmEssence
+		player.hrm.realmEssence = player.re.halterEssence
 		for (let prop in player.ta.buyables) {
 			if (prop != 19 && prop != 39) {
 				if (getBuyableAmount("ta", prop).gt(tmp.ta.buyables[prop].purchaseLimit)) setBuyableAmount("ta", prop, tmp.ta.buyables[prop].purchaseLimit)
@@ -1143,6 +1183,9 @@ function fixOldSave(oldVersion){
 		for (let prop in player.fu.buyables) {
 			if (getBuyableAmount("fu", prop).gt(tmp.fu.buyables[prop].purchaseLimit)) setBuyableAmount("fu", prop, tmp.fu.buyables[prop].purchaseLimit)
 		}
+		setBuyableAmount("ma", 101, new Decimal(0))
+		setBuyableAmount("ma", 102, new Decimal(0))
+		setBuyableAmount("ma", 103, new Decimal(0))
 
 		setLevelableXP("pu", 101, new Decimal(player.le.punchcardsXP[0]))
 		setLevelableXP("pu", 201, new Decimal(player.le.punchcardsXP[1]))

@@ -38,7 +38,7 @@
 </head>
 <body onload="load()" onmousemove="updateMouse(event)">
 	<div id="app">
-		<div class="uiHolder" v-if="player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c' && !player.ma.inBlackHeart" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
+		<div class="uiHolder" v-if="!player.hideMenu" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
 			<div class="uniHolder">
 				<button class="uniButton" v-if="layerShown('i') && player.uniTab==1" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe=1"><span class="buttonText">1</span></button>
 				<button class="uniButton" v-if="layerShown('h') && player.uniTab==0" v-bind:style="constructUniButtonStyle('h') " onclick="player.universe=-666"><span class="buttonText">H</span></button>
@@ -180,6 +180,6 @@
 			<bg :layer="player.tab" ></bg>
 
 		</div>
-		<div class="layerBG" id="uniBG" v-if="player.startedGame && player.tab != 'bigc' && player.tab != 'revc' && player.tab != 'c'"></div>
+		<div class="layerBG" id="uniBG" v-if="player.startedGame && !player.hideMenu"></div>
 	</div>
 </body>

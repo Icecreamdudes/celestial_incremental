@@ -32,10 +32,11 @@ addLayer("s", {
         let onepersec = new Decimal(1)
 
         player.s.singularitiesToGet = new Decimal(1)
+        if (hasUpgrade("ma", 29)) player.s.singularitiesToGet = player.s.singularityPointsToGet.add(1).log(1e10).add(1).floor()
 
         if (player.in.infinityPoints.lt(2.5e193)) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.125).div(15000)
-        } else if (player.in.infinityPoints.lt(2.71e3793)) {
+        } else if (player.in.infinityPoints.lt("2.71e3793")) {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.05).mul(2.13e10)
         } else {
             player.s.singularityPointsToGet = player.in.infinityPoints.pow(0.02).mul(1.35e124)
@@ -403,7 +404,7 @@ addLayer("s", {
         },
         20: {
             requirementDescription: "<h3>60 Singularities",
-            effectDescription: "Keep IP related blessing boosters, NIP related jinxes, and graces on all resets.",
+            effectDescription: "Keep IP related blessing boosters, NIP related jinxes, and graces on all resets.<br>Also keep any hex Qol control values.",
             done() { return player.s.singularities.gte(60) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -513,7 +514,7 @@ addLayer("s", {
                 if (player.in.infinityPoints.gte(1e40)) {look.color = "white"} else {look.color = "gray"} 
                 return look
             }],
-            ["raw-html", () => {return player.s.singularityPointsToGet.gte(2.71e3793) ? "[SOFTCAPPED<sup>2</sup>]" : player.s.singularityPointsToGet.gte(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return player.in.infinityPoints.gte("2.71e3793") ? "[SOFTCAPPED<sup>2</sup>]" : player.in.infinityPoints.gte(2.5e193) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "(Highest: " + format(player.s.highestSingularityPoints) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],

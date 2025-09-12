@@ -111,9 +111,9 @@
             },
             style() {
                 if (getBuyableAmount('id', 1).lt(8)) {
-                    return { width: '75px', "min-height": '50px', borderRadius: '0px' }
+                    return { width: '80px', "min-height": '50px', borderRadius: '0px' }
                 } else {
-                    return { width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
+                    return { width: '80px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
                 }
             } 
         },
@@ -124,7 +124,7 @@
             onClick() {
                 player.id.dimMax = false
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
+            style: { width: '80px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
         },
     },
     bars: {},

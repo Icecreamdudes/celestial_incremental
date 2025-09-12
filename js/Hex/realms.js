@@ -28,7 +28,9 @@ addLayer("hrm", {
         player.hrm.realmEffect = Decimal.pow(1.5, player.hrm.realmCompletions)
 
         player.hrm.realmEssenceGain = Decimal.pow(1.35, player.hrm.realmCompletions).sub(1)
+        player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(levelableEffect("pet", 1106)[2])
         player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(buyableEffect("hrm", 6))
+        if (hasUpgrade("ma", 30)) player.hrm.realmEssenceGain = player.hrm.realmEssenceGain.mul(upgradeEffect("ma", 30))
 
         player.hrm.realmEssenceEffects = [new Decimal(1), new Decimal(1)]
         player.hrm.realmEssenceEffects[0] = Decimal.pow(2.5, player.hrm.realmEssence.add(1).log(6))
@@ -125,20 +127,20 @@ addLayer("hrm", {
         3: {
             costBase() { return new Decimal(100) },
             costGrowth() { return new Decimal(6) },
-            purchaseLimit() { return new Decimal(30) },
+            purchaseLimit() { return new Decimal(35) },
             currency() { return player.hrm.realmEssence},
             pay(amt) { player.hrm.realmEssence = this.currency().sub(amt) },
             effect(x) {
-                return getBuyableAmount(this.layer, this.id).mul(0.1)
+                return getBuyableAmount(this.layer, this.id).mul(0.02)
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() {return this.currency().gte(this.cost())},
             display() {
                 return "<h3>RE-3</h3>\n\
-                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/30)\n\
+                    (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/35)\n\
                     Increase IP Booster softcap exponent.\n\
-                    Currently: +" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
+                    Currently: +" + format(tmp[this.layer].buyables[this.id].effect, 2) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Realm Essence"
             },
             buy() {

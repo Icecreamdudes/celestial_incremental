@@ -165,7 +165,10 @@
         player.r.pentMilestone9Effect = [player.r.pent.pow(2).add(1), player.r.pent.pow(1.2).add(1)]
         if (player.r.pent.gt(12500)) {player.r.pentMilestone11Effect = Decimal.pow(100, player.r.pent.sub(12500).div(2500))} else {player.r.pentMilestone11Effect = new Decimal(1)}
         if (player.r.pent.gt(17500)) {player.r.pentMilestone13Effect = Decimal.pow(100, player.r.pent.sub(17500).div(2500))} else {player.r.pentMilestone13Effect = new Decimal(1)}
-        if (player.r.pent.gt(22500)) {player.r.pentMilestone15Effect = Decimal.pow(10, player.r.pent.sub(22500).div(2500))} else {player.r.pentMilestone15Effect = new Decimal(1)}
+        if (player.r.pent.gt(22500)) {
+            player.r.pentMilestone15Effect = Decimal.pow(10, player.r.pent.sub(22500).div(2500))
+            if (player.r.pent.gte(150000)) player.r.pentMilestone15Effect = Decimal.pow(10, player.r.pent.div(25000)).mul(1e45)
+        } else {player.r.pentMilestone15Effect = new Decimal(1)}
         player.r.pentMilestone18Effect = player.r.timeCubes.add(1).log(1000).div(10).add(1)
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
@@ -661,7 +664,11 @@
         },
         25: {
             requirementDescription: "<h3>Pent 22,500",
-            effectDescription() { return "Boosts singularity points based on pent above 22,500.<br>Currently: x" + format(player.r.pentMilestone15Effect) },
+            effectDescription() {
+                let str = "Boosts singularity points based on pent above 22,500.<br>Currently: x" + format(player.r.pentMilestone15Effect)
+                if (player.r.pent.gte(150000)) str = str.concat(" <small style='color:red'>[SOFTCAPPED]</small>")
+                return str
+            },
             done() { return player.r.pent.gte(22500) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 24) },
             style: { width: '800px', "min-height": '75px' },

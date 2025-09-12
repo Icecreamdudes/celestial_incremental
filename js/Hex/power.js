@@ -862,7 +862,7 @@ addLayer("hpw", {
         1062: {
             title: "Might F:2",
             unlocked() {return challengeCompletions("hrm", 16) >= 2},
-            description: "Multiply regular, broken, and alternative infinities by x10.",
+            description: "Gain 10% infinities per second.",
             branches: [1006],
             cost() {return new Decimal(2176782336)},
             canAfford() { return hasUpgrade("hpw", 1006)},
@@ -874,7 +874,7 @@ addLayer("hpw", {
         1063: {
             title: "Might F:3",
             unlocked() {return challengeCompletions("hrm", 16) >= 3},
-            description: "Increase replicanti mult by +3x.",
+            description: "Triple replicanti mult.",
             branches: [1006],
             cost() {return new Decimal(13060694016)},
             canAfford() { return hasUpgrade("hpw", 1006)},

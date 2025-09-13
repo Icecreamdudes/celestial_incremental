@@ -1157,7 +1157,7 @@
                     ["row", [["buyable", 11], ["clickable", 11]]],
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", () => { return "You are rolling a " + formatWhole(player.d.diceSides) + ' sided dice.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "You are rolling " + formatShortWhole(player.d.dice) + " " + formatShortWhole(player.d.diceSides) + ' sided dice.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Current rolls:<br>" + player.d.rollText + '.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "+" + formatWhole(player.d.gainedDicePointsDisplay) + ' DP.'}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],    
                     ], {width: "60%", backgroundColor: "#333333", border: "3px solid white", padding: "5px", borderRadius: "15px"}],

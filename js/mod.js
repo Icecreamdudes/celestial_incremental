@@ -103,7 +103,7 @@ function updateStyles() {
 			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
 			break;
 		case "po":
-			layerBG = "linear-gradient(45deg, #8a00a9, #0061ff)"
+			layerBG = "linear-gradient(45deg, #450054, #00307f)"
 			break;
 		case "t":
 			layerBG = "#02172f"

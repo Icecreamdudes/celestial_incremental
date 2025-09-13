@@ -93,7 +93,7 @@
         if (getLevelableBool("pu", 103)) player.dr.rankEffect = player.dr.rank.mul(0.7).add(1).pow(levelableEffect("pu", 103)[0])
         if (getLevelableBool("pu", 202)) player.dr.rankEffect = player.dr.rankEffect.pow(levelableEffect("pu", 202)[0])
         player.dr.rankReq = layers.dr.getRankReq()
-        if (player.pet.activeAbilities[0]) player.dr.rankReq = player.dr.rankReq.pow(1.4)
+        if (player.pet.activeAbilities[0]) player.dr.rankReq = player.dr.rankReq.pow(1.4).floor()
         if (!hasUpgrade("le", 14)) player.dr.ranksToGet = new Decimal(1)
 
 
@@ -125,7 +125,7 @@
         if (getLevelableBool("pu", 104)) player.dr.tierEffect = player.dr.tier.mul(0.8).add(1).pow(levelableEffect("pu", 104)[0])
         if (getLevelableBool("pu", 202)) player.dr.tierEffect = player.dr.tierEffect.pow(levelableEffect("pu", 202)[0])
         player.dr.tierReq = layers.dr.getTierReq()
-        if (player.pet.activeAbilities[0]) player.dr.tierReq = player.dr.tierReq.pow(1.4)
+        if (player.pet.activeAbilities[0]) player.dr.tierReq = player.dr.tierReq.pow(1.4).floor()
 
         if (!hasUpgrade("le", 15)) player.dr.tiersToGet = new Decimal(1)
         if (player.dr.rank.gte(player.dr.tierReq) && hasUpgrade("le", 15)) {
@@ -146,7 +146,7 @@
         if (getLevelableBool("pu", 105)) player.dr.tetrEffect = player.dr.tetr.add(1).pow(levelableEffect("pu", 105)[0])
         if (getLevelableBool("pu", 202)) player.dr.tetrEffect = player.dr.tetrEffect.pow(levelableEffect("pu", 202)[0])
         player.dr.tetrReq = layers.dr.getTetrReq()
-        if (player.pet.activeAbilities[0]) player.dr.tetrReq = player.dr.tetrReq.pow(1.4)
+        if (player.pet.activeAbilities[0]) player.dr.tetrReq = player.dr.tetrReq.pow(1.4).floor()
 
         if (!hasUpgrade("le", 18)) player.dr.tetrsToGet = new Decimal(1)
         if (player.dr.tier.gte(player.dr.tetrReq) && hasUpgrade("le", 18)) {
@@ -242,7 +242,7 @@
                     return "<h2>Reset dark celestial points, but rank up.</h2><br><h3>Req: " + format(player.dr.rankReq) + " Points<br><small style='color:red'>[SOFTCAPPED<sup>3</sup>]</small></h3>"
                 }
             },
-            canClick() { return player.du.points.gte(player.dr.rankReq) && !hasUpgrade("le", 16) },
+            canClick() { return player.du.points.gte(player.dr.rankReq) && player.dr.ranksToGet.gt(0) && !hasUpgrade("le", 16) },
             unlocked() { return true },
             onClick() {
                 player.dr.rank = player.dr.rank.add(player.dr.ranksToGet)
@@ -257,7 +257,7 @@
         },
         12: {
             title() { return "<h2>Reset dark celestial points and ranks, but tier up.</h2><br><h3>Req: " + formatWhole(player.dr.tierReq) + " Rank</h3>" },
-            canClick() { return player.dr.rank.gte(player.dr.tierReq) && !hasUpgrade("le", 19) },
+            canClick() { return player.dr.rank.gte(player.dr.tierReq) && player.dr.tiersToGet.gt(0) && !hasUpgrade("le", 19) },
             unlocked() { return true },
             onClick() {
                 player.dr.tier = player.dr.tier.add(player.dr.tiersToGet)
@@ -272,7 +272,7 @@
         },
         13: {
             title() { return "<h2>Reset dark celestial points, ranks, and tiers, but tetr up.</h2><br><h3>Req: " + formatWhole(player.dr.tetrReq) + " Tier</h3>" },
-            canClick() { return player.dr.tier.gte(player.dr.tetrReq) && !hasUpgrade("le", 21) },
+            canClick() { return player.dr.tier.gte(player.dr.tetrReq) && player.dr.tetrsToGet.gt(0) && !hasUpgrade("le", 21) },
             unlocked() { return true },
             onClick() {
                 player.dr.tetr = player.dr.tetr.add(player.dr.tetrsToGet)
@@ -288,7 +288,7 @@
         },
         14: {
             title() { return "<h2><small>Reset dark celestial points and previous rank content, but pent up.</small></h2><br><h3>Req: " + formatWhole(player.dr.pentReq) + " Tetr</h3>" },
-            canClick() { return player.dr.tetr.gte(player.dr.pentReq) },
+            canClick() { return player.dr.tetr.gte(player.dr.pentReq) && player.dr.pentsToGet.gt(0) },
             unlocked() { return getLevelableBool("pu", 207) },
             onClick() {
                 player.dr.pent = player.dr.pent.add(player.dr.pentsToGet)

@@ -322,18 +322,18 @@
         6: {
             title() { return "Spider" },
             description() {
-                return formatWhole(player.cb.evolutionShards) + "/100 Evolution Shards" +
-                "<br>"  + formatWhole(player.cb.paragonShards) + "/25 Paragon Shards" +
+                return formatWhole(player.cb.evolutionShards) + "/80 Evolution Shards" +
+                "<br>"  + formatWhole(player.cb.paragonShards) + "/20 Paragon Shards" +
                 "<br>"  + formatWhole(player.cb.XPBoost) + "/10,000 XPBoost"
             },
             canClick() {
-                return (player.cb.evolutionShards.gte(100) && player.cb.paragonShards.gte(25) && player.cb.XPBoost.gte(10000))
+                return (player.cb.evolutionShards.gte(80) && player.cb.paragonShards.gte(20) && player.cb.XPBoost.gte(10000))
             },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(-1)
 
-                player.cb.evolutionShards = player.cb.evolutionShards.sub(100)
-                player.cb.paragonShards = player.cb.paragonShards.sub(25)
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(80)
+                player.cb.paragonShards = player.cb.paragonShards.sub(20)
                 player.cb.XPBoost = player.cb.XPBoost.sub(10000)
 
                 player.ev.evolutionsUnlocked[6] = true
@@ -459,6 +459,7 @@
             progress() {
                 return player.cb.pityEvoCurrent.div(player.cb.pityMax)
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {
                 "background-color": "#d487fd",
             },
@@ -474,6 +475,7 @@
             progress() {
                 return player.cb.pityParaCurrent.div(player.cb.pityMax)
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {
                 "background-color": "#4C64FF",
             },
@@ -1718,6 +1720,7 @@ addLayer("ev4", {
             progress() {
                 return player.ev4.offerings.div(player.ev4.offeringReq)
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {
                 "background-color": "#f38004",
             },

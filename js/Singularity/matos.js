@@ -2673,7 +2673,7 @@
             title: "Kres Upgrade II",
             unlocked: true,
             description: "Kres' pet level boosts his strength and defense.",
-            cost: new Decimal("1000"),
+            cost: new Decimal("500"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -2741,7 +2741,7 @@
             title: "Old Formula",
             unlocked: true,
             description: "Buff the antimatter formula by ^20.",
-            cost: new Decimal("2000"),
+            cost: new Decimal("1000"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -2871,7 +2871,7 @@
             title: "New Formula",
             unlocked: true,
             description: "Singularity gain is boosted based on SP gain.",
-            cost: new Decimal("3500"),
+            cost: new Decimal("2000"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -2906,7 +2906,7 @@
             title: "Combo Consummation",
             unlocked: true,
             description: "Unlock combo milestones.",
-            cost: new Decimal("5000"),
+            cost: new Decimal("3500"),
             currencyLocation() { return player.ma },
             currencyDisplayName: "Common Matos Fragments",
             currencyInternalName: "commonMatosFragments",
@@ -3704,7 +3704,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', "background-color": "rgb(245, 255, 104)" }
+            style: {width: "275px", height: "150px", backgroundColor: "#f5ff68"},
         },
         202: {
             costBase() { return new Decimal(5) },
@@ -3738,7 +3738,7 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', "background-color": "rgb(245, 255, 104)" }
+            style: {width: "275px", height: "150px", backgroundColor: "#f5ff68"},
         },
         203: {
             costBase() { return new Decimal(5) },
@@ -3772,16 +3772,16 @@
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '275px', height: '150px', "background-color": "rgb(245, 255, 104)" }
+            style: {width: "275px", height: "150px", backgroundColor: "#f5ff68"},
         },
     },
     milestones: {
         101: {
             requirementDescription: "<h3>100 Depth 1 Combo",
-            effectDescription: "Keep 10% of highest Depth 1 combo",
+            effectDescription() {return "Keep " + formatWhole(player.ma.keptCombo[0].mul(100)) + "% of highest Depth 1 combo"},
             toggles: [["ma", "keepCombo1"]],
             done() { return player.ma.bestComboDepth1.gte(100) && hasUpgrade("ma", 31)},
-            style: {boxSizing: "border-box", width: '585px', height: "90px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "0px", marginBottom: "-5px"},
+            style: {boxSizing: "border-box", width: '585px', height: "95px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "0px", marginBottom: "-5px"},
         },
         102: {
             requirementDescription: "<h3>150 Depth 1 Combo",
@@ -3834,10 +3834,10 @@
 
         201: {
             requirementDescription: "<h3>100 Depth 2 Combo",
-            effectDescription: "Keep 10% of highest Depth 2 combo",
+            effectDescription() {return "Keep " + formatWhole(player.ma.keptCombo[1].mul(100)) + "% of highest Depth 2 combo"},
             toggles: [["ma", "keepCombo2"]],
             done() { return player.ma.bestComboDepth2.gte(100) && hasUpgrade("ma", 31)},
-            style: {boxSizing: "border-box", width: '585px', height: "90px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "0px", marginBottom: "-5px"},
+            style: {boxSizing: "border-box", width: '585px', height: "95px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "0px", marginBottom: "-5px"},
         },
         202: {
             requirementDescription: "<h3>150 Depth 2 Combo",
@@ -3890,10 +3890,10 @@
 
         301: {
             requirementDescription: "<h3>100 Depth 3 Combo",
-            effectDescription: "Keep 10% of highest Depth 3 combo",
+            effectDescription() {return "Keep " + formatWhole(player.ma.keptCombo[2].mul(100)) + "% of highest Depth 3 combo"},
             toggles: [["ma", "keepCombo3"]],
             done() { return player.ma.bestComboDepth3.gte(100) && hasUpgrade("ma", 31)},
-            style: {boxSizing: "border-box", width: '585px', height: "90px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "0px", marginBottom: "-5px"},
+            style: {boxSizing: "border-box", width: '585px', height: "95px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "0px", marginBottom: "-5px"},
         },
         302: {
             requirementDescription: "<h3>150 Depth 3 Combo",

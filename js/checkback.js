@@ -2367,9 +2367,8 @@ addLayer("cb", {
             progress() {
                 return player.cb.xp.div(player.cb.req)
             },
-            fillStyle: {
-                backgroundColor: "#094599",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#094599"},
             borderStyle: {
                 borderTop: "0px",
                 borderRadius: "0px 0px 10px 10px",

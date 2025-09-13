@@ -26,7 +26,7 @@
     },
     tooltip: "Boosters",
     branches: [["le", "#4f0694"]],
-    color: "black",
+    color: "#6e64c4",
     update(delta) {
         let onepersec = new Decimal(1)
 

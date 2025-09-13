@@ -263,7 +263,7 @@
         player.points = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -586,7 +586,7 @@
         },
         14: {
             requirementDescription: "<h3>Pent 5",
-            effectDescription() { return "Unlock mods and new grasshopper studies." },
+            effectDescription() { return "Unlock mods and new grasshopper studies, and start with 10 Tetr on resets." },
             done() { return player.r.pent.gte(5) },
             style: { width: '800px', "min-height": '75px' },
         },
@@ -812,8 +812,7 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

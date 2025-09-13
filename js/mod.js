@@ -594,15 +594,52 @@ let credits = `<h1>Credits:</h1><br>
 		-Art by Jtoh_Sc.<br>
 		-Testing by Nova and Piterpicher.<br>
 		-Bug Fixes by Tsanth and Forwaken.<br>
-		-Revamped Layout Concept by Seder3214.<br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.8 - The Hexing Revamp</h3><br>
+		Content:<br>
+			- Added Universe α: Hex.<br>
+			- Added Hex of Provenance.<br>
+			- Added Hex of Refinement.<br>
+			- Added Hex of Blessings.<br>
+			- Added Hex of Curses.<br>
+			- Added Hex of Power.<br>
+			- Added Hex of Realms.<br>
+			- Added Hex of Vexes.<br>
+			- Added Hex of Sacrifice.<br>
+			- Revamped the UI.<br>
+			(If you have any ideas on how to further improve it, suggest changes in the discord!)<br>
+			- Remade singularity core content.<br>
+			- Remade core scrap content.<br>
+			- Improved pollinator content.<br>
+			- Improved punchcard content.<br>
+			- Added a new punchcard.<br>
+			- Added a new eclipse black heart skill.<br><br>
+		Balancing:<br>
+			- Removed IP/NIP factors, realm mods, and realm essence.<br>
+			(These features were massive inflators, yet were quick and boring in functionality)<br>
+			- Point gain is more gradual now throughout singularity.<br>
+			- IP values are now lower, but more meaningful.<br>
+			- Mods now has buyables that buff AD and NIP, to keep them being meaningful later.<br>
+			- Pollinator values are no longer inflated.<br>
+			- Pollinator no longer greatly buffs golden grass and mods.<br>
+			- Pent milestones are now more spread out.<br>
+			- No longer unlock an extra OTF slot in singularity, instead permanently unlock hex.<br>
+			- Through the core revamp, all cores are now important in their own ways.<br>
+			- Made mutant spider be unlocked later in the game, to prevent confusion.<br>
+			- Buffed mutant spider effects, since it is now unlocked later in the game.<br><br>
+		Qol:<br>
+			- Core scrap automation can be unlocked from a starmetal alloy upgrade.<br>
+			- Added a starmetal alloy upgrade that multiplies DCP to improve early D1.<br>
+			- Added a dimboost reserve buyable to Tav.<br>
+			- Moved keeping 10 Tetr to Pent 5 milestone.<br>
+			- Changed all resource text to improve readability.<br>
+			- Probably more, I can't remember it all.<br><br>
+		Bugfixes:<br>
+			- Too many to even count.<br><br>
+
 	<h3>v1.7 - The Singularity Update Part III: Matos</h3><br>
-				- CONTAINS MAJOR SPOILERS FOR THE ENTIRE GAME. READ WITH CAUTION.<br>
-		<br>
-		<br>
-		<br>
 		Content:<br>
 			- Added Matos.<br>
 			- Added Black Heart depths 1, 2, and 3.<br>
@@ -616,12 +653,11 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added 3 new punchards.<br>
 			- Added 4 playable characters in the Black Heart.<br>
 			- A good amount of lore.<br>
-			- A lot of new music made by yours truly.<br>
+			- A lot of new music made by yours truly.<br><br>
 		Balancing:<br>
-			- A bit of balancing here and there, made the game easier.<br>
+			- A bit of balancing here and there, made the game easier.<br><br>
 		Qol:<br>
-			- I lost track lmao.<br>
-
+			- I lost track lmao.<br><br>
 		Bugfixes:<br>
 			- Fixed the darn AU1 bug.<br>
 			- I lost track lmao.<br><br>
@@ -751,6 +787,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Clarified that Dream Realm Mod Buyable 1 ignores softcaps.<br>
 			- Fixed Realm Mod Halter Boost's tab not having updated text.<br>
 			- Clarified that NIP Upgrade 4 unlocks new IP Upgrades.<br><br>
+
 	<h3>v1.5 - The Singularity Update Part II: Starmetal and Darkness</h3><br>
 		<br>
 		<br>
@@ -794,6 +831,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		Balancing: Changes to pet shop prices, XPBoost, and Realm Mods.<br>
 		Bugfixes: I lost track again lmao<br>
 		QoL: I lost track again lmao<br><br>
+
 	<h3>v1.3 - The Layout Update - with QoL</h3><br>
 		Content:<br>
 			- Added the Sidebar Layout.<br>
@@ -833,6 +871,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		???:<br>
 			- Continued work on the buyable code rework, layers improved this patch are hex, grass, AD, and ID.<br>
 			- As I said last patch, this also means the buy max buttons on those layers are subtab specific now.<br><br>
+
 	<h3>v1.2.1 - Softcaps and Inflation Squashing</h3><br>
 		Bugfixes:<br>
 			- Fixed Oil buy max buttons not loading correctly.<br>
@@ -868,6 +907,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Begun work on buyable code rework, current layers done are: Ranks, Factors, Prestige, Trees, Grasshoppers.<br>
 			- Since of this, all buy max buttons on those layers are subtab specific and not controlled by the main variable.<br>
 			- There was sadly not enough time to get to all layers, so hopefully more work on this can be done later.<br><br>
+
 	<h3>v1.2 - The Pet Update Part II: Epic Pets!!! :)</h3><br>
 		Content:<br>
 			- Added 3 new epic pets!!! (They are hard to get so good luck)<br>
@@ -880,6 +920,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- New song for check back by 150percent!!!<br><br>
 		Bugfixes: I lost track lmao<br><br>
 		QoL: I lost track again lmao<br><br>
+
 	<h3>v1.1.2 - Even More Bugfixes</h3><br>
 	 	Bugfixes:<br>
    			- Fixed Cante Quiz Questions breaking if the answer is negative.<br>
@@ -903,6 +944,7 @@ let changelog = `<h1>Changelog:</h1><br>
    			- Decreased the cost scaling of Grasshop Check Back Study II Upgrades to account for the increased cap.<br>
      		- Buffed the Daily XP Reward from the Insane Face evolution. (Decreased base, but now effected by multipliers)<br>
        		- Buffed the chances to gain paragon shards from XPBoosting. (B1 5% -> 10%, B2 20% -> 25%)<br><br>
+
 	<h3>v1.1.1 - Tons of Bugfixes</h3><br>
 	 	Bugfixes:<br>
    		- Fixed Big Crunch not working properly.<br>
@@ -944,6 +986,7 @@ let changelog = `<h1>Changelog:</h1><br>
 		- Buffed grass, rocket fuel, and ranks.<br>
 		- Changed some pet evolution requirements.<br>
 		- Made some challenges easier.<br><br>
+
 	<h3>v1.0</h3><br>
 		- Added Universe 1, Universe 2, and Alternate Universe 1.<br>
 		- Added Ranks, Tiers, Tetrs, Pents, Factors, Prestige, Trees, Grass, Grasshop, and Code Experience.<br>
@@ -1190,6 +1233,7 @@ function fixOldSave(oldVersion){
 		for (let prop in player.fu.buyables) {
 			if (getBuyableAmount("fu", prop).gt(tmp.fu.buyables[prop].purchaseLimit)) setBuyableAmount("fu", prop, tmp.fu.buyables[prop].purchaseLimit)
 		}
+		setBuyableAmount("sma", 12, new Decimal(getBuyableAmount("sma", 12).mul(2))),
 		setBuyableAmount("ma", 101, new Decimal(0))
 		setBuyableAmount("ma", 102, new Decimal(0))
 		setBuyableAmount("ma", 103, new Decimal(0))

@@ -203,7 +203,7 @@
                 player.cs.scraps[player.cs.scrapIndex].amount = new Decimal(0)
             },
             style() {
-                let look = {minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                let look = {width: "273px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
                 if (player.ma.matosDefeated) {
                     look.width = "800px"
                 } else if (hasUpgrade("sma", 107)) {

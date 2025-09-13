@@ -519,7 +519,7 @@
         },
         15: {
             requirementDescription: "<h3>6 Infinities",
-            effectDescription: "Keeps pent milestones and start with 10 Tetr on resets.",
+            effectDescription: "Keeps pent milestones.",
             done() { return player.in.infinities.gte(6) },
             style: { width: '800px', "min-height": '75px' },
         },

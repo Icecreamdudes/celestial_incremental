@@ -437,7 +437,7 @@ addLayer("s", {
         },
         2: {
             title: "Singularity Core",
-            body() { return "Matos, the celestial of machines discovered a way of controlling the power of singularity without being affected by it's negative properties. By extracting the power from singularities and concentrating them into a core. The power is protected by a layer of starmetal, which is a metal extracted from dying stars. However, the singularity core is still unstable. It needs a fuel source in order to be stabilized. With all three of these factors, a the power of singularities can be used through cores. Matos gave his cores to other celestials in order to make them stronger." },
+            body() { return "Matos, the celestial of machines discovered a way of controlling the power of singularity without being affected by it's negative properties. By extracting the power from singularities and concentrating them into a core. The power is protected by a layer of starmetal, which is a metal extracted from dying stars. However, the singularity core is still unstable. It needs a fuel source in order to be stabilized. With all three of these factors, a the power of singularities can be used through cores. Using these fueled cores, Matos made other celestials stronger." },
             unlocked() { return hasMilestone("s", 19) },      
         },
         3: {

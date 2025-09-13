@@ -22,14 +22,14 @@
     nodeStyle() {
         return {
             background: "linear-gradient(120deg,rgb(128, 24, 11) 0%,rgb(136, 6, 82) 100%)",
-            "background-origin": "border-box",
-            "border-color": "#000000",
-            "color": "#000000",
+            backgroundOrigin: "border-box",
+            borderColor: "#000000",
+            color: "#000000",
         };
     },
     tooltip: "Core Fragments",
-    branches: ["coa","cop"],
-    color: "rgb(51, 3, 31)",
+    branches: ["co"],
+    color: "#33031f",
     update(delta) {
         let onepersec = new Decimal(1)
     }, 

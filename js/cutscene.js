@@ -596,7 +596,8 @@
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 35) {
             player.c.cutscenes[34] = false
             player.tab = "ma"
-            player.subtabs["ma"]['stuff'] = 'Perks'
+            player.subtabs["ma"]['stuff'] = "Win"
+            player.ma.currentDepth = new Decimal(0)
             player.c.cutscenes[34] = false
         }
 

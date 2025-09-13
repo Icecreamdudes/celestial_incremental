@@ -110,6 +110,7 @@
         for (let prop in player.cs.scraps) {
             player.cs.scraps[prop].gain = Decimal.pow(1.15, player.co.cores[prop].level).sub(1)
             if (player.cs.scraps[prop].gain.gte(1000)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.div(1000).pow(0.1).mul(1000) // BASE SOFTCAP
+            if (player.ma.matosDefeated) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.add(1000)
 
             if (hasUpgrade("fu", 19)) player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(player.s.singularitiesEffect)
             player.cs.scraps[prop].gain = player.cs.scraps[prop].gain.mul(levelableEffect("pu", 204)[2])
@@ -202,8 +203,14 @@
                 player.cs.scraps[player.cs.scrapIndex].amount = new Decimal(0)
             },
             style() {
-                let look = {width: "273px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
-                if (hasUpgrade("sma", 107)) look.width = "550px"
+                let look = {minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                if (player.ma.matosDefeated) {
+                    look.width = "800px"
+                } else if (hasUpgrade("sma", 107)) {
+                    look.width = "550px"
+                } else {
+                    look.width = "273px"
+                }
                 if (!player.ev.evolutionsUnlocked[9]) {
                     look.color = "white"
                     look.backgroundColor = "#333"
@@ -1054,7 +1061,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 101], ["upgrade", 102], ["upgrade", 103],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "factor": {
@@ -1071,7 +1078,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 201], ["upgrade", 202], ["upgrade", 203],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "prestige": {
@@ -1088,7 +1095,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 301], ["upgrade", 302], ["upgrade", 303],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "tree": {
@@ -1105,7 +1112,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 401], ["upgrade", 402], ["upgrade", 403],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "grass": {
@@ -1122,7 +1129,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 501], ["upgrade", 502], ["upgrade", 503],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "grasshopper": {
@@ -1139,7 +1146,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 601], ["upgrade", 602], ["upgrade", 603],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "code": {
@@ -1156,7 +1163,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 701], ["upgrade", 702], ["upgrade", 703],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "dice": {
@@ -1173,7 +1180,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 801], ["upgrade", 802], ["upgrade", 803],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "rocket": {
@@ -1190,7 +1197,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 901], ["upgrade", 902], ["upgrade", 903],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "antimatter": {
@@ -1207,7 +1214,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 1001], ["upgrade", 1002], ["upgrade", 1003],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "infinity": {
@@ -1224,7 +1231,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 1101], ["upgrade", 1102], ["upgrade", 1103],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "checkback": {
@@ -1241,7 +1248,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 1201], ["upgrade", 1202], ["upgrade", 1203],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
             "radioactive": {
@@ -1258,7 +1265,7 @@
                     ], {width: "530px", height: "60px"}],
                     ["style-row", [
                         ["upgrade", 1301], ["upgrade", 1302], ["upgrade", 1303],
-                    ], {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}],
+                    ], () => {return !player.ma.matosDefeated ? {width: "378px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"} : {width: "748px", height: "130px", backgroundColor: "#3d3834", borderRadius: "15px", marginBottom: "10px"}}],
                 ]
             },
         },
@@ -1279,15 +1286,15 @@
                                 look.borderColor = CORE_STRENGTH[player.co.cores[player.cs.scrapIndex].strength].color
                                 return look
                             }],
-                        ], {width: "247px", height: "250px"}],
+                        ], () => {return !player.ma.matosDefeated ? {width: "247px", height: "250px"} : {display: "none !important"}}],
                         ["style-column", [
                             ["buttonless-microtabs", "scrap", {borderWidth: "0px"}],
                             ["style-row", [
                                 ["clickable", 1],
                                 ["style-row", [], () => {return !hasUpgrade("sma", 107) ? {width: "3px", height: "47px", backgroundColor: "#ababab"} : {display: "none !important"}}],
                                 ["clickable", 2]
-                            ], {width: "550px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"}],
-                        ], {width: "550px", height: "250px", borderLeft: "3px solid #ababab"}],
+                            ], () => {return !player.ma.matosDefeated ? {width: "550px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"} : {width: "800px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"}}],
+                        ], () => {return !player.ma.matosDefeated ? {width: "550px", height: "250px", borderLeft: "3px solid #ababab"} : {width: "800px", height: "250px"}}],
                     ], {width: "800px", height: "250px", backgroundColor: "#4f4b45", border: "3px solid #ababab", borderRadius: "15px 15px 0 0"}],
                     ["style-column", [
                         ["blank", "10px"],

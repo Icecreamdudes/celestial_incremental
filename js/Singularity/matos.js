@@ -748,38 +748,11 @@
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("BUT I CAN'T LET YOU GUYS CONTINUE", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
-                setTimeout(() => {
-                    ultimateAttackSequence();
-                }, 3000)
-                player.ma.attacksDone = player.ma.attacksDone.add(1)
+                    setTimeout(() => {
+                        ultimateAttackSequence();
+                    }, 3000)
+                    player.ma.attacksDone = player.ma.attacksDone.add(1)
                 }
-                setTimeout(() => {
-                    if (player.subtabs["ma"]["stuff"] == "Bullet Hell" && player.ma.currentCelestialiteType == 25) {
-                        player.ma.matosDefeated = true
-                        player.ma.inBlackHeart = false
-                        player.ma.matosFightActive = false
-                        for (let i = 0; i < player.ma.deadCharacters.length; i++) {
-                            player.ma.health[i] = player.ma.healthMax[i]
-                            player.ma.deadCharacters[i] = false
-                        }
-                        player.ma.fightingCelestialites = false
-                        player.ma.currentDepth = new Decimal(0)
-                        player.ma.combo = new Decimal(0)
-
-                        player.ma.attacksDone = new Decimal(0)
-                        player.ma.epsilonCelestialitesKilled = new Decimal(0)
-                        player.ma.omegaCelestialitesKilled = new Decimal(0)
-                        player.ma.motivationCount  = new Decimal(0)
-                        player.ma.matosFightActive = false
-
-                        player.ma.commonMatosFragments = player.ma.commonMatosFragments.add(Decimal.mul(700, player.ma.matosFragmentMult[0]))
-                        player.ma.rareMatosFragments = player.ma.rareMatosFragments.add(Decimal.mul(300, player.ma.matosFragmentMult[1]))
-                        player.ma.epicMatosFragments = player.ma.epicMatosFragments.add(Decimal.mul(50, player.ma.matosFragmentMult[2]))
-                        player.ma.legendaryMatosFragments = player.ma.legendaryMatosFragments.add(Decimal.mul(5, player.ma.matosFragmentMult[3]))
-
-                        player.subtabs["ma"]["stuff"] = "Win"
-                    }
-                }, 54000)
             }
         }
     },
@@ -1518,7 +1491,7 @@
             onClick() {},
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
-                player.ma.deadCharacters[3] == false ? look.backgroundColor = "#361e1e" : look.backgroundColor = "#b68c18"
+                !player.ma.deadCharacters[3] ? look.backgroundColor = "#5b460c" : look.backgroundColor = "#361e1e"
                 return look
             },
         },
@@ -2255,6 +2228,7 @@
             width: 200,
             height: 50,
             progress() {
+                if (player.ma.deadCharacters[0]) new Decimal(0)
                 return player.ma.health[0].div(player.ma.healthMax[0])
             },
             borderStyle: {borderRadius: "15px"},
@@ -2271,6 +2245,7 @@
             width: 200,
             height: 50,
             progress() {
+                if (player.ma.deadCharacters[1]) new Decimal(0)
                 return player.ma.health[1].div(player.ma.healthMax[1])
             },
             borderStyle: {borderRadius: "15px"},
@@ -2287,6 +2262,7 @@
             width: 200,
             height: 50,
             progress() {
+                if (player.ma.deadCharacters[2]) new Decimal(0)
                 return player.ma.health[2].div(player.ma.healthMax[2])
             },
             borderStyle: {borderRadius: "15px"},
@@ -2303,6 +2279,7 @@
             width: 200,
             height: 50,
             progress() {
+                if (player.ma.deadCharacters[3]) new Decimal(0)
                 return player.ma.health[3].div(player.ma.healthMax[3])
             },
             borderStyle: {borderRadius: "15px"},
@@ -4122,14 +4099,15 @@
                     ["style-column", [
                         ["raw-html", () => { return "Downside: You can no longer fuel cores, and all your cores are destroyed." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Unlocks: Core Fragments and Starmetal Essence." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                        ["blank", "25px"],
+                        ["blank", "15px"],
                         ["raw-html", () => { return "x2 to check back XP gain." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "x1.5 to XPBoost gain." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "x1e20 to golden grass." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "x5 to moonstone." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "x1e600 boost to infinity points." }, {color: "white", fontSize: "18px", fontFamily: "monospace" }],
                         ["raw-html", () => { return "x1e40 boost to singularity points." }, {color: "white", fontSize: "18px", fontFamily: "monospace" }],
-                        ["raw-html", () => { return "+1000 base radiation gain." }, {color: "white", fontSize: "18px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "+1,000 base radiation gain." }, {color: "white", fontSize: "18px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "+1,000 base core scrap gain." }, {color: "white", fontSize: "18px", fontFamily: "monospace" }],
                     ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #8a0e79 0%, #a80c33 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },

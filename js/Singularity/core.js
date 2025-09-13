@@ -147,7 +147,7 @@ addLayer("co", {
     }, // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() {
         if (!player.ma.matosDefeated) return "Co"
-        return "<s>CA</s>"
+        return "<s>Co</s>"
     }, // This appears on the layer's node. Default is the id with the first letter capitalized
     startData() { return {
         cores: {
@@ -1496,7 +1496,10 @@ addLayer("co", {
             },
         },
         1000: {
-            title: "<h1>Condense all of your power into a core.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3 style='font-size:'>(Singularity gain based on infinity points)</h3>",
+            title() {
+                if (player.ma.matosDefeated) return "<h1>Condense all your power into singularity points.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3>(Singularity gain based on infinity points)</h3>"
+                return "<h1>Condense all of your power into a core.<br><small>(Req: 1e40 infinity points)</small></h1><br><h3'>(Singularity gain based on infinity points)</h3>"
+            },
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked: true,
             onClick() {

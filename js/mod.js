@@ -162,22 +162,22 @@ function updateStyles() {
 			layerBG = "#204387"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
-		case "cof": case "sme":
+		case "cof":
 			if (!player.ma.matosDefeated) layerBG = "#260300"
-			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(168, 16, 49) 0%, rgb(117, 4, 4) 100%)"
+			if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			if (player.tab == "co" && player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)"
 			break;
-		case "sma":
+		case "sma": case "sme":
 			layerBG = "linear-gradient(120deg, #73752b 0%, #5f4d19 25%, #75303b 50%, #6a3075, 75%, #306775 100%)"
 			break;
 		case "ma": 
 			if (!player.ma.inBlackHeart) {
 				if (!player.ma.matosDefeated) layerBG = "#260300"
-				if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg,rgb(168, 16, 49) 0%, rgb(117, 4, 4) 100%)"
+				if (player.ma.matosDefeated) layerBG = "linear-gradient(-180deg, #540818 0%, #3a0202 100%)"
 			}
 			if (player.ma.inBlackHeart) layerBG = "black"
-			if (player.ma.currentDepth.eq(2)) layerBG = "linear-gradient(-180deg,rgb(114, 4, 85) 0%, rgb(37, 1, 33) 100%)"
-			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)"
+			if (player.ma.currentDepth.eq(2)) layerBG = "linear-gradient(-180deg, #720455 0%, #250121 100%)"
+			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": case "db": case "dv": case "pu":

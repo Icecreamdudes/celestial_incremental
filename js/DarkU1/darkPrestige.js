@@ -226,7 +226,7 @@
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
         },
         15: {
-            costBase() { return new Decimal(100) },
+            costBase() { return new Decimal(1000) },
             costGrowth() { return new Decimal(10) },
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.dp.prestigePoints},
@@ -240,6 +240,40 @@
             },
             display() {
                 return "which are multiplying grass value and capacity by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
+            },
+            buy(mult) {
+                if (mult != true && !hasUpgrade("dn", 11)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasUpgrade("dn", 11)) this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: { width: '275px', height: '150px', color: "white", backgroundColor: "#081733", borderColor: "#102e67" }
+        },
+        16: {
+            costBase() { return new Decimal(100) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.dp.prestigePoints},
+            pay(amt) { player.dp.prestigePoints = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return getLevelableBool("pu", 208) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Booster Req Divider"
+            },
+            display() {
+                return "which are dividing booster requirement by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
@@ -280,7 +314,7 @@
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
                     ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],
-                        ["dark-buyable", 14], ["dark-buyable", 15]], {maxWidth: "900px"}],
+                        ["dark-buyable", 14], ["dark-buyable", 16], ["dark-buyable", 15]], {maxWidth: "900px"}],
                 ]
             },
         },

@@ -25,20 +25,20 @@
     }},
     automate() {
         if (hasUpgrade("sma", 201)) {
-            buyUpgrade("le", 11)
-            buyUpgrade("le", 12)
-            buyUpgrade("le", 13)
-            buyUpgrade("le", 14)
-            buyUpgrade("le", 15)
-            buyUpgrade("le", 16)
-            buyUpgrade("le", 17)
-            buyUpgrade("le", 18)
-            buyUpgrade("le", 19)
-            buyUpgrade("le", 21)
-            buyUpgrade("le", 22)
-            buyUpgrade("le", 23)
-            buyUpgrade("le", 101)
-            buyUpgrade("le", 102)
+            buyUpgrade("le", 11, false)
+            buyUpgrade("le", 12, false)
+            buyUpgrade("le", 13, false)
+            buyUpgrade("le", 14, false)
+            buyUpgrade("le", 15, false)
+            buyUpgrade("le", 16, false)
+            buyUpgrade("le", 17, false)
+            buyUpgrade("le", 18, false)
+            buyUpgrade("le", 19, false)
+            buyUpgrade("le", 21, false)
+            buyUpgrade("le", 22, false)
+            buyUpgrade("le", 23, false)
+            buyUpgrade("le", 101, false)
+            buyUpgrade("le", 102, false)
         }
     },
     nodeStyle() {
@@ -399,6 +399,7 @@
         player.dp.buyables[13] = new Decimal(0)
         player.dp.buyables[14] = new Decimal(0)
         player.dp.buyables[15] = new Decimal(0)
+        player.dp.buyables[16] = new Decimal(0)
 
         player.dg.generators = new Decimal(0)
         player.dg.generatorsToGet = new Decimal(0)
@@ -470,6 +471,7 @@
         player.dp.buyables[13] = new Decimal(0)
         player.dp.buyables[14] = new Decimal(0)
         player.dp.buyables[15] = new Decimal(0)
+        player.dp.buyables[16] = new Decimal(0)
 
         player.dg.generators = new Decimal(0)
         player.dg.generatorsToGet = new Decimal(0)

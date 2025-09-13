@@ -254,12 +254,13 @@ addLayer("cb", {
 
         //automation
         for (let i = 0; i < player.cb.buttonAutomationTimersMax.length; i++) {
-            if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimersMax[i] = player.cb.buttonTimersMax[i].mul(10).div(player.cb.buttonAutomationAllocation[i].pow(0.75))
-            player.cb.buttonAutomationTimersMax[i] = player.cb.buttonAutomationTimersMax[i].div(buyableEffect("ma", 33))
-
+            if (player.cb.buttonAutomationAllocation[i].gt(0)) {
+                player.cb.buttonAutomationTimersMax[i] = player.cb.buttonTimersMax[i].mul(10).div(player.cb.buttonAutomationAllocation[i].pow(0.75))
+                player.cb.buttonAutomationTimersMax[i] = player.cb.buttonAutomationTimersMax[i].div(buyableEffect("ma", 33))
+            }
         }
         for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
-            if (player.cb.buttonAutomationTimers[i].gt(player.cb.buttonTimersMax[i].mul(10))) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimersMax[i]
+            if (player.cb.buttonAutomationTimers[i].gt(player.cb.buttonTimersMax[i].mul(10).div(buyableEffect("ma", 33)))) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimersMax[i]
             if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(onepersec.mul(delta))
 
             if (player.cb.buttonAutomationTimers[i].lt(0)) {
@@ -272,11 +273,13 @@ addLayer("cb", {
 
         //pet
         for (let i = 0; i < player.cb.petAutomationTimersMax.length; i++) {
-            if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimersMax[i] = player.cb.petButtonTimersMax[i].mul(25).div(player.cb.petAutomationAllocation[i].pow(0.75))
-            player.cb.petAutomationTimersMax[i] = player.cb.petAutomationTimersMax[i].div(buyableEffect("ma", 34))
+            if (player.cb.petAutomationAllocation[i].gt(0)) {
+                player.cb.petAutomationTimersMax[i] = player.cb.petButtonTimersMax[i].mul(25).div(player.cb.petAutomationAllocation[i].pow(0.75))
+                player.cb.petAutomationTimersMax[i] = player.cb.petAutomationTimersMax[i].div(buyableEffect("ma", 34))
+            }
         }
         for (let i = 0; i < player.cb.petAutomationTimers.length; i++) {
-            if (player.cb.petAutomationTimers[i].gt(player.cb.petButtonTimersMax[i].mul(25))) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimersMax[i]
+            if (player.cb.petAutomationTimers[i].gt(player.cb.petButtonTimersMax[i].mul(25).div(buyableEffect("ma", 34)))) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimersMax[i]
             if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimers[i].sub(onepersec.mul(delta))
 
             if (player.cb.petAutomationTimers[i].lt(0)) {

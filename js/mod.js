@@ -1211,7 +1211,7 @@ function fixOldSave(oldVersion){
 		setLevelableXP("pu", 301, new Decimal(player.le.punchcardsXP[14]))
 		setLevelableXP("pu", 302, new Decimal(player.le.punchcardsXP[15]))
 		setLevelableXP("pu", 207, new Decimal(player.le.punchcardsXP[16]))
-		setLevelableXP("pu", 208, new Decimal(player.le.punchcardsXP[17]))
+		setLevelableXP("pu", 109, new Decimal(player.le.punchcardsXP[17]))
 		setLevelableXP("pu", 303, new Decimal(player.le.punchcardsXP[18]))
 		setLevelableXP("pu", 304, new Decimal(player.le.punchcardsXP[19]))
 
@@ -1232,7 +1232,7 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pu", 301, new Decimal(player.le.punchcardsLevels[14]).sub(1).min(10))
 		setLevelableAmount("pu", 302, new Decimal(player.le.punchcardsLevels[15]).sub(1).min(10))
 		setLevelableAmount("pu", 207, new Decimal(player.le.punchcardsLevels[16]).sub(1).min(10))
-		setLevelableAmount("pu", 208, new Decimal(player.le.punchcardsLevels[17]).sub(1).min(10))
+		setLevelableAmount("pu", 109, new Decimal(player.le.punchcardsLevels[17]).sub(1).min(10))
 		setLevelableAmount("pu", 303, new Decimal(player.le.punchcardsLevels[18]).sub(1).min(10))
 		setLevelableAmount("pu", 304, new Decimal(player.le.punchcardsLevels[19]).sub(1).min(10))
 		

@@ -34,7 +34,10 @@
         if (player.db.boosters.gte(3)) player.db.boosterReq = Decimal.floor(Decimal.pow(6, player.db.boosters.pow(1.25).add(1)).mul(1e10)).floor()
         if (player.db.boosters.gte(7)) player.db.boosterReq = Decimal.floor(Decimal.pow(9, player.db.boosters.pow(1.4).add(1)).mul(1e10)).floor()
 
+        if (getLevelableBool("pu", 109)) player.db.boosterReq = player.db.boosterReq.mul(levelableEffect("pu", 109)[0])
+        if (getLevelableBool("pu", 109)) player.db.boosterReq = player.db.boosterReq.mul(levelableEffect("pu", 109)[1])
         if (getLevelableBool("pu", 208)) player.db.boosterReq = player.db.boosterReq.mul(levelableEffect("pu", 208)[0])
+        if (getLevelableBool("pu", 208)) player.db.boosterReq = player.db.boosterReq.mul(buyableEffect("dp", 16))
 
         player.db.boosterEffect = Decimal.pow(5, player.db.boosters)
 

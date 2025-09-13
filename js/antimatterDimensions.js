@@ -26,8 +26,7 @@
     }
     },
     automate() {
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyUpgrade("ad", 11)
             buyUpgrade("ad", 12)
             buyUpgrade("ad", 13)

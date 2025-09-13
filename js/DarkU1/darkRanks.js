@@ -116,7 +116,9 @@
             player.dr.rank = player.dr.rank.add(player.dr.ranksToGet)
         }
 
-        let tiersGain = player.dr.rank.mul(player.dr.tierDiv).div(5).pow(Decimal.div(20, 23)).floor()
+        let tiersGain = player.dr.rank
+        if (player.pet.activeAbilities[0]) tiersGain = tiersGain.pow(1/1.4)
+        tiersGain = tiersGain.mul(player.dr.tierDiv).div(5).pow(Decimal.div(20, 23)).floor()
 
         if (!hasUpgrade("sma", 11)) player.dr.tierEffect = player.dr.tier.mul(0.4).add(1).pow(1.1)
         if (hasUpgrade("sma", 11)) player.dr.tierEffect = player.dr.tier.mul(0.65).add(1).pow(1.15)
@@ -136,7 +138,9 @@
             player.dr.tier = player.dr.tier.add(player.dr.tiersToGet)
         }
 
-        let tetrGain = player.dr.tier.mul(player.dr.tetrDiv).div(4).pow(Decimal.div(25, 28)).floor()
+        let tetrGain = player.dr.tier
+        if (player.pet.activeAbilities[0]) tetrGain = tetrGain.pow(1/1.4)
+        tetrGain = tetrGain.mul(player.dr.tetrDiv).div(4).pow(Decimal.div(25, 28)).floor()
 
         player.dr.tetrEffect = player.dr.tetr.add(1).pow(1.2)
         if (getLevelableBool("pu", 105)) player.dr.tetrEffect = player.dr.tetr.add(1).pow(levelableEffect("pu", 105)[0])

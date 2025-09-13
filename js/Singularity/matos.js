@@ -62,6 +62,7 @@
         curseSpellDuration: new Decimal(0),
         energyBoostDuration: new Decimal(0),
         energyBoostSelected: new Decimal(0),
+        shieldDuration: new Decimal(0),
 
         //currencies
         commonMatosFragments: new Decimal(0),
@@ -186,7 +187,7 @@
             player.ma.healthMax[3] = player.ma.eclipseStats[1].add(50)
             player.ma.damage[3] = player.ma.eclipseStats[0].mul(0.04).add(1)
             player.ma.cooldown[3] = Decimal.div(5, player.ma.eclipseStats[2].mul(0.01).add(1))
-            //player.ma.cooldown2[3] = Decimal.div(15, player.ma.eclipseStats[2].mul(0.005).add(1))
+            player.ma.cooldown2[3] = Decimal.div(30, player.ma.eclipseStats[2].mul(0.008).add(1))
             //player.ma.cooldown3[3] = Decimal.div(30, player.ma.eclipseStats[2].mul(0.008).add(1))
         } else
         {
@@ -326,6 +327,7 @@
         player.ma.teamBuffDuration = player.ma.teamBuffDuration.sub(onepersec.mul(delta))
         player.ma.curseSpellDuration = player.ma.curseSpellDuration.sub(onepersec.mul(delta))
         player.ma.energyBoostDuration = player.ma.energyBoostDuration.sub(onepersec.mul(delta))
+        player.ma.shieldDuration = player.ma.shieldDuration.sub(onepersec.mul(delta))
         if (player.ma.currentCelestialiteType != 5 && player.ma.fightingCelestialites) player.ma.celestialiteTimer = player.ma.celestialiteTimer.sub(onepersec.mul(delta))
         if (player.ma.currentCelestialiteType == 5 && player.ma.fightingCelestialites) player.ma.respawnTimer = player.ma.respawnTimer.sub(onepersec.mul(delta))
 
@@ -362,24 +364,23 @@
                     if (player.ma.cursedCelestialite) {
                         // 30% chance to reflect damage to attacker
                         if (Math.random() < 0.3) {
-                            player.ma.health[character] = player.ma.health[character].sub(damage);
-                            logPrint(
-                                "<span style='color: hsl(308, 81.70%, 30.00%);'>Cursed celestialite reflects " +
-                                format(damage) +
-                                " damage back to " +
-                                player.ma.characterNames[character] +
-                                "! (Double curse lmao)</span>"
-                            );
+                            if (player.ma.shieldDuration.lte(0)) {
+                                player.ma.health[character] = player.ma.health[character].sub(damage)
+                                logPrint("<span style='color: #8b0e7a;'>Cursed celestialite reflects " + format(damage) + " damage back to " + player.ma.characterNames[character] + "! (Double curse lmao)</span>")
+                            } else {
+                                logPrint("<span style='color: #8b0e7a;'>Shield blocked reflective damage towards " + player.ma.characterNames[character] + ".</span>")
+                            }
                         }
                     }
                 }
-                player.ma.health[character] = player.ma.health[character].sub(damage);
-                if (player.ma.currentCelestialiteType != 25) { logPrint(
-                    "<span style='color: hsl(308, 81.70%, 30.00%);'>The " + player.ma.celestialiteNames[player.ma.currentCelestialiteType] + " Celestialite attacks " + player.ma.characterNames[character] + " for " +format(damage) + " damage."
-                ); }
-                if (player.ma.currentCelestialiteType == 25) { logPrint(
-                    "<span style='color:rgb(139, 14, 52);'>Matos attacks " + player.ma.characterNames[character] + " for " +format(damage) + " damage."
-                ); }
+                if (player.ma.shieldDuration.lte(0)) {
+                    player.ma.health[character] = player.ma.health[character].sub(damage);
+                    if (player.ma.currentCelestialiteType != 25) {logPrint("<span style='color: #8b0e7a'>The " + player.ma.celestialiteNames[player.ma.currentCelestialiteType] + " Celestialite attacks " + player.ma.characterNames[character] + " for " +format(damage) + " damage.")}
+                    if (player.ma.currentCelestialiteType == 25) {logPrint("<span style='color: #8b0e34'>Matos attacks " + player.ma.characterNames[character] + " for " +format(damage) + " damage.")}
+                } else {
+                    if (player.ma.currentCelestialiteType != 25) {logPrint("<span style='color: #8b0e7a'>Shield blocked damage towards " + player.ma.characterNames[character] + ".</span>")}
+                    if (player.ma.currentCelestialiteType == 25) {logPrint("<span style='color: #8b0e34'>Shield blocked damage towards " + player.ma.characterNames[character] + ".</span>")}
+                }
             }
             player.ma.celestialiteTimer = player.ma.celestialiteCooldown;
         }
@@ -407,14 +408,12 @@
                 for (let i = 0; i < player.ma.health.length; i++) {
                     if (!player.ma.deadCharacters[i]) {
                         let explosionDmg = player.ma.healthMax[i].mul(explosionPercent);
-                        player.ma.health[i] = player.ma.health[i].sub(explosionDmg);
-                        logPrint(
-                            "<span style='color:rgb(238, 135, 0);'>Explosion! " +
-                            player.ma.characterNames[i] +
-                            " takes " +
-                            format(explosionDmg) +
-                            " damage!</span>"
-                        );
+                        if (player.ma.shieldDuration.lte(0)) {
+                            player.ma.health[i] = player.ma.health[i].sub(explosionDmg)
+                            logPrint("<span style='color: #ee8700;'>Explosion! " + player.ma.characterNames[i] + " takes " + format(explosionDmg) + " damage!</span>")
+                        } else {
+                            logPrint("<span style='color: #ee8700;'>Shield blocked explosive damage towards " + player.ma.characterNames[i] + ".</span>")
+                        }
                     }
                 }
             }
@@ -493,7 +492,6 @@
             player.ma.shieldCelestialite = false
             player.ma.shieldHealth = new Decimal(0)
             player.ma.shieldMaxHealth = new Decimal(0)
-
         }
         if (player.ma.currentCelestialiteType == 15 || player.ma.currentCelestialiteType == 16 || player.ma.currentCelestialiteType == 17) {
             player.ma.stealthyCelestialite = true
@@ -1186,14 +1184,12 @@
                 if (player.ma.cursedCelestialite) {
                     // 30% chance to reflect damage to attacker
                     if (Math.random() < 0.3) {
-                        player.ma.health[0] = player.ma.health[0].sub(damage);
-                        logPrint(
-                            "<span style='color: #910a27;'>Cursed celestialite reflects " +
-                            format(damage) +
-                            " damage back to " +
-                            player.ma.characterNames[0] +
-                            "!</span>"
-                        );
+                        if (player.ma.shieldDuration.lte(0)) {
+                            player.ma.health[0] = player.ma.health[0].sub(damage)
+                            logPrint("<span style='color: #8b0e7a;'>Cursed celestialite reflects " + format(damage) + " damage back to " + player.ma.characterNames[0] + "!</span>")
+                        } else {
+                            logPrint("<span style='color: #8b0e7a;'>Shield blocked reflective damage towards " + player.ma.characterNames[0] + ".</span>")
+                        }
                     }
                 }
             },
@@ -1224,14 +1220,12 @@
                 if (player.ma.cursedCelestialite) {
                     // 30% chance to reflect damage to attacker
                     if (Math.random() < 0.3) {
-                        player.ma.health[1] = player.ma.health[1].sub(damage);
-                        logPrint(
-                            "<span style='color: #710a91;'>Cursed celestialite reflects " +
-                            format(damage) +
-                            " damage back to " +
-                            player.ma.characterNames[1] +
-                            "!</span>"
-                        );
+                        if (player.ma.shieldDuration.lte(0)) {
+                            player.ma.health[1] = player.ma.health[1].sub(damage)
+                            logPrint("<span style='color: #8b0e7a;'>Cursed celestialite reflects " + format(damage) + " damage back to " + player.ma.characterNames[1] + "!</span>")
+                        } else {
+                            logPrint("<span style='color: #8b0e7a;'>Shield blocked reflective damage towards " + player.ma.characterNames[1] + ".</span>")
+                        }
                     }
                 }
             },
@@ -1262,14 +1256,12 @@
                 if (player.ma.cursedCelestialite) {
                     // 30% chance to reflect damage to attacker
                     if (Math.random() < 0.3) {
-                        player.ma.health[2] = player.ma.health[2].sub(damage);
-                        logPrint(
-                            "<span style='color: #065c19;'>Cursed celestialite reflects " +
-                            format(damage) +
-                            " damage back to " +
-                            player.ma.characterNames[2] +
-                            "!</span>"
-                        );
+                        if (player.ma.shieldDuration.lte(0)) {
+                            player.ma.health[2] = player.ma.health[2].sub(damage)
+                            logPrint("<span style='color: #8b0e7a;'>Cursed celestialite reflects " + format(damage) + " damage back to " + player.ma.characterNames[2] + "!</span>")
+                        } else {
+                            logPrint("<span style='color: #8b0e7a;'>Shield blocked reflective damage towards " + player.ma.characterNames[2] + ".</span>")
+                        }
                     }
                 }
             },
@@ -1304,24 +1296,26 @@
                 }
         
                 // Apply self-damage to Kres
-                player.ma.health[0] = player.ma.health[0].sub(selfDamage);
-                logPrint("<span style='color: #910a27;'>Kres takes " + format(selfDamage) + " self-damage from the Big Attack.</span>");
+                if (player.ma.shieldDuration.lte(0)) {
+                    player.ma.health[0] = player.ma.health[0].sub(selfDamage)
+                    logPrint("<span style='color: #910a27;'>Kres takes " + format(selfDamage) + " self-damage from the Big Attack.</span>")
+                } else {
+                    logPrint("<span style='color: #910a27;'>Shield blocks Kres's self-damage.</span>")
+                }
         
                 // Reset Kres' attack timer
                 player.ma.attackTimer2[0] = player.ma.cooldown2[0];
 
                 if (player.ma.cursedCelestialite) {
-                // 30% chance to reflect damage to attacker
-                if (Math.random() < 0.3) {
-                player.ma.health[0] = player.ma.health[0].sub(damage);
-                logPrint(
-                    "<span style='color: #910a27;'>Cursed celestialite reflects " +
-                    format(damage) +
-                    " damage back to " +
-                    player.ma.characterNames[0] +
-                    "!</span>"
-                );
-                }
+                    // 30% chance to reflect damage to attacker
+                    if (Math.random() < 0.3) {
+                        if (player.ma.shieldDuration.lte(0)) {
+                            player.ma.health[0] = player.ma.health[0].sub(damage)
+                            logPrint("<span style='color: #8b0e7a;'>Cursed celestialite reflects " + format(damage) + " damage back to " + player.ma.characterNames[0] + "!</span>")
+                        } else {
+                            logPrint("<span style='color: #8b0e7a;'>Shield blocked reflective damage towards " + player.ma.characterNames[0] + ".</span>")
+                        }
+                    }
                 }
             },
             style() {
@@ -1415,19 +1409,17 @@
                         if (player.ma.shieldHealth.lte(0) && player.ma.currentCelestialiteType == 25) logPrint(
                             `<span style='color: #065c19;'>Sel's turret attacks Matos for ${format(turretDamage)} damage.</span>`
                         );
-                                        if (player.ma.cursedCelestialite) {
-                        // 30% chance to reflect damage to attacker
-                        if (Math.random() < 0.3) {
-                        player.ma.health[2] = player.ma.health[2].sub(turretDamage);
-                        logPrint(
-                        "<span style='color: #065c19;'>Cursed celestialite reflects " +
-                        format(turretDamage) +
-                        " damage back to " +
-                        player.ma.characterNames[2] +
-                        "!</span>"
-                        );
-                }
-                }
+                        if (player.ma.cursedCelestialite) {
+                            // 30% chance to reflect damage to attacker
+                            if (Math.random() < 0.3) {
+                                if (player.ma.shieldDuration.lte(0)) {
+                                    player.ma.health[2] = player.ma.health[2].sub(turretDamage)
+                                    logPrint("<span style='color: #8b0e7a;'>Cursed celestialite reflects " + format(turretDamage) + " damage back to " + player.ma.characterNames[2] + "!</span>")
+                                } else {
+                                    logPrint("<span style='color: #8b0e7a;'>Shield blocked reflective damage towards " + player.ma.characterNames[2] + ".</span>")
+                                }
+                            }
+                        }
                     }
         
                     // Decrease the turret duration left
@@ -1544,6 +1536,26 @@
             },
             style() {
                 let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = "#b68c18"
+                return look
+            },
+        },
+        213: {
+            title() { return "Shield" },
+            tooltip() { return "Prevent all damage taken for 2s." },
+            canClick() { return !player.ma.deadCharacters[3] },
+            unlocked() { return (player.ma.attackTimer2[3].lte(0) || !this.canClick()) && hasUpgrade("sma", 222) && player.ma.selectedCharacters[3] },
+            onClick() {
+                logPrint("<span style='color: #b68c18;'>Eclipse shields the entire team!</span>")
+
+                player.ma.shieldDuration = new Decimal(2) // Set shield duration to 2 seconds.
+
+                // Reset Eclipse' shield timer
+                player.ma.attackTimer2[3] = player.ma.cooldown2[3];
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", borderRadius: "15px"}
+                if (player.ma.shieldDuration.gt(0)) {look.minHeight = "50px";look.borderRadius = "15px 15px 0 0"} else {look.minHeight = "100px";look.borderRadius = "15px"}
                 !this.canClick() ? look.backgroundColor = "#361e1e" : look.backgroundColor = "#b68c18"
                 return look
             },
@@ -2215,7 +2227,7 @@
             let gain3 = Decimal.add(1, getRandomInt(1)).mul(player.ma.matosFragmentMult[2])
             player.ma.epicMatosFragments = player.ma.epicMatosFragments.add(gain3)
             logPrint("<span style='color: #cb79ed;'>You gained " + formatWhole(gain3) + " epic matos fragments! (You have " + formatWhole(player.ma.epicMatosFragments) + ").")
-            if (player.ma.omegaCelestialitesKilled.lte(5) && !player.ma.matosToggle) {
+            if (player.ma.omegaCelestialitesKilled.lte(5) && player.ma.matosToggle) {
                 player.ma.omegaCelestialitesKilled = player.ma.omegaCelestialitesKilled.add(1)
                 logPrint("<span style='color: white;'>You killed " + formatWhole(player.ma.omegaCelestialitesKilled) + "/5 omega celestialites...")
                 if (player.ma.omegaCelestialitesKilled.eq(1)) {
@@ -2327,7 +2339,7 @@
             },
             borderStyle() {return player.ma.celestialiteTimer.gte(0) && player.ma.currentCelestialiteType != 5 ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
             baseStyle: {background: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "rgb(92, 92, 92)"},
+            fillStyle: {backgroundColor: "#5c5c5c"},
             textStyle: {userSelect: "none"},
             display() {
                 return "<h5>" + format(player.ma.shieldHealth) + "/" + format(player.ma.shieldMaxHealth) + "<h5> Shield HP.</h5>";
@@ -2588,6 +2600,38 @@
             textStyle: {userSelect: "none"},
             display() {
                 return "<h5>" + formatTime(player.ma.attackTimer[3]) + "/" + formatTime(player.ma.cooldown[3]) + "<h5></h5>";
+            },
+        },
+        eclipseAttack3: {
+            unlocked() { return !tmp.ma.clickables[213].unlocked }, 
+            direction: RIGHT,
+            width: 100,
+            height() { return player.ma.shieldDuration.gt(0) ? 50 : 100 },
+            progress() {
+                return player.ma.attackTimer2[3].div(player.ma.cooldown2[3]);
+            },
+            borderStyle() {return player.ma.shieldDuration.gt(0) ? {border: "0", borderRadius: "15px 15px 0 0"} : {border: "0", borderRadius: "15px"}},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#b68c18"},
+            textStyle: {userSelect: "none"},
+            display() {
+                return "<h5>" + formatTime(player.ma.attackTimer2[3]) + "/" + formatTime(player.ma.cooldown2[3]) + "<h5></h5>"; 
+            },
+        },
+        shieldBar: {
+            unlocked() { return player.ma.shieldDuration.gt(0) && hasUpgrade("sma", 222) && player.ma.selectedCharacters[3] }, 
+            direction: RIGHT,
+            width: 100,
+            height: 48,
+            progress() {
+                return player.ma.shieldDuration.div(2); // Divide by the total shield duration (2 seconds)
+            },
+            borderStyle: {border: "0", borderTop: "2px solid white", borderRadius: "0 0 15px 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#b68c18"},
+            textStyle: {userSelect: "none"},
+            display() {
+                return "<h5>" + formatTime(player.ma.shieldDuration) + "/2.00s<h5></h5>"; 
             },
         },
     },
@@ -4160,7 +4204,6 @@
                         ["style-column", [
                             ["raw-html", () => {return "Max Health: <h3>" + format(player.ma.healthMax[3])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", () => {return "Average Damage: <h3>" + format(player.ma.damage[3]) + "/s"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return "2nd Skill Cooldown: <h3>" + formatTime(player.ma.cooldown[3])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                             ["raw-html", () => {return hasUpgrade("ma", 28) ? "Health Regen: <h3>" + format(player.ma.healthRegen[3]) + "/s" : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                         ], {width: "250px", height: "104px", backgroundColor: "#241c04", borderBottom: "3px solid #8a0e79"}],
                         ["clickable", 19],
@@ -4199,7 +4242,18 @@
                             ["row", [["clickable", 101], ["clickable", 103]]],
                         ]],
                         ["blank", ["150px", "150px"]],
-                        ["row", [["clickable", 104]]],
+                        ["column", [
+                            ["blank", ["50px", "50px"]],
+                            ["clickable", 104],
+                            ["style-row", [
+                                ["raw-html", () => {return player.ma.airCelestialite ? "≋" : ""}, {color: "#ccc", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                ["raw-html", () => {return player.ma.regenCelestialite ? "♡" : ""}, {color: "#bb8888", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                ["raw-html", () => {return player.ma.stealthyCelestialite ? "☉" : ""}, {color: "#78866b", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                ["raw-html", () => {return player.ma.cursedCelestialite ? "✶" : ""}, {color: "#8b0e7a", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                ["raw-html", () => {return player.ma.explosiveCelestialite ? "✺" : ""}, {color: "#ee8700", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                            ], {width: "50px", height: "50px"}],
+                        ]],
                     ]],
                     ["blank", "10px"],
                     ["style-row", [
@@ -4247,6 +4301,9 @@
                                 ["row", [
                                     ["style-row", [["clickable", 211]], {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
                                     ["style-row", [["clickable", 212], ["bar", "eclipseAttack2"]], () => {return hasUpgrade("sma", 221) ? {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}],
+                                ]],
+                                ["row", [
+                                    ["style-column", [["clickable", 213], ["bar", "eclipseAttack3"], ["bar", "shieldBar"]], () => {return hasUpgrade("sma", 222) ? {width: "100px", height: "100px", border: "2px solid white", borderRadius: "17px", margin: "-1px"} : {display: "none !important"}}], 
                                 ]],
                             ], () => {return player.ma.selectedCharacters[3] ? {width: "215px"} : {display: "none !important"}}],
                         ], {width: "700px", height: "300px", backgroundColor: "rgba(0,0,0,0.2)", border: "2px solid white", borderRadius: "30px", margin: "5px"}],

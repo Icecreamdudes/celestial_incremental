@@ -93,6 +93,7 @@
         player.dp.buyables[13] = new Decimal(0)
         player.dp.buyables[14] = new Decimal(0)
         player.dp.buyables[15] = new Decimal(0)
+        player.dp.buyables[16] = new Decimal(0)
 
         player.dg.generatorPower = new Decimal(0)
     },

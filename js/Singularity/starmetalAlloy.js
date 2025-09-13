@@ -76,6 +76,7 @@
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+                player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1
@@ -464,7 +465,7 @@
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
             effect() {
-                return player.sma.eclipseShards.pow(0.5).div(20).add(1)
+                return player.sma.eclipseShards.add(1).log(10).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -493,6 +494,20 @@
             unlocked() { return hasUpgrade("sma", 201) && hasUpgrade("sma", 202) && hasUpgrade("sma", 203)},
             description: "Unlock Eclipse's second skill.",
             cost: new Decimal("20"),
+            currencyLocation() { return player.sma },
+            currencyDisplayName: "Eclipse Shards",
+            currencyInternalName: "eclipseShards",
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "#f5ff68"
+                return look
+            }
+        },
+        222: {
+            title: "Third Skill",
+            unlocked() { return hasUpgrade("sma", 221)},
+            description: "Unlock Eclipse's third skill.",
+            cost: new Decimal("50"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Eclipse Shards",
             currencyInternalName: "eclipseShards",
@@ -717,11 +732,17 @@
                 unlocked() { return player.pet.levelables[501][0].gte(1) },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards"}, {color: "white", fontSize: "30px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 201] ,["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 221]]],
+                    ["style-column", [
+                        ["blank", "5px"],
+                        ["row", [["upgrade", 201] ,["upgrade", 202], ["upgrade", 203], ["upgrade", 204], ["upgrade", 205]]],
+                        ["blank", "5px"],
+                        ["style-row", [], {width: "800px", height: "3px", backgroundColor: "#b29c47"}],
+                        ["blank", "5px"],
+                        ["row", [["upgrade", 221], ["upgrade", 222]]],
+                        ["blank", "5px"],
+                    ], {width: "800px", backgroundColor: "#222", border: "3px solid #b29c47", borderRadius: "20px"}],
                 ]
             },
         },

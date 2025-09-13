@@ -353,7 +353,7 @@ addLayer("pet", {
                 if (tmp.pet.levelables[layers.pet.levelables.index].pointValue == undefined) {
                     return ""
                 } else if (player.pet.petButtonTimer[layers.pet.levelables.index - 301].gt(0)) {
-                    return "<h3 style='font-size:7px'>Check back in<br>" + formatTime(player.pet.petButtonTimer[layers.pet.levelables.index - 301]) + "."
+                    return "<h3 style='font-size:10px;line-height:0.5'>Check back in<br>" + formatTime(player.pet.petButtonTimer[layers.pet.levelables.index - 301]) + "."
                 } else if (layers.pet.levelables.index == 302) {
                     return "<h3>Roll for<br>Pet Points!"
                 } else {
@@ -526,6 +526,7 @@ addLayer("pet", {
             onClick () {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+                player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1

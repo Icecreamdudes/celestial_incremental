@@ -1523,7 +1523,7 @@ player.c.cutsceneText = [
 'However, Nova needed a bigger team. He searched the multiverse for other celestials who wanted to join his cause. ',
 'He stumbled upon ???????, the ?????? Celestial.',
 '??????? also had a deep-rooted hatred for celestial hunters, so she joined the team.',
-'??????? became the first of three Novasent—Nova\'s three most trusted celestials.',
+'??????? became the first of three Novasent-Nova\'s three most trusted celestials.',
 ]
 },
 startCutscene31()
@@ -1537,7 +1537,7 @@ player.c.cutsceneText = [
 'One day, he decided to appear in every human\'s dream and introduce himself as their god.',
 'Soon after, the humans started to build large temples to worship Nova and the Novasent.',
 'These temples extracted superphysical values from the souls of those who worshipped Nova, and Nova gained immense power.',
-'However, one of these souls had superphysical power like none other…',
+'However, one of these souls had superphysical power like none other...',
 ]
 },
 startCutscene32()

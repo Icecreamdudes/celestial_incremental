@@ -1243,7 +1243,7 @@ addLayer("le", {
         },
         6: {
             title: "Log 6",
-            body() { return "Log 6: We found more strange spherical devices, but these don't emit radiation. It emits a strange celestial energy to boost superphysical values. Strange… These devices must have been made by celestials to make them stronger. We don't see any celestial hunter brand markings on it, so it must have been made by celestials. We must do more investigations." },
+            body() { return "Log 6: We found more strange spherical devices, but these don't emit radiation. It emits a strange celestial energy to boost superphysical values. Strange... These devices must have been made by celestials to make them stronger. We don't see any celestial hunter brand markings on it, so it must have been made by celestials. We must do more investigations." },
             unlocked() { return player.le.punchcardIndex.eq(5) },
             style: {border: "2px solid #384166"},
         },

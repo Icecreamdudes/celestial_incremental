@@ -77,6 +77,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
+            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Singularity Upgrade II",
@@ -86,7 +87,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '150px', "min-height": '120px' },
+            style: {width: "160px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Singularity Upgrade III",
@@ -96,7 +97,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '150px', "min-height": '120px' },
+            style: {width: "134px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Singularity Upgrade IV",
@@ -109,8 +110,8 @@ addLayer("s", {
             effect() {
                 return player.s.singularityPoints.add(1).log(10).pow(5).add(1)
             },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
-            style: { width: '175px', "min-height": '120px' },
+            effectDisplay() { return formatShort(upgradeEffect(this.layer, this.id))+'x' }, // Add formatting to the effect
+            style: {width: "160px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Singularity Upgrade V",
@@ -120,7 +121,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '135px', "min-height": '120px' },
+            style: {width: "140px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Singularity Upgrade VI",
@@ -130,7 +131,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Singularity Upgrade VII",
@@ -140,7 +141,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Singularity Upgrade VIII",
@@ -150,7 +151,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Singularity Upgrade IX",
@@ -160,7 +161,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         20: {
             title: "Singularity Upgrade X",
@@ -170,7 +171,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Singularity Upgrade X",
@@ -180,7 +181,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Singularity Upgrade XI",
@@ -190,7 +191,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "Singularity Upgrade XII",
@@ -200,7 +201,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         24: {
             title: "Singularity Upgrade XIII",
@@ -210,7 +211,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         25: {
             title: "Singularity Upgrade XIV",
@@ -220,7 +221,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {
             title: "Singularity Upgrade XV",
@@ -230,7 +231,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         27: {
             title: "Singularity Upgrade XVI",
@@ -240,7 +241,7 @@ addLayer("s", {
             currencyLocation() { return player.s },
             currencyDisplayName: "Singularity Points",
             currencyInternalName: "singularityPoints",
-            style: { width: '125px', "min-height": '120px' },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -453,9 +454,11 @@ addLayer("s", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
+                    ["style-row", [
+                        ["upgrade", 11],["upgrade", 12],["upgrade", 13],["upgrade", 14],["upgrade", 15],["upgrade", 16],["upgrade", 17],
                         ["upgrade", 18],["upgrade", 19],["upgrade", 20],["upgrade", 21],["upgrade", 22],["upgrade", 23],
-                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27]], {maxWidth: "1000px"}],
+                        ["upgrade", 24],["upgrade", 25],["upgrade", 26],["upgrade", 27]
+                    ], {maxWidth: "800px"}],
                 ]
             },
             "Milestones": {

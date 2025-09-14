@@ -156,7 +156,11 @@
 
                 player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet)
             },
-            style: { border: "3px solid #0a0c19", width: '300px', "min-height": '120px', borderRadius: '15px', backgroundColor: "#191e40", color: "white" },
+            style() {
+                let look = {width: "300px", minHeight: "120px", color: "white", backgroundColor: "#191e40", border: "3px solid #0a0c19", borderRadius: "15px"}
+                if (this.canClick()) {look.backgroundColor = "#191e40";look.color = "white"} else {look.backgroundColor = "#bf8f8f";look.color = "black"}
+                return look
+            },
         },
         12: {
             title() { return "<h2>Make Rocket Parts" },
@@ -170,7 +174,11 @@
 
                 player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet)
             },
-            style: { border: "3px solid #0a0c19", width: '300px', "min-height": '120px', borderRadius: '15px', backgroundColor: "#191e40", color: "white"},
+            style() {
+                let look = {width: "300px", minHeight: "120px", color: "white", backgroundColor: "#191e40", border: "3px solid #0a0c19", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#191e40" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
         },
         13: {
             title() { return "<h2>Select Passenger" },

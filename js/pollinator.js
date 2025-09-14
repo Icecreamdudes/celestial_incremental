@@ -914,7 +914,7 @@ addLayer("pol", {
             ["raw-html", () => { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, {color: "#cb8e00", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => { return "(+" + format(player.pol.pollinatorsPerSecond) + "/s)" }, () => {
                 let look = {color: "#cb8e00", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                player.pol.pollinatorsPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                player.pol.pollinatorsPerSecond.gt(0) ? look.color = "#cb8e00" : look.color = "gray"
                 return look
             }],
             ["raw-html", () => { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],

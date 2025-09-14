@@ -242,6 +242,10 @@
         if (player.d.buyables[14].gt(player.d.diceSides.sub(player.d.buyables[22].mul(2)))) {
             player.d.buyables[14] = player.d.diceSides.sub(player.d.buyables[22].mul(2))
         }
+        if (player.d.dice.gt(24)) {
+            player.d.dice = new Decimal(24)
+            setBuyableAmount("d", 11, new Decimal(24))
+        }
 
         //----------------------------------------
 
@@ -1231,7 +1235,7 @@
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]
-                    ], {maxWidth: "565px", padding: "5px 0", backgroundColor: "#333", border: "3px solid #666", borderRadius: "20px"}],
+                    ], {maxWidth: "565px"}],
                 ]
             },
             "Challenge Debuffs": {

@@ -715,21 +715,21 @@
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", function () { return "Rank " + formatWhole(player.r.rank) + " (+" + formatWhole(player.r.ranksToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", function () { return "x" + format(player.r.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("p", 14) ? "Rank " + formatWhole(player.r.rank) + " (+" + formatWhole(player.r.ranksToGet) + ")" : "Rank " + formatWhole(player.r.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return "x" + format(player.r.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "75px"}],
                         ["clickable", 11],
                     ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", function () { return "Tier " + formatWhole(player.r.tier) + " (+" + formatWhole(player.r.tiersToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", function () { return "x" + format(player.r.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return hasUpgrade("p", 14) ? "Tier " + formatWhole(player.r.tier) + " (+" + formatWhole(player.r.tiersToGet) + ")" : "Tier " + formatWhole(player.r.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return "x" + format(player.r.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "75px"}],
                         ["clickable", 12],
                     ], () => {return hasUpgrade("i", 13) ? {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "0px"} : {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"}}],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", () => {return "Tetr " + formatWhole(player.r.tetr) + " (+" + formatWhole(player.r.tetrsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return hasUpgrade("p", 14) ? "Tetr " + formatWhole(player.r.tetr) + " (+" + formatWhole(player.r.tetrsToGet) + ")" : "Tetr " + formatWhole(player.r.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                             ["raw-html", () => {return "x" + format(player.r.tetrEffect) + " Points" }, () => {
                                 let look = {color: "white", fontFamily: "monospace"}
                                 if (hasUpgrade("p", 16)) {look.fontSize = "16px"} else {look.fontSize = "20px"}
@@ -751,14 +751,14 @@
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", function () { return "Pent " + formatWhole(player.r.pent) + " (+" + formatWhole(player.r.pentToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", function () { return "x" + format(player.r.pentEffect) + " Prestige Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", function () { return inChallenge("ip", 14) ? "/" + format(player.r.challengeIVEffect) + " Points" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return (hasUpgrade("i", 32) && !inChallenge("ip", 14)) ? "Pent " + formatWhole(player.r.pent) + " (+" + formatWhole(player.r.pentToGet) + ")" : "Pent " + formatWhole(player.r.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return "x" + format(player.r.pentEffect) + " Prestige Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return inChallenge("ip", 14) ? "/" + format(player.r.challengeIVEffect) + " Points" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 14],
                     ], {width: "800px", height: "100px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "2px solid white", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "<h3>Milestones" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["milestone", 11],
                     ["milestone", 12],
                     ["milestone", 13],

@@ -387,12 +387,12 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Rank " + formatWhole(player.dr.rank) + " (+" + formatWhole(player.dr.ranksToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return hasUpgrade("le", 14) ? "Rank " + formatWhole(player.dr.rank) + " (+" + formatWhole(player.dr.ranksToGet) + ")" : "Rank " + formatWhole(player.dr.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.rankPoints) + " Rank Points (+" + formatWhole(player.dr.rankPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.rankPointsEffect) + " Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.rankPoints) + " Rank Points (+" + formatWhole(player.dr.rankPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.rankPointsEffect) + " Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], {width: "399px", height: "45px", backgroundColor: "#03181b"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 11],
@@ -400,12 +400,12 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Tier " + formatWhole(player.dr.tier) + " (+" + formatWhole(player.dr.tiersToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return hasUpgrade("le", 15) ? "Tier " + formatWhole(player.dr.tier) + " (+" + formatWhole(player.dr.tiersToGet) + ")" : "Tier " + formatWhole(player.dr.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.tierPoints) + " Tier Points (+" + formatWhole(player.dr.tierPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tierPointsEffect) + " Rank Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.tierPoints) + " Tier Points (+" + formatWhole(player.dr.tierPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.tierPointsEffect) + " Rank Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], {width: "399px", height: "45px", backgroundColor: "#03181b"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 12],
@@ -413,12 +413,12 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Tetr " + formatWhole(player.dr.tetr) + " (+" + formatWhole(player.dr.tetrsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return hasUpgrade("le", 18) ? "Tetr " + formatWhole(player.dr.tetr) + " (+" + formatWhole(player.dr.tetrsToGet) + ")" : "Tetr " + formatWhole(player.dr.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.tetrPoints) + " Tetr Points (+" + formatWhole(player.dr.tetrPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tetrPointsEffect) + " Tier Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.tetrPoints) + " Tetr Points (+" + formatWhole(player.dr.tetrPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.tetrPointsEffect) + " Tier Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], () => {return getLevelableBool("pu", 207) ? {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px"} : {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px 0px 0px 13px"}}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 13],
@@ -426,12 +426,12 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Pent " + formatWhole(player.dr.pent) + " (+" + formatWhole(player.dr.pentsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.pentEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return false ? "Pent " + formatWhole(player.dr.pent) + " (+" + formatWhole(player.dr.pentsToGet) + ")" : "Pent " + formatWhole(player.dr.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.pentEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.pentPoints) + " Pent Points (+" + formatWhole(player.dr.pentPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.pentPointsEffect) + " Tetr Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.pentPoints) + " Pent Points (+" + formatWhole(player.dr.pentPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.pentPointsEffect) + " Tetr Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px 0px 0px 13px"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 14],

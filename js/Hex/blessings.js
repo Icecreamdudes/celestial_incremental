@@ -2,7 +2,7 @@ addLayer("hbl", {
     name: "Hex of Blessings",
     symbol: "Bl", // Decides what text appears on the node.
     tooltip: "Blessings", // Decides the nodes tooltip
-    nodeStyle: {background: "linear-gradient(140deg, #ffbf00 0%, #cc9800 100%)", backgroundOrigin: "borderBox"},
+    nodeStyle: {background: "linear-gradient(140deg, #ffbf00 0%, #cc9800 100%)", backgroundOrigin: "borderBox", borderColor: "#7f5f00"},
     color: "#ffbf00", // Decides the nodes color.
     branches: ["hre"], // Decides the nodes branches.
     startData() { return {

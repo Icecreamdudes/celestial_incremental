@@ -3,7 +3,7 @@ addLayer("hve", {
     name: "Hex of Vexes",
     symbol: "Ve", // Decides what text appears on the node.
     tooltip: "Vexes", // Decides the nodes tooltip
-    nodeStyle: {background: "linear-gradient(140deg, #808 0%, #707 100%)", backgroundOrigin: "borderBox"},
+    nodeStyle: {background: "linear-gradient(140deg, #808 0%, #707 100%)", backgroundOrigin: "borderBox", borderColor: "#404"},
     color: "#808", // Decides the nodes color.
     branches: ["hcu"], // Decides the nodes branches.
     startData() { return {

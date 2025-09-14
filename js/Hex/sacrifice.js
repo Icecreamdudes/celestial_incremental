@@ -3,7 +3,7 @@ addLayer("hsa", {
     symbol: "Sa", // Decides what text appears on the node.
     tooltip: "Sacrifice", // Decides the nodes tooltip
     color: "#fffdd0", // Decides the nodes color.
-    nodeStyle: {background: "linear-gradient(180deg, #fffdd0, #fdfff6)", borderColor: "#ccc"}, // Decides the nodes style, in CSS format.
+    nodeStyle: {background: "linear-gradient(180deg, #fffdd0, #fdfff6)", borderColor: "#7F7E68"}, // Decides the nodes style, in CSS format.
     branches: ["hpr"], // Decides the nodes branches.
     startData() { return {
         sacredEnergy: new Decimal(0),

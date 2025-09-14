@@ -24,6 +24,7 @@ const CORE_STRENGTH = [
 const CORE_INFO = {
     point: {
         name: "Point Core",
+        short: "points",
         color: "#eaf6f7",
         effect: [
             "Boost points based on itself: x",
@@ -33,6 +34,7 @@ const CORE_INFO = {
     },
     factor: {
         name: "Factor Core",
+        short: "factors",
         color: "#83cecf",
         effect: [
             "Boost factor power based on itself: x",
@@ -42,6 +44,7 @@ const CORE_INFO = {
     },
     prestige: {
         name: "Prestige Core",
+        short: "prestige",
         color: "#31aeb0",
         effect: [
             "Boost prestige points based on itself: x",
@@ -51,6 +54,7 @@ const CORE_INFO = {
     },
     tree: {
         name: "Tree Core",
+        short: "trees",
         color: "#0b6623",
         effect: [
             "Boost trees based on itself: x",
@@ -60,6 +64,7 @@ const CORE_INFO = {
     },
     grass: {
         name: "Grass Core",
+        short: "grass",
         color: "#119B35",
         effect: [
             "Boost grass based on itself: x",
@@ -69,6 +74,7 @@ const CORE_INFO = {
     },
     grasshopper: {
         name: "Grasshopper Core",
+        short: "grasshoppers",
         color: "#19e04d",
         effect: [
             "Boost grasshoppers based on itself: x",
@@ -78,6 +84,7 @@ const CORE_INFO = {
     },
     code: {
         name: "Code Core",
+        short: "code",
         color: "#1377BF",
         effect: [
             "Boost code experience based on itself: x",
@@ -87,6 +94,7 @@ const CORE_INFO = {
     },
     dice: {
         name: "Dice Core",
+        short: "dice",
         color: "#363636",
         effect: [
             "Boost dice points based on itself: x",
@@ -96,6 +104,7 @@ const CORE_INFO = {
     },
     rocket: {
         name: "Rocket Core",
+        short: "rockets",
         color: "#2f4f57",
         effect: [
             "Boost rocket fuel based on itself: x",
@@ -105,6 +114,7 @@ const CORE_INFO = {
     },
     antimatter: {
         name: "Antimatter Core",
+        short: "antimatter",
         color: "#0FFFCA",
         effect: [
             "Boost antimatter based on itself: x",
@@ -114,6 +124,7 @@ const CORE_INFO = {
     },
     infinity: {
         name: "Infinity Core",
+        short: "infinity",
         color: "#FFBF00",
         effect: [
             "Boost infinity points based on itself: x",
@@ -123,6 +134,7 @@ const CORE_INFO = {
     },
     checkback: {
         name: "Check Back Core",
+        short: "check back",
         color: "#094599",
         effect: [
             "Boost check back XP: x",
@@ -132,6 +144,7 @@ const CORE_INFO = {
     },
     radioactive: {
         name: "Radioactive Core",
+        short: "radioactivity",
         color: "#45ff17",
         effect: [
             "Boost singularity points: x",

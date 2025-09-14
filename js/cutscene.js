@@ -864,10 +864,10 @@
             '"If you can\'t remember anything about your identity, don\'t worry. You will remember eventually."',
             '"There are four of us here, and 5 dead group members that were killed. That makes you the tenth person to enter the Domain of Singularity. There is only one way out, and that is by defeating Matos by infiltrating his circuitry and destroying his heart. Defeating Matos will provide us with the technology to return home."',
             '"Matos is a celestial. An interdimensional being of immense power. Out of the 9 people that arrived here in the Domain of Singularity, only one person has ever been able to defeat a celestial. That\'s how powerful they are."',
-            '"We don\'t know why we were sent to this place. Since we have arrived here, we have been exploring this forest & trying to find an alternative exit. For decades, all the progress we have made was the discovery of two strange machines. Follow me."',
-            'You follow the man through the forest. After a short walk, you see two machines in front of you. One is labeled "Core Processor," and the other "Core Assembler".',
-            '"These machines are able to create and use Singularity Cores, which are a step closer to defeating Matos. Woah."',
-            "Suddenly, the machines shoot beams of energy. Light fills your entire field of vision. ",
+            '"We don\'t know why we were sent to this place. Since we have arrived here, we have been exploring this forest & trying to find an alternative exit. For decades, all the progress we have made was the discovery of a strange machine. Follow me."',
+            'You follow the man through the forest. After a short walk, you see a machine in front of you.',
+            '"This machine is able to refuel Singularity Cores, which can bring us a step closer to defeating Matos."',
+            "Suddenly, the machine shoots beams of energy. Light fills your entire field of vision. ",
             "You find yourself in the same black desert. You stare at your hands; the same 10 rings.",
         ]
     },
@@ -878,19 +878,19 @@
             "The Singularity Core shines with a dull, faint gray glow.",
             "Four people stand in front of you.",
             "It was the man from before, a woman with glowing eyes, a tall man wearing a metallic mask, and a humanoid being completely made out of smoke.",
-            '"This person can power the Cores... how fascinating", the woman remarks.',
+            '"This person can power the cores... how fascinating", the woman remarks.',
             '"I\'d like to introduce you to everyone here. I am Kres, the woman next to me is named Nav, the mask with the mask is named Sel, and the smoke creature is Eclipse," said the man as he observes the Singularity Core.',
             '"Eclipse does not speak, so we have given him that title," Sel replied. His voice is deep and gravelly.',
             '"We are the four people left alive in the Domain of Singularity. We need you to help us defeat Matos, the Celestial of Machinery," Nav explains.',
-            "You get up and walk to the Core. You notice that the core has a list of attributed superphysical values.",
-            "You enter in the schematics of your Singularity Core and prepare to return to the desert."
+            "You get up and walk to the core. You notice that the core has a list of attributed superphysical values.",
+            "You put another dead core into the machine, and prepare to return to the desert."
         ]
     },
     startCutscene16() {
         player.c.cutsceneText = [
-            "You rematerialize in the Domain of Singularity. The Core Assembler shakes vigorously and another Singularity Core rolls out of the front",
-            '"The more of these we make, the more weapons we have against Matos," Sel says as he inspects the newly made Core.',
-            '"Interesting... a core that glows with the essence of ' + /*player.coa.fuels[player.coa.nextCoreFuel]*/ + 's."',
+            "You rematerialize in the Domain of Singularity. The machine shakes vigorously and another Singularity Core rolls out of the front",
+            '"The more of these we re-awaken, the more weapons we have against Matos," Sel says as he inspects the newly fueled core.',
+            '"Interesting... a core that glows with the essence of ' + CORE_INFO[player.co.resetIndex].short + '."',
             "Sel's knowledge of SPVs outside of the Domain of Singularity surprises you.",
             '"How do you know what that is?" you ask.',
             '"I guess I should tell you a little bit about myself. Kres and I were celestial hunters before we ended up in this place. Each of these superphysical values have a \'Golden Standard\' attributed that all of us Hunters have to follow."',
@@ -905,8 +905,8 @@
     startCutscene17() {
         player.c.cutsceneText = [
             //WRITE CUTSCENE
-            "Another Core rolls out of the Core Assembler, but you notice something odd.",
-            "A greenish mist comes out of the Core, and you also notice the same greenish mist ooze out of the previous Cores you have made.",
+            "Another core rolls out of the machine, but you notice something odd.",
+            "A greenish mist comes out of the core, and you also notice the same greenish mist ooze out of the previous cores you have fueled.",
             'Your foresight tells you that this greenish mist is an SPV titled "Radiation."',
             "The feeling of the mist falling into your hands makes you feel uneasy.",
             "You don't let it get to your head, though. As a matter of fact, you try to make use of this substance.",
@@ -918,7 +918,7 @@
             "The green mist accumulates into a giant cloud that obscures the red sky.",
             '"What could this be?" Kres exclaims with concern.',
             '"I don\'t know. It seems as if it is the same kind of gas that Sel is made out of.", Nav replies.',
-            'The fourth Core pops out of the Core Assembler. Kres walks over to the Core and observes it closely.',
+            'The fourth core pops out of the machine. Kres walks over to the core and observes it closely.',
             '"Maybe this "Radiation" value can help us defeat Matos," Kres suggests.',
             '"Do you have any ideas?", Sel asks.',
             'You remember what Tav said. This ancient technology is meant to make Celestials stronger.',
@@ -936,7 +936,7 @@
             'You brace yourself for conflict, but a loud creaking sound comes from behind.',
             'When you turn around, you see a giant machine slowly walking towards the monolith. He quickly puts together a large spear using the parts of his body before sprinting',
             'This isn\'t good. A conflict while you\'re here would certainly be the end of you.',
-            'You sprint to the Core Assembler and grab all of the cores. You then stuff all of the cores',
+            'You grab all of your cores and prepare.',
             '"Whoever it is... I am requesting a challenge!"',
         ]
     },
@@ -1010,8 +1010,8 @@
     },
     startCutscene24() {
         player.c.cutsceneText = [
-            "You become overwhelmed by the large number of singularity cores that you are generating.",
-            'You ask the question, "So, how do we defeat Matos with all of these cores? At this point they are just taking up space. I don\'t think we can handle having all of these cores."',
+            "You become overwhelmed by the power now contained in your Singularity Cores.",
+            'You ask the question, "So, how do we defeat Matos with all of these cores? At this point it is a struggle to increase the power of these cores."',
             'Nav responds. "Well this is the closest we\'ve gotten so far. Before you arrived, we didn\'t even have access to these cores."',
             '"What if we find out ways to utilize the materials that these cores are made out of...", Kres Suggests.',
             'The group agrees to try that out, while Eclipse sits there and stares.',
@@ -1025,19 +1025,19 @@
     startCutscene25() {
         player.c.cutsceneText = [
             "As the lightning strikes, Sel deciphers the morse code.",
-            '"It says... "Five Primes. At the highest potential."", Sel says with a worried tone.', 
+            '"It says... "Currently faulty. Reach the highest potential."", Sel says with a worried tone.', 
             '"What does that mean?" Kres asks.',
             '"Honestly, I have no idea."',
             '"Is that what we need to do in order to defeat Matos?", you ask.',
             '"I\'m not sure, but it\'s certainly worth a shot.", Sel replies.',
-            '"Well, what does it mean by "Five Primes?", Nav asks.',
+            '"Well, what does it mean by "faulty?", Nav asks.',
             'Eclipse points at the sun, which is red, and vibrant.',
-            '"I think I know what it means. We need to find starmetal alloy. Then we can \"prime\" the core, by infusing the starmetal alloy into it.", Kres responds.',
+            '"I think I know what it means. We need to find starmetal alloy. Then we can \"strengthen\" the core, by infusing the starmetal alloy into it.", Kres responds.',
             '"These cores seem pretty ancient, so it would make sense for Matos to want them rejuvenated with fresh materials."',
             '"How do we even get to the sun? We don\'t have anything.", Nav asks.',
             '"We must extract the sun\'s energy and give it physical form to create starmetal alloy.", Kres replies.',
             '"I think I know how exactly I would do that...", you say.',
-            "You have an idea. Using superphysical power from universe 1, you can use it to funnel the sun's energy into the core assembler, which will produce starmetal alloy.",
+            "You have an idea. Using superphysical power from universe 1, you can use it to funnel the sun's energy into the machine, which will produce starmetal alloy.",
             "You tell the group your plan, and they agree to it.",
         ]
     },
@@ -1045,9 +1045,9 @@
         player.c.cutsceneText = [
             "You return to the Domain of Singularity, with starmetal alloy. The group is waiting for you.",
             '"So... this is what we need?" Kres asks.',
-            '"Yup. Seems like we can also try improving the core assembler with this alloy.", you reply.',
-            '"Guys... what if making all of these cores for Matos is a bad idea?" Nav asks.',
-            '"If he wants the strongest possible core, wouldn\'t that just make him more powerful?"',
+            '"Yup. Seems like we can also try improving the cores with this alloy.", you reply.',
+            '"Guys... what if fueling all of these cores for Matos is a bad idea?" Nav asks.',
+            '"If he wants the strongest possible cores, wouldn\'t that just make him more powerful?"',
             '"Hmm... I mean how else would we be able to escape?" Kres replies.',
             '"And if we defeat this celestial using it\'s own creation, that would be a good look as celestial hunters." Sel adds.',
             '"We have been here for years. Boss probably thinks we are dead. We must restore the hope of celestial hunters! We must make it out alive!" Kres exclaims.',
@@ -1217,7 +1217,7 @@
             '"Oh crap! We must get out of here now!", Sel exclaims.',
             'Eclipse starts to morph wings, and picks up you and your entire team using a gravitational force.',
             "You all ascend out of the hole, and you see the sky filled with superphysical energy.",
-            "You see thousands of explosions scatter the ground, and lights fill up the night sky.",
+            "You see 13 massive explosions scatter the ground, and lights fill up the night sky.",
             '"Those must be the singularity cores! They are exploding!" Nav exclaims.',
             '"Now that you think about it, how will we be able to escape this place?", Kres asks.',
             '"I think we must face Nova and the Novasent.", you say.',
@@ -1241,8 +1241,7 @@
             '"Here is your first and only hint: When the sun and moon aligns, the cards will show you the way."',
             'All of a sudden you return to the domain of singularity, and it appears to be destroyed beyond recognition.',
             'You wake up and find yourself sleeping on the ground. Nav and Sel are beside you.',
-            '"Everything is destroyed. Seems like there were singularity cores everywhere.", Nav says.',
-            "The core assembler is destroyed, and the core processor is nowhere to be found.",
+            '"Everything is destroyed. Seems like the machine was destroyed by the explosions too.", Nav says.',
             '"What do we do now?" Sel asks.',
             '"I guess we just get stronger.", You reply.'
         ]

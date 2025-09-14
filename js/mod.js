@@ -18,7 +18,7 @@
 		"Hall of Celestials/celestialHall.js", "Misc/settings.js", "Misc/stats.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/credits.js", "Ordinal/ordinal.js", "Ordinal/markup.js", "gem.js",
 		"Check Back/pet.js", "Singularity/starmetalAlloy.js", "DarkU1/darkU1.js","DarkU1/lightExtractor.js","DarkU1/darkRanks.js","DarkU1/darkPrestige.js", "DarkU1/boosters.js", "DarkU1/vaporizer.js",
 		"DarkU1/generators.js","DarkU1/darkGrass.js","DarkU1/normality.js","Singularity/matos.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", "Singularity/starmetalEssence.js",  
-		"legendaryPets.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "mining.js", "cutsceneNew.js"],
+		"legendaryPets.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "mining.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -33,7 +33,7 @@ let VERSION = {
 }
 
 let hotkey = `<h1>Hotkeys:</h1><br>
-		Maybe soon. (Removed for optimization with other stuff)<br>
+		Alt - Toggle music on/off<br>
 		`
 
 let credits = `<h1>Credits:</h1><br>
@@ -424,7 +424,7 @@ var doNotCallTheseFunctionsEveryTick = ["blowUpEverything", "startCutscene1","st
  "generateRadiationOutput",  "startCutscene19", "startCutscene20", "startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset", "normalityReset",
  "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28", "startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset", "generateSelection", "addGrass",
 "petButton7", "evoBanner", "paragonBanner", "gemReset", "generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32","startCutscene33","startCutscene34", "resetFightCooldown",
-"starReset", "legendarySummon", "generatePhase1Attack", "generatePhase2Attack","startCutscene35","startCutscene36","startCutscene37","startCutscene38","startCutscene39", ]
+"starReset", "legendarySummon", "generatePhase1Attack", "generatePhase2Attack","startCutscene35","startCutscene36","startCutscene37","startCutscene38","startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath"]
 
 function getStartPoints(){
     return new Decimal(modInfo.initialStartPoints)

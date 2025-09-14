@@ -9,6 +9,9 @@ addLayer("i", {
         unlocked: true,
 
         PreOTFMult: new Decimal(1),
+
+        cutsceneInput: new Decimal(0),
+        cutsceneInputAmount: new Decimal(0),
     }
     },
     automate() {
@@ -100,7 +103,7 @@ addLayer("i", {
             if (options.newMenu == false) player.universe = 0.6
             player.musuniverse = 0.6
         }
-        if (player.tab == "i" || player.tab == "u1u" || player.tab == "u1t" || player.tab == "u1l"  || player.tab == "h" || player.tab == "r" || player.tab == "f" || player.tab == "p" || player.tab == "t" || player.tab == "g"
+        if (player.tab == "i" || player.tab == "u1u" || player.tab == "u1t" || player.tab == "u1l"  || player.tab == "u1c"  || player.tab == "h" || player.tab == "r" || player.tab == "f" || player.tab == "p" || player.tab == "t" || player.tab == "g"
           || player.tab == "pe" || player.tab == "pol" || player.tab == "gh" || player.tab == "rf" || player.tab == "de" || player.tab == "m" || player.tab == "d" || player.tab == "rm" ||
         player.tab == "re" || player.tab == "fa" ) {
             if (options.newMenu == false) player.universe = 1
@@ -183,9 +186,17 @@ addLayer("i", {
                     if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
                     if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
                 } //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
+                if (player.fi.inBattle)
+                {
+                    if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10);
+                }
             }
         } else if (player.musuniverse == 0.5 && options.musicToggle) {
-            playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
+            if (!player.fi.inBattle) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
+            if (player.fi.inBattle)
+            {
+            if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10);
+            }
         } else if (player.musuniverse == 0.6 && options.musicToggle) {
             //playAndLoopAudio("music/mining.mp3", options.musicVolume/10);
         } else if (player.musuniverse == -0.5 && options.musicToggle) {
@@ -259,6 +270,21 @@ addLayer("i", {
             if (cutsceneID == 54) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 55) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
             if (cutsceneID == 56) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 57) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 58) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 59) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 60) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 61) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 62) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 63) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 65) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 66) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+            if (cutsceneID == 69) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+            if (cutsceneID == 70) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 71) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
+            if (cutsceneID == 72) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
         }
         if (window.cinematicCutsceneActive && options.musicToggle)
         {
@@ -285,6 +311,10 @@ addLayer("i", {
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
 
         //----------------------------------------
+
+        //cutscene
+        player.i.cutsceneInputAmount = player.i.cutsceneInput.floor()
+        if (player.i.cutsceneInput.lt(0)) player.i.cutsceneInputAmount = new Decimal(0)
 
         // START OF CELESTIAL POINT MODIFIERS
         player.gain = new Decimal(1)
@@ -677,6 +707,17 @@ addLayer("i", {
             currencyInternalName: "points",
         },
     },
+    clickables: {
+        11: {
+            title() { return "<h2>Replay Cutscene" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.c.cutscene[player.i.cutsceneInput] = true
+            },
+            style: { width: '300px', "min-height": '60px' },
+        },
+    },
     buyables: {},
     milestones: {},
     challenges: {},
@@ -734,6 +775,30 @@ addLayer("i", {
                     ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
                     ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
                     ["blank", "25px"],
+                ],
+            },
+            "Cutscene Rewatch": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current Cutscene ID: " + formatWhole(player.i.cutsceneInput) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [
+                    ["text-input", "cutsceneInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        height: "48px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+                    ["clickable", 11],
+                    ]],
                 ],
             },
             "Portal": {
@@ -825,3 +890,16 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         }
     });
 }
+    document.addEventListener('keydown', function(event) {
+        if (event.altKey && options.toggleHotkey) {
+            if (!options.musicToggle) 
+            {
+                options.musicToggle = true
+                doPopup("milestone", "Music is toggled on.", "Milestone Gotten!", 3, tmp[layer].color)
+            } else
+            {
+                options.musicToggle = false
+                doPopup("milestone", "Music is toggled off.", "Milestone Gotten!", 3, tmp[layer].color)
+            }
+        }
+    });

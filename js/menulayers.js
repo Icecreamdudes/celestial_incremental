@@ -147,6 +147,51 @@ addLayer("u1l", {
     ],
     layerShown() { return false }
 })
+addLayer("u1c", {
+    name: "u1c", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "U1C", // This appears on the layer's node. Default is the id with the first letter capitalized
+    row: 1,
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+    }},
+    automate() {},
+    nodeStyle() {},
+    tooltip: "Upgrades",
+    color: "#eaf6f7",
+    branches: ["branch"],
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
+    tabFormat: [
+        ["layer-proxy", ["i", [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current Cutscene ID: " + formatWhole(player.i.cutsceneInput) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [
+                    ["text-input", "cutsceneInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        height: "48px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+                    ["clickable", 11],
+                    ]],
+        ]]]
+    ],
+    layerShown() { return false }
+})
 addLayer("u1t", {
     name: "u1t", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "U1T", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -479,8 +524,8 @@ addLayer("a1s", {
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap starts at <h3>" + format(player.cp.replicantiSoftcap3Start) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap3Start) ? "Third softcap multiplies replicanti time requirement by <h3>x" + format(player.cp.replicantiSoftcap3Effect) + "</h3>." : ""}, { "color": "#cc2121", "font-size": "20px", "font-family": "monospace" }],
             ["blank", "25px"],
-            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap starts at <h3>" + format(player.cp.replicantiSoftcap4Start) + "</h3>." : ""}, { "color": "#541313", "font-size": "20px", "font-family": "monospace" }],
-            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap raises replicanti mult by <h3>^" + format(player.cp.replicantiSoftcap4Effect) + "</h3>." : ""}, { "color": "#541313", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap starts at <h3>" + format(player.cp.replicantiSoftcap4Start) + "</h3>." : ""}, { "color": "#9c1c1c", "font-size": "20px", "font-family": "monospace" }],
+            ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap4Start) ? "Fourth softcap raises replicanti mult by <h3>^" + format(player.cp.replicantiSoftcap4Effect) + "</h3>." : ""}, { "color": "#9c1c1c", "font-size": "20px", "font-family": "monospace" }],
             ["blank", "25px"],
             ["raw-html", function () { return player.cp.replicantiPoints.gte(1e308) ? "Hardcap: <h3>" + format(player.cp.replicantiPointCap) + "</h3>." : ""}, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
         ]]]

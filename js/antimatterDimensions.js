@@ -13,9 +13,10 @@
         // Dimension Stuff
         dimensionAmounts: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         dimensionsPerSecond: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
+        dimensionBase: [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)],
         dimensionGrowths: [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),],
 
-        tickspeedMult: new Decimal(1.1),
+        tickspeedMult: new Decimal(1.13),
 
         //pause
         revCrunchPause: new Decimal(0),
@@ -25,8 +26,7 @@
     }
     },
     automate() {
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyUpgrade("ad", 11)
             buyUpgrade("ad", 12)
             buyUpgrade("ad", 13)
@@ -48,7 +48,8 @@
       },
 
     tooltip: "Antimatter Dimensions",
-    color: "rgba(30,181,22,1)",
+    color: "#1eb516",
+    branches: [],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -82,19 +83,25 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 37))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.id.infinityPowerEffect)
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.h.ragePowerEffect)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("m", 17))
 
         // SOFTCAP MODIFIER
         if (player.ad.antimatterPerSecond.gt(1e300) && !hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.1)
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18) && !hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(1, Decimal.div(player.ad.antimatterPerSecond.plus(1).log10(), 1000))).mul(1e300)
-        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18) && hasUpgrade("bi", 21)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(1, Decimal.div(player.ad.antimatterPerSecond.plus(1).log10(), 1100))).mul(1e300)
+        let base = new Decimal(1000)
+        if (hasUpgrade("bi", 21)) base = base.mul(1.1)
+        base = base.mul(buyableEffect("m", 15))
+        base = base.mul(player.cs.scraps.antimatter.effect)
+        let max = Decimal.div(1, Decimal.pow(1.05, player.ad.antimatterPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
+        if (player.ad.antimatterPerSecond.gt(1e300) && hasChallenge("ip", 18)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.div(1e300).pow(Decimal.div(base, player.ad.antimatterPerSecond.plus(1).log(10)).min(max)).mul(1e300)
 
         // SOFTCAP IGNORING MODIFIERS
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 37))
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("rm", 31))
         if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
-        if (player.cop.processedCoreFuel.eq(9)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.cop.processedCoreInnateEffects[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.co.cores.antimatter.effect[0])
+
+        // POWER MODIFIERS
+        if (hasUpgrade("hpw", 1052)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
@@ -104,9 +111,8 @@
         if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
         if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
-        if (hasUpgrade("bi", 113)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
-        if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(100)
-        player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("cs", 31))
+        if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
+        if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
 
         //----------------------------------------
 
@@ -133,7 +139,7 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.om.hexMasteryPointsEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 37))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)
-            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.h.ragePowerEffect)
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("m", 17))
 
             // SOFTCAP MODIFIER
             if (player.ad.dimensionsPerSecond[i].gt(1e300) && !hasChallenge("ip", 18)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.1)
@@ -142,11 +148,11 @@
 
             // CONTINUED REGULAR MODIFIERS
             if (hasUpgrade("ip", 43)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(upgradeEffect("ip", 43))
-            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("rm", 31))
             if (hasMilestone("fa", 12)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[1])
 
             // POWER MODIFIERS
-            if (player.cop.processedCoreFuel.eq(9)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.cop.processedCoreInnateEffects[1])
+            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.co.cores.antimatter.effect[1])
+            if (hasUpgrade("hpw", 1052)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(1.05)
         }
         
         // SPECIALIZED MODIFIERS
@@ -159,7 +165,7 @@
         if (hasUpgrade("ip", 13)) player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(upgradeEffect("ip", 13))
         player.ad.dimensionsPerSecond[6] = player.ad.dimensionsPerSecond[6].mul(levelableEffect("pet", 106)[1])
 
-        // ANTIMATTER DIMENSION COST SOFTCAP
+        // ANTIMATTER DIMENSION COST SOFTCAP GROWTH
         player.ad.dimensionGrowths = [new Decimal(1e3),new Decimal(1e4),new Decimal(1e5),new Decimal(1e6),new Decimal(1e8),new Decimal(1e10),new Decimal(1e12),new Decimal(1e15),]
         if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21) ) {
             player.ad.dimensionGrowths = [new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e120),new Decimal(1e15),]        
@@ -168,14 +174,23 @@
             player.ad.dimensionGrowths = [new Decimal(1e15),new Decimal(1e25),new Decimal(1e35),new Decimal(1e45),new Decimal(1e60),new Decimal(1e80),new Decimal(1e100),new Decimal(1e15),]        
         }
 
+        // ANTIMATTER DIMENSION COST SOFTCAP BASE
+        player.ad.dimensionBase = [new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
+        if (player.ad.antimatter.gt(1e300) && !hasUpgrade("bi", 21)) {
+            player.ad.dimensionBase = [new Decimal("1e-2175"), new Decimal("1e-2325"), new Decimal("1e-2355"), new Decimal("1e-2640"), new Decimal("1e-2580"), new Decimal("1e-2500"), new Decimal("1e-2460"), new Decimal(1e24)]
+        }
+        if (player.ad.antimatter.gt(1e300) && hasUpgrade("bi", 21)) {
+            player.ad.dimensionBase = [new Decimal("1e-1200"), new Decimal("1e-1575"), new Decimal("1e-1765"), new Decimal("1e-1905"), new Decimal("1e-1860"), new Decimal("1e-1940"), new Decimal("1e-2000"), new Decimal(1e24)]
+        }
+
         //----------------------------------------
 
         // START OF TICKSPEED MODIFIERS
-        player.ad.tickspeedMult = new Decimal(1.125)
+        player.ad.tickspeedMult = new Decimal(1.13)
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ad", 3))
         player.ad.tickspeedMult = player.ad.tickspeedMult.add(buyableEffect("ca", 22))
         if (hasUpgrade("ep1", 12)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(upgradeEffect("ep1", 12))
-        if (player.cop.processedCoreFuel.eq(9)) player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.cop.processedCoreInnateEffects[2])
+        player.ad.tickspeedMult = player.ad.tickspeedMult.mul(player.co.cores.antimatter.effect[2])
 
         //----------------------------------------
 
@@ -188,17 +203,7 @@
             layers.revc.reverseCrunch();
         }
     },
-    branches: [""],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.ad.dimMax == false },
@@ -206,7 +211,7 @@
             onClick() {
                 player.ad.dimMax = true
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px' }
+            style: { width: '80px', "min-height": '50px', borderRadius: '0px' }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -215,7 +220,7 @@
             onClick() {
                 player.ad.dimMax = false
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px' }
+            style: { width: '80px', "min-height": '50px', borderRadius: '0px' }
         },
         4: {
             title() { return "Max All" },
@@ -261,42 +266,39 @@
                 player.ad.revCrunchPause = new Decimal(6)
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
     },
-    dimBoostReset()
-    {
+    dimBoostReset() {
         player.ad.antimatter = new Decimal(10)
+        player.ad.antimatterPerSecond = new Decimal(0)
 
         player.ad.buyables[1] = new Decimal(0)
 
-        for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
             player.ad.dimensionAmounts[i] = new Decimal(0)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
             player.ad.buyables[11+i] = new Decimal(0)
         }
 
     },
-    galaxyReset()
-    {
+    galaxyReset() {
         player.ad.antimatter = new Decimal(10)
+        player.ad.antimatterPerSecond = new Decimal(0)
 
         player.ad.buyables[1] = new Decimal(0)
 
-        for (let i = 0; i < player.ad.dimensionAmounts.length; i++)
-        {
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
             player.ad.dimensionAmounts[i] = new Decimal(0)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
             player.ad.buyables[11+i] = new Decimal(0)
         }
 
-        player.ad.buyables[2] = new Decimal(0)
+        if (player.ad.buyables[2].gt(buyableEffect("ta", 38))) player.ad.buyables[2] = buyableEffect("ta", 38)
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "AD Upgrade I",
             unlocked() { return true },
             description: "Gives you 10 antimatter. Spend it wisely.",
@@ -304,13 +306,10 @@
             currencyLocation() { return player.ad },
             currencyDisplayName: "Antimatter",
             currencyInternalName: "antimatter",
-            onPurchase()
-            {
-                player.ad.antimatter = new Decimal(10)
-            }
+            onPurchase() {player.ad.antimatter = new Decimal(10)},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "AD Upgrade II",
             unlocked() { return true },
             description: "Antimatter boosts itself.",
@@ -322,6 +321,7 @@
                 return player.ad.antimatter.abs().plus(1).log10().add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "AD Upgrade III",
@@ -335,9 +335,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.25).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "AD Upgrade IV",
             unlocked() { return player.in.infinities.gte(2) },
             description: "Boosts grass based on antimatter.",
@@ -349,9 +349,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.3).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "AD Upgrade V",
             unlocked() { return player.in.infinities.gte(2) },
             description: "Boosts trees and leaves based on antimatter.",
@@ -363,9 +363,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.35).div(4).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "AD Upgrade VI",
             unlocked() { return player.in.infinities.gte(2) },
             description: "Boosts grasshoppers and fertilizer based on antimatter.",
@@ -377,9 +377,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.25).div(8).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "AD Upgrade VII",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Infinities boost antimatter dimensions.",
@@ -391,9 +391,9 @@
                 return player.in.infinities.pow(0.2).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "AD Upgrade VIII",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Boosts mods and lines of code based on antimatter.",
@@ -405,9 +405,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.15).div(12).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "AD Upgrade IX",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Increase factor effect base based on antimatter.",
@@ -419,9 +419,9 @@
                 return player.ad.antimatter.plus(1).log10().div(2500)
             },
             effectDisplay() { return "+" + format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "AD Upgrade X",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Boosts code experience based on antimatter.",
@@ -433,6 +433,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.1).div(20).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -465,7 +466,7 @@
             style: { width: '400px', height: '50px', borderRadius: '10px 0px 0px 10px'}
         },
         2: {
-            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : new Decimal(Infinity) },
+            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(6) : new Decimal(160) },
             currency() {
                 if (getBuyableAmount(this.layer, this.id).eq(0)) {
                     return player.ad.dimensionAmounts[3]
@@ -482,6 +483,8 @@
             effect(x) {
                 let mult = new Decimal(2).mul(buyableEffect("ca", 21))
                 if (hasUpgrade("ev2", 11)) mult = mult.mul(upgradeEffect("ev2", 11))
+
+                if (hasUpgrade("cs", 1001)) mult = mult.pow(10)
                 return mult.pow(getBuyableAmount(this.layer, this.id))
             },
             unlocked() { return true },
@@ -493,13 +496,7 @@
                 }
             },
             canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                if (hasChallenge("ip", 18)) {
-                    return "<h3>" + getBuyableAmount(this.layer, this.id) + " Dimension Boosts"
-                } else {
-                    return "<h3>" + getBuyableAmount(this.layer, this.id) + "/" + this.purchaseLimit() + " Dimension Boosts"
-                }
-            },
+            title() {return "<h3>" + getBuyableAmount(this.layer, this.id) + "/" + this.purchaseLimit() + " Dimension Boosts"},
             display() {
                 let dimtext = ""
                 if (getBuyableAmount(this.layer, this.id).eq(0)) {
@@ -526,10 +523,18 @@
         3: {
             costBase() { return new Decimal(1) },
             costMult() { return new Decimal(4) },
-            effectBase() {return new Decimal(0.01)},
-            purchaseLimit() { return !hasChallenge("ip", 18) ? new Decimal(1) : new Decimal(16) },
+            purchaseLimit() {
+                if (!hasChallenge("ip", 18)) return new Decimal(1)
+                if (!hasUpgrade("cs", 1002)) return new Decimal(16)
+                return new Decimal(80)
+            },
             currency() { return player.ad.dimensionAmounts[7]},
-            effect(x) { return this.effectBase().mul(player.ca.galaxyDustEffect).mul(getBuyableAmount(this.layer, this.id).add(player.ca.replicantiGalaxies)) },
+            effect(x) {
+                let eff = new Decimal(0.01)
+                eff = eff.mul(player.ca.galaxyDustEffect)
+                if (hasUpgrade("cs", 1002)) eff = eff.mul(3)
+                return eff.mul(getBuyableAmount(this.layer, this.id).add(player.ca.replicantiGalaxies))
+            },
             unlocked() { return true },
             cost(x) { return (x || getBuyableAmount(this.layer, this.id)).add(this.costBase()).mul(this.costMult())},
             canAfford() { return this.currency().gte(this.cost()) },
@@ -548,7 +553,7 @@
             style: { width: '300px', height: '75px', borderRadius: '10px'}
         },
         11: {
-            costBase() { return new Decimal(10) },
+            costBase() { return player.ad.dimensionBase[0] },
             costGrowth() { return player.ad.dimensionGrowths[0]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -578,7 +583,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         12: {
-            costBase() { return new Decimal(100) },
+            costBase() { return player.ad.dimensionBase[1] },
             costGrowth() { return player.ad.dimensionGrowths[1] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -608,7 +613,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         13: {
-            costBase() { return new Decimal(1e4) },
+            costBase() { return player.ad.dimensionBase[2] },
             costGrowth() { return player.ad.dimensionGrowths[2] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -638,7 +643,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         14: {
-            costBase() { return new Decimal(1e6) },
+            costBase() { return player.ad.dimensionBase[3] },
             costGrowth() { return player.ad.dimensionGrowths[3]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -668,7 +673,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         15: {
-            costBase() { return new Decimal(1e9) },
+            costBase() { return player.ad.dimensionBase[4] },
             costGrowth() { return player.ad.dimensionGrowths[4] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -698,7 +703,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         16: {
-            costBase() { return new Decimal(1e13) },
+            costBase() { return player.ad.dimensionBase[5] },
             costGrowth() { return player.ad.dimensionGrowths[5]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -728,7 +733,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         17: {
-            costBase() { return new Decimal(1e18) },
+            costBase() { return player.ad.dimensionBase[6] },
             costGrowth() { return player.ad.dimensionGrowths[6] },
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -758,7 +763,7 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
         18: {
-            costBase() { return new Decimal(1e24) },
+            costBase() { return player.ad.dimensionBase[7] },
             costGrowth() { return player.ad.dimensionGrowths[7]},
             currency() { return player.ad.antimatter},
             pay(amt) { player.ad.antimatter = this.currency().sub(amt) },
@@ -788,80 +793,75 @@
             style: { width: '175px', height: '50px', borderRadius: '10px'}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" }},
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]]],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
+                        ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]
+                    ], {maxWidth: "750px"}],
                 ]
-
             },
             "Dimensions": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["buyable", 1], ["clickable", 2], ["clickable", 3], ["clickable", 4]]],
                     ["blank", "25px"],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return "1st dimension (" + format(buyableEffect("ad", "11")) + "x): " + format(player.ad.dimensionAmounts[0]) + " (+" + format(player.ad.dimensionsPerSecond[0]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return "1st dimension (" + format(buyableEffect("ad", "11")) + "x): " + format(player.ad.dimensionAmounts[0]) + " (+" + format(player.ad.dimensionsPerSecond[0]) + "/s)"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 11],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return "2nd dimension (" + format(buyableEffect("ad", "12")) + "x): " + format(player.ad.dimensionAmounts[1]) + " (+" + format(player.ad.dimensionsPerSecond[1]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return "2nd dimension (" + format(buyableEffect("ad", "12")) + "x): " + format(player.ad.dimensionAmounts[1]) + " (+" + format(player.ad.dimensionsPerSecond[1]) + "/s)"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 12],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return "3rd dimension (" + format(buyableEffect("ad", "13")) + "x): " + format(player.ad.dimensionAmounts[2]) + " (+" + format(player.ad.dimensionsPerSecond[2]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return "3rd dimension (" + format(buyableEffect("ad", "13")) + "x): " + format(player.ad.dimensionAmounts[2]) + " (+" + format(player.ad.dimensionsPerSecond[2]) + "/s)"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 13],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return "4th dimension (" + format(buyableEffect("ad", "14")) + "x): " + format(player.ad.dimensionAmounts[3]) + " (+" + format(player.ad.dimensionsPerSecond[3]) + "/s)"}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return "4th dimension (" + format(buyableEffect("ad", "14")) + "x): " + format(player.ad.dimensionAmounts[3]) + " (+" + format(player.ad.dimensionsPerSecond[3]) + "/s)"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 14],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(1) ? "5th dimension (" + format(buyableEffect("ad", "15")) + "x): " + format(player.ad.dimensionAmounts[4]) + " (+" + format(player.ad.dimensionsPerSecond[4]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(1) ? "5th dimension (" + format(buyableEffect("ad", "15")) + "x): " + format(player.ad.dimensionAmounts[4]) + " (+" + format(player.ad.dimensionsPerSecond[4]) + "/s)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 15],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(2) ? "6th dimension (" + format(buyableEffect("ad", "16")) + "x): " + format(player.ad.dimensionAmounts[5]) + " (+" + format(player.ad.dimensionsPerSecond[5]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(2) ? "6th dimension (" + format(buyableEffect("ad", "16")) + "x): " + format(player.ad.dimensionAmounts[5]) + " (+" + format(player.ad.dimensionsPerSecond[5]) + "/s)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 16],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(3) ? "7th dimension (" + format(buyableEffect("ad", "17")) + "x): " + format(player.ad.dimensionAmounts[6]) + " (+" + format(player.ad.dimensionsPerSecond[6]) + "/s)" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(3) ? "7th dimension (" + format(buyableEffect("ad", "17")) + "x): " + format(player.ad.dimensionAmounts[6]) + " (+" + format(player.ad.dimensionsPerSecond[6]) + "/s)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 17],
                     ]],
                     ["row", [
                         ["style-row", [
-                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(4) ? "8th dimension (" + format(buyableEffect("ad", "18")) + "x): " + format(player.ad.dimensionAmounts[7]) : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }]
-                        ], {width: "700px"}], 
+                            ["raw-html", function () { return getBuyableAmount("ad", 2).gte(4) ? "8th dimension (" + format(buyableEffect("ad", "18")) + "x): " + format(player.ad.dimensionAmounts[7]) : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "650px"}], 
                         ["buyable", 18],
                     ]],
                     ["blank", "25px"],
@@ -869,14 +869,12 @@
                     ["blank", "25px"],
                     ["raw-html", function () { return !hasChallenge("ip", 18) ?  "Progress gets halted at 1e300 antimatter." : "" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["raw-html", function () { return hasChallenge("ip", 18) ?  "Progress gets softcapped at 1e300 antimatter." : "" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-    ]
-
+                ]
             },
             "Reverse Break": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return getLevelableAmount("pet", 1101).gte(1) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 15]]],
                     ["blank", "25px"],
@@ -889,11 +887,18 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter, which boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.ad.antimatterPerSecond) + "</h3> antimatter per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.ad.antimatterPerSecond) + "/s)"}, () => {
+                look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.ad.antimatterPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
+        ["raw-html", () => {return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("ip", 11)) || hasMilestone("s", 19)}
 })
 

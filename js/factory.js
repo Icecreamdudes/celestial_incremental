@@ -20,24 +20,21 @@
 
         milestoneEffect: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), 
             new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), ]
-    }
-    },
-    automate() {
-
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
-            "background": "gray",
-            "background-origin": "border-box",
-            "color": "black",
-            "border-color": "white",
+            background: "gray",
+            backgroundOrigin: "border-box",
+            color: "black",
+            borderColor: "white",
         }
     },
+    branches: ["oi"],
     tooltip: "Factory",
     color: "gray",
     update(delta) {
         let onepersec = new Decimal(1)
-
 
         player.fa.foundryEffectPerSecond = new Decimal(0)
         if (player.fa.buyables[11].gte(1)) player.fa.foundryEffectPerSecond = new Decimal(1)
@@ -50,16 +47,13 @@
         player.fa.foundryEffectMax = player.fa.foundryEffectMax.mul(buyableEffect("fa", 101))
         player.fa.foundryEffectMax = player.fa.foundryEffectMax.mul(buyableEffect("fa", 102))
     
-        if (player.fa.foundryEffect.lt(player.fa.foundryEffectMax))
-        {
+        if (player.fa.foundryEffect.lt(player.fa.foundryEffectMax)) {
             player.fa.foundryEffect = player.fa.foundryEffect.add(player.fa.foundryEffectPerSecond.mul(delta))
-        } else
-        {
+        } else {
             player.fa.foundryEffect = player.fa.foundryEffectMax
         }
 
-        if (player.fa.charge.gte(player.fa.bestCharge))
-        {
+        if (player.fa.charge.gte(player.fa.bestCharge)) {
             player.fa.bestCharge = player.fa.charge
         }
 
@@ -67,13 +61,16 @@
         player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.buyables[12].add(1))
         player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.buyables[13].add(1))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 13))
-        player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 205))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 206))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 207))
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("fa", 208))
         if (hasMilestone("fa", 21)) player.fa.chargeRate = player.fa.chargeRate.mul(player.fa.milestoneEffect[9])
-        player.fa.chargeRate = player.fa.chargeRate.mul(player.le.punchcardsPassiveEffect[5])
+        player.fa.chargeRate = player.fa.chargeRate.mul(levelableEffect("pu", 105)[2])
         player.fa.chargeRate = player.fa.chargeRate.mul(buyableEffect("st", 105))
+        player.fa.chargeRate = player.fa.chargeRate.mul(player.i.postOTFMult)
+
+        // AUTOMATION
+        if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
 
         player.fa.milestoneEffect[0] = player.fa.charge.pow(0.3).div(3).add(1) //ip
         player.fa.milestoneEffect[1] = player.fa.charge.pow(3).add(1) //ad
@@ -87,76 +84,9 @@
         player.fa.milestoneEffect[9] = player.fa.charge.pow(0.1).add(1) //charge
         player.fa.milestoneEffect[10] = player.fa.charge.pow(0.015).add(1) //pre-otf
     },
-    branches: ["m", "t",],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.fa.factoryMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.fa.factoryMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.fa.factoryMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.fa.factoryMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        4: {
-            title() { return "Buy Max On" },
-            canClick() { return player.fa.foundryMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.fa.foundryMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        5: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.fa.foundryMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.fa.foundryMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        6: {
-            title() { return "Buy Max On" },
-            canClick() { return player.fa.generatorMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.fa.generatorMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        7: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.fa.generatorMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.fa.generatorMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-    },
-    bars: {
-    },
-    upgrades: {
-    },
+    clickables: {},
+    bars: {},
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(1e40) },
@@ -268,7 +198,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.r.timeCubes},
             pay(amt) { player.r.timeCubes = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -302,7 +236,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -336,7 +274,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.an.anonymity},
             pay(amt) { player.an.anonymity = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -370,7 +312,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.oi.oil},
             pay(amt) { player.oi.oil = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.25).mul(0.2).add(1)
+                if (hasUpgrade("cs", 603)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -400,47 +346,17 @@
         },
 
         //generator
-        201: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(1.7) },
-            purchaseLimit() { return new Decimal(250) },
-            currency() { return player.h.ragePower},
-            pay(amt) { player.h.ragePower = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12)) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return 'Rage Power Generator'
-            },
-            display() {
-                return 'which are producing ' + format(tmp[this.layer].buyables[this.id].effect.mul(100)) + '% of rage power per second.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rage Power'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
         202: {
             costBase() { return new Decimal(1e12) },
             costGrowth() { return new Decimal(5) },
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12))
+                if (hasUpgrade("cs", 903)) eff = eff.add(1).pow(2).sub(1)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -474,7 +390,11 @@
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.rg.repliGrass},
             pay(amt) { player.rg.repliGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.04).mul(buyableEffect("fa", 12)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.04).mul(buyableEffect("fa", 12))
+                if (hasUpgrade("cs", 903)) eff = eff.add(1).pow(2).sub(1)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -508,7 +428,11 @@
             purchaseLimit() { return new Decimal(250) },
             currency() { return player.oi.oil},
             pay(amt) { player.oi.oil = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.01).mul(buyableEffect("fa", 12))
+                if (hasUpgrade("cs", 903)) eff = eff.add(1).pow(2).sub(1)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -536,47 +460,17 @@
             },
             style: { width: '275px', height: '150px', }
         },
-        205: {
-            costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(1.35) },
-            purchaseLimit() { return new Decimal(1000) },
-            currency() { return player.h.ragePower},
-            pay(amt) { player.h.ragePower = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
-            unlocked() { return player.fa.buyables[13].gte(1) },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return 'Rage Power Charger'
-            },
-            display() {
-                return 'which are boosting charge rate by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Rage Power'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
         206: {
             costBase() { return new Decimal(1e20) },
             costGrowth() { return new Decimal(2.5) },
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 903)) eff = eff.pow(2)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -610,7 +504,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.rg.repliGrass},
             pay(amt) { player.rg.repliGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 903)) eff = eff.pow(2)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -644,7 +542,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.oi.oil},
             pay(amt) { player.oi.oil = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 903)) eff = eff.pow(2)
+                return eff
+            },
             unlocked() { return player.fa.buyables[13].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -676,69 +578,69 @@
     milestones: {
         11: {
             requirementDescription: "<h3>100 Best Charge",
-            effectDescription() { return "Boosts infinity points based on charge: Currently: " + format(player.fa.milestoneEffect[0]) + "x" },
+            effectDescription() { return "Boosts infinity points based on charge:<br>Currently: " + format(player.fa.milestoneEffect[0]) + "x" },
             done() { return player.fa.bestCharge.gte(100) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         12: {
             requirementDescription: "<h3>1,000 Best Charge",
-            effectDescription() { return "Boosts antimatter dimensions (ignoring softcap) based on charge: Currently: " + format(player.fa.milestoneEffect[1]) + "x" },
+            effectDescription() { return "Boosts AD (ignoring softcap) based on charge:<br>Currently: " + format(player.fa.milestoneEffect[1]) + "x" },
             done() { return player.fa.bestCharge.gte(1000) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         13: {
             requirementDescription: "<h3>10,000 Best Charge",
-            effectDescription() { return "Boosts broken infinities based on charge: Currently: " + format(player.fa.milestoneEffect[2]) + "x" },
+            effectDescription() { return "Boosts broken infinities based on charge:<br>Currently: " + format(player.fa.milestoneEffect[2]) + "x" },
             done() { return player.fa.bestCharge.gte(10000) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         14: {
             requirementDescription: "<h3>100,000 Best Charge",
-            effectDescription() { return "Boosts steel based on charge: Currently: " + format(player.fa.milestoneEffect[3]) + "x" },
+            effectDescription() { return "Boosts steel based on charge:<br>Currently: " + format(player.fa.milestoneEffect[3]) + "x" },
             done() { return player.fa.bestCharge.gte(1e5) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         15: {
             requirementDescription: "<h3>1,000,000 Best Charge",
-            effectDescription() { return "Boosts negative infinity points based on charge: Currently: " + format(player.fa.milestoneEffect[4]) + "x" },
+            effectDescription() { return "Boosts negative infinity points based on charge:<br>Currently: " + format(player.fa.milestoneEffect[4]) + "x" },
             done() { return player.fa.bestCharge.gte(1e6) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         16: {
             requirementDescription: "<h3>10,000,000 Best Charge",
-            effectDescription() { return "Boosts infinity dimensions based on charge: Currently: " + format(player.fa.milestoneEffect[5]) + "x" },
+            effectDescription() { return "Boosts infinity dimensions based on charge:<br>Currently: " + format(player.fa.milestoneEffect[5]) + "x" },
             done() { return player.fa.bestCharge.gte(1e7) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         17: {
             requirementDescription: "<h3>1e9 Best Charge",
-            effectDescription() { return "Boosts oil based on charge: Currently: " + format(player.fa.milestoneEffect[6]) + "x" },
+            effectDescription() { return "Boosts oil based on charge: Currently:<br>" + format(player.fa.milestoneEffect[6]) + "x" },
             done() { return player.fa.bestCharge.gte(1e9) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         18: {
             requirementDescription: "<h3>1e11 Best Charge",
-            effectDescription() { return "Boosts anonymity based on charge: Currently: " + format(player.fa.milestoneEffect[7]) + "x" },
+            effectDescription() { return "Boosts anonymity based on charge:<br>Currently: " + format(player.fa.milestoneEffect[7]) + "x" },
             done() { return player.fa.bestCharge.gte(1e11) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         19: {
             requirementDescription: "<h3>1e14 Best Charge",
-            effectDescription() { return "Boosts galaxy dust based on charge: Currently: " + format(player.fa.milestoneEffect[8]) + "x" },
+            effectDescription() { return "Boosts galaxy dust based on charge:<br>Currently: " + format(player.fa.milestoneEffect[8]) + "x" },
             done() { return player.fa.bestCharge.gte(1e14) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         21: {
             requirementDescription: "<h3>1e50 Best Charge",
-            effectDescription() { return "Boosts charge based on charge: Currently: " + format(player.fa.milestoneEffect[9]) + "x" },
+            effectDescription() { return "Boosts charge based on charge:<br>Currently: " + format(player.fa.milestoneEffect[9]) + "x" },
             done() { return player.fa.bestCharge.gte(1e50) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         22: {
             requirementDescription: "<h3>1e100 Best Charge",
-            effectDescription() { return "Boosts Pre-OTF currencies based on charge: Currently: " + format(player.fa.milestoneEffect[10]) + "x" },
+            effectDescription() { return "Boosts Pre-OTF currencies based on charge:<br>Currently: " + format(player.fa.milestoneEffect[10]) + "x" },
             done() { return player.fa.bestCharge.gte(1e100) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
     challenges: {
@@ -752,7 +654,7 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
             "Foundry": {
@@ -760,16 +662,16 @@
                 unlocked() { return player.fa.buyables[11].gte(1) },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return format(player.fa.foundryEffect) + "x/" + format(player.fa.foundryEffectMax) + "x to steel gain based on time since last steelie reset."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(+" + format(player.fa.foundryEffectPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => { return format(player.fa.foundryEffect) + "x/" + format(player.fa.foundryEffectMax) + "x to steel gain based on time since last steelie reset."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "(+" + format(player.fa.foundryEffectPerSecond) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.r.timeCubes) + "</h3> Time Cubes" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.p.crystals) + "</h3> Crystals" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.an.anonymity) + "</h3> Anonymity" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.r.timeCubes) + "</h3> Time Cubes" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.p.crystals) + "</h3> Crystals" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.an.anonymity) + "</h3> Anonymity" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 101], ["ex-buyable", 102]]],
-                    ["row", [["ex-buyable", 103], ["ex-buyable", 104]]],
+                    ["style-row", [["ex-buyable", 101], ["ex-buyable", 102],
+                        ["ex-buyable", 103], ["ex-buyable", 104]], {maxWidth: "600px"}],
 
                 ]
             },
@@ -778,13 +680,12 @@
                 unlocked() { return player.fa.buyables[12].gte(1)  },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.h.ragePower) + "</h3> Rage Power" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.p.crystals) + "</h3> Crystals" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> Repli-Grass" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.p.crystals) + "</h3> Crystals" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.rg.repliGrass) + "</h3> Repli-Grass" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.oi.oil) + "</h3> Oil" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 201], ["ex-buyable", 202], ["ex-buyable", 203], ["ex-buyable", 204]]],
-                    ["row", [["ex-buyable", 205], ["ex-buyable", 206], ["ex-buyable", 207], ["ex-buyable", 208]]],
+                    ["style-row", [["ex-buyable", 202], ["ex-buyable", 203], ["ex-buyable", 204],
+                        ["ex-buyable", 206], ["ex-buyable", 207], ["ex-buyable", 208]], {maxWidth: "900px"}],
                 ]
             },
             "Charger": {
@@ -792,14 +693,16 @@
                 unlocked() { return player.fa.buyables[13].gte(1)  },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.fa.charge) + "</h3> Charge" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You are gaining " + format(player.fa.chargeRate) + " per second."}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Best charge: " + format(player.fa.bestCharge) + ""}, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Charge is reset on steel and infinity resets, and best charge is reset on singularity resets.)"}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Charge gain is based on factory buyables)"}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => { return "You have <h3>" + format(player.fa.charge) + "</h3> Charge" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(+" + format(player.fa.chargeRate) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => { return "Best charge: " + format(player.fa.bestCharge) + ""}, {color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "(Charge is reset on steel and infinity resets, and best charge is reset on singularity resets.)"}, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", () => { return "(Charge gain is based on factory buyables)"}, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Charger Milestones"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                    ["raw-html", () => { return "Charger Milestones"}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ["blank", "10px"],
                     ["milestone", 11],
                     ["milestone", 12],
                     ["milestone", 13],
@@ -811,17 +714,15 @@
                     ["milestone", 19],
                     ["milestone", 21],
                     ["milestone", 22],
-                    ["blank", "25px"],
                 ]
             },
         },
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.gh.steel) + "</h3> Steel" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-
-        ["row", [["clickable", 1]]],
+        ["raw-html", () => { return "You have <h3>" + format(player.gh.steel) + "</h3> Steel" }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 101)}
 })

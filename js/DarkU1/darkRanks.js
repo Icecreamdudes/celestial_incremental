@@ -1,5 +1,4 @@
-﻿
-addLayer("dr", {
+﻿addLayer("dr", {
     name: "Dark Ranks", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -57,7 +56,7 @@ addLayer("dr", {
         };
     },
     tooltip: "Ranks",
-    branches: [["le", "#4f0694"]],
+    branches: [["le", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -78,20 +77,23 @@ addLayer("dr", {
         player.dr.pentDiv = new Decimal(1)
 
         //Rank and Tier effects/costs
-        let ranksGainPreS = player.du.points.mul(player.dr.rankDiv).div(25).pow(Decimal.div(20, 29)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPreS = player.du.points.mul(player.dr.rankDiv).div(25).mul(50).pow(Decimal.div(20, 29)).floor()
-        let ranksGainPostS = player.du.points.mul(player.dr.rankDiv).div(25).pow(0.25).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS =  player.du.points.mul(player.dr.rankDiv).div(25).mul(50).pow(0.25).floor()
-        let ranksGainPostS2 = player.du.points.mul(player.dr.rankDiv).div(25).pow(Decimal.div(1, 10)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS2 = player.du.points.mul(player.dr.rankDiv).div(25).mul(50).pow(Decimal.div(1, 10)).floor()
-        let ranksGainPostS3 = player.du.points.mul(player.dr.rankDiv).div(25).pow(Decimal.div(1, 100)).floor()
-        if (hasUpgrade("le", 12)) ranksGainPostS3 = player.du.points.mul(player.dr.rankDiv).div(25).mul(50).pow(Decimal.div(1, 100)).floor()
+        let pointExponent = player.du.points
+        if (player.pet.activeAbilities[0]) pointExponent = pointExponent.pow(1/1.4)
+        let ranksGainPreS = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(20, 29)).floor()
+        if (hasUpgrade("le", 12)) ranksGainPreS = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(20, 29)).floor()
+        let ranksGainPostS = pointExponent.mul(player.dr.rankDiv).div(10).pow(0.25).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS =  pointExponent.mul(player.dr.rankDiv).mul(2).pow(0.25).floor()
+        let ranksGainPostS2 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 10)).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS2 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 10)).floor()
+        let ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).div(10).pow(Decimal.div(1, 100)).floor()
+        if (hasUpgrade("le", 12)) ranksGainPostS3 = pointExponent.mul(player.dr.rankDiv).mul(2).pow(Decimal.div(1, 100)).floor()
 
         if (!hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.3).add(1).pow(1.055)
         if (hasUpgrade("sma", 11)) player.dr.rankEffect = player.dr.rank.mul(0.5).add(1).pow(1.08)
-        if (player.le.punchcards[3]) player.dr.rankEffect = player.dr.rank.mul(0.7).add(1).pow(Decimal.mul(0.5, player.le.punchcardsLevelsEffect[3]).add(1))
+        if (getLevelableBool("pu", 103)) player.dr.rankEffect = player.dr.rank.mul(0.7).add(1).pow(levelableEffect("pu", 103)[0])
+        if (getLevelableBool("pu", 202)) player.dr.rankEffect = player.dr.rankEffect.pow(levelableEffect("pu", 202)[0])
         player.dr.rankReq = layers.dr.getRankReq()
-        if (player.pet.activeAbilities[0]) player.dr.rankReq = player.dr.rankReq.pow(1.4)
+        if (player.pet.activeAbilities[0]) player.dr.rankReq = player.dr.rankReq.pow(1.4).floor()
         if (!hasUpgrade("le", 14)) player.dr.ranksToGet = new Decimal(1)
 
 
@@ -102,7 +104,7 @@ addLayer("dr", {
             player.dr.ranksToGet = ranksGainPostS.sub(player.dr.rank).add(18)
         }
         if (player.du.points.gte(player.dr.rankReq) && player.dr.rank.add(player.dr.ranksToGet).gt(100) && hasUpgrade("le", 14)) {
-            player.dr.ranksToGet = ranksGainPostS2.sub(player.dr.rank).add(98)
+            player.dr.ranksToGet = ranksGainPostS2.sub(player.dr.rank).add(95)
         }
         if (player.du.points.gte(player.dr.rankReq) && player.dr.rank.add(player.dr.ranksToGet).gt(1e50) && hasUpgrade("le", 14)) {
             player.dr.ranksToGet = ranksGainPostS3.sub(player.dr.rank)
@@ -114,13 +116,16 @@ addLayer("dr", {
             player.dr.rank = player.dr.rank.add(player.dr.ranksToGet)
         }
 
-        let tiersGain = player.dr.rank.mul(player.dr.tierDiv).div(5).pow(Decimal.div(20, 23)).floor()
+        let tiersGain = player.dr.rank
+        if (player.pet.activeAbilities[0]) tiersGain = tiersGain.pow(1/1.4)
+        tiersGain = tiersGain.mul(player.dr.tierDiv).div(5).pow(Decimal.div(20, 23)).floor()
 
         if (!hasUpgrade("sma", 11)) player.dr.tierEffect = player.dr.tier.mul(0.4).add(1).pow(1.1)
         if (hasUpgrade("sma", 11)) player.dr.tierEffect = player.dr.tier.mul(0.65).add(1).pow(1.15)
-        if (player.le.punchcards[4]) player.dr.tierEffect = player.dr.tier.mul(0.8).add(1).pow(Decimal.mul(0.5, player.le.punchcardsLevelsEffect[4]).add(1.2))
+        if (getLevelableBool("pu", 104)) player.dr.tierEffect = player.dr.tier.mul(0.8).add(1).pow(levelableEffect("pu", 104)[0])
+        if (getLevelableBool("pu", 202)) player.dr.tierEffect = player.dr.tierEffect.pow(levelableEffect("pu", 202)[0])
         player.dr.tierReq = layers.dr.getTierReq()
-        if (player.pet.activeAbilities[0]) player.dr.tierReq = player.dr.tierReq.pow(1.4)
+        if (player.pet.activeAbilities[0]) player.dr.tierReq = player.dr.tierReq.pow(1.4).floor()
 
         if (!hasUpgrade("le", 15)) player.dr.tiersToGet = new Decimal(1)
         if (player.dr.rank.gte(player.dr.tierReq) && hasUpgrade("le", 15)) {
@@ -133,12 +138,15 @@ addLayer("dr", {
             player.dr.tier = player.dr.tier.add(player.dr.tiersToGet)
         }
 
-        let tetrGain = player.dr.tier.mul(player.dr.tetrDiv).div(4).pow(Decimal.div(25, 28)).floor()
+        let tetrGain = player.dr.tier
+        if (player.pet.activeAbilities[0]) tetrGain = tetrGain.pow(1/1.4)
+        tetrGain = tetrGain.mul(player.dr.tetrDiv).div(4).pow(Decimal.div(25, 28)).floor()
 
         player.dr.tetrEffect = player.dr.tetr.add(1).pow(1.2)
-        if (player.le.punchcards[5]) player.dr.tetrEffect = player.dr.tetr.add(1).pow(Decimal.mul(0.5, player.le.punchcardsLevelsEffect[5]).add(1.4))
+        if (getLevelableBool("pu", 105)) player.dr.tetrEffect = player.dr.tetr.add(1).pow(levelableEffect("pu", 105)[0])
+        if (getLevelableBool("pu", 202)) player.dr.tetrEffect = player.dr.tetrEffect.pow(levelableEffect("pu", 202)[0])
         player.dr.tetrReq = layers.dr.getTetrReq()
-        if (player.pet.activeAbilities[0]) player.dr.tetrReq = player.dr.tetrReq.pow(1.4)
+        if (player.pet.activeAbilities[0]) player.dr.tetrReq = player.dr.tetrReq.pow(1.4).floor()
 
         if (!hasUpgrade("le", 18)) player.dr.tetrsToGet = new Decimal(1)
         if (player.dr.tier.gte(player.dr.tetrReq) && hasUpgrade("le", 18)) {
@@ -153,11 +161,11 @@ addLayer("dr", {
 
         let pentGain = player.dr.tetr.mul(player.dr.pentDiv).add(1).log(5)
 
-        player.dr.pentEffect = Decimal.pow(5, player.dr.pent).pow(player.le.punchcardsEffect[16])
+        player.dr.pentEffect = Decimal.pow(5, player.dr.pent).pow(levelableEffect("pu", 207)[0])
         player.dr.pentReq = layers.dr.getPentReq()
 
         player.dr.pentsToGet = new Decimal(1)
-        if (player.dr.tetr.lt(player.dr.pentReq) || player.dr.pentsToGet.lt(0)) {
+        if (player.dr.tetr.lt(player.dr.pentReq) || player.dr.pentsToGet.lt(0) || !getLevelableBool("pu", 207)) {
             player.dr.pentsToGet = new Decimal(0)
         }
 
@@ -171,9 +179,9 @@ addLayer("dr", {
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.dr.tierPointsEffect)
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.dp.prestigePointsEffect)
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(buyableEffect("dg", 12))
-        if (player.le.punchcards[3]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.le.punchcardsEffect[3])
-        if (player.le.punchcards[6]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.le.punchcardsEffect[6])
-        if (player.le.punchcards[14]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(player.le.punchcardsEffect[14])
+        if (getLevelableBool("pu", 103)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 103)[1])
+        if (getLevelableBool("pu", 202)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 202)[1])
+        if (getLevelableBool("pu", 301)) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(buyableEffect("dgr", 15))
         player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.mul(levelableEffect("st", 102)[0])
         if (player.pet.activeAbilities[0]) player.dr.rankPointsPerSecond = player.dr.rankPointsPerSecond.pow(0.6)
@@ -187,9 +195,9 @@ addLayer("dr", {
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.dr.tetrPointsEffect)
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.dp.prestigePointsEffect)
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(buyableEffect("dg", 12))
-        if (player.le.punchcards[4]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.le.punchcardsEffect[4])
-        if (player.le.punchcards[6]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.le.punchcardsEffect[6])
-        if (player.le.punchcards[14]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(player.le.punchcardsEffect[14])
+        if (getLevelableBool("pu", 104)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 104)[1])
+        if (getLevelableBool("pu", 202)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 202)[1])
+        if (getLevelableBool("pu", 301)) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(buyableEffect("dgr", 15))
         player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.mul(levelableEffect("st", 103)[0])
         if (player.pet.activeAbilities[0]) player.dr.tierPointsPerSecond = player.dr.tierPointsPerSecond.pow(0.6)
@@ -203,9 +211,9 @@ addLayer("dr", {
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.dr.pentPointsEffect)
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.dp.prestigePointsEffect)
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(buyableEffect("dg", 12))
-        if (player.le.punchcards[5]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.le.punchcardsEffect[5])
-        if (player.le.punchcards[6]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.le.punchcardsEffect[6])
-        if (player.le.punchcards[14]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(player.le.punchcardsEffect[14])
+        if (getLevelableBool("pu", 105)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 105)[1])
+        if (getLevelableBool("pu", 202)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 202)[1])
+        if (getLevelableBool("pu", 301)) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(buyableEffect("dgr", 15))
         player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.mul(levelableEffect("st", 104)[0])
         if (player.pet.activeAbilities[0]) player.dr.tetrPointsPerSecond = player.dr.tetrPointsPerSecond.pow(0.6)
@@ -216,20 +224,12 @@ addLayer("dr", {
         player.dr.pentPointsEffect = player.dr.pentPoints.pow(0.5).div(25).add(1)
 
         player.dr.pentPointsPerSecond = Decimal.pow(5, player.dr.pent).sub(1).div(5)
+        if (getLevelableBool("pu", 301)) player.dr.pentPointsPerSecond = player.dr.pentPointsPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dr.pentPointsPerSecond = player.dr.pentPointsPerSecond.mul(levelableEffect("st", 205)[0])
 
     },
     bars: {},
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #0d515a"  },
-        },
         11: {
             title() {
                 if (player.dr.rank.lte(20)) {
@@ -242,7 +242,7 @@ addLayer("dr", {
                     return "<h2>Reset dark celestial points, but rank up.</h2><br><h3>Req: " + format(player.dr.rankReq) + " Points<br><small style='color:red'>[SOFTCAPPED<sup>3</sup>]</small></h3>"
                 }
             },
-            canClick() { return player.du.points.gte(player.dr.rankReq) && !hasUpgrade("le", 16) },
+            canClick() { return player.du.points.gte(player.dr.rankReq) && player.dr.ranksToGet.gt(0) && !hasUpgrade("le", 16) },
             unlocked() { return true },
             onClick() {
                 player.dr.rank = player.dr.rank.add(player.dr.ranksToGet)
@@ -257,7 +257,7 @@ addLayer("dr", {
         },
         12: {
             title() { return "<h2>Reset dark celestial points and ranks, but tier up.</h2><br><h3>Req: " + formatWhole(player.dr.tierReq) + " Rank</h3>" },
-            canClick() { return player.dr.rank.gte(player.dr.tierReq) && !hasUpgrade("le", 19) },
+            canClick() { return player.dr.rank.gte(player.dr.tierReq) && player.dr.tiersToGet.gt(0) && !hasUpgrade("le", 19) },
             unlocked() { return true },
             onClick() {
                 player.dr.tier = player.dr.tier.add(player.dr.tiersToGet)
@@ -272,7 +272,7 @@ addLayer("dr", {
         },
         13: {
             title() { return "<h2>Reset dark celestial points, ranks, and tiers, but tetr up.</h2><br><h3>Req: " + formatWhole(player.dr.tetrReq) + " Tier</h3>" },
-            canClick() { return player.dr.tier.gte(player.dr.tetrReq) && !hasUpgrade("le", 21) },
+            canClick() { return player.dr.tier.gte(player.dr.tetrReq) && player.dr.tetrsToGet.gt(0) && !hasUpgrade("le", 21) },
             unlocked() { return true },
             onClick() {
                 player.dr.tetr = player.dr.tetr.add(player.dr.tetrsToGet)
@@ -281,15 +281,15 @@ addLayer("dr", {
             onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "404px", minHeight: "103.7px", color: "white", border: "2px solid #0d515a", margin: "-2px"}
-                player.le.punchcards[16] ? look.borderRadius = "0px" : look.borderRadius = "0px 0px 15px 0px"
+                getLevelableBool("pu", 207) ? look.borderRadius = "0px" : look.borderRadius = "0px 0px 15px 0px"
                 !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             },
         },
         14: {
             title() { return "<h2><small>Reset dark celestial points and previous rank content, but pent up.</small></h2><br><h3>Req: " + formatWhole(player.dr.pentReq) + " Tetr</h3>" },
-            canClick() { return player.dr.tetr.gte(player.dr.pentReq) },
-            unlocked() { return player.le.punchcards[16] },
+            canClick() { return player.dr.tetr.gte(player.dr.pentReq) && player.dr.pentsToGet.gt(0) },
+            unlocked() { return getLevelableBool("pu", 207) },
             onClick() {
                 player.dr.pent = player.dr.pent.add(player.dr.pentsToGet)
                 layers.dr.pentReset()
@@ -304,17 +304,17 @@ addLayer("dr", {
     },
     getRankReq() {
         if (player.dr.rank.lte(20)) {
-            if (!hasUpgrade("le", 12)) return player.dr.rank.add(1).pow(1.45).mul(25).div(player.dr.rankDiv)
-            if (hasUpgrade("le", 12)) return player.dr.rank.add(1).pow(1.45).mul(25).div(50).div(player.dr.rankDiv)
+            if (!hasUpgrade("le", 12)) return player.dr.rank.add(1).pow(1.45).mul(10).div(player.dr.rankDiv)
+            if (hasUpgrade("le", 12)) return player.dr.rank.add(1).pow(1.45).div(2).div(player.dr.rankDiv)
         } else if (player.dr.rank.gt(20) && player.dr.rank.lte(100)) {
-            if (!hasUpgrade("le", 12)) return (player.dr.rank.sub(17)).pow(4).mul(25).div(player.dr.rankDiv)
-            if (hasUpgrade("le", 12)) return (player.dr.rank.sub(17)).pow(4).mul(25).div(50).div(player.dr.rankDiv)
+            if (!hasUpgrade("le", 12)) return (player.dr.rank.sub(17)).pow(4).mul(10).div(player.dr.rankDiv)
+            if (hasUpgrade("le", 12)) return (player.dr.rank.sub(17)).pow(4).div(2).div(player.dr.rankDiv)
         } else if (player.dr.rank.gt(100) && player.dr.rank.lt(1e50)) {
-            if (!hasUpgrade("le", 12)) return (player.dr.rank.sub(97)).pow(10).mul(25).div(player.dr.rankDiv)
-            if (hasUpgrade("le", 12)) return (player.dr.rank.sub(97)).pow(10).mul(25).div(50).div(player.dr.rankDiv)
+            if (!hasUpgrade("le", 12)) return (player.dr.rank.sub(94)).pow(10).mul(10).div(player.dr.rankDiv)
+            if (hasUpgrade("le", 12)) return (player.dr.rank.sub(94)).pow(10).div(2).div(player.dr.rankDiv)
         } else if (player.dr.rank.gte(1e50)) {
-            if (!hasUpgrade("le", 12)) return (player.dr.rank).pow(100).mul(25).div(player.dr.rankDiv)
-            if (hasUpgrade("le", 12)) return (player.dr.rank).pow(100).mul(25).div(50).div(player.dr.rankDiv)
+            if (!hasUpgrade("le", 12)) return (player.dr.rank).pow(100).mul(10).div(player.dr.rankDiv)
+            if (hasUpgrade("le", 12)) return (player.dr.rank).pow(100).div(2).div(player.dr.rankDiv)
         }
     },
     getTierReq() {
@@ -387,12 +387,19 @@ addLayer("dr", {
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Rank " + formatWhole(player.dr.rank) + " (+" + formatWhole(player.dr.ranksToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Rank " + formatWhole(player.dr.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("le", 14) ? "(+" + formatWhole(player.dr.ranksToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.ranksToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
+                                ["raw-html", () => { return "x" + format(player.dr.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.rankPoints) + " Rank Points (+" + formatWhole(player.dr.rankPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.rankPointsEffect) + " Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.rankPoints) + " Rank Points (+" + formatWhole(player.dr.rankPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.rankPointsEffect) + " Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], {width: "399px", height: "45px", backgroundColor: "#03181b"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 11],
@@ -400,12 +407,19 @@ addLayer("dr", {
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Tier " + formatWhole(player.dr.tier) + " (+" + formatWhole(player.dr.tiersToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Tier " + formatWhole(player.dr.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("le", 15) ? "(+" + formatWhole(player.dr.tiersToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.tiersToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
+                                ["raw-html", () => { return "x" + format(player.dr.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.tierPoints) + " Tier Points (+" + formatWhole(player.dr.tierPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tierPointsEffect) + " Rank Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.tierPoints) + " Tier Points (+" + formatWhole(player.dr.tierPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.tierPointsEffect) + " Rank Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], {width: "399px", height: "45px", backgroundColor: "#03181b"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 12],
@@ -413,29 +427,43 @@ addLayer("dr", {
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Tetr " + formatWhole(player.dr.tetr) + " (+" + formatWhole(player.dr.tetrsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Tetr " + formatWhole(player.dr.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("le", 18) ? "(+" + formatWhole(player.dr.tetrsToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.tetrsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
+                                ["raw-html", () => { return "x" + format(player.dr.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.tetrPoints) + " Tetr Points (+" + formatWhole(player.dr.tetrPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.tetrPointsEffect) + " Tier Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
-                            ], () => {return player.le.punchcards[16] ? {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px"} : {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px 0px 0px 13px"}}],
+                                ["raw-html", () => { return formatWhole(player.dr.tetrPoints) + " Tetr Points (+" + formatWhole(player.dr.tetrPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.tetrPointsEffect) + " Tier Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                            ], () => {return getLevelableBool("pu", 207) ? {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px"} : {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px 0px 0px 13px"}}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 13],
-                    ], () => {return player.le.punchcards[16] ? {width: "800px", height: "100px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderBottom: "0px", borderRadius: "0px"} : {width: "800px", height: "100px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderRadius: "0px 0px 15px 15px"}}],
+                    ], () => {return getLevelableBool("pu", 207) ? {width: "800px", height: "100px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderBottom: "0px", borderRadius: "0px"} : {width: "800px", height: "100px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderRadius: "0px 0px 15px 15px"}}],
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", function () { return "Pent " + formatWhole(player.dr.pent) + " (+" + formatWhole(player.dr.pentsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.pentEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Pent " + formatWhole(player.dr.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return false ? "(+" + formatWhole(player.dr.pentsToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.pentsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
+                                ["raw-html", () => { return "x" + format(player.dr.pentEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
-                                ["raw-html", function () { return formatWhole(player.dr.pentPoints) + " Pent Points (+" + formatWhole(player.dr.pentPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
-                                ["raw-html", function () { return "x" + format(player.dr.pentPointsEffect) + " Tetr Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
+                                ["raw-html", () => { return formatWhole(player.dr.pentPoints) + " Pent Points (+" + formatWhole(player.dr.pentPointsPerSecond) + "/s)"}, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],
+                                ["raw-html", () => { return "x" + format(player.dr.pentPointsEffect) + " Tetr Points" }, {color: "#cccccc", fontSize: "16px", fontFamily: "monospace"}],    
                             ], {width: "399px", height: "45px", backgroundColor: "#03181b", borderRadius: "0px 0px 0px 13px"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 14],
-                    ], () => {return player.le.punchcards[16] ? {width: "800px", height: "100px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderRadius: "0px 0px 15px 15px"} : {display: "none !important"} }],
+                    ], () => {return getLevelableBool("pu", 207) ? {width: "800px", height: "100px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderRadius: "0px 0px 15px 15px"} : {display: "none !important"} }],
                     ["style-column", [
                         ["raw-html", function () { return "Total Mult: x" + format(player.dr.rankEffect.mul(player.dr.tierEffect).mul(player.dr.tetrEffect).mul(player.dr.pentEffect).mul(player.dr.rankPointsEffect)) }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ], {width: "400px", height: "50px", backgroundColor: "#06282d", border: "2px solid #0d515a", borderTop: "0px", borderRadius: "0px 0px 15px 15px"}],
@@ -444,13 +472,14 @@ addLayer("dr", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-        ["raw-html", function () { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["raw-html", () => { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 11) }
+    layerShown() { return hasUpgrade("le", 11) },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

@@ -26,42 +26,20 @@ addLayer("au2", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.subtabs["au2"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'au2'
-            player.tab = "po"
-            player.subtabs["au2"]['stuff'] = 'Main'
-        }
-        if (player.subtabs["au2"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'au2'
-            player.tab = "settings"
-            player.subtabs["au2"]['stuff'] = 'Main'
-        }
-
         player.au2.starsToGet = Decimal.mul(player.ro.rocketParts, player.ro.activatedFuel.pow(0.3)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("st", 209)[0]).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("st", 201)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("ma", 31)).floor()
         player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pet", 501)[0]).floor()
-        player.au2.starsToGet = player.au2.starsToGet.mul(player.le.punchcardsPassiveEffect[17]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("pu", 109)[2]).floor()
     },
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-    },
+    clickables: {},
     bars: {},
     upgrades: {},
     buyables: {},
     milestones: {},
     challenges: {},
-    infoboxes: {
-    },
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -72,22 +50,12 @@ addLayer("au2", {
                     ["tree", treeAU2],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return true },
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
     tabFormat: [
-                ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+        ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.au2.au2Unlocked && player.tab != "cmc"}
+    layerShown() { return player.startedGame == true && player.au2.au2Unlocked}
 })

@@ -1,5 +1,5 @@
 ﻿addLayer("m", {
-    name: "M", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Mods", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "M", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -9,6 +9,7 @@
         codeExperience: new Decimal(0),
         codeExperienceToGet: new Decimal(0),
         codeExperiencePause: new Decimal(0),
+        codeExperienceEffect: new Decimal(1),
 
         linesOfCode: new Decimal(0),
         linesOfCodePerSecond: new Decimal(0),
@@ -22,19 +23,23 @@
         modSoftcapStart: new Decimal(10),
 
         modMax: false,
-    }
-    },
+    }},
     automate() {
-        if (hasMilestone("ip", 17))
-        {
+        if (hasMilestone("ip", 17)) {
             buyBuyable("m", 11)
             buyBuyable("m", 12)
             buyBuyable("m", 13)
             buyBuyable("m", 14)
         }
+        if (hasMilestone("s", 17)) {
+            buyBuyable("m", 15)
+            buyBuyable("m", 16)
+            buyBuyable("m", 17)
+            buyBuyable("m", 18)
+        }
     },
-    nodeStyle() {
-    },
+    branches: ["gh"],
+    nodeStyle() {},
     tooltip: "Mods",
     color: "#1377BF",
     update(delta) {
@@ -46,7 +51,6 @@
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(levelableEffect("pet", 201)[0])
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
         if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
-        if (inChallenge("ip", 13) || player.po.hex) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("h", 17))
 
         // CHALLENGE MODIFIERS
         if (inChallenge('ip', 15)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(0.65)
@@ -57,11 +61,10 @@
 
         // CONTINUED REGULAR MODIFIERS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.co.cores.code.effect[0])
 
         // POWER MODIFIERS
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.pow(player.co.cores.code.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.div(player.po.halterEffects[8])
@@ -78,6 +81,9 @@
             layers.m.codeExperienceReset();
         }
         player.m.codeExperiencePause = player.m.codeExperiencePause.sub(1)
+
+        // CODE EXPERIENCE EFFECT
+        player.m.codeExperienceEffect = player.m.codeExperience.add(1).log(1e100).add(1).pow(2)
 
         //----------------------------------------
 
@@ -97,14 +103,11 @@
 
         // CONTINUED REGULAR MODIFIERS
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ad", 18))
-        if (inChallenge("ip", 13) || player.po.hex) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("h", 18))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("p", 12))
-        if (player.pol.pollinatorsIndex == 6) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.pol.pollinatorsEffect[10])
+        if (player.pol.pollinatorEffects.butterfly.enabled) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.pol.pollinatorEffects.butterfly.effects[0])
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.cop.processedCoreInnateEffects[3])
 
         // POWER MODIFIERS
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.pow(player.re.realmEssenceEffect)
 
         // MOD SOFTCAP CODE
         if (player.m.mods.gte(player.m.modSoftcapStart)) {
@@ -130,17 +133,19 @@
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 302)[1])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
-        if (inChallenge("ip", 13) || player.po.hex) player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("h", 18))
         if (hasUpgrade("ip", 33) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 33))
         if (player.de.antidebuffIndex.eq(4)) player.m.modsToGet = player.m.modsToGet.mul(player.de.antidebuffEffect)
         if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
+        if (player.pol.pollinatorEffects.butterfly.enabled) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorEffects.butterfly.effects[1])
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
         player.m.modsToGet = player.m.modsToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(6)) player.m.modsToGet = player.m.modsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.m.modsToGet = player.m.modsToGet.mul(player.co.cores.code.effect[2])
+        if (hasUpgrade("cs", 702)) player.m.modsToGet = player.m.modsToGet.mul(1e15)
 
         // POWER MODIFIERS
-        player.m.modsToGet = player.m.modsToGet.pow(buyableEffect("rm", 28))
-        player.m.modsToGet = player.m.modsToGet.pow(player.re.realmEssenceEffect)
+        if (hasUpgrade("hpw", 1043)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
+        player.m.modsToGet = player.m.modsToGet.pow(player.cs.scraps.code.effect)
+        if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.m.modsToGet = player.m.modsToGet.div(player.po.halterEffects[10])
@@ -154,6 +159,7 @@
         // MOD REQUIREMENT
         player.m.modsReq = player.m.mods.pow(1.45).add(100)
         player.m.modsReq = player.m.modsReq.div(levelableEffect("pet", 203)[1])
+        if (hasUpgrade("cs", 702)) player.m.modsReq = player.m.modsReq.pow(5)
 
         // MOD GAIN CODE
         if (player.m.linesOfCode.gte(player.m.modsReq)) {
@@ -161,17 +167,7 @@
             player.m.linesOfCode = new Decimal(0)
         }
     },
-    branches: ["t"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.m.modMax == false },
@@ -179,7 +175,7 @@
             onClick() {
                 player.m.modMax = true
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', minHeight: '50px', }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -188,7 +184,7 @@
             onClick() {
                 player.m.modMax = false
             },
-            style: { width: '75px', "min-height": '50px', }
+            style: { width: '75px', minHeight: '50px', }
         },
         11: {
             title() { return "<h3>Reset everything except grasshop and pent for code experience. <br>(Req: 10,000,000 trees and 1e65 celestial points)" },
@@ -198,16 +194,14 @@
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
+            style: { width: '400px', minHeight: '100px', borderRadius: '15px' },
         },
     },
-    codeExperienceReset()
-    {
+    codeExperienceReset() {
         player.points = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -240,15 +234,14 @@
 
         player.p.prestigePoints = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
-        {
-        for (let i = 0; i < player.p.upgrades.length; i++) {
-            if (+player.p.upgrades[i] < 24) {
-                player.p.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11)) {
+            for (let i = 0; i < player.p.upgrades.length; i++) {
+                if (+player.p.upgrades[i] < 24) {
+                    player.p.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
         player.t.buyables[11] = new Decimal(0)
         player.t.buyables[12] = new Decimal(0)
         player.t.buyables[13] = new Decimal(0)
@@ -272,15 +265,14 @@
         player.g.buyables[17] = new Decimal(0)
         player.g.buyables[18] = new Decimal(0)
 
-        if (!hasMilestone("ip", 11))
-        {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 17) {
-                player.g.upgrades.splice(i, 1);
-                i--;
+        if (!hasMilestone("ip", 11)) {
+            for (let i = 0; i < player.g.upgrades.length; i++) {
+                if (+player.g.upgrades[i] < 17) {
+                    player.g.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
-    }
         player.g.grass = new Decimal(0)
         player.g.savedGrass = new Decimal(0)
         player.g.grassCount = new Decimal(0)
@@ -293,23 +285,26 @@
     },
     bars: {
         modbar: {
-            unlocked() { return true },
+            unlocked: true,
             direction: RIGHT,
             width: 476,
             height: 50,
             progress() {
+                if (player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq)) return new Decimal(1)
                 return player.m.linesOfCode.div(player.m.modsReq)
             },
-            fillStyle: {
-                "background-color": "#1377BF",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#1377BF"},
+            textStyle: {fontSize: "14px"},
             display() {
-                return "<h5>" + format(player.m.linesOfCode) + "/" + format(player.m.modsReq) + "<h5> Lines of code to make a mod.</h5>";
+                if (player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq)) return "There is currently an excess of code."
+                let str = format(player.m.linesOfCode) + "/" + format(player.m.modsReq) + " (+" + format(player.m.linesOfCodePerSecond) + "/s)<br>Lines of code to make a mod."
+                if (player.m.mods.gte(player.m.modSoftcapStart)) str = str.concat("<br><small style='color:red;font-size:12px'>After " + formatWhole(player.m.modSoftcapStart) + " mods, lines of code are divided by " + format(player.m.modSoftcap) + "</small>")
+                return str
             },
         },
     },
-    upgrades: {
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(4) },
@@ -317,7 +312,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.25).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.8).mul(0.25).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -351,7 +346,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.25).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(0.9).mul(0.25).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -385,7 +380,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -419,12 +414,12 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1).pow(buyableEffect("cs", 27)) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Row 1 Multiplier"
+                return "Basic Multiplier"
             },
             display() {
                 return "which are boosting point, factor power, and prestige point gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
@@ -447,52 +442,180 @@
             },
             style: { width: '275px', height: '150px', }
         },
-    },
-    milestones: {
+        15: {
+            costBase() { return new Decimal(1e60) },
+            costGrowth() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.m.mods},
+            pay(amt) { player.m.mods = this.currency().sub(amt) },
+            effect(x) {
+                return getBuyableAmount(this.layer, this.id).pow(0.75).mul(0.005).add(1)
+            },
+            unlocked() { return hasUpgrade("bi", 113) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Antimatter Softcap Reducer"
+            },
+            display() {
+                return "which are boosting antimatter softcap base by x" + format(tmp[this.layer].buyables[this.id].effect, 3) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Mods"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
 
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
-    microtabs: {
-        stuff: {
-            "Main": {
-                buttonStyle() { return { color: "#1377BF", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["bar", "modbar"]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>You are making " + format(player.m.linesOfCodePerSecond) + "<h2> lines of code per second. (Based on code experience)" }],
-                    ["raw-html", function () { return "<h2>You have " + formatWhole(player.m.mods) + "<h2> mods, which boost tree gain by x" + format(player.m.modEffect) + "."}],
-                    ["raw-html", function () { return "<h2>You will gain " + format(player.m.modsToGet, 1) + "<h2> mods." }],
-                    ["raw-html", function () { return player.m.mods.gte(player.m.modSoftcapStart) ? "After " + formatWhole(player.m.modSoftcapStart) + " mods, lines of code gain is divided by " + format(player.m.modSoftcap) + " (Based on mods)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 11]]],
-                ]
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            "Buyables": {
-                buttonStyle() { return { color: "#1377BF", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>You have " + formatWhole(player.m.mods) + "<h2> mods."}],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                ]
+            style: {width: '275px', height: '150px'},
+        },
+        16: {
+            costBase() { return new Decimal(1e65) },
+            costGrowth() { return new Decimal(1e5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.m.mods},
+            pay(amt) { player.m.mods = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked() { return hasUpgrade("bi", 113) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "NIP Base Booster"
             },
+            display() {
+                return "which are raising negative infinity points base formula by ^" + format(tmp[this.layer].buyables[this.id].effect, 1) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Mods"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '275px', height: '150px'},
+        },
+        17: {
+            costBase() { return new Decimal(1e80) },
+            costGrowth() { return new Decimal(1e10) },
+            purchaseLimit() { return new Decimal(50) },
+            currency() { return player.m.mods},
+            pay(amt) { player.m.mods = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(8, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return hasUpgrade("bi", 113) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "AD Octupler"
+            },
+            display() {
+                return "which are boosting antimatter dimensions by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Mods"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '275px', height: '150px'},
+        },
+        18: {
+            costBase() { return new Decimal(1e100) },
+            costGrowth() { return new Decimal(1e20) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.m.mods},
+            pay(amt) { player.m.mods = this.currency().sub(amt) },
+            effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
+            unlocked() { return hasUpgrade("bi", 113) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "NIP Doubler"
+            },
+            display() {
+                return "which are boosting negative infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Mods"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '275px', height: '150px'},
         },
     },
-
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
+    microtabs: {},
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.m.codeExperience) + "</h3> Code Experience" }, { "color": "#1377BF", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.m.codeExperienceToGet.gt(1) ? "You will gain <h3>" + format(player.m.codeExperienceToGet) + "</h3> code experience on reset." : ""}, { "color": "#1377BF", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + format(player.m.codeExperience) + "</h3> Code Experience" }, {color: "#1377BF", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.m.codeExperienceToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.m.codeExperienceToGet.gt(1)) {look.color = "#1377BF"} else {look.color = "gray"}
+                return look
+            }],
+        ]],
+        ["raw-html", () => {return hasUpgrade("cs", 701) ? "Boosts factor base by x" + format(player.m.codeExperienceEffect) : ""}, {color: "#1377BF", fontSize: "20px", fontFamily: "monospace"}],
+        ["blank", "15px"],
+        ["clickable", 11],
+        ["blank", "25px"],
+        ["style-column", [
+            ["blank", "10px"],
+            ["row", [
+                ["raw-html", () => { return "You have " + formatWhole(player.m.mods) + " mods"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                ["raw-html", () => { return player.m.linesOfCodePerSecond.div(20).gt(player.m.modsReq) ? "(+" + format(player.m.modsToGet, 1) + "/s)" : "(+" + format(player.m.modsToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ]],
+            ["raw-html", () => {return "Boosts tree gain by x" + format(player.m.modEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["blank", "10px"],
+            ["bar", "modbar"],
+            ["blank", "10px"],
+        ], {width: "550px", backgroundColor: "#031726", border: "3px solid #ccc", borderRadius: "15px"}],
+        ["blank", "25px"],
+        ["style-row", [
+            ["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+            ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]
+        ], {maxWidth: "1200px"}],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasMilestone("r", 14) }
 })

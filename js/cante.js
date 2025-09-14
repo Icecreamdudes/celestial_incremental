@@ -1,5 +1,5 @@
 ﻿addLayer("ca", {
-    name: "Cante, the Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "Cante, Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() { return "Ξ"} , // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -38,8 +38,7 @@
         rememberanceCoreCost: new Decimal(1000),
 
         defeatedCante: false,
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("s", 16))
         {
@@ -65,9 +64,9 @@
             "border-color": "#0f354c",
         };
     },
-
     tooltip: "Cante, the Celestial of Replicanti",
     color: "white",
+    branches: ["bi"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -75,17 +74,18 @@
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 12))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 15))
         player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("ca", 18))
-        player.ca.replicantiMult = player.ca.replicantiMult.add(buyableEffect("rm", 34))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(buyableEffect("g", 26))
         player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
-        if (hasUpgrade("bi", 116)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("bi", 116))
+        if (hasUpgrade("bi", 117)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
+        if (hasUpgrade("hpw", 1063)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
+        
+        player.ca.replicantiMult = player.ca.replicantiMult.div(player.ca.replicantiSoftcap)
 
         player.ca.replicantiTimerReq = new Decimal(1)
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 13))
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 16))
         player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.div(buyableEffect("ca", 19))
-        player.ca.replicantiTimerReq = player.ca.replicantiTimerReq.mul(player.ca.replicantiSoftcap)
 
         player.ca.replicateChance = new Decimal(0.02)
         player.ca.replicateChance = player.ca.replicateChance.add(buyableEffect("ca", 11))
@@ -94,8 +94,7 @@
 
         if (player.ca.unlockedCante && hasUpgrade("bi", 24)) player.ca.replicantiTimer = player.ca.replicantiTimer.add(onepersec.mul(delta))
 
-        if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq))
-        {
+        if (player.ca.replicantiTimer.gte(player.ca.replicantiTimerReq)) {
             layers.ca.replicantiMultiply();
         }
 
@@ -103,18 +102,11 @@
         if (player.ca.replicanti.gt(1)) { player.ca.replicantiEffect2 = player.ca.replicanti.add(1).log(10).pow(1.17).mul(10).add(1) } else { player.ca.replicantiEffect2 = new Decimal(1) }
         player.ca.replicantiEffect3 = player.ca.replicanti.pow(0.5)
         
-        if (hasUpgrade("bi", 116))
-        {
-            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(player.ca.replicanti.plus(1).log10().pow(0.4))
-            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(player.ca.replicanti.plus(1).log10().pow(0.35))
-            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(player.ca.replicanti.plus(1).log10().pow(0.75))
-
+        if (hasUpgrade("bi", 117)) {
+            player.ca.replicantiEffect = player.ca.replicantiEffect.pow(player.ca.replicanti.plus(1).log(10).pow(0.4))
+            player.ca.replicantiEffect2 = player.ca.replicantiEffect2.pow(player.ca.replicanti.plus(1).log(10).pow(0.45))
+            player.ca.replicantiEffect3 = player.ca.replicantiEffect3.pow(player.ca.replicanti.plus(1).log(10).pow(0.4))
         }
-        if (player.ca.replicanti.gt("1e2000"))
-        {
-            player.ca.replicantiEffect3 = Decimal.mul("1e300000", player.ca.replicantiEffect3.plus(1).log10().pow(10))
-        }
-
 
         //CANTE
         player.ca.canteEnergyMult = new Decimal(1)
@@ -139,61 +131,43 @@
 
         //rep galax
         player.ca.replicantiGalaxiesCap = buyableEffect("ca", 23)
+        if (hasUpgrade("cs", 1003)) player.ca.replicantiGalaxies = player.ca.replicantiGalaxiesCap
 
         //rememberance
         player.ca.rememberanceCoreCost = player.ca.rememberanceCores.add(1).pow(1.5).mul(1000)
         player.ca.rememberanceCoresEffect = player.ca.rememberanceCores.mul(0.05).add(1)
 
-        if (player.ca.replicanti.gte("1.8e308"))
-        {
-            if (player.ca.replicanti.lt("1e2000")) player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.3).plus(1)
-            if (player.ca.replicanti.gte("1e2000")) player.ca.replicantiSoftcap = player.ca.replicanti.log10().pow(1.6).plus(1)
-            } else
-        {
+        if (player.ca.replicanti.gte("1.8e308")) {
+            player.ca.replicantiSoftcap = Decimal.pow(10, player.ca.replicanti.div(1.79e308).add(1).log(1e100))
+        } else {
             player.ca.replicantiSoftcap = new Decimal(1)
         }
     },
-    gainCanteCore()
-    {
+    gainCanteCore() {
         let leftover = new Decimal(0)
         leftover = player.ca.canteEnergy.sub(player.ca.canteEnergyReq)
         player.ca.canteCores = player.ca.canteCores.add(1)
         player.ca.canteEnergy = new Decimal(0)
         player.ca.canteEnergy = player.ca.canteEnergy.add(leftover)
     },
-    convertRememberanceCore()
-    {
+    convertRememberanceCore() {
         player.ca.canteCores = player.ca.canteCores.sub(1)
         player.oi.protoMemories = player.oi.protoMemories.sub(player.ca.rememberanceCoreCost)
         player.ca.rememberanceCores = player.ca.rememberanceCores.add(1)
     },
-    replicantiMultiply()
-    {
+    replicantiMultiply() {
         let random = new Decimal(0)
         random = Math.random()
-        if (random < player.ca.replicateChance)
-        {
-            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21))
-            {
+        if (random < player.ca.replicateChance) {
+            if (player.ca.replicanti.lt(1.79e308) || hasUpgrade("ma", 21)) {
                 player.ca.replicanti = player.ca.replicanti.mul(player.ca.replicantiMult)
-            } else 
-            {
+            } else {
                 player.ca.replicanti = new Decimal(1.79e308)
             }
         }
         player.ca.replicantiTimer = new Decimal(0)
     },
-    branches: ["om"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -214,7 +188,7 @@
         },
         11: {
             title() { return "<h1>UNLOCK" },
-            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoints[19].gte(1e22) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
+            canClick() { return player.cb.level.gte(250) && player.ad.antimatter.gte("1e600") && player.in.infinities.gte(100000) && player.h.hexPoint.gte(1e36) && player.ta.highestDicePoints.gte(1e50) && player.cb.petPoints.gte(500) },
             unlocked() { return true},
             onClick() {
                 player.ca.unlockedCante = true
@@ -230,7 +204,6 @@
                 player.ca.galaxyDust = player.ca.galaxyDust.add(player.ca.galaxyDustToGet)
                 player.ca.replicanti = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
@@ -246,7 +219,6 @@
                 player.ca.replicantiGalaxies = player.ca.replicantiGalaxies.add(1)
                 player.ca.replicanti = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: '3px solid #241c44', borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#333c81" : look.backgroundColor = "#bf8f8f"
@@ -270,7 +242,6 @@
             onClick() {
                 layers.ca.convertRememberanceCore();
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         16: {
@@ -279,13 +250,8 @@
             unlocked() { return true },
             onClick() {
                 player.ca.defeatedCante = true
-                if (options.newMenu) {
-                    player.tab = 'ca'
-                    player.microtabs["ca"]['stuff'] = 'Main'
-                } else {
-                    player.tab = 'po'
-                    player.subtabs["po"]['stuff'] = 'Portals'
-                }
+                player.tab = 'ca'
+                player.subtabs["ca"]['stuff'] = 'Main'
             },
             style: { width: '500px', "min-height": '200px', borderRadius: '20px' },
         },
@@ -299,9 +265,8 @@
             progress() {
                 return player.ca.canteEnergy.div(player.ca.canteEnergyReq)
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 return "<h5>" + format(player.ca.canteEnergy) + "/" + formatWhole(player.ca.canteEnergyReq) + "<h5> Cante energy to gain a cante core.</h5>";
             },
@@ -312,12 +277,13 @@
             width: 476,
             height: 50,
             progress() {
+                if (player.ca.replicantiTimerReq.lte(0.05)) return new Decimal(1)
                 return player.ca.replicantiTimer.div(player.ca.replicantiTimerReq)
             },
-            fillStyle: {
-                "background-color": "#193ceb",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#193ceb"},
             display() {
+                if (player.ca.replicantiTimerReq.lte(0.05)) return "Interval Maxed"
                 return "Time: " + formatTime(player.ca.replicantiTimer) + "/" + formatTime(player.ca.replicantiTimerReq);
             },
         },
@@ -326,10 +292,15 @@
     },
     buyables: {
         11: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e18) },
+            costBase() { return new Decimal(1e18) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(78) },
+            currency() { return player.in.infinityPoints},
+            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005) },
-            unlocked() { return true },
-            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicate Chance"
             },
@@ -338,30 +309,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy(mult) {
-                let base = new Decimal(1e18)
-                let growth = 10
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         12: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e19) },
+            costBase() { return new Decimal(1e19) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.in.infinityPoints},
+            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075) },
-            unlocked() { return true },
-            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicanti Mult"
             },
@@ -370,30 +343,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy(mult) {
-                let base = new Decimal(1e19)
-                let growth = 10
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         13: {
-            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e20) },
+            costBase() { return new Decimal(1e20) },
+            costGrowth() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.in.infinityPoints},
+            pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.in.infinityPoints.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicanti Interval"
             },
@@ -402,30 +377,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Infinity Points"
             },
             buy(mult) {
-                let base = new Decimal(1e20)
-                let growth = 100
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.in.infinityPoints = player.in.infinityPoints.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.in.infinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.in.infinityPoints = player.in.infinityPoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         14: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e13) },
+            costBase() { return new Decimal(1e13) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(78) },
+            currency() { return player.ta.negativeInfinityPoints},
+            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.005) },
-            unlocked() { return true },
-            canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicate Chance+"
             },
@@ -434,30 +411,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                let base = new Decimal(1e13)
-                let growth = 10
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         15: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e14) },
+            costBase() { return new Decimal(1e14) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ta.negativeInfinityPoints},
+            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075) },
-            unlocked() { return true },
-            canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicanti Mult+"
             },
@@ -466,30 +445,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                let base = new Decimal(1e14)
-                let growth = 10
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         16: {
-            cost(x) { return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e15) },
+            costBase() { return new Decimal(1e15) },
+            costGrowth() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ta.negativeInfinityPoints},
+            pay(amt) { player.ta.negativeInfinityPoints = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.075).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.ta.negativeInfinityPoints.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicanti Interval+"
             },
@@ -498,30 +479,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Negative Infinity Points"
             },
             buy(mult) {
-                let base = new Decimal(1e15)
-                let growth = 100
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ta.negativeInfinityPoints, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         17: {
-            cost(x) { return new Decimal(2).pow(x || getBuyableAmount(this.layer, this.id)).mul(3) },
+            costBase() { return new Decimal(3) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(25) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.008) },
-            unlocked() { return hasUpgrade('bi', 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked() {return hasUpgrade('bi', 26)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicate Chance++"
             },
@@ -530,30 +513,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(3)
-                let growth = 2
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         18: {
-            cost(x) { return new Decimal(3).pow(x || getBuyableAmount(this.layer, this.id)).mul(6) },
+            costBase() { return new Decimal(6) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05) },
-            unlocked() { return hasUpgrade("bi", 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked() {return hasUpgrade('bi', 26)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicanti Mult++"
             },
@@ -562,30 +547,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(6)
-                let growth = 3
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         19: {
-            cost(x) { return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id)).mul(4) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(10) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
-            unlocked() { return hasUpgrade('bi', 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked() {return hasUpgrade('bi', 26)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Replicanti Interval++"
             },
@@ -594,30 +581,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(4)
-                let growth = 10
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundColor: "#44ABD9", backgroundImage: "linear-gradient(0deg, #0a82b9 0%, #7dd3f9 100%)", backgroundOrigin: "border-box"},
         },
         21: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(10) },
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
-            unlocked() { return hasUpgrade('bi', 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Dimension Boost Base"
             },
@@ -626,62 +615,66 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(10)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'}
+            style: {width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'},
         },
         22: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(20) },
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01) },
-            unlocked() { return hasUpgrade('bi', 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Tickspeed Base"
             },
             display() {
-                return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " to the tickspeed base.\n\
+                return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " to ADs tickspeed base.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(20)
-                let growth = 1.3
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'}
+            style: {width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'},
         },
         23: {
-            cost(x) { return new Decimal(3).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(3) },
+            purchaseLimit() { return new Decimal(40) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return hasUpgrade('bi', 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "MAX REPLICANTI GALAXIES"
             },
@@ -690,30 +683,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(50)
-                let growth = 3
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'}
+            style: {width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'},
         },
         24: {
-            cost(x) { return new Decimal(1.4).pow(x || getBuyableAmount(this.layer, this.id)).mul(150) },
+            costBase() { return new Decimal(150) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.ca.galaxyDust},
+            pay(amt) { player.ca.galaxyDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).mul(player.ca.galaxyDust.pow(0.3)).add(1) },
-            unlocked() { return hasUpgrade('bi', 26) },
-            canAfford() { return player.ca.galaxyDust.gte(this.cost()) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "INFINITY POINTS"
             },
@@ -722,32 +717,26 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Galaxy Dust"
             },
             buy(mult) {
-                let base = new Decimal(150)
-                let growth = 1.4
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.ca.galaxyDust = player.ca.galaxyDust.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16) ) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.ca.galaxyDust, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.ca.galaxyDust = player.ca.galaxyDust.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'}
+            style: {width: '275px', height: '150px', backgroundColor: '#333c81', color: 'white'},
         },
     },
-    milestones: {
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Unlock": {
@@ -760,7 +749,7 @@
                     ["raw-html", function () { return formatWhole(player.cb.level) + "/250 Check Back Level" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.ad.antimatter) + "/1e600 Antimatter" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return formatWhole(player.in.infinities) + "/100,000 Infinities" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return format(player.h.hexPoints[19]) + "/1e22 Hex 20 Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return format(player.h.hexPoint) + "/1e36 Hex Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.ta.highestDicePoints) + "/1e50 Highest Dice Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return format(player.cb.petPoints) + "/500 Pet Points" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -772,9 +761,11 @@
                 unlocked() { return player.ca.unlockedCante },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "which boosts infinity points by <h3>" + format(player.ca.replicantiEffect) + "</h3>x, infinity dimensions by <h3>" + format(player.ca.replicantiEffect2) + "</h3>x, and points by <h3>" + format(player.ca.replicantiEffect3) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return !hasUpgrade("ma", 21) ? "(Caps out at 1.79e308 replicanti)" : "After 1.79e308 replicanti, replicate interval is multiplied by x" + format(player.ca.replicantiSoftcap) + "."}, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "Boosts infinity points by x" + format(player.ca.replicantiEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts infinity dimensions by x" + format(player.ca.replicantiEffect2)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Boosts points by x" + format(player.ca.replicantiEffect3)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return !hasUpgrade("ma", 21) ? "(Caps out at 1.79e308 replicanti)" : "After 1.79e308 replicanti, Replicanti Mult is divided by /" + format(player.ca.replicantiSoftcap) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["bar", "replicantiBar"]]],
                     ["blank", "25px"],
@@ -783,9 +774,9 @@
                     ]],
                     ["raw-html", function () { return "Replicate Chance: " + format(player.ca.replicateChance.mul(100)) + "%" }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
-                    ["row", [["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16],
+                        ["ex-buyable", 17], ["ex-buyable", 18], ["ex-buyable", 19]], {maxWidth: "900px"}],
                 ]
             },
             "Galaxy Dust": {
@@ -793,17 +784,23 @@
                 unlocked() { return player.ca.unlockedCante && hasUpgrade("bi", 26) },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ca.galaxyDust) + "</h3> galaxy dust." }, { "color": "#979EE8", "font-size": "26px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Galaxy dust multiplies antimatter galaxy effect base by <h3>" + format(player.ca.galaxyDustEffect) + "</h3>x." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will <h3>" + format(player.ca.galaxyDustToGet) + "</h3> galaxy dust on reset." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.ca.galaxyDust) + "</h3> galaxy dust"}, {color: "#979EE8", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.ca.galaxyDustToGet) + ")"}, () => {
+                            let look = {color: "#979EE8", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.ca.replicanti.gte(1e10) ? look.color = "#979EE8" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", () => {return "Boosts antimatter galaxy effect base by x" + format(player.ca.galaxyDustEffect)}, {color: "#979EE8", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, { "color": "#979EE8", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(They just act like regular antimatter galaxies)" }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, {color: "#979EE8", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(They just act like regular antimatter galaxies)" }, {color: "#979EE8", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 13]]],
                 ]
@@ -848,17 +845,15 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 16]]],
                 ]
-
             },
         },
     },
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
     layerShown() { return (player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)) || hasMilestone("s", 19)}
 })
 

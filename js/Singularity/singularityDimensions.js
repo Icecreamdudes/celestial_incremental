@@ -24,10 +24,8 @@
         pausedDimensions: false,
         producingDimensions: false,
         radiationUsage: new Decimal(0),
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(120deg, #782424 0%, #8c1111 100%)",
@@ -37,41 +35,51 @@
         };
     },
     tooltip: "Singularity Dimensions",
-    branches: ["cop",],
+    branches: ["co",],
     color: "#3d1616",
     update(delta) {
         let onepersec = new Decimal(1)
 
         // Singularity Power Effects
         player.sd.singularityPowerEffect = player.sd.singularityPower.pow(0.4).add(1)
-        if (player.sd.singularityPower.gt("1e1000")) player.sd.singularityPowerEffect = Decimal.mul("1e400", player.sd.singularityPower.div("1e1000").pow(0.06).add(1))
         player.sd.singularityPowerEffect2 = player.sd.singularityPower.pow(1.1).add(1)
-        if (player.sd.singularityPower.gt("1e1000")) player.sd.singularityPowerEffect2 = Decimal.mul("1e1100", player.sd.singularityPower.div("1e1000").pow(0.06).add(1))
         
         if (player.sd.pausedDimensions && player.sd.producingDimensions) {
-        // Singularity Power Gain
-        player.sd.singularityPower = player.sd.singularityPower.add(player.sd.singularityPowerPerSecond.mul(delta))
+            // Singularity Power Gain
+            player.sd.singularityPowerPerSecond = player.sd.dimensionAmounts[0]
+                .mul(buyableEffect("sd", 11))
+                .mul(player.co.cores.radioactive.effect[2])
+                .mul(buyableEffect("fu", 54))
+                .mul(buyableEffect("sma", 14))
+                .mul(levelableEffect("pet", 308)[1])
+                .mul(player.st.starPowerEffect3) 
 
-        player.sd.singularityPowerPerSecond = player.sd.dimensionAmounts[0]
-            .mul(buyableEffect("sd", 11))
-            .mul(player.cop.processedCorePrimedEffects[2])
-            .mul(buyableEffect("sma", 14))
-            .mul(levelableEffect("pet", 308)[1])
-            .mul(player.st.starPowerEffect2) 
-        // Dimension Gain
-        for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
-            player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
-        }
-        for (let i = 0; i < player.sd.dimensionAmounts.length-1; i++) {
-            player.sd.dimensionsPerSecond[i] = player.sd.dimensionAmounts[i+1]
-            .mul(buyableEffect("sd", i+12))
-            .mul(buyableEffect("fu", 53))
-            .mul(buyableEffect("sma", 14))
-            .mul(player.cop.processedCorePrimedEffects[2])
-            .mul(player.st.starPowerEffect2) 
-        }
+            // Singularity Power Softcap
+            let base = new Decimal(300)
+            if (player.sd.singularityPowerPerSecond.gt(1e300)) player.sd.singularityPowerPerSecond = player.sd.singularityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.sd.singularityPowerPerSecond.plus(1).log(10))).mul(1e300)
+            
+            // Singularity Power Per Second Calc
+            player.sd.singularityPower = player.sd.singularityPower.add(player.sd.singularityPowerPerSecond.mul(delta))
 
-        player.ra.storedRadiation = player.ra.storedRadiation.sub(player.sd.radiationUsage.mul(delta))
+            // Dimension Gain
+            for (let i = 0; i < player.sd.dimensionAmounts.length-1; i++) {
+                player.sd.dimensionsPerSecond[i] = player.sd.dimensionAmounts[i+1]
+                .mul(buyableEffect("sd", i+12))
+                .mul(buyableEffect("fu", 53))
+                .mul(buyableEffect("sma", 14))
+                .mul(player.co.cores.radioactive.effect[2])
+                .mul(player.st.starPowerEffect3) 
+
+                // Dimension Softcap
+                if (player.sd.dimensionsPerSecond[i].gt(1e300)) player.sd.dimensionsPerSecond[i] = player.sd.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
+            }
+
+            // Dimension Per Second Calc
+            for (let i = 0; i < player.sd.dimensionAmounts.length; i++) {
+                player.sd.dimensionAmounts[i] = player.sd.dimensionAmounts[i].add(player.sd.dimensionsPerSecond[i].mul(delta))
+            }
+
+            player.ra.storedRadiation = player.ra.storedRadiation.sub(player.sd.radiationUsage.mul(delta))
         }
 
         player.sd.radiationUsage = player.sd.buyables[11]
@@ -84,27 +92,17 @@
             .mul(player.sd.buyables[18].add(1))
             .mul(3)
             .pow(0.5)
-            .div(buyableEffect("fu", 54))
+        if (hasUpgrade("cs", 1302)) player.sd.radiationUsage = player.sd.radiationUsage.div(5)
 
 
         if (player.ra.storedRadiation.gt(player.sd.radiationUsage.mul(0.1))) {
             player.sd.producingDimensions = true
-        } else
-        {
+        } else {
             player.sd.producingDimensions = false
             player.ra.storedRadiation = new Decimal(0)
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "s"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.sd.dimMax == false },
@@ -113,21 +111,24 @@
                 player.sd.dimMax = true
             },
             style() {
-                if (getBuyableAmount('sd', 1).lt(8)) {
-                    return { width: '75px', "min-height": '50px', borderRadius: '0px' }
-                } else {
-                    return { width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
-                }
-            } 
+                let look = {width: "80px", minHeight: "50px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                if (getBuyableAmount('sd', 1).lt(8)) {look.borderRadius = "0px"} else {look.borderRadius = "10px 0 0 10px"}
+                return look
+            },
         },
         3: {
             title() { return "Buy Max Off" },
-            canClick() { return player.sd.dimMax == true  },
+            canClick() { return player.sd.dimMax == true},
             unlocked() { return true },
             onClick() {
                 player.sd.dimMax = false
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px' }
+            style() {
+                let look = {width: "80px", minHeight: "50px", borderRadius: "0px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         4: {
             title() { return "Unpause Dimension Production" },
@@ -136,7 +137,11 @@
             onClick() {
                 player.sd.pausedDimensions = true
             },
-            style: { width: '200px', "min-height": '50px', borderRadius: '0px' }
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "0px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            }
         },
         5: {
             title() { return "Pause Dimension Production" },
@@ -145,14 +150,15 @@
             onClick() {
                 player.sd.pausedDimensions = false
             },
-            style: { width: '200px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' }
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "0px 10px 10px 0px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            }
         },
-
     },
-    bars: {
-    },
-    upgrades: { 
-    },
+    bars: {},
+    upgrades: {},
     buyables: {
         1: {
             purchaseLimit() { return new Decimal(8) },
@@ -182,9 +188,13 @@
                 return "Next SD: " + format(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
             },
             buy() {
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
-            style: { width: '250px', height: '50px', borderRadius: '10px 0px 0px 10px' }
+            style() {
+                let look = {width: "250px", height: "50px", borderRadius: "10px 0px 0px 10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         11: {
             costBase() { return new Decimal(10) },
@@ -214,7 +224,11 @@
                     player.sd.dimensionAmounts[0] = player.sd.dimensionAmounts[0].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         12: {
             costBase() { return new Decimal(100) },
@@ -244,7 +258,11 @@
                     player.sd.dimensionAmounts[1] = player.sd.dimensionAmounts[1].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         13: {
             costBase() { return new Decimal(1000) },
@@ -274,7 +292,11 @@
                     player.sd.dimensionAmounts[2] = player.sd.dimensionAmounts[2].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         14: {
             costBase() { return new Decimal(100000) },
@@ -304,7 +326,11 @@
                     player.sd.dimensionAmounts[3] = player.sd.dimensionAmounts[3].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         15: {
             costBase() { return new Decimal(1e7) },
@@ -334,7 +360,11 @@
                     player.sd.dimensionAmounts[4] = player.sd.dimensionAmounts[4].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         16: {
             costBase() { return new Decimal(1e10) },
@@ -364,7 +394,11 @@
                     player.sd.dimensionAmounts[5] = player.sd.dimensionAmounts[5].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         17: {
             costBase() { return new Decimal(1e14) },
@@ -394,7 +428,11 @@
                     player.sd.dimensionAmounts[6] = player.sd.dimensionAmounts[6].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         18: {
             costBase() { return new Decimal(1e18) },
@@ -424,16 +462,16 @@
                     player.sd.dimensionAmounts[7] = player.sd.dimensionAmounts[7].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "10px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
     },
-    milestones: {
-   
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -498,17 +536,25 @@
                         ], {width: "700px"}], 
                         ["buyable", 18],
                     ]],
-                    ["blank", "25px"],
                 ]
             },
         },
     }, 
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.sd.singularityPower) + "</h3> singularity power, which boosts infinity and negative infinity points by x" + format(player.sd.singularityPowerEffect) + ", and infinity dimensions by x" + format(player.sd.singularityPowerEffect2) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.sd.singularityPowerPerSecond) + "</h3> singularity power per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [
+            ["raw-html", () => {return "You have " + format(player.sd.singularityPower) + " singularity power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.sd.singularityPowerPerSecond) + "/s)"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.sd.pausedDimensions && player.sd.producingDimensions) {look.color = "white"} else {look.color = "gray"}
+                return look
+            }],
+            ["raw-html", () => {return player.sd.singularityPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["raw-html", () => {return "Boosts infinity and negative infinity points by x" + format(player.sd.singularityPowerEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Boosts infinity dimensions by x" + format(player.sd.singularityPowerEffect2)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasMilestone("s", 14)  }
 })

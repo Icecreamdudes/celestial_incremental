@@ -1,6 +1,6 @@
 ﻿addLayer("ep0", {
-    name: "Ep0", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "EP0", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Dotknight", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Dk", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -18,7 +18,8 @@
     },
     automate() {
     },
-    nodeStyle() {
+    nodeStyle: {
+        backgroundColor: "#9176af",
     },
     tooltip: "Dotknight",
     color: "#cb79ed",
@@ -60,33 +61,6 @@
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-        2: {
-            title() { return getLevelableAmount("pet", 406).gt(0) ? "<img src='resources/selEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 406).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep5"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-        3: {
-            title() { return getLevelableAmount("pet", 402).gt(0) ? "<img src='resources/dragonEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 402).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep1"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
         11: {
             title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
             canClick() { return player.ep0.dotknightPointButtonTimers[0].lt(0) && this.unlocked() },
@@ -171,8 +145,7 @@
     bars: {
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Dotknight Upgrade I",
             unlocked() { return true },
             description() { return "Boosts replicanti mult based on dotknight points." },
@@ -184,10 +157,9 @@
                 return player.ep0.dotknightPoints.pow(0.2).div(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Dotknight Upgrade II",
             unlocked() { return true },
             description() { return "Boosts time cubes based on dotknight points." },
@@ -199,10 +171,9 @@
                 return player.ep0.dotknightPoints.pow(0.35).div(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Dotknight Upgrade III",
             unlocked() { return true },
             description() { return "Boosts dragon points based on dotknight points." },
@@ -214,7 +185,7 @@
                 return player.ep0.dotknightPoints.pow(0.25).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -224,7 +195,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -232,7 +203,7 @@
                 return "Dotknight Scraps"
             },
             display() {
-                return 'which are boosting main core scrap gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting core scrap gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dotknight Points'
             },
             buy(mult) {
@@ -321,13 +292,9 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -353,7 +320,7 @@
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -361,14 +328,14 @@
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 401).gte(1) }
 })
 addLayer("ep1", {
-    name: "Ep1", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "EP1", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Dragon", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Dr", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -386,7 +353,8 @@ addLayer("ep1", {
     },
     automate() {
     },
-    nodeStyle() {
+    nodeStyle: {
+        backgroundColor: "#689b3a",
     },
     tooltip: "Dragon",
     color: "#cb79ed",
@@ -428,33 +396,6 @@ addLayer("ep1", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-        2: {
-            title() { return getLevelableAmount("pet", 401).gt(0) ? "<img src='resources/dotknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 401).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep0"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-        3: {
-            title() { return getLevelableAmount("pet", 403).gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 403).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep2"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
         11: {
             title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
             canClick() { return player.ep1.dragonPointButtonTimers[0].lt(0) && this.unlocked() },
@@ -540,8 +481,7 @@ addLayer("ep1", {
     bars: {
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Dragon Upgrade I",
             unlocked() { return true },
             description() { return "Boosts crystals based on dragon points." },
@@ -553,13 +493,12 @@ addLayer("ep1", {
                 return player.ep1.dragonPoints.pow(0.5).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Dragon Upgrade II",
             unlocked() { return true },
-            description() { return "Boosts tickspeed base based on dragon points." },
+            description() { return "Boosts AD tickspeed base based on dragon points." },
             cost: new Decimal(250),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Dragon Points",
@@ -568,10 +507,9 @@ addLayer("ep1", {
                 return player.ep1.dragonPoints.pow(0.15).div(70).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Dragon Upgrade III",
             unlocked() { return true },
             description() { return "Boosts cookie points based on dragon points." },
@@ -583,7 +521,7 @@ addLayer("ep1", {
                 return player.ep1.dragonPoints.pow(0.25).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -669,7 +607,7 @@ addLayer("ep1", {
                 return "Dragon Dotknights"
             },
             display() {
-                return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting dotknight point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dragon Points'
             },
             buy(mult) {
@@ -690,13 +628,9 @@ addLayer("ep1", {
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -722,7 +656,7 @@ addLayer("ep1", {
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -730,14 +664,14 @@ addLayer("ep1", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 402).gte(1) }
 })
 addLayer("ep2", {
-    name: "Ep2", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "EP2", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Cookie", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Co", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -755,7 +689,8 @@ addLayer("ep2", {
     },
     automate() {
     },
-    nodeStyle() {
+    nodeStyle: {
+        backgroundColor: "#b9966d",
     },
     tooltip: "Cookie",
     color: "#cb79ed",
@@ -797,33 +732,6 @@ addLayer("ep2", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-        2: {
-            title() { return getLevelableAmount("pet", 402).gt(0) ? "<img src='resources/dragonEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 402).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep1"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-        3: {
-            title() { return getLevelableAmount("pet", 404).gt(0) ? "<img src='resources/kresEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 404).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep3"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
         11: {
             title() { return player.ep2.cookiePointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[0]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[0]) + " Cookie Points."},
             canClick() { return player.ep2.cookiePointButtonTimers[0].lt(0) && this.unlocked() },
@@ -945,10 +853,10 @@ addLayer("ep2", {
             currencyDisplayName: "Cookie Points",
             currencyInternalName: "cookiePoints",
             effect() {
-                return player.ep2.cookiePoints.pow(0.15).div(80).add(1)
+                return player.ep2.cookiePoints.add(1).log(10).pow(0.5).div(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12:
         {
@@ -963,7 +871,7 @@ addLayer("ep2", {
                 return player.ep2.cookiePoints.pow(1.1).div(2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13:
         {
@@ -978,7 +886,7 @@ addLayer("ep2", {
                 return player.ep2.cookiePoints.pow(0.25).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -1064,7 +972,7 @@ addLayer("ep2", {
                 return "Cookie Dragons"
             },
             display() {
-                return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting dragon point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Cookie Points'
             },
             buy(mult) {
@@ -1113,7 +1021,7 @@ addLayer("ep2", {
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
         },
@@ -1121,14 +1029,14 @@ addLayer("ep2", {
 
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep2.cookiePoints) + "</h3> cookie points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 403).gte(1) }
 })
 addLayer("ep3", {
-    name: "Ep3", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "EP3", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Kres", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Kr", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1141,7 +1049,9 @@ addLayer("ep3", {
         kresStats: [new Decimal(7), new Decimal(8), new Decimal(5)]
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        backgroundColor: "#910a27",
+    },
     tooltip: "Kres",
     color: "#cb79ed",
     update(delta) {
@@ -1166,35 +1076,7 @@ addLayer("ep3", {
         player.ep3.kresStats[2] = player.ep3.kresStats[2].add(buyableEffect("ma", 13))
     },
     branches: ["branch"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-        2: {
-            title() { return getLevelableAmount("pet", 403).gt(0) ? "<img src='resources/cookieEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 403).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep2"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-        3: {
-            title() { return getLevelableAmount("pet", 405).gt(0) ? "<img src='resources/navknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 405).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep4"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-    },
+    clickables: {},
     bars: {},
     upgrades: {},
     buyables: {
@@ -1229,7 +1111,7 @@ addLayer("ep3", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         2: {
             costBase() { return new Decimal(25) },
@@ -1262,7 +1144,7 @@ addLayer("ep3", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         3: {
             costBase() { return new Decimal(75) },
@@ -1295,7 +1177,7 @@ addLayer("ep3", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         
         11: {
@@ -1401,7 +1283,7 @@ addLayer("ep3", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
+                    ["style-row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13]], {maxWidth: "900px"}],
 
                 ]
             },
@@ -1419,7 +1301,7 @@ addLayer("ep3", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3],]],
+                    ["style-row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3]], {maxWidth: "900px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These stats will be helpful for the future!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1430,14 +1312,14 @@ addLayer("ep3", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep3.kresPoints) + "/" + format(player.ep3.kresPointsMax) + "</h3> kres points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ep3.kresPointsPerSecond) + "</h3> kres points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 404).gte(1) }
 })
 addLayer("ep4", {
-    name: "Ep4", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "EP4", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Nav", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Na", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1451,7 +1333,9 @@ addLayer("ep4", {
         navStats: [new Decimal(9), new Decimal(6), new Decimal(5)]
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        backgroundColor: "#710a91",
+    },
     tooltip: "Nav",
     color: "#cb79ed",
     update(delta) {
@@ -1476,35 +1360,7 @@ addLayer("ep4", {
         player.ep4.navStats[2] = player.ep4.navStats[2].add(buyableEffect("ma", 13))
     },
     branches: ["branch"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-        2: {
-            title() { return getLevelableAmount("pet", 404).gt(0) ? "<img src='resources/kresEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 404).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep3"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-        3: {
-            title() { return getLevelableAmount("pet", 406).gt(0) ? "<img src='resources/selknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 406).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep5"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-    },
+    clickables: {},
     bars: {},
     upgrades: {},
     buyables: {
@@ -1539,7 +1395,7 @@ addLayer("ep4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         2: {
             costBase() { return new Decimal(75) },
@@ -1572,7 +1428,7 @@ addLayer("ep4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         3: {
             costBase() { return new Decimal(50) },
@@ -1605,8 +1461,9 @@ addLayer("ep4", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
+
         11: {
             purchaseLimit() { return new Decimal(990) },
             currency() { return player.ep4.navPoints},
@@ -1710,7 +1567,7 @@ addLayer("ep4", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
+                    ["style-row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
             "Stats": {
@@ -1727,7 +1584,7 @@ addLayer("ep4", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3],]],
+                    ["style-row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3]], {maxWidth: "900px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These stats will be helpful for the future!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -1738,14 +1595,14 @@ addLayer("ep4", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep4.navPoints) + "/" + format(player.ep4.navPointsMax) + "</h3> nav points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ep4.navPointsPerSecond) + "</h3> nav points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 405).gte(1) }
 })
 addLayer("ep5", {
-    name: "Ep5", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "EP5", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Sel", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "Se", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1759,7 +1616,9 @@ addLayer("ep5", {
         selStats: [new Decimal(6), new Decimal(6), new Decimal(8)]
     }},
     automate() {},
-    nodeStyle() {},
+    nodeStyle: {
+        backgroundColor: "#065c19",
+    },
     tooltip: "Sel",
     color: "#cb79ed",
     update(delta) {
@@ -1784,39 +1643,9 @@ addLayer("ep5", {
         player.ep5.selStats[2] = player.ep5.selStats[2].add(buyableEffect("ma", 13))
     },
     branches: ["branch"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cb"
-            },
-            style: { width: '100px', "min-height": '50px', 'background-image': '#febc06' },
-        },
-        2: {
-            title() { return getLevelableAmount("pet", 405).gt(0) ? "<img src='resources/navEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 405).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep3"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-        3: {
-            title() { return getLevelableAmount("pet", 401).gt(0) ? "<img src='resources/dotknightknightEpicPet.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>" : "<img src='resources/secret.png'style='width:calc(100%);height:calc(100%);margin:-20%'></img>"},
-            canClick() { return getLevelableAmount("pet", 401).gt(0) },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ep0"
-            },
-            style: { width: '50px', "min-height": '50px', 'border-radius': "0%", 'border-width': "0px", 'padding': "0px", 'background-color': '#6600A6' },
-        },
-    },
-    bars: {
-    },
-    upgrades: {
-    },
+    clickables: {},
+    bars: {},
+    upgrades: {},
     buyables: {
         1: {
             costBase() { return new Decimal(75) },
@@ -1849,7 +1678,7 @@ addLayer("ep5", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         2: {
             costBase() { return new Decimal(50) },
@@ -1882,7 +1711,7 @@ addLayer("ep5", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
         3: {
             costBase() { return new Decimal(25) },
@@ -1915,8 +1744,9 @@ addLayer("ep5", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '175px', height: '100px', }
+            style: {width: "175px", height: "120px"},
         },
+
         11: {
             purchaseLimit() { return new Decimal(990) },
             currency() { return player.ep5.selPoints},
@@ -2020,7 +1850,7 @@ addLayer("ep5", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13],]],
+                    ["style-row", [["ex-buyable", 11],["ex-buyable", 12],["ex-buyable", 13]], {maxWidth: "900px"}],
                 ]
             },
             "Stats": {
@@ -2037,7 +1867,7 @@ addLayer("ep5", {
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5],]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3],]],
+                    ["style-row", [["ex-buyable", 1],["ex-buyable", 2],["ex-buyable", 3]], {maxWidth: "900px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return "These stats will be helpful for the future!" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -2047,8 +1877,8 @@ addLayer("ep5", {
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.ep5.selPoints) + "/" + format(player.ep5.selPointsMax) + "</h3> sel points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
         ["raw-html", function () { return "You are gaining <h3>" + format(player.ep5.selPointsPerSecond) + "</h3> sel points per second. (based on level)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 2], ["clickable", 1], ["clickable", 3]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 406).gte(1) }
 })

@@ -53,15 +53,6 @@ addLayer("mu", {
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "od"
-            },
-            style: { width: '100px', minHeight: '50px' },
-        },
         101: {
             title() { return "Reset ordinal, but gain +" + formatWhole(player.mu.pg) + " ordinal power." },
             canClick() { return player.mu.pg.gte(100) },
@@ -138,12 +129,11 @@ addLayer("mu", {
                 ["raw-html", () => {return formatWhole(player.od.ob)}, {color: "white", fontSize: "30px", fontFamily: "monospace"}],
             ], {width:"75px", height: "73px", backgroundColor: "#333333", borderRadius: "0px 20px 20px 0px"}],
         ], {width: "577px", border: "2px solid white", borderRadius: "20px"}],
-        ["blank", "10px"],
-        ["clickable", 1],
         ["blank", "25px"],
         ["raw-html", () => {return "You have " + format(player.mu.cp) + " Ordinal Power."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "25px"],
         ["microtabs", "Content", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && layerShown("od") },
     deactivated() { return true},

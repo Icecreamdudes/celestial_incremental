@@ -15,12 +15,12 @@
     nodeStyle() {
         return {
             background: "linear-gradient(0deg, #770022 0%, #8D71B4 100%)",
-            "background-origin": "border-box",
-            "border-color": "#770022",
+            backgroundOrigin: "border-box",
+            borderColor: "#770022",
         };
-      },
+    },
     tooltip: "Pests",
-    color: "#770022",
+    color: "#411c35",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -44,53 +44,43 @@
         ]
     },
     branches: ["g", "gh"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-    },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h1>Effects" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Celestial Points: /" + format(player.pe.pestEffect[0]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Factor Power: /" + format(player.pe.pestEffect[1]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Prestige Points: /" + format(player.pe.pestEffect[2]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Leaf Gain: /" + format(player.pe.pestEffect[3]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Grass Value: /" + format(player.pe.pestEffect[4]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Lines of Code: /" + format(player.pe.pestEffect[5]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "<h2>Fertilizer: /" + format(player.pe.pestEffect[6]) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>Your pests are killing the grasshoppers, so -" + format(player.pe.pestEffect[7]*100) + "% grasshoppers per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>Grasshops remove 10% of your pests." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["raw-html", () => { return "<h1>Effects" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["blank", "5px"],
+                        ["h-line", "350px"],
+                        ["blank", "5px"],
+                        ["raw-html", () => { return "<h2>Celestial Points: /" + formatShort(player.pe.pestEffect[0]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "<h2>Factor Power: /" + formatShort(player.pe.pestEffect[1]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "<h2>Prestige Points: /" + formatShort(player.pe.pestEffect[2]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "<h2>Leaf Gain: /" + formatShort(player.pe.pestEffect[3]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "<h2>Grass Value: /" + formatShort(player.pe.pestEffect[4]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "<h2>Lines of Code: /" + formatShort(player.pe.pestEffect[5]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "<h2>Fertilizer: /" + formatShort(player.pe.pestEffect[6]) }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ], {width: "400px", padding: "10px 20px", backgroundColor: "#1a0b15", border: "3px solid #411c35", borderRadius: "20px"}],
+                        ["blank", "10px"],
+                    ["style-column", [
+                        ["raw-html", () => { return "<h2>Your pests are killing the grasshoppers,<br>so -" + formatShort(player.pe.pestEffect[7]*100) + "% grasshoppers per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                        ["blank", "10px"],
+                        ["raw-html", () => { return "<h2>Grasshops remove 10% of your pests." }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
+                    ], {width: "600px", padding: "10px", backgroundColor: "#1a0b15", border: "3px solid #411c35", borderRadius: "20px"}],
                 ]
             },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.g.grass) + "</h3> grass, which boost leaf gain by <h3>x" + format(player.g.grassEffect) + "." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
-        ["raw-html", function () { return "There are <h3>" + format(player.pe.pests) + "</h3> pests." }, { "color": "#770022", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.pe.pestsPerSecond) + "</h3> pests per second." }, { "color": "#770022", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [
+            ["raw-html", () => { return "There are <h3>" + format(player.pe.pests) + "</h3> pests" }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+            ["raw-html", () => { return "(+" + format(player.pe.pestsPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 12) || inChallenge("ip", 18)) },
     deactivated() { return !(inChallenge("ip", 12) || inChallenge("ip", 18))},

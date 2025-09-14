@@ -33,6 +33,20 @@ addLayer("pet", {
         singularityButtonTimers: [new Decimal(0), new Decimal(0),],
         singularityButtonTimersMax: [new Decimal(600), new Decimal(3600),],
 
+        // Legendary Gems
+        legendaryGemsToGetMin: new Decimal(0),
+        legendaryGemsToGetMax: new Decimal(0),
+
+        legendaryGemTimer: new Decimal(0),
+        legendaryGemTimerMax: new Decimal(86400),
+
+        gemEffects: [new Decimal(1), new Decimal(1), new Decimal(1)], // Red, Purple, Green
+
+        //summon
+        summonReqs: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)], // Red, Purple, Green
+        summonTimer: new Decimal(0),
+        summonTimer: new Decimal(21600),
+
         // PET SHOP
         shopResetTimer: new Decimal(0),
         shopResetTimerMax: new Decimal(21600),
@@ -67,8 +81,7 @@ addLayer("pet", {
     color: "#4e7cff",
     branches: [],
     update(delta) {
-        let onepersec = new Decimal(player.ev10.checkbackBoost)
-        let ops = new Decimal(1)
+        let onepersec = player.cb.cbTickspeed
 
         // PET COOLDOWN DIVIDER
         player.pet.petCooldownDiv = new Decimal(1)
@@ -83,13 +96,13 @@ addLayer("pet", {
         if (hasUpgrade("ev8", 13)) player.pet.petPointMult = player.pet.petPointMult.mul(1.2)
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 401)[0])
         player.pet.petPointMult = player.pet.petPointMult.mul(levelableEffect("pet", 406)[2])
-        player.pet.petPointMult = player.pet.petPointMult.mul(player.leg.gemEffects[1])
+        player.pet.petPointMult = player.pet.petPointMult.mul(player.pet.gemEffects[1])
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("ep4", 12))
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
 
         // PET BUTTON COOLDOWN CALC
         for (let i = 0; i < player.pet.petButtonTimer.length; i++) {
-            player.pet.petButtonTimer[i] = player.pet.petButtonTimer[i].sub(onepersec.mul(delta))
+            player.pet.petButtonTimer[i] = player.pet.petButtonTimer[i].sub(onepersec.mul(player.ev10.checkbackBoost).mul(delta))
         }
 
         // DICE STUFF
@@ -98,7 +111,7 @@ addLayer("pet", {
         }
 
         // =- FRAGMENTATION START -=
-        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(ops.mul(delta))
+        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(onepersec.mul(delta))
         if (player.pet.bannerResetTimer.lte(0)) {
             layers.pet.refreshBanner();
         }
@@ -108,19 +121,90 @@ addLayer("pet", {
         for (let i = 0; i < player.pet.bannerButtonTimersMax.length; i++) {
             player.pet.bannerButtonTimersMax[i] = player.pet.bannerButtonTimersMax[i].div(buyableEffect("ep3", 13))
 
-            player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(ops.mul(delta))
+            player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(onepersec.mul(delta))
         }
 
         player.pet.singularityButtonTimersMax = [new Decimal(1800), new Decimal(10800),]
         for (let i = 0; i < player.pet.singularityButtonTimersMax.length; i++) {
             player.pet.singularityButtonTimersMax[i] = player.pet.singularityButtonTimersMax[i].div(buyableEffect("ep4", 13))
  
-            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(ops.mul(delta))
+            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(onepersec.mul(delta))
+        }
+
+        // =- LEGENDARY GEMS -=
+        player.pet.legendaryGemsToGetMin = player.cb.XPBoost.pow(0.2).div(2).floor()
+        player.pet.legendaryGemsToGetMax = player.cb.XPBoost.pow(0.25).div(2).floor()
+
+        player.pet.legendaryGemTimerMax = new Decimal(86400)
+        player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(onepersec.mul(delta))
+
+        player.pet.gemEffects[0] = player.cb.legendaryPetGems[0].pow(0.1).div(5).add(1)
+        player.pet.gemEffects[1] = player.cb.legendaryPetGems[1].pow(0.07).div(10).add(1)
+        player.pet.gemEffects[2] = player.cb.legendaryPetGems[2].pow(0.05).div(7).add(1)
+
+        player.pet.summonTimerMax = new Decimal(21600)
+        player.pet.summonTimer = player.pet.summonTimer.sub(onepersec.mul(delta))
+
+        const hours = new Date().getHours() % 6;
+
+        if (hours >= 0 && hours <= 1) {
+            player.pet.summonReqs = [
+                new Decimal(20),
+                new Decimal(10),
+                new Decimal(10),
+                new Decimal(20),
+                new Decimal(0),
+            ]
+        }
+        if (hours > 1 && hours <= 2) {
+            player.pet.summonReqs = [
+                new Decimal(15),
+                new Decimal(15),
+                new Decimal(10),
+                new Decimal(16),
+                new Decimal(1),
+            ]
+        }
+        if (hours > 2 && hours <= 3) {
+            player.pet.summonReqs = [
+                new Decimal(10),
+                new Decimal(20),
+                new Decimal(10),
+                new Decimal(12),
+                new Decimal(2),
+            ]
+        }
+        if (hours > 3 && hours <= 4) {
+            player.pet.summonReqs = [
+                new Decimal(10),
+                new Decimal(15),
+                new Decimal(15),
+                new Decimal(8),
+                new Decimal(3),
+            ]
+        }
+        if (hours > 4 && hours <= 5) {
+            player.pet.summonReqs = [
+                new Decimal(10),
+                new Decimal(10),
+                new Decimal(20),
+                new Decimal(4),
+                new Decimal(4),
+            ]
+        }
+        if (hours > 5 && hours <= 6) {
+            player.pet.summonReqs = [
+                new Decimal(15),
+                new Decimal(10),
+                new Decimal(15),
+                new Decimal(0),
+                new Decimal(5),
+            ]
         }
 
         // =- PET SHOP START -=
         player.pet.shopResetTimerMax = new Decimal(21600)
-        player.pet.shopResetTimer = player.pet.shopResetTimer.sub(ops.mul(delta))
+        player.pet.shopResetTimer = player.pet.shopResetTimer.sub(onepersec.mul(delta))
 
         player.pet.commonPrices = [new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(10), new Decimal(20), new Decimal(20), new Decimal(30), new Decimal(30)]
         for (let i = 0; i < player.pet.commonPrices.length; i++) {
@@ -152,69 +236,52 @@ addLayer("pet", {
         //legendary pets
         player.pet.legendaryPetAbilityCooldownsMax = [new Decimal(36000),]
         for (let i = 0; i < player.pet.legendaryPetAbilityCooldownsMax.length; i++) {
-            player.pet.legendaryPetAbilityCooldowns[i] = player.pet.legendaryPetAbilityCooldowns[i].sub(ops.mul(delta))
+            player.pet.legendaryPetAbilityCooldowns[i] = player.pet.legendaryPetAbilityCooldowns[i].sub(onepersec.mul(delta))
         }
 
         player.pet.legendaryPetAbilityTimersMax = [new Decimal(600),]
-        player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(player.le.punchcardsPassiveEffect[18])
+        player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(levelableEffect("pu", 303)[1])
 
-        if (player.le.punchcards[18]) player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(player.le.punchcardsEffect[18])
+        if (getLevelableBool("pu", 303)) player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(levelableEffect("pu", 303)[0])
         
-        let abilityTimeDecrease = ops
-        if (player.le.punchcards[18]) abilityTimeDecrease = abilityTimeDecrease.div(player.le.punchcardsEffect[18])
+        let abilityTimeDecrease = onepersec
+        if (getLevelableBool("pu", 303)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
         player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimers[0].sub(abilityTimeDecrease.mul(delta))
+
+        if (player.pet.legendaryPetAbilityTimers[0].lte(0) && player.pet.activeAbilities[0]) {
+            player.pet.activeAbilities[0] = false
+            player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
+            player.le.starmetalAlloyPauseAgain = new Decimal(10)
+            for (let prop in player.pu.levelables) {
+                if (getLevelableBool("pu", prop)) {
+                    addLevelableXP("pu", prop, player.le.eclipseShardsToGetTrue.mul(player.le.eclipseShardsValue).floor())
+                }
+                setLevelableBool("pu", prop, false)
+            }
+            player.le.starmetalAlloyToGet = new Decimal(0)
+            player.le.eclipseShardsToGet = new Decimal(0)
+            player.le.resetAmount = new Decimal(0)
+
+            if (!hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(0)
+            if (hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(1)
+
+            player.sma.inStarmetalChallenge = false
+            player.universe = 3
+            player.tab = "sma"
+            player.subtabs.pu["stuff"] = "Collection"
+
+            layers.pu.generateSelection();
+        }
 
         for (let i = 0; i < player.pet.legendaryPetAbilityTimers.length; i++) {
             if (player.pet.legendaryPetAbilityTimers[i].gt(0)) {
                 player.pet.activeAbilities[i] = true
-            }  else
-            {
+            } else {
                 player.pet.activeAbilities[i] = false
             }
         }
-
-        if (player.pet.legendaryPetAbilityTimers[0].lte(0) && player.pet.activeAbilities[0]) {
-            player.pet.activeAbilities[0] = false
-                player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
-                player.le.starmetalAlloyPauseAgain = new Decimal(10)
-                for (let i = 0; i < player.le.punchcards.length; i++)
-                    {
-                        if (player.le.punchcards[i] == true)
-                        {
-                            player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.starmetalAlloyToGetTrue.floor())
-                        }
-                        player.le.punchcards[i] = false
-                    }
-                    player.le.starmetalAlloyToGet = new Decimal(0)
-                    player.le.resetAmount = new Decimal(0)
-        
-                    player.le.activePunchcards = []
-                    player.le.activePunchcardIndex = new Decimal(0)
-                    if (!hasUpgrade("sma", 15)) player.le.storedSelections = new Decimal(0)
-                    if (hasUpgrade("sma", 15)) player.le.storedSelections = new Decimal(1)
-        
-                    player.sma.inStarmetalChallenge = false
-                    player.universe = 3
-                    player.tab = "sma"
-        
-                    for (let i = 0; i < player.le.punchcardSelections.length; i++)
-                    {
-                        player.le.punchcardSelections[i] = false
-                    }
-        
-                    layers.le.generateSelection();
-        }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', minHeight: '50px' },
-        },
         2: {
             title() { return "<h3>Level Up" },
             canClick() { return tmp.pet.levelables[layers.pet.levelables.index].canBuy },
@@ -240,6 +307,13 @@ addLayer("pet", {
             title() { return "<h3>Sacrifice one"},
             canClick() { return getLevelableXP("pet", layers.pet.levelables.index).gte(1)},
             unlocked() { return layers.pet.levelables.index < 1000 && layers.pet.levelables.index != 0 && player.ev.evolutionsUnlocked[4]},
+            tooltip() {
+                if (tmp.pet.levelables[layers.pet.levelables.index].sacValue == undefined) {
+                    return ""
+                } else {
+                    return "+" + format(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase)) + " Offerings"
+                }
+            },
             onClick() {
                 setLevelableXP("pet", layers.pet.levelables.index, getLevelableXP("pet", layers.pet.levelables.index).sub(1))
                 player.ev4.offerings = player.ev4.offerings.add(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase))
@@ -255,6 +329,13 @@ addLayer("pet", {
             title() {return "<h3>Sacrifice all" },
             canClick() { return getLevelableXP("pet", layers.pet.levelables.index).gte(1) },
             unlocked() { return layers.pet.levelables.index < 1000 && layers.pet.levelables.index != 0 && player.ev.evolutionsUnlocked[4] },
+            tooltip() {
+                if (tmp.pet.levelables[layers.pet.levelables.index].sacValue == undefined) {
+                    return ""
+                } else {
+                    return "+" + format(tmp.pet.levelables[layers.pet.levelables.index].sacValue.mul(player.ev4.offeringsBase).mul(getLevelableXP("pet", layers.pet.levelables.index))) + " Offerings"
+                }
+            },
             onClick() {
                 let amount = getLevelableXP("pet", layers.pet.levelables.index)
                 setLevelableXP("pet", layers.pet.levelables.index, new Decimal(0))
@@ -272,7 +353,7 @@ addLayer("pet", {
                 if (tmp.pet.levelables[layers.pet.levelables.index].pointValue == undefined) {
                     return ""
                 } else if (player.pet.petButtonTimer[layers.pet.levelables.index - 301].gt(0)) {
-                    return "<h3>Check back in<br>" + formatTime(player.pet.petButtonTimer[layers.pet.levelables.index - 301]) + "."
+                    return "<h3 style='font-size:10px;line-height:0.5'>Check back in<br>" + formatTime(player.pet.petButtonTimer[layers.pet.levelables.index - 301]) + "."
                 } else if (layers.pet.levelables.index == 302) {
                     return "<h3>Roll for<br>Pet Points!"
                 } else {
@@ -325,7 +406,7 @@ addLayer("pet", {
             title() { return "<h3>???"},
             tooltip() { return "Coming in<br>future update"},
             canClick() { return false },
-            unlocked() { return /*layers.pet.levelables.index >= 200 && layers.pet.levelables.index < 300*/ },
+            unlocked() { return false /*layers.pet.levelables.index >= 200 && layers.pet.levelables.index < 300*/ },
             onClick () {},
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -338,7 +419,7 @@ addLayer("pet", {
             title() { return "<h3>???"},
             tooltip() { return "Coming in<br>future update"},
             canClick() { return false },
-            unlocked() { return /*layers.pet.levelables.index >= 100 && layers.pet.levelables.index < 200*/ },
+            unlocked() { return false /*layers.pet.levelables.index >= 100 && layers.pet.levelables.index < 200*/ },
             onClick () {},
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -385,11 +466,11 @@ addLayer("pet", {
             style: {width: "125px", minHeight: "60px", backgroundColor: "#cb79ed", color: "black", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"},
         },
         15: {
-            title() { return "Legendary Pets" },
+            title() { return "Legendary Gems" },
             canClick() { return true },
             unlocked() { return player.cb.legendaryPetGems[0].gt(0) || player.cb.legendaryPetGems[1].gt(0) || player.cb.legendaryPetGems[2].gt(0) },
             onClick() {
-                player.tab = "leg"
+                player.subtabs["pet"]["content"] = "Legendary Gems"
             },
             style: {width: "125px", minHeight: "60px", backgroundColor: "#eed200", color: "#fe6d00", borderRadius: "0px", border: "0px", borderBottom: "2px solid white"}, 
         },
@@ -445,13 +526,18 @@ addLayer("pet", {
             onClick () {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
                 player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
+                player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
                 player.universe = -0.1
-                player.tab = "dut"
-                layers.le.generateSelection();
+                player.tab = "le"
+                player.uniTab = 1
 
-                player.subtabs["le"]["stuff"] = "Shards"
+                layers.le.starmetalResetAgain()
+                layers.pu.generateSelection();
+
+                player.subtabs.le["stuff"] = "Shards"
+                player.subtabs.pu["stuff"] = "Selection"                
             },
             style() {
                 let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
@@ -579,7 +665,7 @@ addLayer("pet", {
         112: {
             title() { return "Singularity"},
             canClick() { return true },
-            unlocked() { return hasUpgrade("s", 23) },
+            unlocked() { return hasUpgrade("s", 23) && player.cb.highestLevel.gte(25000) },
             onClick() {
                 player.subtabs["pet"]["fragTabs"] = "Singularity"
             },
@@ -619,6 +705,59 @@ addLayer("pet", {
             style() {
                 let look = {width: "225px", minHeight: "50px", borderRadius: "30px / 15px"}
                 this.canClick() ? look.backgroundColor = "#4c64ff" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        // LEGENDARY GEMS
+        201: {
+            title() { return player.pet.legendaryGemTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.legendaryGemTimer) + "." : "Reset for legendary gems."},
+            canClick() { return player.pet.legendaryGemTimer.lt(0) },
+            unlocked() { return true },
+            onClick() {
+                const redGemGain = randomInt(player.pet.legendaryGemsToGetMin, player.pet.legendaryGemsToGetMax)
+                const purpleGemGain = randomInt(player.pet.legendaryGemsToGetMin, player.pet.legendaryGemsToGetMax)
+                const greenGemGain = randomInt(player.pet.legendaryGemsToGetMin, player.pet.legendaryGemsToGetMax)
+    
+                // Add the gems to the player's inventory
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(redGemGain)
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(purpleGemGain)
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(greenGemGain)
+
+                player.pet.legendaryGemTimer = player.pet.legendaryGemTimerMax
+
+                // RESET CODE
+                player.cb.xp = new Decimal(0)
+                player.cb.totalxp = new Decimal(0)
+                player.cb.level = new Decimal(0)
+                player.cb.XPBoost = new Decimal(1)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#fe9400" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
+        202: {
+            title() { return player.pet.summonTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.summonTimer) + "." : "SUMMON."},
+            canClick() { return player.pet.summonTimer.lte(0) && player.cb.legendaryPetGems[0].gte(player.pet.summonReqs[0]) && player.cb.legendaryPetGems[1].gte(player.pet.summonReqs[1]) && player.cb.legendaryPetGems[2].gte(player.pet.summonReqs[2]) && player.cb.evolutionShards.gte(player.pet.summonReqs[3]) && player.cb.paragonShards.gte(player.pet.summonReqs[4]) },
+            unlocked() { return true },
+            tooltip() { return "25% - 14 of every common pet<br>25% - 10 of every uncommon pet<br>15% - 4 of every rare pet<br>10% - Epic pet and singularity fragments<br>10% - A lot of pet points<br>15% - LEGENDARY PET SUMMON" },
+            onClick() {
+                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].sub(player.pet.summonReqs[0])
+                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].sub(player.pet.summonReqs[1])
+                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].sub(player.pet.summonReqs[2])
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.pet.summonReqs[3])
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.pet.summonReqs[4])
+
+                player.pet.summonTimer = player.pet.summonTimerMax
+
+                layers.pet.legendarySummon();
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#fe9400" : look.backgroundColor = "#bf8f8f"
                 return look
             },
         },
@@ -1037,7 +1176,6 @@ addLayer("pet", {
         0: {
             image() { return "resources/secret.png"},
             title() { return "No pet selected." },
-            lore() { return "" },
             description() { return "" },
             currency() { return getLevelableXP(this.layer, this.id) },
             barStyle() { return {backgroundColor: "#0B6623"}},
@@ -1045,7 +1183,7 @@ addLayer("pet", {
         },
         // COMMON PETS
         101: {
-            image() { return this.canClick() ? "resources/gwaCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/gwaCommonPet.png" : "resources/secret.png"},
             title() { return "Gwa" },
             lore() { return "Has a childlike innocence and is very kind. Seems to have immense power but is also very reluctant to use the power." }, 
             description() {
@@ -1083,7 +1221,7 @@ addLayer("pet", {
             }  
         },
         102: {
-            image() { return this.canClick() ? "resources/eggCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eggCommonPet.png" : "resources/secret.png"},
             title() { return "Egg Guy" },
             lore() { return "This fellow came out of a very powerful chicken... However he would meet his fate when the chicken inside hatches..." }, 
             description() {
@@ -1121,7 +1259,7 @@ addLayer("pet", {
             }
         },
         103: {
-            image() { return this.canClick() ? "resources/unsmithCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/unsmithCommonPet.png" : "resources/secret.png"},
             title() { return "Unsmith" },
             lore() { return "A creature that was synergized out of the purest form of SPV, which we don't know what it is yet... We will figure it out one day." }, 
             description() {
@@ -1159,7 +1297,7 @@ addLayer("pet", {
             }  
         },
         104: {
-            image() { return this.canClick() ? "resources/checkpointCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/checkpointCommonPet.png" : "resources/secret.png"},
             title() { return "Gd Checkpoint" },
             lore() { return "This guy feels a little bit familiar, but you don't know why. You just ignore it." }, 
             description() {
@@ -1197,7 +1335,7 @@ addLayer("pet", {
             }  
         },
         105: {
-            image() { return this.canClick() ? "resources/slaxCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/slaxCommonPet.png" : "resources/secret.png"},
             title() { return "Slax" },
             lore() { return "A being of neon green and plasma. The energy of the void radiates within it's presence." }, 
             description() {
@@ -1235,7 +1373,7 @@ addLayer("pet", {
             }  
         },
         106: {
-            image() { return this.canClick() ? "resources/spiderCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/spiderCommonPet.png" : "resources/secret.png"},
             title() { return "Spider" },
             lore() { return "This eight-legged bug has no place in these worlds, but a small crack in the fabric of reality made it slip through and gain enough power to be your pet." }, 
             description() {
@@ -1273,7 +1411,7 @@ addLayer("pet", {
             }  
         },
         107: {
-            image() { return this.canClick() ? "resources/blobCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/blobCommonPet.png" : "resources/secret.png"},
             title() { return "Blob" },
             lore() { return "Blob." }, 
             description() {
@@ -1309,7 +1447,7 @@ addLayer("pet", {
             }  
         },
         108: {
-            image() { return this.canClick() ? "resources/replicatorCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/replicatorCommonPet.png" : "resources/secret.png"},
             title() { return "Replicator" },
             lore() { return "This creature was the result of a failed replicant galaxy transformation. It holds the power of 1.79e308 replicanti, but can not replicate itself no more." }, 
             description() {
@@ -1347,18 +1485,18 @@ addLayer("pet", {
             }  
         },
         109: {
-            image() { return this.canClick() ? "resources/smokeCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/smokeCommonPet.png" : "resources/secret.png"},
             title() { return "Smoke" },
             lore() { return "A burning world that once was. Reduced to nothingness and ash. Smoke from that world made its way over here. The new world." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to all mastery points.<br>" +
-                    "x" + format(this.effect()[1]) + " to all hex points."
+                    "x" + format(this.effect()[1]) + " to jinx score."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(1.2).mul(0.7).add(1), // All Mastery Points
-                    getLevelableAmount(this.layer, this.id).pow(1.8).mul(1.2).add(1), // All Hex Points
+                    getLevelableAmount(this.layer, this.id).pow(0.9).mul(0.03).add(1), // Jinx Score
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -1386,7 +1524,7 @@ addLayer("pet", {
         },
         // UNCOMMON PETS
         201: {
-            image() { return this.canClick() ? "resources/testeUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/testeUncommonPet.png" : "resources/secret.png"},
             title() { return "Teste" },
             lore() { return "A cat that likes committing murder on walls." }, 
             description() {
@@ -1426,7 +1564,7 @@ addLayer("pet", {
             }  
         },
         202: {
-            image() { return this.canClick() ? "resources/starUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/starUncommonPet.png" : "resources/secret.png"},
             title() { return "Star" },
             lore() { return "One of the many stars from the night sky. A burning ball of gas." }, 
             description() {
@@ -1466,7 +1604,7 @@ addLayer("pet", {
             }  
         },
         203: {
-            image() { return this.canClick() ? "resources/normalFaceUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/normalFaceUncommonPet.png" : "resources/secret.png"},
             title() { return "Normal Face" },
             lore() { return "Originated from a vast land of blocks and spikes. A victim of lobotomy." }, 
             description() {
@@ -1506,7 +1644,7 @@ addLayer("pet", {
             }  
         },
         204: {
-            image() { return this.canClick() ? "resources/sharkUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/sharkUncommonPet.png" : "resources/secret.png"},
             title() { return "Shark" },
             lore() { return "A shark that was once swimming in an infinite sea found itself trapped in this universe." }, 
             description() {
@@ -1546,7 +1684,7 @@ addLayer("pet", {
             }  
         },
         205: {
-            image() { return this.canClick() ? "resources/eyeUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eyeUncommonPet.png" : "resources/secret.png"},
             title() { return "THE WATCHING EYE" },
             lore() { return "It's always watching." }, 
             description() {
@@ -1582,7 +1720,7 @@ addLayer("pet", {
             }  
         },
         206: {
-            image() { return this.canClick() ? "resources/clockUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/clockUncommonPet.png" : "resources/secret.png"},
             title() { return "Clock" },
             lore() { return "This clock is the symbol of check back. Must be one patient fellow. You can feel the presence of evolution shards..." }, 
             description() {
@@ -1622,7 +1760,7 @@ addLayer("pet", {
             }  
         },
         207: {
-            image() { return this.canClick() ? "resources/trollUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/trollUncommonPet.png" : "resources/secret.png"},
             title() { return "Trollface" },
             lore() { return "You can NOT trust this guy no matter what. Also please do not evolve it either." }, 
             description() {
@@ -1662,7 +1800,7 @@ addLayer("pet", {
             }  
         },
         208: {
-            image() { return this.canClick() ? "resources/infinityBreakerUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/infinityBreakerUncommonPet.png" : "resources/secret.png"},
             title() { return "Infinity Breaker" },
             lore() { return "This pet has been breaking your infinities all along. It is made of an unknown metal. It seems familiar." }, 
             description() {
@@ -1702,7 +1840,7 @@ addLayer("pet", {
             }  
         },
         209: {
-            image() { return this.canClick() ? "resources/johnUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/johnUncommonPet.png" : "resources/secret.png"},
             title() { return "John" },
             lore() { return "Just a cartoon doodle dude that got transported here for literally no reason." }, 
             description() {
@@ -1743,7 +1881,7 @@ addLayer("pet", {
         },
         // RARE PETS
         301: {
-            image() { return this.canClick() ? "resources/novaRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/novaRarePet.png" : "resources/secret.png"},
             title() { return "Nova" },
             lore() { return "A clown from the domain of singularity. Likes playing pranks and causing havoc. Only here to watch what you are doing." }, 
             description() {
@@ -1789,7 +1927,7 @@ addLayer("pet", {
             }  
         },
         302: {
-            image() { return this.canClick() ? "resources/diceRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/diceRarePet.png" : "resources/secret.png"},
             title() { return "Dice" },
             lore() { return "One of Zar's creations. This pet will always output a random number between 1 and 6." }, 
             description() {
@@ -1800,7 +1938,7 @@ addLayer("pet", {
             effect() { 
                 return [
                     player.pet.highestDicePetCombo.add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)).pow(levelableEffect("pet", 1302)[0]), // Dice Points (Based on Highest Combo)
-                    player.d.dicePoints.pow(0.1).mul(getLevelableAmount(this.layer, this.id).pow(1.2)).add(1).pow(levelableEffect("pet", 1302)[0]), // Mods (Based on Dice Points)
+                    player.d.dicePoints.add(1).log(6).mul(6).mul(getLevelableAmount(this.layer, this.id).pow(1.2)).add(1).pow(2).pow(levelableEffect("pet", 1302)[0]), // Mods (Based on Dice Points)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -1846,7 +1984,7 @@ addLayer("pet", {
             }  
         },
         303: {
-            image() { return this.canClick() ? "resources/ufoRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/ufoRarePet.png" : "resources/secret.png"},
             title() { return "Drippy Ufo" },
             lore() { return "An unknown flying object, but with style. Iridite's messenger. Be careful what you tell it." }, 
             description() {
@@ -1893,7 +2031,7 @@ addLayer("pet", {
             }  
         },
         304: {
-            image() { return this.canClick() ? "resources/goofyAhhThingRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/goofyAhhThingRarePet.png" : "resources/secret.png"},
             title() { return "Goofy Ahh Thing" },
             lore() { return "эта дурацкая ax-тварь — существо из неизвестной вселенной. Это может быть тайно небожитель." }, 
             description() {
@@ -1917,6 +2055,7 @@ addLayer("pet", {
                 let random = getRandomInt(4)
                 if (random == 1) {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                     player.cb.pityEvoCurrent = new Decimal(0)
                     if (player.subtabs['cb']['stuff'] == "Pets") callAlert("You gained an Evolution Shard! (25%)", "resources/evoShard.png")
                 } else {
@@ -1947,7 +2086,7 @@ addLayer("pet", {
             }  
         },
         305: {
-            image() { return this.canClick() ? "resources/antimatterRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/antimatterRarePet.png" : "resources/secret.png"},
             title() { return "Antimatter" },
             lore() { return "The one controlling your antimatter and makes sure it stays in safe quantities." }, 
             description() {
@@ -1993,18 +2132,18 @@ addLayer("pet", {
             }  
         },
         306: {
-            image() { return this.canClick() ? "resources/hexShadowRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/hexShadowRarePet.png" : "resources/secret.png"},
             title() { return "Hex Shadow" },
             lore() { return "Found halfway to the top of the hex staircase. Unwilling to talk or give any information. Has a strange odor." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to steel <small>(based on rage power)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to crystal <small>(based on rage power)</small>."
+                return "x" + format(this.effect()[0]) + " to dice points <small>(based on total hex power)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to rocket fuel <small>(based on total hex power)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.h.ragePower.pow(1.2).mul(0.3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.4)), // Steel (Based on Rage Power)
-                    player.h.ragePower.pow(1.01).mul(0.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Crystals (Based on Rage Power)
+                    player.hpw.totalPower.add(1).log(6).mul(0.25).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Dice Points (Based on power)
+                    player.hpw.totalPower.add(1).log(6).mul(0.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Rocket Fuel (Based on power)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2049,18 +2188,18 @@ addLayer("pet", {
             }  
         },
         307: {
-            image() { return this.canClick() ? "resources/grassSquareRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/grassSquareRarePet.png" : "resources/secret.png"},
             title() { return "Grass Square" },
             lore() { return "It was one ordinary of cutting grass, and one of the grass particles randomly grew a face. This is what we have now." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to blank mods <small>(based on golden grass)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to rage power <small>(based on golden grass)</small>."
+                return "x" + format(this.effect()[0]) + " to pollinators <small>(based on golden grass)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to repli-grass <small>(based on golden grass)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.g.goldGrass.pow(0.1).mul(0.01).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Blank Mods (Based on Golden Grass)
-                    player.g.goldGrass.pow(0.12).mul(0.015).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)), // Rage Power (Based on Golden Grass)
+                    player.g.goldGrass.add(1).log(10).mul(0.25).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)), // Pollinators (Based on Golden Grass)
+                    player.g.goldGrass.add(1).log(10).mul(0.025).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)), // Repli-Grass (Based on Golden Grass)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2096,18 +2235,18 @@ addLayer("pet", {
             }  
         },
         308: {
-            image() { return this.canClick() ? "resources/impossibleTriangleRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/impossibleTriangleRarePet.png" : "resources/secret.png"},
             title() { return "Impossible Triangle" },
             lore() { return "An anomaly of a shape, but is only a mere illusion. Celestials love their illusions." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to singularity points <small>(based on core scraps)</small>.<br>" +
+                return "x" + format(this.effect()[0]) + " to singularity points <small>(based on radiation)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to singularity dimensions <small>(based on singularity points)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.cs.coreScraps.pow(0.8).mul(0.4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Singularity Points (Based on Core Scraps)
-                    player.s.singularityPoints.plus(1).log10().pow(1.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)) // Singularity Dimenstions (Based on Singularity Points)
+                    player.ra.radiation.pow(0.6).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.3)), // Singularity Points (Based on Radiation)
+                    player.s.singularityPoints.add(1).log(10).pow(1.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.25)) // Singularity Dimenstions (Based on Singularity Points)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2142,18 +2281,18 @@ addLayer("pet", {
             }  
         },
         309: {
-            image() { return this.canClick() ? "resources/forbiddenCoreRarePet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/forbiddenCoreRarePet.png" : "resources/secret.png"},
             title() { return "Forbidden Core" },
             lore() { return "The first core ever produced by the celestials of the domain of singularity. It has lived for so long it developed a conciousness." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to radiation <small>(based on singularities)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to resource core scraps <small>(based on starmetal alloys)</small>."
+                    "x" + format(this.effect()[1]) + " to core scraps <small>(based on starmetal alloys)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.s.singularities.pow(0.5).mul(0.1).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Radiation (Based on Singularities)
-                    player.sma.starmetalAlloy.pow(0.3).mul(0.05).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)) // Core Scraps (Based on Starmetal Alloys)
+                    player.s.singularities.add(1).log(10).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)), // Radiation (Based on Singularities)
+                    player.sma.starmetalAlloy.add(1).log(10).mul(0.5).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.2)) // Core Scraps (Based on Starmetal Alloys)
                 ]
             },
             sacValue() { return new Decimal(10)},
@@ -2185,11 +2324,11 @@ addLayer("pet", {
                 this.canClick() ? look.backgroundColor = "#0031BF" : look.backgroundColor = "#222222"
                 layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
                 return look
-            }  
+            }
         },
         // EPIC PETS
         401: {
-            image() { return this.canClick() ? "resources/dotknightEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/secret.png"},
             title() { return "Dotknight" },
             lore() { return "A knight of unknown origin that wields the cursword, which is one of the most powerful swords. He is yet to awaken its true power." }, 
             description() {
@@ -2216,7 +2355,7 @@ addLayer("pet", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(25)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
                 }
@@ -2236,7 +2375,7 @@ addLayer("pet", {
             } 
         },
         402: {
-            image() { return this.canClick() ? "resources/dragonEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/dragonEpicPet.png" : "resources/secret.png"},
             title() { return "Dragon" },
             lore() { return "This dragon is heavily associated with the number 12. Seems oddly familiar. You might've seen this dragon in a dream before." }, 
             description() {
@@ -2263,7 +2402,7 @@ addLayer("pet", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(25)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
                 }
@@ -2283,7 +2422,7 @@ addLayer("pet", {
             } 
         },
         403: {
-            image() { return this.canClick() ? "resources/cookieEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/cookieEpicPet.png" : "resources/secret.png"},
             title() { return "Cookie" },
             lore() { return "This cookie is imbued with large amounts of incremental power. Clicking it would be very dangerous." }, 
             description() {
@@ -2310,7 +2449,7 @@ addLayer("pet", {
             canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(25)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
                 }
@@ -2330,7 +2469,7 @@ addLayer("pet", {
             } 
         },
         404: {
-            image() { return this.canClick() ? "resources/kresEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/kresEpicPet.png" : "resources/secret.png"},
             title() { return "Kres" },
             lore() { return "<small>Kres a member of the Celestial Hunting Corporation, and was sent out on the mission to the domain of singularity. Originally in the military from one universe's Earth, he joined the corporation when his universe got taken over by celestials.</small>" }, 
             description() {
@@ -2357,7 +2496,7 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(100)
+                    return new Decimal(50)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
                 }
@@ -2377,20 +2516,20 @@ addLayer("pet", {
             } 
         },
         405: {
-            image() { return this.canClick() ? "resources/navEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/navEpicPet.png" : "resources/secret.png"},
             title() { return "Nav" },
             lore() { return "Nav, another member of the corporation, has mastered the art of superphysical magic. She was born from a line of talented superphysical wizards that worked for the corporation." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to anonymity <small>(based on core scraps)</small>.<br>" +
-                    "x" + format(this.effect()[1]) + " to oil <small>(based on core scraps)</small>.<br>" +
-                    "x" + format(this.effect()[2]) + " to fun <small>(based on core scraps)</small>."
+                return "x" + format(this.effect()[0]) + " to anonymity <small>(based on radiation)</small>.<br>" +
+                    "x" + format(this.effect()[1]) + " to oil <small>(based on radiation)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to fun <small>(based on radiation)</small>."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.cs.coreScraps.pow(1.5).mul(4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.6)), // Anonymity (Based on Core Scraps)
-                    player.cs.coreScraps.pow(1.2).mul(3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.55)), // Oil (Based on Core Scraps)
-                    player.cs.coreScraps.pow(0.9).mul(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Fun (Based on Core Scraps)
+                    player.ra.radiation.pow(1.3).mul(4).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.6)), // Anonymity (Based on Radiation)
+                    player.ra.radiation.mul(3).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.55)), // Oil (Based on Radiation)
+                    player.ra.radiation.pow(0.7).mul(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.5)), // Fun (Based on Radiation)
                 ]
             },
             sacValue() { return new Decimal(25)},
@@ -2404,7 +2543,7 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(100)
+                    return new Decimal(50)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
                 }
@@ -2424,7 +2563,7 @@ addLayer("pet", {
             } 
         },
         406: {
-            image() { return this.canClick() ? "resources/selEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/selEpicPet.png" : "resources/secret.png"},
             title() { return "Sel" },
             lore() { return "Sel was originally a rouge hunter travelling between civilizations, fighting celestialites for money. However, he met Kres and realized the greater opportunity of joining the corporation." }, 
             description() {
@@ -2451,7 +2590,7 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(100)
+                    return new Decimal(50)
                 } else {
                     return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
                 }
@@ -2472,7 +2611,7 @@ addLayer("pet", {
         },
         //legendary
         501: {
-            image() { return this.canClick() ? "resources/eclipseLegendaryPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eclipseLegendaryPet.png" : "resources/secret.png"},
             title() { return "Eclipse" },
             lore() { return "The true story of eclipse is extremely mysterious and shrouded in secrecy. Kres, Nav, and Sel only found him during their first encounter with Matos. Eclipse doesn't speak. They only listen. But Eclipse is an extremely powerful being, that helps the trio during their ventures." }, 
             description() {
@@ -2490,7 +2629,7 @@ addLayer("pet", {
             },
             sacValue() { return new Decimal(100)},
             // CLICK CODE
-            unlocked() { return player.cb.highestLevel.gte(1000000) },
+            unlocked() { return player.cb.highestLevel.gte(100000) },
             canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -2519,18 +2658,20 @@ addLayer("pet", {
         },
         // START OF EVOLVED PETS
         1101: {
-            image() { return this.canClick() ? "resources/voidGwaEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/voidGwaEvoPet.png" : "resources/secret.png"},
             title() { return "Voidgwa" },
             lore() { return "Seems to be like gwa, but its appearance is inverted. It has a strange force that prevents you from getting near it." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to infinities.<br>" +
-                    "x" + format(this.effect()[1]) + " to broken infinities.<br>"
+                    "x" + format(this.effect()[1]) + " to broken infinities.<br>" +
+                    "x" + format(this.effect()[2]) + " to alternate infinities.<br>"
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).div(5).add(1), // Infinities
                     getLevelableAmount(this.layer, this.id).div(5).add(1), // Broken Infinities
+                    getLevelableAmount(this.layer, this.id).div(5).add(1), // Alternate Infinities
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },
@@ -2564,7 +2705,7 @@ addLayer("pet", {
             } 
         },
         1103: {
-            image() { return this.canClick() ? "resources/goldsmithEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/goldsmithEvoPet.png" : "resources/secret.png"},
             title() { return "Goldsmith" },
             lore() { return "This purest form of SPV condensed into a golden, metallic material. Shines too bright you can barely see." }, 
             description() {
@@ -2608,7 +2749,7 @@ addLayer("pet", {
             } 
         },
         1104: {
-            image() { return this.canClick() ? "resources/paragonCheckpointEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/paragonCheckpointEvoPet.png" : "resources/secret.png"},
             title() { return "Paragon Checkpoint" },
             lore() { return "Infused with the power of paragon shards, all sense of familiarity fades away. This being gives you a vague idea of where these shards came from, but you can't figure it out." }, 
             description() {
@@ -2628,7 +2769,7 @@ addLayer("pet", {
             evoCan() { return true },
             evoTooltip() { return ""},
             evoClick() {
-                player.tab = "ev9"
+                player.tab = "cs"
             },
             // CLICK CODE
             unlocked() { return hasMilestone("s", 12) },
@@ -2654,48 +2795,45 @@ addLayer("pet", {
             } 
         },
         1106: {
-            image() { return this.canClick() ? "resources/mutantSpiderEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/mutantSpiderEvoPet.png" : "resources/secret.png"},
             title() { return "Mutant Spider" },
-            lore() { return "The poor spider ate two entire paragon shards and this is what it looks like now." }, 
+            lore() { return "The poor spider ate too many paragon shards and this is what it looks like now." }, 
             description() {
-                return "x" + format(this.effect()[0]) + " to steel.<br>" +
-                    "x" + format(this.effect()[1]) + " to crystals.<br>"
+                return "x" + format(this.effect()[0]) + " to pre-power resources.<br>" +
+                    "x" + format(this.effect()[1]) + " to hex power.<br>" +
+                    "x" + format(this.effect()[2]) + " to realm essence."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(1.8).add(1), // Steel
-                    getLevelableAmount(this.layer, this.id).mul(2).pow(1.7).add(1), // Crystals
+                    getLevelableAmount(this.layer, this.id).mul(6).max(1), // Pre-Power Resources
+                    getLevelableAmount(this.layer, this.id).mul(2).max(1), // Hex Power
+                    getLevelableAmount(this.layer, this.id).mul(0.5).add(1), // Realm Essence
                 ]
             },
-            levelTooltip() { return "Costs Evo Shards." },
+            levelTooltip() { return "Costs Paragon Shards." },
             evoCan() { return true },
             evoTooltip() { return ""},
             evoClick() {
-                player.po.lastUniverse = "cb"
-                if (options.newMenu) {
-                    player.tab = "halter"
-                } else {
-                    player.tab = "po"
-                    player.subtabs["po"]['stuff'] = 'Halter'
-                }
+                player.tab = "po"
+                player.subtabs["po"]["stuff"] = "Halter"
             },
             // CLICK CODE
-            unlocked() { return hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0) },
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
             canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
-            pay(amt) { player.cb.evolutionShards = player.cb.evolutionShards.sub(amt) },
-            canAfford() { return player.cb.evolutionShards.gte(this.xpReq()) },
+            pay(amt) { player.cb.paragonShards = player.cb.paragonShards.sub(amt) },
+            canAfford() { return player.cb.paragonShards.gte(this.xpReq()) },
             xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.65).add(3).floor() },
-            currency() { return player.cb.evolutionShards },
+            currency() { return player.cb.paragonShards },
             buy() {
                 this.pay(this.xpReq())
                 setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
             },
             // STYLE
             barShown() { return this.canClick() },
-            barStyle() { return {backgroundColor: "#d487fd"}},
+            barStyle() { return {backgroundColor: "#4C64FF"}},
             style() {
                 let look = {width: "100px", minHeight: "125px"}
                 this.canClick() ? look.backgroundColor = "#0C0047" : look.backgroundColor = "#222222"
@@ -2704,7 +2842,7 @@ addLayer("pet", {
             } 
         },
         1202: {
-            image() { return this.canClick() ? "resources/sunEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/sunEvoPet.png" : "resources/secret.png"},
             title() { return "Sun" },
             lore() { return "Nothing changed at all about this star. It just got a bit closer." }, 
             description() {
@@ -2748,7 +2886,7 @@ addLayer("pet", {
             } 
         },
         1203: {
-            image() { return this.canClick() ? "resources/insaneFaceEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/insaneFaceEvoPet.png" : "resources/secret.png"},
             title() { return "Insane Face" },
             lore() { return "The lobotomy got to it. The face is no longer normal. It is angry. It wants revenge." }, 
             description() {
@@ -2792,7 +2930,7 @@ addLayer("pet", {
             } 
         },
         1204: {
-            image() { return this.canClick() ? "resources/mrRedSharkEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/mrRedSharkEvoPet.png" : "resources/secret.png"},
             title() { return "MrRedShark" },
             lore() { return "An evolved version of the shark. Pushes a lot of mass around. A master of the elements. Very muscular." }, 
             description() {
@@ -2836,7 +2974,7 @@ addLayer("pet", {
             } 
         },
         1205: {
-            image() { return this.canClick() ? "resources/eyeEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eyeEvoPet.png" : "resources/secret.png"},
             title() { return "EYE" },
             lore() { return "Don't look at it." }, 
             description() {
@@ -2882,7 +3020,7 @@ addLayer("pet", {
             } 
         },
         1206: {
-            image() { return this.canClick() ? "resources/marcelAcoplaoEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/marcelAcoplaoEvoPet.png" : "resources/secret.png"},
             title() { return "Marcel Acoplao" },
             lore() { return "The creator of check back. The man responsible for your duty of having to click. wait. click.. wait.. click.... wait......." }, 
             description() {
@@ -2926,7 +3064,7 @@ addLayer("pet", {
             } 
         },
         1302: {
-            image() { return this.canClick() ? "resources/d20EvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/d20EvoPet.png" : "resources/secret.png"},
             title() { return "d20" },
             lore() { return "The gamblingness has turned up a notch. You either get a large number like 20 or a puny small number like 1." }, 
             description() {
@@ -2971,7 +3109,7 @@ addLayer("pet", {
             } 
         },
         1303: {
-            image() { return this.canClick() ? "resources/moonEvoPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/moonEvoPet.png" : "resources/secret.png"},
             title() { return "Moon" },
             lore() { return "Iridite's messenger turned out to be something much larger. A whole moon. Who knows, maybe a whole civilization is hiding underneath the surface." }, 
             description() {
@@ -3172,6 +3310,61 @@ addLayer("pet", {
         player.pet.shardBought = [0, 0]
         player.pet.crateBought = [0, 0, 0, 0, 0, 0]
     },
+    legendarySummon() {
+        let random = Math.random();
+        if (random < 0.25) {
+            player.pet.levelables[101][1] = player.pet.levelables[101][1].add(14)
+            player.pet.levelables[102][1] = player.pet.levelables[101][1].add(14)
+            player.pet.levelables[103][1] = player.pet.levelables[101][1].add(14)
+            player.pet.levelables[104][1] = player.pet.levelables[104][1].add(14)
+            player.pet.levelables[105][1] = player.pet.levelables[105][1].add(14)
+            player.pet.levelables[106][1] = player.pet.levelables[106][1].add(14)
+            player.pet.levelables[107][1] = player.pet.levelables[107][1].add(14)
+            player.pet.levelables[108][1] = player.pet.levelables[108][1].add(14)
+            player.pet.levelables[109][1] = player.pet.levelables[109][1].add(14)
+            callAlert("You gained 14 of every common pet!", "resources/Pets/commonbg.png");
+        } else if (random < 0.5) {
+            player.pet.levelables[201][1] = player.pet.levelables[201][1].add(10)
+            player.pet.levelables[202][1] = player.pet.levelables[202][1].add(10)
+            player.pet.levelables[203][1] = player.pet.levelables[203][1].add(10)
+            player.pet.levelables[204][1] = player.pet.levelables[204][1].add(10)
+            player.pet.levelables[205][1] = player.pet.levelables[205][1].add(10)
+            player.pet.levelables[206][1] = player.pet.levelables[206][1].add(10)
+            player.pet.levelables[207][1] = player.pet.levelables[207][1].add(10)
+            player.pet.levelables[208][1] = player.pet.levelables[208][1].add(10)
+            player.pet.levelables[209][1] = player.pet.levelables[209][1].add(10)
+            callAlert("You gained 10 of every uncommon pet!", "resources/Pets/uncommonbg.png");
+        } else if (random < 0.65) {
+            player.pet.levelables[301][1] = player.pet.levelables[301][1].add(4)
+            player.pet.levelables[302][1] = player.pet.levelables[302][1].add(4)
+            player.pet.levelables[303][1] = player.pet.levelables[303][1].add(4)
+            player.pet.levelables[304][1] = player.pet.levelables[304][1].add(4)
+            player.pet.levelables[305][1] = player.pet.levelables[305][1].add(4)
+            player.pet.levelables[306][1] = player.pet.levelables[306][1].add(4)
+            player.pet.levelables[307][1] = player.pet.levelables[307][1].add(4)
+            player.pet.levelables[308][1] = player.pet.levelables[308][1].add(4)
+            player.pet.levelables[309][1] = player.pet.levelables[309][1].add(4)
+            callAlert("You gained 4 of every rare pet!", "resources/Pets/rarebg.png");
+        } else if (random < 0.75) {
+            let random2 = getRandomInt(6, 10)
+            player.pet.singularityFragments = player.pet.singularityFragments.add(random2)
+            addLevelableXP("pet", 401, random2)
+            addLevelableXP("pet", 402, random2)
+            addLevelableXP("pet", 403, random2)
+
+            callAlert("You gained " + random2 + " of every epic and singularity fragment!", "resources/Pets/epicbg.png");
+
+        } else if (random < 0.9) {
+            let random3 = getRandomInt(1000, 2000)
+            random3 = random3 * player.pet.petPointMult
+
+            player.cb.petPoints = player.cb.petPoints.add(random3)
+            callAlert("You gained " + formatWhole(random3) + " pet points!", "resources/petPoint.png");
+        } else {
+            player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
+            callAlert("Eclipse becomes stronger.", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+        }
+    },
     bars: {},
     upgrades: {},
     buyables: {},
@@ -3207,7 +3400,11 @@ addLayer("pet", {
                             ["style-column", [
                                 ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
                                 ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209]]],
-                            ], {width: "525px", backgroundColor: "#0d170d", padding: "5px"}],
+                            ], () => {
+                                let look = {width: "525px", backgroundColor: "#0d170d", padding: "5px"}
+                                if (player.cb.highestLevel.lt(25)) look.borderBottom = "3px solid #88e688"
+                                return look
+                            }],
             
                             ["style-column", [
                                 ["raw-html", "Rare", {color: "#4e7cff", fontSize: "20px", fontFamily: "monospace"}],
@@ -3227,10 +3424,10 @@ addLayer("pet", {
 
                             ["style-column", [
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
-                            ], () => { return player.cb.highestLevel.gte(1000000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
+                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 501]]],
-                            ], () => { return player.cb.highestLevel.gte(1000000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
+                            ], () => { return player.cb.highestLevel.gte(100000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
 
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616"}],
@@ -3253,15 +3450,15 @@ addLayer("pet", {
                                 ["raw-html", "Evo-Shard", {color: "#d487fd", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#2a1b32", borderBottom: "3px solid #d487fd", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1106]]],
-                                ["row", [["levelable", 1206], ["levelable", 1104]]],
+                                ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1206]]],
+                                ["row", [["levelable", 1104]]],
                             ], {width: "525px", backgroundColor: "#150d19", padding: "5px"}],
 
                             ["style-column", [
                                 ["raw-html", "Para-Shard", {color: "#4c64ff", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "535px", height: "40px", backgroundColor: "#0f1433", borderTop: "3px solid #4c64ff", borderBottom: "3px solid #4c64ff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205]]],
+                                ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205], ["levelable", 1106]]],
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616"}],
@@ -3303,6 +3500,70 @@ addLayer("pet", {
                         ["hoverless-clickable", 111], ["hoverless-clickable", 112]
                     ], {width: "550px", height: "47px", background: "repeating-linear-gradient(-45deg, #161616 0 15px, #101010 0 30px)", borderBottom: "3px solid white"}],
                     ["buttonless-microtabs", "fragTabs", { 'border-width': '0px' }],
+                ],
+            },
+            "Legendary Gems": {
+                buttonStyle() { return {color: "#222222"}},
+                unlocked() { return true },
+                content: [
+                    ["scroll-column", [
+                        ["blank", "20px"],
+                        ["left-row", [
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[0])}, {width: "93px", height: "50px", color: "#ff5555", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Red Legendary Gem<hr><small>x" + format(player.pet.gemEffects[0]) + " XP</small></div>"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[1])}, {width: "93px", height: "50px", color: "#aa55aa", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Purple Legendary Gem<hr><small>x" + format(player.pet.gemEffects[1]) + " Pet Points</small></div>"}],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatShortWhole(player.cb.legendaryPetGems[2])}, {width: "95px", height: "50px", color: "#55ff55", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", () => { return "<div class='bottomTooltip'>Green Legendary Gem<hr><small>x" + format(player.pet.gemEffects[2]) + " XPBoost</small></div>"}],
+                            ], {width: "150px", height: "50px"}],
+                        ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                        ["blank", "20px"],
+                        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.pet.legendaryGemsToGetMin) + " to " + formatWhole(player.pet.legendaryGemsToGetMax) + "</h3> of each gem on reset. (based on XPBoost)" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "25px"],
+                        ["row", [["clickable", 201]]],
+                        ["blank", "25px"],
+                        ["style-column", [
+                            ["raw-html", "Summoning Altar", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", "(Gems requirements are dependent on the current time of day)", {color: "black", fontSize: "14px", fontFamily: "monospace"}],
+                            ["blank", "25px"],
+                            ["raw-html", "Current Requirements:", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ["blank", "10px"],
+                            ["left-row", [
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/redLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[0])}, {width: "93px", height: "50px", color: "red", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/purpleLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[1])}, {width: "93px", height: "50px", color: "purple", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/greenLegendaryPetGem.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[2])}, {width: "95px", height: "50px", color: "green", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
+                            ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                            ["left-row", [
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[3])}, {width: "95px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "150px", height: "50px", borderRight: "2px solid white"}],
+                                ["tooltip-row", [
+                                    ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                    ["raw-html", () => { return formatShortWhole(player.pet.summonReqs[4]) }, {width: "95px", height: "50px", color: "#4c64ff", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ], {width: "150px", height: "50px"}],
+                            ], {width: "300px", height: "50px", backgroundColor: "black", borderLeft: "2px solid white", borderRight: "2px solid white", borderBottom: "2px solid white", borderRadius: "0 0 10px 10px", userSelect: "none"}],
+                            ["blank", "25px"],
+                            ["row", [["clickable", 202]]],
+                        ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "20px", borderRadius: "15px"} : {display: "none !important"}}],
+                    ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
                 ],
             },
             "???": {
@@ -3446,3 +3707,8 @@ addLayer("pet", {
     ],
     layerShown() { return player.startedGame == true }
 })
+function randomInt(min, max) {
+    min = Math.ceil(min.toNumber());
+    max = Math.floor(max.toNumber());
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

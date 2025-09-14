@@ -15,8 +15,6 @@ addLayer("po", {
         rocketFuel: false,
         hex: false,
         breakInfinity: false,
-        realmMods: false,
-        gem: false,
 
         keepOTFS: false,
 
@@ -37,13 +35,9 @@ addLayer("po", {
         */
        halterIndex: new Decimal(0),
        halterText: ["", "", "", "", "", "", "", "", "", "", ""],
-
-    }
-    },
-    automate() {
-    },
-    nodeStyle() {
-    },
+    }},
+    automate() {},
+    nodeStyle() {},
     tooltip: "Portal",
     color: "white",
     update(delta) {
@@ -56,7 +50,6 @@ addLayer("po", {
 
         player.po.featureSlotsMax = new Decimal(1)
         if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
-        if (hasUpgrade("s", 18)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice) {
@@ -65,7 +58,7 @@ addLayer("po", {
         if (player.po.rocketFuel) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
-        if (player.po.hex) {
+        if (player.po.hex && !hasUpgrade("s", 18)) {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         }
         if (player.po.breakInfinity) {
@@ -73,12 +66,6 @@ addLayer("po", {
             player.po.featureSlots = player.po.featureSlots.sub(1)
         } else {
             player.in.breakInfinity = false
-        }
-        if (player.po.realmMods) {
-            player.po.featureSlots = player.po.featureSlots.sub(2)
-        }
-        if (player.po.gem) {
-            player.po.featureSlots = player.po.featureSlots.sub(1)
         }
 
         //IF ADDING NEW OTFS - REMEMBER TO EXIT THEM AFTER LEAVING TAVS DOMAIN
@@ -131,15 +118,6 @@ addLayer("po", {
     },
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = player.po.lastUniverse
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Keep OTFs on reset. (Currently off)" },
             display() {
@@ -306,7 +284,7 @@ addLayer("po", {
                 return player.po.hex ? "<h1>The number 6.<br>On" : "<h1>The number 6.<br>Off";
             },
             canClick() { return player.po.featureSlots.gte(1) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15))},
-            unlocked() { return (!inChallenge("ip", 11) && hasChallenge("ip", 13)) && (!inChallenge("ip", 13) && hasChallenge("ip", 13))  && (!inChallenge("ip", 15) && hasChallenge("ip", 13))  && (!inChallenge("ip", 16) && hasChallenge("ip", 13))     },
+            unlocked() { return hasChallenge("ip", 13) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) && !hasUpgrade("s", 18)},
             onClick() {
                 player.po.hex = true
             },
@@ -339,142 +317,54 @@ addLayer("po", {
                 borderRadius: "20px",
             },
         },
-        15: {
-            title() { return "<h1>Realm Mods" },
-            display() {
-                return player.po.realmMods ? "<h2>The possibilities are endless. (Point gain gets raised to the ^0.35)<br>On" : !hasMilestone("s", 15) ? "<h2>Feel the realms.<br>Off<br><h3>Req: 1 cante core (which gets spent)<br>(You have " + formatWhole(player.ca.canteCores) + " cores)<br>Takes up 2 OTF slots" : "<h1>Feel the realms.<br>Off<br><h2>Takes up 2 OTF slots";
-            },
-            canClick() { return player.po.featureSlots.gte(2) && (player.ca.canteCores.gte(1) || hasMilestone("s", 15))},
-            unlocked() { return hasUpgrade("bi", 27) },
-            onClick() {
-                player.po.keepOTFS = true
-                player.po.realmMods = true
-
-                if (!hasMilestone("s", 15))
-                {
-                    player.ca.canteCores = player.ca.canteCores.sub(1)
-                }
-
-                layers.in.bigCrunch();
-            },
-            style: {
-                width: '200px',
-                "min-height": '200px',
-                "border-color": "white",
-                "background-image": "linear-gradient(0deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)",
-                "background-origin": "border-box",
-                "color": "white",
-                borderRadius: "20px",
-            },
-        },
-        16: {
-            title() { return "<h1>Gems" },
-            display() {
-                return player.po.gem ? "<h1>Monetize everything.<br>On" : "<h1>Monetize everything.<br>Off<br><h2>Req: ???";
-            },
-            canClick() { return player.po.featureSlots.gte(1)},
-            unlocked() { return false },
-            onClick() {
-                player.po.gem = true
-            },
-            style: {
-                width: '200px',
-                minHeight: '200px',
-                borderColor: "#780af3",
-                backgroundImage: "linear-gradient(0deg, #ab66f9, #c18dfa)",
-                backgroundOrigin: "border-box",
-                color: "white",
-                borderRadius: "20px",
-            },
-        },
     },
-    bars: {
-        infbar: {
-            unlocked() { return !player.in.unlockedInfinity },
-            direction: UP,
-            width: 476,
-            height: 476,
-            progress() {
-                return player.points.add(1).log10().div("308.25")
-            },
-            fillStyle: {
-                "background-color": "#e81cff",
-            },
-            display() {
-                return "<h1>" + format(player.points.add(1).log10().div("308.25").mul(100)) + "%</h5>";
-            },
-        },
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Otherworldly Features": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return inChallenge("ip", 14) ? "You can pick an OTF once you are at pent 15." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return !inChallenge("ip", 11) ? "You have <h3>" + formatWhole(player.po.featureSlots) + "/" + formatWhole(player.po.featureSlotsMax) + "</h3> free feature slots." : "No features for you!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return inChallenge("ip", 14) ? "You can pick an OTF once you are at pent 15." : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
-                    ["row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16]]],
+                    ["style-row", [["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14]], {maxWidth: "1000px"}],
                 ]
-
-            },
-            "Portals": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["bar", "infbar"]]],
-                    ["blank", "25px"],
-                    ["tree", tree],
-                ]
-
             },
             "Halter": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasMilestone("ip", 23)},
-                content:
-                [
+                buttonStyle() {return { color: "white", borderRadius: "5px" } },
+                unlocked() {
+                    let halt = false
+                    for (i = 0; i < player.po.halterEffects.length; i++) {
+                        if (player.po.halterEffects[0].gt(1)) halt = true
+                    }
+                    return hasMilestone("ip", 23) || halt
+                },
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>" + player.po.halterText[player.po.halterIndex]}],
-                    ["text-input", "halterInput", {
-                        color: "var(--color)",
-                        width: "400px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
+                    ["raw-html", () => {return "<h3>" + player.po.halterText[player.po.halterIndex]}],
+                    ["blank", "10px"],
+                    ["text-input", "halterInput", {width: "300px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", border: "0", border: "2px solid white", borderRadius: "15px", padding: "0 25px 0 25px"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?" }],
-                    ["raw-html", function () { return "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)" }],
-                    ["blank", "25px"],
+                    ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
+                    ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)"],
                 ]
             },
         },
     },
-
     tabFormat: [
-        ["row", [["clickable", 1]]],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true }
 })

@@ -1,7 +1,10 @@
-﻿var treeA1 = [["ar", "pr", "an"], ["rt", "rg", "gs"], ["oi", "fu"]]
+﻿var treeA1 = [["cp"], ["ar", "pr"], ["an", "rt", "rg"], ["oi", "gs"], ["fu"]]
 addLayer("cp", {
-    name: "Alt-Universe 1: Cantepocalypse", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "A1", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Alternate Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol() {
+        if (player.cap.cantepocalypsePrep) return "CP"
+        return "AO"
+    }, // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -34,37 +37,24 @@ addLayer("cp", {
             buyUpgrade("cp", 18)
         }
     },
-    nodeStyle() {
-        return {
-            background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)",
-            "background-origin": "border-box",
-            "border-color": "#012738",
-        }
+    nodeStyle: {background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)", backgroundOrigin: "border-box", borderColor: "#013851"},
+    tooltip() {
+        if (player.cap.cantepocalypsePrep) return "Cantepocalypse"
+        return "Alternate Origin"
     },
-    tooltip: "Alt-Universe 1: Cantepocalypse",
-    color: "white",
-    branches: ["i"],
+    color: "#398",
+    branches: ["ar", "pr"],
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.musuniverse == 1.5 && player.cap.cantepocalypsePrep == true) {
+        if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
+            player.uniTab = 2
             player.cap.cantepocalypsePrep = false
+            player.subtabs["cap"]['stuff'] = 'Main'
             player.cp.cantepocalypseActive = true
-            if (options.newMenu == true) showTab("a1u")
         }
 
         if (hasUpgrade("cp", 18) && player.cp.cantepocalypseActive) player.cp.cantepocalypseActive = false
-
-        if (player.subtabs["cp"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'cp'
-            player.tab = "po"
-            player.subtabs["cp"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["cp"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'cp'
-            player.tab = "settings"
-            player.subtabs["cp"]['stuff'] = 'Features'
-        }
 
         multAdd = new Decimal(0.01)
         multAdd = multAdd.add(player.ar.rankPointsEffect)
@@ -79,7 +69,7 @@ addLayer("cp", {
         if (hasMilestone("gs", 12)) multAdd = multAdd.mul(player.gs.milestone2Effect)
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[0])
         multAdd = multAdd.mul(levelableEffect("pet", 402)[0])
-        if (player.cop.processedCoreFuel.eq(0)) multAdd = multAdd.mul(player.cop.processedCoreInnateEffects[2])
+        multAdd = multAdd.mul(player.co.cores.point.effect[2])
         if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
         player.cp.replicantiPointsTimerReq = new Decimal(3)
@@ -144,17 +134,7 @@ addLayer("cp", {
             player.cp.replicantiPointsTimer = new Decimal(0)
         }
     },
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-    },
+    clickables: {},
     bars: {
         replicantiBar: {
             unlocked() { return true },
@@ -168,6 +148,7 @@ addLayer("cp", {
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -179,8 +160,7 @@ addLayer("cp", {
         },
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Feature I",
             unlocked() { return true },
             description: "Unlocks Alt-Ranks.",
@@ -188,9 +168,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Feature II",
             unlocked() { return true },
             description: "Unlocks Perks.",
@@ -198,9 +178,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Feature III",
             unlocked() { return true },
             description: "Unlocks Tetr Points.",
@@ -208,9 +188,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Feature IV",
             unlocked() { return true },
             description: "Unlocks Anonymity.",
@@ -218,9 +198,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Feature V",
             unlocked() { return true },
             description: "Unlocks Repli-Trees.",
@@ -228,9 +208,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Feature VI",
             unlocked() { return true },
             description: "Unlocks Repli-Grass.",
@@ -238,9 +218,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Feature VII",
             unlocked() { return true },
             description: "Unlocks Grass-Skip.",
@@ -248,12 +228,12 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Feature VIII",
             unlocked() { return true },
-            description: "Unlocks THE PORTAL, and more oil content.",
+            description: "Escape Cantepocalypse, and unlock more oil content.",
             cost: new Decimal(1e90),
             onPurchase() {
                 player.cp.cantepocalypseActive = false
@@ -261,9 +241,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "Feature IX",
             unlocked() { return hasMilestone("s", 17) },
             description: "Unlocks Funify.",
@@ -271,6 +251,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {},
@@ -279,21 +260,13 @@ addLayer("cp", {
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Features": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["tree", treeA1],
-                ]
-            },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]], {maxWidth: "800px"}],
                 ]
             },
             "Softcap": {
@@ -308,23 +281,14 @@ addLayer("cp", {
                     ["raw-html", function () { return player.cp.replicantiPoints.gte(player.cp.replicantiSoftcap2Start) ? "Second softcap divides replicanti mult by <h3>/" + format(player.cp.replicantiSoftcap2Effect) + "</h3>." : ""}, { "color": "#ff4545", "font-size": "20px", "font-family": "monospace" }],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return hasUpgrade("cp", 18) || player.s.highestSingularityPoints.gt(0) },
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti point Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
-    layerShown() { return (player.startedGame == true && ((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && player.tab != "cmc"}
+    layerShown() { return player.startedGame == true && (((player.cap.cantepocalypseUnlock && !player.s.highestSingularityPoints.gt(0)) || (player.s.highestSingularityPoints.gt(0) && hasUpgrade("bi", 28))) || hasMilestone("s", 18)) && !player.sma.inStarmetalChallenge}
 })

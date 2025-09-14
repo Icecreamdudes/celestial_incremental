@@ -344,7 +344,7 @@ addLayer("po", {
                 unlocked() {
                     let halt = false
                     for (i = 0; i < player.po.halterEffects.length; i++) {
-                        if (player.po.halterEffects[0].gt(0)) halt = true
+                        if (player.po.halterEffects[0].gt(1)) halt = true
                     }
                     return hasMilestone("ip", 23) || halt
                 },

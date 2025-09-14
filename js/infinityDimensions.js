@@ -165,6 +165,7 @@
         11: {
             costBase() { return new Decimal(1e11) },
             costGrowth() { return new Decimal(1e2) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -200,6 +201,7 @@
         12: {
             costBase() { return new Decimal(1e12) },
             costGrowth() { return new Decimal(1e3) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -235,6 +237,7 @@
         13: {
             costBase() { return new Decimal(1e14) },
             costGrowth() { return new Decimal(1e4) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -270,6 +273,7 @@
         14: {
             costBase() { return new Decimal(1e17) },
             costGrowth() { return new Decimal(1e5) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -305,6 +309,7 @@
         15: {
             costBase() { return new Decimal(1e21) },
             costGrowth() { return new Decimal(1e6) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -340,6 +345,7 @@
         16: {
             costBase() { return new Decimal(1e26) },
             costGrowth() { return new Decimal(1e7) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -375,6 +381,7 @@
         17: {
             costBase() { return new Decimal(1e32) },
             costGrowth() { return new Decimal(1e8) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {
@@ -410,6 +417,7 @@
         18: {
             costBase() { return new Decimal(1e39) },
             costGrowth() { return new Decimal(1e9) },
+            purchaseLimit() { return new Decimal(Infinity)},
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) {

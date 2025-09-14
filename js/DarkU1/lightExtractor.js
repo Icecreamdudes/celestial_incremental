@@ -400,6 +400,37 @@ addLayer("le", {
             }
         }
 
+        if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount))
+        {
+            player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
+            player.le.starmetalAlloyPauseAgain = new Decimal(10)
+            for (let i = 0; i < player.le.punchcards.length; i++)
+            {
+                if (player.le.punchcards[i] == true)
+                {
+                    player.le.punchcardsXP[i] = player.le.punchcardsXP[i].add(player.le.starmetalAlloyToGetTrue.floor())
+                }
+                player.le.punchcards[i] = false
+            }
+            player.le.starmetalAlloyToGet = new Decimal(0)
+            player.le.resetAmount = new Decimal(0)
+        
+            player.le.activePunchcards = []
+            player.le.activePunchcardIndex = new Decimal(0)
+            if (!hasUpgrade("sma", 15)) player.le.storedSelections = new Decimal(0)
+            if (hasUpgrade("sma", 15)) player.le.storedSelections = new Decimal(1)
+        
+            player.sma.inStarmetalChallenge = false
+            player.universe = 3
+            player.tab = "sma"
+        
+            for (let i = 0; i < player.le.punchcardSelections.length; i++)
+            {
+                player.le.punchcardSelections[i] = false
+            }
+        
+            layers.le.generateSelection();
+        }
     },
     generateSelection() {
         const availableIndices = player.le.punchcardSelections
@@ -448,6 +479,19 @@ addLayer("le", {
                 player.tab = "du"
             },
             style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #384166"  },
+        },
+        2: {
+            title() { return "<h2>Deactivate Auto-Enter" },
+            canClick() { return true },
+            unlocked() { return player.sme.autoEnterToggle == true },
+            onClick() {
+                player.sme.autoEnterToggle = false
+            },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #384166", borderRight: "2px solid #384166"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
         11: {
             title() { return "<h2>Reset everything in this universe for starmetal alloy.<br>Req: " + format(player.le.starmetalAlloyReq) + " Points" },
@@ -1377,6 +1421,7 @@ addLayer("le", {
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
+                    ["row", [["clickable", 2]]],
                 ]
 
             },

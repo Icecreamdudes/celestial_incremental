@@ -110,6 +110,16 @@
         }
         }
 
+        if (player.sme.autoEnterToggle)
+        {
+            player.sma.inStarmetalChallenge = true
+            player.universe = -0.1
+            player.tab = "le"
+            layers.le.generateSelection();
+
+            player.subtabs["le"]["stuff"] = "Main"
+        }
+
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()
     },
     clickables: {

@@ -77,6 +77,7 @@
 				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1t') " onclick="showTab('u1t')"><span class="buttonText">Tree</span></button>
 				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1u') " onclick="showTab('u1u')"><span class="buttonText">Upgrades</span></button>
 				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1l') " onclick="showTab('u1l')"><span class="buttonText">Lore</span></button>
+				<button class="menuButton" v-if="player.universe == 1" v-bind:style="constructMenuButtonStyle('u1c') " onclick="showTab('u1c')"><span class="buttonText">Cutscene Rewatch</span></button>
 
 			<div class="menuHeader" v-if="(layerShown('h') || layerShown('r') || layerShown('f') || layerShown('p') || layerShown('re')) && player.universe == 1">Row 1</div>
 				<button class="menuButton" v-if="layerShown('h') && player.universe == 1" v-bind:style="constructMenuButtonStyle('h') " onclick="showTab('h')"><span class="buttonText">Hex</span></button>

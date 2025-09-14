@@ -117,6 +117,24 @@ cutscene: [
     true,
     true,
     true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
 ],
 
 }
@@ -160,12 +178,13 @@ player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca02
 player.tab == "leg" ? "#eed200" : 
 player.tab == "ma" && player.ma.currentDepth.eq(2) ? "linear-gradient(-180deg,rgb(114, 4, 85) 0%, rgb(37, 1, 33) 100%)" : 
 (player.tab == "ma" && player.ma.currentDepth.eq(3)) || (player.tab == "c" && (player.c.currentCutscene == 33 || player.c.currentCutscene == 34)|| (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) ? "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)" : 
-player.sma.inStarmetalChallenge || player.ma.inBlackHeart ? "black" : 
+player.sma.inStarmetalChallenge || (player.ma.inBlackHeart && player.tab != "ba") ? "black" : 
 !player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
 player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
 player.tab == "ro" || player.tab == "mi" ? "#3d3d3d" : 
 player.tab == "au2" ? "#151230" : 
 player.tab == "cmc" || (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???" || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) ? "black" : 
+player.tab == "ba" && player.fi.battleTier.eq(1) ? "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)" : 
 "#161616");
 
 if (player.tab === "au2" || player.tab === "au2t" || player.tab === "st" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
@@ -503,7 +522,7 @@ if (player.c.cutscene[19] && hasChallenge("ip", 11))
     });
     player.c.cutscene[19] = false
 }
-if (player.c.cutscene[20] && (inChallenge("ip", 12) && player.gh.grasshoppers.gte(1)))
+if (player.c.cutscene[20] && ((inChallenge("ip", 12) || !player.c.cutscene[21]) && player.gh.grasshoppers.gte(1)))
 {
     showCutscene(cutsceneDialogue21, {
         cutsceneID: 21,
@@ -511,7 +530,7 @@ if (player.c.cutscene[20] && (inChallenge("ip", 12) && player.gh.grasshoppers.gt
     });
     player.c.cutscene[20] = false
 }
-if (player.c.cutscene[21] && (inChallenge("ip", 13))) //HEX, likely to change conditions
+if (player.c.cutscene[21] && ((inChallenge("ip", 13) || !player.c.cutscene[22]))) //HEX, likely to change conditions
 {
     showCutscene(cutsceneDialogue22, {
         cutsceneID: 22,
@@ -519,7 +538,7 @@ if (player.c.cutscene[21] && (inChallenge("ip", 13))) //HEX, likely to change co
     });
     player.c.cutscene[21] = false
 }
-if (player.c.cutscene[22] && (inChallenge("ip", 15) && player.d.challengeDicePoints.gte(1))) 
+if (player.c.cutscene[22] && ((inChallenge("ip", 15) || !player.c.cutscene[23]) && player.d.challengeDicePoints.gte(1))) 
 {
     showCutscene(cutsceneDialogue23, {
         cutsceneID: 23,
@@ -536,7 +555,7 @@ if (player.c.cutscene[23] && player.cb.evolutionShards.gte(1)) //marcel
     });
     player.c.cutscene[23] = false
 }
-if (player.c.cutscene[24] && inChallenge("ip", 16))
+if (player.c.cutscene[24] && (inChallenge("ip", 16) || !player.c.cutscene[25]))
 {
     showCutscene(cutsceneDialogue25, {
         cutsceneID: 25,
@@ -544,7 +563,7 @@ if (player.c.cutscene[24] && inChallenge("ip", 16))
     });
     player.c.cutscene[24] = false
 }
-if (player.c.cutscene[25] && inChallenge("ip", 17))
+if (player.c.cutscene[25] && (inChallenge("ip", 17) || !player.c.cutscene[26]))
 {
     showCutscene(cutsceneDialogue26, {
         background: "#ffffff",
@@ -615,7 +634,7 @@ if (player.c.cutscene[32] && hasUpgrade("ta", 21))
     });
     player.c.cutscene[32] = false
 }
-if (player.c.cutscene[33] && inChallenge("tad", 11))
+if (player.c.cutscene[33] && (inChallenge("tad", 11) || !player.c.cutscene[34]))
 {
     showCutscene(cutsceneDialogue34, {
         cutsceneID: 34,
@@ -751,7 +770,7 @@ if (player.c.cutscene[48] && player.ca.replicantiGalaxies.gte(1))
     });
     player.c.cutscene[48] = false
 }   
-if (player.c.cutscene[49] && player.tab == "cap")
+if (player.c.cutscene[49] && (player.tab == "cap" || !player.c.cutscene[50]))
 {
     showCutscene(cutsceneDialogue50, {
     cutsceneID: 50,
@@ -804,7 +823,7 @@ if (player.c.cutscene[54] && player.cap.reqsPassed[3])
     });
     player.c.cutscene[54] = false
 } 
-if (player.c.cutscene[55] && (player.tab == "cp" || player.tab == "a1u"))
+if (player.c.cutscene[55] && ((player.tab == "cp"  || !player.c.cutscene[56]) || (player.tab == "a1u" || !player.c.cutscene[56])))
 {
     showCutscene(cutsceneDialogue56, {
     cutsceneID: 56,
@@ -813,7 +832,149 @@ if (player.c.cutscene[55] && (player.tab == "cp" || player.tab == "a1u"))
     });
     player.c.cutscene[55] = false
 }
-
+if (player.c.cutscene[56] && hasUpgrade("cp", 15))
+{
+    showCutscene(cutsceneDialogue57, {
+    cutsceneID: 57,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[56] = false
+}
+if (player.c.cutscene[57] && hasUpgrade("cp", 18))
+{
+    showCutscene(cutsceneDialogue58, {
+    cutsceneID: 58,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[57] = false
+}
+if (player.c.cutscene[58] && player.oi.protoMemories.gt(1))
+{
+    showCutscene(cutsceneDialogue59, {
+    cutsceneID: 59,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[58] = false
+}
+if (player.c.cutscene[59] && player.ca.defeatedCante)
+{
+    showCutscene(cutsceneDialogue60, {
+    cutsceneID: 60,
+    background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[59] = false
+}
+if (player.c.cutscene[60] && !player.c.cutscene[59])
+{
+    showCutscene(cutsceneDialogue61, {
+    cutsceneID: 61,
+    background: "#000000",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[60] = false
+}
+if (player.c.cutscene[61] && hasMilestone("s", 11))
+{
+    showCutscene(cutsceneDialogue62, {
+    cutsceneID: 62,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[61] = false
+}
+if (player.c.cutscene[62] && (player.cop.processingCore  || !player.c.cutscene[63]))
+{
+    showCutscene(cutsceneDialogue63, {
+    cutsceneID: 63,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[62] = false
+}
+if (player.c.cutscene[63] && hasUpgrade("i", 101))
+{
+    showCutscene(cutsceneDialogue64, {
+    cutsceneID: 64,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[63] = false
+}
+if (player.c.cutscene[64] && hasMilestone("s", 12))
+{
+    showCutscene(cutsceneDialogue65, {
+    cutsceneID: 65,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[64] = false
+}
+if (player.c.cutscene[65] && hasMilestone("s", 13))
+{
+    showCutscene(cutsceneDialogue66, {
+    cutsceneID: 66,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[65] = false
+}
+if (player.c.cutscene[66] && hasMilestone("s", 14))
+{
+    showCutscene(cutsceneDialogue67, {
+    cutsceneID: 67,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[66] = false
+}
+if (player.c.cutscene[67] && hasUpgrade("cp", 19))
+{
+    showCutscene(cutsceneDialogue68, {
+    cutsceneID: 68,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[67] = false
+}
+if (player.c.cutscene[68] && hasUpgrade("fu", 11))
+{
+    showCutscene(cutsceneDialogue69, {
+    cutsceneID: 69,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[68] = false
+}
+if (player.c.cutscene[69] && hasUpgrade("fu", 16))
+{
+    showCutscene(cutsceneDialogue70, {
+    cutsceneID: 70,
+    background: "#ffffff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[69] = false
+}
+if (player.c.cutscene[70] && (inChallenge("fu", 11) || !player.c.cutscene[71]))
+{
+    showCutscene(cutsceneDialogue71, {
+    cutsceneID: 71,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[70] = false
+}
+if (player.c.cutscene[71] && hasChallenge("fu", 11))
+{
+    showCutscene(cutsceneDialogue72, {
+    cutsceneID: 72,
+    background: "#5e8503",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[71] = false
+}
 if (player.tab != "c" && player.tab != "bigc" && player.c.cutsceneIndex == player.c.cutsceneText.length)
 {
 player.c.cutsceneIndex = 0

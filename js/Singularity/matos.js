@@ -3717,6 +3717,7 @@ for (let i = 0; i < player.ma.deadCharacters.length; i++)
                 ["style-column", [
                             ["raw-html", function () { return "Downside: Core Assembler and Core Processor are gone. You are unable to use or produce cores." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                             ["raw-html", function () { return "Unlocks: Core Fragments and Starmetal Essence." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                            ["raw-html", function () { return "Also unlocks fighting in check back." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ["blank", "25px"],
                             ["raw-html", function () { return "x2 to check back XP gain." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                             ["raw-html", function () { return "x1.5 to XPBoost gain." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],

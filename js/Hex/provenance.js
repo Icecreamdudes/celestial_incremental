@@ -2,6 +2,7 @@ addLayer("hpr", {
     name: "Hex of Provenance",
     symbol: "Pr", // Decides what text appears on the node.
     tooltip: "Provenance", // Decides the nodes tooltip
+    nodeStyle: {background: "linear-gradient(140deg, #0061ff 0%, #004dcc 100%)", backgroundOrigin: "borderBox"},
     color: "#0061ff", // Decides the nodes color.
     startData() { return {
         rank: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],

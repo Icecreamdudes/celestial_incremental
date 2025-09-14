@@ -2,6 +2,7 @@ addLayer("hpu", {
     name: "Hex of Purity",
     symbol: "Pu", // Decides what text appears on the node.
     tooltip: "Purity", // Decides the nodes tooltip
+    nodeStyle: {background: "linear-gradient(140deg, #e0d4ad 0%, #b3a98a 100%)", backgroundOrigin: "borderBox"},
     color: "#e0d4ad", // Decides the nodes color.
     branches: ["hre"], // Decides the nodes branches.
     startData() { return {

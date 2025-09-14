@@ -306,7 +306,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "BI IP Upgrade II",
@@ -316,7 +316,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "BI IP Upgrade III",
@@ -326,7 +326,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "BI IP Upgrade IV",
@@ -336,7 +336,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "BI IP Upgrade V",
@@ -346,7 +346,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "BI IP Upgrade VI",
@@ -360,7 +360,7 @@
                 return player.ip.hexRuns.add(1).log(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "BI IP Upgrade VII",
@@ -370,7 +370,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "BI IP Upgrade VIII",
@@ -380,7 +380,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "BI IP Upgrade IX",
@@ -390,7 +390,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "BI IP Upgrade X",
@@ -400,7 +400,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "BI IP Upgrade XI",
@@ -414,7 +414,7 @@
                 return player.in.infinityPoints.pow(0.2).mul(0.002).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         24: {
             title: "BI IP Upgrade XII",
@@ -424,7 +424,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         25: {
             title: "BI IP Upgrade XIII",
@@ -434,7 +434,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         26: {
             title: "BI IP Upgrade XIV",
@@ -444,7 +444,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         27: {
             title: "BI IP Upgrade XV",
@@ -454,7 +454,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         28: {
             title: "BI IP Upgrade XVI",
@@ -464,7 +464,7 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         //Negative Infinity Points
         101: {
@@ -479,7 +479,7 @@
                 return player.in.infinities.pow(0.2).mul(0.05).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         102: {
             title: "BI NIP Upgrade II",
@@ -493,7 +493,7 @@
                 return player.points.div(1e308).plus(1).log(1e308).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         103: {
             title: "BI NIP Upgrade III",
@@ -503,7 +503,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         104: {
             title: "BI NIP Upgrade IV",
@@ -513,7 +513,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         105: {
             title: "BI NIP Upgrade V",
@@ -523,7 +523,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         106: {
             title: "BI NIP Upgrade VI",
@@ -533,7 +533,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         107: {
             title: "BI NIP Upgrade VII",
@@ -547,7 +547,7 @@
                 return player.ta.highestRocketFuel.pow(0.1).mul(0.015).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         108: {
             title: "BI NIP Upgrade VIII",
@@ -557,7 +557,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         109: {
             title: "BI NIP Upgrade IX",
@@ -567,7 +567,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         111: {
             title: "BI NIP Upgrade X",
@@ -577,7 +577,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         112: {
             title: "BI NIP Upgrade XI",
@@ -587,7 +587,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         113: {
             title: "BI NIP Upgrade XII",
@@ -597,7 +597,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         114: {
             title: "BI NIP Upgrade XIII",
@@ -607,7 +607,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         115: {
             title: "BI NIP Upgrade XIV",
@@ -617,7 +617,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         116: {
             title: "BI NIP Upgrade XV",
@@ -627,7 +627,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         117: {
             title: "BI NIP Upgrade XVI",
@@ -637,7 +637,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

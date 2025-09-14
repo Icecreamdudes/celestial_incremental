@@ -356,7 +356,7 @@ addLayer("hbl", {
                 if (upgradeEffect(this.layer, this.id).lt(18)) return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[SOFTCAPPED]</small>"
                 return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         2: {
             title: "Grace II",
@@ -372,7 +372,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         3: {
             title: "Grace III",
@@ -388,7 +388,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         4: {
             title: "Grace IV",
@@ -406,7 +406,7 @@ addLayer("hbl", {
             effectDisplay() {
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         5: {
             title: "Grace V",
@@ -422,7 +422,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         6: {
             title: "Grace VI",
@@ -445,7 +445,7 @@ addLayer("hbl", {
                 if (inChallenge("hrm", 16)) return "+^" + format(upgradeEffect(this.layer, this.id))
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     milestones: {

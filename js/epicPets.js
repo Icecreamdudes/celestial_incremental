@@ -157,7 +157,7 @@
                 return player.ep0.dotknightPoints.pow(0.2).div(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Dotknight Upgrade II",
@@ -171,7 +171,7 @@
                 return player.ep0.dotknightPoints.pow(0.35).div(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Dotknight Upgrade III",
@@ -185,7 +185,7 @@
                 return player.ep0.dotknightPoints.pow(0.25).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -493,7 +493,7 @@ addLayer("ep1", {
                 return player.ep1.dragonPoints.pow(0.5).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Dragon Upgrade II",
@@ -507,7 +507,7 @@ addLayer("ep1", {
                 return player.ep1.dragonPoints.pow(0.15).div(70).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Dragon Upgrade III",
@@ -521,7 +521,7 @@ addLayer("ep1", {
                 return player.ep1.dragonPoints.pow(0.25).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -856,7 +856,7 @@ addLayer("ep2", {
                 return player.ep2.cookiePoints.add(1).log(10).pow(0.5).div(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12:
         {
@@ -871,7 +871,7 @@ addLayer("ep2", {
                 return player.ep2.cookiePoints.pow(1.1).div(2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13:
         {
@@ -886,7 +886,7 @@ addLayer("ep2", {
                 return player.ep2.cookiePoints.pow(0.25).div(20).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #3c2447", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

@@ -526,6 +526,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Rocket Fuel Upgrade II",
@@ -535,6 +536,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Rocket Fuel Upgrade III",
@@ -544,6 +546,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Rocket Fuel Upgrade IV",
@@ -553,6 +556,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Rocket Fuel Upgrade V",
@@ -566,6 +570,7 @@
                 return player.rf.rocketFuel.pow(0.3).mul(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Rocket Fuel Upgrade VI",
@@ -579,7 +584,7 @@
                 return player.rf.rocketFuel.pow(0.5).mul(5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Rocket Fuel Upgrade VII",
@@ -589,6 +594,7 @@
             currencyLocation() { return player.rf },
             currencyDisplayName: "Rocket Fuel",
             currencyInternalName: "rocketFuel",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {},

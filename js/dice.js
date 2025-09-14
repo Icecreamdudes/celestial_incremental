@@ -744,7 +744,7 @@
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",
             currencyInternalName: "challengeDicePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Something boosts dice outside of this layer!?",
@@ -758,7 +758,7 @@
                 return player.points.plus(1).log10().pow(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Pointy boost.",
@@ -772,7 +772,7 @@
                 return player.d.dicePoints.pow(0.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Grassy boost.",
@@ -786,7 +786,7 @@
                 return player.d.dicePoints.pow(0.085).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Reversey Boost.",
@@ -800,7 +800,7 @@
                 return player.cb.level.pow(1.87654321).mul(15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Self Synergize.",
@@ -814,7 +814,7 @@
                 return player.d.dicePoints.pow(0.125).div(100).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Challengey Prestigey Pointy Boosty.",
@@ -828,7 +828,7 @@
                 return player.d.challengeDicePoints.pow(0.4).mul(1000).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Dicey Dicey Dicey Dicey.",
@@ -838,7 +838,7 @@
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",
             currencyInternalName: "challengeDicePoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

@@ -577,7 +577,7 @@
                 return player.an.anonymity.pow(0.06).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Fun Upgrade II",
@@ -591,7 +591,7 @@
                 return player.pr.perkPointsChance.add(1).pow(1.6)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Fun Upgrade III",
@@ -601,7 +601,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Fun Upgrade IV",
@@ -615,7 +615,7 @@
                 return player.timePlayed*0.000001 + 1
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Fun Upgrade V",
@@ -625,7 +625,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Fun Upgrade VI",
@@ -635,7 +635,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Fun Upgrade VII",
@@ -645,7 +645,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Fun Upgrade VIII",
@@ -655,7 +655,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Fun Upgrade IX",
@@ -665,7 +665,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

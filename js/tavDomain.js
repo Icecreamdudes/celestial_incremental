@@ -192,7 +192,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12:
         {
@@ -203,7 +203,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Disfigured Infinities",
             currencyInternalName: "disfiguredInfinities",
-            style: {width: "125px", color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {width: "125px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13:
         {
@@ -214,7 +214,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Corrupted Infinities",
             currencyInternalName: "corruptedInfinities",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14:
         {
@@ -225,7 +225,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15:
         {
@@ -236,7 +236,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Disfigured Infinities",
             currencyInternalName: "disfiguredInfinities",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16:
         {
@@ -247,7 +247,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Corrupted Infinities",
             currencyInternalName: "corruptedInfinities",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

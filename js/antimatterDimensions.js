@@ -307,7 +307,7 @@
             currencyDisplayName: "Antimatter",
             currencyInternalName: "antimatter",
             onPurchase() {player.ad.antimatter = new Decimal(10)},
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "AD Upgrade II",
@@ -321,7 +321,7 @@
                 return player.ad.antimatter.abs().plus(1).log10().add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "AD Upgrade III",
@@ -335,7 +335,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.25).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "AD Upgrade IV",
@@ -349,7 +349,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.3).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "AD Upgrade V",
@@ -363,7 +363,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.35).div(4).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "AD Upgrade VI",
@@ -377,7 +377,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.25).div(8).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "AD Upgrade VII",
@@ -391,7 +391,7 @@
                 return player.in.infinities.pow(0.2).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "AD Upgrade VIII",
@@ -405,7 +405,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.15).div(12).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "AD Upgrade IX",
@@ -419,7 +419,7 @@
                 return player.ad.antimatter.plus(1).log10().div(2500)
             },
             effectDisplay() { return "+" + format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "AD Upgrade X",
@@ -433,7 +433,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.1).div(20).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

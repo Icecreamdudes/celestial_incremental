@@ -419,7 +419,7 @@
             currencyDisplayName: "Point Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.point.color}
@@ -435,7 +435,7 @@
             currencyDisplayName: "Point Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.point.color}
@@ -451,7 +451,7 @@
             currencyDisplayName: "Point Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.point.color}
@@ -473,7 +473,7 @@
             currencyDisplayName: "Factor Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.factor.color}
@@ -489,7 +489,7 @@
             currencyDisplayName: "Factor Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.factor.color}
@@ -505,7 +505,7 @@
             currencyDisplayName: "Factor Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.factor.color}
@@ -521,7 +521,7 @@
             currencyDisplayName: "Prestige Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.prestige.color}
@@ -537,7 +537,7 @@
             currencyDisplayName: "Prestige Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.prestige.color}
@@ -553,7 +553,7 @@
             currencyDisplayName: "Prestige Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.prestige.color}
@@ -569,7 +569,7 @@
             currencyDisplayName: "Tree Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.tree.color}
@@ -585,7 +585,7 @@
             currencyDisplayName: "Tree Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.tree.color}
@@ -601,7 +601,7 @@
             currencyDisplayName: "Tree Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.tree.color}
@@ -617,7 +617,7 @@
             currencyDisplayName: "Grass Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.grass.color}
@@ -633,7 +633,7 @@
             currencyDisplayName: "Grass Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.grass.color}
@@ -649,7 +649,7 @@
             currencyDisplayName: "Grass Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.grass.color}
@@ -665,7 +665,7 @@
             currencyDisplayName: "Grasshopper Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.grasshopper.color}
@@ -681,7 +681,7 @@
             currencyDisplayName: "Grasshopper Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.grasshopper.color}
@@ -697,7 +697,7 @@
             currencyDisplayName: "Grasshopper Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.grasshopper.color}
@@ -713,7 +713,7 @@
             currencyDisplayName: "Code Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.code.color}
@@ -729,7 +729,7 @@
             currencyDisplayName: "Code Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.code.color}
@@ -745,7 +745,7 @@
             currencyDisplayName: "Code Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.code.color}
@@ -761,7 +761,7 @@
             currencyDisplayName: "Dice Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.dice.color}
@@ -777,7 +777,7 @@
             currencyDisplayName: "Dice Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.dice.color}
@@ -793,7 +793,7 @@
             currencyDisplayName: "Dice Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.dice.color}
@@ -809,7 +809,7 @@
             currencyDisplayName: "Rocket Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.rocket.color}
@@ -825,7 +825,7 @@
             currencyDisplayName: "Rocket Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.rocket.color}
@@ -841,7 +841,7 @@
             currencyDisplayName: "Rocket Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.rocket.color}
@@ -857,7 +857,7 @@
             currencyDisplayName: "Antimatter Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.antimatter.color}
@@ -873,7 +873,7 @@
             currencyDisplayName: "Antimatter Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.antimatter.color}
@@ -889,7 +889,7 @@
             currencyDisplayName: "Antimatter Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.antimatter.color}
@@ -905,7 +905,7 @@
             currencyDisplayName: "Infinity Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.infinity.color}
@@ -921,7 +921,7 @@
             currencyDisplayName: "Infinity Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.infinity.color}
@@ -937,7 +937,7 @@
             currencyDisplayName: "Infinity Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.infinity.color}
@@ -953,7 +953,7 @@
             currencyDisplayName: "Check Back Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.checkback.color}
@@ -969,7 +969,7 @@
             currencyDisplayName: "Check Back Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.checkback.color}
@@ -985,7 +985,7 @@
             currencyDisplayName: "Check Back Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.checkback.color}
@@ -1001,7 +1001,7 @@
             currencyDisplayName: "Radioactive Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.radioactive.color}
@@ -1017,7 +1017,7 @@
             currencyDisplayName: "Radioactive Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.radioactive.color}
@@ -1033,7 +1033,7 @@
             currencyDisplayName: "Radioactive Core Scraps",
             currencyInternalName: "amount",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 if (hasUpgrade(this.layer, this.id)) {look.backgroundColor = "#77bf5f"}
                 else if (!canAffordUpgrade(this.layer, this.id)) {look.backgroundColor =  "#bf8f8f"}
                 else {look.backgroundColor = CORE_INFO.radioactive.color}

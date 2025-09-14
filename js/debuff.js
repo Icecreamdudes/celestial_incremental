@@ -408,7 +408,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -426,7 +426,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -440,7 +440,7 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -454,7 +454,7 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -472,7 +472,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -486,7 +486,7 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -500,7 +500,7 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -514,7 +514,7 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
             style() {
-                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },
@@ -532,7 +532,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #46385a", borderRadius: "15px", margin: "2px"}
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
                 return look
             },

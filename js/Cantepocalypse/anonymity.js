@@ -199,7 +199,7 @@
                 return player.an.anonymity.pow(0.75).mul(6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
+            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Anonymity X",

@@ -853,7 +853,7 @@
                     ["style-row", [
                         ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]
-                    ], {maxWidth: "750px", padding: "5px 0", backgroundColor: "#2a2136", border: "3px solid #4e386e", borderRadius: "20px"}],
+                    ], {maxWidth: "750px"}],
                 ]
             },
             "Antidebuff": {

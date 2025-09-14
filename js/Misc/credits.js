@@ -92,6 +92,10 @@ addLayer("credits", {
         ["raw-html", () => credits, {color: "white", fontSize: "18px", fontFamily: "monospace",}],
 
         ["blank", "25px"],
+        
+        ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+
+        ["blank", "25px"],
     ],
     layerShown() { return false }
 })

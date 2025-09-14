@@ -604,14 +604,6 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.8 - The Hexing Revamp</h3><br>
 		Content:<br>
 			- Added Universe α: Hex.<br>
-			- Added Hex of Provenance.<br>
-			- Added Hex of Refinement.<br>
-			- Added Hex of Blessings.<br>
-			- Added Hex of Curses.<br>
-			- Added Hex of Power.<br>
-			- Added Hex of Realms.<br>
-			- Added Hex of Vexes.<br>
-			- Added Hex of Sacrifice.<br>
 			- Revamped the UI.<br>
 			(If you have any ideas on how to further improve it, suggest changes in the discord!)<br>
 			- Remade singularity core content.<br>

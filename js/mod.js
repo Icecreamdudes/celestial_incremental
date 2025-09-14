@@ -1212,26 +1212,26 @@ function fixOldSave(oldVersion){
 		player.hrm.realmEssence = player.re.halterEssence
 		for (let prop in player.ta.buyables) {
 			if (prop != 19 && prop != 39) {
-				if (getBuyableAmount("ta", prop).gt(tmp.ta.buyables[prop].purchaseLimit)) setBuyableAmount("ta", prop, tmp.ta.buyables[prop].purchaseLimit)
+				if (getBuyableAmount("ta", prop).gt(layers.ta.buyables[prop].purchaseLimit())) setBuyableAmount("ta", prop, layers.ta.buyables[prop].purchaseLimit())
 			}
 		}
 		for (let prop in player.ip.buyables) {
-			if (getBuyableAmount("ip", prop).gt(tmp.ip.buyables[prop].purchaseLimit)) setBuyableAmount("ip", prop, tmp.ip.buyables[prop].purchaseLimit)
+			if (getBuyableAmount("ip", prop).gt(layers.ip.buyables[prop].purchaseLimit())) setBuyableAmount("ip", prop, layers.ip.buyables[prop].purchaseLimit())
 		}
 		for (let prop in player.id.buyables) {
-			if (getBuyableAmount("id", prop).gt(tmp.id.buyables[prop].purchaseLimit)) setBuyableAmount("id", prop, tmp.id.buyables[prop].purchaseLimit)
+			if (getBuyableAmount("id", prop).gt(layers.id.buyables[prop].purchaseLimit())) setBuyableAmount("id", prop, layers.id.buyables[prop].purchaseLimit())
 		}
 		for (let prop in player.om.buyables) {
-			if (getBuyableAmount("om", prop).gt(tmp.om.buyables[prop].purchaseLimit)) setBuyableAmount("om", prop, tmp.om.buyables[prop].purchaseLimit)
+			if (getBuyableAmount("om", prop).gt(layers.om.buyables[prop].purchaseLimit())) setBuyableAmount("om", prop, layers.om.buyables[prop].purchaseLimit())
 		}
 		for (let prop in player.bi.buyables) {
-			if (getBuyableAmount("bi", prop).gt(tmp.bi.buyables[prop].purchaseLimit)) setBuyableAmount("bi", prop, tmp.bi.buyables[prop].purchaseLimit)
+			if (getBuyableAmount("bi", prop).gt(layers.bi.buyables[prop].purchaseLimit())) setBuyableAmount("bi", prop, layers.bi.buyables[prop].purchaseLimit())
 		}
 		for (let prop in player.ca.buyables) {
-			if (getBuyableAmount("ca", prop).gt(tmp.ca.buyables[prop].purchaseLimit)) setBuyableAmount("ca", prop, tmp.ca.buyables[prop].purchaseLimit)
+			if (getBuyableAmount("ca", prop).gt(layers.ca.buyables[prop].purchaseLimit())) setBuyableAmount("ca", prop, layers.ca.buyables[prop].purchaseLimit())
 		}
 		for (let prop in player.fu.buyables) {
-			if (getBuyableAmount("fu", prop).gt(tmp.fu.buyables[prop].purchaseLimit)) setBuyableAmount("fu", prop, tmp.fu.buyables[prop].purchaseLimit)
+			if (getBuyableAmount("fu", prop).gt(layers.fu.buyables[prop].purchaseLimit())) setBuyableAmount("fu", prop, layers.fu.buyables[prop].purchaseLimit())
 		}
 		setBuyableAmount("sma", 12, new Decimal(getBuyableAmount("sma", 12).mul(2))),
 		setBuyableAmount("ma", 101, new Decimal(0))

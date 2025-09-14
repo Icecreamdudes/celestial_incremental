@@ -2021,6 +2021,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Shard Research II",
@@ -2030,6 +2031,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Shard Research III",
@@ -2039,6 +2041,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Shard Research IV",
@@ -2048,6 +2051,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Shard Research V",
@@ -2057,6 +2061,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Shard Research VI",
@@ -2066,6 +2071,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Shard Research VII",
@@ -2075,6 +2081,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Shard Research VIII",
@@ -2084,6 +2091,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Paragon Shards",
             currencyInternalName: "paragonShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Shard Research IX",
@@ -2097,7 +2105,7 @@ addLayer("ev8", {
                 return player.cb.paragonShards.mul(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '135px', "min-height": '120px' },
+            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Shard Research X",
@@ -2107,6 +2115,7 @@ addLayer("ev8", {
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
             currencyInternalName: "evolutionShards",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #6a437e", borderRadius: "15px", margin: "2px"},
 
         },
         22: {
@@ -2121,7 +2130,7 @@ addLayer("ev8", {
                 return player.cb.evolutionShards.mul(0.02).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '135px', "min-height": '120px' },
+            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #253c7f", borderRadius: "15px", margin: "2px"},
 
         },
       /*  23: {

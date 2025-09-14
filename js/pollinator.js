@@ -480,6 +480,7 @@ addLayer("pol", {
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Pollinator Upgrade II",
@@ -493,7 +494,7 @@ addLayer("pol", {
                 return player.pol.pollinators.add(1).pow(new Decimal(0.1).add(buyableEffect("pol", 13))).div(4).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '120px', },
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Pollinator Upgrade III",
@@ -503,6 +504,7 @@ addLayer("pol", {
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Pollinator Upgrade IV",
@@ -512,6 +514,7 @@ addLayer("pol", {
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Pollinator Upgrade V",
@@ -521,6 +524,7 @@ addLayer("pol", {
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Pollinator Upgrade VI",
@@ -530,6 +534,7 @@ addLayer("pol", {
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Pollinator Upgrade VII",
@@ -543,7 +548,7 @@ addLayer("pol", {
                 return player.pol.pollinators.add(1).log(10).div(2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '120px', },
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Pollinator Upgrade VIII",
@@ -553,6 +558,7 @@ addLayer("pol", {
             currencyLocation() { return player.pol },
             currencyDisplayName: "Pollinators",
             currencyInternalName: "pollinators",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -906,7 +912,11 @@ addLayer("pol", {
     tabFormat: [
         ["row", [
             ["raw-html", () => { return "You have <h3>" + format(player.pol.pollinators) + "</h3> pollinators." }, {color: "#cb8e00", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => { return "(+" + format(player.pol.pollinatorsPerSecond) + "/s)" }, {color: "#cb8e00", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => { return "(+" + format(player.pol.pollinatorsPerSecond) + "/s)" }, () => {
+                let look = {color: "#cb8e00", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.pol.pollinatorsPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
             ["raw-html", () => { return player.pol.pollinators.gt(1e15) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["microtabs", "stuff", { borderWidth: '0px' }],

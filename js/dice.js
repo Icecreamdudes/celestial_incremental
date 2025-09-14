@@ -732,8 +732,7 @@
     },
     bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Autobuy!!?! Hehehe haha",
             unlocked() { return true },
             description: "Autobuys them dice point buyables!",
@@ -741,9 +740,9 @@
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",
             currencyInternalName: "challengeDicePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Something boosts dice outside of this layer!?",
             unlocked() { return true },
             description: "You want something to help? Points boost dice point gain!",
@@ -755,10 +754,9 @@
                 return player.points.plus(1).log10().pow(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '200px', height: '100px', }
+            style: {width: "180px", color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Pointy boost.",
             unlocked() { return true },
             description: "Dice point boost pointies.",
@@ -770,9 +768,9 @@
                 return player.d.dicePoints.pow(0.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Grassy boost.",
             unlocked() { return true },
             description: "Dice points boost them grasshoppers.",
@@ -784,9 +782,9 @@
                 return player.d.dicePoints.pow(0.085).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Reversey Boost.",
             unlocked() { return true },
             description: "Ur check back level boosts dice points.",
@@ -798,10 +796,9 @@
                 return player.cb.level.pow(1.87654321).mul(15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Self Synergize.",
             unlocked() { return true },
             description: "Ur dice points boost itself.",
@@ -813,9 +810,9 @@
                 return player.d.dicePoints.pow(0.125).div(100).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Challengey Prestigey Pointy Boosty.",
             unlocked() { return true },
             description: "Challenge dice points boosts them prestige points and points.",
@@ -827,10 +824,9 @@
                 return player.d.challengeDicePoints.pow(0.4).mul(1000).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Dicey Dicey Dicey Dicey.",
             unlocked() { return hasUpgrade("s", 13) },
             description: "Gain 100x more infinity dice effect.",
@@ -838,7 +834,7 @@
             currencyLocation() { return player.d },
             currencyDisplayName: "Challenge Dice Points",
             currencyInternalName: "challengeDicePoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #666", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -1227,9 +1223,15 @@
                     ["raw-html", () => {return "Boosts dice point gain by x" + format(player.d.challengeDicePointsEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => {return hasUpgrade("cs", 803) ? "Boosts dice score by x" + format(player.d.challengeDicePointsEffect2) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
+                    ["style-row", [
+                        ["ex-buyable", 21], ["ex-buyable", 22],
+                        ["ex-buyable", 23], ["ex-buyable", 24]
+                    ], {maxWidth: "600px"}],
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]], {maxWidth: "1200px"}],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                        ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18]
+                    ], {maxWidth: "565px", padding: "5px 0", backgroundColor: "#333", border: "3px solid #666", borderRadius: "20px"}],
                 ]
             },
             "Challenge Debuffs": {
@@ -1237,12 +1239,12 @@
                 unlocked() { return inChallenge("ip", 15) },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Challenge V Debuffs:" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "^0.9 Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.85 Grasshopper Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.65 Code Experience Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.65 Prestige Point Gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "Challenge V Debuffs:", {color: "white", fontSize: "36px", fontFamily: "monospace"}],
+                    ["blank", "10px"],
+                    ["raw-html", "^0.9 Point Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", "^0.65 Prestige Point Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", "^0.85 Grasshopper Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", "^0.65 Code Experience Gain.", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ]
             },
         },

@@ -280,7 +280,11 @@ addLayer("hsa", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.hsa.sacredEnergy) + "</h3> sacred energy." }, {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.hsa.sacredEnergyGain) + ")" }, {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.hsa.sacredEnergyGain) + ")" }, () => {
+                let look = {color: "rgba(0,0,0,0.6)", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.hpr.rank[1].gte(1) ? look.color = "rgba(0,0,0,0.6)" : look.color = "rgba(100,100,100,0.6)"
+                return look
+            }],
         ]],
         ["row", [
             ["raw-html", () => {return "Adds +" + format(player.hsa.sacredEffect, 3) + " to the hex point softcap exponent." }, {color: "rgba(0,0,0,0.6)", fontSize: "16px", fontFamily: "monospace"}],

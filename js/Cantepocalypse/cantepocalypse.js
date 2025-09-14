@@ -160,8 +160,7 @@ addLayer("cp", {
         },
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Feature I",
             unlocked() { return true },
             description: "Unlocks Alt-Ranks.",
@@ -169,9 +168,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Feature II",
             unlocked() { return true },
             description: "Unlocks Perks.",
@@ -179,9 +178,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Feature III",
             unlocked() { return true },
             description: "Unlocks Tetr Points.",
@@ -189,9 +188,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Feature IV",
             unlocked() { return true },
             description: "Unlocks Anonymity.",
@@ -199,9 +198,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Feature V",
             unlocked() { return true },
             description: "Unlocks Repli-Trees.",
@@ -209,9 +208,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Feature VI",
             unlocked() { return true },
             description: "Unlocks Repli-Grass.",
@@ -219,9 +218,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Feature VII",
             unlocked() { return true },
             description: "Unlocks Grass-Skip.",
@@ -229,9 +228,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Feature VIII",
             unlocked() { return true },
             description: "Escape Cantepocalypse, and unlock more oil content.",
@@ -242,9 +241,9 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "Feature IX",
             unlocked() { return hasMilestone("s", 17) },
             description: "Unlocks Funify.",
@@ -252,6 +251,7 @@ addLayer("cp", {
             currencyLocation() { return player.cp },
             currencyDisplayName: "Replicanti Points",
             currencyInternalName: "replicantiPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {},

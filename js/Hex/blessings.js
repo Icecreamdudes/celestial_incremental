@@ -356,7 +356,7 @@ addLayer("hbl", {
                 if (upgradeEffect(this.layer, this.id).lt(18)) return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[SOFTCAPPED]</small>"
                 return "+" + formatWhole(upgradeEffect(this.layer, this.id)) + "<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
         2: {
             title: "Grace II",
@@ -372,7 +372,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
         3: {
             title: "Grace III",
@@ -388,7 +388,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
         4: {
             title: "Grace IV",
@@ -406,7 +406,7 @@ addLayer("hbl", {
             effectDisplay() {
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
         5: {
             title: "Grace V",
@@ -422,7 +422,7 @@ addLayer("hbl", {
                 return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
         6: {
             title: "Grace VI",
@@ -445,7 +445,7 @@ addLayer("hbl", {
                 if (inChallenge("hrm", 16)) return "+^" + format(upgradeEffect(this.layer, this.id))
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
     },
     milestones: {
@@ -453,25 +453,25 @@ addLayer("hbl", {
             requirementDescription: "<h3>3,600 Blessings",
             effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifierEffects[1])) + " Blessings."},
             done() { return player.hbl.blessings.gte(3600) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         2: {
             requirementDescription: "<h3>6,000 Blessings",
             effectDescription: "Increase base of IP Booster Booster by +0.3.",
             done() { return player.hbl.blessings.gte(6000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         3: {
             requirementDescription: "<h3>12,000 Blessings",
             effectDescription: "Increase jinx cap by 6.",
             done() { return player.hbl.blessings.gte(12000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         4: {
             requirementDescription: "<h3>36,000 Blessings",
             effectDescription() { return "x" + format(new Decimal(2).mul(player.hpu.purifierEffects[1])) + " Boons."},
             done() { return player.hbl.blessings.gte(36000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         5: {
             requirementDescription: "<h3>120,000 Blessings",
@@ -480,13 +480,13 @@ addLayer("hbl", {
                 return "Boost provenenace effects by x1.3."
             },
             done() { return player.hbl.blessings.gte(120000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         6: {
             requirementDescription: "<h3>360,000 Blessings",
             effectDescription: "Increase base of Λ-Jinx by +0.02.",
             done() { return player.hbl.blessings.gte(360000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
     microtabs: {
@@ -585,7 +585,11 @@ addLayer("hbl", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.hbl.blessings) + "</h3> blessings." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.hbl.blessingsGain) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.hbl.blessingsGain) + ")" }, () => {
+                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.hre.refinement.gte(18) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
             ["raw-html", () => {return player.hbl.blessingPerSec.eq(0) ? "" : player.hbl.blessingPerSec.gt(0) ? "(+" + format(player.hbl.blessingPerSec) + "/s)" : "<span style='color:red'>(" + format(player.hbl.blessingPerSec) + "/s)</span>" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => {return inChallenge("hrm", 11) ? "Bless resets left: " + formatWhole(player.hrm.blessLimit) + "/6" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],

@@ -372,8 +372,7 @@
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "20px"],
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + format(player.pr.perkPoints) + "</h3> perk points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],

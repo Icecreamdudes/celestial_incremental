@@ -784,17 +784,23 @@
                 unlocked() { return player.ca.unlockedCante && hasUpgrade("bi", 26) },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.ca.galaxyDust) + "</h3> galaxy dust." }, { "color": "#979EE8", "font-size": "26px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Galaxy dust multiplies antimatter galaxy effect base by <h3>" + format(player.ca.galaxyDustEffect) + "</h3>x." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.ca.galaxyDustToGet) + "</h3> galaxy dust on reset." }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + format(player.ca.replicanti) + "</h3> replicanti." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.ca.galaxyDust) + "</h3> galaxy dust"}, {color: "#979EE8", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.ca.galaxyDustToGet) + ")"}, () => {
+                            let look = {color: "#979EE8", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.ca.replicanti.gte(1e10) ? look.color = "#979EE8" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", () => {return "Boosts antimatter galaxy effect base by x" + format(player.ca.galaxyDustEffect)}, {color: "#979EE8", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, { "color": "#979EE8", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(They just act like regular antimatter galaxies)" }, { "color": "#979EE8", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.replicantiGalaxies) + "/" + formatWhole(player.ca.replicantiGalaxiesCap) + "</h3> replicanti galaxies." }, {color: "#979EE8", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(They just act like regular antimatter galaxies)" }, {color: "#979EE8", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 13]]],
                 ]

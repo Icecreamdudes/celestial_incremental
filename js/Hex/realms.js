@@ -93,7 +93,7 @@ addLayer("hrm", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(180deg, #c88, #ca8, #cca, #8c8, #8cc, #88c, #a8c)"
                 return look
             },
@@ -119,7 +119,7 @@ addLayer("hrm", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(180deg, #c88, #ca8, #cca, #8c8, #8cc, #88c, #a8c)"
                 return look
             },
@@ -148,7 +148,7 @@ addLayer("hrm", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(180deg, #c88, #ca8, #cca, #8c8, #8cc, #88c, #a8c)"
                 return look
             },
@@ -177,7 +177,7 @@ addLayer("hrm", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(180deg, #c88, #ca8, #cca, #8c8, #8cc, #88c, #a8c)"
                 return look
             },
@@ -206,7 +206,7 @@ addLayer("hrm", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(180deg, #c88, #ca8, #cca, #8c8, #8cc, #88c, #a8c)"
                 return look
             },
@@ -235,7 +235,7 @@ addLayer("hrm", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
             style() {
-                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit()) ? look.background = "#77bf5f" : !this.canAfford() ? look.background =  "#bf8f8f" : look.background = "linear-gradient(180deg, #c88, #ca8, #cca, #8c8, #8cc, #88c, #a8c)"
                 return look
             },
@@ -464,7 +464,11 @@ addLayer("hrm", {
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "You have <h3>" + formatShort(player.hrm.realmEssence) + "</h3> Realm Essence."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return "(+" + formatShort(player.hrm.realmEssenceGain) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return "(+" + formatShort(player.hrm.realmEssenceGain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.hrm.realmEssenceGain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts Pre-Power resources by x" + format(player.hrm.realmEssenceEffects[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

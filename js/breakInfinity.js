@@ -34,7 +34,6 @@
             buyUpgrade("bi", 12)
             buyUpgrade("bi", 13)
             buyUpgrade("bi", 14)
-            buyUpgrade("bi", 15)
             buyUpgrade("bi", 16)
             buyUpgrade("bi", 17)
             buyUpgrade("bi", 18)
@@ -299,306 +298,286 @@
     bars: {},
     upgrades: {
         //Infinity Points
-        11:
-        {
+        11: {
             title: "BI IP Upgrade I",
             unlocked() { return true },
             description: "Points are raised to the ^1.1.",
             cost: new Decimal(6e8),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "BI IP Upgrade II",
             unlocked() { return true },
             description: "Unlock more graces in hex of blessings.",
             cost: new Decimal(2e9),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "BI IP Upgrade III",
             unlocked() { return true },
             description: "Unlock new hexed jinx's in hex of curses.",
             cost: new Decimal(6e9),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "BI IP Upgrade IV",
             unlocked() { return true },
             description: "Unlock OTF Mastery.",
             cost: new Decimal(2e10),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        16: {
             title: "BI IP Upgrade V",
-            unlocked() { return true },
-            description: "Unlock OTF Mastery Buyables.",
-            cost: new Decimal(5e10),
-            currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
-            currencyInternalName: "infinityPoints",
-        },
-        16:
-        {
-            title: "BI IP Upgrade VI",
             unlocked() { return true },
             description: "Unlock more alternate infinity buyables.",
             cost: new Decimal(2e11),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
-            title: "BI IP Upgrade VII",
+        17: {
+            title: "BI IP Upgrade VI",
             unlocked() { return true },
             description: "Total hex runs boost pollinator gain.",
             cost: new Decimal(1e12),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
             effect() {
-                return player.ip.hexRuns.add(1).log10().add(1)
+                return player.ip.hexRuns.add(1).log(10).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
-            title: "BI IP Upgrade VIII",
+        18: {
+            title: "BI IP Upgrade VII",
             unlocked() { return true },
             description: "Unlock Infinity Dimensions.",
             cost: new Decimal(3e13),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
-            title: "BI IP Upgrade IX",
+        19: {
+            title: "BI IP Upgrade VIII",
             unlocked() { return true },
             description: "Unlock Infinity Power Buyables. (In infinity dimensions layer)",
             cost: new Decimal(2e14),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
-            title: "BI IP Upgrade X",
+        21: {
+            title: "BI IP Upgrade IX",
             unlocked() { return true },
             description: "Slightly weaken the post-1e300 AM softcap.",
             cost: new Decimal(1e15),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        22:
-        {
-            title: "BI IP Upgrade XI",
+        22: {
+            title: "BI IP Upgrade X",
             unlocked() { return true },
             description: "Points boost the antimatter effect even more.",
             cost: new Decimal(3e16),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        23:
-        {
-            title: "BI IP Upgrade XII",
+        23: {
+            title: "BI IP Upgrade XI",
             unlocked() { return true },
-            description: "Infinity points boost itself.",
+            description: "Infinity points boost themselves.",
             cost: new Decimal(1e18),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
             effect() {
                 return player.in.infinityPoints.pow(0.2).mul(0.002).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        24:
-        {
-            title: "BI IP Upgrade XIII",
+        24: {
+            title: "BI IP Upgrade XII",
             unlocked() { return true },
             description() { return !hasUpgrade("bi", 24) ? "..." : "Unlocks Cante and new pet evolutions." },
             cost: new Decimal(1e22),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        25:
-        {
-            title: "BI IP Upgrade XIV",
+        25: {
+            title: "BI IP Upgrade XIII",
             unlocked() { return true },
-            description: "Raise check back effect to the ^5. (only ^2 in dice), and gain 4% of B.I per second.",
+            description: "Raise check back effect by ^5. (only ^2 in dice), and gain 4% BI/s.",
             cost: new Decimal(1e24),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        26:
-        {
-            title: "BI IP Upgrade XV",
+        26: {
+            title: "BI IP Upgrade XIV",
             unlocked() { return true },
             description: "Unlock galaxy dust.",
             cost: new Decimal(1e26),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        27:
-        {
-            title: "BI IP Upgrade XVI",
+        27: {
+            title: "BI IP Upgrade XV",
             unlocked() { return true },
             description: "Unlock hex of realms, and new hex of power mights.",
             cost: new Decimal(1e32),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        28:
-        {
-            title: "BI IP Upgrade XVII",
+        28: {
+            title: "BI IP Upgrade XVI",
             unlocked() { return player.ca.unlockedCante },
             description() { return !hasUpgrade("bi", 24) ? "Unlock ??? (Check ???)." : !hasUpgrade("bi", 28) ? "Unlock ??? (Check Cante)." : "Unlock Cante's Trials (Check Cante)." },
             cost: new Decimal(1e38),
             currencyLocation() { return player.in },
-            currencyDisplayName: "Infinity Points",
+            currencyDisplayName: "IP",
             currencyInternalName: "infinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
         //Negative Infinity Points
-        101:
-        {
+        101: {
             title: "BI NIP Upgrade I",
             unlocked() { return true },
-            description: "Boost infinity points based on infinities.",
+            description: "Boost IP based on infinities.",
             cost: new Decimal(1e7),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
             effect() {
                 return player.in.infinities.pow(0.2).mul(0.05).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        102:
-        {
+        102: {
             title: "BI NIP Upgrade II",
             unlocked() { return true },
-            description: "Boost negative infinity points based on points.",
+            description: "Boost NIP based on points.",
             cost: new Decimal(3e7),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
             effect() {
                 return player.points.div(1e308).plus(1).log(1e308).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        103:
-        {
+        103: {
             title: "BI NIP Upgrade III",
             unlocked() { return true },
             description: "Unlock miracles in hex of blessings.",
             cost: new Decimal(1e8),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        104:
-        {
+        104: {
             title: "BI NIP Upgrade IV",
             unlocked() { return true },
             description: "Autobuy negative infinity point and OTF synergizer buyables.",
             cost: new Decimal(3e8),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        105:
-        {
+        105: {
             title: "BI NIP Upgrade V",
             unlocked() { return true },
             description: "Buying antimatter dimensions and tickspeed don't spend antimatter.",
             cost: new Decimal(8e8),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        106:
-        {
+        106: {
             title: "BI NIP Upgrade VI",
             unlocked() { return true },
             description: "Unlock more origin upgrades. (Universe 1 if you forgot)",
             cost: new Decimal(4e9),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        107:
-        {
+        107: {
             title: "BI NIP Upgrade VII",
             unlocked() { return true },
             description: "Boost steel gain based on highest rocket fuel.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
             effect() {
                 return player.ta.highestRocketFuel.pow(0.1).mul(0.015).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        108:
-        {
+        108: {
             title: "BI NIP Upgrade VIII",
             unlocked() { return true },
             description: "Raise antimatter effect to the ^1.6.",
             cost: new Decimal(2e11),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        109:
-        {
+        109: {
             title: "BI NIP Upgrade IX",
             unlocked() { return true },
             description: "Autobuy mastery, break infinity, and infinity point buyables.",
             cost: new Decimal(5e12),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        111:
-        {
+        111: {
             title: "BI NIP Upgrade X",
             unlocked() { return true },
             description: "Improve the infinity point formula.",
             cost: new Decimal(3e13),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         112: {
             title: "BI NIP Upgrade XI",
@@ -606,9 +585,9 @@
             description: "Dimension boosts and antimatter galaxies don't reset antimatter dimensions.",
             cost: new Decimal(2e14),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         113: {
             title: "BI NIP Upgrade XII",
@@ -616,9 +595,9 @@
             description: "Unlock new mod buyables.",
             cost: new Decimal(1e15),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         114: {
             title: "BI NIP Upgrade XIII",
@@ -626,9 +605,9 @@
             description: "Raise the antimatter effect to the ^3.",
             cost: new Decimal(3e16),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         115: {
             title: "BI NIP Upgrade XIV",
@@ -636,9 +615,9 @@
             description: "Improve the infinity point formula again.",
             cost: new Decimal(1e18),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         116: {
             title: "BI NIP Upgrade XV",
@@ -646,9 +625,9 @@
             description: "Unlock a new pollinator.",
             cost: new Decimal(1e20),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         117: {
             title: "BI NIP Upgrade XVI",
@@ -656,9 +635,9 @@
             description: "Triple replicanti mult, and replicanti effects are buffed.",
             cost: new Decimal(1e300),
             currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
+            currencyDisplayName: "NIP",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -773,10 +752,7 @@
             "Broken Infinities": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities. (+<h3>" + format(player.bi.brokenInfinitiesToGet) + "</h3>)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
@@ -787,17 +763,20 @@
             "Break Infinity Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ta.negativeInfinityPoints) + "</h3> negative infinity points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18],
-                        ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28]], {maxWidth: "1100px"}],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
+                        ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28],
+                    ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#332600", border: "3px solid #7f5f00", borderRadius: "20px"}],
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108],
-                        ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117]], {maxWidth: "1100px"}],
+                    ["style-row", [
+                        ["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105], ["upgrade", 106], ["upgrade", 107], ["upgrade", 108],
+                        ["upgrade", 109], ["upgrade", 111], ["upgrade", 112], ["upgrade", 113], ["upgrade", 114], ["upgrade", 115], ["upgrade", 116], ["upgrade", 117],
+                    ], {maxWidth: "1000px", padding: "5px 0", backgroundColor: "#232b2b", border: "3px solid #596c6c", borderRadius: "20px"}],
                     ["blank", "25px"],
                     ["raw-html", function () { return !player.ta.unlockedReverseBreak ? "Wanna break infinity for antimatter? Check pet evolutions." : ""}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
@@ -857,8 +836,18 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.in.infinitiesToGet) + "</h3> infinities on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + formatWhole(player.bi.brokenInfinities) + "</h3> broken infinities"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.bi.brokenInfinitiesToGet) + ")"}, () => {
+                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.bi.brokenInfinitiesToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + format(player.in.infinitiesToGet) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "8px"}],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

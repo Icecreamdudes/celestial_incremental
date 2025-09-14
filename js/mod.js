@@ -114,13 +114,10 @@ function updateStyles() {
 		case "gh":
 			layerBG = "#073b77"
 			break;
-		case "hpr":
+		case "hpr": case "m":
 			layerBG = "#000919"
 			break;
-		case "hre":
-			layerBG = "#111"
-			break;
-		case "hbl":
+		case "hbl": case "pol":
 			layerBG = "#191300"
 			break;
 		case "hcu":
@@ -129,8 +126,11 @@ function updateStyles() {
 		case "hpu":
 			layerBG = "#161511"
 			break;
-		case "hpw":
+		case "hpw": case "pe":
 			layerBG = "#200"
+			break;
+		case "hve":
+			layerBG = "#101"
 			break;
 		case "hrm":
 			layerBG = "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)"
@@ -145,6 +145,9 @@ function updateStyles() {
 		case "om": case "id":
 			layerBG = "#001f18"
 			break;
+		case "de":
+			layerBG = "#1c1624"
+			break;
 		case "revc":
 			layerBG = "#31aeb0"
 			break;
@@ -153,6 +156,7 @@ function updateStyles() {
 			break;
 		case "ca":
 			layerBG = "#2a3e66"
+			if (player.subtabs["ca"]['stuff'] == "Galaxy Dust") layerBG = "#0f1226"
 			break;
 		case "cap":
 			layerBG = "#1f1e33"

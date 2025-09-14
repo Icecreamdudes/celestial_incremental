@@ -299,11 +299,9 @@
             },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Prestige Upgrade I",
             unlocked() { return true },
             description: "Triples celestial point gain.",
@@ -311,9 +309,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Prestige Upgrade II",
             unlocked() { return true },
             description: "Unlock a prestige effect that buffs celestial points.",
@@ -321,9 +319,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Prestige Upgrade III",
             unlocked() { return true },
             description: "Unlocks Factor VII.",
@@ -331,9 +329,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Prestige Upgrade IV",
             unlocked() { return true },
             description: "You can buy max ranks, tiers, and tetr",
@@ -341,9 +339,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Prestige Upgrade V",
             unlocked() { return true },
             description: "Autobuys factors I-VIII.",
@@ -352,9 +350,9 @@
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
             tooltip() { return "Autobuyers don't spend resources. This applies to most autobuyers in the game." },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Prestige Upgrade VI",
             unlocked() { return hasUpgrade("i", 15) },
             description: "Unlock a second tetr effect that buffs factor power.",
@@ -362,9 +360,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Prestige Upgrade VII",
             unlocked() { return hasUpgrade("p", 16) },
             description: "Automates rank gain.",
@@ -372,9 +370,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Prestige Upgrade VIII",
             unlocked() { return hasUpgrade("p", 17) },
             description: "Automates tier gain.",
@@ -382,9 +380,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "Prestige Upgrade IX",
             unlocked() { return hasUpgrade("p", 18) && tmp.f.buyables[26].unlocked },
             description: "Unlocks Power Factor VIII, and more tree buyables.",
@@ -392,9 +390,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "Prestige Upgrade X",
             unlocked() { return hasUpgrade("p", 19) },
             description: "Autobuys power factors I-VIII",
@@ -402,9 +400,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        22:
-        {
+        22: {
             title: "Prestige Upgrade XI",
             unlocked() { return hasUpgrade("p", 21) },
             description: "Automates tetr gain.",
@@ -412,9 +410,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        23:
-        {
+        23: {
             title: "Prestige Upgrade XII",
             unlocked() { return hasUpgrade("p", 22) && hasMilestone("r", 11) },
             description: "Unlocks Tree Factor IV.",
@@ -422,6 +420,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -706,8 +705,7 @@
             "Main": {
                 buttonStyle() { return { color: "#31aeb0", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "15px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
@@ -718,12 +716,15 @@
             "Crystallize": {
                 buttonStyle() { return { color: "white", borderRadius: "5px", borderColor: "#31aeb0", backgroundColor: "#98245c"}},
                 unlocked() { return hasUpgrade("i", 24) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + format(player.p.crystals) + "</h3> crystals."}, {color: "#b6658c", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.p.crystalsToGet) + ")"}, {color: "#b6658c", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + format(player.p.crystalsToGet) + ")"}, () => {
+                            let look = {color: "#b6658c", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.p.crystalsToGet.gte(1) ? look.color = "#b6658c" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", "(Gain based on Tetr)", { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
                     ["raw-html", function () { return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],

@@ -1052,7 +1052,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.point.amount) + " <small>Point Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.point.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.point.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.point.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.point.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.point.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts time cube effects by ^" + formatShort(player.cs.scraps.point.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1069,7 +1073,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.factor.amount) + " <small>Factor Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.factor.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.factor.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.factor.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.factor.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.factor.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Increases factor power effect softcap by +^" + formatShort(player.cs.scraps.factor.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1086,7 +1094,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.prestige.amount) + " <small>Prestige Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.prestige.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.prestige.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.prestige.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.prestige.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.prestige.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Increases prestige effect softcaps by +^" + formatShort(player.cs.scraps.prestige.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1103,7 +1115,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.tree.amount) + " <small>Tree Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.tree.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.tree.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.tree.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.tree.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.tree.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Increases tree effect softcap by +^" + formatShort(player.cs.scraps.tree.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1120,7 +1136,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.grass.amount) + " <small>Grass Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.grass.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.grass.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.grass.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.grass.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.grass.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Increases grass effect softcaps by +^" + formatShort(player.cs.scraps.grass.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1137,7 +1157,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.grasshopper.amount) + " <small>Grasshopper Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.grasshopper.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.grasshopper.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.grasshopper.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.grasshopper.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.grasshopper.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Increases grasshopper effect softcaps by +^" + formatShort(player.cs.scraps.grasshopper.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1154,7 +1178,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.code.amount) + " <small>Code Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.code.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.code.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.code.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.code.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.code.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts mod gain by ^" + formatShort(player.cs.scraps.code.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1171,7 +1199,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.dice.amount) + " <small>Dice Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.dice.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.dice.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.dice.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.dice.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.dice.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts tier 1 booster dice effects by ^" + formatShort(player.cs.scraps.dice.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1188,7 +1220,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.rocket.amount) + " <small>Rocket Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.rocket.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.rocket.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.rocket.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.rocket.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.rocket.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts rocket fuel effects by ^" + formatShort(player.cs.scraps.rocket.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1205,7 +1241,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.antimatter.amount) + " <small>Antimatter Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.antimatter.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.antimatter.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.antimatter.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.antimatter.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.antimatter.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts antimatter softcap base by x" + formatShort(player.cs.scraps.antimatter.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1222,7 +1262,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.infinity.amount) + " <small>Infinity Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.infinity.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.infinity.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.infinity.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.infinity.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.infinity.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts base infinity point gain by ^" + formatShort(player.cs.scraps.infinity.effect, 3)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1239,7 +1283,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.checkback.amount) + " <small>Check Back Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.checkback.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.checkback.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.checkback.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.checkback.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.checkback.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts check back xp by x" + formatShort(player.cs.scraps.checkback.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -1256,7 +1304,11 @@
                     ["style-column", [
                         ["row", [
                             ["raw-html", () => {return "<small>You have</small> " + formatShorterWhole(player.cs.scraps.radioactive.amount) + " <small>Radioactive Core Scrap</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.radioactive.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.radioactive.gain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                            ["raw-html", () => {return hasUpgrade("sma", 107) ? "(+" + formatShort(player.cs.scraps.radioactive.gain.mul(0.01)) + "/s)" : "(+" + formatShorterWhole(player.cs.scraps.radioactive.gain) + ")"}, () => {
+                                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                                player.cs.scraps.radioactive.gain.gt(0) ? look.color = "white" : look.color = "gray"
+                                return look
+                            }],
                         ]],
                         ["row", [
                             ["raw-html", () => {return "Boosts radiation gain by x" + formatShort(player.cs.scraps.radioactive.effect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

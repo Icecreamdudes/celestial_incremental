@@ -231,7 +231,11 @@ addLayer("hpr", {
                 ["style-column", [
                     ["raw-html", () => {return formatWhole(player.hpr.rank[0]) + " α-Provenance"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["row", [
-                        ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[0]) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[0]) + ")"}, () => {
+                            let look = {color: "white", fontSize: "16px", fontFamily: "monospace"}
+                            player.hpr.rankGain[0].gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                         ["raw-html", () => {return player.hpr.rank[0].gte(1200) && player.hpr.rank[0].lt(6000000) ? "[SOFTLOCKED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
                         ["raw-html", () => {return player.hpr.rank[0].gte(6000000) && player.hpr.rank[0].lt(2.4e8) ? "[SOFTLOCKED<sup>2</sup>]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
                         ["raw-html", () => {return player.hpr.rank[0].gte(2.4e8) ? "[SOFTLOCKED<sup>3</sup>]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
@@ -245,7 +249,11 @@ addLayer("hpr", {
             ["style-column", [
                 ["style-column", [
                     ["raw-html", () => {return formatWhole(player.hpr.rank[1]) + " β-Provenance"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[1]) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[1]) + ")"}, () => {
+                        let look = {color: "white", fontSize: "16px", fontFamily: "monospace"}
+                        player.hpr.rankGain[1].gt(0) ? look.color = "white" : look.color = "gray"
+                        return look
+                    }],
                 ], {width: "250px", height: "50px", borderBottom: "2px solid white"}],
                 ["style-column", [
                     ["raw-html", () => {return "x" + format(player.hpr.rankEffect[1][0]) + " celestial points<br>x" + format(player.hpr.rankEffect[1][1]) + " hex points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
@@ -255,7 +263,11 @@ addLayer("hpr", {
             ["style-column", [
                 ["style-column", [
                     ["raw-html", () => {return formatWhole(player.hpr.rank[2]) + " γ-Provenance"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[2]) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[2]) + ")"}, () => {
+                        let look = {color: "white", fontSize: "16px", fontFamily: "monospace"}
+                        player.hpr.rankGain[2].gt(0) ? look.color = "white" : look.color = "gray"
+                        return look
+                    }],
                 ], {width: "250px", height: "50px", borderBottom: "2px solid white"}],
                 ["style-column", [
                     ["raw-html", () => {return "x" + format(player.hpr.rankEffect[2][0]) + " celestial points<br>x" + format(player.hpr.rankEffect[2][1]) + " hex points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
@@ -267,7 +279,11 @@ addLayer("hpr", {
             ["style-column", [
                 ["style-column", [
                     ["raw-html", () => {return formatWhole(player.hpr.rank[3]) + " δ-Provenance"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[3]) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[3]) + ")"}, () => {
+                        let look = {color: "white", fontSize: "16px", fontFamily: "monospace"}
+                        player.hpr.rankGain[3].gt(0) ? look.color = "white" : look.color = "gray"
+                        return look
+                    }],
                 ], {width: "250px", height: "50px", borderBottom: "2px solid white"}],
                 ["style-column", [
                     ["raw-html", () => {return "x" + format(player.hpr.rankEffect[3][0]) + " celestial points<br>x" + format(player.hpr.rankEffect[3][1]) + " hex points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
@@ -277,7 +293,11 @@ addLayer("hpr", {
             ["style-column", [
                 ["style-column", [
                     ["raw-html", () => {return formatWhole(player.hpr.rank[4]) + " ε-Provenance"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[4]) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[4]) + ")"}, () => {
+                        let look = {color: "white", fontSize: "16px", fontFamily: "monospace"}
+                        player.hpr.rankGain[4].gt(0) ? look.color = "white" : look.color = "gray"
+                        return look
+                    }],
                 ], {width: "250px", height: "50px", borderBottom: "2px solid white"}],
                 ["style-column", [
                     ["raw-html", () => {return "x" + format(player.hpr.rankEffect[4][0]) + " celestial points<br>x" + format(player.hpr.rankEffect[4][1]) + " hex points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],
@@ -287,7 +307,11 @@ addLayer("hpr", {
             ["style-column", [
                 ["style-column", [
                     ["raw-html", () => {return formatWhole(player.hpr.rank[5]) + " ζ-Provenance"}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[5]) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "(+" + formatWhole(player.hpr.rankGain[5]) + ")"}, () => {
+                        let look = {color: "white", fontSize: "16px", fontFamily: "monospace"}
+                        player.hpr.rankGain[5].gt(0) ? look.color = "white" : look.color = "gray"
+                        return look
+                    }],
                 ], {width: "250px", height: "50px", borderBottom: "2px solid white"}],
                 ["style-column", [
                    ["raw-html", () => {return "x" + format(player.hpr.rankEffect[5][0]) + " celestial points<br>x" + format(player.hpr.rankEffect[5][1]) + " hex points"}, {color: "white", fontSize: "14px", fontFamily: "monospace"}],

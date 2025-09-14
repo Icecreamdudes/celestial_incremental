@@ -41,14 +41,14 @@
     },
     nodeStyle() {
         return {
-            background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)",
+            background: "linear-gradient(315deg, #d3a165 0%, #FFBF00 100%)",
             "background-origin": "border-box",
             "border-color": "#7c5423",
         };
       },
 
     tooltip: "Infinity",
-    color: "white",
+    color: "#ffbf00",
     branches: ["ad"],
     update(delta) {
         let onepersec = new Decimal(1)
@@ -96,8 +96,7 @@
     },
     bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Upgrade (1, 1)",
             unlocked() { return true },
             description: "Unlocks Antimatter Dimensions.",
@@ -105,10 +104,9 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Upgrade (1, 2)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts antimatter based on completed dice runs.",
@@ -120,10 +118,9 @@
                 return player.ip.diceRuns.pow(1.1).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Upgrade (1, 3)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts 7th dimensions based on completed rocket fuel runs.",
@@ -135,10 +132,9 @@
                 return player.ip.rocketFuelRuns.pow(0.9).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Upgrade (1, 4)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts factor power based on antimatter.",
@@ -150,10 +146,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "Upgrade (2, 1)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts factor power and prestige points based on infinities.",
@@ -165,10 +160,9 @@
                 return player.in.infinities.pow(1.4).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        22:
-        {
+        22: {
             title: "Upgrade (2, 2)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts tree and leaf gain based on infinities.",
@@ -180,10 +174,9 @@
                 return player.in.infinities.pow(1.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        23:
-        {
+        23: {
             title: "Upgrade (2, 3)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts mod and lines of code gain based on infinities.",
@@ -195,10 +188,9 @@
                 return player.in.infinities.pow(1.15).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        24:
-        {
+        24: {
             title: "Upgrade (2, 4)",
             unlocked() { return hasUpgrade("ip", 11) },
             description: "Boosts golden grass gain based on infinities.",
@@ -210,10 +202,9 @@
                 return player.in.infinities.pow(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        31:
-        {
+        31: {
             title: "Upgrade (3, 1)",
             unlocked() { return hasUpgrade("ip", 21) },
             description: "Unlocks more check back content and more IP upgrades.<br>(CB Level 100)",
@@ -221,10 +212,9 @@
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
             currencyInternalName: "infinityPoints",
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        32:
-        {
+        32: {
             title: "Upgrade (3, 2)",
             unlocked() { return hasUpgrade("ip", 31) },
             description: "Boosts grasshoppers based on infinity points.",
@@ -242,10 +232,9 @@
                 if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
                 return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        33:
-        {
+        33: {
             title: "Upgrade (3, 3)",
             unlocked() { return hasUpgrade("ip", 31) },
             description: "Boosts mods based on infinity points.",
@@ -263,10 +252,9 @@
                 if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
                 return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        34:
-        {
+        34: {
             title: "Upgrade (3, 4)",
             unlocked() { return hasUpgrade("ip", 31) },
             description: "Boosts dice points and rocket fuel based on infinity points.",
@@ -284,10 +272,9 @@
                 if (player.in.infinityPoints.lt("1e2000")) return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[SOFTCAPPED]</small>"
                 return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:red'>[HARDCAPPED]</small>"
             }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        41:
-        {
+        41: {
             title: "Upgrade (4, 1)",
             unlocked() { return hasUpgrade("ta", 14) },
             description: "Boosts negative infinity points based on infinity points.",
@@ -299,10 +286,9 @@
                 return player.in.infinityPoints.plus(1).log10().mul(0.65).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        42:
-        {
+        42: {
             title: "Upgrade (4, 2)",
             unlocked() { return hasUpgrade("ta", 14) },
             description: "Boosts infinity points based on negative infinity points.",
@@ -315,13 +301,12 @@
                 return player.ta.negativeInfinityPoints.pow(0.08).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        43:
-        {
+        43: {
             title: "Upgrade (4, 3)",
             unlocked() { return hasUpgrade("ta", 14) },
-            description: "Boosts antimatter dimensions (ignoring softcap) based on negative infinity points.",
+            description: "Boosts AD (ignoring softcap) based on negative infinity points.",
             cost: new Decimal(80000),
             currencyLocation() { return player.in },
             currencyDisplayName: "Infinity Points",
@@ -330,10 +315,9 @@
                 return player.ta.negativeInfinityPoints.plus(1).log10().pow(1.35).mul(2.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
-        44:
-        {
+        44: {
             title: "Upgrade (4, 4)",
             unlocked() { return hasUpgrade("ta", 14) },
             description: "Boosts dimension power based on infinity points.",
@@ -345,7 +329,7 @@
                 return player.in.infinityPoints.plus(1).log10().pow(1.25).mul(0.5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "130px", height: "130px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #7f5f00", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -491,64 +475,64 @@
             requirementDescription: "<h3>1 Infinity",
             effectDescription: "Unlock the Otherworldy Feature: Rocket Fuel.",
             done() { return player.in.infinities.gte(1) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         11: {
             requirementDescription: "<h3>2 Infinities",
             effectDescription: "Keeps grass and prestige upgrades on all resets.",
             done() { return player.in.infinities.gte(2) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         12: {
             requirementDescription: "<h3>3 Infinities",
-            effectDescription: "Keep check back unlocked, gain 5% of prestige points per second.",
+            effectDescription: "Keep check back unlocked,<br>and gain 5% of prestige points per second.",
             done() { return player.in.infinities.gte(3) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         13: {
             requirementDescription: "<h3>4 Infinities",
             effectDescription: "Gain 5% of grass per second.",
             done() { return player.in.infinities.gte(4) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         14: {
             requirementDescription: "<h3>5 Infinities",
             effectDescription: "Keep antimatter progress on regular infinity resets.",
             done() { return player.in.infinities.gte(5) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         15: {
             requirementDescription: "<h3>6 Infinities",
             effectDescription: "Keeps pent milestones.",
             done() { return player.in.infinities.gte(6) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         16: {
             requirementDescription: "<h3>8 Infinities",
             effectDescription: "Unlock challenges.",
             done() { return player.in.infinities.gte(8) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         17: {
             requirementDescription: "<h3>15 Infinities",
             effectDescription: "Autobuys grasshopper studies and mod buyables.",
             done() { return player.in.infinities.gte(15) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         18: {
             requirementDescription: "<h3>25 Infinities",
             effectDescription: "Gain an option to keep OTFs on infinity reset.",
             done() { return player.in.infinities.gte(25) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         19: {
             requirementDescription: "<h3>40 Infinities",
             effectDescription() { return "Autobuy universe 1 upgrades." },
             done() { return player.in.infinities.gte(40) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "90px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
             toggles: [
                 ["i", "auto"], // Each toggle is defined by a layer and the data toggled for that layer
             ],
@@ -558,49 +542,49 @@
             effectDescription() { return "Skip the big crunch screen, and automatically reset." },
             done() { return player.in.infinities.gte(80) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         22: {
             requirementDescription: "<h3>150 Infinities",
             effectDescription() { return "Gain 10% of grasshoppers and code experience per second." },
             done() { return player.in.infinities.gte(150) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         23: {
             requirementDescription: "<h3>777 Infinities",
             effectDescription() { return "Unlocks the point halter (Next to OTF)." },
             done() { return player.in.infinities.gte(777) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         24: {
             requirementDescription: "<h3>4000 Infinities",
             effectDescription() { return "Check back pet effects are always active." },
             done() { return player.in.infinities.gte(4000) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         25: {
             requirementDescription: "<h3>15000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         26: {
             requirementDescription: "<h3>30000 Infinities",
             effectDescription() { return "Tav's domain doesn't reset infinity milestones." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         27: {
             requirementDescription: "<h3>70000 Infinities",
             effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
             done() { return player.in.infinities.gte(70000) && player.in.unlockedBreak && player.ev.evolutionsUnlocked[3] },
             unlocked() { return player.in.unlockedBreak && player.ev.evolutionsUnlocked[3]},
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
     challenges: {
@@ -626,7 +610,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
 
         },
         12: {
@@ -642,7 +627,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
 
         },
         13: {
@@ -669,7 +655,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
 
         },
         14: {
@@ -686,7 +673,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
 
         },
         15: {
@@ -726,8 +714,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
-
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
         },
         16: {
             name: "Challenge VI",
@@ -753,8 +741,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
-
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
         },
         17: {
             name: "Challenge VII",
@@ -772,7 +760,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
         },
         18: {
             name: "Challenge VIII",
@@ -788,8 +777,8 @@
             onExit() {
                 layers.in.bigCrunch()
             },
-            style: { width: '350px', height: '275px', }
-
+            buttonStyle: {backgroundColor: "white"},
+            style: { width: '350px', height: '275px'},
         },
     },
     infoboxes: {},
@@ -800,10 +789,12 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
                         ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],
                         ["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34],
-                        ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]], {maxWidth: "600px"}],
+                        ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]
+                    ], {maxWidth: "625px", padding: "5px 0", backgroundColor: "#332600", border: "3px solid #7f5f00", borderRadius: "20px"}],
                 ]
             },
             "Milestones": {
@@ -874,7 +865,7 @@
         ]],
         ["row", [
             ["raw-html", () => { return "You have <h3>" + formatWhole(player.in.infinities) + "</h3> infinities." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + format(player.in.infinitiesToGet) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => { return player.in.infinitiesToGet.gt(1) ? "(+" + format(player.in.infinitiesToGet) + ")" : "" }, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "8px"}],
         ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],

@@ -188,8 +188,7 @@ addLayer("i", {
         },
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Feature I",
             unlocked() { return true },
             description: "Unlocks Ranks.",
@@ -197,9 +196,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Feature II",
             unlocked() { return hasUpgrade("i", 11) },
             description: "Unlocks Factors.",
@@ -207,9 +206,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Tetr",
             unlocked() { return hasUpgrade("i", 12) },
             description: "Unlocks Tetr (In ranks).",
@@ -217,9 +216,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Prestige",
             unlocked() { return hasUpgrade("i", 13) },
             description: "Unlocks Prestige.",
@@ -227,9 +226,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Power Factors",
             unlocked() { return hasUpgrade("i", 14) },
             description: "Unlocks Power Factors (In factors).",
@@ -237,9 +236,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Trees",
             unlocked() { return hasUpgrade("i", 15) },
             description: "Unlocks Trees.",
@@ -247,9 +246,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Grass",
             unlocked() { return hasUpgrade("i", 16) },
             description: "Unlocks Grass.",
@@ -257,9 +256,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Pent",
             unlocked() { return hasUpgrade("i", 17) },
             description: "Unlocks Pent (in ranks).",
@@ -267,9 +266,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "Check Back",
             unlocked() { return hasUpgrade("i", 18) },
             description: "Unlocks Check Back.",
@@ -277,9 +276,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "OTF",
             unlocked() { return hasUpgrade("i", 19) },
             description: "Unlocks Otherworldly Features.",
@@ -287,9 +286,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        22:
-        {
+        22: {
             title: "Pollinate",
             unlocked() { return player.in.unlockedBreak},
             description: "Use the experience of debuffs and pests to create Pollinators.",
@@ -297,9 +296,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        23:
-        {
+        23: {
             title: "Steel",
             unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
             description: "Unlocks Steelie reset layer (in grasshop).",
@@ -307,9 +306,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        24:
-        {
+        24: {
             title: "Crystallize",
             unlocked() { return hasUpgrade("i", 23) && hasUpgrade("bi", 106)},
             description: "Unlocks Crystallize reset layer (in prestige).",
@@ -317,9 +316,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        25:
-        {
+        25: {
             title: "Productive Pollination",
             unlocked() { return hasUpgrade("i", 24) && hasUpgrade("bi", 106)},
             description: "Unlocks more Pollinator upgrades.",
@@ -327,9 +326,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        26:
-        {
+        26: {
             title: "Time Reversal",
             unlocked() { return hasUpgrade("i", 25) && hasUpgrade("bi", 106)},
             description: "Unlocks Time Reversal (in ranks layer).",
@@ -337,9 +336,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        27:
-        {
+        27: {
             title: "Pentomation",
             unlocked() { return hasUpgrade("i", 26) && hasUpgrade("bi", 106)},
             description: "Automatically gain pent without resetting.",
@@ -347,9 +346,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        28:
-        {
+        28: {
             title: "2nd OTF slot...",
             unlocked() { return hasUpgrade("i", 27) && hasUpgrade("bi", 106)},
             description: "Gain a 2nd OTF slot. (doesn't stack with tav's domain)",
@@ -357,9 +356,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        29:
-        {
+        29: {
             title: "True Refinement",
             unlocked() { return hasUpgrade("i", 32) && hasUpgrade("bi", 106) && player.ca.unlockedCante},
             description: "Unlock Hex of Purity.",
@@ -367,6 +366,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         30: {
             title: "Hexing Power",
@@ -376,6 +376,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         31: {
             title: "Auto CDPs",
@@ -385,6 +386,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         32: {
             title: "Completely Pentomated",
@@ -394,9 +396,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        37:
-        {
+        37: {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
@@ -404,9 +406,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        38:
-        {
+        38: {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
@@ -414,9 +416,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        39:
-        {
+        39: {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
@@ -424,9 +426,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        41:
-        {
+        41: {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
@@ -434,9 +436,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        101:
-        {
+        101: {
             title: "Factory",
             unlocked() { return hasMilestone("s", 11)},
             description: "Unlocks the factory.",
@@ -444,6 +446,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {},

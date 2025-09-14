@@ -27,8 +27,7 @@
             buyUpgrade("an", 23)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Anonymity",
     branches: ["ar"],
     color: "#0c04c1",
@@ -104,6 +103,7 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Anonymity II",
@@ -117,6 +117,7 @@
                 return player.an.anonymity.plus(1).log10().pow(1.25).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Anonymity III",
@@ -126,6 +127,7 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Anonymity IV",
@@ -135,6 +137,7 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Anonymity V",
@@ -144,6 +147,7 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Anonymity VI",
@@ -157,6 +161,7 @@
                 return player.an.anonymity.pow(0.15).div(6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Anonymity VII",
@@ -170,6 +175,7 @@
                 return player.pr.perkPoints.pow(0.2).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Anonymity VIII",
@@ -179,7 +185,7 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
-            style: {width: "150px", height: "100px"},
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Anonymity IX",
@@ -193,6 +199,7 @@
                 return player.an.anonymity.pow(0.75).mul(6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: "Anonymity X",
@@ -202,6 +209,7 @@
             currencyLocation() { return player.an },
             currencyDisplayName: "Anonymity",
             currencyInternalName: "anonymity",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Anonymity XI",
@@ -215,7 +223,7 @@
                 return player.cp.replicantiSoftcap2Start.plus(1).log10().pow(0.65).mul(5).add(1)
             },
             effectDisplay() { return "/" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: { width: '135px', height: '100px', },
+            style: {width: "135px", color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "Anonymity XII",
@@ -229,7 +237,7 @@
                 return player.an.anonymity.plus(1).log10().pow(0.8).mul(1.7).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '130px', hesight: '100px', },
+            style: {width: "130px", color: "rgba(0,0,0,0.8)", border: "3px solid #060260", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {},
@@ -245,7 +253,11 @@
                     ["blank", "10px"],
                     ["row", [
                         ["raw-html", () => { return "You have <h3>" + format(player.an.anonymity) + "</h3> anonymity." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "(+" + format(player.an.anonymityToGet) + ")" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => { return "(+" + format(player.an.anonymityToGet) + ")" }, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.an.anonymityToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["blank", "10px"],
                     ["row", [["clickable", 11]]],

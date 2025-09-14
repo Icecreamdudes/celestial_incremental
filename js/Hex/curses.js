@@ -673,7 +673,11 @@ addLayer("hcu", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.hcu.curses) + "</h3> Curses." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.hcu.cursesGain) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.hcu.cursesGain) + "/s)" }, () => {
+                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.hcu.cursesGain.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
             ["raw-html", () => {return player.hcu.cursesGain.gte(1e12) && inChallenge("hrm", 12) ? "<small>[SOFTCAPPED<sup>2</sup>]</small>" :
                 player.hcu.cursesGain.gte(1e12) || inChallenge("hrm", 12) ? "<small>[SOFTCAPPED]</small>" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],

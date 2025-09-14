@@ -1458,8 +1458,7 @@
             "Main": {
                 buttonStyle() { return { borderColor: "white", color: "white", borderRadius: "5px" } },
                 unlocked() { return !hasUpgrade("cs", 201) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return !tmp.f.buyables[14].unlocked ?  "Next factor unlocks at tier 2." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return tmp.f.buyables[14].unlocked && !tmp.f.buyables[15].unlocked ?  "Next factor unlocks at tier 4." : "" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -1476,12 +1475,15 @@
             "Power": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("i", 15) && !hasUpgrade("cs", 201) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => { return "You have " + format(player.f.factorPower) + " factor power." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "(+" + format(player.f.factorPowerPerSecond) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => { return "(+" + format(player.f.factorPowerPerSecond) + "/s)" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.f.factorPowerPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["row", [
                         ["raw-html", () => { return "Boosts celestial points by x" + format(player.f.factorPowerEffect) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -1504,8 +1506,7 @@
             "Tree": {
                 buttonStyle() { return { borderColor: "#0B6623", color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("r", 11) && !hasUpgrade("cs", 201) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.g.grass) + " grass." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1523,8 +1524,7 @@
             "Grass": {
                 buttonStyle() { return { borderColor: "#119B35", color: "white", borderRadius: "5px" } },
                 unlocked() { return player.gh.buyables[15].gt(0) && !hasUpgrade("cs", 201) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.gh.fertilizer) + " fertilizer." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
@@ -1542,7 +1542,11 @@
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => { return "You have " + format(player.f.factorPower) + " factor power." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "(+" + format(player.f.factorPowerPerSecond) + "/s)" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => { return "(+" + format(player.f.factorPowerPerSecond) + "/s)" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.f.factorPowerPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["row", [
                         ["raw-html", () => { return "Boosts celestial points by x" + format(player.f.factorPowerEffect) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],

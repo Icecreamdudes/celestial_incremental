@@ -245,7 +245,11 @@
                     ["blank", "10px"],
                     ["row", [
                         ["raw-html", () => { return "You have " + format(player.dn.normality) + " normality"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return "(+" + format(player.dn.normalityToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => { return "(+" + format(player.dn.normalityToGet) + ")"}, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.dn.normalityToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", () => { return "Divides starmetal alloy requirement by /" + format(player.dn.normalityEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["raw-html", () => { return "(Normality is kept on starmetal resets)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],

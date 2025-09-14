@@ -1747,7 +1747,11 @@ addLayer("st", {
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => {return "You have " + formatWhole(player.st.starPower) + " star power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + formatWhole(player.st.starPowerPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + formatWhole(player.st.starPowerPerSecond) + "/s)"}, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.st.starPowerPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                         ["raw-html", () => {return player.st.starPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["raw-html", () => { return "Boosts point gain by ^" + format(player.st.starPowerEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
@@ -1884,7 +1888,11 @@ addLayer("st", {
     tabFormat: [
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + formatWhole(player.au2.starsToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + formatWhole(player.au2.starsToGet) + ")"}, () => {
+                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                player.au2.starsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
         ]],
         ["raw-html", () => {return "You have " + formatWhole(player.pl.planets) + " planets"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],

@@ -339,7 +339,11 @@
                 content: [
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + formatWhole(player.dg.generators) + "</h3> generators"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + formatWhole(player.dg.generatorsToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + formatWhole(player.dg.generatorsToGet) + ")" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.dg.generatorsToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                         ["raw-html", () => {return (player.dg.generatorsToGet.gte(1e100)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["raw-html", () => {return "Provides a base generator power gain of +" + format(player.dg.generatorEffect) + "/s"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],

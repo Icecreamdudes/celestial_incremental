@@ -259,6 +259,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: 'Grass Upgrade II',
@@ -268,6 +269,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: 'Grass Upgrade III',
@@ -277,6 +279,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: 'Grass Upgrade IV',
@@ -286,6 +289,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: 'Grass Upgrade V',
@@ -295,6 +299,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: 'Grass Upgrade VI',
@@ -304,6 +309,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: 'Grass Upgrade VII',
@@ -313,6 +319,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: 'Grass Upgrade VIII',
@@ -322,6 +329,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
             currencyInternalName: 'grass',
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: 'Grass Upgrade IX',
@@ -335,6 +343,7 @@
                 return player.r.pent.lte(100) ? player.r.pent.mul(10) : new Decimal(1000)
             },
             effectDisplay() { return '+'+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         21: {
             title: 'Grass Upgrade X',
@@ -348,6 +357,7 @@
                 return player.cb.level.pow(0.8).add(1)
             },
             effectDisplay() { return 'x'+formatWhole(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         23: {
             title: "Grass Upgrade XI",
@@ -361,6 +371,7 @@
                 return player.g.goldGrass.add(1).log(10).pow(0.3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
         22: {
             title: "Grass Upgrade XII",
@@ -370,6 +381,7 @@
             currencyLocation() { return player.g },
             currencyDisplayName: "Grass",
             currencyInternalName: "grass",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #084d1a", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

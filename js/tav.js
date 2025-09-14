@@ -287,7 +287,7 @@
             onClick() {
                 player.buyMax = true
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '5px 0px 0px 5px' }
+            style: { width: '80px', "min-height": '50px', borderRadius: '15px 0px 0px 15px' }
         },
         3: {
             title() { return "Buy Max Off" },
@@ -296,7 +296,7 @@
             onClick() {
                 player.buyMax = false
             },
-            style: { width: '75px', "min-height": '50px', borderRadius: '0px 5px 5px 0px' }
+            style: { width: '80px', "min-height": '50px', borderRadius: '0px 15px 15px 0px' }
         },
         4: {
             title() { return "<h3>Lower Dimension" },
@@ -570,11 +570,9 @@
             style: { width: '50px', "min-height": '50px', borderRadius: '0px 10px 10px 0px' },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Negative Upgrade I",
             unlocked() { return true },
             description: "Unlocks Buyables.",
@@ -582,9 +580,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Negative Upgrade II",
             unlocked() { return true },
             description: "NIP boosts Dimension Power gain.",
@@ -596,10 +594,9 @@
                 return player.ta.negativeInfinityPoints.pow(0.75).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', "min-height": '120px' },
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Negative Upgrade III",
             unlocked() { return hasUpgrade("ta", 12) },
             description: "Skip the reverse crunch button.",
@@ -607,9 +604,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Negative Upgrade IV",
             unlocked() { return hasUpgrade("ta", 13) },
             description: "Unlock limiters for Dimboost and Galaxy autobuyers. Unlock new IP upgrades.",
@@ -617,10 +614,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
-            style: { width: '150px', "min-height": '120px' },
+            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Negative Upgrade V",
             unlocked() { return hasUpgrade("ta", 14) },
             description: "Unlock new hex of blessing content.",
@@ -628,9 +624,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Negative Upgrade VI",
             unlocked() { return hasUpgrade("ta", 15) },
             description: "Unlock the hex of curses.",
@@ -638,9 +634,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Negative Upgrade VII",
             unlocked() { return hasUpgrade("ta", 16) },
             description: "Unlock the OTF synergizer.",
@@ -648,6 +644,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         18:
         {
@@ -658,9 +655,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "Negative Upgrade IX",
             unlocked() { return hasUpgrade("ta", 18) },
             description: "Unlock 3 more OTF synergizer buyables.",
@@ -668,9 +665,9 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "Negative Upgrade X",
             unlocked() { return hasUpgrade("ta", 19) },
             description: "Unlock TAV'S DOMAIN and broken infinities.",
@@ -678,6 +675,7 @@
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -2135,7 +2133,14 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter. (+" + format(player.ad.antimatterPerSecond) + "/s)" }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.ad.antimatterPerSecond) + "/s)"}, () => {
+                look = {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}
+                player.ad.antimatterPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
         ["row", [
             ["raw-html", () => { return "You have <h3>" + format(player.ta.negativeInfinityPoints) + "</h3> negative infinity points" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
             ["raw-html", () => { return "(+" + format(player.ta.negativeInfinityPointsToGet) + ")" }, () => {

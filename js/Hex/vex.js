@@ -433,12 +433,16 @@ addLayer("hve", {
                     ], {width: "90px", height: "120px"}],
                     ["id-upgrade", 61], ["id-upgrade", 62], ["id-upgrade", 63]
                 ]],
-            ], {width: "472px", height: "600px", backgroundColor: "#101", borderRight: "3px solid white", borderRadius: "15px 0 0 15px"}],
+            ], {width: "472px", height: "600px", backgroundColor: "#160016", borderRight: "3px solid white", borderRadius: "15px 0 0 15px"}],
             ["column", [
                 ["style-column", [
                     ["row", [
                         ["raw-html", () => {return "You have " + formatWhole(player.hve.vex) + "/" + formatWhole(player.hve.vexTotal) + " Vexes."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return hasMilestone("hre", 16) ? "(+" + formatWhole(player.hve.vexGain) + ")" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return hasMilestone("hre", 16) ? "(+" + formatWhole(player.hve.vexGain) + ")" : "" }, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.hve.vexGain.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", () => {return player.hve.vexTotal.lt(18) ? "The next Vex will go in Row " + VEXROW[player.hve.vexTotal.toNumber()] + "." : ""}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "20px"],
@@ -455,7 +459,7 @@ addLayer("hve", {
                             ["raw-html", () => {return hasUpgrade("hpw", 62) ? "Jinx Score: x" + format(player.hve.vexEffects[1]) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", () => {return hasUpgrade("hpw", 92) ? "Blessings: x" + format(player.hve.vexEffects[2]) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "300px", height: "330px"}],
-                    ], {width: "300px", height: "380px", backgroundColor: "#101", border: "2px solid #808", borderRadius: "15px"}],
+                    ], {width: "300px", height: "380px", backgroundColor: "#160016", border: "2px solid #808", borderRadius: "15px"}],
                 ], {width: "300px", height: "400px"}],
             ], {width: "325px", height: "600px"}],
         ], {backgroundColor: "#202", border: "3px solid white", borderRadius: "15px"}],

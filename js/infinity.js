@@ -415,8 +415,15 @@ addLayer("in", {
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter (+" + format(player.ad.antimatterPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.ad.antimatterPerSecond) + "/s)"}, () => {
+                look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.ad.antimatterPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
+        ["raw-html", () => {return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

@@ -48,7 +48,7 @@
       },
 
     tooltip: "Antimatter Dimensions",
-    color: "rgba(30,181,22,1)",
+    color: "#1eb516",
     branches: [],
     update(delta) {
         let onepersec = new Decimal(1)
@@ -298,8 +298,7 @@
     },
     bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "AD Upgrade I",
             unlocked() { return true },
             description: "Gives you 10 antimatter. Spend it wisely.",
@@ -307,13 +306,10 @@
             currencyLocation() { return player.ad },
             currencyDisplayName: "Antimatter",
             currencyInternalName: "antimatter",
-            onPurchase()
-            {
-                player.ad.antimatter = new Decimal(10)
-            }
+            onPurchase() {player.ad.antimatter = new Decimal(10)},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "AD Upgrade II",
             unlocked() { return true },
             description: "Antimatter boosts itself.",
@@ -325,6 +321,7 @@
                 return player.ad.antimatter.abs().plus(1).log10().add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "AD Upgrade III",
@@ -338,9 +335,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.25).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "AD Upgrade IV",
             unlocked() { return player.in.infinities.gte(2) },
             description: "Boosts grass based on antimatter.",
@@ -352,9 +349,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.3).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "AD Upgrade V",
             unlocked() { return player.in.infinities.gte(2) },
             description: "Boosts trees and leaves based on antimatter.",
@@ -366,9 +363,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.35).div(4).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "AD Upgrade VI",
             unlocked() { return player.in.infinities.gte(2) },
             description: "Boosts grasshoppers and fertilizer based on antimatter.",
@@ -380,9 +377,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.25).div(8).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "AD Upgrade VII",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Infinities boost antimatter dimensions.",
@@ -394,9 +391,9 @@
                 return player.in.infinities.pow(0.2).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "AD Upgrade VIII",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Boosts mods and lines of code based on antimatter.",
@@ -408,9 +405,9 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.15).div(12).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "AD Upgrade IX",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Increase factor effect base based on antimatter.",
@@ -422,9 +419,9 @@
                 return player.ad.antimatter.plus(1).log10().div(2500)
             },
             effectDisplay() { return "+" + format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "AD Upgrade X",
             unlocked() { return player.in.infinities.gte(3) },
             description: "Boosts code experience based on antimatter.",
@@ -436,6 +433,7 @@
                 return player.ad.antimatter.plus(1).log10().pow(1.1).div(20).add(1)
             },
             effectDisplay() { return "x"+format(upgradeEffect(this.layer, this.id))}, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #0f5a0b", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -805,8 +803,10 @@
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
-                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]], {maxWidth: "720px"}],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
+                        ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21]
+                    ], {maxWidth: "750px"}],
                 ]
             },
             "Dimensions": {
@@ -887,8 +887,15 @@
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter (+" + format(player.ad.antimatterPerSecond) + "/s)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + format(player.ad.antimatter) + "</h3> antimatter"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.ad.antimatterPerSecond) + "/s)"}, () => {
+                look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.ad.antimatterPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
+        ["raw-html", () => {return "Boosts points by x" + format(player.ad.antimatterEffect) + " (based on points and antimatter)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

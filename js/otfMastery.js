@@ -18,11 +18,9 @@
         hexMasteryPointsEffect: new Decimal(1),
         hexMasteryPointsToGet: new Decimal(0),
 
-    }
-    },
+    }},
     automate() {
-        if (hasUpgrade("bi", 109))
-        {
+        if (hasUpgrade("bi", 109)) {
             buyBuyable("om", 11)
             buyBuyable("om", 12)
             buyBuyable("om", 13)
@@ -34,21 +32,18 @@
     nodeStyle() {
         return {
             background: "linear-gradient(45deg, #8a00a9, #0061ff)",
-            "background-origin": "border-box",
-            "border-color": "purple",
+            backgroundOrigin: "border-box",
+            borderColor: "purple",
         };
-      },
-
+    },
     tooltip: "Otherworldy Feature Mastery",
     color: "#8a00a9",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.po.dice && player.d.dicePoints.gte(1))
-        {
+        if (player.po.dice && player.d.dicePoints.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.diceMasteryPointsToGet = player.d.dicePoints.plus(1).log10().pow(2.4).mul(10)
-        } else
-        {
+        } else {
             player.om.diceMasteryPointsToGet = new Decimal(0)
         }
         if (hasUpgrade("s", 12)) player.om.diceMasteryPointsToGet = player.ta.highestDicePoints.plus(1).log10().pow(2.4).mul(10)
@@ -60,11 +55,9 @@
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
-        if (player.po.rocketFuel && player.rf.rocketFuel.gte(1))
-        {
+        if (player.po.rocketFuel && player.rf.rocketFuel.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.rocketFuelMasteryPointsToGet = player.rf.rocketFuel.plus(1).log10().pow(2.7)
-        } else
-        {
+        } else {
             player.om.rocketFuelMasteryPointsToGet = new Decimal(0)
         }
         if (hasUpgrade("s", 12)) player.om.rocketFuelMasteryPointsToGet = player.ta.highestRocketFuel.plus(1).log10().pow(2.7)
@@ -76,11 +69,9 @@
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
-        if ((player.po.hex || hasUpgrade("s", 18)) && player.h.hexPoint.gte(1))
-        {
+        if ((player.po.hex || hasUpgrade("s", 18)) && player.h.hexPoint.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.h.hexPoint.plus(1).log10().pow(1.65)
-        } else
-        {
+        } else {
             player.om.hexMasteryPointsToGet = new Decimal(0)
         }
         if (hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.ta.highestHexPoints.plus(1).log10().pow(1.65)
@@ -106,26 +97,7 @@
         if (hasUpgrade("s", 12)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(Decimal.mul(player.om.hexMasteryPointsToGet.mul(delta), 0.04))
     },
     branches: ["id", "bi"],
-    clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-    },
+    clickables: {},
     bars: {},
     upgrades: {},
     buyables: {
@@ -342,52 +314,41 @@
             "Mastery": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.om.diceMasteryPoints) + "</h3> dice mastery points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.om.diceMasteryPointsToGet) + ")"}, () => {
-                            let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            if (player.po.dice) {look.color = "white"} else {look.color = "gray"}
-                            return look
-                        }],
-                    ]],
-                    ["raw-html", function () { return "which boost infinity points by <h3>" + format(player.om.diceMasteryPointsEffect) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.om.rocketFuelMasteryPoints) + "</h3> rocket fuel mastery points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.om.rocketFuelMasteryPointsToGet) + ")"}, () => {
-                            let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            if (player.po.rocketFuel) {look.color = "white"} else {look.color = "gray"}
-                            return look
-                        }],
-                    ]],
-                    ["raw-html", function () { return "which boost negative infinity points by <h3>" + format(player.om.rocketFuelMasteryPointsEffect) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.om.hexMasteryPointsToGet) + ")"}, () => {
-                            let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            if (player.po.hex || hasUpgrade("s", 18)) {look.color = "white"} else {look.color = "gray"}
-                            return look
-                        }],
-                    ]],
-                    ["raw-html", function () { return "which boost all antimatter dimensions by <h3>" + format(player.om.hexMasteryPointsEffect) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "<h2>You produce each mastery point based on the respective OTF currency per infinity reset." }, { "color": "white", "font-size": "12px", "font-family": "monospace" }],
-                ]
-
-            },
-            "Buyables": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("bi", 15) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.om.diceMasteryPoints) + "</h3> dice mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.om.rocketFuelMasteryPoints) + "</h3> rocket fuel mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                content: [
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["row", [
+                            ["raw-html", () => {return "You have <h3>" + format(player.om.diceMasteryPoints) + "</h3> dice mastery points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "(+" + format(player.om.diceMasteryPointsToGet) + ")"}, () => {
+                                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                if (player.po.dice) {look.color = "white"} else {look.color = "gray"}
+                                return look
+                            }],
+                        ]],
+                        ["raw-html", () => {return "which boost infinity points by <h3>" + format(player.om.diceMasteryPointsEffect) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "10px"],
+                        ["row", [
+                            ["raw-html", () => {return "You have <h3>" + format(player.om.rocketFuelMasteryPoints) + "</h3> rocket fuel mastery points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "(+" + format(player.om.rocketFuelMasteryPointsToGet) + ")"}, () => {
+                                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                if (player.po.rocketFuel) {look.color = "white"} else {look.color = "gray"}
+                                return look
+                            }],
+                        ]],
+                        ["raw-html", () => {return "which boost negative infinity points by <h3>" + format(player.om.rocketFuelMasteryPointsEffect) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "10px"],
+                        ["row", [
+                            ["raw-html", () => {return "You have <h3>" + format(player.om.hexMasteryPoints) + "</h3> hex mastery points."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "(+" + format(player.om.hexMasteryPointsToGet) + ")"}, () => {
+                                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                if (player.po.hex || hasUpgrade("s", 18)) {look.color = "white"} else {look.color = "gray"}
+                                return look
+                            }],
+                        ]],
+                        ["raw-html", () => {return "which boost all antimatter dimensions by <h3>" + format(player.om.hexMasteryPointsEffect) + "</h3>x." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                        ["blank", "10px"],
+                        ["raw-html", "You produce each mastery point based on the respective OTF currency per infinity reset.", { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ], {padding: "10px 20px", backgroundColor: "#1b0021", border: "3px solid #450054", borderRadius: "20px"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
                         ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],

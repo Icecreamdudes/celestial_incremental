@@ -156,7 +156,7 @@
 
                 player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet)
             },
-            style: { border: "3px solid rgb(27, 0, 36)", width: '300px', "min-height": '120px', borderRadius: '15px', backgroundColor: "#1b1173", color: "white" },
+            style: { border: "3px solid #0a0c19", width: '300px', "min-height": '120px', borderRadius: '15px', backgroundColor: "#191e40", color: "white" },
         },
         12: {
             title() { return "<h2>Make Rocket Parts" },
@@ -170,7 +170,7 @@
 
                 player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet)
             },
-            style: { border: "3px solid rgb(27, 0, 36)", width: '300px', "min-height": '120px', borderRadius: '15px', backgroundColor: "#1b1173", color: "white"},
+            style: { border: "3px solid #0a0c19", width: '300px', "min-height": '120px', borderRadius: '15px', backgroundColor: "#191e40", color: "white"},
         },
         13: {
             title() { return "<h2>Select Passenger" },
@@ -676,7 +676,7 @@
                         ["raw-html", function () { return "You have <h3>" + format(player.ro.activatedFuel) + "</h3> activated fuel." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Activated fuel boosts golden grass value by x<h3>" + format(player.ro.activatedFuelEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You will gain <h3>" + format(player.ro.activatedFuelToGet) + "</h3> activated fuel on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", borderBottom: "0px", backgroundColor: "#1b1173", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ], {width: "1000px", border: "3px solid #0a0c19", borderBottom: "0px", backgroundColor: "#191e40", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                         ["style-row", [
                         ["style-column", [
                     ["blank", "25px"],
@@ -687,10 +687,10 @@
                             ["raw-html", function () { return "You have <h3>" + format(player.fa.charge) + "</h3> charge, which multiplies activated fuel x" + format(player.ro.activatedFuelContributions[3]) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#1b1173"}],
+                    ], {width: "1000px", border: "3px solid #0a0c19", backgroundColor: "#191e40"}],
                     ["style-column", [
                         ["raw-html", function () { return "(Converting does a singularity equivalent reset.)" }, { "color": "white", "font-size": "17px", "font-family": "monospace", lineHeight: "1.5"}], 
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", borderTop: "0px", backgroundColor: "#1b1173", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}],
+                    ], {width: "1000px", border: "3px solid #0a0c19", borderTop: "0px", backgroundColor: "#191e40", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}],
                     ["blank", "25px"],
                     ["clickable", 11],
                 ]
@@ -704,7 +704,7 @@
                         ["raw-html", function () { return "You have <h3>" + formatWhole(player.ro.rocketParts) + "</h3> rocket parts." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                         ["raw-html", function () { return "Activated fuel boosts moonstone value by x<h3>" + format(player.ro.rocketPartsEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                         ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.ro.rocketPartsToGet) + "</h3> rocket parts on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", borderBottom: "0px", backgroundColor: "#1b1173", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ], {width: "1000px", border: "3px solid #0a0c19", borderBottom: "0px", backgroundColor: "#191e40", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
                         ["style-row", [
                         ["style-column", [
                     ["blank", "25px"],
@@ -715,11 +715,11 @@
                             ["raw-html", function () { return "You have <h3>" + format(player.g.moonstone) + "</h3> moonstone, which multiplies rocket parts x" + format(player.ro.rocketPartsContributions[3]) + "." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#1b1173"}],
+                    ], {width: "1000px", border: "3px solid #0a0c19", backgroundColor: "#191e40"}],
                     ["style-column", [
                         ["raw-html", function () { return "(Converting does a singularity equivalent reset.)" }, { "color": "white", "font-size": "17px", "font-family": "monospace", lineHeight: "1.5"}], 
                         ["raw-html", function () { return "(Rocket part gain is rounded down to the nearest integer.)" }, { "color": "white", "font-size": "17px", "font-family": "monospace", lineHeight: "1.5"}], 
-                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", borderTop: "0px", backgroundColor: "#1b1173", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}],
+                    ], {width: "1000px", border: "3px solid #0a0c19", borderTop: "0px", backgroundColor: "#191e40", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}],
                     ["blank", "25px"],
                     ["clickable", 12],
                 ]
@@ -794,7 +794,7 @@
                     ["blank", "25px"],
 
                                                         ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on launch." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Evolution shard cost: " + formatWhole(player.ro.evoCost) + "" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Paragon shard cost: " + formatWhole(player.ro.paragonCost) + "" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],

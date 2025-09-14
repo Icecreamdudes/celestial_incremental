@@ -487,73 +487,73 @@
             requirementDescription: "<h3>Grass-Skip 1",
             effectDescription: "Unlock Grass-Skippers",
             done() { return player.gs.grassSkip.gte(1) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         12: {
             requirementDescription: "<h3>Grass-Skip 2",
             effectDescription() { return "Replicanti Points boost themselves at a reduced rate.<br>Currently: " + format(player.gs.milestone2Effect)+"x" },
             done() { return player.gs.grassSkip.gte(2) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         13: {
             requirementDescription: "<h3>Grass-Skip 3",
             effectDescription() { return "Autobuy perk buyables." },
             done() { return player.gs.grassSkip.gte(3) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         14: {
             requirementDescription: "<h3>Grass-Skip 4",
             effectDescription() { return "Keep repli-grass content on reset." },
             done() { return player.gs.grassSkip.gte(4) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         15: {
             requirementDescription: "<h3>Grass-Skip 7",
             effectDescription() { return "Gain 10% of anonymity per second." },
             done() { return player.gs.grassSkip.gte(7) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         16: {
             requirementDescription: "<h3>Grass-Skip 11",
             effectDescription() { return "Autobuy repli-tree buyables." },
             done() { return player.gs.grassSkip.gte(11) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         17: {
             requirementDescription: "<h3>Grass-Skip 15",
             effectDescription() { return "Unlocks oil." },
             done() { return player.gs.grassSkip.gte(15) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         18: {
             requirementDescription: "<h3>Grass-Skip 20",
             effectDescription() { return "Grass-Skips above 19 (ignoring additive) boost pollinator gain.<br>Currently: " + format(player.gs.milestone8Effect)+"x" },
             done() { return player.gs.grassSkip.gte(20) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         19: {
             requirementDescription: "<h3>Grass-Skip 30",
             effectDescription() { return "Gain 500% of all alternate rank currencies per second." },
             done() { return player.gs.grassSkip.gte(30) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         20: {
             requirementDescription: "<h3>Grass-Skip 40",
             effectDescription() { return "Grass-Skips above 39 (ignoring additive) boost linking power gain.<br>Currently: " + format(player.gs.milestone10Effect)+"x" },
             done() { return player.gs.grassSkip.gte(40) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         21: {
             requirementDescription: "<h3>Grass-Skip 50",
             effectDescription() { return "Slightly reduce Repli-Grass softcap scaling." },
             done() { return player.gs.grassSkip.gte(50) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         22: {
             requirementDescription: "<h3>Grass-Skip 60",
             effectDescription() { return "Improve Grass-Skip milestone 8's effect." },
             done() { return player.gs.grassSkip.gte(60) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
     challenges: {
@@ -565,19 +565,26 @@
             "Grass-Skip": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", () => { return !player.fu.buyables[24].gte(1) ? "Grass-skip " + formatWhole(player.gs.grassSkip) + " (+" + formatWhole(player.gs.grassSkipToGet) + ")" : "Grass-skip " + formatWhole(player.gs.grassSkip) + " + " + formatWhole(buyableEffect("fu", 24)) + " (+" + formatWhole(player.gs.grassSkipToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [
+                                ["raw-html", () => {return !player.fu.buyables[24].gte(1) ? "Grass-skip " + formatWhole(player.gs.grassSkip) : "Grass-skip " + formatWhole(player.gs.grassSkip) + " + " + formatWhole(buyableEffect("fu", 24))}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return hasUpgrade("fu", 18) ? "(+" + formatWhole(player.gs.grassSkipToGet) + ")" : ""}, () => {
+                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    player.gs.grassSkipToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                    return look
+                                }],
+                            ]],
                             ["raw-html", () => { return "x" + format(player.gs.grassSkipEffect) + " Replicanti Point Mult" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", () => { return hasUpgrade("cs", 602) ? "x" + format(player.gs.grassSkipEffect2) + " Grasshoppers" : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "100px"}],
                         ["clickable", 11],
                     ], {width: "800px", height: "100px", backgroundColor: "#162e5e", border: "3px solid #0c1a36", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Milestones"  }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", "Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["blank", "5px"],
                     ["milestone", 11],
                     ["milestone", 12],
                     ["milestone", 13],
@@ -595,12 +602,15 @@
             "Grass-Skippers": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("gs", 11) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + format(player.gs.grassSkippers) + "</h3> grass-skippers."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.gs.grassSkippersPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}]
+                        ["raw-html", () => {return "(+" + format(player.gs.grassSkippersPerSecond) + "/s)"}, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.gs.grassSkippersPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", () => {return "Boosts rank, tier, and tetr points by x" + format(player.gs.grassSkippersEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],

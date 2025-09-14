@@ -306,7 +306,11 @@
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + format(player.dp.prestigePoints) + "</h3> prestige points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.dp.prestigePointsToGet) + ")" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + format(player.dp.prestigePointsToGet) + ")" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.dp.prestigePointsToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                         ["raw-html", () => {return (player.dp.prestigePointsToGet.gte(1e250)) ? "[SOFTCAPPED<sup>2</sup>]" : player.du.points.div(1000).pow(0.25).gte(1e7) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["raw-html", () => {return "Boosts rank, tier, and tetr point gain by x" + format(player.dp.prestigePointsEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],

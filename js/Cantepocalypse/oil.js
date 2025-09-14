@@ -603,7 +603,11 @@
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => {return "You have <h3>" + format(player.oi.oil) + "</h3> oil."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.oi.oilToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + format(player.oi.oilToGet) + ")"}, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.oi.oilToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", () => {return "Boosts repli-trees and extends repli-tree softcap by x" + format(player.oi.oilEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],

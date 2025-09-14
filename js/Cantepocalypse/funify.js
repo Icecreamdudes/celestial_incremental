@@ -577,6 +577,7 @@
                 return player.an.anonymity.pow(0.06).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         12: {
             title: "Fun Upgrade II",
@@ -590,6 +591,7 @@
                 return player.pr.perkPointsChance.add(1).pow(1.6)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         13: {
             title: "Fun Upgrade III",
@@ -599,6 +601,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Fun Upgrade IV",
@@ -612,6 +615,7 @@
                 return player.timePlayed*0.000001 + 1
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         15: {
             title: "Fun Upgrade V",
@@ -621,6 +625,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         16: {
             title: "Fun Upgrade VI",
@@ -630,6 +635,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         17: {
             title: "Fun Upgrade VII",
@@ -639,6 +645,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         18: {
             title: "Fun Upgrade VIII",
@@ -648,6 +655,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
         19: {
             title: "Fun Upgrade IX",
@@ -657,6 +665,7 @@
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #7e7f02", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -2351,7 +2360,11 @@
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => {return "You are having " + format(player.fu.fun) + " fun"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.fu.funToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + format(player.fu.funToGet) + ")"}, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.fu.funToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", () => {return "Boosts oil by x" + format(player.fu.funEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ["raw-html", () => {return "Boosts proto memories by x" + format(player.fu.funEffect2)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
@@ -2361,7 +2374,9 @@
                     ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]], {maxWidth: "600px"}],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15],
+                        ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]], {maxWidth: "650px"}],
                 ]
             },
             "SFRGT": {
@@ -2388,7 +2403,11 @@
                     ["blank", "10px"],
                     ["row", [
                         ["raw-html", () => {return "You are having " + format(player.fu.fun) + " fun"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.fu.funToGet) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => {return "(+" + format(player.fu.funToGet) + ")"}, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.fu.funToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["blank", "10px"],
                     ["row", [["clickable", 23],["blank", ["25px", "25px"]],["clickable", 26],]],
@@ -2407,7 +2426,11 @@
                     ["blank", "25px"],
                     ["row", [
                         ["raw-html", () => { return player.fu.enterFear ? "You have <h3>" + format(player.fu.jocusEssence) + "</h3> jocus essence" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => { return inChallenge("fu", 11) ? "(+" + format(player.fu.jocusEssenceToGet) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ["raw-html", () => { return inChallenge("fu", 11) ? "(+" + format(player.fu.jocusEssenceToGet) + ")" : "" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.fu.jocusEssenceToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
                     ]],
                     ["raw-html", () => { return inChallenge("fu", 11) ? "Boosts anonymity gain by x" + format(player.fu.jocusEssenceEffect) : player.fu.enterFear ? "Effect only active in Fear Challenge" : "" }, () => {
                         let look = {fontSize: "20px", fontFamily: "monospace"}

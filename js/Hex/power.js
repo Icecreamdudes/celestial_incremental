@@ -181,7 +181,7 @@ addLayer("hpw", {
                 return player.hpw.power.add(1).log(6).add(1).mul(2)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         2: {
             title: "Might 1:2",
@@ -197,7 +197,7 @@ addLayer("hpw", {
                 return player.hpw.power.add(1).log(2).add(1).mul(3)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         11: {
             title: "Might 2:1",
@@ -210,7 +210,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         12: {
             title: "Might 2:2",
@@ -223,7 +223,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         21: {
             title: "Might 3:1",
@@ -240,7 +240,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         22: {
             title: "Might 3:2",
@@ -257,7 +257,7 @@ addLayer("hpw", {
                 return Decimal.pow(6, player.hre.refinement.div(6).pow(0.66))
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         31: {
             title: "Might 4:1",
@@ -270,7 +270,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         32: {
             title: "Might 4:2",
@@ -287,7 +287,7 @@ addLayer("hpw", {
                 return player.hcu.jinxTotal.pow(1.6).add(1).log(6).floor()
             },
             effectDisplay() { return "+" + formatWhole(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         41: {
             title: "Might 5:1",
@@ -304,7 +304,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         42: {
             title: "Might 5:2",
@@ -317,7 +317,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         51: {
             title: "Might 6:1",
@@ -330,7 +330,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         61: {
             title: "Might 7:1",
@@ -343,7 +343,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         62: {
             title: "Might 7:2",
@@ -356,7 +356,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         71: {
             title: "Might 8:1",
@@ -373,7 +373,7 @@ addLayer("hpw", {
                 return new Decimal(0.2).mul(player.hpw.upgTotal).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id), 1) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         72: {
             title: "Might 8:2",
@@ -386,7 +386,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         81: {
             title: "Might 9:1",
@@ -399,7 +399,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         91: {
             title: "Might 10:1",
@@ -412,7 +412,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         92: {
             title: "Might 10:2",
@@ -425,7 +425,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         101: {
             title: "Might 11:1",
@@ -438,7 +438,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         102: {
             title: "Might 11:2",
@@ -462,7 +462,7 @@ addLayer("hpw", {
                 if (inChallenge("hrm", 16)) return "^+" + format(upgradeEffect(this.layer, this.id))
                 return format(upgradeEffect(this.layer, this.id)) + "x"
             }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         103: {
             title: "Might 11:3",
@@ -483,7 +483,7 @@ addLayer("hpw", {
                 if (upgradeEffect(this.layer, this.id).gte(1.1)) str = str.concat("<small style='color:red'>[HARDCAPPED]</small>")
                 return str
             },
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         111: {
             title: "Might 12:1",
@@ -500,7 +500,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         112: {
             title: "Might 12:2",
@@ -513,7 +513,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         121: {
             title: "Might 13:1",
@@ -526,7 +526,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         131: {
             title: "Might 14:1",
@@ -539,7 +539,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         132: {
             title: "Might 14:2",
@@ -555,7 +555,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
         141: {
             title: "Might 15:1",
@@ -572,7 +572,7 @@ addLayer("hpw", {
                 return Decimal.pow(1.3, player.hpw.power.div(1e6).add(1).log(6).pow(0.9))
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id), 1) + "x" }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px"},
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
 
         1001: {
@@ -585,7 +585,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f00"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1002: {
             title: "Might B:0",
@@ -597,7 +597,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f80"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f80"},
         },
         1003: {
             title: "Might C:0",
@@ -609,7 +609,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #ff0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #ff0"},
         },
         1004: {
             title: "Might D:0",
@@ -621,7 +621,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #0f0"},
         },
         1005: {
             title: "Might E:0",
@@ -633,7 +633,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #00f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1006: {
             title: "Might F:0",
@@ -645,7 +645,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #80f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #80f"},
         },
         1011: {
             title: "Might A:1",
@@ -661,7 +661,7 @@ addLayer("hpw", {
                 return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f00"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1012: {
             title: "Might A:2",
@@ -673,7 +673,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f00"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1013: {
             title: "Might A:3",
@@ -685,7 +685,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f00"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1021: {
             title: "Might B:1",
@@ -701,7 +701,7 @@ addLayer("hpw", {
                 return player.hpw.power.pow(0.2).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f80"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f80"},
         },
         1022: {
             title: "Might B:2",
@@ -713,7 +713,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f80"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f80"},
         },
         1023: {
             title: "Might B:3",
@@ -725,7 +725,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #f80"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f80"},
         },
         1031: {
             title: "Might C:1",
@@ -737,7 +737,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #ff0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #ff0"},
         },
         1032: {
             title: "Might C:2",
@@ -749,7 +749,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #ff0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #ff0"},
         },
         1033: {
             title: "Might C:3",
@@ -761,7 +761,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #ff0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #ff0"},
         },
         1041: {
             title: "Might D:1",
@@ -777,7 +777,7 @@ addLayer("hpw", {
                 return player.hpw.power.pow(0.3).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #0f0"},
         },
         1042: {
             title: "Might D:2",
@@ -789,7 +789,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #0f0"},
         },
         1043: {
             title: "Might D:3",
@@ -801,7 +801,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #0f0"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #0f0"},
         },
         1051: {
             title: "Might E:1",
@@ -817,7 +817,7 @@ addLayer("hpw", {
                 return Decimal.pow(1.06, player.hpw.power.add(1).log(6)).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #00f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1052: {
             title: "Might E:2",
@@ -829,7 +829,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #00f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1053: {
             title: "Might E:3",
@@ -841,7 +841,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #00f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1061: {
             title: "Might F:1",
@@ -857,7 +857,7 @@ addLayer("hpw", {
                 return player.hpw.power.pow(0.24).add(1).pow(buyableEffect("hrm", 5))
             },
             effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #80f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #80f"},
         },
         1062: {
             title: "Might F:2",
@@ -869,7 +869,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #80f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #80f"},
         },
         1063: {
             title: "Might F:3",
@@ -881,7 +881,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "2px solid #80f"},
+            style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #80f"},
         },
     },
     buyables: {
@@ -906,7 +906,7 @@ addLayer("hpw", {
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power"
             },
             buy() {setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
-            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
         2: {
             costBase() { return new Decimal(1e11) },
@@ -926,7 +926,7 @@ addLayer("hpw", {
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power"
             },
             buy() {setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
-            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
         3: {
             costBase() { return new Decimal(1e13) },
@@ -946,7 +946,7 @@ addLayer("hpw", {
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power"
             },
             buy() {setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
-            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
         4: {
             costBase() { return new Decimal(1e16) },
@@ -966,7 +966,7 @@ addLayer("hpw", {
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power"
             },
             buy() {setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
-            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
         5: {
             costBase() { return new Decimal(1e20) },
@@ -986,7 +986,7 @@ addLayer("hpw", {
                     Req: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Power"
             },
             buy() {setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
-            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
         6: {
             costBase() { return new Decimal(1e25) },
@@ -1017,7 +1017,7 @@ addLayer("hpw", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", borderColor: "rgba(0,0,0,0.8)", borderRadius: "15px", margin: "10px"},
+            style: {width: "120px", height: "120px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "10px"},
         },
     },
     milestones: {
@@ -1026,42 +1026,42 @@ addLayer("hpw", {
             effectDescription: "Keep a grace on power reset per vigor.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(1)},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         2: {
             requirementDescription: "<h3>6 Total Power",
             effectDescription: "Keep IP related boosters on power resets.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(6)},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         3: {
             requirementDescription: "<h3>36 Total Power",
             effectDescription: "Double blessing gain below power requirement.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(36)},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         4: {
             requirementDescription: "<h3>216 Total Power",
             effectDescription: "Keep NIP related jinxes on power resets.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(216)},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         5: {
             requirementDescription: "<h3>1296 Total Power",
             effectDescription: "Buying jinxes no longer spends curses.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(1296)},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         6: {
             requirementDescription: "<h3>7776 Total Power",
             effectDescription: "Double blessing gain below power requirement again.",
             onComplete() { player.hpw.vigor = player.hpw.vigor + 1 },
             done() { return player.hpw.totalPower.gte(7776)},
-            style: {width: '500px', height: "50px", borderRadius: "10px"},
+            style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
     microtabs: {
@@ -1232,7 +1232,11 @@ addLayer("hpw", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpw.power) + "</h3> Power." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return player.hbl.blessings.gte(6e5) ? "(+" + formatWhole(player.hpw.powerGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + formatWhole(player.hpw.powerGain) + ")"}, () => {
+                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.hbl.blessings.gte(6e5) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
         ]],
         ["blank", "10px"],
         ["clickable", 1],

@@ -570,31 +570,31 @@
             requirementDescription: "<h3>Pent 1",
             effectDescription: "Unlocks a new type of factor and grass upgrades.",
             done() { return player.r.pent.gte(1) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         12: {
             requirementDescription: "<h3>Pent 2",
             effectDescription: "Autobuy tree buyables and unlocks grasshop.",
             done() { return player.r.pent.gte(2) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         13: {
             requirementDescription: "<h3>Pent 3",
             effectDescription: "Autobuys grass buyables, and unlocks tree factor VI.<br>Second grass effect now multiplies celestial points.",
             done() { return player.r.pent.gte(3) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         14: {
             requirementDescription: "<h3>Pent 5",
-            effectDescription() { return "Unlock mods and new grasshopper studies, and start with 10 Tetr on resets." },
+            effectDescription() { return "Unlock mods and new grasshopper studies,<br>and start with 10 Tetr on resets." },
             done() { return player.r.pent.gte(5) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         15: {
             requirementDescription: "<h3>Pent 7",
             effectDescription() { return "Autobuy grass and prestige upgrades." },
             done() { return player.r.pent.gte(7) },
-            style: { width: '800px', "min-height": '90px' },
+            style: {width: "600px", height: "90px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
             toggles: [
                 ["p", "auto"], // Each toggle is defined by a layer and the data toggled for that layer
                 ["g", "auto"]
@@ -604,63 +604,63 @@
             requirementDescription: "<h3>Pent 8",
             effectDescription() { return "Unlock tree factor VIII and autobuy tree and grass factors." },
             done() { return player.r.pent.gte(8) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         17: {
             requirementDescription: "<h3>Pent 11",
             effectDescription() { return "Unlocks a new check back button." },
             done() { return player.r.pent.gte(11) && this.unlocked() },
             unlocked() { return layerShown("cb") },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         18: {
             requirementDescription: "<h3>Pent 15",
             effectDescription() { return "Unlocks new grasshopper studies." },
             done() { return player.r.pent.gte(15) && this.unlocked() },
             unlocked() { return layerShown("cb") },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         19: {
             requirementDescription: "<h3>Pent 30",
             effectDescription() { return "Boosts tree and mod gain based on pent.<br>Currently: x" + format(player.r.pentMilestone9Effect[0]) + " and x" + format(player.r.pentMilestone9Effect[1]) + " respectively" },
             done() { return player.r.pent.gte(30) && this.unlocked() },
             unlocked() { return layerShown("cb") },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         20: {
             requirementDescription: "<h3>Pent 10,000",
             effectDescription() { return "Good luck on increasing pent, you will need it.<br>Boosts Pre-OTF currencies by x100" },
             done() { return player.r.pent.gte(10000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && layerShown("cb") },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         21: {
             requirementDescription: "<h3>Pent 12,500",
             effectDescription() { return "Boosts infinity points based on pent above 12,500.<br>Currently: x" + format(player.r.pentMilestone11Effect) },
             done() { return player.r.pent.gte(12500) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 20) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         22: {
             requirementDescription: "<h3>Pent 15,000",
             effectDescription() { return "Unlocks more booster dice effects." },
             done() { return player.r.pent.gte(15000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 21) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         23: {
             requirementDescription: "<h3>Pent 17,500",
             effectDescription() { return "Boosts negative infinity points based on pent above 17,500.<br>Currently: x" + format(player.r.pentMilestone13Effect) },
             done() { return player.r.pent.gte(17500) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 22) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         24: {
             requirementDescription: "<h3>Pent 20,000",
             effectDescription() { return "Unlocks even more booster dice effects." },
             done() { return player.r.pent.gte(20000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 23) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         25: {
             requirementDescription: "<h3>Pent 22,500",
@@ -671,35 +671,35 @@
             },
             done() { return player.r.pent.gte(22500) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 24) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         26: {
             requirementDescription: "<h3>Pent 25,000",
             effectDescription() { return "Improve the negative infinity point formula." },
             done() { return player.r.pent.gte(25000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 25) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         27: {
             requirementDescription: "<h3>Pent 27,500",
             effectDescription() { return "Boosts time cubes effect by ^2." },
             done() { return player.r.pent.gte(27500) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 26) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         28: {
             requirementDescription: "<h3>Pent 30,000",
             effectDescription() { return "Boosts moonstone value based on time cubes.<br>Currently: x" + format(player.r.pentMilestone18Effect) },
             done() { return player.r.pent.gte(30000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 27) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         29: {
             requirementDescription: "<h3>Pent 50,000",
             effectDescription() { return "Produce 0.2% of moonstone value per second." },
             done() { return player.r.pent.gte(50000) && this.unlocked() },
             unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 28) },
-            style: { width: '800px', "min-height": '75px' },
+            style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },
     challenges: {
@@ -715,21 +715,42 @@
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", () => {return hasUpgrade("p", 14) ? "Rank " + formatWhole(player.r.rank) + " (+" + formatWhole(player.r.ranksToGet) + ")" : "Rank " + formatWhole(player.r.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [
+                                ["raw-html", () => {return "Rank " + formatWhole(player.r.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return hasUpgrade("p", 14) ? "(+" + formatWhole(player.r.ranksToGet) + ")" : ""}, () => {
+                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    player.r.ranksToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                    return look
+                                }],
+                            ]],
                             ["raw-html", () => { return "x" + format(player.r.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "75px"}],
                         ["clickable", 11],
                     ], {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "15px 15px 0px 0px"}],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", () => { return hasUpgrade("p", 14) ? "Tier " + formatWhole(player.r.tier) + " (+" + formatWhole(player.r.tiersToGet) + ")" : "Tier " + formatWhole(player.r.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [
+                                ["raw-html", () => {return "Tier " + formatWhole(player.r.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return hasUpgrade("p", 14) ? "(+" + formatWhole(player.r.tiersToGet) + ")" : ""}, () => {
+                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    player.r.tiersToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                    return look
+                                }],
+                            ]],
                             ["raw-html", () => { return "x" + format(player.r.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "75px"}],
                         ["clickable", 12],
                     ], () => {return hasUpgrade("i", 13) ? {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderBottom: "0px", borderRadius: "0px"} : {width: "800px", height: "75px", backgroundColor: "#333333", border: "2px solid white", borderRadius: "0px 0px 15px 15px"}}],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", () => {return hasUpgrade("p", 14) ? "Tetr " + formatWhole(player.r.tetr) + " (+" + formatWhole(player.r.tetrsToGet) + ")" : "Tetr " + formatWhole(player.r.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [
+                                ["raw-html", () => {return "Tetr " + formatWhole(player.r.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return hasUpgrade("p", 14) ? "(+" + formatWhole(player.r.tetrsToGet) + ")" : ""}, () => {
+                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    player.r.tetrsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                    return look
+                                }],
+                            ]],
                             ["raw-html", () => {return "x" + format(player.r.tetrEffect) + " Points" }, () => {
                                 let look = {color: "white", fontFamily: "monospace"}
                                 if (hasUpgrade("p", 16)) {look.fontSize = "16px"} else {look.fontSize = "20px"}
@@ -751,7 +772,14 @@
                     ["blank", "25px"],
                     ["style-row", [
                         ["style-column", [
-                            ["raw-html", () => { return (hasUpgrade("i", 32) && !inChallenge("ip", 14)) ? "Pent " + formatWhole(player.r.pent) + " (+" + formatWhole(player.r.pentToGet) + ")" : "Pent " + formatWhole(player.r.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["row", [
+                                ["raw-html", () => {return "Pent " + formatWhole(player.r.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return (hasUpgrade("i", 32) && !inChallenge("ip", 14)) ? "(+" + formatWhole(player.r.pentToGet) + ")" : ""}, () => {
+                                    let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                    player.r.pentToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                    return look
+                                }],
+                            ]],
                             ["raw-html", () => { return "x" + format(player.r.pentEffect) + " Prestige Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ["raw-html", () => { return inChallenge("ip", 14) ? "/" + format(player.r.challengeIVEffect) + " Points" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "399px", height: "100px"}],

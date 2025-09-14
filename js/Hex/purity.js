@@ -262,7 +262,11 @@ addLayer("hpu", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpu.purity) + "</h3> purity." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasMilestone("hre", 13) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return hasMilestone("hre", 13) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, () => {
+                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.hpu.purityGain.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
         ]],
         ["raw-html", () => {return "(You have <h3>" + formatWhole(player.hpu.totalPurity) + "</h3> total purity)" }, {color: "#ddd", fontSize: "16px", fontFamily: "monospace"}],
         ["blank", "10px"],

@@ -387,7 +387,14 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => { return hasUpgrade("le", 14) ? "Rank " + formatWhole(player.dr.rank) + " (+" + formatWhole(player.dr.ranksToGet) + ")" : "Rank " + formatWhole(player.dr.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Rank " + formatWhole(player.dr.rank)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("le", 14) ? "(+" + formatWhole(player.dr.ranksToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.ranksToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
                                 ["raw-html", () => { return "x" + format(player.dr.rankEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
@@ -400,7 +407,14 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => { return hasUpgrade("le", 15) ? "Tier " + formatWhole(player.dr.tier) + " (+" + formatWhole(player.dr.tiersToGet) + ")" : "Tier " + formatWhole(player.dr.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Tier " + formatWhole(player.dr.tier)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("le", 15) ? "(+" + formatWhole(player.dr.tiersToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.tiersToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
                                 ["raw-html", () => { return "x" + format(player.dr.tierEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
@@ -413,7 +427,14 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => { return hasUpgrade("le", 18) ? "Tetr " + formatWhole(player.dr.tetr) + " (+" + formatWhole(player.dr.tetrsToGet) + ")" : "Tetr " + formatWhole(player.dr.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Tetr " + formatWhole(player.dr.tetr)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return hasUpgrade("le", 18) ? "(+" + formatWhole(player.dr.tetrsToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.tetrsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
                                 ["raw-html", () => { return "x" + format(player.dr.tetrEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [
@@ -426,7 +447,14 @@
                     ["style-row", [
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", () => { return false ? "Pent " + formatWhole(player.dr.pent) + " (+" + formatWhole(player.dr.pentsToGet) + ")" : "Pent " + formatWhole(player.dr.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["row", [
+                                    ["raw-html", () => {return "Pent " + formatWhole(player.dr.pent)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return false ? "(+" + formatWhole(player.dr.pentsToGet) + ")" : ""}, () => {
+                                        let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                                        player.dr.pentsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                                        return look
+                                    }],
+                                ]],
                                 ["raw-html", () => { return "x" + format(player.dr.pentEffect) + " Points" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "399px", height: "53px", borderBottom: "2px solid #0d515a"}],
                             ["style-column", [

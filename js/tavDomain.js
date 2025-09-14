@@ -125,7 +125,7 @@
                 player.tad.currentConversion = new Decimal(0)
             },
             style() {
-                let look = {width: "248px", minHeight: "100px", borderRadius: "0px", fontSize: "13px"}
+                let look = {width: "248px", minHeight: "100px", borderRadius: "0px", fontSize: "12px"}
                 this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -138,7 +138,7 @@
                 player.tad.currentConversion = new Decimal(1)
             },
             style() {
-                let look = {width: "248px", minHeight: "100px", borderRadius: "0px", fontSize: "13px"}
+                let look = {width: "248px", minHeight: "100px", borderRadius: "0px", fontSize: "12px"}
                 this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -151,7 +151,7 @@
                 player.tad.currentConversion = new Decimal(2)
             },
             style() {
-                let look = {width: "250px", minHeight: "100px", borderRadius: "0px", fontSize: "13px"}
+                let look = {width: "250px", minHeight: "100px", borderRadius: "0px", fontSize: "12px"}
                 this.canClick() ? look.backgroundColor = "#5b629a" : look.backgroundColor = "#bf8f8f"
                 return look
             },
@@ -192,6 +192,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         12:
         {
@@ -202,7 +203,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Disfigured Infinities",
             currencyInternalName: "disfiguredInfinities",
-            style: { width: '125px', height: '100px', }
+            style: {width: "125px", color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         13:
         {
@@ -213,6 +214,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Corrupted Infinities",
             currencyInternalName: "corruptedInfinities",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         14:
         {
@@ -223,6 +225,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Shattered Infinities",
             currencyInternalName: "shatteredInfinities",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         15:
         {
@@ -233,7 +236,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Disfigured Infinities",
             currencyInternalName: "disfiguredInfinities",
-            style: { width: '125px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
         16:
         {
@@ -244,6 +247,7 @@
             currencyLocation() { return player.tad },
             currencyDisplayName: "Corrupted Infinities",
             currencyInternalName: "corruptedInfinities",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid #596c6c", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {

@@ -600,7 +600,11 @@
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.rf.rocketFuel) + "</h3 rocket fuel"}, {color: "#949494", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.rf.rocketFuelToGet) + ")"}, {color: "#949494", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.rf.rocketFuelToGet) + ")"}, () => {
+                let look = {color: "#949494", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.rf.rocketFuelToGet.gte(1) ? look.color = "#949494" : look.color = "gray"
+                return look
+            }],
             ["raw-html", () => {return player.rf.rocketFuel.gt(1e20) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "Boosts grassshoppers by x" + format(player.rf.rocketFuelEffect) + "." }, {color: "#949494", fontSize: "20px", fontFamily: "monospace"}],

@@ -595,11 +595,10 @@
             "Dimensions": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("bi", 17) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "You have <h3>" + format(player.in.infinityPoints) + "</h3> infinity points." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["row", [["buyable", 1], ["clickable", 2], ["clickable", 3]]],
                     ["blank", "25px"],
@@ -667,7 +666,11 @@
     tabFormat: [
         ["row", [
             ["raw-html", () => {return "You have <h3>" + format(player.id.infinityPower) + "</h3> infinity power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.id.infinityPowerPerSecond) + "/s)"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", () => {return "(+" + format(player.id.infinityPowerPerSecond) + "/s)"}, () => {
+                let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                player.id.infinityPowerPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
             ["raw-html", () => {return player.id.infinityPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["raw-html", () => { return "Boosts antimatter dimensions by x" + format(player.id.infinityPowerEffect)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],

@@ -1207,9 +1207,10 @@ function fixOldSave(oldVersion){
 		if (player.ma.bestComboDepth1.gte(100)) player.ma.bestComboDepth1 = new Decimal(100)
 		if (player.ma.bestComboDepth2.gte(100)) player.ma.bestComboDepth2 = new Decimal(100)
 		if (player.ma.bestComboDepth3.gte(100)) player.ma.bestComboDepth3 = new Decimal(100)
-		player.cb.evolutionShards = player.cb.evolutionShards.floor()
-		player.cb.paragonShards = player.cb.paragonShards.floor()
-		player.hrm.realmEssence = player.re.halterEssence
+		player.cb.evolutionShards = new Decimal(player.cb.evolutionShards).floor()
+		player.cb.paragonShards = new Decimal(player.cb.paragonShards).floor()
+		player.hrm.realmEssence = new Decimal(player.re.halterEssence)
+		player.hrm.totalRealmEssence = new Decimal(player.re.halterEssence)
 		for (let prop in player.ta.buyables) {
 			if (prop != 19 && prop != 39) {
 				if (getBuyableAmount("ta", prop).gt(layers.ta.buyables[prop].purchaseLimit())) setBuyableAmount("ta", prop, layers.ta.buyables[prop].purchaseLimit())
@@ -1280,17 +1281,17 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pu", 303, new Decimal(player.le.punchcardsLevels[18]).sub(1).min(10))
 		setLevelableAmount("pu", 304, new Decimal(player.le.punchcardsLevels[19]).sub(1).min(10))
 		
-		player.cs.scraps.point.amount = player.cs.resourceCoreScraps[0]
-		player.cs.scraps.factor.amount = player.cs.resourceCoreScraps[1]
-		player.cs.scraps.prestige.amount = player.cs.resourceCoreScraps[2]
-		player.cs.scraps.tree.amount = player.cs.resourceCoreScraps[3]
-		player.cs.scraps.grass.amount = player.cs.resourceCoreScraps[4]
-		player.cs.scraps.grasshopper.amount = player.cs.resourceCoreScraps[5]
-		player.cs.scraps.code.amount = player.cs.resourceCoreScraps[6]
-		player.cs.scraps.dice.amount = player.cs.resourceCoreScraps[7]
-		player.cs.scraps.rocket.amount = player.cs.resourceCoreScraps[8]
-		player.cs.scraps.antimatter.amount = player.cs.resourceCoreScraps[9]
-		player.cs.scraps.infinity.amount = player.cs.resourceCoreScraps[10]
-		player.cs.scraps.checkback.amount = player.cs.paragonScraps
+		player.cs.scraps.point.amount = new Decimal(player.cs.resourceCoreScraps[0])
+		player.cs.scraps.factor.amount = new Decimal(player.cs.resourceCoreScraps[1])
+		player.cs.scraps.prestige.amount = new Decimal(player.cs.resourceCoreScraps[2])
+		player.cs.scraps.tree.amount = new Decimal(player.cs.resourceCoreScraps[3])
+		player.cs.scraps.grass.amount = new Decimal(player.cs.resourceCoreScraps[4])
+		player.cs.scraps.grasshopper.amount = new Decimal(player.cs.resourceCoreScraps[5])
+		player.cs.scraps.code.amount = new Decimal(player.cs.resourceCoreScraps[6])
+		player.cs.scraps.dice.amount = new Decimal(player.cs.resourceCoreScraps[7])
+		player.cs.scraps.rocket.amount = new Decimal(player.cs.resourceCoreScraps[8])
+		player.cs.scraps.antimatter.amount = new Decimal(player.cs.resourceCoreScraps[9])
+		player.cs.scraps.infinity.amount = new Decimal(player.cs.resourceCoreScraps[10])
+		player.cs.scraps.checkback.amount = new Decimal(player.cs.paragonScraps)
 	}
 }

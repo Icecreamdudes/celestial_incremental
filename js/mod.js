@@ -1203,6 +1203,8 @@ function fixOldSave(oldVersion){
 		if (player.ma.bestComboDepth1.gte(100)) player.ma.bestComboDepth1 = new Decimal(100)
 		if (player.ma.bestComboDepth2.gte(100)) player.ma.bestComboDepth2 = new Decimal(100)
 		if (player.ma.bestComboDepth3.gte(100)) player.ma.bestComboDepth3 = new Decimal(100)
+		if (!player.pet.singularityFragments) player.pet.singularityFragments = new Decimal(0)
+		player.pet.highestDicePetCombo = new Decimal(player.pet.highestDicePetCombo)
 		player.cb.evolutionShards = new Decimal(player.cb.evolutionShards).floor()
 		player.cb.paragonShards = new Decimal(player.cb.paragonShards).floor()
 		player.hrm.realmEssence = new Decimal(player.re.halterEssence)

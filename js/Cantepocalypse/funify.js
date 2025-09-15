@@ -2505,7 +2505,7 @@
             "Fear": {
                 content: [
                     ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.fu.fear) + "</h3> anger"}, {color: "gray", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have <h3>" + format(player.fu.fear) + "</h3> fear"}, {color: "gray", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "(+" + format(player.fu.fearPerSecond) + "/s)"}, () => {
                             let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                             if (player.fu.fearProduce && inChallenge("fu", 11)) {look.color = "gray"} else {look.color = "#222"}

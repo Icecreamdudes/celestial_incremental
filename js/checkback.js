@@ -2335,25 +2335,12 @@ addLayer("cb", {
             player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
         } else if (rng < 0.05) {
             //the legendary stuff
-            let random = getRandomInt(3)
-            let gainedGems = getRandomInt(5) + 6
-            if (random == 0) {
-                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
-                if (!(player.tab == "cb" && player.subtabs["cb"]['stuff'] == 'Pets' && player.subtabs["pet"]['Content'] == 'Pet Shop')) {
-                    if (!(player.cb.petAutomationTimers[6].lt(1) && player.cb.petAutomationAllocation[6].gt(0)) && player.cb.alertToggle) callAlert("You gained " + formatWhole(gainedGems) + " Red Legendary Gems!", "resources/redLegendaryPetGem.png");
-                }
-            }
-            if (random == 1) {
-                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
-                if (!(player.tab == "cb" && player.subtabs["cb"]['stuff'] == 'Pets' && player.subtabs["pet"]['Content'] == 'Pet Shop')) {
-                    if (!(player.cb.petAutomationTimers[6].lt(1) && player.cb.petAutomationAllocation[6].gt(0)) && player.cb.alertToggle) callAlert("You gained " + formatWhole(gainedGems) + " Purple Legendary Gems!", "resources/purpleLegendaryPetGem.png");
-                }
-            }
-            if (random == 2) {
-                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
-                if (!(player.tab == "cb" && player.subtabs["cb"]['stuff'] == 'Pets' && player.subtabs["pet"]['Content'] == 'Pet Shop')) {
-                    if (!(player.cb.petAutomationTimers[6].lt(1) && player.cb.petAutomationAllocation[6].gt(0)) && player.cb.alertToggle) callAlert("You gained " + formatWhole(gainedGems) + " Green Legendary Gems!", "resources/greenLegendaryPetGem.png");
-                }
+            let gainedGems = getRandomInt(5) + 10
+            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
+            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
+            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
+            if (!(player.tab == "cb" && player.subtabs["cb"]['stuff'] == 'Pets' && player.subtabs["pet"]['Content'] == 'Pet Shop')) {
+                if (!(player.cb.petAutomationTimers[6].lt(1) && player.cb.petAutomationAllocation[6].gt(0)) && player.cb.alertToggle) callAlert("You gained " + formatWhole(gainedGems) + " of each Legendary Gem!", "resources/Pets/legendarybg.png");
             }
             player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
         }

@@ -70,6 +70,7 @@ addLayer("pet", {
         //leg
         legendaryPetAbilityTimers: [new Decimal(0),],
         legendaryPetAbilityTimersMax: [new Decimal(600),],
+        eclipsePity: 0,
 
         activeAbilities: [false,],
     }},
@@ -462,7 +463,7 @@ addLayer("pet", {
         15: {
             title() { return "Legendary Gems" },
             canClick() { return true },
-            unlocked() { return player.cb.legendaryPetGems[0].gt(0) || player.cb.legendaryPetGems[1].gt(0) || player.cb.legendaryPetGems[2].gt(0) },
+            unlocked() { return player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23) },
             onClick() {
                 player.subtabs["pet"]["content"] = "Legendary Gems"
             },
@@ -728,7 +729,7 @@ addLayer("pet", {
             title() { return player.pet.summonTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.summonTimer) + "." : "SUMMON."},
             canClick() { return player.pet.summonTimer.lte(0) && player.cb.legendaryPetGems[0].gte(player.pet.summonReqs[0]) && player.cb.legendaryPetGems[1].gte(player.pet.summonReqs[1]) && player.cb.legendaryPetGems[2].gte(player.pet.summonReqs[2]) && player.cb.evolutionShards.gte(player.pet.summonReqs[3]) && player.cb.paragonShards.gte(player.pet.summonReqs[4]) },
             unlocked() { return true },
-            tooltip() { return "25% - 14 of every common pet<br>25% - 10 of every uncommon pet<br>15% - 4 of every rare pet<br>10% - Epic pet and singularity fragments<br>10% - A lot of pet points<br>15% - LEGENDARY PET SUMMON" },
+            tooltip() { return "20% - 14 of every common pet<br>20% - 10 of every uncommon pet<br>20% - 4 of every rare pet<br>10% - Epic pet and singularity fragments<br>10% - A lot of pet points<br>20% - LEGENDARY PET SUMMON" },
             onClick() {
                 player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].sub(player.pet.summonReqs[0])
                 player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].sub(player.pet.summonReqs[1])
@@ -3274,19 +3275,11 @@ addLayer("pet", {
             layers.cb.petButton7()
         } else if (rng < 0.02) {
             let random = getRandomInt(3)
-            let gainedGems = getRandomInt(5) + 6
-            if (random == 0) {
-                player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
-                callAlert("You gained " + formatWhole(gainedGems) + " Red Legendary Gems!", "resources/redLegendaryPetGem.png");
-            }
-            if (random == 1) {
-                player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
-                callAlert("You gained " + formatWhole(gainedGems) + " Purple Legendary Gems!", "resources/purpleLegendaryPetGem.png");
-            }
-            if (random == 2) {
-                player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
-                callAlert("You gained " + formatWhole(gainedGems) + " Green Legendary Gems!", "resources/greenLegendaryPetGem.png");
-            }
+            let gainedGems = getRandomInt(5) + 10
+            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
+            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
+            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
+            callAlert("You gained " + formatWhole(gainedGems) + " of each Legendary Gem!", "resources/Pets/legendarybg.png");
         }
     },
     resetPrices() {
@@ -3297,8 +3290,14 @@ addLayer("pet", {
         player.pet.crateBought = [0, 0, 0, 0, 0, 0]
     },
     legendarySummon() {
+        if (player.pet.eclipsePity == 4) {
+            player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
+            callAlert("Eclipse becomes stronger. (PITY ROLL)", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            player.pet.eclipsePity = 0
+            return
+        }
         let random = Math.random();
-        if (random < 0.25) {
+        if (random < 0.2) {
             player.pet.levelables[101][1] = player.pet.levelables[101][1].add(14)
             player.pet.levelables[102][1] = player.pet.levelables[101][1].add(14)
             player.pet.levelables[103][1] = player.pet.levelables[101][1].add(14)
@@ -3308,8 +3307,9 @@ addLayer("pet", {
             player.pet.levelables[107][1] = player.pet.levelables[107][1].add(14)
             player.pet.levelables[108][1] = player.pet.levelables[108][1].add(14)
             player.pet.levelables[109][1] = player.pet.levelables[109][1].add(14)
-            callAlert("You gained 14 of every common pet!", "resources/Pets/commonbg.png");
-        } else if (random < 0.5) {
+            callAlert("You gained 14 of every common pet!", "resources/Pets/commonbg.png")
+            player.pet.eclipsePity = player.pet.eclipsePity + 1
+        } else if (random < 0.4) {
             player.pet.levelables[201][1] = player.pet.levelables[201][1].add(10)
             player.pet.levelables[202][1] = player.pet.levelables[202][1].add(10)
             player.pet.levelables[203][1] = player.pet.levelables[203][1].add(10)
@@ -3319,8 +3319,9 @@ addLayer("pet", {
             player.pet.levelables[207][1] = player.pet.levelables[207][1].add(10)
             player.pet.levelables[208][1] = player.pet.levelables[208][1].add(10)
             player.pet.levelables[209][1] = player.pet.levelables[209][1].add(10)
-            callAlert("You gained 10 of every uncommon pet!", "resources/Pets/uncommonbg.png");
-        } else if (random < 0.65) {
+            callAlert("You gained 10 of every uncommon pet!", "resources/Pets/uncommonbg.png")
+            player.pet.eclipsePity = player.pet.eclipsePity + 1
+        } else if (random < 0.6) {
             player.pet.levelables[301][1] = player.pet.levelables[301][1].add(4)
             player.pet.levelables[302][1] = player.pet.levelables[302][1].add(4)
             player.pet.levelables[303][1] = player.pet.levelables[303][1].add(4)
@@ -3330,28 +3331,48 @@ addLayer("pet", {
             player.pet.levelables[307][1] = player.pet.levelables[307][1].add(4)
             player.pet.levelables[308][1] = player.pet.levelables[308][1].add(4)
             player.pet.levelables[309][1] = player.pet.levelables[309][1].add(4)
-            callAlert("You gained 4 of every rare pet!", "resources/Pets/rarebg.png");
-        } else if (random < 0.75) {
+            callAlert("You gained 4 of every rare pet!", "resources/Pets/rarebg.png")
+            player.pet.eclipsePity = player.pet.eclipsePity + 1
+        } else if (random < 0.7) {
             let random2 = getRandomInt(6, 10)
             player.pet.singularityFragments = player.pet.singularityFragments.add(random2)
             addLevelableXP("pet", 401, random2)
             addLevelableXP("pet", 402, random2)
             addLevelableXP("pet", 403, random2)
 
-            callAlert("You gained " + random2 + " of every epic and singularity fragment!", "resources/Pets/epicbg.png");
-
-        } else if (random < 0.9) {
-            let random3 = getRandomInt(1000, 2000)
+            callAlert("You gained " + random2 + " of every epic and singularity fragment!", "resources/Pets/epicbg.png")
+            player.pet.eclipsePity = player.pet.eclipsePity + 1
+        } else if (random < 0.8) {
+            let random3 = getRandomInt(5000, 10000)
             random3 = random3 * player.pet.petPointMult
 
             player.cb.petPoints = player.cb.petPoints.add(random3)
-            callAlert("You gained " + formatWhole(random3) + " pet points!", "resources/petPoint.png");
+            callAlert("You gained " + formatWhole(random3) + " pet points!", "resources/petPoint.png")
+            player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else {
             player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
             callAlert("Eclipse becomes stronger.", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
         }
     },
-    bars: {},
+    bars: {
+        summonPity: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 300,
+            height: 50,
+            progress() {
+                return new Decimal(player.pet.eclipsePity / 5)
+            },
+            borderStyle: {border: "2px solid white", borderRadius: "15px"},
+            baseStyle: {backgroundColor: "#2f2a00"},
+            fillStyle: {
+                "background-color": "#776900",
+            },
+            display() {
+                return "<h5>" + player.pet.eclipsePity + "/5<br>Legendary Summon Pity</h5>";
+            },
+        },
+    },
     upgrades: {},
     buyables: {},
     milestones: {},
@@ -3548,6 +3569,8 @@ addLayer("pet", {
                             ], {width: "300px", height: "50px", backgroundColor: "black", borderLeft: "2px solid white", borderRight: "2px solid white", borderBottom: "2px solid white", borderRadius: "0 0 10px 10px", userSelect: "none"}],
                             ["blank", "25px"],
                             ["row", [["clickable", 202]]],
+                            ["blank", "10px"],
+                            ["bar", "summonPity"],
                         ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "20px", borderRadius: "15px"} : {display: "none !important"}}],
                     ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
                 ],

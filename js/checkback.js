@@ -2402,8 +2402,14 @@ addLayer("cb", {
                 return "Check Back OTF Boost."
             },
             display() {
-                return "which are multiplying hex points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+                if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
+                    return "which are multiplying hex points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
+                } else {
+                    let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
+                    return "which are multiplying hex points, rocket fuel, and dice points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
+                }
             },
             buy(mult) {
                 if (mult != true) {
@@ -2438,8 +2444,14 @@ addLayer("cb", {
                 return "Check Back IP Boost."
             },
             display() {
-                return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+                if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
+                    return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
+                } else {
+                    let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
+                    return "which are multiplying infinity points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
+                }
             },
             buy(mult) {
                 if (mult != true) {
@@ -2474,8 +2486,14 @@ addLayer("cb", {
                 return "Check Back XP Boost Boost."
             },
             display() {
-                return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+                if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
+                    return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
+                } else {
+                    let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
+                    return "which are multiplying XPBoost by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
+                }
             },
             buy(mult) {
                 if (mult != true) {
@@ -2510,8 +2528,14 @@ addLayer("cb", {
                 return "Check Back Pet Point Boost."
             },
             display() {
-                return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+                if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
+                    return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
+                } else {
+                    let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
+                    return "which are multiplying pet points by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
+                }
             },
             buy(mult) {
                 if (mult != true) {
@@ -2546,8 +2570,14 @@ addLayer("cb", {
                 return "Check Back Pollinators Boost."
             },
             display() {
-                return "which are multiplying pollinators by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+                if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
+                    return "which are multiplying pollinators by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
+                } else {
+                    let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
+                    return "which are multiplying pollinators by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
+                }
             },
             buy(mult) {
                 if (mult != true) {
@@ -2582,8 +2612,14 @@ addLayer("cb", {
                 return "Check Back Pity Req. Reducer."
             },
             display() {
-                return "which are reducing the pity requirement by " + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
-                    Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels worth of XP."
+                if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
+                    return "which are reducing the pity requirement by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
+                } else {
+                    let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
+                    return "which are reducing the pity requirement by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                        Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
+                }
             },
             buy(mult) {
                 if (mult != true) {

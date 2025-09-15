@@ -70,7 +70,7 @@ addLayer("hrm", {
     buyables: {
         1: {
             costBase() { return new Decimal(1) },
-            costGrowth() { return new Decimal(10) },
+            costGrowth() { return new Decimal(6) },
             purchaseLimit() { return new Decimal(12) },
             currency() { return player.hrm.realmEssence},
             pay(amt) { player.hrm.realmEssence = this.currency().sub(amt) },
@@ -155,7 +155,7 @@ addLayer("hrm", {
         },
         4: {
             costBase() { return new Decimal(1000) },
-            costGrowth() { return new Decimal(25) },
+            costGrowth() { return new Decimal(12) },
             purchaseLimit() { return new Decimal(60) },
             currency() { return player.hrm.realmEssence},
             pay(amt) { player.hrm.realmEssence = this.currency().sub(amt) },
@@ -184,7 +184,7 @@ addLayer("hrm", {
         },
         5: {
             costBase() { return new Decimal(10000) },
-            costGrowth() { return new Decimal(50) },
+            costGrowth() { return new Decimal(24) },
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.hrm.realmEssence},
             pay(amt) { player.hrm.realmEssence = this.currency().sub(amt) },
@@ -213,7 +213,7 @@ addLayer("hrm", {
         },
         6: {
             costBase() { return new Decimal(100000) },
-            costGrowth() { return new Decimal(100) },
+            costGrowth() { return new Decimal(60) },
             purchaseLimit() { return new Decimal(30) },
             currency() { return player.hrm.realmEssence},
             pay(amt) { player.hrm.realmEssence = this.currency().sub(amt) },

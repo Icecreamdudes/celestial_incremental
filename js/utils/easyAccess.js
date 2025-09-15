@@ -66,6 +66,14 @@ function addLevelableXP(layer, id, amt) {
 	player[layer].levelables[id][1] = player[layer].levelables[id][1].add(amt)
 }
 
+function getLevelableBool(layer, id) {
+	return (player[layer].levelables[id][2])
+}
+
+function setLevelableBool(layer, id, val) {
+	player[layer].levelables[id][2] = val
+}
+
 function getClickableState(layer, id) {
 	return (player[layer].clickables[id])
 }

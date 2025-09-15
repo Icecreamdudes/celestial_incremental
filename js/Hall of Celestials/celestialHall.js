@@ -1,7 +1,7 @@
-﻿var treeCH = []
+﻿var treeCH = [["ch"]]
 addLayer("ch", {
-    name: "Celestial Hall", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Hall", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "CH", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -20,22 +20,11 @@ addLayer("ch", {
             "border-color": "#2e0054",
         }
     },
-    tooltip: "Hall of Celestials",
+    tooltip: "Hall",
     color: "#0260fe",
     branches: ["cp"],
     update(delta) {
         let onepersec = new Decimal(1)
-
-        if (player.subtabs["ch"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'ch'
-            player.tab = "po"
-            player.subtabs["ch"]['stuff'] = 'Hall'
-        }
-        if (player.subtabs["ch"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'ch'
-            player.tab = "settings"
-            player.subtabs["ch"]['stuff'] = 'Hall'
-        }
         
         player.ch.celestialTexts = [
             "Tav, the Celestial of Limits",
@@ -44,15 +33,6 @@ addLayer("ch", {
         ]
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "po"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h1>→" },
             canClick() { return true },
@@ -232,7 +212,7 @@ addLayer("ch", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-        ["microtabs", "hall", { 'border-width': '0px' }],
+                    ["microtabs", "hall", { 'border-width': '0px' }],
                 ]
             },
             "???": {
@@ -259,18 +239,8 @@ addLayer("ch", {
                     ["row", [ ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" }, { "color": "white", "font-size": "12.5px", "font-family": "monospace" }], ["clickable", 106], ]],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)"}},
-                unlocked() { return true },
-                content: [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
-                hall: {
+        hall: {
             "Hall": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
@@ -294,24 +264,24 @@ addLayer("ch", {
                     //NOTE: REMEMBER TO KEEP PASTING THIS INTO MENULAYERS.JS
                 ]
             },
-                        "Matos Perks": {
+            "Matos Perks": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.ch.celestialIndex.eq(3) && player.ch.matosDisplay.eq(1) },
                 content: [
                     ["blank", "25px"],
-                ["style-column", [
-                    ["row", [["raw-html", function () { return "Perks - Matos" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
-                ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
-                ["style-column", [
-                    ["row", [["raw-html", function () { return "Perks - Matos" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
-                ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
-                    
+                    ["style-column", [
+                        ["row", [["raw-html", function () { return "Perks - Matos" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", borderBottom: "5px", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}],
+                    ["style-column", [
+                        ["row", [["raw-html", function () { return "Perks - Matos" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],]],
+                    ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg,rgb(138, 14, 121) 0%,rgb(168, 12, 51) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },
         },
     },
     tabFormat: [
-        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.fu.defeatedJocus && player.tab != "cmc"}
+    layerShown() { return player.startedGame == true && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge}
 })

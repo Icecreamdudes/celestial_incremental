@@ -249,7 +249,7 @@ function resetRow(row) {
 
 function startChallenge(layer, x) {
 	let enter = false
-	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked || !canEnterChallenge(layer, x)) return
+	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked || !tmp[layer].challenges[x].canClick || !canEnterChallenge(layer, x)) return
 
 	if (player[layer].activeChallenge == x) {
 		// This needs to be embedded due to how 'enter' works
@@ -418,7 +418,9 @@ var interval = setInterval(function() {
 	updateOomps(diff);
 	updateWidth()
 	updateTabFormats()
+	updateStyles()
 	gameLoop(diff)
+	miscCode()
 	fixNaNs()
 	adjustPopupTime(trueDiff)
 	updateParticles(trueDiff)
@@ -667,3 +669,11 @@ function swarmParticles(particleColor, flashColor) {
 		  localStorage.removeItem('volume'); // Clear the saved volume
 	  }
   }
+
+function rowShown(arr) {
+	let val = false
+	for (let i = 0; i < arr.length; i++) {
+		if (layerShown(arr[i])) val = true
+	}
+	return val
+}

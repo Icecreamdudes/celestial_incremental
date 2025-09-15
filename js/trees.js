@@ -16,9 +16,7 @@
 
         treeSoftcap: new Decimal(1),
         treeSoftcapStart: new Decimal(15),
-        treeMax: false,
-    }
-    },
+    }},
     automate() {
         if (hasMilestone("r", 12))
         {
@@ -32,10 +30,10 @@
             buyBuyable("t", 18)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Trees",
     color: "#0B6623",
+    branches: ["p"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -48,32 +46,34 @@
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 33))
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 34))
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 35))
+        player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 36))
+        if (hasUpgrade("cs", 201)) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 104))
         player.t.treesToGet = player.t.treesToGet.mul(player.m.modEffect)
         player.t.treesToGet = player.t.treesToGet.mul(levelableEffect("pet", 102)[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])
         player.t.treesToGet = player.t.treesToGet.mul(player.rf.abilityEffects[1])
-        if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("g", 12))
+        if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(player.g.grassEffect2)
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.treesToGet = player.t.treesToGet.mul(upgradeEffect("ad", 15))
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.t.treesToGet = player.t.treesToGet.mul(player.hre.refinementEffect[2][1])
 
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("h", 13))
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
         if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 3) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorsEffect[4])
+        if (player.pol.pollinatorEffects.bat.enabled) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorEffects.bat.effects[1])
         player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("gh", 32))
         player.t.treesToGet = player.t.treesToGet.mul(player.r.timeCubeEffects[1])
         player.t.treesToGet = player.t.treesToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.t.treesToGet = player.t.treesToGet.mul(player.co.cores.tree.effect[0])
 
         // POWER MODIFIERS
-        player.t.treesToGet = player.t.treesToGet.pow(buyableEffect("rm", 24))
-        player.t.treesToGet = player.t.treesToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(3)) player.t.treesToGet = player.t.treesToGet.pow(player.cop.processedCoreInnateEffects[1])
+        if (hasUpgrade("hpw", 1023)) player.t.treesToGet = player.t.treesToGet.pow(1.24)
+        player.t.treesToGet = player.t.treesToGet.pow(player.co.cores.tree.effect[1])
+        if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.1)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
@@ -83,7 +83,7 @@
 
         // TREE EFFECT
         player.t.treeEffect = player.t.trees.div(6).pow(1.1).add(1)
-        if (player.t.treeEffect.gte("1e15000")) player.t.treeEffect = player.t.treeEffect.div("1e15000").pow(0.2).mul("1e15000")
+        if (player.t.treeEffect.gte("1e15000")) player.t.treeEffect = player.t.treeEffect.div("1e15000").pow(Decimal.add(0.1, player.cs.scraps.tree.effect)).mul("1e15000")
 
         //----------------------------------------
 
@@ -111,17 +111,15 @@
         // CHALLENGE MODIFIERS
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.pe.pestEffect[3])
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("h", 13))
         if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 3) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorsEffect[5])
+        if (player.pol.pollinatorEffects.bat.enabled) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorEffects.bat.effects[0])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 32))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(3)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.cop.processedCoreInnateEffects[2])
 
         // POWER MODIFIERS
-        player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.re.realmEssenceEffect)
+        player.t.leavesPerSecond = player.t.leavesPerSecond.pow(player.co.cores.tree.effect[2])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
@@ -134,61 +132,36 @@
         player.t.treeReq = player.t.trees.pow(1.35).add(10)
         player.t.treeReq = player.t.treeReq.div(buyableEffect("t", 14))
         player.t.treeReq = player.t.treeReq.div(levelableEffect("pet", 203)[0])
+        if (hasUpgrade("cs", 401)) player.t.treeReq = player.t.treeReq.pow(1.6)
 
         if (player.t.leaves.gte(player.t.treeReq)) {
             player.t.trees = player.t.trees.add(player.t.treesToGet)
             player.t.leaves = new Decimal(0)
         }
     },
-    branches: ["r"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.t.treeMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.t.treeMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.t.treeMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.t.treeMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-    },
+    clickables: {},
     bars: {
         treebar: {
-            unlocked() { return true },
+            unlocked: true,
             direction: RIGHT,
             width: 476,
             height: 50,
             progress() {
+                if (player.t.leavesPerSecond.div(20).gt(player.t.treeReq)) return new Decimal(1)
                 return player.t.leaves.div(player.t.treeReq)
             },
-            fillStyle: {
-                "background-color": "#0B6623",
-            },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#0B6623"},
+            textStyle: {fontSize: "14px"},
             display() {
-                return "<h5>" + format(player.t.leaves) + "/" + format(player.t.treeReq) + "<h5> Leaves to gain a tree.</h5>";
+                if (player.t.leavesPerSecond.div(100).gt(player.t.treeReq)) return "There is currently an excess of leaves."
+                let str = format(player.t.leaves) + "/" + format(player.t.treeReq) + " (+" + format(player.t.leavesPerSecond) + "/s)<br>Leaves to gain a tree."
+                if (player.t.trees.gte(player.t.treeSoftcapStart)) str = str.concat("<br><small style='color:red;font-size:12px'>After " + formatWhole(player.t.treeSoftcapStart) + " trees, leaves are divided by " + format(player.t.treeSoftcap) + "</small>")
+                return str
             },
         },
     },
-    upgrades: {
-    },
+    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(100000) },
@@ -196,7 +169,11 @@
             purchaseLimit() { return new Decimal(5000) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.3).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.3)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -230,7 +207,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.25).add(1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -264,7 +245,11 @@
             purchaseLimit() { return new Decimal(5000) },
             currency() { return player.p.prestigePoints},
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -298,7 +283,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -332,7 +321,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).pow(1.35).add(1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).pow(1.35).add(1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return hasUpgrade("p", 19) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -366,7 +359,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return hasUpgrade("p", 19) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -400,7 +397,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return hasUpgrade("g", 15) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -434,7 +435,11 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.t.trees},
             pay(amt) { player.t.trees = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 24)) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(0.05).add(1)
+                if (hasUpgrade("cs", 403)) eff = eff.pow(3)
+                return eff
+            },
             unlocked() { return hasUpgrade("g", 15) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -463,33 +468,33 @@
             style: { width: '275px', height: '150px', backgroundColor: "#3b844e"}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Trees": {
                 buttonStyle() { return { color: "#0B6623", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
+                    ["blank", "10px"],
+                    ["style-column", [
+                        ["blank", "10px"],
+                        ["row", [
+                            ["raw-html", () => { return "You have " + formatWhole(player.t.trees) + " trees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                            ["raw-html", () => { return player.t.leavesPerSecond.div(20).gt(player.t.treeReq) ? "(+" + format(player.t.treesToGet, 1) + "/s)" : "(+" + format(player.t.treesToGet, 1) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                        ]],
+                        ["row", [
+                            ["raw-html", () => {return "Boosts prestige point gain by x" + format(player.t.treeEffect) + "."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.t.treeEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}]
+                        ]],
+                        ["blank", "10px"],
+                        ["bar", "treebar"],
+                        ["blank", "10px"],
+                    ], {width: "550px", backgroundColor: "#021407", border: "3px solid #ccc", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", function () { return "<h2>You have " + formatWhole(player.t.trees) + "<h2> trees, which boost prestige point gain by x" + format(player.t.treeEffect) + "."}],
-                        ["raw-html", () => {return player.t.treeEffect.gte("1e15000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace", paddingLeft: "10px"}]
-                    ]],
-                    ["raw-html", function () { return "<h2>You will gain " + format(player.t.treesToGet, 1) + "<h2> trees." }],
-                    ["raw-html", function () { return "<h2>You are making " + format(player.t.leavesPerSecond) + "<h2> leaves per second. " }],
-                    ["raw-html", function () { return player.t.trees.gte(player.t.treeSoftcapStart) ? "After " + formatWhole(player.t.treeSoftcapStart) + " trees, leaf gain is divided by " + format(player.t.treeSoftcap) + " (Based on trees)" : "" }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["bar", "treebar"]]],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
@@ -498,8 +503,8 @@
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
         ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 16)},
 })

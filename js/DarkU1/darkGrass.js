@@ -1,5 +1,4 @@
-﻿
-addLayer("dgr", {
+﻿addLayer("dgr", {
     name: "Dark Grass", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "DG", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -15,12 +14,11 @@ addLayer("dgr", {
         maxGrass: new Decimal(1),
 
         grassTimer: new Decimal(0),
-        grassTimerReq: new Decimal(10),
-        lastPickedText: "",
+        grassTimerReq: new Decimal(5),
+        lastPickedText: "Last grown plot: ()",
     }},
     automate() {
-        if (hasUpgrade("dn", 13))
-        {
+        if (hasUpgrade("dn", 13)) {
             buyBuyable("dgr", 11)
             buyBuyable("dgr", 12)
             buyBuyable("dgr", 13)
@@ -38,7 +36,7 @@ addLayer("dgr", {
         };
     },
     tooltip: "Dark Grass",
-    branches: [["dg", "#4f0694"]],
+    branches: [["dg", "#309"]],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -54,10 +52,12 @@ addLayer("dgr", {
         // MAX GRASS
         player.dgr.maxGrass = new Decimal(1)
         player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dgr", 11))
-        if (player.le.punchcards[11]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[11])
-        if (player.le.punchcards[12]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[12])
-        if (player.le.punchcards[13]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[13])
-        if (player.le.punchcards[14]) player.dgr.maxGrass = player.dgr.maxGrass.mul(player.le.punchcardsEffect[14])
+        if (getLevelableBool("pu", 108)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 108)[1])
+        if (getLevelableBool("pu", 205)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 205)[0])
+        if (getLevelableBool("pu", 205)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dg", 16))
+        if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 206)[0])
+        if (getLevelableBool("pu", 206)) player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("dp", 15))
+        if (getLevelableBool("pu", 301)) player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("pu", 301)[0])
         player.dgr.maxGrass = player.dgr.maxGrass.mul(levelableEffect("st", 109)[0])
         
         // MAX GRASS SOFTCAP
@@ -66,17 +66,19 @@ addLayer("dgr", {
         // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
-        if (player.le.punchcards[11]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[11])
-        if (player.le.punchcards[12]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[12])
-        if (player.le.punchcards[13]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[13])
-        if (player.le.punchcards[14]) player.dgr.grassValue = player.dgr.grassValue.mul(player.le.punchcardsEffect[14])
+        if (getLevelableBool("pu", 108)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 108)[1])
+        if (getLevelableBool("pu", 205)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 205)[0])
+        if (getLevelableBool("pu", 205)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dg", 16))
+        if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 206)[0])
+        if (getLevelableBool("pu", 206)) player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dp", 15))
+        if (getLevelableBool("pu", 301)) player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("pu", 301)[0])
         player.dgr.grassValue = player.dgr.grassValue.mul(levelableEffect("st", 108)[0])
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)
 
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
-        player.dgr.grassTimerReq = new Decimal(10)
+        player.dgr.grassTimerReq = new Decimal(5)
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("dgr", 13))
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(levelableEffect("st", 206)[0])
         player.dgr.grassTimerReq = player.dgr.grassTimerReq.div(buyableEffect("st", 102))
@@ -85,16 +87,16 @@ addLayer("dgr", {
             player.dgr.grassTimer = new Decimal(0)
         }
 
-        if (player.dgr.grass.lt(1e10)) {
-            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.1).add(1)
-        } else if (player.dgr.grass.lt(1e50) && player.dgr.grass.gte(1e10)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e10).add(1).log(10).mul(0.05).add(2)
-        } else if (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e50).add(1).log(10).mul(0.02).add(4)
-        } else if (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) {
-            player.dgr.grassEffect = player.dgr.grass.div(1e100).add(1).log(10).mul(0.005).add(5)
-        } else if (player.dgr.grass.gte("1e1000")) {
-            player.dgr.grassEffect = player.dgr.grass.div("1e1000").add(1).log(10).pow(0.5).mul(0.05).add(9.5)
+        if (player.dgr.grass.lt(1e5)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.2).add(1)
+        } else if (player.dgr.grass.lt(1e15)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.1).add(1.5)
+        } else if (player.dgr.grass.lt(1e35)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.05).add(2.25)
+        } else if (player.dgr.grass.lt(1e75)) {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).mul(0.025).add(3.125)
+        } else {
+            player.dgr.grassEffect = player.dgr.grass.add(1).log(10).sub(75).pow(0.5).mul(0.01).add(5)
         }
         
     },
@@ -132,17 +134,7 @@ addLayer("dgr", {
             },
         },
     },
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #006a44" },
-        },
-    },
+    clickables: {},
     grid: {
         rows: 5,
         cols: 5,
@@ -150,7 +142,7 @@ addLayer("dgr", {
             return new Decimal(0)
         },
         getTitle(data, id) {
-            return format(getGridData("dgr", id))
+            return formatShort(getGridData("dgr", id))
         },
         getCanClick(data, id) {
             return getGridData("dgr", id).gt(0)
@@ -160,7 +152,7 @@ addLayer("dgr", {
             setGridData("dgr", id, new Decimal(0))
         },
         getStyle(data, id) {
-            let look = {width: "75px", height: "75px", fontSize: "7px", borderRadius: "0px"}
+            let look = {width: "75px", height: "75px", fontSize: "8px", borderRadius: "0px"}
             getGridData("dgr", id).eq(0) ? look.backgroundColor = "#081707" : getGridData("dgr", id).lt(player.dgr.maxGrass) ? look.backgroundColor = "#1a4516" : look.backgroundColor = "#2b7326"
             getGridData("dgr", id).eq(0) ? look.color = "dimgray" : look.color = "white"
             return look
@@ -169,12 +161,16 @@ addLayer("dgr", {
     upgrades: {},
     buyables: {
         11: {
-            costBase() { return new Decimal(4) },
+            costBase() { return new Decimal(2) },
             costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(1500) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).pow(0.7).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(1.3)
+                if (getLevelableBool("pu", 108)) eff = eff.pow(levelableEffect("pu", 108)[0])
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -203,12 +199,16 @@ addLayer("dgr", {
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         12: {
-            costBase() { return new Decimal(6) },
-            costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(1500) },
+            costBase() { return new Decimal(4) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(1000) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.5).add(1) },
+            effect(x) {
+                let eff = getBuyableAmount(this.layer, this.id).add(1).pow(1.25)
+                if (getLevelableBool("pu", 108)) eff = eff.pow(levelableEffect("pu", 108)[0])
+                return eff
+            },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -271,12 +271,12 @@ addLayer("dgr", {
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         14: {
-            costBase() { return new Decimal(20) },
-            costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(1000) },
+            costBase() { return new Decimal(10) },
+            costGrowth() { return new Decimal(1.4) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.3).pow(1.1).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -305,12 +305,12 @@ addLayer("dgr", {
             style: { width: '275px', height: '150px', color: "white", backgroundColor: "#003522", borderColor: "#006a44" }
         },
         15: {
-            costBase() { return new Decimal(35) },
-            costGrowth() { return new Decimal(1.65) },
-            purchaseLimit() { return new Decimal(1000) },
+            costBase() { return new Decimal(25) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.15).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.25) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -340,11 +340,11 @@ addLayer("dgr", {
         },
         16: {
             costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(1.7) },
-            purchaseLimit() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(1.6) },
+            purchaseLimit() { return new Decimal(500) },
             currency() { return player.dgr.grass},
             pay(amt) { player.dgr.grass = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).pow(1.15).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -381,8 +381,7 @@ addLayer("dgr", {
             "Main": {
                 buttonStyle() { return { border: "2px solid #006a44", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["style-column", [
                         ["style-row", [
@@ -419,26 +418,27 @@ addLayer("dgr", {
             "Buyables": {
                 buttonStyle() { return { border: "2px solid #006a44", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["row", [["dark-buyable", 11],["dark-buyable", 12],["dark-buyable", 13],]],
-                    ["row", [["dark-buyable", 14],["dark-buyable", 15],["dark-buyable", 16],]],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13],
+                        ["dark-buyable", 14], ["dark-buyable", 15], ["dark-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
         },
     },
     tabFormat: [
-        ["row", [
-            ["raw-html", () => { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass, which boosts generator power effect by ^" + format(player.dgr.grassEffect) }, {color: "white", fontSize: "24px", fontFamily: "monospace", paddingRight: "10px"}],
-            ["raw-html", () => { return (player.dgr.grass.lt(1e50) && player.dgr.grass.gte(1e10)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return (player.dgr.grass.lt(1e100) && player.dgr.grass.gte(1e50)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return (player.dgr.grass.lt("1e1000") && player.dgr.grass.gte(1e100)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-            ["raw-html", () => { return player.dgr.grass.gte("1e1000") ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
-        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
-        ]],
-        ["row", [["clickable", 1]]],
+        ["raw-html", () => { return "You have <h3>" + format(player.dgr.grass) + "</h3> dark grass"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["style-row", [
+            ["raw-html", () => {return "Boosts generator power effect by ^" + format(player.dgr.grassEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace", paddingRight: "10px"}],
+            ["raw-html", () => { return (player.dgr.grass.lt(1e15) && player.dgr.grass.gte(1e5)) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => { return (player.dgr.grass.lt(1e35) && player.dgr.grass.gte(1e15)) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => { return (player.dgr.grass.lt(1e75) && player.dgr.grass.gte(1e35)) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+            ["raw-html", () => { return player.dgr.grass.gte(1e75) ? "[SOFTCAPPED<sup>4</sup>]" : ""}, {color: "red", fontSize: "18px", fontFamily: "monospace"}],
+        ], () => {return player.pet.legendaryPetAbilityTimers[0].gt(0) ? {display: "none !important"} : {}}],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
-    layerShown() { return hasUpgrade("le", 22) }
+    layerShown() { return hasUpgrade("le", 22) },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

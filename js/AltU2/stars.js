@@ -26,19 +26,16 @@ addLayer("st", {
 
         //buymax
         dimMax: false,
-
     }},
     automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)",
-            "background-origin": "border-box",
-            "border-color": "#eaf6f7",
-            "color": "#eaf6f7",
-            "font-size": "48px",
+            backgroundOrigin: "border-box",
+            borderColor: "#eaf6f7",
+            color: "#eaf6f7",
         };
     },
-    
     tooltip: "Stars",
     branches: [[""]],
     color: "#37078f",
@@ -67,6 +64,11 @@ addLayer("st", {
         player.st.starPower = player.st.starPower.add(player.st.starPowerPerSecond.mul(delta))
         player.st.starPowerPerSecond = player.st.dimensionPowerEffects[0]
         player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(buyableEffect("ma", 32))
+        player.st.starPowerPerSecond = player.st.starPowerPerSecond.mul(levelableEffect("pu", 208)[1])
+
+        // Star Power Softcap
+        let base = new Decimal(300)
+        if (player.st.starPowerPerSecond.gt(1e300)) player.st.starPowerPerSecond = player.st.starPowerPerSecond.div(1e300).pow(Decimal.div(base, player.st.starPowerPerSecond.plus(1).log(10))).mul(1e300)
 
         player.st.starPowerEffect = player.st.starPower.plus(1).log10().div(100).add(1).min(1.3)
         player.st.starPowerEffect2 = player.st.starPower.pow(50).add(1)
@@ -78,147 +80,130 @@ addLayer("st", {
         player.au2.stars = player.au2.stars.floor()
     },
     bars: {
-            0: {
+        0: {
             unlocked() { return getBuyableAmount("st", 1).gte(1) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[0].div(player.st.dimensionsTimerMax[0])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[0]) + "/" + format(player.st.dimensionsTimerMax[0]) + "<h5> seconds to produce 1st dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[0]) + "/" + formatTime(player.st.dimensionsTimerMax[0]) + "<h5> to produce 1st dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            1: {
+        1: {
             unlocked() { return getBuyableAmount("st", 1).gte(2) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[1].div(player.st.dimensionsTimerMax[1])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[1]) + "/" + format(player.st.dimensionsTimerMax[1]) + "<h5> seconds to produce 2nd dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[1]) + "/" + formatTime(player.st.dimensionsTimerMax[1]) + "<h5> to produce 2nd dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            2: {
+        2: {
             unlocked() { return getBuyableAmount("st", 1).gte(3) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[2].div(player.st.dimensionsTimerMax[2])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[2]) + "/" + format(player.st.dimensionsTimerMax[2]) + "<h5> seconds to produce 3rd dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[2]) + "/" + formatTime(player.st.dimensionsTimerMax[2]) + "<h5> to produce 3rd dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            3: {
+        3: {
             unlocked() { return getBuyableAmount("st", 1).gte(4) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[3].div(player.st.dimensionsTimerMax[3])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[3]) + "/" + format(player.st.dimensionsTimerMax[3]) + "<h5> seconds to produce 4th dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[3]) + "/" + formatTime(player.st.dimensionsTimerMax[3]) + "<h5> to produce 4th dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            4: {
+        4: {
             unlocked() { return getBuyableAmount("st", 1).gte(5) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[4].div(player.st.dimensionsTimerMax[4])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[4]) + "/" + format(player.st.dimensionsTimerMax[4]) + "<h5> seconds to produce 5th dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[4]) + "/" + formatTime(player.st.dimensionsTimerMax[4]) + "<h5> to produce 5th dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            5: {
+        5: {
             unlocked() { return getBuyableAmount("st", 1).gte(6) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[5].div(player.st.dimensionsTimerMax[5])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[5]) + "/" + format(player.st.dimensionsTimerMax[5]) + "<h5> seconds to produce 6th dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[5]) + "/" + formatTime(player.st.dimensionsTimerMax[5]) + "<h5> to produce 6th dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            6: {
+        6: {
             unlocked() { return getBuyableAmount("st", 1).gte(7) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[6].div(player.st.dimensionsTimerMax[6])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[6]) + "/" + format(player.st.dimensionsTimerMax[6]) + "<h5> seconds to produce 7th dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[6]) + "/" + formatTime(player.st.dimensionsTimerMax[6]) + "<h5> to produce 7th dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
-            7: {
+        7: {
             unlocked() { return getBuyableAmount("st", 1).gte(8) },
             direction: RIGHT,
-            width: 250,
+            width: 200,
             height: 50,
             progress() {
                 return player.st.dimensionsTimer[7].div(player.st.dimensionsTimerMax[7])
             },
-            fillStyle: {
-                "background-color": "#5d1482",
-            },
+            borderStyle: {border: "0", borderRight: "2px solid white", borderRadius: "15px 0 0 15px"},
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#5d1482"},
             display() {
-                return "<h5>" + format(player.st.dimensionsTimer[7]) + "/" + format(player.st.dimensionsTimerMax[7]) + "<h5> seconds to produce 8th dimensions.</h5>";
+                return "<h5>" + formatTime(player.st.dimensionsTimer[7]) + "/" + formatTime(player.st.dimensionsTimerMax[7]) + "<h5> to produce 8th dimensions</h5>";
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
         },
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "au2"
-            },
-            style: { width: "100px", minHeight: "50px", color: "white", borderRadius: "10px", border: "2px solid #0d515a"  },
-        },
         2: {
-            title() { return "<h3>Level Up" },
+            title() { return "Level Up" },
             canClick() { return tmp.st.levelables[layers.st.levelables.index].canBuy },
             unlocked() { return layers.st.levelables.index != 0 },
             tooltip() {
@@ -233,7 +218,7 @@ addLayer("st", {
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {
-                let look = {width: "100px", minHeight: "40px", borderRadius: "0px", fontSize: '8px'}
+                let look = {width: "425px", minHeight: "40px", borderRadius: "0px", fontSize: '12px'}
                 !this.canClick() ? look.backgroundColor = "#bf8f8f" : layers.st.levelables.index >= 1000 ? look.backgroundColor = "#d487fd" : look.backgroundColor = "#4e7cff"
                 return look
             },
@@ -246,8 +231,10 @@ addLayer("st", {
                 player.st.dimMax = true
             },
             style() {
-                    return { color: "white", width: '75px', "min-height": '50px', borderRadius: '10px 0px 0px 10px' }
-            } 
+                let look = {width: "80px", minHeight: "50px", borderRadius: "15px 0px 0px 15px"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         4: {
             title() { return "Buy Max Off" },
@@ -257,8 +244,10 @@ addLayer("st", {
                 player.st.dimMax = false
             },
             style() {
-                    return { color: "white", width: '75px', "min-height": '50px', borderRadius: '0px 0px 0px 0px' }
-            } 
+                let look = {width: "80px", minHeight: "50px", borderRadius: "0"}
+                this.canClick() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
     },
     levelables: {
@@ -272,7 +261,7 @@ addLayer("st", {
             style() { return { width: '100px', height: '125px', backgroundColor: '#222222'} } 
         },
         101: {
-            image() { return this.canClick() ? "resources/gwaCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/gwaCommonPet.png" : "resources/secret.png"},
             title() { return "Gwa" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark celestial points.<br>"
@@ -307,7 +296,7 @@ addLayer("st", {
             }  
         },
         102: {
-            image() { return this.canClick() ? "resources/eggCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eggCommonPet.png" : "resources/secret.png"},
             title() { return "Egg Guy" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark rank points.<br>"
@@ -342,7 +331,7 @@ addLayer("st", {
             }  
         },
         103: {
-            image() { return this.canClick() ? "resources/unsmithCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/unsmithCommonPet.png" : "resources/secret.png"},
             title() { return "Unsmith" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark tier points.<br>"
@@ -350,7 +339,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(3).add(1), // Tier Point Gain
+                    getLevelableAmount(this.layer, this.id).mul(3).pow(6).add(1), // Tier Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -377,7 +366,7 @@ addLayer("st", {
             }  
         },
         104: {
-            image() { return this.canClick() ? "resources/checkpointCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/checkpointCommonPet.png" : "resources/secret.png"},
             title() { return "Gd Checkpoint" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark tetr points.<br>"
@@ -385,7 +374,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(3).add(1), // Tetr Point Gain
+                    getLevelableAmount(this.layer, this.id).mul(3).pow(9).add(1), // Tetr Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -412,7 +401,7 @@ addLayer("st", {
             }  
         },
         105: {
-            image() { return this.canClick() ? "resources/slaxCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/slaxCommonPet.png" : "resources/secret.png"},
             title() { return "Slax" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark prestige points.<br>"
@@ -447,7 +436,7 @@ addLayer("st", {
             }  
         },
         106: {
-            image() { return this.canClick() ? "resources/spiderCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/spiderCommonPet.png" : "resources/secret.png"},
             title() { return "Spider" },
             description() {
                 return "x" + format(this.effect()[0]) + " to generators.<br>"
@@ -482,7 +471,7 @@ addLayer("st", {
             }  
         },
         107: {
-            image() { return this.canClick() ? "resources/blobCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/blobCommonPet.png" : "resources/secret.png"},
             title() { return "Blob" },
             description() {
                 return "x" + format(this.effect()[0]) + " to generator power.<br>"
@@ -517,7 +506,7 @@ addLayer("st", {
             }  
         },
         108: {
-            image() { return this.canClick() ? "resources/replicatorCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/replicatorCommonPet.png" : "resources/secret.png"},
             title() { return "Replicator" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark grass value.<br>"
@@ -552,7 +541,7 @@ addLayer("st", {
             }  
         },
         109: {
-            image() { return this.canClick() ? "resources/smokeCommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/smokeCommonPet.png" : "resources/secret.png"},
             title() { return "Smoke" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark grass capacity.<br>"
@@ -589,7 +578,7 @@ addLayer("st", {
 
         //Unc
         201: {
-            image() { return this.canClick() ? "resources/testeUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/testeUncommonPet.png" : "resources/secret.png"},
             title() { return "Teste" },
             description() {
                 return "^" + format(this.effect()[0]) + " to dark celestial point softcap.<br>"
@@ -624,7 +613,7 @@ addLayer("st", {
             }  
         },
         202: {
-            image() { return this.canClick() ? "resources/starUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/starUncommonPet.png" : "resources/secret.png"},
             title() { return "Star" },
             description() {
                 return "/" + format(this.effect()[0]) + " to dark rank req.<br>"
@@ -659,7 +648,7 @@ addLayer("st", {
             }  
         },
         203: {
-            image() { return this.canClick() ? "resources/normalFaceUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/normalFaceUncommonPet.png" : "resources/secret.png"},
             title() { return "Normal Face" },
             description() {
                 return "/" + format(this.effect()[0]) + " to dark tier req.<br>"
@@ -694,7 +683,7 @@ addLayer("st", {
             }  
         },
         204: {
-            image() { return this.canClick() ? "resources/sharkUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/sharkUncommonPet.png" : "resources/secret.png"},
             title() { return "Shark" },
             description() {
                 return "/" + format(this.effect()[0]) + " to dark tetr req.<br>"
@@ -729,7 +718,7 @@ addLayer("st", {
             }  
         },
         205: {
-            image() { return this.canClick() ? "resources/eyeUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eyeUncommonPet.png" : "resources/secret.png"},
             title() { return "Eye" },
             description() {
                 return "x" + format(this.effect()[0]) + " to dark pent points.<br>"
@@ -737,7 +726,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2).pow(1.4).add(1), // Pent Points gain
+                    getLevelableAmount(this.layer, this.id).mul(3).pow(12).add(1), // Pent Points gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -764,7 +753,7 @@ addLayer("st", {
             }  
         },
         206: {
-            image() { return this.canClick() ? "resources/clockUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/clockUncommonPet.png" : "resources/secret.png"},
             title() { return "Clock" },
             description() {
                 return "/" + format(this.effect()[0]) + " to dark grass timer.<br>"
@@ -799,7 +788,7 @@ addLayer("st", {
             }  
         },
         207: {
-            image() { return this.canClick() ? "resources/trollUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/trollUncommonPet.png" : "resources/secret.png"},
             title() { return "Troll Face" },
             description() {
                 return "x" + format(this.effect()[0]) + " to normality.<br>"
@@ -834,7 +823,7 @@ addLayer("st", {
             }  
         },
         208: {
-            image() { return this.canClick() ? "resources/infinityBreakerUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/infinityBreakerUncommonPet.png" : "resources/secret.png"},
             title() { return "Infinity Breaker" },
             description() {
                 return "/" + format(this.effect()[0]) + " to starmetal req.<br>"
@@ -869,7 +858,7 @@ addLayer("st", {
             }  
         },
         209: {
-            image() { return this.canClick() ? "resources/johnUncommonPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/johnUncommonPet.png" : "resources/secret.png"},
             title() { return "John" },
             description() {
                 return "x" + format(this.effect()[0]) + " to stars.<br>"
@@ -936,7 +925,11 @@ addLayer("st", {
             buy() {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             },
-            style: { color: "white", width: '250px', height: '50px', borderRadius: '0px 10px 10px 0px' }
+            style() {
+                let look = {width: "250px", height: "50px", borderRadius: "0px 15px 15px 0px"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         11: {
             costBase() { return new Decimal(10) },
@@ -948,7 +941,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -966,7 +959,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[0] = player.st.dimensionAmounts[0].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         12: {
             costBase() { return new Decimal(100) },
@@ -978,7 +975,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -996,7 +993,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[1] = player.st.dimensionAmounts[1].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         13: {
             costBase() { return new Decimal(10000) },
@@ -1008,7 +1009,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -1026,7 +1027,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[2] = player.st.dimensionAmounts[2].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         14: {
             costBase() { return new Decimal(1e7) },
@@ -1038,7 +1043,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -1056,7 +1061,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[3] = player.st.dimensionAmounts[3].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         15: {
             costBase() { return new Decimal(1e11) },
@@ -1068,7 +1077,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -1086,7 +1095,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[4] = player.st.dimensionAmounts[4].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         16: {
             costBase() { return new Decimal(1e10) },
@@ -1098,7 +1111,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -1116,7 +1129,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[5] = player.st.dimensionAmounts[5].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         17: {
             costBase() { return new Decimal(1e14) },
@@ -1128,7 +1145,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -1146,7 +1163,11 @@ addLayer("st", {
                     player.st.dimensionAmounts[6] = player.st.dimensionAmounts[6].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
         18: {
             costBase() { return new Decimal(1e18) },
@@ -1158,7 +1179,7 @@ addLayer("st", {
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+                return "Cost: " + formatShortWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
             },
             buy() {
                 if (player.st.dimMax == false) {
@@ -1176,18 +1197,21 @@ addLayer("st", {
                     player.st.dimensionAmounts[7] = player.st.dimensionAmounts[7].add(max)
                 }
             },
-            style: { width: '175px', height: '50px', borderRadius: '10px' }
+            style() {
+                let look = {width: "175px", height: "50px", borderRadius: "0 15px 15px 0"}
+                this.canAfford() ? look.color = "white" : look.color = "black"
+                return look
+            },
         },
-
 
         //upgrade tree: general
         101: {
             costBase() { return new Decimal(5) },
-            costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
+            costGrowth() { return new Decimal(5) },
+            purchaseLimit() { return new Decimal(15) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.3).div(25).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1211,7 +1235,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", backgroundColor: "#0c6344", borderColor: "#05291c", borderRadius: '10px', borderWidth: '5px' }
+            style: {width: '140px', height: '140px', color: "white", background: "#0c6344", border: "5px solid #05291c", borderColor: "#05291c", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         102: {
             costBase() { return new Decimal(8) },
@@ -1219,8 +1243,8 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(40).add(1) },
-            unlocked() { return player.st.buyables[101].gte(5) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.025).add(1) },
+            unlocked() { return player.st.buyables[101].gte(1) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
             display() {
@@ -1242,7 +1266,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg, #53bd96 0%, #147363 100%)", borderColor: "#0e5448", borderRadius: '10px', borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg, #53bd96 0%, #147363 100%)", border: "5px solid #0e5448", borderColor: "#0e5448", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         103: {
             costBase() { return new Decimal(20) },
@@ -1250,12 +1274,11 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(50) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(8).add(1) },
-            unlocked() { return player.st.buyables[101].gte(10) },
-            branches: [104,],
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(8) },
+            unlocked() { return player.st.buyables[101].gte(2) },
+            branches: [104],
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-
             display() {
                 return "which are boosting golden grass gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
@@ -1275,8 +1298,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg, #53bd96 0%,rgb(193, 235, 79) 100%)", borderColor: "#22452e", borderRadius: '10px', borderWidth: '5px'   }
-
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg, #53bd96 0%,rgb(193, 235, 79) 100%)", border: "5px solid #22452e", borderColor: "#22452e", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },        
         104: {
             costBase() { return new Decimal(40) },
@@ -1284,11 +1306,10 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(150) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return player.gh.steel.add(10).plus(1).log10().pow(2).pow(getBuyableAmount(this.layer, this.id)) },
+            effect(x) { return player.gh.steel.add(10).log(10).pow(2).pow(getBuyableAmount(this.layer, this.id)) },
             unlocked() { return player.st.buyables[103].gte(5) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-
             display() {
                 return "which are boosting steel gain by x" + format(tmp[this.layer].buyables[this.id].effect) + " (affected by steel).\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
@@ -1308,7 +1329,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg,rgb(53, 53, 53) 0%,rgb(167, 167, 167) 100%)", borderColor: "#1c1c1c", borderRadius: '10px', borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg,rgb(53, 53, 53) 0%,rgb(167, 167, 167) 100%)", border: "5px solid #1c1c1c", borderColor: "#1c1c1c", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         105: {
             costBase() { return new Decimal(100) },
@@ -1316,7 +1337,7 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(75) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(100).pow(2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(100).add(1).pow(2) },
             unlocked() { return player.st.buyables[103].gte(10) && player.st.buyables[104].gte(10) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1341,7 +1362,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(-120deg, #f7f774 0%,rgb(150, 167, 0) 100%)", borderColor: "#ecff5e", borderRadius: '10px', borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(-120deg, #f7f774 0%, #96a700 100%)", border: "5px solid #ecff5e", borderColor: "#ecff5e", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         106: {
             costBase() { return new Decimal(250) },
@@ -1349,11 +1370,10 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(20) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2) },
             unlocked() { return player.st.buyables[102].gte(5) && player.st.buyables[105].gte(5) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-
             display() {
                 return "which are boosting normality gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
@@ -1374,7 +1394,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)", borderColor: "rgb(128, 255, 111)", borderRadius: '10px', borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(120deg, #7ab10e 0%, #c1df00 50%, #748d03 100%)", border: "5px solid #80ff6f", borderColor: "#80ff6f", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         107: {
             costBase() { return new Decimal(100) },
@@ -1382,11 +1402,10 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(10).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).add(1).pow(10) },
             unlocked() { return player.st.buyables[104].gte(10)  },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-
             display() {
                 return "which are boosting oil gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
@@ -1407,7 +1426,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(70deg,rgb(20, 20, 20) 0%,rgb(53, 53, 53) 100%)", borderColor: "rgb(12, 12, 12)", borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(70deg, #141414 0%, #353535 100%)", border: "5px solid #0c0c0c", borderColor: "#0c0c0c", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         108: {
             costBase() { return new Decimal(300) },
@@ -1415,11 +1434,10 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(300) },
             currency() { return player.au2.stars},
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5).pow(15).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5).add(1).pow(15) },
             unlocked() { return player.st.buyables[104].gte(20)  },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-
             display() {
                 return "which are boosting anonymity gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
@@ -1440,7 +1458,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(70deg, #0c04c1 0%,rgb(67, 58, 250) 100%)", borderColor: "hsl(229, 100.00%, 25.30%)", borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(70deg, #0c04c1 0%, #433afa 100%)", border: "5px solid #001881", borderColor: "#001881", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         109: {
             costBase() { return new Decimal(1000) },
@@ -1448,11 +1466,10 @@ addLayer("st", {
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.au2.stars },
             pay(amt) { player.au2.stars = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).pow(6).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(6) },
             unlocked() { return player.st.buyables[107].gte(20) && player.st.buyables[108].gte(10)  },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
-
             display() {
                 return "which are boosting fun gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
@@ -1473,9 +1490,8 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "black", background: "linear-gradient(45deg, #fcff04 0%, #befa32 100%)", borderColor: "#fcff04", borderWidth: '5px'   }
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(45deg, #fcff04 0%, #befa32 100%)", border: "5px solid #fcff04", borderColor: "#fcff04", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
-
 
         //Progression
         201: {
@@ -1508,7 +1524,7 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)", borderColor: "#eaf6f7", borderRadius: '10px', borderWidth: '5px' }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(15deg, #011247 0%, #37078f 50%, #5d1482 100%)", border: "5px solid #eaf6f7", borderColor: "#eaf6f7", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         202: {
             costBase() { return new Decimal(1000) },
@@ -1540,17 +1556,17 @@ addLayer("st", {
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", borderColor: "#59c2ff", borderRadius: '10px', borderWidth: '5px' }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", border: "5px solid #59c2ff", borderColor: "#59c2ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
 
         //planets
         301: {
             costBase() { return new Decimal(3) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.pl.planets},
             pay(amt) { player.pl.planets = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(10).pow(Decimal.mul(getBuyableAmount(this.layer, this.id), 7)) },
+            effect(x) { return Decimal.pow(1e5, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1561,28 +1577,28 @@ addLayer("st", {
             branches: [302],
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "black", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", borderColor: "#FFBF00", borderRadius: '10px', borderWidth: '5px' }
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(315deg, rgba(211,161,101,1) 0%, #FFBF00 100%)", border: "5px solid #FFBF00", borderColor: "#FFBF00", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         302: {
             costBase() { return new Decimal(6) },
             costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.pl.planets},
             pay(amt) { player.pl.planets = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(6).pow(Decimal.mul(getBuyableAmount(this.layer, this.id), 4)).add(1) },
+            effect(x) { return Decimal.pow(1e4, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return player.st.buyables[301].gte(5) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1593,28 +1609,28 @@ addLayer("st", {
             branches: [302],
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "black", background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", borderColor: "#008080", borderRadius: '10px', borderWidth: '5px' }
+            style: {width: '140px', height: '140px', color: "black", background: "linear-gradient(150deg, #008080, 0%, #b2d8d8 100%)", border: "5px solid #008080", borderColor: "#008080", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
         303: {
             costBase() { return new Decimal(3) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(100) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.pl.planets},
             pay(amt) { player.pl.planets = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).pow(3).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(2).add(1).pow(3) },
             unlocked() { return player.st.buyables[302].gte(5) && player.st.buyables[301].gte(10)  },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1625,20 +1641,20 @@ addLayer("st", {
             branches: [302, 301],
             buy(mult) {
                 if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
                     this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
             },
-            style: { width: '140px', height: '140px', color: "white", background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)", borderColor: "#6b1919", borderRadius: '10px', borderWidth: '5px' }
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(-120deg, #6b1919 0%, #000000 100%)", border: "5px solid #6b1919", borderColor: "#6b1919", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
     },
     milestones: {},
@@ -1646,60 +1662,57 @@ addLayer("st", {
     infoboxes: {},
     microtabs: {
         stuff: {
-                "Main": {
+            "Main": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                            ["layer-proxy", ["ro", [
-                            ["left-row", [
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
-            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
-            ["tooltip-row", [
-                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
-            ], {width: "150px", height: "50px"}],
-        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
-                    ["blank", "25px"],
-                   ["style-column", [
-                        ["raw-html", function () { return player.ro.rocketNames[player.ro.rocketIndex] }, { "color": "#dbdbdb", "font-size": "36px", "font-family": "monospace" }],
-                    ], {width: "1000px", border: "3px solid #dbdbdb", borderBottom: "0px", backgroundColor: "#1c1c1c", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}], 
-                    ["style-row", [
+                    ["layer-proxy", ["ro", [
+                        ["left-row", [
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/evoShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.evolutionShards)}, {width: "93px", height: "50px", color: "#d487fd", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Evolution Shards<hr><small>(Gained from check back buttons)</small></div>"],
+                            ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
+                            ["tooltip-row", [
+                                ["raw-html", "<img src='resources/paragonShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                                ["raw-html", () => { return formatWhole(player.cb.paragonShards)}, {width: "95px", height: "50px", color: "#4C64FF", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                                ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
+                            ], {width: "150px", height: "50px"}],
+                        ], {width: "300px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
+                        ["blank", "25px"],
                         ["style-column", [
-                    ["blank", "25px"],
-
-                                                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Evolution shard cost: " + formatWhole(player.ro.evoCost) + "" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Paragon shard cost: " + formatWhole(player.ro.paragonCost) + "" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["style-row", [["clickable", 15],]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Launching the rocket performs a singularity equivalent reset, uses activated fuel and rocket parts, and resets selected pet levels." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
-                    ], {width: "1000px", border: "3px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "0px 0px 15px 15px"}],
-                   ]]]
+                            ["raw-html", function () { return player.ro.rocketNames[player.ro.rocketIndex] }, { "color": "#dbdbdb", "font-size": "36px", "font-family": "monospace" }],
+                        ], {width: "1000px", border: "3px solid #dbdbdb", borderBottom: "0px", backgroundColor: "#1c1c1c", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}], 
+                        ["style-row", [
+                            ["style-column", [
+                                ["blank", "25px"],
+                                ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                                ["blank", "25px"],
+                                ["raw-html", function () { return "Evolution shard cost: " + formatWhole(player.ro.evoCost) + "" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+                                ["raw-html", function () { return "Paragon shard cost: " + formatWhole(player.ro.paragonCost) + "" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
+                                ["blank", "25px"],
+                                ["style-row", [["clickable", 15],]],
+                                ["blank", "25px"],
+                                ["raw-html", function () { return "Launching the rocket performs a singularity equivalent reset, uses activated fuel and rocket parts, and resets selected pet levels." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
+                                ["blank", "25px"],
+                            ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
+                        ], {width: "1000px", border: "3px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "0px 0px 15px 15px"}],
+                    ]]],
                 ]
             },
             "Pets": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "15px"],
-                                        ["style-column", [
+                    ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px' }],
                             ]],
-                        ], {width: "550px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #9badff"}],
+                        ], {width: "550px", height: "175px", backgroundColor: "#070024", borderBottom: "3px solid #9badff", borderRadius: "2px 2px 0 0"}],
                         ["always-scroll-column", [
                             ["style-column", [
                                 ["raw-html", "Common", {color: "#9badff", fontSize: "20px", fontFamily: "monospace"}],
@@ -1716,185 +1729,174 @@ addLayer("st", {
                                 ["row", [["levelable", 201], ["levelable", 202], ["levelable", 203], ["levelable", 204], ["levelable", 205]]],
                                 ["row", [["levelable", 206], ["levelable", 207], ["levelable", 208], ["levelable", 209]]],
                             ], {width: "525px", backgroundColor: "#0f1c18", padding: "5px"}],
-
                         ], {width: "550px", height: "522px"}],
-                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "5px 5px 5px 5px"}],
+                    ], {width: "550px", height: "700px", backgroundColor: "#161616", border: "3px solid rgb(218, 218, 218)", borderRadius: "5px 5px 5px 5px"}],
                 ]
             },
             "Upgrade Trees": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
-        ["microtabs", "trees", { 'border-width': '0px' }],
+                content: [
+                    ["microtabs", "trees", { 'border-width': '0px' }],
                 ]
             },
             "Dimensions": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.st.starPower) + "</h3> star power, which boosts point gain by ^" + format(player.st.starPowerEffect) + ",<br>dice points and rocket fuel by x" + format(player.st.starPowerEffect2) + ", and singularity dimensions by x" + format(player.st.starPowerEffect3) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You are gaining " + formatWhole(player.st.starPowerPerSecond) + " star power per second." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "You have " + formatWhole(player.st.starPower) + " star power"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + formatWhole(player.st.starPowerPerSecond) + "/s)"}, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.st.starPowerPerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                        ["raw-html", () => {return player.st.starPowerPerSecond.gt(1e300) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => { return "Boosts point gain by ^" + format(player.st.starPowerEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Boosts dice points and rocket fuel by x" + format(player.st.starPowerEffect2)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Boosts singularity dimensions by x" + format(player.st.starPowerEffect3)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["row", [["clickable", 3], ["clickable", 4], ["buyable", 1]]],
+                    ["style-row", [["clickable", 3], ["clickable", 4], ["buyable", 1]], {width: "410px", border: "2px solid white", borderRadius: "17px"}],
                     ["blank", "25px"],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(1) ? "1st dimension power: " + format(player.st.dimensionPower[0]) + " (+" + format(player.st.dimensionPowerPerSecond[0]) + "/s, +" + format(player.st.dimensionPowerEffects[0]) + " SP/s)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(1) ? "1st dimension (" + format(buyableEffect("st", "11")) + "x): " + format(player.st.dimensionAmounts[0]) + " (+" + format(player.st.dimensionsGain[0]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 0],
-    ["buyable", 11],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(2) ? "2nd dimension power: " + format(player.st.dimensionPower[1]) + " (+" + format(player.st.dimensionPowerPerSecond[1]) + "/s, x" + format(player.st.dimensionPowerEffects[1]) + " 1D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(2) ? "2nd dimension (" + format(buyableEffect("st", "12")) + "x): " + format(player.st.dimensionAmounts[1]) + " (+" + format(player.st.dimensionsGain[1]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 1],
-    ["buyable", 12],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(3) ? "3rd dimension power: " + format(player.st.dimensionPower[2]) + " (+" + format(player.st.dimensionPowerPerSecond[2]) + "/s, x" + format(player.st.dimensionPowerEffects[2]) + " 2D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(3) ? "3rd dimension (" + format(buyableEffect("st", "13")) + "x): " + format(player.st.dimensionAmounts[2]) + " (+" + format(player.st.dimensionsGain[2]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 2],
-    ["buyable", 13],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(4) ? "4th dimension power: " + format(player.st.dimensionPower[3]) + " (+" + format(player.st.dimensionPowerPerSecond[3]) + "/s, x" + format(player.st.dimensionPowerEffects[3]) + " 3D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(4) ? "4th dimension (" + format(buyableEffect("st", "14")) + "x): " + format(player.st.dimensionAmounts[3]) + " (+" + format(player.st.dimensionsGain[3]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 3],
-    ["buyable", 14],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(5) ? "5th dimension power: " + format(player.st.dimensionPower[4]) + " (+" + format(player.st.dimensionPowerPerSecond[4]) + "/s, x" + format(player.st.dimensionPowerEffects[4]) + " 4D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(5) ? "5th dimension (" + format(buyableEffect("st", "15")) + "x): " + format(player.st.dimensionAmounts[4]) + " (+" + format(player.st.dimensionsGain[4]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 4],
-    ["buyable", 15],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(6) ? "6th dimension power: " + format(player.st.dimensionPower[5]) + " (+" + format(player.st.dimensionPowerPerSecond[5]) + "/s, x" + format(player.st.dimensionPowerEffects[5]) + " 5D" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(6) ? "6th dimension (" + format(buyableEffect("st", "16")) + "x): " + format(player.st.dimensionAmounts[5]) + " (+" + format(player.st.dimensionsGain[5]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 5],
-    ["buyable", 16],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(7) ? "7th dimension power: " + format(player.st.dimensionPower[6]) + " (+" + format(player.st.dimensionPowerPerSecond[6]) + "/s, x" + format(player.st.dimensionPowerEffects[6]) + " 6D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(7) ? "7th dimension (" + format(buyableEffect("st", "17")) + "x): " + format(player.st.dimensionAmounts[6]) + " (+" + format(player.st.dimensionsGain[6]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 6],
-    ["buyable", 17],
-]],
-["row", [
-    ["column", [
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(8) ? "8th dimension power: " + format(player.st.dimensionPower[7]) + " (+" + format(player.st.dimensionPowerPerSecond[7]) + "/s, x" + format(player.st.dimensionPowerEffects[7]) + " 7D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-        ["raw-html", function () { return getBuyableAmount("st", 1).gte(8) ? "8th dimension (" + format(buyableEffect("st", "18")) + "x): " + format(player.st.dimensionAmounts[7]) + " (+" + format(player.st.dimensionsGain[7]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
-    ], {width: "700px"}],
-    ["bar", 7],
-    ["buyable", 18],
-]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => {return getBuyableAmount("st", 1).gte(1) ? "1st dimension power: " + formatShort(player.st.dimensionPower[0]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[0]) + "/s, +" + formatShort(player.st.dimensionPowerEffects[0]) + " SP/s)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => {return getBuyableAmount("st", 1).gte(1) ? "1st dimension (" + formatShort(buyableEffect("st", "11")) + "x): " + formatShort(player.st.dimensionAmounts[0]) + " (+" + formatShort(player.st.dimensionsGain[0]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 0], ["buyable", 11]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(2) ? "2nd dimension power: " + formatShort(player.st.dimensionPower[1]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[1]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[1]) + " 1D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(2) ? "2nd dimension (" + formatShort(buyableEffect("st", "12")) + "x): " + formatShort(player.st.dimensionAmounts[1]) + " (+" + formatShort(player.st.dimensionsGain[1]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 1], ["buyable", 12]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(3) ? "3rd dimension power: " + formatShort(player.st.dimensionPower[2]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[2]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[2]) + " 2D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(3) ? "3rd dimension (" + formatShort(buyableEffect("st", "13")) + "x): " + formatShort(player.st.dimensionAmounts[2]) + " (+" + formatShort(player.st.dimensionsGain[2]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 2], ["buyable", 13]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(4) ? "4th dimension power: " + formatShort(player.st.dimensionPower[3]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[3]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[3]) + " 3D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(4) ? "4th dimension (" + formatShort(buyableEffect("st", "14")) + "x): " + formatShort(player.st.dimensionAmounts[3]) + " (+" + formatShort(player.st.dimensionsGain[3]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 3], ["buyable", 14]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(5) ? "5th dimension power: " + formatShort(player.st.dimensionPower[4]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[4]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[4]) + " 4D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(5) ? "5th dimension (" + formatShort(buyableEffect("st", "15")) + "x): " + formatShort(player.st.dimensionAmounts[4]) + " (+" + formatShort(player.st.dimensionsGain[4]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 4], ["buyable", 15]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(6) ? "6th dimension power: " + formatShort(player.st.dimensionPower[5]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[5]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[5]) + " 5D" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(6) ? "6th dimension (" + formatShort(buyableEffect("st", "16")) + "x): " + formatShort(player.st.dimensionAmounts[5]) + " (+" + formatShort(player.st.dimensionsGain[5]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 5], ["buyable", 16]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(7) ? "7th dimension power: " + formatShort(player.st.dimensionPower[6]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[6]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[6]) + " 6D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(7) ? "7th dimension (" + formatShort(buyableEffect("st", "17")) + "x): " + formatShort(player.st.dimensionAmounts[6]) + " (+" + formatShort(player.st.dimensionsGain[6]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 6], ["buyable", 17]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(8) ? "8th dimension power: " + formatShort(player.st.dimensionPower[7]) + " (+" + formatShort(player.st.dimensionPowerPerSecond[7]) + "/s, x" + formatShort(player.st.dimensionPowerEffects[7]) + " 7D)" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return getBuyableAmount("st", 1).gte(8) ? "8th dimension (" + formatShort(buyableEffect("st", "18")) + "x): " + formatShort(player.st.dimensionAmounts[7]) + " (+" + formatShort(player.st.dimensionsGain[7]) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }]
+                        ], {width: "700px"}],
+                        ["style-row", [["bar", 7], ["buyable", 18]], {border: "2px solid white", borderRadius: "17px", margin: "-1px"}],
+                    ]],
                 ]
             },
         },
-            trees: {
+        trees: {
             "General": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
+                    ["blank", "25px"],
                     ["always-scroll-column", [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["ex-buyable", 101],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["ex-buyable", 102],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["ex-buyable", 106],
-                        
-                ]],
-                    ["blank", "25px"],
+                        ["blank", "10px"],
                         ["row", [
-                        ["ex-buyable", 103],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["ex-buyable", 105],
-
+                            ["ex-buyable", 101],
+                            ["ex-buyable", 102],
+                            ["ex-buyable", 106],
                         ]],
-                                            ["blank", "25px"],
                         ["row", [
-                        ["ex-buyable", 104],
+                            ["ex-buyable", 103],
+                            ["ex-buyable", 105],
                         ]],
-                        ["blank", "25px"],
                         ["row", [
-                        ["ex-buyable", 107],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["ex-buyable", 108],
+                            ["ex-buyable", 104],
                         ]],
-                        ["blank", "25px"],
                         ["row", [
-                        ["ex-buyable", 109],
+                            ["ex-buyable", 107],
+                            ["ex-buyable", 108],
                         ]],
-
-                 ], {width: "1000px", height: "700px", /*backgroundColor: "#4a4a4a", border: "3px solid #ffffff", paddingTop: "5px", paddingBottom: "5px", borderRadius: "5px 5px 5px 5px"*/}],
+                        ["row", [
+                            ["ex-buyable", 109],
+                        ]],
+                        ["blank", "10px"],
+                    ], {width: "550px", height: "700px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
                 ]
             },
            "Progression": {
                 buttonStyle() { return { border: "2px solid #37078f", borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["always-scroll-column", [
-                    ["row", [
-                        ["ex-buyable", 201],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["ex-buyable", 202], 
-                        
-                ]],
-
-                 ], {width: "1000px", height: "700px", /*backgroundColor: "#4a4a4a", border: "3px solid #ffffff", paddingTop: "5px", paddingBottom: "5px", borderRadius: "5px 5px 5px 5px"*/}],
+                        ["blank", "10px"],
+                        ["row", [
+                            ["ex-buyable", 201],
+                            ["ex-buyable", 202],
+                        ]],
+                        ["blank", "10px"],
+                    ], {width: "550px", height: "700px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
                 ]
             },
             "Planets": {
                 buttonStyle() { return { color: "white", background: "linear-gradient(15deg, #34eb86 0%, #279ccf 50%, #411bb3 100%)", borderColor: "#59c2ff",borderRadius: "10px" } },
                 unlocked() { return true },
-                content:
-                [
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.pl.planets) + "</h3> planets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                content: [
                     ["blank", "25px"],
                     ["always-scroll-column", [
-                    ["row", [
-                        ["ex-buyable", 301],
-                        ["raw-html", function () { return "&nbsp&nbsp&nbsp&nbsp"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                        ["ex-buyable", 303], 
-                        
-                ]],
-                    ["blank", "25px"],
-                                    ["row", [
-                        ["ex-buyable", 302],
-                        
-                ]],
-
-                 ], {width: "1000px", height: "700px", /*backgroundColor: "#4a4a4a", border: "3px solid #ffffff", paddingTop: "5px", paddingBottom: "5px", borderRadius: "5px 5px 5px 5px"*/}],
+                        ["blank", "10px"],
+                        ["row", [
+                            ["ex-buyable", 301],
+                            ["ex-buyable", 303],
+                        ]],
+                        ["row", [
+                            ["ex-buyable", 302],
+                        ]],
+                        ["blank", "10px"],
+                    ], {width: "550px", height: "700px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],
                 ]
             },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["row", [
+            ["raw-html", () => {return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + formatWhole(player.au2.starsToGet) + ")"}, () => {
+                let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                player.au2.starsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                return look
+            }],
+        ]],
+        ["raw-html", () => {return "You have " + formatWhole(player.pl.planets) + " planets"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.au2.au2Unlocked }
 })

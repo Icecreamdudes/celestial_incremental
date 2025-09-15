@@ -21,11 +21,19 @@ body {
 	--color: #dfdfdf;
 	--points: #ffffff;
 	background: var(--background);
+	touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 html, body {
 	min-height: 100%;
 	height: 100%;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 ::-webkit-scrollbar {
@@ -75,6 +83,10 @@ html, body {
     width: 16px;
     background-position: center 4px;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(122, 122, 122)'><polygon points='0,0 100,0 50,50'/></svg>");
+}
+
+::-webkit-scrollbar-corner {
+	background-color: #7a7a7a;
 }
 
 td {
@@ -304,6 +316,30 @@ h1, h2, h3, b, input {
 	color: white;
 }
 
+.jinxTitle {
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	font-size: 10px;
+	text-align: right;
+}
+
+.jinxCost {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	font-size: 10px;
+	text-align: right;
+}
+
+.jinxTotal {
+	position: absolute;
+	bottom: 4px;
+	left: 50%;
+    transform: translate(-50%, 0);
+	font-size: 10px;
+}
+
 .levelableHolder {
 	width: 100px;
 	height: 125px;
@@ -327,10 +363,8 @@ h1, h2, h3, b, input {
 }
 
 .levelableImg {
-	width: 108%;
-	height: 108%;
-	margin: -4%;
-	clip-path: inset(4%);
+	width: 100%;
+	height: 100%;
 }
 
 .levelableText {
@@ -360,15 +394,11 @@ h1, h2, h3, b, input {
 }
 
 .levelableBarText {
-	z-index: 3;
+	position: absolute;
 	width: 90%;
 	height: calc(15% - 4px);
 	font-size: 14px;
-	vertical-align: middle;
-	display: flex;
-	justify-content: center;
-	align-items: left;
-	position: absolute;
+	z-index: 3;
 }
 
 .levelableBarProgress {
@@ -461,7 +491,7 @@ h1, h2, h3, b, input {
 	height: 35px;
 	border-bottom: 2px solid white;
 	color: white;
-	font-size: 20px;
+	font-size: 18px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -516,6 +546,7 @@ h1, h2, h3, b, input {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition-duration: 0ms;
 }
 
 .levelableDisplayRow {
@@ -532,47 +563,18 @@ h1, h2, h3, b, input {
 	position: relative;
 }
 
-.treeNode {
-	height: 100px;
-	width: 100px;
-	border: var(--hqProperty1);
-	border-color: rgba(0, 0, 0, 0.125);
-	border-radius: 50%;
-	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
-	font-size: 40px;
-	font-family: "Roboto Mono", monospace;
+.idUpgrade {
+	position: absolute;
+	top: 4px;
+	left: calc(50%);
+	transform: translateX(-50%);
 	color: rgba(0, 0, 0, 0.5);
-	text-shadow: var(--hqProperty3);
-	padding: 0;
-	margin: 0 10px 0 10px;
-}
-
-
-.treeButton {
-	height: 100px;
-	width: 100px;
-	border: var(--hqProperty1);
-	border-color: rgba(0, 0, 0, 0.125);
-	border-radius: 33%;
-	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
-	font-size: 40px;
-	font-family: "Roboto Mono", monospace;
-	color: rgba(0, 0, 0, 0.5);
-	text-shadow: var(--hqProperty3);
-	padding: 0;
 }
 
 .treeThing {
-	margin: 0 10px 0 10px;
+	margin: 0 5px 0 5px;
 	vertical-align: middle;
 }
-
-.smallNode {
-	height: 60px;
-	width: 60px;
-	font-size: 30px;
-}
-
 
 .locked {
 	background-color: #bf8f8f;
@@ -583,7 +585,7 @@ h1, h2, h3, b, input {
 	cursor: pointer;
 }
 
-	.can:hover {
+	.can:not(.tabNode):hover {
 		transform: scale(1.15, 1.15);
 		box-shadow: 0 0 20px var(--points)
 	}
@@ -617,7 +619,8 @@ h1, h2, h3, b, input {
 	}
 
 .hide {
-	display: none !important
+	display: none !important;
+	margin: 0px !important;
 }
 
 .resetNotify {
@@ -1112,7 +1115,7 @@ ul {
 	position: absolute;
 	z-index: 20000;
   
-	background-color: black;
+	background-color: var(--background_tooltip);
 	color: var(--points);
 	content: attr(tooltip);
 	font-size:14px;
@@ -1129,7 +1132,7 @@ ul {
 	width: 0;
 
 	border-color: rgba(0, 0, 0, 0);
-	border-bottom-color: black;
+	border-bottom-color: var(--background_tooltip);
 	border-width: 5px;
 	margin-left: -5px;
 }
@@ -1411,9 +1414,9 @@ button > * {
 	font-size: 30px;
   }
 
-/* General styles for all spawn areas */
-.spawn-area {
-    width: 80vw; /* Set width relative to viewport width */
+/* Spawn Area when new layout is active */
+.menu-spawn-area {
+    width: calc(80vw - 400px); /* Set width relative to viewport width */
     height: 50vh; /* Set height relative to viewport height */
     opacity: 90%;
     position: absolute;
@@ -1426,19 +1429,12 @@ button > * {
     z-index: 1; /* Spawn area stays below other elements */
 }
 
-/* Spawn Area when new layout is active */
-.menu-spawn-area {
-    width: calc(80vw - 266px); /* Set width relative to viewport width */
-    height: 50vh; /* Set height relative to viewport height */
-    opacity: 90%;
-    position: absolute;
-    bottom: 10vh; /* Distance from the bottom of the viewport */
-    left: calc(50% + 133px); /* Center horizontally */
-    transform: translateX(-50%); /* Ensure it's centered */
-    border: 2px solid black;
-    box-sizing: border-box;
-    overflow: hidden; /* Ensure content stays within bounds */
-    z-index: 1; /* Spawn area stays below other elements */
+@media (max-width: 1250px) {
+    .menu-spawn-area {
+        width: 90vw; /* Make it slightly wider for small screens */
+        height: 35vh; /* Reduce height on smaller screens */
+        bottom: 5vh;  /* Adjust position to keep elements on screen */
+    }
 }
 
 /* Specific styles for each spawn area */
@@ -1456,24 +1452,6 @@ button > * {
 
 #moonstone-spawn-area {
     background-color: #64beff;
-}
-
-/* Media query for smaller screens (tablets) */
-@media (max-width: 768px) {
-    .spawn-area {
-        width: 90vw; /* Make it slightly wider for small screens */
-        height: 40vh; /* Reduce height on smaller screens */
-        bottom: 8vh;  /* Adjust position to keep elements on screen */
-    }
-}
-
-/* Media query for very small screens (phones) */
-@media (max-width: 480px) {
-    .spawn-area {
-        width: 95vw; /* Almost full width on phones */
-        height: 35vh; /* Shorter height for small screens */
-        bottom: 5vh;  /* Bring the element closer to the bottom */
-    }
 }
 
 
@@ -1503,21 +1481,6 @@ button > * {
 	/* You can customize further styles like box-shadow, animation, etc. */
   }
 
-
-/* Styling for the large green circle */
-.mainCircle {
-    width: 80px;
-    height: 80px;
-    background-color: green;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10; /* Ensure the circle appears above the spawn area */
-	border: 2px solid black; /* Add a black border */
-}
-
 /* Styling for the large green circle when Sidebar Layout is enabled.*/
 .menuMainCircle {
     width: 80px;
@@ -1526,7 +1489,7 @@ button > * {
     border-radius: 50%;
     position: absolute;
     top: 50%;
-    left: calc(50% + 133px);
+    left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10; /* Ensure the circle appears above the spawn area */
 	border: 2px solid black; /* Add a black border */

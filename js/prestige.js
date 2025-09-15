@@ -7,6 +7,8 @@
         unlocked: true,
         prestigePoints: new Decimal(0),
         prestigePointsToGet: new Decimal(0),
+        prestigeEffect: new Decimal(1),
+        prestigeEffect2: new Decimal(1),
 
         crystals: new Decimal(0),
         crystalEffect: new Decimal(0),
@@ -47,7 +49,7 @@
     },
     tooltip: "Prestige",
     color: "#31aeb0",
-    branches: ["f"],
+    branches: ["r"],
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -62,12 +64,12 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(levelableEffect("pet", 102)[0])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.diceEffects[2])
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("ip", 21))
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.hre.refinementEffect[1][1])
            
         // CHALLENGE MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.pe.pestEffect[2])
         if (hasUpgrade("d", 17)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("d", 17))
         if (inChallenge("ip", 13)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.7)
-        if (inChallenge("ip", 13) || player.po.hex) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("h", 12))
         if (inChallenge("ip", 15)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.65)
         if (inChallenge("ip", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.5)
         if (player.de.antidebuffIndex.eq(1)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.de.antidebuffEffect)
@@ -76,15 +78,14 @@
         // CONTINUED REGULAR MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("p", 11))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("id", 22))
-        if (player.pol.pollinatorsIndex == 2) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorsEffect[3])
+        if (player.pol.pollinatorEffects.fly.enabled) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.pol.pollinatorEffects.fly.effects[1])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(2)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.cop.processedCoreInnateEffects[0])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.co.cores.prestige.effect[0])
 
         // POWER MODIFIERS
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("rm", 23))
+        if (hasUpgrade("hpw", 1022)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(2)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.cop.processedCoreInnateEffects[1])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.co.cores.prestige.effect[1])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.p.prestigePoints.gt(player.p.prestigePoints.mul(0.6 * delta))) {
@@ -98,6 +99,13 @@
         if (hasUpgrade("rf", 12)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.2, delta)))
         if (hasMilestone("ip", 12) && !inChallenge("ip", 14)) player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet.mul(Decimal.mul(0.05, delta)))
 
+        // PRESTIGE EFFECTS
+        player.p.prestigeEffect = player.p.prestigePoints.pow(0.2).add(1)
+        if (player.p.prestigePoints.gte("1e100000")) player.p.prestigeEffect = player.p.prestigeEffect.div("1e20000").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e20000")
+        if (hasUpgrade("cs", 301)) player.p.prestigeEffect = player.p.prestigeEffect.pow(1.05)
+
+        player.p.prestigeEffect2 = player.p.prestigePoints.pow(0.05).div(9).add(1)
+        if (player.p.prestigePoints.gte("1e150020")) player.p.prestigeEffect2 = player.p.prestigeEffect2.div("1e7500").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e7500")
         //----------------------------------------
 
         // CRYSTAL RESET CODE
@@ -110,28 +118,28 @@
         player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.rm.realmModsEffect[1])
+        if (hasUpgrade("hpw", 1021)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1021))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 1106)[1])
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(levelableEffect("pet", 306)[1])
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
         if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
-        if (player.cop.processedCoreFuel.eq(2)) player.p.crystalsToGet = player.p.crystalsToGet.mul(player.cop.processedCoreInnateEffects[2])
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.co.cores.prestige.effect[2])
+        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.i.postOTFMult)
 
         // CRYSTALS PER SECOND
         player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))
 
         // CRYSTAL EFFECT
-        player.p.crystalEffect = player.p.crystals.plus(1).log10().pow(0.265).mul(0.045).add(1)
+        player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
+        if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
     },
     prestigeReset()
     {
         player.points = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -148,7 +156,7 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -247,15 +255,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Buy Max On" },
             canClick() { return player.p.crystalMax == false },
@@ -282,7 +281,6 @@
                 layers.p.prestigeReset()
                 player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
         },
         12: {
@@ -293,7 +291,6 @@
                 player.p.crystalPause = new Decimal(5)
                 player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
                 this.canClick() ? look.backgroundColor = "#98245c" : look.backgroundColor = "#bf8f8f"
@@ -302,11 +299,9 @@
             },
         },
     },
-    bars: {
-    },
+    bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Prestige Upgrade I",
             unlocked() { return true },
             description: "Triples celestial point gain.",
@@ -314,32 +309,19 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Prestige Upgrade II",
             unlocked() { return true },
-            description() { return "Boosts celestial points based on prestige points." },
+            description: "Unlock a prestige effect that buffs celestial points.",
             cost: new Decimal(2),
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-            effect() {
-                let mult = player.p.prestigePoints.pow(0.2).add(1)
-                if (mult.gte("1e20000")) mult = mult.div("1e20000").pow(0.1).mul("1e20000")
-                return mult
-            },
-            effectDisplay() {
-                if (upgradeEffect(this.layer, this.id).lt("1e20000")) {
-                    return format(upgradeEffect(this.layer, this.id))+"x"
-                } else {
-                    return format(upgradeEffect(this.layer, this.id))+"x<br><small style='color:darkred'>[SOFTCAPPED]</small>"
-                }
-            },
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Prestige Upgrade III",
             unlocked() { return true },
             description: "Unlocks Factor VII.",
@@ -347,9 +329,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Prestige Upgrade IV",
             unlocked() { return true },
             description: "You can buy max ranks, tiers, and tetr",
@@ -357,9 +339,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Prestige Upgrade V",
             unlocked() { return true },
             description: "Autobuys factors I-VIII.",
@@ -368,23 +350,19 @@
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
             tooltip() { return "Autobuyers don't spend resources. This applies to most autobuyers in the game." },
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Prestige Upgrade VI",
             unlocked() { return hasUpgrade("i", 15) },
-            description: "Tetr boosts factor power gain.",
+            description: "Unlock a second tetr effect that buffs factor power.",
             cost: new Decimal(4096),
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
-            effect() {
-                return player.r.tetr.pow(0.6).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Prestige Upgrade VII",
             unlocked() { return hasUpgrade("p", 16) },
             description: "Automates rank gain.",
@@ -392,9 +370,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Prestige Upgrade VIII",
             unlocked() { return hasUpgrade("p", 17) },
             description: "Automates tier gain.",
@@ -402,9 +380,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        19:
-        {
+        19: {
             title: "Prestige Upgrade IX",
             unlocked() { return hasUpgrade("p", 18) && tmp.f.buyables[26].unlocked },
             description: "Unlocks Power Factor VIII, and more tree buyables.",
@@ -412,9 +390,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "Prestige Upgrade X",
             unlocked() { return hasUpgrade("p", 19) },
             description: "Autobuys power factors I-VIII",
@@ -422,9 +400,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        22:
-        {
+        22: {
             title: "Prestige Upgrade XI",
             unlocked() { return hasUpgrade("p", 21) },
             description: "Automates tetr gain.",
@@ -432,9 +410,9 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        23:
-        {
+        23: {
             title: "Prestige Upgrade XII",
             unlocked() { return hasUpgrade("p", 22) && hasMilestone("r", 11) },
             description: "Unlocks Tree Factor IV.",
@@ -442,6 +420,7 @@
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     buyables: {
@@ -451,7 +430,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(25).pow(1.3).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -485,7 +464,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(11).pow(1.25).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -519,7 +498,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.05).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -553,7 +532,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.2).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -587,7 +566,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.02).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -621,7 +600,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -655,7 +634,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.1).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.1).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -689,7 +668,7 @@
             purchaseLimit() { return new Decimal(500) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1).pow(buyableEffect("cs", 23)) },
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -718,52 +697,67 @@
             style: { width: '275px', height: '150px', backgroundColor: '#98245c', color: 'white'}
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "#31aeb0", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
+                content: [
+                    ["blank", "15px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "800px"}],
                 ]
             },
             "Crystallize": {
                 buttonStyle() { return { color: "white", borderRadius: "5px", borderColor: "#31aeb0", backgroundColor: "#98245c"}},
                 unlocked() { return hasUpgrade("i", 24) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.p.crystals) + "</h3> crystals." }, { color: "#b6658c", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.p.crystalsToGet) + "</h3> crystals on reset. (based on tier)"}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return "Crystals boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.p.crystals) + "</h3> crystals."}, {color: "#b6658c", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.p.crystalsToGet) + ")"}, () => {
+                            let look = {color: "#b6658c", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.p.crystalsToGet.gte(1) ? look.color = "#b6658c" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", "(Gain based on Tetr)", { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
+                    ["raw-html", function () { return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
                     ["row", [["clickable", 12]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
     },
 
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, { "color": "#31aeb0", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.points.gt(100000) ? "You will gain <h3>" + format(player.p.prestigePointsToGet) + "</h3> prestige points on reset." : ""}, { "color": "#31aeb0", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["row", [
+            ["raw-html", () => { return "You have <h3>" + format(player.p.prestigePoints) + "</h3> prestige points." }, {color: "#31aeb0", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => { return "(+" + format(player.p.prestigePointsToGet) + ")"}, () => {
+                let look = {fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                if (player.points.gt(100000)) {look.color = "#31aeb0"} else {look.color = "gray"}
+                return look
+            }],
+        ]],
+        ["row", [
+            ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
+        ["row", [
+            ["raw-html", () => {return hasUpgrade("g", 11) ? "Boosts grass value by x" + format(player.p.prestigeEffect2) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return hasUpgrade("g", 11) && player.p.prestigePoints.gte("1e150020") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+        ]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && hasUpgrade("i", 14) }
 })

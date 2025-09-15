@@ -31,7 +31,7 @@
         };
     },
     tooltip: "Debuff",
-    color: "#4e386e",
+    color: "#8D71B4",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -88,17 +88,17 @@
         }
 
         if (player.de.antidebuffIndex == 0) {
-                player.de.antidebuffText = "Your chosen effect is boosting points by x" + format(player.de.antidebuffEffect) + "."
+                player.de.antidebuffText = "Your chosen effect is boosting points by x" + formatShort(player.de.antidebuffEffect) + "."
         } else if (player.de.antidebuffIndex == 1) {
-                player.de.antidebuffText = "Your chosen effect is boosting prestige points by x" + format(player.de.antidebuffEffect) + "."
+                player.de.antidebuffText = "Your chosen effect is boosting prestige points by x" + formatShort(player.de.antidebuffEffect) + "."
         } else if (player.de.antidebuffIndex == 2) {
-                player.de.antidebuffText = "Your chosen effect is boosting grass by x" + format(player.de.antidebuffEffect) + "."
+                player.de.antidebuffText = "Your chosen effect is boosting grass by x" + formatShort(player.de.antidebuffEffect) + "."
         } else if (player.de.antidebuffIndex == 3) {
-                player.de.antidebuffText = "Your chosen effect is boosting trees by x" + format(player.de.antidebuffEffect) + "."
+                player.de.antidebuffText = "Your chosen effect is boosting trees by x" + formatShort(player.de.antidebuffEffect) + "."
         } else if (player.de.antidebuffIndex == 4) {
-                player.de.antidebuffText = "Your chosen effect is boosting mods by x" + format(player.de.antidebuffEffect) + "."
+                player.de.antidebuffText = "Your chosen effect is boosting mods by x" + formatShort(player.de.antidebuffEffect) + "."
         } else if (player.de.antidebuffIndex == 5) {
-                player.de.antidebuffText = "Your chosen effect is boosting code experience by x" + format(player.de.antidebuffEffect) + "."
+                player.de.antidebuffText = "Your chosen effect is boosting code experience by x" + formatShort(player.de.antidebuffEffect) + "."
         } else if (player.de.antidebuffIndex == 6) {
                 player.de.antidebuffText = "Your chosen effect is boosting nothing."
         }
@@ -143,7 +143,7 @@
         player.points = new Decimal(10)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
@@ -308,97 +308,69 @@
     },
     branches: ["t", "m"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         11: {
-            title() { return "<h3>Reset everything before OTFs for antidebuff points.<br><h4>Req: 1e14 grasshoppers." },
+            title() { return "<h2>Reset everything before OTFs for antidebuff points.</h1><br><h3>Req: 1e14 grasshoppers.</h3>" },
             canClick() { return player.de.antidebuffPointsToGet.gte(1) && player.gh.grasshoppers.gte(1e14)},
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffPause = new Decimal(4)
                 player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '400px', "min-height": '80px', borderRadius: '15px' },
+            style: {width: "400px", minHeight: "100px", borderRadius: "15px"},
         },
         12: {
-            title() { return "Points<br>x" + format(layers.de.getAntidebuffEffect(0)) },
+            title() { return "Points<br>x" + formatShortWhole(layers.de.getAntidebuffEffect(0)) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffIndex = new Decimal(0)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0 0 0 15px"},
         },
         13: {
-            title() { return "Prestige Points<br>x" + format(layers.de.getAntidebuffEffect(1)) },
+            title() { return "Prestige Points<br>x" + formatShortWhole(layers.de.getAntidebuffEffect(1)) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffIndex = new Decimal(1)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0"},
         },
         14: {
-            title() { return "Grass<br>x" + format(layers.de.getAntidebuffEffect(2))},
+            title() { return "Grass<br>x" + formatShortWhole(layers.de.getAntidebuffEffect(2))},
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffIndex = new Decimal(2)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0"},
         },
         15: {
-            title() { return "Trees<br>x" + format(layers.de.getAntidebuffEffect(3)) },
+            title() { return "Trees<br>x" + formatShortWhole(layers.de.getAntidebuffEffect(3)) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffIndex = new Decimal(3)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0"},
         },
         16: {
-            title() { return "Mods<br>x" + format(layers.de.getAntidebuffEffect(4)) },
+            title() { return "Mods<br>x" + formatShortWhole(layers.de.getAntidebuffEffect(4)) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffIndex = new Decimal(4)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0"},
         },
         17: {
-            title() { return "Code Experience<br>x" + format(layers.de.getAntidebuffEffect(5)) },
+            title() { return "Code Experience<br>x" + formatShortWhole(layers.de.getAntidebuffEffect(5)) },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
                 player.de.antidebuffIndex = new Decimal(5)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0"},
         },
         18: {
             title() { return "None" },
@@ -407,10 +379,10 @@
             onClick() {
                 player.de.antidebuffIndex = new Decimal(6)
             },
-            style: { width: '150px', "min-height": '75px', 'border-radius': "0%" },
+            style: {width: "110px", minHeight: "75px", borderRadius: "0 0 15px 0"},
         },
         19: {
-            title() { return "<h3>Reset for Tav Points, but do an equivalent Tav Domain reset. <br>(Req: 1e9 celestial points)" },
+            title() { return "<h2>Reset for Tav Points, but do an equivalent Tav Domain reset.</h2><br><h3>(Req: 1e9 celestial points)</h3>" },
             canClick() { return player.de.tavPointsToGet.gte(1) && player.points.gte(1e9) },
             unlocked() { return true },
             onClick() {
@@ -418,14 +390,12 @@
                 layers.in.bigCrunch();
                 player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet)
             },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
+            style: {width: "410px", minHeight: "100px", borderRadius: "15px"},
         },
     },
     bars: {},
     upgrades: {
-        11:
-        {
+        11: {
             title: "Tav Essence Upgrade I",
             unlocked() { return true },
             description() { return "Tav essence boosts grasshoppers." },
@@ -437,9 +407,13 @@
                 return player.de.tavEssence.pow(0.15).div(3).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        12:
-        {
+        12: {
             title: "Tav Essence Upgrade II",
             unlocked() { return true },
             description() { return "Points boost tav essence." },
@@ -451,9 +425,13 @@
                 return player.points.plus(1).log10().pow(1.1).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        13:
-        {
+        13: {
             title: "Tav Essence Upgrade III",
             unlocked() { return true },
             description() { return "Re-unlock check back early, cuz yeah." },
@@ -461,9 +439,13 @@
             currencyLocation() { return player.de },
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        14:
-        {
+        14: {
             title: "Tav Essence Upgrade IV",
             unlocked() { return true },
             description() { return "Gain an OTF slot, but only while in Tav's domain." },
@@ -471,9 +453,13 @@
             currencyLocation() { return player.de },
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        15:
-        {
+        15: {
             title: "Tav Essence Upgrade V",
             unlocked() { return true },
             description() { return "Check back boosts point gain." },
@@ -485,9 +471,13 @@
                 return player.cb.levelEffect.pow(0.35).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        16:
-        {
+        16: {
             title: "Tav Essence Upgrade VI",
             unlocked() { return true },
             description() { return "Re-unlock antidebuff points." },
@@ -495,9 +485,13 @@
             currencyLocation() { return player.de },
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        17:
-        {
+        17: {
             title: "Tav Essence Upgrade VII",
             unlocked() { return true },
             description() { return "Gain 100% of antidebuff points per second." },
@@ -505,9 +499,13 @@
             currencyLocation() { return player.de },
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        18:
-        {
+        18: {
             title: "Tav Essence Upgrade VIII",
             unlocked() { return true },
             description() { return "Gain 10% of tav points per second." },
@@ -515,9 +513,13 @@
             currencyLocation() { return player.de },
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
+            style() {
+                let look = {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
-        19:
-        {
+        19: {
             title: "Tav Essence Upgrade IX",
             unlocked() { return true },
             description() { return "Boost tav points and essence based on broken infinities." },
@@ -529,7 +531,11 @@
                 return player.bi.brokenInfinities.mul(100).pow(1.6).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style() {
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#8D71B4"
+                return look
+            },
         },
     },
     buyables: {
@@ -563,7 +569,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         12: {
             cost(x) { return new Decimal(1.675).pow(x || getBuyableAmount(this.layer, this.id)).mul(200) },
@@ -595,7 +601,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         13: {
             cost(x) { return new Decimal(1.75).pow(x || getBuyableAmount(this.layer, this.id)).mul(500) },
@@ -627,7 +633,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         14: {
             cost(x) { return new Decimal(1.875).pow(x || getBuyableAmount(this.layer, this.id)).mul(900) },
@@ -659,7 +665,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         15: {
             cost(x) { return new Decimal(1.6).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e6) },
@@ -691,7 +697,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         16: {
             cost(x) { return new Decimal(1.7).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e7) },
@@ -723,7 +729,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         17: {
             cost(x) { return new Decimal(1.8).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e8) },
@@ -755,10 +761,11 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
         18: {
             cost(x) { return new Decimal(1.9).pow(x || getBuyableAmount(this.layer, this.id)).mul(1e14) },
+            
             effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.3).mul(0.035).add(1)},
             unlocked() { return true },
             canAfford() { return player.de.tavEssence.gte(this.cost()) },
@@ -772,13 +779,11 @@
             buy(mult) {
                 let base = new Decimal(1e14)
                 let growth = 1.9
-                if (mult != true)
-                {
+                if (mult != true) {
                     let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
                     player.de.tavEssence = player.de.tavEssence.sub(buyonecost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
 
                 let max = Decimal.affordGeometricSeries(player.de.tavEssence, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
@@ -787,7 +792,7 @@
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
             }
             },
-            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box"}
+            style: { width: '275px', height: '150px', backgroundImage: "linear-gradient(0deg, #4e386e 0%, #8D71B4 100%)", backgroundOrigin: "border-box", borderColor: "#4e386e"}
         },
     },
     milestones: {},
@@ -798,97 +803,129 @@
             "C8 Debuffs": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("ip", 18) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "^0.4 to celestial point gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.5 to prestige point gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.6 to grasshopper gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.6 to code experience gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "-90% of points per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "-60% of prestige points per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "-40% of grass per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "-30% of trees and mods per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "-20% of code experience per second." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["style-column", [
+                        ["raw-html", () => {return "^0.4 to celestial point gain."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "^0.5 to prestige point gain."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "^0.6 to grasshopper gain."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "^0.6 to code experience gain."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["blank", "10px"],
+                        ["raw-html", () => {return "-90% of points per second."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "-60% of prestige points per second."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "-40% of grass per second."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "-30% of trees and mods per second."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "-20% of code experience per second."}, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ], {padding: "10px 20px", backgroundColor: "#2a2136", border: "3px solid #4e386e", borderRadius: "20px"}],
                 ]
             },
             "Tav's Domain Debuffs": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("tad", 11) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "^0.3 to prestige point gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.35 to grasshopper gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.4 to code experience gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.4 to grass gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.45 to celestial point gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.5 to tree gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.5 to leaf gain." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "^0.55 to all antimatter dimensions." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", () => { return "^0.45 to celestial point gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.3 to prestige point gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.5 to leaf gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.5 to tree gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.4 to grass gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.35 to grasshopper gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.4 to code experience gain." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                        ["raw-html", () => { return "^0.55 to all antimatter dimensions." }, {color: "white", fontSize: "24px", fontFamily: "monospace" }],
+                    ], {padding: "10px 20px", backgroundColor: "#2a2136", border: "3px solid #4e386e", borderRadius: "20px"}],
                 ]
             },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("tad", 11) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19]]],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence"}, {color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "(+" + format(player.de.tavEssencePerSecond) + "/s)"}, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.de.tavEssencePerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["blank", "10px"],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19]
+                    ], {maxWidth: "750px"}],
                 ]
             },
             "Antidebuff": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("ip", 18) || hasUpgrade("de", 16)},
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return !inChallenge("tad", 11) ? "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points, which divide pest gain by /" + format(player.de.antidebuffPointsEffect) + "." : "" }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return inChallenge("tad", 11) ? "You have <h3>" + format(player.de.antidebuffPoints) + "</h3> antidebuff points, <s>which divide pest gain by /" + format(player.de.antidebuffPointsEffect) + "." : "" }, { "color": "#8D71B4", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.de.antidebuffPointsToGet) + "</h3> antidebuff points on reset." }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "You have " + format(player.de.antidebuffPoints) + " antidebuff points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.de.antidebuffPointsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
+                    ]],
+                    ["raw-html", () => {return inChallenge("tad", 11) ? "<s>Divides pest gain by /" + format(player.de.antidebuffPointsEffect) : "Divides pest gain by /" + format(player.de.antidebuffPointsEffect)}, () => {
+                        let look = {color: "white", fontSize: "20px", fontFamily: "monospace"}
+                        inChallenge("tad", 11) ? look.color = "gray" : look.color = "white"
+                        return look
+                    }],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.de.antidebuffText }, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return !inChallenge("tad", 11) ? "When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return inChallenge("tad", 11) ? "<s>When an effect is activated, all other resources are depleted by 95% per second." : ""}, { "color": "#8D71B4", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]]],
+                    ["style-column", [
+                        ["style-column", [
+                            ["raw-html", () => { return player.de.antidebuffText }, {color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                            ["raw-html", () => { return !inChallenge("tad", 11) ? "When an effect is activated, all other resources are depleted by 95% per second." : "<s>When an effect is activated, all other resources are depleted by 95% per second."}, () => {
+                                let look = {color: "white", fontSize: "14px", fontFamily: "monospace"}
+                                inChallenge("tad", 11) ? look.color = "gray" : look.color = "white"
+                                return look
+                            }],
+                        ], {borderBottom: "3px solid #4e386e", padding: "10px 0"}],
+                        ["row", [
+                            ["clickable", 12], ["clickable", 13], ["clickable", 14], ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18]
+                        ]],
+                    ], {width: "770px", backgroundColor: "#2a2136", border: "3px solid #4e386e", borderRadius: "18px"}],
                 ]
             },
             "Tav's Compensation": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return inChallenge("tad", 11) },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavPoints) + "</h3> tav points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "which boost point gain by x<h3>" + format(player.de.tavPointsEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.de.tavPointsToGet) + "</h3> tav points on reset (based on points)." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => { return "You have <h3>" + format(player.de.tavPoints) + "</h3> tav points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(+" + format(player.de.tavPointsToGet) + ")" }, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.de.tavPointsToGet.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                        ["raw-html", "[based on points]", {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "8px"}],
+                    ]],
+                    ["raw-html", () => {return "Boost point gain by x" + format(player.de.tavPointsEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 19]]],
-                    ["raw-html", function () { return "(These effects are only active while in Tav's Domain)" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["raw-html", () => { return "(These effects are only active while in Tav's Domain)" }, {color: "white", fontSize: "16px", fontFamily: "monospace" }],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.de.tavEssencePerSecond) + "</h3> tav essence per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.de.tavEssence) + "</h3> tav essence"}, {color: "white", fontSize: "20px", fontFamily: "monospace" }],
+                        ["raw-html", () => {return "(+" + format(player.de.tavEssencePerSecond) + "/s)"}, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.de.tavEssencePerSecond.gt(0) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
-                    ["row", [["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
+                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
                 ]
             },
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-        ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-        ["row", [["clickable", 1]]],
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
     ],
     layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) },
     deactivated() { return !(inChallenge("ip", 18) || inChallenge("tad", 11))},

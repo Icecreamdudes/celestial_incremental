@@ -12,7 +12,7 @@ var activeFunctions = [
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "pointClick",
-	"evoClick"
+	"evoClick", "onHover"
 ]
 
 var noCall = doNotCallTheseFunctionsEveryTick

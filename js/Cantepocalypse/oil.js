@@ -48,19 +48,19 @@
     },
     nodeStyle() {},
     tooltip: "Oil",
-    branches: ["rt", "rm", "cb", "m"],
+    branches: ["an", "cb"],
     color: "#3c3642",
     update(delta) {
         let onepersec = new Decimal(1)
 
         player.oi.oilToGet = player.an.anonymity.div(1e25).pow(0.2)
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 1206)[1])
-        if (player.pol.pollinatorsIndex == 8) player.oi.oilToGet = player.oi.oilToGet.mul(player.pol.pollinatorsEffect[17])
+        if (player.pol.pollinatorEffects.mechanical.enabled) player.oi.oilToGet = player.oi.oilToGet.mul(player.pol.pollinatorEffects.mechanical.effects[1])
         if (hasMilestone("fa", 17)) player.oi.oilToGet = player.oi.oilToGet.mul(player.fa.milestoneEffect[6])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("ra", 15))
         player.oi.oilToGet = player.oi.oilToGet.mul(player.fu.funEffect)
         if (hasUpgrade("fu", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("fu", 12))
-        player.oi.oilToGet = player.oi.oilToGet.mul(player.le.punchcardsPassiveEffect[4])
+        player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pu", 104)[2])
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 405)[1])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("st", 107))
 
@@ -86,10 +86,10 @@
 
         for (let i = 0; i < player.oi.linkingPower.length; i++) {
             player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(player.gs.milestone10Effect)
+            if (hasUpgrade('ma', 22)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(upgradeEffect('ma', 22))
 
             // KEEP MULTIPLIERS BEFORE THIS
             if (inChallenge("fu", 11)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].pow(0.1)
-                if (hasUpgrade('ma', 22)) player.oi.linkingPowerPerSecond[i] = player.oi.linkingPowerPerSecond[i].mul(upgradeEffect('ma', 22))
             player.oi.linkingPower[i] = player.oi.linkingPower[i].add(player.oi.linkingPowerPerSecond[i].mul(delta))
         }
 
@@ -101,6 +101,7 @@
         player.oi.linkingPowerEffect[5] = player.oi.linkingPower[5].pow(0.25).add(1)
 
         player.oi.protoMemoriesPerSecond = player.oi.linkingPower[0].mul(player.oi.linkingPower[1].mul(player.oi.linkingPower[2].mul(player.oi.linkingPower[3].mul(player.oi.linkingPower[4].mul(player.oi.linkingPower[5]))))).plus(1).pow(0.55).div(1e7)
+        player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(buyableEffect("oi", 24))
         player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(levelableEffect("pet", 403)[2])
         player.oi.protoMemoriesPerSecond = player.oi.protoMemoriesPerSecond.mul(player.fu.funEffect2)
 
@@ -170,24 +171,6 @@
         }
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return (A1)" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-        2: {
-            title() { return "<h2>Return (U1)" },
-            canClick() { return true },
-            unlocked() { return (hasUpgrade("cp", 18) && options.newMenu == false) },
-            onClick() {
-                player.tab = "i"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         3: {
             title() { return "Buy Max On" },
             canClick() { return player.buyMax == false },
@@ -214,7 +197,6 @@
                 player.oi.oil = player.oi.oil.add(player.oi.oilToGet)
                 player.oi.oilPause = new Decimal(4)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
         14: {
@@ -238,7 +220,6 @@
                 player.oi.linkingPower[4] = new Decimal(0)
                 player.oi.linkingPower[5] = new Decimal(0)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '100px', borderRadius: '15px' },
         },
     },
@@ -255,6 +236,7 @@
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -268,10 +250,15 @@
     upgrades: {},
     buyables: {
         11: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
-            canAfford() { return player.oi.oil.gte(this.cost()) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.oil},
+            pay(amt) { player.oi.oil = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Point Linker"
             },
@@ -280,30 +267,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
             buy(mult) {
-                let base = new Decimal(5)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.oil = player.oi.oil.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         12: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
-            canAfford() { return player.oi.oil.gte(this.cost()) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.oil},
+            pay(amt) { player.oi.oil = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Factor Power Linker"
             },
@@ -312,30 +301,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
             buy(mult) {
-                let base = new Decimal(5)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.oil = player.oi.oil.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         13: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
-            canAfford() { return player.oi.oil.gte(this.cost()) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.oil},
+            pay(amt) { player.oi.oil = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Prestige Point Linker"
             },
@@ -344,30 +335,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
             buy(mult) {
-                let base = new Decimal(5)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.oil = player.oi.oil.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         14: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
-            canAfford() { return player.oi.oil.gte(this.cost()) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.oil},
+            pay(amt) { player.oi.oil = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Tree Linker"
             },
@@ -376,30 +369,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
             buy(mult) {
-                let base = new Decimal(5)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.oil = player.oi.oil.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         15: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
-            canAfford() { return player.oi.oil.gte(this.cost()) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.oil},
+            pay(amt) { player.oi.oil = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Grass Linker"
             },
@@ -408,30 +403,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
             buy(mult) {
-                let base = new Decimal(5)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.oil = player.oi.oil.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         16: {
-            cost(x) { return new Decimal(1.5).pow(x || getBuyableAmount(this.layer, this.id)).mul(5) },
-            effect(x) { return getBuyableAmount(this.layer, this.id) },
-            unlocked() { return true },
-            canAfford() { return player.oi.oil.gte(this.cost()) },
+            costBase() { return new Decimal(5) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.oil},
+            pay(amt) { player.oi.oil = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Grasshopper Linker"
             },
@@ -440,30 +437,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Oil"
             },
             buy(mult) {
-                let base = new Decimal(5)
-                let growth = 1.5
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.oil = player.oi.oil.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.oil, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.oil = player.oi.oil.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         21: {
-            cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(20) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(10).pow(2.4).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.oi.protoMemories.gte(this.cost()) },
+            costBase() { return new Decimal(20) },
+            costGrowth() { return new Decimal(1.2) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.protoMemories},
+            pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(10).pow(2.4).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Steel Rememberance"
             },
@@ -472,30 +471,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
             buy(mult) {
-                let base = new Decimal(20)
-                let growth = 1.2
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         22: {
-            cost(x) { return new Decimal(1.25).pow(x || getBuyableAmount(this.layer, this.id)).mul(35) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(5).pow(1.45).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.oi.protoMemories.gte(this.cost()) },
+            costBase() { return new Decimal(35) },
+            costGrowth() { return new Decimal(1.25) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.protoMemories},
+            pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(5).pow(1.45).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Crystal Rememberance"
             },
@@ -504,30 +505,32 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
             buy(mult) {
-                let base = new Decimal(35)
-                let growth = 1.25
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         23: {
-            cost(x) { return new Decimal(1.3).pow(x || getBuyableAmount(this.layer, this.id)).mul(50) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(3).pow(1.35).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.oi.protoMemories.gte(this.cost()) },
+            costBase() { return new Decimal(50) },
+            costGrowth() { return new Decimal(1.3) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.protoMemories},
+            pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(3).pow(1.35).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
                 return "Time Cube Rememberance"
             },
@@ -536,65 +539,60 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
             buy(mult) {
-                let base = new Decimal(50)
-                let growth = 1.3
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
         24: {
-            cost(x) { return new Decimal(1.35).pow(x || getBuyableAmount(this.layer, this.id)).mul(80) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(1.5).pow(0.85).add(1) },
-            unlocked() { return true },
-            canAfford() { return player.oi.protoMemories.gte(this.cost()) },
+            costBase() { return new Decimal(80) },
+            costGrowth() { return new Decimal(1.35) },
+            purchaseLimit() { return new Decimal(100) },
+            currency() { return player.oi.protoMemories},
+            pay(amt) { player.oi.protoMemories = this.currency().sub(amt) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
+            unlocked: true,
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
+            canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Rage Power Rememberance"
+                return "Memory Rememberance"
             },
             display() {
-                return "which are multiplying rage power gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying proto memory gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Proto Memories"
             },
             buy(mult) {
-                let base = new Decimal(80)
-                let growth = 1.35
-                if (mult != true && !hasMilestone("s", 16))
-                {
-                    let buyonecost = new Decimal(growth).pow(getBuyableAmount(this.layer, this.id)).mul(base)
-                    player.oi.protoMemories = player.oi.protoMemories.sub(buyonecost)
+                if (mult != true && !hasMilestone("s", 16)) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else
-                {
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (!hasMilestone("s", 16)) this.pay(cost)
 
-                let max = Decimal.affordGeometricSeries(player.oi.protoMemories, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone("s", 16)) player.oi.protoMemories = player.oi.protoMemories.sub(cost)
-
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-            }
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
             },
-            style: { width: '275px', height: '150px', }
+            style: { width: '275px', height: '150px'},
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
@@ -603,9 +601,15 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> oil." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Your oil boosts repli-trees and extends repli-tree softcap by <h3>x" + format(player.oi.oilEffect) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.oi.oilToGet) + "</h3> oil on reset." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],,
+                    ["row", [
+                        ["raw-html", () => {return "You have <h3>" + format(player.oi.oil) + "</h3> oil."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "(+" + format(player.oi.oilToGet) + ")"}, () => {
+                            let look = {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.oi.oilToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", () => {return "Boosts repli-trees and extends repli-tree softcap by x" + format(player.oi.oilEffect)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                 ]
@@ -616,7 +620,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.oil) + "</h3> oil." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => {return "You have <h3>" + format(player.oi.oil) + "</h3> oil."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["style-column", [
                         ["raw-html", () => { return "Linking Powers"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
@@ -683,8 +687,8 @@
                         ["raw-html", () => { return "(Each linking power is based on it's respective currency)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "825px", height: "30px", backgroundColor: "#0c1a36", borderLeft: "3px solid #0c1a36", borderRight: "3px solid #0c1a36", borderBottom: "3px solid #0c1a36"}],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-                    ["row", [["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]]],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],
+                        ["ex-buyable", 14], ["ex-buyable", 15], ["ex-buyable", 16]], {maxWidth: "900px"}],
                 ]
             },
             "PROTO MEMORIES": {
@@ -754,7 +758,7 @@
                     ["blank", "25px"],
                     ["row", [["clickable", 14]]],
                     ["blank", "25px"],
-                    ["row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]]],
+                    ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23], ["ex-buyable", 24]], {maxWidth: "1200px"}],
                 ]
             },
             "REMEMBERANCE CORES": {
@@ -776,13 +780,12 @@
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1], ["clickable", 2]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasMilestone("gs", 17) }
 })

@@ -85,11 +85,17 @@ addLayer("credits", {
 
         ["blank", "50px"],
 
-        ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>", {"color": "white", "font-size": "36px", "font-family": "monospace",}],
+        ["raw-html", () => "<a href=https://discord.gg/icecreamdude-s-incremental-games-850817562040467556>Join the Discord!</a>", {color: "white", fontSize: "36px", fontFamily: "monospace",}],
 
         ["blank", "25px"],
 
-        ["raw-html", () => credits, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["raw-html", () => credits, {color: "white", fontSize: "18px", fontFamily: "monospace",}],
+
+        ["blank", "25px"],
+        
+        ["raw-html", () => {return "Playtime: " + formatTime(player.timePlayed)}, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+
+        ["blank", "25px"],
     ],
     layerShown() { return false }
 })

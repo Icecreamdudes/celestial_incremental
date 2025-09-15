@@ -20,14 +20,9 @@ h1, h2, h3, b, input {
 	cursor: not-allowed;
 }
 
-/* Can meens can be clicked/bought/etc */
-.can {
-	cursor: pointer;
-}
-
-.can:hover {
-	transform: scale(1.15, 1.15);
-	box-shadow: 0 0 20px var(--points)
+.incomplete {
+	background-color: #bf8f8f;
+	cursor: default;
 }
 
 .bought {

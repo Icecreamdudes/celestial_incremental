@@ -13,10 +13,8 @@
         //next update: titanium, uranium, plutonium 
         //gems for next update: topaz, ruby, sapphire, emerald, diamond
         miningBars: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)], //Copper, Iron, Gold, Platinum
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(90deg,rgba(102, 229, 255, 1) 0%, rgba(250, 244, 62, 1) 100%)",
@@ -30,54 +28,34 @@
         let onepersec = new Decimal(1)
     },
     branches: ["ro", "ca"],
-    clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "in"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
-    },
-    bars: {
-    },
-    upgrades: {
-    },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
+    clickables: {},
+    bars: {},
+    upgrades: {},
+    buyables: {},
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Mines": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
+                
                 ]
-
             },
             "Smelting": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
-                content:
-                [
+                content:[
+                
                 ]
-
             },
         },
     },
-
     tabFormat: [
-                        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
-    layerShown() { return player.startedGame == true && hasUpgrade("ev8", 23) }
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
+    layerShown() { return player.startedGame == true && hasUpgrade("ev8", 23)}
 })

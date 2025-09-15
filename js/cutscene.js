@@ -2,26 +2,22 @@
     name: "cutscene", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "C", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-tooltip: "cutscene", // Row the layer is in on the tree (0 is the first row)
-color: "white",
-startData() { return {
-unlocked: true,
-currentCutscene: 0,
+    tooltip: "cutscene", // Row the layer is in on the tree (0 is the first row)
+    color: "white",
+    startData() { return {
+        unlocked: true,
+        currentCutscene: 0,
 
-cutsceneID: 0,
-cutsceneActive: false,
-cutsceneIndex: 0,
+        //Cutscenes
+        cutscenes: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,],
 
-//Cutscenes
-cutscenes: [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,],
+        //OTF
+        cutsceneDice: true,
+        cutsceneRocketFuel: true,
+        cutsceneHex: true,
 
-//OTF
-cutsceneDice: true,
-cutsceneRocketFuel: true,
-cutsceneHex: true,
-
-//celestial
-tavCutscene: false,
+        //celestial
+        tavCutscene: false,
 
 //Cutscene Info
 cutsceneText: [
@@ -142,225 +138,13 @@ cutscene: [
 },
 update(delta) {
 
-player.c.ev2bg = "resources/gdbg.jpg"
-
-//Background
-document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2 || player.c.cutscene13) && player.tab == "c" ? "black":
-
-player.tab == "t" ? "#02172f" : 
-player.tab == "g" ? "#042347" : 
-player.tab == "gh" ? "#073b77" : 
-player.tab == "cb" || player.tab == "ps" ? "#021124" : 
-player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" : 
-player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
-player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
-player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
-player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
-player.tab == "bigc" ? "#b87c34" : 
-player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.tab == "bi" || player.tab == "om" || player.tab == "id" || player.tab == "u2l" || player.tab == "u2t" ? "#001f18" : 
-player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
-player.tab == "revc" ? "#31aeb0" : 
-player.tab == "tad" ? "#b2d8d8" : 
-player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" : 
-player.tab == "ca" ? "#2a3e66" : 
-player.tab == "cap" ? "#1f1e33" : 
-player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || 
-player.tab == "a1u" || player.tab == "a1s" || player.tab == "a1t" || player.tab == "fu" ? "#204387" : 
-player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
-player.tab == "ev8" ? "#242525" : 
-player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
-(player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || (player.tab == "ma" && !player.ma.inBlackHeart) || player.tab == "sma" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd") && !player.ma.matosDefeated ? "#260300" : 
-(player.tab == "s" || player.tab == "cs" || (player.tab == "ma" && !player.ma.inBlackHeart) || player.tab == "sma" || player.tab == "u3b" || player.tab == "sme" || player.tab == "cof" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd") && player.ma.matosDefeated ? "linear-gradient(-180deg,rgb(168, 16, 49) 0%, rgb(117, 4, 4) 100%)" : 
-(player.tab == "coa" || player.tab == "cop") && player.ma.matosDefeated ? "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)" : 
-player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4"  || player.tab == "ep5" ? "#7d3f98" : 
-(player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
-player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 
-player.tab == "leg" ? "#eed200" : 
-player.tab == "ma" && player.ma.currentDepth.eq(2) ? "linear-gradient(-180deg,rgb(114, 4, 85) 0%, rgb(37, 1, 33) 100%)" : 
-(player.tab == "ma" && player.ma.currentDepth.eq(3)) || (player.tab == "c" && (player.c.currentCutscene == 33 || player.c.currentCutscene == 34)|| (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) ? "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)" : 
-player.sma.inStarmetalChallenge || (player.ma.inBlackHeart && player.tab != "ba") ? "black" : 
-!player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
-player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
-player.tab == "ro" || player.tab == "mi" ? "#3d3d3d" : 
-player.tab == "au2" ? "#151230" : 
-player.tab == "cmc" || (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???" || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) ? "black" : 
-player.tab == "ba" && player.fi.battleTier.eq(1) ? "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)" : 
-"#161616");
-
-if (player.tab === "au2" || player.tab === "au2t" || player.tab === "st" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
-    // Add the galaxy background if it doesn't already exist
-    if (!document.getElementById("galaxy-background")) {
-        const galaxyBackground = document.createElement("div");
-        galaxyBackground.id = "galaxy-background";
-        galaxyBackground.style.position = "fixed";
-        galaxyBackground.style.top = "0";
-        galaxyBackground.style.left = "0";
-        galaxyBackground.style.width = "100%";
-        galaxyBackground.style.height = "100%";
-        galaxyBackground.style.overflow = "hidden";
-        galaxyBackground.style.zIndex = "-2222"; // Ensure it stays in the background
-        galaxyBackground.style.background = "radial-gradient(circle, #151230, #000000)"; // Galaxy gradient
-        document.body.appendChild(galaxyBackground);
-
-        // Add stars
-        for (let i = 0; i < 200; i++) {
-            const star = document.createElement("div");
-            star.style.position = "absolute";
-            star.style.width = `${Math.random() * 2 + 1}px`; // Random size between 1px and 3px
-            star.style.height = star.style.width; // Ensure the height matches the width
-            star.style.backgroundColor = "white"; // Plain white color
-            star.style.borderRadius = "50%"; // Make it circular
-            star.style.top = `${Math.random() * 100}vh`; // Random vertical position
-            star.style.left = `${Math.random() * 100}vw`; // Random horizontal position
-            galaxyBackground.appendChild(star);
-        }
-    }
-} else {
-    // Remove the galaxy background if the tab is not "au2"
-    const galaxyBackground = document.getElementById("galaxy-background");
-    if (galaxyBackground) {
-        galaxyBackground.remove();
-    }
-}
-
-if (player.tab == "ma" && player.ma.currentDepth && player.ma.currentDepth.eq && player.ma.currentDepth.eq(3) && (player.subtabs["ma"]["stuff"] == "Fight")) {
-    if (!document.getElementById("embers-background")) {
-        // Create embers background container
-        const embersBg = document.createElement("div");
-        embersBg.id = "embers-background";
-        embersBg.style.position = "fixed";
-        embersBg.style.top = "0";
-        embersBg.style.left = "0";
-        embersBg.style.width = "100vw";
-        embersBg.style.height = "100vh";
-        embersBg.style.pointerEvents = "none";
-        embersBg.style.zIndex = "-2220";
-        embersBg.style.overflow = "hidden";
-        document.body.appendChild(embersBg);
-
-        // Add floating embers throughout the screen
-        for (let i = 0; i < 100; i++) {
-            const ember = document.createElement("div");
-            ember.className = "ember-float";
-            ember.style.position = "absolute";
-            ember.style.left = `${Math.random() * 100}vw`;
-            ember.style.top = `${Math.random() * 100}vh`;
-            const size = Math.random() * 8 + 4;
-            ember.style.width = `${size}px`;
-            ember.style.height = `${size}px`;
-            ember.style.background = "radial-gradient(circle, #fff7b1 0%, #ffec8b 60%, #ff9800 100%)";
-            ember.style.borderRadius = "50%";
-            ember.style.opacity = Math.random() * 0.4 + 0.4;
-            ember.style.filter = "blur(1.5px)";
-            ember.style.pointerEvents = "none";
-            ember.style.zIndex = "1";
-            // Animate embers floating in random directions
-            const duration = 6 + Math.random() * 6;
-            const xMove = (Math.random() - 0.5) * 60;
-            const yMove = -60 - Math.random() * 60;
-            ember.animate([
-                { transform: "translate(0,0)", opacity: ember.style.opacity },
-                { transform: `translate(${xMove}px, ${yMove}vh)`, opacity: 0.1 }
-            ], {
-                duration: duration * 1000,
-                iterations: Infinity,
-                delay: Math.random() * 4 * 1000
-            });
-            embersBg.appendChild(ember);
-        }
-    }
-} else {
-    // Remove embers background if not in depth 3
-    const embersBg = document.getElementById("embers-background");
-    if (embersBg) embersBg.remove();
-}
-
-
-// Solar Eclipse Effect (moving sun/moon)
-if (player.sma.inStarmetalChallenge && player.pet.activeAbilities[0]) {
-    if (!document.getElementById("solar-eclipse-bg")) {
-        // Create the eclipse overlay
-        const eclipse = document.createElement("div");
-        eclipse.id = "solar-eclipse-bg";
-        eclipse.style.position = "fixed";
-        eclipse.style.top = "0";
-        eclipse.style.left = "0";
-        eclipse.style.width = "100vw";
-        eclipse.style.height = "100vh";
-        eclipse.style.zIndex = "-2221";
-        eclipse.style.pointerEvents = "none";
-        eclipse.style.background = "radial-gradient(circle at 50% 40%, #222 0%, #111 40%, #000 70%, #000c 100%)";
-        eclipse.style.transition = "opacity 1s";
-        document.body.appendChild(eclipse);
-
-        // Add the sun/moon eclipse (moving)
-        const sun = document.createElement("div");
-        sun.id = "eclipse-sun";
-        sun.style.position = "absolute";
-        sun.style.width = "300px";
-        sun.style.height = "300px";
-        sun.style.borderRadius = "50%";
-        sun.style.background = "radial-gradient(circle, #ffe066 0%, #ffb700 60%, #222 100%)";
-        sun.style.boxShadow = "0 0 120px 60px #ffe06655";
-        eclipse.appendChild(sun);
-
-        const moon = document.createElement("div");
-        moon.id = "eclipse-moon";
-        moon.style.position = "absolute";
-        moon.style.width = "260px";
-        moon.style.height = "260px";
-        moon.style.borderRadius = "50%";
-        moon.style.background = "#111";
-        moon.style.boxShadow = "0 0 60px 30px #000a";
-        eclipse.appendChild(moon);
-
-        // Corona effect
-        const corona = document.createElement("div");
-        corona.id = "eclipse-corona";
-        corona.style.position = "absolute";
-        corona.style.width = "400px";
-        corona.style.height = "400px";
-        corona.style.borderRadius = "50%";
-        corona.style.background = "radial-gradient(circle, #fff2 0%, #fff0 80%)";
-        corona.style.pointerEvents = "none";
-        eclipse.appendChild(corona);
-    }
-
-    // Animate the sun/moon position in an arc
-    const now = Date.now() / 1000;
-    const angle = (now % 60) / 60 * 2 * Math.PI; // 1 full orbit every 60 seconds
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight * 0.4;
-    const radius = Math.min(window.innerWidth, window.innerHeight) * 0.25;
-
-    const sunX = centerX + Math.cos(angle) * radius;
-    const sunY = centerY + Math.sin(angle) * radius * 0.5;
-
-    // Move sun, moon, and corona together
-    ["eclipse-sun", "eclipse-moon", "eclipse-corona"].forEach((id, i) => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.style.left = `${sunX}px`;
-            el.style.top = `${sunY}px`;
-            el.style.transform = "translate(-50%, -50%)";
-        }
-    });
-} else {
-    // Remove the eclipse overlay if not in challenge
-    const eclipse = document.getElementById("solar-eclipse-bg");
-    if (eclipse) eclipse.remove();
-}
-
-//new cutscenes
-
-if (player.c.cutscene[0] && player.startedGame)
+if (player.c.cutscene[0] && player.tab == "i")
 {
     showCutscene(cutsceneDialogue1, {
         background: "#000000", 
         cutsceneID: 1,
         portrait: "resources/secret.png"
     });
-    player.tab = "u1u"
     player.c.cutscene[0] = false
 }
 if (player.c.cutscene[1] && player.r.rank.gte(1))
@@ -426,7 +210,6 @@ if (player.c.cutscene[8] && hasUpgrade("i", 19))
         cutsceneID: 9,
         portrait: "resources/secret.png"
     });
-    player.tab = "u1u"
     player.c.cutscene[8] = false
 }
 if (player.c.cutscene[9] && hasUpgrade("i", 21))
@@ -886,7 +669,7 @@ if (player.c.cutscene[61] && hasMilestone("s", 11))
     });
     player.c.cutscene[61] = false
 }
-if (player.c.cutscene[62] && (player.cop.processingCore  || !player.c.cutscene[63]))
+if (player.c.cutscene[62] && (player.subtabs["co"]["stuff"] == "Cores" || !player.c.cutscene[63]))
 {
     showCutscene(cutsceneDialogue63, {
     cutsceneID: 63,
@@ -975,11 +758,88 @@ if (player.c.cutscene[71] && hasChallenge("fu", 11))
     });
     player.c.cutscene[71] = false
 }
+
+player.c.ev2bg = "resources/gdbg.jpg"
+
+//Background
+document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2 || player.c.cutscene13) && player.tab == "c" ? "black":
+
+player.tab == "t" ? "#02172f" : 
+player.tab == "g" ? "#042347" : 
+player.tab == "gh" ? "#073b77" : 
+player.tab == "cb" || player.tab == "ps" ? "#021124" : 
+player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" : 
+player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
+player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
+player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
+player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
+player.tab == "bigc" ? "#b87c34" : 
+player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.tab == "bi" || player.tab == "om" || player.tab == "id" || player.tab == "u2l" || player.tab == "u2t" ? "#001f18" : 
+player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
+player.tab == "revc" ? "#31aeb0" : 
+player.tab == "tad" ? "#b2d8d8" : 
+player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" : 
+player.tab == "ca" ? "#2a3e66" : 
+player.tab == "cap" ? "#1f1e33" : 
+player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || 
+player.tab == "a1u" || player.tab == "a1s" || player.tab == "a1t" || player.tab == "fu" ? "#204387" : 
+player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
+player.tab == "ev8" ? "#242525" : 
+player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
+(player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || (player.tab == "ma" && !player.ma.inBlackHeart) || player.tab == "sma" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd") && !player.ma.matosDefeated ? "#260300" : 
+(player.tab == "s" || player.tab == "cs" || (player.tab == "ma" && !player.ma.inBlackHeart) || player.tab == "sma" || player.tab == "u3b" || player.tab == "sme" || player.tab == "cof" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd") && player.ma.matosDefeated ? "linear-gradient(-180deg,rgb(168, 16, 49) 0%, rgb(117, 4, 4) 100%)" : 
+(player.tab == "coa" || player.tab == "cop") && player.ma.matosDefeated ? "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)" : 
+player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4"  || player.tab == "ep5" ? "#7d3f98" : 
+(player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
+player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 
+player.tab == "leg" ? "#eed200" : 
+player.tab == "ma" && player.ma.currentDepth.eq(2) ? "linear-gradient(-180deg,rgb(114, 4, 85) 0%, rgb(37, 1, 33) 100%)" : 
+(player.tab == "ma" && player.ma.currentDepth.eq(3)) || (player.tab == "c" && (player.c.currentCutscene == 33 || player.c.currentCutscene == 34)|| (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) ? "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)" : 
+player.sma.inStarmetalChallenge || (player.ma.inBlackHeart && player.tab != "ba") ? "black" : 
+!player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
+player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
+player.tab == "ro" || player.tab == "mi" ? "#3d3d3d" : 
+player.tab == "au2" ? "#151230" : 
+player.tab == "cmc" || (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???" || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) ? "black" : 
+player.tab == "ba" && player.fi.battleTier.eq(1) ? "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)" : 
+"#161616");
+
+if (player.tab === "au2" || player.tab === "au2t" || player.tab === "st" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
+    // Add the galaxy background if it doesn't already exist
+    if (!document.getElementById("galaxy-background")) {
+        const galaxyBackground = document.createElement("div");
+        galaxyBackground.id = "galaxy-background";
+        galaxyBackground.style.position = "fixed";
+        galaxyBackground.style.top = "0";
+        galaxyBackground.style.left = "0";
+        galaxyBackground.style.width = "100%";
+        galaxyBackground.style.height = "100%";
+        galaxyBackground.style.overflow = "hidden";
+        galaxyBackground.style.zIndex = "-2222"; // Ensure it stays in the background
+        galaxyBackground.style.background = "radial-gradient(circle, #151230, #000000)"; // Galaxy gradient
+        document.body.appendChild(galaxyBackground);
+
+        // Add stars
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement("div");
+            star.style.position = "absolute";
+            star.style.width = `${Math.random() * 2 + 1}px`; // Random size between 1px and 3px
+            star.style.height = star.style.width; // Ensure the height matches the width
+            star.style.backgroundColor = "white"; // Plain white color
+            star.style.borderRadius = "50%"; // Make it circular
+            star.style.top = `${Math.random() * 100}vh`; // Random vertical position
+            star.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+            galaxyBackground.appendChild(star);
+        }
+
+//new cutscenes
+
 if (player.tab != "c" && player.tab != "bigc" && player.c.cutsceneIndex == player.c.cutsceneText.length)
 {
 player.c.cutsceneIndex = 0
 }
-},
+}
+/*
 startCutscene1() {
 player.c.cutsceneText = [
 "You find yourself in a vast desert of black sand.",
@@ -989,6 +849,7 @@ player.c.cutsceneText = [
 "As the voice fades away, you look at your own hands, and see ten points manifest as rings. One for each finger.",
 ]
 },
+
 startCutscene2() {
 player.c.cutsceneText = [
 "A dot manifests itself in the center of your vision.",
@@ -1654,16 +1515,8 @@ bars: {
 },
 infoboxes: {
 },
-
-tabFormat: [
-["blank", "125px"],
-["raw-html", function () { return !player.c.evoCutscene ? player.c.cutsceneText[player.c.cutsceneIndex] : ""}, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-["raw-html", function () { return player.c.evoCutscene ? player.c.cutsceneText[player.c.cutsceneIndex] : ""}, { "color": "white", "font-size": "32px", "font-family": "Verdana, sans-serif" }],
-["blank", "25px"],
-["row", [["clickable", 12], ["clickable", 11]]],
-],
-layerShown() { return true }
-})
+*/
+}
 // Define the CSS animation within a template literal
 const cssStyles = `
 @keyframes fall {
@@ -1686,19 +1539,6 @@ document.head.appendChild(styleElement);
 let raining = false;
 let rainInterval;
 
-function startRain(rainColor) {
-if (!raining) {
-raining = true;
-rainInterval = setInterval(() => createRaindrop(rainColor), 30);
-}
-}
-
-function stopRain() {
-if (raining) {
-raining = false;
-clearInterval(rainInterval);
-}
-}
 
 function createRaindrop(rainColor) {
 const raindrop = document.createElement('div');
@@ -1718,14 +1558,6 @@ raindrop.remove();
 });
 }
 
-// Handle tab visibility change
-document.addEventListener('visibilitychange', () => {
-if (document.visibilityState === 'visible') {
-startRain('#00f'); // Set default rain color
-} else {
-stopRain();
-}
-});
 
 
 const embersCss = `
@@ -1767,135 +1599,591 @@ player.subtabs["i"]['stuff'] = 'Upgrades'
 player.c.cutscenes[0] = false
 }
 
-//2
-if (player.c.cutscenes[1] && hasUpgrade("i", 21))
-{
-player.c.currentCutscene = 2
-} else if (player.tab != "c" && hasUpgrade("i", 21))
-{
-player.c.currentCutscene = 0
-}
-if (player.c.currentCutscene == 2)
-{
-player.tab = "c"
-layers.c.startCutscene2();
-}
-if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 2)
-{
-player.c.cutscenes[1] = false
-player.tab = "po"
-player.subtabs["po"]['stuff'] = 'Otherworldly Features'
-player.c.cutscenes[1] = false
-}
+        //3
+        if (player.c.cutscenes[2] && player.in.infinities.gt(0)) {
+            player.c.currentCutscene = 3
+        } else if (player.tab != "c" && player.in.infinities.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 3) {
+            player.tab = "c"
+            layers.c.startCutscene3();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3) {
+            player.c.cutscenes[2] = false
+            player.tab = "in"
+            player.c.cutscenes[2] = false
+        }
 
-//3
-if (player.c.cutscenes[2] && player.in.infinities.gt(0))
-{
-player.c.currentCutscene = 3
-} else if (player.tab != "c" && player.in.infinities.gt(0))
-{
-player.c.currentCutscene = 0
-}
-if (player.c.currentCutscene == 3)
-{
-player.tab = "c"
-layers.c.startCutscene3();
-}
-if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3)
-{
-player.c.cutscenes[2] = false
-player.tab = "in"
-player.subtabs["in"]['stuff'] = 'Features'
-player.c.cutscenes[2] = false
-}
+        //4
+        if (player.c.cutscenes[3] && player.ta.negativeInfinityPoints.gt(0)) {
+            player.c.currentCutscene = 4
+        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 4) {
+            player.tab = "c"
+            layers.c.startCutscene4();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 4) {
+            player.c.cutscenes[3] = false
+            player.tab = "i"
+            player.c.cutscenes[3] = false
+        }
 
-//4
-if (player.c.cutscenes[3] && player.ta.negativeInfinityPoints.gt(0))
-{
-player.c.currentCutscene = 4
-} else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(0))
-{
-player.c.currentCutscene = 0
-}
-if (player.c.currentCutscene == 4)
-{
-player.tab = "c"
-layers.c.startCutscene4();
-}
-if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 4)
-{
-player.c.cutscenes[3] = false
-player.tab = "i"
-player.subtabs["i"]['stuff'] = 'Features'
-player.c.cutscenes[3] = false
+        //5
+        if (player.c.cutscenes[4] && player.ta.negativeInfinityPoints.gt(1000)) {
+            player.c.currentCutscene = 5
+        } else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(1000)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 5) {
+            player.tab = "c"
+            layers.c.startCutscene5();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 5) {
+            player.c.cutscenes[4] = false
+            player.tab = "i"
+            player.c.cutscenes[4] = false
+        }
 
-}
-
-
-//5
-if (player.c.cutscenes[4] && player.ta.negativeInfinityPoints.gt(1000))
-{
-player.c.currentCutscene = 5
-} else if (player.tab != "c" && player.ta.negativeInfinityPoints.gt(1000))
-{
-player.c.currentCutscene = 0
-}
-if (player.c.currentCutscene == 5)
-{
-player.tab = "c"
-layers.c.startCutscene5();
-}
-if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 5)
-{
-player.c.cutscenes[4] = false
-player.tab = "i"
-player.subtabs["i"]['stuff'] = 'Features'
-player.c.cutscenes[4] = false
-}
+        //6
+        if (player.c.cutscenes[5] && inChallenge("tad", 11)) {
+            player.c.currentCutscene = 6
+        } else if (inChallenge("tad", 11) && player.tab != "c") {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 6) {
+            player.tab = "c"
+            layers.c.startCutscene6();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 6) {
+            player.c.cutscenes[5] = false
+            player.tab = "i"
+            player.c.cutscenes[5] = false
+        }
 
 
-//6
-if (player.c.cutscenes[5] && inChallenge("tad", 11))
-{
-player.c.currentCutscene = 6
-} else if (player.tab != "c" && inChallenge("tad", 11) && player.tab != "c")
-{
-player.c.currentCutscene = 0
-}
-if (player.c.currentCutscene == 6)
-{
-player.tab = "c"
-layers.c.startCutscene6();
-}
-if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 6)
-{
-player.c.cutscenes[5] = false
-player.tab = "i"
-player.subtabs["i"]['stuff'] = 'Features'
-player.c.cutscenes[5] = false
-}
+        //7
+        if (player.c.cutscenes[6] && player.in.unlockedBreak) {
+            player.c.currentCutscene = 7
+        } else if (player.tab != "c" && player.in.unlockedBreak) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 7) {
+            player.tab = "c"
+            layers.c.startCutscene7();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 7) {
+            player.c.cutscenes[6] = false
+            player.tab = "po"
+            player.c.cutscenes[6] = false
+        }
+
+        //8
+        if (player.c.cutscenes[7] && hasUpgrade("bi", 24)) {
+            player.c.currentCutscene = 8
+        } else if (player.tab != "c" && hasUpgrade("bi", 24)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 8) {
+            player.tab = "c"
+            layers.c.startCutscene8();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8) {
+            player.c.cutscenes[7] = false
+            player.tab = "in"
+            player.c.cutscenes[7] = false
+        }
+
+        //9
+        if (player.c.cutscenes[8] && player.ca.galaxyDust.gt(0)) {
+            player.c.currentCutscene = 9
+        } else if (player.tab != "c" && player.ca.galaxyDust.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 9) {
+            player.tab = "c"
+            layers.c.startCutscene9();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9) {
+            player.c.cutscenes[8] = false
+            player.tab = "in"
+            player.c.cutscenes[8] = false
+        }
+
+        //10
+        if (player.c.cutscenes[9] && hasUpgrade("bi", 28)) {
+            player.c.currentCutscene = 10
+        } else if (player.tab != "c" && hasUpgrade("bi", 28)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 10) {
+            player.tab = "c"
+            layers.c.startCutscene10();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 10) {
+            player.c.cutscenes[9] = false
+            player.tab = "cap"
+            player.subtabs["cap"]['stuff'] = 'Main'
+            player.c.cutscenes[9] = false
+        }
+
+        //11
+        if (player.c.cutscenes[10] && (player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock))) {
+            player.c.currentCutscene = 11
+        } else if (player.tab != "c" && player.tab == "cp" || (player.tab == "c" && player.cap.cantepocalypseUnlock)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 11) {
+            player.tab = "c"
+            layers.c.startCutscene11();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 11) {
+            player.c.cutscenes[10] = false
+            player.tab = "cp"
+            player.c.cutscenes[10] = false
+        }
+
+        //12
+        if (player.c.cutscenes[11] && hasUpgrade("cp", 18)) {
+            player.c.currentCutscene = 12
+        } else if (player.tab != "c" && hasUpgrade("cp", 18)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 12) {
+            player.tab = "c"
+            layers.c.startCutscene12();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 12) {
+            player.c.cutscenes[11] = false
+            player.tab = "cp"
+            player.c.cutscenes[11] = false
+        }
+
+        //13
+        if (player.c.cutscenes[12] && player.ca.defeatedCante) {
+            player.c.currentCutscene = 13
+        } else if (player.tab != "c" && player.ca.defeatedCante) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 13) {
+            player.tab = "c"
+            layers.c.startCutscene13();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 13) {
+            player.c.cutscenes[12] = false
+            player.tab = "po"
+            player.c.cutscenes[12] = false
+        }
+
+        //14
+        if (player.c.cutscenes[13] && player.s.highestSingularityPoints.gt(0)) {
+            player.c.currentCutscene = 14
+        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 14) {
+            player.tab = "c"
+            layers.c.startCutscene14();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 14) {
+            player.c.cutscenes[13] = false
+            player.tab = "i"
+            player.c.cutscenes[13] = false
+        }
+        //15
+        if (player.c.cutscenes[14] && player.tab == "co" && player.subtabs["co"]['Cores'] == "Main") {
+            player.c.currentCutscene = 15
+        } else if (player.tab != "c" && player.s.highestSingularityPoints.gt(0)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 15) {
+            player.tab = "c"
+            layers.c.startCutscene15();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 15) {
+            player.c.cutscenes[14] = false
+            player.tab = "i"
+            player.c.cutscenes[14] = false
+        } 
+
+        //16
+        if (player.c.cutscenes[15] && hasMilestone("s", 12)) {
+            player.c.currentCutscene = 16
+        } else if (player.tab != "c" && hasMilestone("s", 12)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 16) {
+            player.tab = "c"
+            layers.c.startCutscene16();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 16) {
+            player.c.cutscenes[15] = false
+            player.tab = "i"
+            player.c.cutscenes[15] = false
+        } 
+
+        //17
+        if (player.c.cutscenes[16] && hasMilestone("s", 13)) {
+            player.c.currentCutscene = 17
+        } else if (player.tab != "c" && hasMilestone("s", 13)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 17) {
+            player.tab = "c"
+            layers.c.startCutscene17();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 17) {
+            player.c.cutscenes[16] = false
+            player.tab = "ra"
+            player.c.cutscenes[16] = false
+        } 
+
+        //18
+        if (player.c.cutscenes[17] && hasMilestone("s", 14)) {
+            player.c.currentCutscene = 18
+        } else if (player.tab != "c" && hasMilestone("s", 14)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 18) {
+            player.tab = "c"
+            layers.c.startCutscene18();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 18) {
+            player.c.cutscenes[17] = false
+            player.tab = "sd"
+            player.c.cutscenes[17] = false
+        } 
+
+        //19
+        if (player.c.cutscenes[18] && hasUpgrade("cp", 19)) {
+            player.c.currentCutscene = 19
+        } else if (player.tab != "c" && hasUpgrade("cp", 19)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 19) {
+            player.tab = "c"
+            layers.c.startCutscene19();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 19) {
+            player.c.cutscenes[18] = false
+            player.tab = "fu"
+            player.c.cutscenes[18] = false
+        } 
+
+        //20
+        if (player.c.cutscenes[19] && player.fu.jocusCelestialActivate) {
+            player.c.currentCutscene = 20
+        } else if (player.tab != "c" && player.fu.jocusCelestialActivate) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 20) {
+            player.tab = "c"
+            layers.c.startCutscene20();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 20) {
+            player.c.cutscenes[19] = false
+            player.tab = "fu"
+            player.c.cutscenes[19] = false
+        } 
+
+        //21
+        if (player.c.cutscenes[20] && hasUpgrade("fu", 15)) {
+            player.c.currentCutscene = 21
+        } else if (player.tab != "c" && hasUpgrade("fu", 15)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 21) {
+            player.tab = "c"
+            layers.c.startCutscene21();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 21) {
+            player.c.cutscenes[20] = false
+            player.tab = "fu"
+            player.c.cutscenes[20] = false
+        }
+
+        //22
+        if (player.c.cutscenes[21] && hasUpgrade("fu", 17)) {
+            player.c.currentCutscene = 22
+        } else if (player.tab != "c" && hasUpgrade("fu", 17)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 22) {
+            player.tab = "c"
+            layers.c.startCutscene22();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 22) {
+            player.c.cutscenes[21] = false
+            player.tab = "fu"
+            player.c.cutscenes[21] = false
+        }
+
+        //23
+        if (player.c.cutscenes[22] && hasChallenge("fu", 11)) {
+            player.c.currentCutscene = 23
+        } else if (player.tab != "c" && hasChallenge("fu", 11)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 23) {
+            player.tab = "c"
+            layers.c.startCutscene23();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 23) {
+            player.c.cutscenes[22] = false
+            player.tab = "ch" 
+            player.universe = -0.5
+            player.c.cutscenes[22] = false
+        }
+
+        //24
+        if (player.c.cutscenes[23] && hasUpgrade("s", 19)) {
+            player.c.currentCutscene = 24
+        } else if (player.tab != "c" && hasUpgrade("s", 19)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 24) {
+            player.tab = "c"
+            layers.c.startCutscene24();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 24) {
+            player.c.cutscenes[23] = false
+            player.tab = "s" 
+            player.c.cutscenes[23] = false
+        }
+
+        //25
+        if (player.c.cutscenes[24] && hasUpgrade("s", 21)) {
+            player.c.currentCutscene = 25
+        } else if (player.tab != "c" && hasUpgrade("s", 21)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 25) {
+            player.tab = "c"
+            layers.c.startCutscene25();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 25) {
+            player.c.cutscenes[24] = false
+            player.tab = "s" 
+            player.c.cutscenes[24] = false
+        }
+
+        //26
+        if (player.c.cutscenes[25] && player.sma.starmetalAlloy.gte(1)) {
+            player.c.currentCutscene = 26
+        } else if (player.tab != "c" && player.sma.starmetalAlloy.gte(1)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 26) {
+            player.tab = "c"
+            layers.c.startCutscene26();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 26) {
+            player.c.cutscenes[25] = false
+            player.tab = "s" 
+            player.c.cutscenes[25] = false
+        }
+
+        //27
+        if (player.c.cutscenes[26] && tmp.pu.levelables[302].canClick) {
+            player.c.currentCutscene = 27
+        } else if (player.tab != "c" && tmp.pu.levelables[302].canClick) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 27) {
+            player.tab = "c"
+            layers.c.startCutscene27();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 27) {
+            player.c.cutscenes[26] = false
+            player.tab = "le" 
+            player.c.cutscenes[26] = false
+        }
+
+        //28
+        if (player.c.cutscenes[27] && player.ma.matosUnlock) {
+            player.c.currentCutscene = 28
+        } else if (player.tab != "c" && player.ma.matosUnlock) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 28) {
+            player.tab = "c"
+            layers.c.startCutscene28();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 28) {
+            player.c.cutscenes[27] = false
+            player.tab = "ma" 
+            player.subtabs["ma"]['stuff'] = 'Stats'
+            player.c.cutscenes[27] = false
+        }
+
+        //29
+        if (player.c.cutscenes[28] && player.ma.secondAreaUnlock) {
+            player.c.currentCutscene = 29
+        } else if (player.tab != "c" && player.ma.secondAreaUnlock) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 29) {
+            player.tab = "c"
+            layers.c.startCutscene29();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 29) {
+            player.c.cutscenes[28] = false
+            player.tab = "ma" 
+            player.subtabs["ma"]['stuff'] = 'Fight'
+            player.c.cutscenes[28] = false
+        }
+
+        //30
+        if (player.c.cutscenes[29] && player.au2.au2Unlocked) {
+            player.c.currentCutscene = 30
+        } else if (player.tab != "c" && player.au2.au2Unlocked) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 30) {
+            player.tab = "c"
+            layers.c.startCutscene30();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 30) {
+            player.c.cutscenes[29] = false
+            player.tab = "st"
+            player.subtabs["st"]['stuff'] = 'Pets'
+            player.c.cutscenes[29] = false
+        }
+
+        //31
+        if (player.c.cutscenes[30] && player.st.buyables[202].gte(1)) {
+            player.c.currentCutscene = 31
+        } else if (player.tab != "c" && player.st.buyables[202].gte(1)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 31) {
+            player.tab = "c"
+            layers.c.startCutscene31();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 31) {
+            player.c.cutscenes[30] = false
+            player.tab = "pl"
+            player.subtabs["pl"]['stuff'] = 'Main'
+            player.c.cutscenes[30] = false
+        }
+
+        //32
+        if (player.c.cutscenes[31] && player.au2.stars.gte(10000)) {
+            player.c.currentCutscene = 32
+        } else if (player.tab != "c" && player.au2.stars.gte(10000)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 32) {
+            player.tab = "c"
+            layers.c.startCutscene32();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 32) {
+            player.c.cutscenes[31] = false
+            player.tab = "pl"
+            player.subtabs["pl"]['stuff'] = 'Main'
+            player.c.cutscenes[31] = false
+        }
+
+        //33
+        if (player.c.cutscenes[32] && hasUpgrade("ma", 27)) {
+            player.c.currentCutscene = 33
+        } else if (player.tab != "c" && hasUpgrade("ma", 27)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 33) {
+            player.tab = "c"
+            layers.c.startCutscene33();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 33) {
+            player.c.cutscenes[32] = false
+            player.tab = "ma"
+            player.subtabs["ma"]['stuff'] = 'Stats'
+            player.c.cutscenes[32] = false
+        }
+
+        //34
+        if (player.c.cutscenes[33] && player.ma.matosFightActive) {
+            player.c.currentCutscene = 34
+        } else if (player.tab != "c" && player.ma.matosFightActive) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 34) {
+            player.tab = "c"
+            layers.c.startCutscene34();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 34) {
+            player.c.cutscenes[33] = false
+            player.tab = "ma"
+            player.subtabs["ma"]['stuff'] = 'Fight'
+            player.c.cutscenes[33] = false
+        }
+
+        //35
+        if (player.c.cutscenes[34] && player.ma.matosDefeated) {
+            player.c.currentCutscene = 35
+        } else if (player.tab != "c" && player.ma.matosDefeated) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == 35) {
+            player.tab = "c"
+            layers.c.startCutscene35();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 35) {
+            player.c.cutscenes[34] = false
+            player.tab = "ma"
+            player.subtabs["ma"]['stuff'] = "Win"
+            player.ma.currentDepth = new Decimal(0)
+            player.c.cutscenes[34] = false
+        }
+
+        //d
+        if (player.c.cutsceneDice && player.po.dice) {
+            player.c.currentCutscene = -1
+        } else if (player.tab != "c" && player.po.dice) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == -1) {
+            player.tab = "c"
+            layers.c.startCutsceneDice();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -1) {
+            player.c.cutsceneDice = false
+            player.tab = "i"
+        }
 
 
-//7
-if (player.c.cutscenes[6] && player.in.unlockedBreak)
-{
-player.c.currentCutscene = 7
-} else if (player.tab != "c" && player.in.unlockedBreak)
-{
-player.c.currentCutscene = 0
-}
-if (player.c.currentCutscene == 7)
-{
-player.tab = "c"
-layers.c.startCutscene7();
-}
-if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 7)
-{
-player.c.cutscenes[6] = false
-player.tab = "po"
-player.subtabs["po"]['stuff'] = 'Otherworldly Features'
-player.c.cutscenes[6] = false
-}
+        //rf
+        if (player.c.cutsceneRocketFuel && player.po.rocketFuel) {
+            player.c.currentCutscene = -2
+        } else if (player.tab != "c" && player.po.rocketFuel) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == -2) {
+            player.tab = "c"
+            layers.c.startCutsceneRocketFuel();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -2) {
+            player.c.cutsceneRocketFuel = false
+            player.tab = "i"
+        }
+
+
+        //h
+        if (player.c.cutsceneHex && player.hpr.rank[0].gte(1)) {
+            player.c.currentCutscene = -3
+        } else if (player.tab != "c" && player.hpr.rank[0].gte(1) && hasChallenge("ip", 13)) {
+            player.c.currentCutscene = 0
+        }
+        if (player.c.currentCutscene == -3) {
+            player.tab = "c"
+            layers.c.startCutsceneHex();
+        }
+        if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == -3) {
+            player.c.cutsceneHex = false
+            player.tab = "i"
+        }
 
 //8
 if (player.c.cutscenes[7] && hasUpgrade("bi", 24))
@@ -2536,3 +2824,4 @@ player.c.cutsceneHex = false
 player.tab = "i"
 player.subtabs["i"]['stuff'] = 'Upgrades'
 } */
+}})

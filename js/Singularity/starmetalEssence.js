@@ -241,7 +241,7 @@
     },
     levelables: {
                 0: {
-            image() { return "resources/secret.png"},
+            image() { return "resources/Pets/secret.png"},
             title() { return "No pet selected." },
             lore() { return "" },
             description() { return "" },
@@ -250,7 +250,7 @@
             style() { return { width: '100px', height: '125px', backgroundColor: '#222222'} } 
         },
             101: {
-            image() { return this.canClick() ? "resources/dotknightEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/Pets/secret.png"},
             title() { return "Dotknight" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -291,7 +291,7 @@
             }  
         },
                     102: {
-            image() { return this.canClick() ? "resources/dragonEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/dragonEpicPet.png" : "resources/Pets/secret.png"},
             title() { return "Dragon" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -332,7 +332,7 @@
             }  
         },
                             103: {
-            image() { return this.canClick() ? "resources/cookieEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/cookieEpicPet.png" : "resources/Pets/secret.png"},
             title() { return "Cookie" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -373,7 +373,7 @@
             }  
         },
                                     104: {
-            image() { return this.canClick() ? "resources/kresEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/kresEpicPet.png" : "resources/Pets/secret.png"},
             title() { return "Kres" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -414,7 +414,7 @@
             }  
         },
                                             105: {
-            image() { return this.canClick() ? "resources/navEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/navEpicPet.png" : "resources/Pets/secret.png"},
             title() { return "Nav" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -455,7 +455,7 @@
             }  
         },
                                                     106: {
-            image() { return this.canClick() ? "resources/selEpicPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/selEpicPet.png" : "resources/Pets/secret.png"},
             title() { return "Sel" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -498,7 +498,7 @@
 
         //legs
         201: {
-            image() { return this.canClick() ? "resources/eclipseLegendaryPet.png" : "resources/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eclipseLegendaryPet.png" : "resources/Pets/secret.png"},
             title() { return "Eclipse" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -891,8 +891,7 @@
             "Generators": {
                 buttonStyle() { return { 'color': 'white' } },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.sma.starmetalAlloy) + "</h3> starmetal alloy." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You have <h3>" + formatWhole(player.ra.radiation) + "</h3> radiation." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
@@ -985,7 +984,6 @@
             },
         },
     }, 
-
     tabFormat: [
         ["raw-html", function () { return "You have <h3>" + format(player.sme.starmetalEssence) + "</h3> starmetal essence." }, { "color": "white", "font-size": "30px", "font-family": "monospace" }],
         ["raw-html", function () { return "Your starmetal essence extends generator time requirements by x<h3>" + format(player.sme.starmetalEssenceSoftcap) + "</h3>." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],

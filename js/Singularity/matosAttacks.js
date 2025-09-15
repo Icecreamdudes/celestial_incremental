@@ -5142,10 +5142,26 @@ function ultimateAttackSequence() {
     });
     setTimeout(() => {
         // All characters are still alive after 49 seconds
-        if (player.subtabs["ma"]["stuff"] == "Bullet Hell" && player.ma.currentCelestialiteType == 25)
-        {
-            player.ma.matosDefeated = true
+        if (player.subtabs["ma"]["stuff"] == "Bullet Hell" && player.ma.currentCelestialiteType == 25) {
+            if (!player.ma.matosDefeated) {
+                player.ma.matosDefeated = true
+                player.in.infinityPoints = new Decimal(0)
+                player.points = new Decimal(0)
+            }
             player.ma.matosFightActive = false
+
+            for (let i = 0; i < player.ma.deadCharacters.length; i++) {
+                player.ma.health[i] = player.ma.healthMax[i]
+                player.ma.deadCharacters[i] = false
+            }
+            player.ma.fightingCelestialites = false
+            player.ma.currentDepth = new Decimal(0)
+            player.ma.combo = new Decimal(0)
+
+            player.ma.attacksDone = new Decimal(0)
+            player.ma.epsilonCelestialitesKilled = new Decimal(0)
+            player.ma.omegaCelestialitesKilled = new Decimal(0)
+            player.ma.motivationCount  = new Decimal(0)
 
            player.ma.commonMatosFragments = player.ma.commonMatosFragments.add(700)
            player.ma.rareMatosFragments = player.ma.rareMatosFragments.add(300)
@@ -5153,9 +5169,8 @@ function ultimateAttackSequence() {
            player.ma.legendaryMatosFragments = player.ma.legendaryMatosFragments.add(5)
 
            player.subtabs["ma"]["stuff"] = "Win"
-
         }
         // Or call any function you want here
-}, 49000);
+    }, 49000);
 }
 

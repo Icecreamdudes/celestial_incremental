@@ -28,10 +28,8 @@ addLayer("cap", {
 
         cantepocalypseUnlock: false,
         cantepocalypsePrep: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(45deg, #0a82b9 0%, #7dd3f9 100%)",
@@ -39,78 +37,73 @@ addLayer("cap", {
             "border-color": "#0f354c",
         };
     },
-
     tooltip: "Cante, the Celestial of Replicanti",
     color: "#727884",
     update(delta) {
         let onepersec = new Decimal(1)
 
-        if (player.cap.reqDisplayIndex.eq(0))
-        {
+        if (player.cap.reqDisplayIndex.eq(0)) {
             player.cap.reqDisplay = "Recall the challenges and reach further like you never have before."
-        } else if (player.cap.reqDisplayIndex.eq(1))
-        {
+        } else if (player.cap.reqDisplayIndex.eq(1)) {
             player.cap.reqDisplay = "Be removed from all of your friendly companions."
-        } else if (player.cap.reqDisplayIndex.eq(2))
-        {
+        } else if (player.cap.reqDisplayIndex.eq(2)) {
             player.cap.reqDisplay = "Revisit the previous celestial and go beyond."
-        } else if (player.cap.reqDisplayIndex.eq(3))
-        {
+        } else if (player.cap.reqDisplayIndex.eq(3)) {
             player.cap.reqDisplay = "Answer questions about your journey so far."
         }
 
-        if (hasUpgrade("i", 37) && hasUpgrade("i", 38) && hasUpgrade("i", 39) && hasUpgrade("i", 41))
-        {
+        if (hasUpgrade("i", 37) && hasUpgrade("i", 38) && hasUpgrade("i", 39) && hasUpgrade("i", 41)) {
             player.cap.passingReqs[0] = true
         }
-        if (hasUpgrade("tad", 14) && hasUpgrade("tad", 15) && hasUpgrade("tad", 16))
-        {
+        if (hasUpgrade("tad", 14) && hasUpgrade("tad", 15) && hasUpgrade("tad", 16)) {
             player.cap.passingReqs[2] = true
         }
 
         player.cap.quizNumber = player.cap.quizInput
 
-        player.cap.quizQuestions = ["log10(infinity points) + check back level", "log10(celestial points)/pet points", "(cante energy/cante energy req) * cante cores",
-             "log10(negative infinity points) + cante cores^4",
-             "pet points - (check back level * log10(infinities))",
-             "log10(broken infinities) + infinities on reset + (evolution shards * paragon shards)",
-             "log1000(celestial points) + log100(celestial points) + log10(steel)", ""]
+        player.cap.quizQuestions = [
+            "What numbered Tree Factor does Prestige Upgrade XII unlock?",
+            "What is the buy cap of grass buyable 'Grass Grow Rate'?",
+            "What is the XPBoost cost of an antimatter crate?",
+            "How many booster dice effects are initially unlocked?",
+            "How many infinities were required to unlock the halter?",
+            "What value does Tav's Domain's debuff raise celestial points by?",
+            "What is hex of blessings refinement requirement?",
+            "What numbered BI IP upgrade unlocks galaxy dust?",
+            ""
+        ]
 
-        if (player.cap.quizIndex.eq(7))
-        {
+        if (player.cap.quizIndex.eq(8)) {
             player.cap.passingReqs[3] = true
             player.subtabs["cap"]['stuff'] = 'Main'
         }
-        if (player.cap.cantepocalypseUnlock)
-        {
+        if (player.cap.cantepocalypseUnlock) {
             player.subtabs["cap"]['stuff'] = 'CANTEPOCALYPSE'
         }
 
-        if (player.subtabs["cap"]['stuff'] == 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
+        if (player.tab == 'cap' && player.subtabs["cap"]['stuff'] == 'CANTEPOCALYPSE' && player.s.highestSingularityPoints.eq(0)) {
             player.cap.cantepocalypsePrep = true
         }
-        if (player.universe == 1.5)
-        {
+        if (player.universe == 1.5) {
             player.cap.cantepocalypsePrep = false
         }
 
-        player.cap.quizAnswers =
-        [
-            player.in.infinityPoints.plus(1).log10().add(player.cb.level).abs(),
-            player.points.plus(1).log10().div(player.cb.petPoints.add(0.01)).abs(),
-            player.ca.canteEnergy.div(player.ca.canteEnergyReq).mul(player.ca.canteCores).abs(),
-            player.ta.negativeInfinityPoints.plus(1).log10().add(player.ca.canteCores.pow(4)).abs(),
-            player.cb.petPoints.sub(player.cb.level.mul(player.in.infinities.plus(1).log10())).abs(),
-            player.bi.brokenInfinities.plus(1).log10().add(player.in.infinitiesToGet.add(player.cb.evolutionShards.mul(player.cb.paragonShards))).abs(),
-            player.points.plus(1).log(1000).add(player.points.plus(1).log(100).add(player.gh.steel.plus(1).log10())).abs(),
+        player.cap.quizAnswers = [
+            new Decimal(4).abs(),
+            new Decimal(200).abs(),
+            new Decimal(0.04).abs(),
+            new Decimal(11).abs(),
+            new Decimal(777).abs(),
+            new Decimal(0.45).abs(),
+            new Decimal(18).abs(),
+            new Decimal(15).abs(),
             new Decimal(0)
         ]
 
-        if (player.cap.quizIndex.lt(7)) player.cap.quizLower = player.cap.quizAnswers[player.cap.quizIndex].sub(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
-        if (player.cap.quizIndex.lt(7)) player.cap.quizHigher = player.cap.quizAnswers[player.cap.quizIndex].add(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
+        if (player.cap.quizIndex.lt(8)) player.cap.quizLower = player.cap.quizAnswers[player.cap.quizIndex].sub(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
+        if (player.cap.quizIndex.lt(8)) player.cap.quizHigher = player.cap.quizAnswers[player.cap.quizIndex].add(player.cap.quizAnswers[player.cap.quizIndex].mul(0.05))
 
-        if (player.cap.reqsPassed[0] && player.cap.reqsPassed[1] && player.cap.reqsPassed[2] && player.cap.reqsPassed[3])
-        {
+        if (player.cap.reqsPassed[0] && player.cap.reqsPassed[1] && player.cap.reqsPassed[2] && player.cap.reqsPassed[3]) {
             player.cap.cantepocalypseUnlock = true
         }
     },
@@ -129,15 +122,6 @@ addLayer("cap", {
     },
     branches: ["ta", "om"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "ca"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h1>I" },
             canClick() { return true },
@@ -252,8 +236,6 @@ addLayer("cap", {
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "If the answer is close enough it can work." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "All answers are converted to positive." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Your answer: " + format(player.cap.quizNumber) }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return player.cap.quizQuestions[player.cap.quizIndex] }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
@@ -288,9 +270,8 @@ addLayer("cap", {
     },
 
     tabFormat: [
-
-        ["row", [["clickable", 1]]],
-                        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasUpgrade("bi", 24)}
 })

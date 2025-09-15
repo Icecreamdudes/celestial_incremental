@@ -1,22 +1,21 @@
-﻿var tree1 = [["h", "r", "f", "p", "re"], ["t", "g", "pe", "pol", "gh", "rf"], ["fa", "de", "m", "cb", "d"], ["rm", "gem", "oi"]]
-
+﻿var tree1 = [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rf", "d"], ["cb", "oi", "fa"]]
 addLayer("i", {
-    name: "Incremental", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
+    name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "OR", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
 
-        PreOTFMult: new Decimal(1),
+        preOTFMult: new Decimal(1),
+        postOTFMult: new Decimal(1),
 
         cutsceneInput: new Decimal(0),
         cutsceneInputAmount: new Decimal(0),
     }
     },
     automate() {
-        if (player.i.auto == true && hasMilestone("ip", 19))
-        {
+        if (player.i.auto == true && hasMilestone("ip", 19)) {
             buyUpgrade("i", 11)
             buyUpgrade("i", 12)
             buyUpgrade("i", 13)
@@ -27,10 +26,8 @@ addLayer("i", {
             buyUpgrade("i", 18)
             buyUpgrade("i", 19)
             buyUpgrade("i", 21)
-            if (hasMilestone("s", 11)) buyUpgrade("i", 20)
         }
-        if (hasMilestone("s", 17))
-        {
+        if (hasMilestone("s", 17)) {
             buyUpgrade("i", 11)
             buyUpgrade("i", 12)
             buyUpgrade("i", 13)
@@ -49,6 +46,7 @@ addLayer("i", {
             buyUpgrade("i", 27)
             buyUpgrade("i", 28)
             buyUpgrade("i", 29)
+            buyUpgrade("i", 30)
             buyUpgrade("i", 31)
             buyUpgrade("i", 32)
             buyUpgrade("i", 33)
@@ -59,35 +57,23 @@ addLayer("i", {
             buyUpgrade("i", 38)
             buyUpgrade("i", 39)
             buyUpgrade("i", 41)
-        }
+            buyUpgrade("i", 101)
+    }},
+    nodeStyle: {
+        background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
+        backgroundOrigin: "border-box",
+        borderColor: "#333",
     },
-    nodeStyle() {
-        return {
-            background: "linear-gradient(315deg, #bababa 0%, #efefef 100%)",
-            "background-origin": "border-box",
-            "border-color": "#151515",
-        };
-    },
-    tooltip: "Universe 1 - Overworld",
-    branches: ["in"],
+    tooltip: "Origin",
+    branches: ["r", "f"],
     color: "white",
     update(delta) {
         let onepersec = new Decimal(1)
 
+       // stopRain()
+
         if (player.startedGame == false && player.tab == "i") {
             player.startedGame = true
-        }
-
-        if (player.startedGame && options.newMenu) {
-            if (player.tab == "i") {
-                player.tab = "u1u"
-            } else if (player.tab == "in") {
-                player.tab = "ip"
-            } else if (player.tab == "cp" && !player.cap.cantepocalypsePrep) {
-                player.tab = "a1u"
-            } else if (player.tab == "po") {
-                player.tab = "otherfeat"
-            }
         }
 
         if (player.startedGame == true && player.c.cutscene1 == false) {
@@ -155,144 +141,9 @@ addLayer("i", {
             player.musuniverse = 1337
         }
 
-        //music control
-        if (cutsceneActive == false) {
-                    if (player.musuniverse == 1 && player.startedGame && options.musicToggle && !(inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18) || inChallenge("tad", 11)) ) {
-            playAndLoopAudio("music/universe1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 1 && (inChallenge("ip", 11) || inChallenge("ip", 12) || inChallenge("ip", 13) || inChallenge("ip", 14) || inChallenge("ip", 15) || inChallenge("ip", 16) || inChallenge("ip", 17) || inChallenge("ip", 18)) && options.musicToggle) {
-            playAndLoopAudio("music/challenge.mp3", options.musicVolume/10);
-        } else if (inChallenge("tad", 11) && options.musicToggle)
-        {
-            playAndLoopAudio("music/tavDomain.mp3", options.musicVolume/10);
-        } 
-        else if (player.musuniverse == 0 && options.musicToggle) {
-            playAndLoopAudio("music/portal.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 2 && options.musicToggle) {
-            playAndLoopAudio("music/universe2.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 3 && options.musicToggle) {
-            if (player.ma.inBlackHeart == false)
-            {
-                if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
-                if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
-            } else
-            {
-                if (!player.ma.fightingCelestialites)
-                {
-                    playAndLoopAudio("music/enteringBlackHeart.mp3", options.musicVolume/10);
-                } else
-                {
-                    if (player.ma.currentDepth.eq(1)) playAndLoopAudio("music/celestialites.mp3", options.musicVolume/10);
-                    if (player.ma.currentDepth.eq(2)) playAndLoopAudio("music/blackHeart.mp3", options.musicVolume/10);
-                    if (player.ma.currentDepth.eq(3) && !player.ma.matosFightActive && player.ma.currentCelestialiteType != 25) playAndLoopAudio("music/matosTheme.mp3", options.musicVolume/10);
-                    if (player.ma.currentDepth.eq(3) && player.ma.matosFightActive && player.ma.currentCelestialiteType == 25) playAndLoopAudio("music/matosFight.mp3", options.musicVolume/10);
-                } //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
-                if (player.fi.inBattle)
-                {
-                    if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10);
-                }
-            }
-        } else if (player.musuniverse == 0.5 && options.musicToggle) {
-            if (!player.fi.inBattle) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10);
-            if (player.fi.inBattle)
-            {
-            if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10);
-            }
-        } else if (player.musuniverse == 0.6 && options.musicToggle) {
-            //playAndLoopAudio("music/mining.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -0.5 && options.musicToggle) {
-            if (player.tab == "cmh") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
-            if ((player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") || player.tab == "cmc") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -0.1 && !player.pet.activeAbilities[0] && options.musicToggle) {
-            playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -0.1 && player.pet.activeAbilities[0] && options.musicToggle) {
-            playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == -1 && options.musicToggle && player.tab == "c") {
-            if (player.c.currentCutscene == 0 || player.c.currentCutscene == 1 || player.c.currentCutscene == 3 || player.c.currentCutscene == 6 || player.c.currentCutscene == 7 || player.c.currentCutscene == 9 || player.c.currentCutscene == 11 || player.c.currentCutscene == 12) {
-               playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 2 || player.c.currentCutscene == 4 || player.c.currentCutscene == 5 || player.c.currentCutscene == 8 || player.c.currentCutscene == 10 || player.c.currentCutscene == 13) {
-                playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 14 || player.c.currentCutscene == 15 ) {
-                playAndLoopAudio("music/singularityCutscene.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 16 || player.c.currentCutscene == 17 || player.c.currentCutscene == 18 || player.c.currentCutscene == 24 || player.c.currentCutscene == 25 || player.c.currentCutscene == 26 || player.c.currentCutscene == 27) {
-                playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 19 || player.c.currentCutscene == 20 || player.c.currentCutscene == 21 || player.c.currentCutscene == 22 || player.c.currentCutscene == 23) {
-                playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 28 || player.c.currentCutscene == 29) {
-                playAndLoopAudio("music/confrontation.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 33 || player.c.currentCutscene == 34 || (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) {
-                playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24) {
-                playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10);
-            } else if (player.c.currentCutscene == 30 || player.c.currentCutscene == 31|| player.c.currentCutscene == 32) {
-                playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
-            }
-        } else if (player.musuniverse == 1.5 && options.musicToggle) {
-            playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10);
-        } else if (player.musuniverse == 2.5 && options.musicToggle) {
-            playAndLoopAudio("music/space.mp3", options.musicVolume/10);
-        }  else {
-            stopAudio();
-        }
-        }
-
-        //cutscene music logic
-        if ((cutsceneActive || window.cinematicCutsceneActive) && options.musicToggle)
-        {
-            //if (cutsceneID == 12345 && cutsceneIndex == 2) playAndLoopAudio("music/space.mp3", options.musicVolume/10); examples
-            //if (cutsceneID == 12345 && cutsceneIndex == 3) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
-
-            if (cutsceneID == 1) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 9) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 11) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 14) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 15) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 16) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 18) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 19) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 24) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 26) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 28) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 29) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 30) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
-            if (cutsceneID == 31) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 32) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 33) playAndLoopAudio("music/tavCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 37) playAndLoopAudio("music/tavCutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 39) playAndLoopAudio("music/tavDeath.mp3", options.musicVolume/10);
-            if (cutsceneID == 41) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 43) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 46) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 47) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 48) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 50) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 52) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 53) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 54) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 55) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 56) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 57) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 58) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 59) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 60) playAndLoopAudio("music/canteCutscene.mp3", options.musicVolume/10);
-            if (cutsceneID == 61) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 62) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 63) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 65) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 66) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 68 && cutsceneIndex < 7) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-            if (cutsceneID == 68 && cutsceneIndex >= 7) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 69) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 70) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
-            if (cutsceneID == 71) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-            if (cutsceneID == 72) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
-        }
-        if (window.cinematicCutsceneActive && options.musicToggle)
-        {
-            if (cinematicCutsceneID == 40) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
-        }
 
 
-        stopRain();
+        //stopRain();
        /* if (player.universe == 1.5)
         {
             startRain("#1486ff");
@@ -305,7 +156,8 @@ addLayer("i", {
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
-        player.i.preOTFMult = player.i.preOTFMult.mul(player.le.punchcardsPassiveEffect[14])
+        player.i.preOTFMult = player.i.preOTFMult.mul(levelableEffect("pu", 301)[1])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.i.preOTFMult = player.i.preOTFMult.mul(player.hre.refinementEffect[5][1])
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
@@ -315,8 +167,16 @@ addLayer("i", {
         //cutscene
         player.i.cutsceneInputAmount = player.i.cutsceneInput.floor()
         if (player.i.cutsceneInput.lt(0)) player.i.cutsceneInputAmount = new Decimal(0)
+        // START OF POST-OTF-MULT MODIFIERS
+        player.i.postOTFMult = new Decimal(1)
+        player.i.postOTFMult = player.i.postOTFMult.mul(buyableEffect("ma", 22))
+
+        //----------------------------------------
 
         // START OF CELESTIAL POINT MODIFIERS
+        if (player.startedGame == true && player.c.cutscene1 == false) {
+            player.gain = new Decimal(1)
+        }
         player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
         player.gain = player.gain.mul(player.r.tierEffect)
@@ -328,26 +188,32 @@ addLayer("i", {
         player.gain = player.gain.mul(buyableEffect("f", 16))
         player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(buyableEffect("f", 18))
+        if (hasUpgrade("cs", 201)) player.gain = player.gain.mul(buyableEffect("f", 101))
         player.gain = player.gain.mul(player.r.tetrEffect)
         if (hasUpgrade("p", 11)) player.gain = player.gain.mul(3)
-        if (hasUpgrade("p", 12)) player.gain = player.gain.mul(upgradeEffect("p", 12))
+        if (hasUpgrade("p", 12)) player.gain = player.gain.mul(player.p.prestigeEffect)
         player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(player.f.factorPowerEffect)
         player.gain = player.gain.mul(buyableEffect("t", 15))
         player.gain = player.gain.mul(buyableEffect("g", 14))
         player.gain = player.gain.mul(player.gh.grasshopperEffects[0])
-        if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.r.pentMilestone3Effect)
+        if (hasMilestone("r", 13)) player.gain = player.gain.mul(player.g.grassEffect2)
         player.gain = player.gain.mul(buyableEffect("m", 14))
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(levelableEffect("pet", 101)[0])
         player.gain = player.gain.mul(player.d.diceEffects[0])
         if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[0][0])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[1][0])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[2][0])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[3][0])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[4][0])
+        if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[5][0])
 
         // CHALLENGE CONTENT
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
-        if (inChallenge("ip", 13) || player.po.hex) player.gain = player.gain.mul(player.h.hexPointsEffect[0])
         if (inChallenge("ip", 14)) player.gain = player.gain.div(player.r.challengeIVEffect)
         if (inChallenge("ip", 15)) player.gain = player.gain.pow(0.9)
         if (hasUpgrade("d", 13)) player.gain = player.gain.mul(upgradeEffect("d", 13))
@@ -363,18 +229,19 @@ addLayer("i", {
         if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
 
         // CONTINUED REGULAR MODIFIERS
-        if (player.pol.pollinatorsIndex == 1) player.gain = player.gain.mul(player.pol.pollinatorsEffect[0])
+        if (player.pol.pollinatorEffects.beetle.enabled) player.gain = player.gain.mul(player.pol.pollinatorEffects.beetle.effects[0])
         player.gain = player.gain.mul(buyableEffect("gh", 31))
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
         player.gain = player.gain.mul(player.r.timeCubeEffects[0])
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
         player.gain = player.gain.mul(player.i.preOTFMult)
-        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.mul(player.cop.processedCoreInnateEffects[0])
+        player.gain = player.gain.mul(player.co.cores.point.effect[0])
 
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
-        player.gain = player.gain.pow(player.re.realmEssenceEffect)
-        if (player.cop.processedCoreFuel.eq(0)) player.gain = player.gain.pow(player.cop.processedCoreInnateEffects[1])
+        player.gain = player.gain.pow(player.co.cores.point.effect[1])
+        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
+        player.gain = player.gain.pow(player.st.starPowerEffect)
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -382,54 +249,11 @@ addLayer("i", {
             player.gain = player.gain.mul(0)
             player.points = player.points.div(player.points.add(1).log10().mul(0.1).add(1).mul(delta))
         }
-        if (player.po.realmMods) player.gain = player.gain.pow(0.35)
         player.gain = player.gain.div(player.po.halterEffects[0])
         if (!player.in.breakInfinity && player.gain.gte("9.99e309")) player.gain = new Decimal("9.99e309")
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.div(player.po.halterEffects[2])
-        player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.po.halterEffects[3])
-        player.t.treesToGet = player.t.treesToGet.div(player.po.halterEffects[4])
-        player.g.grassVal = player.g.grassVal.div(player.po.halterEffects[5])
-
-        //post otf
-        let postOTFMult = new Decimal(1)
-        postOTFMult = postOTFMult.mul(buyableEffect("ma", 22))
-
-        player.h.ragePowerToGet = player.h.ragePowerToGet.mul(postOTFMult)
-        player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(postOTFMult)
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(postOTFMult)
-        player.gh.steelToGet = player.gh.steelToGet.mul(postOTFMult)
-        player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(postOTFMult)
-        player.fa.chargeRate = player.fa.chargeRate.mul(postOTFMult)
-        player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
-        player.gain = player.gain.pow(player.st.starPowerEffect)
-        player.gain = player.gain.pow(player.cof.coreFragmentEffects[0])
-        player.gain = player.gain.pow(buyableEffect("cof", 12))
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
-        if (cutsceneID == 1 && cutsceneActive) player.points = new Decimal(0)
-
-        // MAKE TAB WORK
-        if (player.subtabs["i"]['stuff'] == 'Portal' && player.tab != "in") {
-            player.po.lastUniverse = 'i'
-            player.tab = "po"
-            player.subtabs["i"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["i"]['stuff'] == 'Settings' && player.tab != "in") {
-            player.po.lastUniverse = 'i'
-            player.tab = "settings"
-            player.subtabs["i"]['stuff'] = 'Features'
-        }
-
-        player.r.timeCubes = player.r.timeCubes.add(player.r.timeCubesPerSecond.mul(delta))
-        player.h.ragePower = player.h.ragePower.add(player.h.ragePowerToGet.mul(Decimal.mul(buyableEffect("fa", 201), delta)))
-        player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))
-        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(0.1, player.gh.steelToGet.mul(delta)))
-        player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
-        if (player.fa.buyables[13].gte(1)) player.fa.charge = player.fa.charge.add(player.fa.chargeRate.mul(delta))
-
-        if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
-        if (hasUpgrade("s", 25)) player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet.mul(delta))
     },
     bars: {
         infbar: {
@@ -448,8 +272,7 @@ addLayer("i", {
         },
     },
     upgrades: {
-        11:
-        {
+        11: {
             title: "Feature I",
             unlocked() { return true },
             description: "Unlocks Ranks.",
@@ -457,9 +280,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        12:
-        {
+        12: {
             title: "Feature II",
             unlocked() { return hasUpgrade("i", 11) },
             description: "Unlocks Factors.",
@@ -467,9 +290,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        13:
-        {
+        13: {
             title: "Tetr",
             unlocked() { return hasUpgrade("i", 12) },
             description: "Unlocks Tetr (In ranks).",
@@ -477,9 +300,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        14:
-        {
+        14: {
             title: "Prestige",
             unlocked() { return hasUpgrade("i", 13) },
             description: "Unlocks Prestige.",
@@ -487,9 +310,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        15:
-        {
+        15: {
             title: "Power Factors",
             unlocked() { return hasUpgrade("i", 14) },
             description: "Unlocks Power Factors (In factors).",
@@ -497,9 +320,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        16:
-        {
+        16: {
             title: "Trees",
             unlocked() { return hasUpgrade("i", 15) },
             description: "Unlocks Trees.",
@@ -507,9 +330,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        17:
-        {
+        17: {
             title: "Grass",
             unlocked() { return hasUpgrade("i", 16) },
             description: "Unlocks Grass.",
@@ -517,9 +340,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        18:
-        {
+        18: {
             title: "Pent",
             unlocked() { return hasUpgrade("i", 17) },
             description: "Unlocks Pent (in ranks).",
@@ -527,19 +350,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        20:
-        {
-            title: "Realm Essence",
-            unlocked() { return hasUpgrade("i", 18) && hasMilestone("s", 11) },
-            description: "Unlocks Realm Essence.",
-            cost: new Decimal(1e50),
-            currencyLocation() { return player },
-            currencyDisplayName: "Celestial Points",
-            currencyInternalName: "points",
-        },
-        19:
-        {
+        19: {
             title: "Check Back",
             unlocked() { return hasUpgrade("i", 18) },
             description: "Unlocks Check Back.",
@@ -547,9 +360,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        21:
-        {
+        21: {
             title: "OTF",
             unlocked() { return hasUpgrade("i", 19) },
             description: "Unlocks Otherworldly Features.",
@@ -557,9 +370,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        22:
-        {
+        22: {
             title: "Pollinate",
             unlocked() { return player.in.unlockedBreak},
             description: "Use the experience of debuffs and pests to create Pollinators.",
@@ -567,9 +380,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        23:
-        {
+        23: {
             title: "Steel",
             unlocked() { return hasUpgrade("i", 22) && hasUpgrade("bi", 106)},
             description: "Unlocks Steelie reset layer (in grasshop).",
@@ -577,9 +390,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        24:
-        {
+        24: {
             title: "Crystallize",
             unlocked() { return hasUpgrade("i", 23) && hasUpgrade("bi", 106)},
             description: "Unlocks Crystallize reset layer (in prestige).",
@@ -587,9 +400,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        25:
-        {
+        25: {
             title: "Productive Pollination",
             unlocked() { return hasUpgrade("i", 24) && hasUpgrade("bi", 106)},
             description: "Unlocks more Pollinator upgrades.",
@@ -597,9 +410,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        26:
-        {
+        26: {
             title: "Time Reversal",
             unlocked() { return hasUpgrade("i", 25) && hasUpgrade("bi", 106)},
             description: "Unlocks Time Reversal (in ranks layer).",
@@ -607,9 +420,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        27:
-        {
+        27: {
             title: "Pentomation",
             unlocked() { return hasUpgrade("i", 26) && hasUpgrade("bi", 106)},
             description: "Automatically gain pent without resetting.",
@@ -617,9 +430,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        28:
-        {
+        28: {
             title: "2nd OTF slot...",
             unlocked() { return hasUpgrade("i", 27) && hasUpgrade("bi", 106)},
             description: "Gain a 2nd OTF slot. (doesn't stack with tav's domain)",
@@ -627,16 +440,27 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        29:
-        {
-            title: "Rage Power",
-            unlocked() { return (hasUpgrade("i", 28) && hasUpgrade("bi", 106) && player.po.hex && player.ca.unlockedCante) || hasUpgrade("i", 29)},
-            description: "Unlock Rage Power (requires hex, in hex).",
-            cost: new Decimal("1e3333"),
+        29: {
+            title: "True Refinement",
+            unlocked() { return hasUpgrade("i", 32) && hasUpgrade("bi", 106) && player.ca.unlockedCante},
+            description: "Unlock Hex of Purity.",
+            cost: new Decimal("1e3000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        30: {
+            title: "Hexing Power",
+            unlocked() { return hasUpgrade("i", 29) && hasUpgrade("bi", 106) && player.ca.unlockedCante},
+            description: "Unlock Hex of Power.",
+            cost: new Decimal("1e3600"),
+            currencyLocation() { return player },
+            currencyDisplayName: "Celestial Points",
+            currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         31: {
             title: "Auto CDPs",
@@ -646,48 +470,49 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         32: {
             title: "Completely Pentomated",
             unlocked() { return hasUpgrade("i", 28) && hasUpgrade("bi", 106)},
             description: "You can now buy max pent.",
-            cost: new Decimal("1e2000"),
+            cost: new Decimal("1e2400"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        37:
-        {
+        37: {
             title: "Challenge I.",
             unlocked() { return inChallenge("ip", 11) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e8000"),
+            cost: new Decimal("1e9000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        38:
-        {
+        38: {
             title: "Challenge II.",
             unlocked() { return inChallenge("ip", 12) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e7500"),
+            cost: new Decimal("1e12000"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        39:
-        {
+        39: {
             title: "Challenge III.",
             unlocked() { return inChallenge("ip", 13) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
-            cost: new Decimal("1e2000"),
+            cost: new Decimal("1e2400"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        41:
-        {
+        41: {
             title: "Challenge IV.",
             unlocked() { return inChallenge("ip", 14) && player.cap.reqSelect.eq(0) && hasUpgrade("bi", 28)},
             description: ".",
@@ -695,9 +520,9 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
-        101:
-        {
+        101: {
             title: "Factory",
             unlocked() { return hasMilestone("s", 11)},
             description: "Unlocks the factory.",
@@ -705,6 +530,7 @@ addLayer("i", {
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
             currencyInternalName: "points",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
     clickables: {
@@ -745,12 +571,16 @@ addLayer("i", {
     },
     microtabs: {
         stuff: {
-            "Features": {
+            "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("i", 11) },
+                unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["tree", tree1],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
+                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
+                        ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],
+                        ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
+                        ["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]], {maxWidth: "800px"}],
                 ],
             },
             "Lore": {
@@ -764,62 +594,17 @@ addLayer("i", {
                     ["infobox", "4"],
                 ],
             },
-            "Upgrades": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16]]],
-                    ["row", [["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]]],
-                    ["row", [["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32]]],
-                    ["row", [["upgrade", 20], ["upgrade", 29], ["upgrade", 31], ["upgrade", 101]]],
-                    ["row", [["upgrade", 37], ["upgrade", 38], ["upgrade", 39], ["upgrade", 41]]],
-                    ["blank", "25px"],
-                ],
-            },
-            "Cutscene Rewatch": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Current Cutscene ID: " + formatWhole(player.i.cutsceneInput) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [
-                    ["text-input", "cutsceneInput", {
-                        color: "var(--color)",
-                        width: "400px",
-                        height: "48px",
-                        "font-family": "Calibri",
-                        "text-align": "left",
-                        "font-size": "32px",
-                        border: "2px solid #ffffff17",
-                        background: "var(--background)",
-                    }],
-                    ["clickable", 11],
-                    ]],
-                ],
-            },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", borderColor: "purple", background: "linear-gradient(45deg, #8a00a9, #0061ff)" }},
-                unlocked() { return hasUpgrade("i", 21) || player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0)},
-                content:  [],
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
-
     tabFormat: [
-         ["raw-html", function () { return "You have <h3>" + format(player.points) + "</h3> celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.gain) + "</h3> celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
-    layerShown() { return player.tab != "cmc" }
+        ["raw-html", () => { return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
+    layerShown() {
+        if (player.startedGame == false) return true
+        return !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge
+    }
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {
     return new Promise((resolve) => {
@@ -895,11 +680,11 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
             if (!options.musicToggle) 
             {
                 options.musicToggle = true
-                doPopup("milestone", "Music is toggled on.", "Milestone Gotten!", 3, tmp[layer].color)
+                doPopup("milestone", "Music is toggled on.", "Milestone Gotten!", 3, "#ffffff")
             } else
             {
                 options.musicToggle = false
-                doPopup("milestone", "Music is toggled off.", "Milestone Gotten!", 3, tmp[layer].color)
+                doPopup("milestone", "Music is toggled off.", "Milestone Gotten!", 3, "#ffffff")
             }
         }
     });

@@ -1,5 +1,4 @@
-﻿
-addLayer("dn", {
+﻿addLayer("dn", {
     name: "Normality", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "N", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -14,21 +13,19 @@ addLayer("dn", {
         normalityPause: new Decimal(0),
 
         nMax: false,
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle() {
         return {
             background: "linear-gradient(150deg,rgb(122, 177, 14) 0%,rgba(193, 223, 0) 50%,rgb(116, 141, 3) 100%)",
             "background-origin": "border-box",
-            "border-color": "rgb(128, 255, 111)",
+            "border-color": "#80ff6f",
             "color": "#eaf6f7",
         };
     },
     tooltip: "Normality",
-    branches: [["dgr", "#4f0694"]],
-    color: "rgba(193, 223, 0)",
+    branches: [["dgr", "#309"]],
+    color: "#c1df00",
     update(delta) {
         let onepersec = new Decimal(1)
 
@@ -40,54 +37,26 @@ addLayer("dn", {
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
         player.dn.normalityPause = player.dn.normalityPause.sub(1)
-        if (player.dn.normalityPause.gte(1))
-        {  
-            layers.dn.normalityReset();
-        }
+        if (player.dn.normalityPause.gte(1)) layers.dn.normalityReset();
     },
-    bars: {
-    },
+    bars: {},
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "du"
-            },
-            style: { width: '100px', "min-height": '50px', color: "black" },
-        },
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.dn.nMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.dn.nMax = true
-            },
-            style: { width: '75px', "min-height": '50px', color: "black" }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.dn.nMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.dn.nMax = false
-            },
-            style: { width: '75px', "min-height": '50px', color: "black" }
-        },
         11: {
-            title() { return "<h2>Reset previous content except grass for normality. (Based on points)" },
+            title() { return "<h2>Reset previous content except grass for normality.<br>(Based on points)" },
             canClick() { return player.dn.normalityToGet.gte(1) },
             unlocked() { return true },
             onClick() {
                 player.dn.normality = player.dn.normality.add(player.dn.normalityToGet)
                 player.dn.normalityPause = new Decimal(10)
             },
-            style: { width: '400px', "min-height": '100px', color: "black" },
+            style() {
+                let look = {width: "400px", minHeight: "100px", borderRadius: "15px", color: "white", border: "2px solid #c1df00", margin: "1px"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
         },
     },
-    normalityReset()
-    {
+    normalityReset() {
         player.du.points = new Decimal(0)
         player.dr.rank = new Decimal(0)
         player.dr.tier = new Decimal(0)
@@ -101,6 +70,9 @@ addLayer("dn", {
         player.dp.buyables[11] = new Decimal(0)
         player.dp.buyables[12] = new Decimal(0)
         player.dp.buyables[13] = new Decimal(0)
+        player.dp.buyables[14] = new Decimal(0)
+        player.dp.buyables[15] = new Decimal(0)
+        player.dp.buyables[16] = new Decimal(0)
 
         player.dg.generators = new Decimal(0)
         player.dg.generatorPower = new Decimal(0)
@@ -108,47 +80,50 @@ addLayer("dn", {
         player.dg.buyables[11] = new Decimal(0)
         player.dg.buyables[12] = new Decimal(0)
         player.dg.buyables[13] = new Decimal(0)
+        player.dg.buyables[14] = new Decimal(0)
+        player.dg.buyables[15] = new Decimal(0)
+        player.dg.buyables[16] = new Decimal(0)
 
     },
     upgrades: {
         11: {
             title: "Normality Upgrade I",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 18) },
             description: "Autobuy prestige buyables.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.dn },
             currencyDisplayName: "Normality",
             currencyInternalName: "normality",
             style() {
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #c1df00", margin: "1.5px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
         },
         12: {
             title: "Normality Upgrade II",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 18) },
             description: "Autobuy generator buyables.",
             cost: new Decimal(1e12),
             currencyLocation() { return player.dn },
             currencyDisplayName: "Normality",
             currencyInternalName: "normality",
             style() {
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #c1df00", margin: "1.5px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
         },
         13: {
             title: "Normality Upgrade III",
-            unlocked() { return true },
+            unlocked() { return hasUpgrade("sma", 18) },
             description: "Autobuy grass buyables.",
             cost: new Decimal(1e15),
             currencyLocation() { return player.dn },
             currencyDisplayName: "Normality",
             currencyInternalName: "normality",
             style() {
-                let look = {borderRadius: "10px", color: "white", border: "2px solid #384166", margin: "1.5px"}
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #c1df00", margin: "1.5px"}
                 hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
                 return look
             }
@@ -258,57 +233,45 @@ addLayer("dn", {
             style: { width: '275px', height: '150px', color: "black" }
         },
     },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-
-    },
+    milestones: {},
+    challenges: {},
+    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return { 'border-color': 'black' } },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.dn.normality) + "</h3> normality, which divide starmetal alloy requirement by /" + format(player.dn.normalityEffect) + "."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You will gain <h3>" + format(player.dn.normalityToGet) + "</h3> normality on reset." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                buttonStyle() { return {borderColor: "#c1df00"}},
+                unlocked: true,
+                content: [
+                    ["blank", "10px"],
+                    ["row", [
+                        ["raw-html", () => { return "You have " + format(player.dn.normality) + " normality"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(+" + format(player.dn.normalityToGet) + ")"}, () => {
+                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
+                            player.dn.normalityToGet.gte(1) ? look.color = "white" : look.color = "gray"
+                            return look
+                        }],
+                    ]],
+                    ["raw-html", () => { return "Divides starmetal alloy requirement by /" + format(player.dn.normalityEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "(Normality is kept on starmetal resets)" }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Normality is kept on starmetal resets." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]], {maxWidth: "900px"}],
                     ["blank", "25px"],
-                    ["row", [["clickable", 2], ["clickable", 3]]],
-                    ["blank", "25px"],
-                    ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]]],
-
-        ]
-
-            },
-            "Upgrades": {
-                buttonStyle() { return { 'border-color': 'black' } },
-                unlocked() { return hasUpgrade("sma", 18) },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13],]],
-
-        ]
-
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
+                ]
             },
         },
     },
-
     tabFormat: [
-         ["raw-html", function () { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-         ["raw-html", function () { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-         ["raw-html", function () { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, { "color": "red", "font-size": "16px", "font-family": "monospace" }],
-        ["raw-html", function () { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, { "color": "#FEEF5F", "font-size": "20px", "font-family": "monospace" }],
-         ["row", [["clickable", 1]]],
-         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
-    layerShown() { return hasUpgrade("le", 23) }
+        ["raw-html", () => { return "You have <h3>" + format(player.du.points) + "</h3> dark celestial points." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "You are gaining <h3>" + format(player.du.pointGain) + "</h3> dark celestial points per second." }, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return "UNAVOIDABLE SOFTCAP: /" + format(player.du.pointSoftcap) + " to gain." }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.du.pointGain.gte(player.du.secondSoftcapStart) ? "UNAVOIDABLE SOFTCAP<sup>2</sup>: Gain past " + format(player.du.secondSoftcapStart) + " is raised by ^" + format(player.du.pointSoftcap2) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+        ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace" }],
+        ["microtabs", "stuff", { 'border-width': '0px' }],
+        ["blank", "25px"],
+    ],
+    layerShown() { return hasUpgrade("le", 23) },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

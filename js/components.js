@@ -46,10 +46,10 @@ function loadVue() {
 		template: `
 		<div class="upgTable instant">
 			<div class="upgRow">
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -85,10 +85,10 @@ function loadVue() {
 		template: `
 		<div class="upgTable instant">
 			<div class="upgRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -105,10 +105,10 @@ function loadVue() {
 		template: `
 		<div class="upgTable instant">
 			<div class="upgRow tooltipBox" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -125,10 +125,10 @@ function loadVue() {
 		template: `
 		<div class="upgLeftTable instant">
 			<div class="upgScrollRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -165,10 +165,10 @@ function loadVue() {
 		template: `
 		<div id="scrCon" class="upgScrollRowTable instant">
 			<div class="upgScrollRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -185,10 +185,10 @@ function loadVue() {
 		template: `
 		<div id="scrCon" class="upgScrollRowTable upgAlwaysScrollRow instant">
 			<div class="upgScrollRow" v-bind:style="look" >
-				<div v-for="(item, index) in data">
-				<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
-				<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				<div style="margin:0" v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
 				</div>
 			</div>
 		</div>
@@ -315,8 +315,10 @@ function loadVue() {
 		template: `
 		<div v-if="tmp[layer].challenges && tmp[layer].challenges[data]!== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, [data]) && !inChallenge(layer, [data]))"
 			v-bind:class="['challenge', challengeStyle(layer, data), player[layer].activeChallenge === data ? 'resetNotify' : '']" v-bind:style="tmp[layer].challenges[data].style">
-			<br><h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
-			<button v-bind:class="{ longUpg: true, can: true, [layer]: true }" v-bind:style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
+			<h3 v-html="tmp[layer].challenges[data].name"></h3><br>
+			<button v-bind:class="{ challengeButton: true, can: tmp[layer].challenges[data].canClick, locked: !tmp[layer].challenges[data].canClick, [layer]: true }" 
+				v-bind:style="[{'background-color': tmp[layer].color},tmp[layer].challenges[data].buttonStyle]" 
+				v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br>
 			<span v-if="layers[layer].challenges[data].fullDisplay" v-html="run(layers[layer].challenges[data].fullDisplay, layers[layer].challenges[data])"></span>
 			<span v-else>
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
@@ -350,6 +352,26 @@ function loadVue() {
 		template: `
 		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, tooltipBox: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
 			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), tmp[layer].upgrades[data].style]">
+			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
+			<span v-else>
+				<span v-if= "tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
+				<span v-html="tmp[layer].upgrades[data].description"></span>
+				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
+				<br><br>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
+			</span>
+			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>
+
+			</button>
+		`
+	})
+
+	// data = id
+	Vue.component('id-upgrade', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, tooltipBox: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
+			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), tmp[layer].upgrades[data].style]">
+			<h3 class="idUpgrade" v-html="data"></h3>
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
 			<span v-else>
 				<span v-if= "tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
@@ -485,7 +507,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
-			<div class="exBuyableHolder" v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].buyables[data].style]">
+			<div class="exBuyableHolder tooltipBox" v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].buyables[data].style]">
 				<div class="exBuyableBar">
 					<div class="exBuyableBarText">
 						<span v-html="tmp[layer].buyables[data].purchaseLimit.eq(Infinity) ? formatWhole(player[layer].buyables[data]) : formatWhole(player[layer].buyables[data])+'/'+formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
@@ -500,15 +522,16 @@ function loadVue() {
 					</div>
 				</div>
 				<div class="exBuyableRow">
-					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					<button v-bind:class="{ exBuyableButton: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': '#cccccc'} : {}"
 					v-on:click="if(!interval) {player.f.mfactorMax=false; buyBuyable(layer, data)}" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 					Buy 1</button>
-					<button v-bind:class="{ exBuyableButton: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+					<button v-bind:class="{ exBuyableButton: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
 					v-bind:style="tmp[layer].buyables[data].canBuy ? {'background-color': '#cccccc'} : {}"
 					v-on:click="{buyMaxExBuyable(layer, data)}">
 					Buy Max</button>
 				</div>
+				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
 			</div>
 		</div>
 		`,
@@ -579,6 +602,53 @@ function loadVue() {
 		},
 	})
 
+	Vue.component('jinx-buyable', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<button v-bind:class="{ buyable: true, tooltipBox: true, can: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+			v-bind:style="[tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}, tmp[layer].componentStyles.buyable, tmp[layer].buyables[data].style]"
+			v-on:click="if(!interval) buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+				<div v-bind:class="{jinxTitle: true}" v-if="tmp[layer].buyables[data].title">
+					<span v-html="tmp[layer].buyables[data].title"></span>
+				</div>
+				<div v-bind:class="{jinxCost: true}">
+					<span v-if="!tmp[layer].buyables[data].extraAmount || tmp[layer].buyables[data].extraAmount.eq(0)" v-html="formatWhole(player[layer].buyables[data]) + '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					<span v-if="tmp[layer].buyables[data].extraAmount && tmp[layer].buyables[data].extraAmount.neq(0)" v-html="formatWhole(player[layer].buyables[data]) + '+' + formatWhole(tmp[layer].buyables[data].extraAmount) + '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit)"></span>
+					<br>
+					<span v-html="'Cost: ' + format(tmp[layer].buyables[data].cost)"></span>
+				</div>
+				<div v-bind:class="{jinxTotal: true}" v-if="tmp[layer].buyables[data].total">
+					<span v-html="tmp[layer].buyables[data].total"></span>
+				</div>
+				<span v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+				<node-mark :layer='layer' :data='tmp[layer].buyables[data].marked'></node-mark>
+				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
+
+			</button>
+			<br v-if="(tmp[layer].buyables[data].sellOne !== undefined && !(tmp[layer].buyables[data].canSellOne !== undefined && tmp[layer].buyables[data].canSellOne == false)) || (tmp[layer].buyables[data].sellAll && !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false))">
+			<sell-one :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-one']" v-if="(tmp[layer].buyables[data].sellOne)&& !(tmp[layer].buyables[data].canSellOne !== undefined && tmp[layer].buyables[data].canSellOne == false)"></sell-one>
+			<sell-all :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-all']" v-if="(tmp[layer].buyables[data].sellAll)&& !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false)"></sell-all>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
 	Vue.component('levelable', {
 		props: ['layer', 'data'],
 		template: `
@@ -589,12 +659,12 @@ function loadVue() {
 				<div class="levelableTop">
 					<img v-bind:src="tmp[layer].levelables[data].image" class="levelableImg"></img>
 					<div v-bind:class="{levelableText: true, hide: player[layer].levelables[data][0].eq(0)&&player[layer].levelables[data][1].eq(0)}">
-						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatWhole(player[layer].levelables[data][0]) : 'Lv ' + formatWhole(player[layer].levelables[data][0])+'/'+formatWhole(tmp[layer].levelables[data].levelLimit)"></span>
+						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
 					</div>
 				</div>
 				<div class="levelableBottom">
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
-						<span v-html="player[layer].levelables[data][0].eq(tmp[layer].levelables[data].levelLimit) ? formatWhole(tmp[layer].levelables[data].currency) : formatWhole(tmp[layer].levelables[data].currency)+'/'+formatWhole(tmp[layer].levelables[data].xpReq)"></span>
+						<span v-html="player[layer].levelables[data][0].eq(tmp[layer].levelables[data].levelLimit) ? formatShortestWhole(tmp[layer].levelables[data].currency) : formatShortestWhole(tmp[layer].levelables[data].currency)+'/'+formatShortestWhole(tmp[layer].levelables[data].xpReq)"></span>
 					</div>
 					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
@@ -611,16 +681,16 @@ function loadVue() {
 		template: `
 		<div class="levelableDisplayHolder">
 			<div class="levelableDisplayCol1">
-				<div class="levelableDisplayCard">
+				<div class="levelableDisplayCard" v-bind:style="{width: tmp[layer].levelables[layers[layer].levelables.index].style.width, height: tmp[layer].levelables[layers[layer].levelables.index].style.height}">
 					<div class="levelableDisplayImgHolder">
 						<img v-bind:src="tmp[layer].levelables[layers[layer].levelables.index].image" class="levelableImg"></img>
 						<div v-bind:class="{levelableText: true, hide: layers[layer].levelables.index==0}">
-							<span v-html="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.eq(Infinity) ? 'Lv ' + formatWhole(player[layer].levelables[layers[layer].levelables.index][0]) : 'Lv ' + formatWhole(player[layer].levelables[layers[layer].levelables.index][0])+'/'+formatWhole(tmp[layer].levelables[layers[layer].levelables.index].levelLimit)"></span>
+							<span v-html="tmp[layer].levelables[layers[layer].levelables.index].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[layers[layer].levelables.index][0])+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].levelLimit)"></span>
 						</div>
 					</div>
 					<div class="levelableDisplayBarHolder">
 						<div v-bind:class="{levelableBarText: true, hide: layers[layer].levelables.index==0}">
-							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].eq(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
+							<span v-html="player[layer].levelables[layers[layer].levelables.index][0].eq(tmp[layer].levelables[layers[layer].levelables.index].levelLimit) ? formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency) : formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].currency)+'/'+formatShortestWhole(tmp[layer].levelables[layers[layer].levelables.index].xpReq)"></span>
 						</div>
 						<div v-bind:class="{levelableBarProgress: true, hide: layers[layer].levelables.index==0}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[layers[layer].levelables.index].currency.div(tmp[layer].levelables[layers[layer].levelables.index].xpReq).mul(100))+'%'}, tmp[layer].levelables[layers[layer].levelables.index].barStyle]"></div>
 					</div>
@@ -631,16 +701,16 @@ function loadVue() {
 					<div class="levelableDisplayTitle">
 						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].title"></span>
 					</div>
-					<div class="levelableDisplayButtonHolder">
-						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: layers[layer].levelables.toggle}"
+					<div class="levelableDisplayButtonHolder" v-bind:class="{hide: (tmp[layer].levelables[layers[layer].levelables.index].lore == null)}">
+						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: layers[layer].levelables.toggle, hide: (tmp[layer].levelables[layers[layer].levelables.index].lore == null)}"
 						v-on:click="(layers[layer].levelables.toggle=true)">Effects</button>
-						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: !layers[layer].levelables.toggle}"
+						<button v-bind:class="{levelableDisplayButton: true, levelableDisplayButtonSelect: !layers[layer].levelables.toggle, hide: (tmp[layer].levelables[layers[layer].levelables.index].lore == null)}"
 						v-on:click="(layers[layer].levelables.toggle=false)">Description</button>
 					</div>
-					<div v-bind:class="{levelableDisplayDescription: true, hide: !layers[layer].levelables.toggle}">
+					<div v-bind:class="{levelableDisplayDescription: true, hide: (!layers[layer].levelables.toggle && tmp[layer].levelables[layers[layer].levelables.index].lore != null)}"  v-bind:style="[(tmp[layer].levelables[layers[layer].levelables.index].lore == null) ? {'height': '96px'} : {'height': '79px'}]">
 						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].description"></span>
 					</div>
-					<div v-bind:class="{levelableDisplayLore: true, hide: layers[layer].levelables.toggle}">
+					<div v-bind:class="{levelableDisplayLore: true, hide: (layers[layer].levelables.toggle || tmp[layer].levelables[layers[layer].levelables.index].lore == null)}">
 						<span v-html="tmp[layer].levelables[layers[layer].levelables.index].lore"></span>
 					</div>
 				</div>
@@ -689,7 +759,7 @@ function loadVue() {
 			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
 			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
-			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start;hover" @touchend="stop" @touchcancel="stop" @mouseenter="hover">
 			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
 			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
@@ -713,7 +783,10 @@ function loadVue() {
 				clearInterval(this.interval)
 				this.interval = false
 			  	this.time = 0
-			}
+			},
+			hover() {
+				if (layers[this.layer].clickables[this.data].onHover) run(layers[this.layer].clickables[this.data].onHover, layers[this.layer].clickables[this.data])
+			},
 		},
 	})
 
@@ -725,7 +798,7 @@ function loadVue() {
 			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
 			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
-			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start;hover" @touchend="stop" @touchcancel="stop" @mouseenter="hover">
 			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
 			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
@@ -749,7 +822,10 @@ function loadVue() {
 				clearInterval(this.interval)
 				this.interval = false
 			  	this.time = 0
-			}
+			},
+			hover() {
+				if (layers[this.layer].clickables[this.data].onHover) run(layers[this.layer].clickables[this.data].onHover, layers[this.layer].clickables[this.data])
+			},
 		},
 	})
 
@@ -761,7 +837,7 @@ function loadVue() {
 			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked"
 			v-bind:class="{ upg: true, tooltipBox: true, canHoverless: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
 			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
-			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start;hover" @touchend="stop" @touchcancel="stop" @mouseenter="hover">
 			<span v-if= "tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"><h2 v-html="tmp[layer].clickables[data].title" v-bind:style="{'transition-duration': '0s'}"></h2><br></span>
 			<span v-bind:style="{'white-space': 'pre-line','transition-duration': '0s'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
@@ -785,7 +861,10 @@ function loadVue() {
 				clearInterval(this.interval)
 				this.interval = false
 			  	this.time = 0
-			}
+			},
+			hover() {
+				if (layers[this.layer].clickables[this.data].onHover) run(layers[this.layer].clickables[this.data].onHover, layers[this.layer].clickables[this.data])
+			},
 		},
 	})
 
@@ -937,12 +1016,26 @@ function loadVue() {
 		computed: {
 			key() {return this.$vnode.key}
 		},
-		template: `<div>
-		<span class="upgRow" v-for="(row, r) in data"><table>
+		template: `<div class="trees">
+		<span class="upgRow" v-for="(row, r) in data"><table class="treeRow">
 			<span v-for="(node, id) in row" style = "{width: 0px}">
 				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
 			</span>
-			<tr><table><button class="treeNode hidden"></button></table></tr>
+		</table></span></div>
+	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('row-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `<div class="upgRow">
+		<span class="upgTable" v-for="(row, r) in data">
+			<span v-for="(node, id) in row" style = "{width: 0px}">
+				<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol' :key="key + '-' + r + '-' + id"></tree-node>
+			</span>
 		</span></div>
 
 	`
@@ -987,6 +1080,30 @@ function loadVue() {
 			</span>
 			<tr><table><button class="treeNode hidden"></button></table></tr>
 		</span></div>
+	`
+	})
+
+	// Data is an array with the structure of the tree
+	Vue.component('tab-tree', {
+		props: ['layer', 'data'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="tabHolder">
+			<div class="tabRow" v-for="(row, r) in data" v-bind:class="{hide:!rowShown(data[r])}">
+				<div class="tabTitleHolder">
+					<div v-bind:class="{tabTitle:true,darkTabTitle:player.sma.inStarmetalChallenge}">
+						<span v-html="'Row ' + r"></span>
+					</div>
+				</div>
+				<div class="tabRowHolder">
+					<span v-for="(node, id) in row" style = "{width: 0px}">
+						<tab-node :layer='node' :prev='layer' :abb='tmp[node].name' :key="key + '-' + r + '-' + id"></tab-node>
+					</span>
+				</div>
+			</div>
+		</div>
 	`
 	})
 
@@ -1038,6 +1155,7 @@ function loadVue() {
 	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])
 	Vue.component('tree-node', systemComponents['tree-node'])
+	Vue.component('tab-node', systemComponents['tab-node'])
 	Vue.component('layer-tab', systemComponents['layer-tab'])
 	Vue.component('overlay-head', systemComponents['overlay-head'])
 	Vue.component('info-tab', systemComponents['info-tab'])

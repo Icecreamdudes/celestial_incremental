@@ -13,15 +13,6 @@ addLayer("settings", {
     color: "white",
     branches: ["branch"],
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = player.po.lastUniverse
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         2: {
             title() { return "Settings" },
             canClick() { return true },
@@ -76,8 +67,6 @@ addLayer("settings", {
     infoboxes: {},
     microtabs: {},
     tabFormat: [
-        ["clickable", 1],
-        ["blank", "25px"],
         ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
         ["blank", "50px"],
 
@@ -92,7 +81,7 @@ addLayer("settings", {
             ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideMilestonePopups'); needsCanvasUpdate = true>Hide Milestone Popups:<br>" + options.hideMilestonePopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('newMenu')>Toggle Layout:<br>" + options.newMenu + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+            ["raw-html", () => "<button class=opt onclick=selectMenu()>Layout:<br>" + options.menuType + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],
 
         ["row", [
@@ -107,6 +96,7 @@ addLayer("settings", {
         ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["blank", "25px"],
         ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["blank", "25px"],
     ],
     layerShown() { return false }
 })

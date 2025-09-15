@@ -77,15 +77,6 @@
 
     },
     clickables: {
-        1: {
-            title() { return "<h2>Return" },
-            canClick() { return true },
-            unlocked() { return options.newMenu == false },
-            onClick() {
-                player.tab = "cp"
-            },
-            style: { width: '100px', "min-height": '50px' },
-        },
         11: {
             title() { return "<h2>Gain " + format(player.ar.rankPointsToGet) + " rank points</h2><br><h3>But reset replicanti points<br><small>(Based on Replicanti Points)</small></h3>" },
             canClick() { return player.ar.rankPointsToGet.gt(0) },
@@ -94,7 +85,6 @@
                 player.ar.rankPoints = player.ar.rankPoints.add(player.ar.rankPointsToGet)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "406px", minHeight: "80.7px", borderRadius: "0px 15px 0px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
         12: {
@@ -106,7 +96,6 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style() {return hasUpgrade("cp", 13) ? {width: "406px", minHeight: "80.7px", borderRadius: "0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"} : {width: "406px", minHeight: "80.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"} },
         },
         13: {
@@ -119,7 +108,6 @@
                 player.ar.rankPoints = new Decimal(0)
                 player.cp.replicantiPoints = new Decimal(1)
             },
-            onHold() { clickClickable(this.layer, this.id) },
             style: {width: "406px", minHeight: "80.7px", borderRadius: "0px 0px 15px 0px", color: "black", border: "3px solid #0c1a36", margin: "-3px"},
         },
     },
@@ -136,6 +124,7 @@
                     return new Decimal(1)
                 }
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: {backgroundColor: "#193ceb"},
             display() {
                 if (player.cp.replicantiPoints.lt(player.cp.replicantiPointCap)) {
@@ -187,12 +176,12 @@
         },
     },
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-        ["raw-html", function () { return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x" }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.cp.replicantiPoints) + "</h3> replicanti points."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "Replicanti Mult: " + format(player.cp.replicantiPointsMult, 4) + "x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [["bar", "replicantiBar"]]],
-        ["row", [["clickable", 1]]],
         ["microtabs", "stuff", { 'border-width': '0px' }],
-        ],
+        ["blank", "25px"],
+    ],
     layerShown() { return player.startedGame == true && hasUpgrade("cp", 11) }
 })
 

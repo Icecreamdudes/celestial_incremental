@@ -93,13 +93,8 @@ function updateStyles() {
 	let scrollContainer = document.querySelector('.uniHolder')
 	if (scrollContainer) {
 		scrollContainer.addEventListener("wheel", (event) => {
-    		event.preventDefault(); // Prevent default vertical scrolling
-
-    		// Adjust scrollLeft based on deltaY
-    		// event.deltaY is positive for scrolling down, negative for scrolling up
-    		// We map this to horizontal scrolling: positive deltaY moves right, negative moves left
     		scrollContainer.scrollLeft += event.deltaY; 
-		});
+		}, {passive: true});
 	}
 
 	// ===------   LAYER BACKGROUND   ------=== //

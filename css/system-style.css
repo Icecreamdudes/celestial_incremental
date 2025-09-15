@@ -85,6 +85,7 @@
 	display: inline-block;
   	flex: 0 0 auto;
 	margin: 0;
+	min-width: 70px;
 	width: 19%;
 	height: 100%;
 	color: rgba(0, 0, 0, 0.9);
@@ -197,6 +198,9 @@
 @media (max-width: 1250px) {
 	.uniHolder {
 		width: calc(100% - 6px);
+	}
+	.uniButton {
+		width: 10%;
 	}
 	.titleHolder {
 		width: 295px;

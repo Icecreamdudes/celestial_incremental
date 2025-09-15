@@ -601,12 +601,12 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h4>v1.8.1 - Hex Hotfix 1</h3><br>
+	<h3>v1.8.1 - Hex Hotfix 1</h3><br>
 		Bugfixes:<br>
 		- Boons now trigger a hold tick on click<br>
 		- Fixed pet points and XPBoost being formatted incorrectly<br>
 		- Fixed edge-cases on save transfers<br><br>
-	<h3>v1.8 - The Hexing Revamp</h3><br>
+	<h2>v1.8 - The Hexing Revamp</h2><br>
 		Content:<br>
 			- Added Universe α: Hex.<br>
 			- Revamped the UI.<br>

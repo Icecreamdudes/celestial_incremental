@@ -159,6 +159,7 @@ addLayer("hbl", {
             },
             canClick: true,
             unlocked: true,
+            onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[0].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[0].sub(player.hbl.boosterXP[0]))
                 if (player.hbl.boons.gte(amt)) {
@@ -179,6 +180,7 @@ addLayer("hbl", {
             title() { return "<h3>Boon Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[1]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[1]) + "/" + formatWhole(player.hbl.boosterReq[1]) + ")<br>x" + format(player.hbl.boosterEffects[1]) + " Boons<br><small>(Hold to deposit boons)</small>" },
             canClick: true,
             unlocked: true,
+            onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[1].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[1].sub(player.hbl.boosterXP[1]))
                 if (player.hbl.boons.gte(amt)) {
@@ -203,6 +205,7 @@ addLayer("hbl", {
             },
             canClick: true,
             unlocked: true,
+            onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[2].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[2].sub(player.hbl.boosterXP[2]))
                 if (player.hbl.boons.gte(amt)) {
@@ -227,6 +230,7 @@ addLayer("hbl", {
             },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
+            onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[3].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[3].sub(player.hbl.boosterXP[3]))
                 if (player.hbl.boons.gte(amt)) {
@@ -247,6 +251,7 @@ addLayer("hbl", {
             title() { return "<h3>Blessing Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[4]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[4]) + "/" + formatWhole(player.hbl.boosterReq[4]) + ")<br>x" + format(player.hbl.boosterEffects[4]) + " Blessings<br><small>(Hold to deposit boons)</small>" },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
+            onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[4].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[4].sub(player.hbl.boosterXP[4]))
                 if (player.hbl.boons.gte(amt)) {
@@ -271,6 +276,7 @@ addLayer("hbl", {
             },
             canClick: true,
             unlocked() {return hasUpgrade("ta", 15)},
+            onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[5].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[5].sub(player.hbl.boosterXP[5]))
                 if (player.hbl.boons.gte(amt)) {

@@ -601,7 +601,12 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.8 - The Hexing Revamp</h3><br>
+	<h3>v1.8.1 - Hex Hotfix 1</h3><br>
+		Bugfixes:<br>
+		- Boons now trigger a hold tick on click<br>
+		- Fixed pet points and XPBoost being formatted incorrectly<br>
+		- Fixed edge-cases on save transfers<br><br>
+	<h2>v1.8 - The Hexing Revamp</h2><br>
 		Content:<br>
 			- Added Universe α: Hex.<br>
 			- Revamped the UI.<br>
@@ -1203,10 +1208,14 @@ function fixOldSave(oldVersion){
 		if (player.ma.bestComboDepth1.gte(100)) player.ma.bestComboDepth1 = new Decimal(100)
 		if (player.ma.bestComboDepth2.gte(100)) player.ma.bestComboDepth2 = new Decimal(100)
 		if (player.ma.bestComboDepth3.gte(100)) player.ma.bestComboDepth3 = new Decimal(100)
+		if (!player.pet.singularityFragments) player.pet.singularityFragments = new Decimal(0)
+		player.pet.highestDicePetCombo = new Decimal(player.pet.highestDicePetCombo)
 		player.cb.evolutionShards = new Decimal(player.cb.evolutionShards).floor()
 		player.cb.paragonShards = new Decimal(player.cb.paragonShards).floor()
-		player.hrm.realmEssence = new Decimal(player.re.halterEssence)
-		player.hrm.totalRealmEssence = new Decimal(player.re.halterEssence)
+		if (player.re != undefined) {
+			player.hrm.realmEssence = new Decimal(player.re.halterEssence)
+			player.hrm.totalRealmEssence = new Decimal(player.re.halterEssence)
+		}
 		for (let prop in player.ta.buyables) {
 			if (prop != 19 && prop != 39) {
 				if (getBuyableAmount("ta", prop).gt(layers.ta.buyables[prop].purchaseLimit())) setBuyableAmount("ta", prop, layers.ta.buyables[prop].purchaseLimit())
@@ -1235,47 +1244,50 @@ function fixOldSave(oldVersion){
 		setBuyableAmount("ma", 102, new Decimal(0))
 		setBuyableAmount("ma", 103, new Decimal(0))
 
-		setLevelableXP("pu", 101, new Decimal(player.le.punchcardsXP[0]))
-		setLevelableXP("pu", 201, new Decimal(player.le.punchcardsXP[1]))
-		setLevelableXP("pu", 102, new Decimal(player.le.punchcardsXP[2]))
-		setLevelableXP("pu", 103, new Decimal(player.le.punchcardsXP[3]))
-		setLevelableXP("pu", 104, new Decimal(player.le.punchcardsXP[4]))
-		setLevelableXP("pu", 105, new Decimal(player.le.punchcardsXP[5]))
-		setLevelableXP("pu", 202, new Decimal(player.le.punchcardsXP[6]))
-		setLevelableXP("pu", 106, new Decimal(player.le.punchcardsXP[7]))
-		setLevelableXP("pu", 107, new Decimal(player.le.punchcardsXP[8]))
-		setLevelableXP("pu", 203, new Decimal(player.le.punchcardsXP[9]))
-		setLevelableXP("pu", 204, new Decimal(player.le.punchcardsXP[10]))
-		setLevelableXP("pu", 108, new Decimal(player.le.punchcardsXP[11]))
-		setLevelableXP("pu", 205, new Decimal(player.le.punchcardsXP[12]))
-		setLevelableXP("pu", 206, new Decimal(player.le.punchcardsXP[13]))
-		setLevelableXP("pu", 301, new Decimal(player.le.punchcardsXP[14]))
-		setLevelableXP("pu", 302, new Decimal(player.le.punchcardsXP[15]))
-		setLevelableXP("pu", 207, new Decimal(player.le.punchcardsXP[16]))
-		setLevelableXP("pu", 109, new Decimal(player.le.punchcardsXP[17]))
-		setLevelableXP("pu", 303, new Decimal(player.le.punchcardsXP[18]))
-		setLevelableXP("pu", 304, new Decimal(player.le.punchcardsXP[19]))
+		if (player.le.punchcardsXP != undefined) {
+			setLevelableXP("pu", 101, new Decimal(player.le.punchcardsXP[0]))
+			setLevelableXP("pu", 201, new Decimal(player.le.punchcardsXP[1]))
+			setLevelableXP("pu", 102, new Decimal(player.le.punchcardsXP[2]))
+			setLevelableXP("pu", 103, new Decimal(player.le.punchcardsXP[3]))
+			setLevelableXP("pu", 104, new Decimal(player.le.punchcardsXP[4]))
+			setLevelableXP("pu", 105, new Decimal(player.le.punchcardsXP[5]))
+			setLevelableXP("pu", 202, new Decimal(player.le.punchcardsXP[6]))
+			setLevelableXP("pu", 106, new Decimal(player.le.punchcardsXP[7]))
+			setLevelableXP("pu", 107, new Decimal(player.le.punchcardsXP[8]))
+			setLevelableXP("pu", 203, new Decimal(player.le.punchcardsXP[9]))
+			setLevelableXP("pu", 204, new Decimal(player.le.punchcardsXP[10]))
+			setLevelableXP("pu", 108, new Decimal(player.le.punchcardsXP[11]))
+			setLevelableXP("pu", 205, new Decimal(player.le.punchcardsXP[12]))
+			setLevelableXP("pu", 206, new Decimal(player.le.punchcardsXP[13]))
+			setLevelableXP("pu", 301, new Decimal(player.le.punchcardsXP[14]))
+			setLevelableXP("pu", 302, new Decimal(player.le.punchcardsXP[15]))
+			setLevelableXP("pu", 207, new Decimal(player.le.punchcardsXP[16]))
+			setLevelableXP("pu", 109, new Decimal(player.le.punchcardsXP[17]))
+			setLevelableXP("pu", 303, new Decimal(player.le.punchcardsXP[18]))
+			setLevelableXP("pu", 304, new Decimal(player.le.punchcardsXP[19]))
 
-		setLevelableAmount("pu", 101, new Decimal(player.le.punchcardsLevels[0]).sub(1).min(10))
-		setLevelableAmount("pu", 201, new Decimal(player.le.punchcardsLevels[1]).sub(1).min(10))
-		setLevelableAmount("pu", 102, new Decimal(player.le.punchcardsLevels[2]).sub(1).min(10))
-		setLevelableAmount("pu", 103, new Decimal(player.le.punchcardsLevels[3]).sub(1).min(10))
-		setLevelableAmount("pu", 104, new Decimal(player.le.punchcardsLevels[4]).sub(1).min(10))
-		setLevelableAmount("pu", 105, new Decimal(player.le.punchcardsLevels[5]).sub(1).min(10))
-		setLevelableAmount("pu", 202, new Decimal(player.le.punchcardsLevels[6]).sub(1).min(10))
-		setLevelableAmount("pu", 106, new Decimal(player.le.punchcardsLevels[7]).sub(1).min(10))
-		setLevelableAmount("pu", 107, new Decimal(player.le.punchcardsLevels[8]).sub(1).min(10))
-		setLevelableAmount("pu", 203, new Decimal(player.le.punchcardsLevels[9]).sub(1).min(10))
-		setLevelableAmount("pu", 204, new Decimal(player.le.punchcardsLevels[10]).sub(1).min(10))
-		setLevelableAmount("pu", 108, new Decimal(player.le.punchcardsLevels[11]).sub(1).min(10))
-		setLevelableAmount("pu", 205, new Decimal(player.le.punchcardsLevels[12]).sub(1).min(10))
-		setLevelableAmount("pu", 206, new Decimal(player.le.punchcardsLevels[13]).sub(1).min(10))
-		setLevelableAmount("pu", 301, new Decimal(player.le.punchcardsLevels[14]).sub(1).min(10))
-		setLevelableAmount("pu", 302, new Decimal(player.le.punchcardsLevels[15]).sub(1).min(10))
-		setLevelableAmount("pu", 207, new Decimal(player.le.punchcardsLevels[16]).sub(1).min(10))
-		setLevelableAmount("pu", 109, new Decimal(player.le.punchcardsLevels[17]).sub(1).min(10))
-		setLevelableAmount("pu", 303, new Decimal(player.le.punchcardsLevels[18]).sub(1).min(10))
-		setLevelableAmount("pu", 304, new Decimal(player.le.punchcardsLevels[19]).sub(1).min(10))
+			setLevelableAmount("pu", 101, new Decimal(player.le.punchcardsLevels[0]).sub(1).min(10))
+			setLevelableAmount("pu", 201, new Decimal(player.le.punchcardsLevels[1]).sub(1).min(10))
+			setLevelableAmount("pu", 102, new Decimal(player.le.punchcardsLevels[2]).sub(1).min(10))
+			setLevelableAmount("pu", 103, new Decimal(player.le.punchcardsLevels[3]).sub(1).min(10))
+			setLevelableAmount("pu", 104, new Decimal(player.le.punchcardsLevels[4]).sub(1).min(10))
+			setLevelableAmount("pu", 105, new Decimal(player.le.punchcardsLevels[5]).sub(1).min(10))
+			setLevelableAmount("pu", 202, new Decimal(player.le.punchcardsLevels[6]).sub(1).min(10))
+			setLevelableAmount("pu", 106, new Decimal(player.le.punchcardsLevels[7]).sub(1).min(10))
+			setLevelableAmount("pu", 107, new Decimal(player.le.punchcardsLevels[8]).sub(1).min(10))
+			setLevelableAmount("pu", 203, new Decimal(player.le.punchcardsLevels[9]).sub(1).min(10))
+			setLevelableAmount("pu", 204, new Decimal(player.le.punchcardsLevels[10]).sub(1).min(10))
+			setLevelableAmount("pu", 108, new Decimal(player.le.punchcardsLevels[11]).sub(1).min(10))
+			setLevelableAmount("pu", 205, new Decimal(player.le.punchcardsLevels[12]).sub(1).min(10))
+			setLevelableAmount("pu", 206, new Decimal(player.le.punchcardsLevels[13]).sub(1).min(10))
+			setLevelableAmount("pu", 301, new Decimal(player.le.punchcardsLevels[14]).sub(1).min(10))
+			setLevelableAmount("pu", 302, new Decimal(player.le.punchcardsLevels[15]).sub(1).min(10))
+			setLevelableAmount("pu", 207, new Decimal(player.le.punchcardsLevels[16]).sub(1).min(10))
+			setLevelableAmount("pu", 109, new Decimal(player.le.punchcardsLevels[17]).sub(1).min(10))
+			setLevelableAmount("pu", 303, new Decimal(player.le.punchcardsLevels[18]).sub(1).min(10))
+			setLevelableAmount("pu", 304, new Decimal(player.le.punchcardsLevels[19]).sub(1).min(10))
+		}
+		
 		
 		player.cs.scraps.point.amount = new Decimal(player.cs.resourceCoreScraps[0])
 		player.cs.scraps.factor.amount = new Decimal(player.cs.resourceCoreScraps[1])

@@ -3236,7 +3236,7 @@ addLayer("cb", {
                 ["raw-html", () => { return formatShortWhole(player.cb.level)}, {width: "93px", height: "50px", color: "#0098E5", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
                     if ((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11))) && !inChallenge("ip", 13)) {
-                        return "<div class='bottomTooltip'>Levels<hr><small>x" + format(player.cb.levelEffect) + " Celestial Points<br>(Highest level: " + formatShortWhole(player.cb.highestLevel) + ")</small></div>"
+                        return "<div class='bottomTooltip'>Levels<hr><small>x" + formatShort(player.cb.levelEffect) + " Celestial Points<br>(Highest level: " + formatShortWhole(player.cb.highestLevel) + ")</small></div>"
                     } else if (inChallenge("ip", 13)) {
                         return "<div class='bottomTooltip'>Levels<hr><small>[Effect Disabled due to IC3]<br>(Highest level: " + formatShortWhole(player.cb.highestLevel) + ")</small></div>"
                     } else {
@@ -3246,18 +3246,18 @@ addLayer("cb", {
             ], {width: "148px", height: "50px", borderRight: "2px solid white"}],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/XPBoost.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatShortWhole(player.cb.XPBoost)}, {width: "93px", height: "50px", color: "#00B229", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShort(player.cb.XPBoost)}, {width: "93px", height: "50px", color: "#00B229", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
                     if (player.cb.XPBoost.lt(1000)) {
-                        return "<div class='bottomTooltip'>XPBoost<hr><small>x" + formatShortWhole(player.cb.XPBoostEffect) + " XP</small></div>"
+                        return "<div class='bottomTooltip'>XPBoost<hr><small>x" + formatShort(player.cb.XPBoostEffect) + " XP</small></div>"
                     } else {
-                        return "<div class='bottomTooltip'>XPBoost<hr><small>x" + formatShortWhole(player.cb.XPBoostEffect) + " XP<br>[SOFTCAPPED]</small></div>"
+                        return "<div class='bottomTooltip'>XPBoost<hr><small>x" + formatShort(player.cb.XPBoostEffect) + " XP<br>[SOFTCAPPED]</small></div>"
                     }
                 }],
             ], () => { return (player.cb.highestLevel.gte(100) && (hasUpgrade("ip", 31) || hasMilestone("s", 14))) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"} }],
             ["tooltip-row", [
                 ["raw-html", "<img src='resources/petPoint.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatShortWhole(player.cb.petPoints)}, {width: "93px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", () => { return formatShort(player.cb.petPoints)}, {width: "93px", height: "50px", color: "#A2D800", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", "<div class='bottomTooltip'>Pet Points<hr><small>(Gained from rare pet buttons)</small></div>"],
             ], () => { return player.cb.highestLevel.gte(25) ? {width: "148px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
             ["tooltip-row", [

@@ -27,7 +27,7 @@ function canBuyBuyable(layer, id) {
 
 function canBuyLevelable(layer, id) {
 	let l = temp[layer].levelables[id]
-	return (l.unlocked && run(l.canAfford, l) && player[layer].levelables[id][0].lt(l.levelLimit) && !tmp[layer].deactivated)
+	return (l.unlocked && run(l.canAfford, l) && Decimal.lt(player[layer].levelables[id][0], l.levelLimit) && !tmp[layer].deactivated)
 }
 
 function canAffordPurchase(layer, thing, cost) {

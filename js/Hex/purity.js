@@ -118,7 +118,7 @@ addLayer("hpu", {
         3: {
             title() {
                 let str = "<h3>Purified Provenances</h3><br>Lv." + formatWhole(player.hpu.purifier[0]) + "<br>^" + format(player.hpu.purifierEffects[0]) + " Refiner 2's Effects"
-                if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -134,7 +134,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifier[1]) + "<br>x" + format(player.hpu.purifierEffects[1]) + " 1st & 4th Miracles"
                 if (inChallenge("hrm", 12)) str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifier[1]) + "<br>x" + format(player.hpu.purifierEffects[1]) + " Blessings and Boons"
-                if (player.hpu.purifierEffects[1].gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[1].gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -149,7 +149,7 @@ addLayer("hpu", {
         5: {
             title() {
                 let str = "<h3>Elevated Exponent</h3><br>Lv." + formatWhole(player.hpu.purifier[2]) + "<br>^" + format(player.hpu.purifierEffects[2]) + " Non-Hex Refiner Effects"
-                if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 101)},
@@ -172,7 +172,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifier[3]) + "<br>^" + format(player.hpu.purifierEffects[3]) + " Hex Point Booster"
                 if (inChallenge("hrm", 12)) str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifier[3]) + "<br>^" + format(player.hpu.purifierEffects[3]) + " 1st Refiners Effects"
-                if (player.hpu.purifierEffects[3].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[3].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -188,7 +188,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Amended Automation</h3><br>Lv." + formatWhole(player.hpu.purifier[4]) + "<br>+" + formatWhole(player.hpu.purifierEffects[4].mul(100)) + "% blessings/s"
                 str = str.concat("<br><small>(" + format(player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4])) + "/s)</small>")
-                if (player.hpu.purifierEffects[4].gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[4].gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 if (inChallenge("hrm", 11)) str = str.concat("<br><small style='color:red'>[DISABLED BY CREATOR REALM]</small>")
                 return str
             },
@@ -209,7 +209,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " 4th Grace Effect"
                 if (inChallenge("hrm", 12)) str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " Base Α-Jinx Effect"
-                if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},

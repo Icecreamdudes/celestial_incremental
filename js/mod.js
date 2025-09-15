@@ -89,6 +89,19 @@ function updateStyles() {
 		}
 	}
 
+	// ===------   Universe Bar Horizontal Scrolling   ------=== //
+	let scrollContainer = document.querySelector('.uniHolder')
+	if (scrollContainer) {
+		scrollContainer.addEventListener("wheel", (event) => {
+    		event.preventDefault(); // Prevent default vertical scrolling
+
+    		// Adjust scrollLeft based on deltaY
+    		// event.deltaY is positive for scrolling down, negative for scrolling up
+    		// We map this to horizontal scrolling: positive deltaY moves right, negative moves left
+    		scrollContainer.scrollLeft += event.deltaY; 
+		});
+	}
+
 	// ===------   LAYER BACKGROUND   ------=== //
 	let layerBG = ""
 
@@ -1289,17 +1302,17 @@ function fixOldSave(oldVersion){
 		}
 		
 		
-		player.cs.scraps.point.amount = new Decimal(player.cs.resourceCoreScraps[0])
-		player.cs.scraps.factor.amount = new Decimal(player.cs.resourceCoreScraps[1])
-		player.cs.scraps.prestige.amount = new Decimal(player.cs.resourceCoreScraps[2])
-		player.cs.scraps.tree.amount = new Decimal(player.cs.resourceCoreScraps[3])
-		player.cs.scraps.grass.amount = new Decimal(player.cs.resourceCoreScraps[4])
-		player.cs.scraps.grasshopper.amount = new Decimal(player.cs.resourceCoreScraps[5])
-		player.cs.scraps.code.amount = new Decimal(player.cs.resourceCoreScraps[6])
-		player.cs.scraps.dice.amount = new Decimal(player.cs.resourceCoreScraps[7])
-		player.cs.scraps.rocket.amount = new Decimal(player.cs.resourceCoreScraps[8])
-		player.cs.scraps.antimatter.amount = new Decimal(player.cs.resourceCoreScraps[9])
-		player.cs.scraps.infinity.amount = new Decimal(player.cs.resourceCoreScraps[10])
-		player.cs.scraps.checkback.amount = new Decimal(player.cs.paragonScraps)
+		player.cs.scraps.point.amount = new Decimal(player.cs.resourceCoreScraps[0]).abs()
+		player.cs.scraps.factor.amount = new Decimal(player.cs.resourceCoreScraps[1]).abs()
+		player.cs.scraps.prestige.amount = new Decimal(player.cs.resourceCoreScraps[2]).abs()
+		player.cs.scraps.tree.amount = new Decimal(player.cs.resourceCoreScraps[3]).abs()
+		player.cs.scraps.grass.amount = new Decimal(player.cs.resourceCoreScraps[4]).abs()
+		player.cs.scraps.grasshopper.amount = new Decimal(player.cs.resourceCoreScraps[5]).abs()
+		player.cs.scraps.code.amount = new Decimal(player.cs.resourceCoreScraps[6]).abs()
+		player.cs.scraps.dice.amount = new Decimal(player.cs.resourceCoreScraps[7]).abs()
+		player.cs.scraps.rocket.amount = new Decimal(player.cs.resourceCoreScraps[8]).abs()
+		player.cs.scraps.antimatter.amount = new Decimal(player.cs.resourceCoreScraps[9]).abs()
+		player.cs.scraps.infinity.amount = new Decimal(player.cs.resourceCoreScraps[10]).abs()
+		player.cs.scraps.checkback.amount = new Decimal(player.cs.paragonScraps).abs()
 	}
 }

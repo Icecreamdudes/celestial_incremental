@@ -57,5 +57,5 @@ addLayer("au2", {
         ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on reset." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return player.startedGame == true && player.au2.au2Unlocked}
+    layerShown() { return player.startedGame == true && player.au2.au2Unlocked && !player.sma.inStarmetalChallenge}
 })

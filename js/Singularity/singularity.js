@@ -64,7 +64,7 @@ addLayer("s", {
 
         player.s.singularityTime = player.s.singularityTime.add(onepersec.mul(delta))
 
-        player.s.singularitiesEffect = Decimal.pow(1.175, player.s.singularities.add(1).log(10))
+        player.s.singularitiesEffect = Decimal.pow(1.2, player.s.singularities.add(1).log(10))
     },
     clickables: {},
     bars: {},

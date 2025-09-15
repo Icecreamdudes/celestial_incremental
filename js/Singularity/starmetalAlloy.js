@@ -75,7 +75,6 @@
             unlocked: true,
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
-                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
                 player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true

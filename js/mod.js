@@ -89,6 +89,14 @@ function updateStyles() {
 		}
 	}
 
+	// ===------   Universe Bar Horizontal Scrolling   ------=== //
+	let scrollContainer = document.querySelector('.uniHolder')
+	if (scrollContainer) {
+		scrollContainer.addEventListener("wheel", (event) => {
+    		scrollContainer.scrollLeft += event.deltaY; 
+		}, {passive: true});
+	}
+
 	// ===------   LAYER BACKGROUND   ------=== //
 	let layerBG = ""
 
@@ -601,6 +609,25 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.8.2 - Hex Hotfix 2</h3><br>
+		Qol:<br>
+		- Changed the Uni-bar to scroll instead of using pages.<br>
+		- Removed eclipse cooldown, cause why would you want that.<br>
+		- Added legendary pet summon pity.<br><br>
+		Balancing:<br>
+		- Lowered realm essence upgrade cost scaling.<br>
+		- Made jinx automation be unlocked earlier into hex.<br>
+		- Slightly buffed unlockable singularity effect.<br>
+		- Improved legendary pet summon odds.<br>
+		- Improved legendary gem gain from RNG rolls.<br>
+		- Improved pet point gain from summoning altar.<br><br>
+		Bugfixes:<br>
+		- Added more crash prevention.<br>
+		- Fixed break infinity not requiring an OTF slot after unlocking singularity.<br>
+		- Fixed checkback buyable cost formatting.<br><br>
+		Typos:<br>
+		- Fixed fear being called anger.<br>
+		- Fixed some hex softcaps being called softlocks.<br><br>
 	<h3>v1.8.1 - Hex Hotfix 1</h3><br>
 		Bugfixes:<br>
 		- Boons now trigger a hold tick on click<br>
@@ -1289,17 +1316,17 @@ function fixOldSave(oldVersion){
 		}
 		
 		
-		player.cs.scraps.point.amount = new Decimal(player.cs.resourceCoreScraps[0])
-		player.cs.scraps.factor.amount = new Decimal(player.cs.resourceCoreScraps[1])
-		player.cs.scraps.prestige.amount = new Decimal(player.cs.resourceCoreScraps[2])
-		player.cs.scraps.tree.amount = new Decimal(player.cs.resourceCoreScraps[3])
-		player.cs.scraps.grass.amount = new Decimal(player.cs.resourceCoreScraps[4])
-		player.cs.scraps.grasshopper.amount = new Decimal(player.cs.resourceCoreScraps[5])
-		player.cs.scraps.code.amount = new Decimal(player.cs.resourceCoreScraps[6])
-		player.cs.scraps.dice.amount = new Decimal(player.cs.resourceCoreScraps[7])
-		player.cs.scraps.rocket.amount = new Decimal(player.cs.resourceCoreScraps[8])
-		player.cs.scraps.antimatter.amount = new Decimal(player.cs.resourceCoreScraps[9])
-		player.cs.scraps.infinity.amount = new Decimal(player.cs.resourceCoreScraps[10])
-		player.cs.scraps.checkback.amount = new Decimal(player.cs.paragonScraps)
+		player.cs.scraps.point.amount = new Decimal(player.cs.resourceCoreScraps[0]).abs()
+		player.cs.scraps.factor.amount = new Decimal(player.cs.resourceCoreScraps[1]).abs()
+		player.cs.scraps.prestige.amount = new Decimal(player.cs.resourceCoreScraps[2]).abs()
+		player.cs.scraps.tree.amount = new Decimal(player.cs.resourceCoreScraps[3]).abs()
+		player.cs.scraps.grass.amount = new Decimal(player.cs.resourceCoreScraps[4]).abs()
+		player.cs.scraps.grasshopper.amount = new Decimal(player.cs.resourceCoreScraps[5]).abs()
+		player.cs.scraps.code.amount = new Decimal(player.cs.resourceCoreScraps[6]).abs()
+		player.cs.scraps.dice.amount = new Decimal(player.cs.resourceCoreScraps[7]).abs()
+		player.cs.scraps.rocket.amount = new Decimal(player.cs.resourceCoreScraps[8]).abs()
+		player.cs.scraps.antimatter.amount = new Decimal(player.cs.resourceCoreScraps[9]).abs()
+		player.cs.scraps.infinity.amount = new Decimal(player.cs.resourceCoreScraps[10]).abs()
+		player.cs.scraps.checkback.amount = new Decimal(player.cs.paragonScraps).abs()
 	}
 }

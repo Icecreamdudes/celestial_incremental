@@ -609,6 +609,25 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.8.2 - Hex Hotfix 2</h3><br>
+		Qol:<br>
+		- Changed the Uni-bar to scroll instead of using pages.<br>
+		- Removed eclipse cooldown, cause why would you want that.<br>
+		- Added legendary pet summon pity.<br><br>
+		Balancing:<br>
+		- Lowered realm essence upgrade cost scaling.<br>
+		- Made jinx automation be unlocked earlier into hex.<br>
+		- Slightly buffed unlockable singularity effect.<br>
+		- Improved legendary pet summon odds.<br>
+		- Improved legendary gem gain from RNG rolls.<br>
+		- Improved pet point gain from summoning altar.<br><br>
+		Bugfixes:<br>
+		- Added more crash prevention.<br>
+		- Fixed break infinity not requiring an OTF slot after unlocking singularity.<br>
+		- Fixed checkback buyable cost formatting.<br><br>
+		Typos:<br>
+		- Fixed fear being called anger.<br>
+		- Fixed some hex softcaps being called softlocks.<br><br>
 	<h3>v1.8.1 - Hex Hotfix 1</h3><br>
 		Bugfixes:<br>
 		- Boons now trigger a hold tick on click<br>

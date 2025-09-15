@@ -70,8 +70,6 @@ addLayer("pet", {
         //leg
         legendaryPetAbilityTimers: [new Decimal(0),],
         legendaryPetAbilityTimersMax: [new Decimal(600),],
-        legendaryPetAbilityCooldowns: [new Decimal(0),],
-        legendaryPetAbilityCooldownsMax: [new Decimal(36000),],
 
         activeAbilities: [false,],
     }},
@@ -234,10 +232,6 @@ addLayer("pet", {
         player.pet.cratePrices[5] = player.pet.cratePrices[5].add(new Decimal(250).mul(player.pet.crateBought[5]))
 
         //legendary pets
-        player.pet.legendaryPetAbilityCooldownsMax = [new Decimal(36000),]
-        for (let i = 0; i < player.pet.legendaryPetAbilityCooldownsMax.length; i++) {
-            player.pet.legendaryPetAbilityCooldowns[i] = player.pet.legendaryPetAbilityCooldowns[i].sub(onepersec.mul(delta))
-        }
 
         player.pet.legendaryPetAbilityTimersMax = [new Decimal(600),]
         player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(levelableEffect("pu", 303)[1])
@@ -517,15 +511,12 @@ addLayer("pet", {
 
         //legendary pet skills
         31: {
-            title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h3>Activate Skill" : 
-                player.pet.legendaryPetAbilityTimers[0].lte(0) ? "Check back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "." 
-                : "<h3>Skill Active<br>for " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "."},
+            title: "<h3>Activate Skill</h3>",
             tooltip() { return "Activates the eclipse in DU1 for 10 minutes, unlocking alternate gameplay mechanics. (Also throws you into DU1 cause why not)"},
-            canClick() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) },
+            canClick: true,
             unlocked() { return layers.pet.levelables.index == 501 },
             onClick () {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
-                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
                 player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
@@ -539,12 +530,7 @@ addLayer("pet", {
                 player.subtabs.le["stuff"] = "Shards"
                 player.subtabs.pu["stuff"] = "Selection"                
             },
-            style() {
-                let look = {width: '125px', minHeight: '40px', borderRadius: '0px', fontSize: '8px'}
-                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#bf8f8f"
-                this.canClick() ? look.color = "black" : look.color = "black"
-                return look
-            },
+            style: {width: '125px', minHeight: '40px', backgroundColor: "#eed200", color: "black", borderRadius: '0px', fontSize: '8px'},
         },
         
         // START OF FRAGMENTATION CLICKABLES

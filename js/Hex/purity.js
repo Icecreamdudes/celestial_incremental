@@ -28,7 +28,7 @@ addLayer("hpu", {
 
         if (player.hpu.purityGain.lt(1)) player.hpu.purityGain = new Decimal(0)
 
-        if (hasMilestone("hre", 15) && !inChallenge("hrm", 15)) {
+        if (hasMilestone("hre", 17) && !inChallenge("hrm", 15)) {
             player.hpu.purity = player.hpu.purity.add(player.hpu.purityGain)
             player.hpu.totalPurity = player.hpu.totalPurity.add(player.hpu.purityGain)
         }
@@ -73,11 +73,11 @@ addLayer("hpu", {
                 if (inChallenge("hrm", 16)) return "<h2>Purify, but reset hex points and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"
                 return "<h2>Purify, but reset hex points, provenance, and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"
             },
-            canClick() { return player.hpu.purityGain.gte(1) && (!hasMilestone("hre", 15) || inChallenge("hrm", 15))},
+            canClick() { return player.hpu.purityGain.gte(1) && (!hasMilestone("hre", 17) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 let amt = new Decimal(1)
-                if (hasMilestone("hre", 13)) amt = player.hpu.purityGain
+                if (hasMilestone("hre", 15)) amt = player.hpu.purityGain
                 player.hpu.purity = player.hpu.purity.add(amt)
                 player.hpu.totalPurity = player.hpu.totalPurity.add(amt)
 
@@ -95,7 +95,7 @@ addLayer("hpu", {
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "2px solid black", borderRadius: "15px"}
-                if (hasMilestone("hre", 15) && !inChallenge("hrm", 15)) look.cursor = "default !important"
+                if (hasMilestone("hre", 17) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
@@ -263,7 +263,7 @@ addLayer("hpu", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpu.purity) + "</h3> purity." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasMilestone("hre", 13) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, () => {
+            ["raw-html", () => {return hasMilestone("hre", 15) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, () => {
                 let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                 player.hpu.purityGain.gt(0) ? look.color = "white" : look.color = "gray"
                 return look

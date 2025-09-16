@@ -649,7 +649,7 @@ addLayer("hpw", {
         },
         1011: {
             title: "Might A:1",
-            unlocked() {return challengeCompletions("hrm", 11) >= 1},
+            unlocked() {return challengeCompletions("hrm", 11) >= 1 && hasUpgrade("bi", 27)},
             description: "Boost check back xp based on power.",
             branches: [1001],
             cost() {return new Decimal(6)},
@@ -665,7 +665,7 @@ addLayer("hpw", {
         },
         1012: {
             title: "Might A:2",
-            unlocked() {return challengeCompletions("hrm", 11) >= 2},
+            unlocked() {return challengeCompletions("hrm", 11) >= 2 && hasUpgrade("bi", 27)},
             description: "Raise rank, tier, tetr, and pent effects by ^1.18.",
             branches: [1001],
             cost() {return new Decimal(36)},
@@ -677,7 +677,7 @@ addLayer("hpw", {
         },
         1013: {
             title: "Might A:3",
-            unlocked() {return challengeCompletions("hrm", 11) >= 3},
+            unlocked() {return challengeCompletions("hrm", 11) >= 3 && hasUpgrade("bi", 27)},
             description: "Multiply factor base by x120.",
             branches: [1001],
             cost() {return new Decimal(216)},
@@ -689,7 +689,7 @@ addLayer("hpw", {
         },
         1021: {
             title: "Might B:1",
-            unlocked() {return challengeCompletions("hrm", 12) >= 1},
+            unlocked() {return challengeCompletions("hrm", 12) >= 1 && hasUpgrade("bi", 27)},
             description: "Boost crystals and steel based on power.",
             branches: [1002],
             cost() {return new Decimal(36)},
@@ -705,7 +705,7 @@ addLayer("hpw", {
         },
         1022: {
             title: "Might B:2",
-            unlocked() {return challengeCompletions("hrm", 12) >= 2},
+            unlocked() {return challengeCompletions("hrm", 12) >= 2 && hasUpgrade("bi", 27)},
             description: "Raise prestige points gain by ^1.36.",
             branches: [1002],
             cost() {return new Decimal(216)},
@@ -717,7 +717,7 @@ addLayer("hpw", {
         },
         1023: {
             title: "Might B:3",
-            unlocked() {return challengeCompletions("hrm", 12) >= 3},
+            unlocked() {return challengeCompletions("hrm", 12) >= 3 && hasUpgrade("bi", 27)},
             description: "Raise tree gain by ^1.24.",
             branches: [1002],
             cost() {return new Decimal(1296)},
@@ -729,7 +729,7 @@ addLayer("hpw", {
         },
         1031: {
             title: "Might C:1",
-            unlocked() {return challengeCompletions("hrm", 13) >= 1},
+            unlocked() {return challengeCompletions("hrm", 13) >= 1 && hasUpgrade("bi", 27)},
             description: "Improve Might 1:2's effect.",
             branches: [1003],
             cost() {return new Decimal(216)},
@@ -741,7 +741,7 @@ addLayer("hpw", {
         },
         1032: {
             title: "Might C:2",
-            unlocked() {return challengeCompletions("hrm", 13) >= 2},
+            unlocked() {return challengeCompletions("hrm", 13) >= 2 && hasUpgrade("bi", 27)},
             description: "Raise grass gain by ^1.18.",
             branches: [1003],
             cost() {return new Decimal(1296)},
@@ -753,7 +753,7 @@ addLayer("hpw", {
         },
         1033: {
             title: "Might C:3",
-            unlocked() {return challengeCompletions("hrm", 13) >= 3},
+            unlocked() {return challengeCompletions("hrm", 13) >= 3 && hasUpgrade("bi", 27)},
             description: "Raise golden grass gain by ^1.06.",
             branches: [1003],
             cost() {return new Decimal(7776)},
@@ -765,7 +765,7 @@ addLayer("hpw", {
         },
         1041: {
             title: "Might D:1",
-            unlocked() {return challengeCompletions("hrm", 14) >= 1},
+            unlocked() {return challengeCompletions("hrm", 14) >= 1 && hasUpgrade("bi", 27)},
             description: "Boost infinity dimensions based on power.",
             branches: [1004],
             cost() {return new Decimal(46656)},
@@ -781,7 +781,7 @@ addLayer("hpw", {
         },
         1042: {
             title: "Might D:2",
-            unlocked() {return challengeCompletions("hrm", 14) >= 2},
+            unlocked() {return challengeCompletions("hrm", 14) >= 2 && hasUpgrade("bi", 27)},
             description: "Raise grasshopper gain by ^1.1.",
             branches: [1004],
             cost() {return new Decimal(279936)},
@@ -793,7 +793,7 @@ addLayer("hpw", {
         },
         1043: {
             title: "Might D:3",
-            unlocked() {return challengeCompletions("hrm", 14) >= 3},
+            unlocked() {return challengeCompletions("hrm", 14) >= 3 && hasUpgrade("bi", 27)},
             description: "Raise mod gain by ^1.1.",
             branches: [1004],
             cost() {return new Decimal(1679616)},
@@ -805,7 +805,7 @@ addLayer("hpw", {
         },
         1051: {
             title: "Might E:1",
-            unlocked() {return challengeCompletions("hrm", 15) >= 1},
+            unlocked() {return challengeCompletions("hrm", 15) >= 1 && hasUpgrade("bi", 27)},
             description: "Boost mastery point effects based on power.",
             branches: [1005],
             cost() {return new Decimal(1679616)},
@@ -821,7 +821,7 @@ addLayer("hpw", {
         },
         1052: {
             title: "Might E:2",
-            unlocked() {return challengeCompletions("hrm", 15) >= 2},
+            unlocked() {return challengeCompletions("hrm", 15) >= 2 && hasUpgrade("bi", 27)},
             description: "Raise AD and antimatter by ^1.05.",
             branches: [1005],
             cost() {return new Decimal(10077696)},
@@ -833,7 +833,7 @@ addLayer("hpw", {
         },
         1053: {
             title: "Might E:3",
-            unlocked() {return challengeCompletions("hrm", 15) >= 3},
+            unlocked() {return challengeCompletions("hrm", 15) >= 3 && hasUpgrade("bi", 27)},
             description: "Multiply NIP by x100.",
             branches: [1005],
             cost() {return new Decimal(60466176)},
@@ -845,7 +845,7 @@ addLayer("hpw", {
         },
         1061: {
             title: "Might F:1",
-            unlocked() {return challengeCompletions("hrm", 16) >= 1},
+            unlocked() {return challengeCompletions("hrm", 16) >= 1 && hasUpgrade("bi", 27)},
             description: "Boost infinity points based on power.",
             branches: [1006],
             cost() {return new Decimal(362797056)},
@@ -861,7 +861,7 @@ addLayer("hpw", {
         },
         1062: {
             title: "Might F:2",
-            unlocked() {return challengeCompletions("hrm", 16) >= 2},
+            unlocked() {return challengeCompletions("hrm", 16) >= 2 && hasUpgrade("bi", 27)},
             description: "Gain 10% infinities per second.",
             branches: [1006],
             cost() {return new Decimal(2176782336)},
@@ -873,7 +873,7 @@ addLayer("hpw", {
         },
         1063: {
             title: "Might F:3",
-            unlocked() {return challengeCompletions("hrm", 16) >= 3},
+            unlocked() {return challengeCompletions("hrm", 16) >= 3 && hasUpgrade("bi", 27)},
             description: "Triple replicanti mult.",
             branches: [1006],
             cost() {return new Decimal(13060694016)},
@@ -1075,10 +1075,16 @@ addLayer("hpw", {
                     ["blank", "5px"],
                     ["clickable", 2],
                     ["row", [
-                        ["blank", ["140px", "140px"]],
+                        ["blank", ["280px", "140px"]],
                         ["upgrade", 1],
                         ["upgrade", 2],
                         ["style-row", [["upgrade", 1011]], {width: "140px", height: "140px"}],
+                        ["style-column", [
+                            ["raw-html", "Realm mights work outside of hex.", {color: "rgba(0,0,0,0.6)", userSelect: "none", fontSize: "14px", fontFamily: "monospace"}],
+                        ], () => {
+                            if (hasUpgrade("bi", 27)) return {width: "110px", height: "110px", backgroundColor: "#933", border: "5px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "25px"}
+                            return {width: "140px", height: "140px", visibility: "hidden"}
+                        }],
                     ]],
                     ["row", [
                         ["blank", ["140px", "140px"]],
@@ -1187,7 +1193,7 @@ addLayer("hpw", {
                         ["style-column", [
                             ["raw-html", "Kept on singularity<br>First purchase keeps the respective realm challenge on singularity", {color: "rgba(0,0,0,0.6)", userSelect: "none", fontSize: "14px", fontFamily: "monospace"}],
                         ], () => {
-                            if (challengeCompletions("hrm", 12) >= 3) return {width: "180px", height: "110px", backgroundColor: "#933", border: "5px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "25px"}
+                            if (hasUpgrade("bi", 27)) return {width: "180px", height: "110px", backgroundColor: "#933", border: "5px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "25px"}
                             return {width: "210px", height: "140px", visibility: "hidden"}
                         }],
                     ]],

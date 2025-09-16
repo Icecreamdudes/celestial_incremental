@@ -1,5 +1,5 @@
 const GALAXY_URL = "https://galaxy.click";
-const debug = true;
+const debug = false;
 
 let galaxy = {
     connected: false,

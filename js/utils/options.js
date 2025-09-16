@@ -20,6 +20,9 @@ function getStartOptions() {
 		toggleHotkey: true,
 		toggleParticle: true,
 		menuType: "Tree",
+
+		cloudSave: false,
+		cloudSaveSlot: 10,
 	}
 }
 function updateMusicVolume() {
@@ -89,4 +92,9 @@ function milestoneShown(layer, id) {
 			break;
 	}
 	return false;
+}
+
+function incrementSlotNumber() {
+	options.cloudSaveSlot += 1;
+	if (options.cloudSaveSlot > 10) options.cloudSaveSlot = 0;
 }

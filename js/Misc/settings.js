@@ -32,11 +32,11 @@ addLayer("settings", {
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
         4: {
-            title() { return "Savebank" },
+            title() { return "Saving" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "savebank"
+                player.tab = "saving"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
@@ -71,22 +71,9 @@ addLayer("settings", {
         ["blank", "50px"],
 
         ["row", [
-            ["raw-html", () => "<button class=opt onclick=save()>Save</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave:<br>" + options.autosave + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=hardReset() style='color:darkred'>HARD RESET</button>", {"color": "red", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideMilestonePopups'); needsCanvasUpdate = true>Hide Milestone Popups:<br>" + options.hideMilestonePopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=selectMenu()>Layout:<br>" + options.menuType + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-        ]],
-
-        ["row", [
-            ["raw-html", () => "<button class=opt onclick=exportFile()>Export file</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
-            ["raw-html", () => "<label class=opt for='importfile' style='display:flex;align-items:center;justify-content:center;width:92px;height:92px;'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", {"color": "white", "font-size": "13.3333px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('musicToggle'); needsCanvasUpdate = true>Toggle Music:<br>" + options.musicToggle + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('toggleHotkey'); needsCanvasUpdate = true>Toggle Hotkeys:<br>" + options.toggleHotkey + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ]],

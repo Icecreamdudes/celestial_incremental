@@ -222,6 +222,8 @@ function load() {
 	updateTemp();
 	updateTabFormats()
 	loadVue();
+
+	galaxy.initGalaxyIframeApi();
 }
 
 function loadOptions() {

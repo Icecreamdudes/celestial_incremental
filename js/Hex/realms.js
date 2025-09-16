@@ -10,6 +10,7 @@ addLayer("hrm", {
         realmEffect: new Decimal(1),
         blessLimit: new Decimal(0),
         dreamTimer: new Decimal(60),
+        challengeSoftcap: new Decimal(1),
 
         realmEssence: new Decimal(0),
         totalRealmEssence: new Decimal(0),
@@ -43,6 +44,13 @@ addLayer("hrm", {
             player.hrm.dreamTimer = player.hrm.dreamTimer.sub(delta)
             if (player.hrm.dreamTimer.lte(0)) {
                 completeChallenge("hrm", 15)
+            }
+        }
+
+        player.hrm.challengeSoftcap = new Decimal(1)
+        if (player.hrm.activeChallenge) {
+            if (player.hrm.challenges[player.hrm.activeChallenge] > 10) {
+                player.hrm.challengeSoftcap = Decimal.pow(6, player.hrm.challenges[player.hrm.activeChallenge] - 9)
             }
         }
     },
@@ -454,6 +462,10 @@ addLayer("hrm", {
                         if (!hasUpgrade("bi", 27)) {look.opacity = "0.3";look.userSelect = "none"}
                         return look
                     }],
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["raw-html", () => {return ">9 CHALLENGE CLEAR SOFTCAP:<br>/" + formatWhole(player.hrm.challengeSoftcap) + " Pre-Power Resources"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ], () => {return player.hrm.challengeSoftcap.gt(1) ? {width: "600px", height: "50px", background: "linear-gradient(90deg, #530000, #533a00, #515300, #0e5300, #00531d, #005349, #004677, #003153, #230053, #4f0053)", border: "3px solid white", borderRadius: "20px"} : {display: "none !important"}}],
                 ],
             },
             "Essence": {
@@ -486,7 +498,7 @@ addLayer("hrm", {
                     ], {width: "760px", height: "180px", background: "linear-gradient(90deg, #2f0000, #2f2100, #2e2f00, #082f00, #002f10, #002f2a, #004677, #001c2f, #14002f, #2d002f)", border: "3px solid white", borderRadius: "20px"}],
                     ["style-column", [
                         ["raw-html", "Realm essence gain is based on realm challenge clears,<br>and is gained on singularity reset.", {color: "white", fontSize: "18px", fontFamily: "monospace"}],
-                    ], {width: "600px", height: "50px", background: "linear-gradient(90deg, #530000, #533a00, #515300, #0e5300, #00531d, #005349, #004677, #003153, #230053, #4f0053)", borderBottom: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white", borderRadius: "0 0 20px 20px"}]
+                    ], {width: "600px", height: "50px", background: "linear-gradient(90deg, #530000, #533a00, #515300, #0e5300, #00531d, #005349, #004677, #003153, #230053, #4f0053)", borderBottom: "3px solid white", borderLeft: "3px solid white", borderRight: "3px solid white", borderRadius: "0 0 20px 20px"}],
                 ],
             },
         },

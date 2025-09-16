@@ -22,7 +22,7 @@ addLayer("hcu", {
     update(delta) {
         player.hcu.cursesGain = new Decimal(0)
         if (hasUpgrade("ta", 16)) player.hcu.cursesGain = player.hbl.blessings.add(1).log(6)
-        if (hasUpgrade("ta", 16) && inChallenge("hrm", 13)) player.hcu.cursesGain = Decimal.pow(player.hve.vexTotal.mul(0.2).add(1.8), player.hbl.blessings.add(1).log(6)).sub(1)
+        if (hasUpgrade("ta", 16) && inChallenge("hrm", 13)) player.hcu.cursesGain = Decimal.pow(player.hve.vexTotal.mul(0.2).add(1.8), player.hbl.blessings.add(1).log(6)).sub(1).min(1e30)
         if (hasUpgrade("ta", 16) && hasMilestone("hre", 9)) player.hcu.cursesGain = player.hcu.cursesGain.add(0.6)
         player.hcu.cursesGain = player.hcu.cursesGain.mul(buyableEffect("hcu", 101))
         player.hcu.cursesGain = player.hcu.cursesGain.mul(buyableEffect("hcu", 103))
@@ -143,7 +143,7 @@ addLayer("hcu", {
             },
             effect(x) {
                 let amt = getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount)
-                if (amt.gte(80)) Decimal.mul(0.01, amt).add(7.2)
+                if (amt.gte(100)) return Decimal.mul(0.01, amt).add(9)
                 return Decimal.mul(0.1, amt)
             },
             unlocked() { return true },
@@ -157,7 +157,7 @@ addLayer("hcu", {
             title() { return "Β-Jinx" },
             display() {
                 let amt = getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount)
-                if (amt.gte(80)) return "Increase Α-Jinx's effect by +0.01x<br><small style='color:red'>[SOFTCAPPED]</small>"
+                if (amt.gte(100)) return "Increase Α-Jinx's effect by +0.01x<br><small style='color:red'>[SOFTCAPPED]</small>"
                 return "Increase Α-Jinx's effect by +0.1x"
             },
             total() { return "(Total: +" + format(tmp[this.layer].buyables[this.id].effect) + "x)" },

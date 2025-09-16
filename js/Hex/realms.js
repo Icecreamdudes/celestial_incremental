@@ -49,8 +49,8 @@ addLayer("hrm", {
 
         player.hrm.challengeSoftcap = new Decimal(1)
         if (player.hrm.activeChallenge) {
-            if (player.hrm.challenges[player.hrm.activeChallenge] > 10) {
-                player.hrm.challengeSoftcap = Decimal.pow(6, player.hrm.challenges[player.hrm.activeChallenge] - 9)
+            if (player.hrm.challenges[player.hrm.activeChallenge] > 5) {
+                player.hrm.challengeSoftcap = Decimal.pow(3, player.hrm.challenges[player.hrm.activeChallenge] - 5)
             }
         }
     },
@@ -464,7 +464,7 @@ addLayer("hrm", {
                     }],
                     ["blank", "25px"],
                     ["style-row", [
-                        ["raw-html", () => {return ">9 CHALLENGE CLEAR SOFTCAP:<br>/" + formatWhole(player.hrm.challengeSoftcap) + " Pre-Power Resources"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "<span style='color:#f44'>CHALLENGE SOFTCAP</span><br>/" + formatWhole(player.hrm.challengeSoftcap) + " Pre-Power Resources"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], () => {return player.hrm.challengeSoftcap.gt(1) ? {width: "600px", height: "50px", background: "linear-gradient(90deg, #530000, #533a00, #515300, #0e5300, #00531d, #005349, #004677, #003153, #230053, #4f0053)", border: "3px solid white", borderRadius: "20px"} : {display: "none !important"}}],
                 ],
             },

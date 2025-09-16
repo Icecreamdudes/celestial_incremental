@@ -25,8 +25,7 @@ addLayer("cp", {
         replicantiSoftcap2Start: new Decimal(1e10),
     }},
     automate() {
-        if (hasMilestone("s", 17) && !inChallenge("fu", 11))
-        {
+        if (hasMilestone("s", 17) && !inChallenge("fu", 11)) {
             buyUpgrade("cp", 11)
             buyUpgrade("cp", 12)
             buyUpgrade("cp", 13)
@@ -35,6 +34,7 @@ addLayer("cp", {
             buyUpgrade("cp", 16)
             buyUpgrade("cp", 17)
             buyUpgrade("cp", 18)
+            buyUpgrade("cp", 19)
         }
     },
     nodeStyle: {background: "linear-gradient(45deg, #064461 0%, #4a7d94 100%)", backgroundOrigin: "border-box", borderColor: "#013851"},

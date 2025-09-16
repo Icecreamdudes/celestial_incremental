@@ -439,6 +439,7 @@ addLayer("hcu", {
             purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(2).floor() },
             currency() { return player.hcu.curses},
             pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
+            tooltip: "Works outside of hex.",
             extraAmount() {
                 let amt = new Decimal(0)
                 if (hasUpgrade("hve", 51)) amt = amt.add(1)

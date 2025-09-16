@@ -26,7 +26,7 @@ galaxy.initGalaxyIframeApi = () => {
             }
             if (data.type === "saved") {
                 if (data.error) {
-                    setMessage("Error: " + data.error);
+                    galaxy.log("Error: " + data.error);
                 } else {
                     galaxy.log("Successfully saved to Galaxy!");
                 }

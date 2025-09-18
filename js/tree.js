@@ -3,8 +3,6 @@ var layoutInfo = {
 	showTree: true,
 
     treeLayout: ""
-
-    
 }
 
 
@@ -17,3 +15,9 @@ addNode("blank", {
     layerShown: "ghost",
 }, 
 )
+
+addNode("none", {
+    tabFormat: [
+        ["tree", ["i"]],
+    ],
+})

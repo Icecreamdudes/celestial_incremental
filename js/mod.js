@@ -617,7 +617,8 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Added a hardcap to death realm challenge's curse buff<br>
 			- Added a softcap after 6 realm challenge clears. (not that strong of a softcap though)<br><br>
 		Bugfixes:<br>
-			- Removed player.navTab since we don't use it and some people were getting crashes due to its value corrupting. (Potentially also a very small performance improvement, but I doubt it is in any way noticeable)<br>
+			- Removed player.navTab since we don't use it and some people were getting crashes due to its value corrupting.<br>
+			(Potentially also a very small performance improvement, but I doubt it is in any way noticeable)<br>
 			- Fixed funify unlock upgrade not autobuying.<br>
 			- Fixed singularity autocrunch not setting if set to time.<br>
 			- Fixed one of the cante puzzle questions.<br>

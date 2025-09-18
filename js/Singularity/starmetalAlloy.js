@@ -36,6 +36,7 @@
         // Set Autocrunch Values
         if (player.sma.input.gte(1) && !player.sma.type) player.sma.amount = player.sma.input
         if (player.sma.input.lt(1) && !player.sma.type) player.sma.amount = new Decimal(1)
+        if (player.sma.input.gt(0) && player.sma.type) player.sma.amount = player.sma.input
 
         if (player.s.singularityPointsToGet.gte(player.sma.amount) && player.sma.toggle && !player.sma.type) {
             player.coa.singularityPause = new Decimal(6)

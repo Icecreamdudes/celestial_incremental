@@ -117,7 +117,6 @@
             unlocked: true,
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
-                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
                 player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
@@ -464,9 +463,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
@@ -480,9 +478,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
@@ -496,9 +493,8 @@
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", borderRadius: "10px"}
-                !hasUpgrade(this.layer, this.id) && canAffordUpgrade(this.layer, this.id) ? look.color = "#282363" : look.color = "black"
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%,  #60cfeb 100%)"
+                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
         },
@@ -776,11 +772,10 @@
                     ["style-column", [
                         ["blank", "5px"],
                         ["style-row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103], ["upgrade", 104], ["upgrade", 105],
-                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108]], {maxWidth: "800px"}],
+                            ["upgrade", 106], ["upgrade", 107], ["upgrade", 108], ["upgrade", 109]], {maxWidth: "800px"}],
                         ["blank", "5px"],
                     ], {width: "800px", background: "linear-gradient(120deg, #b8bc45 0%, #987b28 25%, #bc4c5f 50%, #a94cbc, 75%, #4ca5bc 100%)", border: "3px solid #222", borderRadius: "15px"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 101],["upgrade", 102],["upgrade", 103],["upgrade", 104],["upgrade", 105],["upgrade", 106],]],
                     ["blank", "25px"],
                     ["row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]]],
                 ]

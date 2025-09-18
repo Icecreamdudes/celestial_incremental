@@ -237,9 +237,9 @@ addLayer("hpr", {
                             player.hpr.rankGain[0].gt(0) ? look.color = "white" : look.color = "gray"
                             return look
                         }],
-                        ["raw-html", () => {return player.hpr.rank[0].gte(1200) && player.hpr.rank[0].lt(6000000) ? "[SOFTLOCKED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
-                        ["raw-html", () => {return player.hpr.rank[0].gte(6000000) && player.hpr.rank[0].lt(2.4e8) ? "[SOFTLOCKED<sup>2</sup>]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
-                        ["raw-html", () => {return player.hpr.rank[0].gte(2.4e8) ? "[SOFTLOCKED<sup>3</sup>]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
+                        ["raw-html", () => {return player.hpr.rank[0].gte(1200) && player.hpr.rank[0].lt(6000000) ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
+                        ["raw-html", () => {return player.hpr.rank[0].gte(6000000) && player.hpr.rank[0].lt(2.4e8) ? "[SOFTCAPPED<sup>2</sup>]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
+                        ["raw-html", () => {return player.hpr.rank[0].gte(2.4e8) ? "[SOFTCAPPED<sup>3</sup>]" : ""}, {color: "red", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
                     ]],
                 ], {width: "250px", height: "50px", borderBottom: "2px solid white"}],
                 ["style-column", [

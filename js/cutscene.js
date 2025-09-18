@@ -758,6 +758,15 @@ if (player.c.cutscene[71] && hasChallenge("fu", 11))
     });
     player.c.cutscene[71] = false
 }
+if (player.c.cutscene[72] && hasMilestone("s", 17))
+{
+    showCutscene(cutsceneDialogue73, {
+    cutsceneID: 73,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[72] = false
+}
 
 player.c.ev2bg = "resources/gdbg.jpg"
 

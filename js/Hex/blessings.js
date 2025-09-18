@@ -154,7 +154,7 @@ addLayer("hbl", {
         2: {
             title() {
                 let str = "<h3>Hex Point Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[0]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[0]) + "/" + formatWhole(player.hbl.boosterReq[0]) + ")<br>x" + format(player.hbl.boosterEffects[0]) + " Hex Points<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[0].pow(Decimal.div(1, player.hpu.purifierEffects[3])).gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hbl.boosterEffects[0].pow(Decimal.div(1, player.hpu.purifierEffects[3])).gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
@@ -200,7 +200,7 @@ addLayer("hbl", {
         4: {
             title() {
                 let str = "<h3>IP Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[2]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[2]) + "/" + formatWhole(player.hbl.boosterReq[2]) + ")<br>x" + format(player.hbl.boosterEffects[2]) + " Infinity Points<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[2].gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hbl.boosterEffects[2].gte(1e9)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
@@ -225,7 +225,7 @@ addLayer("hbl", {
         5: {
             title() {
                 let str = "<h3>Refiner Req Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[3]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[3]) + "/" + formatWhole(player.hbl.boosterReq[3]) + ")<br>/" + format(player.hbl.boosterEffects[3]) + " Refinement Req<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[3].gte(1e12)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hbl.boosterEffects[3].gte(1e12)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,
@@ -271,7 +271,7 @@ addLayer("hbl", {
         7: {
             title() {
                 let str = "<h3>IP Booster Booster <small>Lv." + formatWhole(player.hbl.boosterLevels[5]) + "</small></h3><br>(" + formatWhole(player.hbl.boosterXP[5]) + "/" + formatWhole(player.hbl.boosterReq[5]) + ")<br>x" + format(player.hbl.boosterEffects[5]) + " IP Booster Base<br><small>(Hold to deposit boons)</small>"
-                if (player.hbl.boosterEffects[5].gte(16)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hbl.boosterEffects[5].gte(16)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick: true,

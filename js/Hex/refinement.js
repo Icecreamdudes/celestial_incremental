@@ -207,7 +207,7 @@ addLayer("hre", {
         },
         13: {
             requirementDescription: "<h3>90 Refinements",
-            effectDescription: "Unlock buy max purity.",
+            effectDescription: "Automate jinxes.",
             done() { return player.hre.refinement.gte(90)},
             unlocked() { return hasMilestone("hre", 12) },
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
@@ -224,7 +224,7 @@ addLayer("hre", {
         },
         15: {
             requirementDescription: "<h3>102 Refinements",
-            effectDescription: "Automate purity gain.",
+            effectDescription: "Unlock buy max purity.",
             done() { return player.hre.refinement.gte(102)},
             unlocked() { return hasMilestone("hre", 14) },
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
@@ -238,7 +238,7 @@ addLayer("hre", {
         },
         17: {
             requirementDescription: "<h3>114 Refinements",
-            effectDescription: "Automate jinxes.",
+            effectDescription: "Automate purity gain.",
             done() { return player.hre.refinement.gte(114)},
             unlocked() { return hasMilestone("hre", 16) },
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},

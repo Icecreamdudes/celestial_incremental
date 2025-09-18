@@ -20,12 +20,7 @@ var systemComponents = {
 			v-on:click="function() {
 				if (shiftDown && options.forceTooltips) player[layer].forceTooltip = !player[layer].forceTooltip
 				else if(tmp[layer].isLayer) {
-					if (tmp[layer].leftTab) {
-						showNavTab(layer, prev)
-						showTab('none')
-					}
-					else
-						showTab(layer, prev)
+					showTab(layer, prev)
 				}
 				else {run(layers[layer].onClick, layers[layer])}
 			}"
@@ -66,12 +61,7 @@ var systemComponents = {
 		<button v-if="nodeShown(layer)"
 			v-on:click="function() {
 				if(tmp[layer].isLayer) {
-					if (tmp[layer].leftTab) {
-						showNavTab(layer, prev)
-						showTab('none')
-					}
-					else
-						showTab(layer, prev)
+					showTab(layer, prev)
 				}
 				else {run(layers[layer].onClick, layers[layer])}
 			}"

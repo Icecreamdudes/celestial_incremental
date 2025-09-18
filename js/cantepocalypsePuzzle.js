@@ -96,7 +96,7 @@ addLayer("cap", {
             new Decimal(777).abs(),
             new Decimal(0.45).abs(),
             new Decimal(18).abs(),
-            new Decimal(15).abs(),
+            new Decimal(14).abs(),
             new Decimal(0)
         ]
 

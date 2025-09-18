@@ -73,6 +73,7 @@ addLayer("h", {
         if (hasUpgrade("hpw", 141)) player.h.prePowerMult = player.h.prePowerMult.mul(upgradeEffect("hpw", 141))
         player.h.prePowerMult = player.h.prePowerMult.mul(levelableEffect("pu", 107)[1])
         player.h.prePowerMult = player.h.prePowerMult.mul(levelableEffect("pet", 1106)[0])
+        player.h.prePowerMult = player.h.prePowerMult.div(player.hrm.challengeSoftcap)
     },
     hexReq(value, base, scale, div = new Decimal(1), add = new Decimal(1)) {
         return value.add(add).pow(scale).mul(base).div(div).ceil()

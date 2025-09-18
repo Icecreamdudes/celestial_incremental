@@ -205,6 +205,7 @@ addLayer("hbl", {
             },
             canClick: true,
             unlocked: true,
+            tooltip: "Works outside of hex.",
             onClick() {this.onHold()},
             onHold() {
                 let amt = player.hbl.boosterReq[2].mul(player.hbl.boosterDeposit).min(player.hbl.boosterReq[2].sub(player.hbl.boosterXP[2]))

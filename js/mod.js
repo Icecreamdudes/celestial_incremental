@@ -609,30 +609,46 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.8.3 - Hex Hotfix 3</h3><br>
+		Qol:<br>
+			- Added tooltips on features that work outside of hex<br>
+			- Made mobile universe buttons slightly wider<br>
+			- Made messages in black heart not flashbang you<br>
+			- Added tooltips to the celestialite type symbols<br><br>
+		Balancing:<br>
+			- Added a hardcap to death realm challenge's curse buff<br>
+			- Added a softcap after 6 realm challenge clears. (not that strong of a softcap though)<br><br>
+		Bugfixes:<br>
+			- Removed player.navTab since we don't use it and some people were getting crashes due to its value corrupting.<br>
+			(Potentially also a very small performance improvement, but I doubt it is in any way noticeable)<br>
+			- Fixed funify unlock upgrade not autobuying.<br>
+			- Fixed singularity autocrunch not setting if set to time.<br>
+			- Fixed one of the cante puzzle questions.<br>
+			- Fixed a jinx softcap not working.<br><br>
 	<h3>v1.8.2 - Hex Hotfix 2</h3><br>
 		Qol:<br>
-		- Changed the Uni-bar to scroll instead of using pages.<br>
-		- Removed eclipse cooldown, cause why would you want that.<br>
-		- Added legendary pet summon pity.<br><br>
+			- Changed the Uni-bar to scroll instead of using pages.<br>
+			- Removed eclipse cooldown, cause why would you want that.<br>
+			- Added legendary pet summon pity.<br><br>
 		Balancing:<br>
-		- Lowered realm essence upgrade cost scaling.<br>
-		- Made jinx automation be unlocked earlier into hex.<br>
-		- Slightly buffed unlockable singularity effect.<br>
-		- Improved legendary pet summon odds.<br>
-		- Improved legendary gem gain from RNG rolls.<br>
-		- Improved pet point gain from summoning altar.<br><br>
+			- Lowered realm essence upgrade cost scaling.<br>
+			- Made jinx automation be unlocked earlier into hex.<br>
+			- Slightly buffed unlockable singularity effect.<br>
+			- Improved legendary pet summon odds.<br>
+			- Improved legendary gem gain from RNG rolls.<br>
+			- Improved pet point gain from summoning altar.<br><br>
 		Bugfixes:<br>
-		- Added more crash prevention.<br>
-		- Fixed break infinity not requiring an OTF slot after unlocking singularity.<br>
-		- Fixed checkback buyable cost formatting.<br><br>
+			- Added more crash prevention.<br>
+			- Fixed break infinity not requiring an OTF slot after unlocking singularity.<br>
+			- Fixed checkback buyable cost formatting.<br><br>
 		Typos:<br>
-		- Fixed fear being called anger.<br>
-		- Fixed some hex softcaps being called softlocks.<br><br>
+			- Fixed fear being called anger.<br>
+			- Fixed some hex softcaps being called softlocks.<br><br>
 	<h3>v1.8.1 - Hex Hotfix 1</h3><br>
 		Bugfixes:<br>
-		- Boons now trigger a hold tick on click<br>
-		- Fixed pet points and XPBoost being formatted incorrectly<br>
-		- Fixed edge-cases on save transfers<br><br>
+			- Boons now trigger a hold tick on click<br>
+			- Fixed pet points and XPBoost being formatted incorrectly<br>
+			- Fixed edge-cases on save transfers<br><br>
 	<h2>v1.8 - The Hexing Revamp</h2><br>
 		Content:<br>
 			- Added Universe α: Hex.<br>

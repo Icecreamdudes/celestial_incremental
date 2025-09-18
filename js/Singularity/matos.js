@@ -4224,12 +4224,30 @@
                             ["blank", ["50px", "50px"]],
                             ["clickable", 104],
                             ["style-row", [
-                                ["raw-html", () => {return player.ma.airCelestialite ? "≋" : ""}, {color: "#ccc", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                ["raw-html", () => {return player.ma.regenCelestialite ? "♡" : ""}, {color: "#bb8888", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                ["raw-html", () => {return player.ma.stealthyCelestialite ? "☉" : ""}, {color: "#78866b", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                ["raw-html", () => {return player.ma.cursedCelestialite ? "✶" : ""}, {color: "#8b0e7a", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
-                                ["raw-html", () => {return player.ma.explosiveCelestialite ? "✺" : ""}, {color: "#ee8700", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.airCelestialite ? "≋" : ""}, {color: "#ccc", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.airCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Air<hr>Can't be targeted by<br>melee attacks.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.shieldCelestialite ? "⛊" : ""}, {color: "#5c5c5c", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.shieldCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Shield<hr>Starts with a shield<br>that is immune to<br>ranged and magic<br>attacks.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.regenCelestialite ? "♡" : ""}, {color: "#bb8888", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.regenCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Regen<hr>Regenerates health<br>over time.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.stealthyCelestialite ? "☉" : ""}, {color: "#78866b", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.stealthyCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Stealthy<hr>Can't be targeted by<br>melee and magic<br>attacks.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.cursedCelestialite ? "✶" : ""}, {color: "#8b0e7a", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.cursedCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Cursed<hr>Has a 30% chance to<br>reflect damage back<br>towards you.</div>" : ""}],
+                                ]],
+                                ["tooltip-row", [
+                                    ["raw-html", () => {return player.ma.explosiveCelestialite ? "✺" : ""}, {color: "#ee8700", fontSize: "50px", fontFamily: "monospace", textShadow: "1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black"}],
+                                    ["raw-html", () => {return player.ma.explosiveCelestialite ? "<div class='bottomTooltip' style='margin-top:0px'>Explosive<hr>Explodes upon death,<br>dealing damage to<br>all team members.</div>" : ""}],
+                                ]],
                             ], {width: "50px", height: "50px"}],
                         ]],
                     ]],

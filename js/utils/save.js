@@ -9,7 +9,6 @@ function save(force) {
 function startPlayerBase() {
 	return {
 		tab: layoutInfo.startTab,
-		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
 		time: Date.now(),
 		notify: {},
 		versionType: modInfo.id,

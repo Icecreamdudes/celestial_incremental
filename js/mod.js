@@ -612,7 +612,9 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.8.3 - Hex Hotfix 3</h3><br>
 		Qol:<br>
 			- Added tooltips on features that work outside of hex<br>
-			- Made mobile universe buttons slightly wider<br><br>
+			- Made mobile universe buttons slightly wider<br>
+			- Made messages in black heart not flashbang you<br>
+			- Added tooltips to the celestialite type symbols<br><br>
 		Balancing:<br>
 			- Added a hardcap to death realm challenge's curse buff<br>
 			- Added a softcap after 6 realm challenge clears. (not that strong of a softcap though)<br><br>

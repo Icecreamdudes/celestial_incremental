@@ -241,7 +241,7 @@
     },
     levelables: {
                 0: {
-            image() { return "resources/Pets/secret.png"},
+            image() { return "resources/secret.png"},
             title() { return "No pet selected." },
             lore() { return "" },
             description() { return "" },
@@ -250,7 +250,7 @@
             style() { return { width: '100px', height: '125px', backgroundColor: '#222222'} } 
         },
             101: {
-            image() { return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/dotknightEpicPet.png" : "resources/secret.png"},
             title() { return "Dotknight" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -291,7 +291,7 @@
             }  
         },
                     102: {
-            image() { return this.canClick() ? "resources/Pets/dragonEpicPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/dragonEpicPet.png" : "resources/secret.png"},
             title() { return "Dragon" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -332,7 +332,7 @@
             }  
         },
                             103: {
-            image() { return this.canClick() ? "resources/Pets/cookieEpicPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/cookieEpicPet.png" : "resources/secret.png"},
             title() { return "Cookie" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -373,7 +373,7 @@
             }  
         },
                                     104: {
-            image() { return this.canClick() ? "resources/Pets/kresEpicPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/kresEpicPet.png" : "resources/secret.png"},
             title() { return "Kres" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -414,7 +414,7 @@
             }  
         },
                                             105: {
-            image() { return this.canClick() ? "resources/Pets/navEpicPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/navEpicPet.png" : "resources/secret.png"},
             title() { return "Nav" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -455,7 +455,7 @@
             }  
         },
                                                     106: {
-            image() { return this.canClick() ? "resources/Pets/selEpicPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/selEpicPet.png" : "resources/secret.png"},
             title() { return "Sel" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
@@ -498,7 +498,7 @@
 
         //legs
         201: {
-            image() { return this.canClick() ? "resources/Pets/eclipseLegendaryPet.png" : "resources/Pets/secret.png"},
+            image() { return this.canClick() ? "resources/Pets/eclipseLegendaryPet.png" : "resources/secret.png"},
             title() { return "Eclipse" },
             description() {
                 return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])

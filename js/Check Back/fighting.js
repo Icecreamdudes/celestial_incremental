@@ -11,7 +11,7 @@ addLayer("fi", {
         battleCapacityAvailable: new Decimal(4),
         battleCapacityCost: new Decimal(1),
 
-        petMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(100),], [new Decimal(250)]],
+        petMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250)]],
         petDamage: [[new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),], [new Decimal(25)]],
 
         petTitle: "",

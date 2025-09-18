@@ -594,6 +594,30 @@ addLayer("i", {
                     ["infobox", "4"],
                 ],
             },
+            "Cutscene Rewatch": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true},
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Current Cutscene ID: " + formatWhole(player.i.cutsceneInput) + "." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [
+                    ["text-input", "cutsceneInput", {
+                        color: "var(--color)",
+                        width: "400px",
+                        height: "48px",
+                        "font-family": "Calibri",
+                        "text-align": "left",
+                        "font-size": "32px",
+                        border: "2px solid #ffffff17",
+                        background: "var(--background)",
+                    }],
+                    ["clickable", 11],
+                    ]],
+                ],
+            },
         },
     },
     tabFormat: [

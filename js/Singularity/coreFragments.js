@@ -73,12 +73,12 @@
         ]
 
         //ancient
-        player.cof.fragmentScore[0] = player.points.plus(1).log10().pow(0.45).div(33)
+        player.cof.fragmentScore[0] = player.points.plus(1).log10().pow(0.45).div(33).div(5)
         player.cof.fragmentScore[0] = player.cof.fragmentScore[0].mul(player.f.factorPower.plus(1).log10().pow(0.446).div(33))
         player.cof.fragmentScore[0] = player.cof.fragmentScore[0].mul(player.p.prestigePoints.plus(1).log10().pow(0.444).div(33))
 
         //natural
-        player.cof.fragmentScore[1] = player.t.trees.plus(1).log10().pow(0.35).div(6)
+        player.cof.fragmentScore[1] = player.t.trees.plus(1).log10().pow(0.35).div(6).div(1.25)
         player.cof.fragmentScore[1] = player.cof.fragmentScore[1].mul(player.g.grass.plus(1).log10().pow(0.35).div(5))
         player.cof.fragmentScore[1] = player.cof.fragmentScore[1].mul(player.gh.grasshoppers.plus(1).log10().pow(0.35).div(5))
 
@@ -88,17 +88,17 @@
         player.cof.fragmentScore[2] = player.cof.fragmentScore[2].mul(player.oi.oil.plus(1).log10().pow(0.35).div(2))
 
         //paradox
-        player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.4).div(4)
+        player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.4).div(4).mul(1.25)
         player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.in.infinities.plus(1).log10().div(1.2))
         player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.ta.negativeInfinityPoints.plus(1).log10().pow(0.4).div(2))
 
         //radioactive
-        player.cof.fragmentScore[4] = player.s.singularityPoints.plus(1).log10().pow(0.6).div(3)
+        player.cof.fragmentScore[4] = player.s.singularityPoints.plus(1).log10().pow(0.6).div(3).mul(2.5)
         player.cof.fragmentScore[4] = player.cof.fragmentScore[4].mul(player.ra.radiation.plus(1).log10().div(1.5))
         player.cof.fragmentScore[4] = player.cof.fragmentScore[4].mul(player.sd.singularityPower.plus(1).log10().pow(0.55).div(15))
 
         //cosmic
-        player.cof.fragmentScore[5] = player.ad.antimatter.plus(1).log10().pow(0.535).div(3)
+        player.cof.fragmentScore[5] = player.ad.antimatter.plus(1).log10().pow(0.535).div(3).mul(2)
         player.cof.fragmentScore[5] = player.cof.fragmentScore[5].mul(player.au2.stars.plus(1).log10().pow(1.8).div(6))
         player.cof.fragmentScore[5] = player.cof.fragmentScore[5].mul(player.ca.replicanti.plus(1).log10().pow(0.575).div(12))
 

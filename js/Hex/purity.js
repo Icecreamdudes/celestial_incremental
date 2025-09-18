@@ -28,7 +28,7 @@ addLayer("hpu", {
 
         if (player.hpu.purityGain.lt(1)) player.hpu.purityGain = new Decimal(0)
 
-        if (hasMilestone("hre", 15) && !inChallenge("hrm", 15)) {
+        if (hasMilestone("hre", 17) && !inChallenge("hrm", 15)) {
             player.hpu.purity = player.hpu.purity.add(player.hpu.purityGain)
             player.hpu.totalPurity = player.hpu.totalPurity.add(player.hpu.purityGain)
         }
@@ -73,11 +73,11 @@ addLayer("hpu", {
                 if (inChallenge("hrm", 16)) return "<h2>Purify, but reset hex points and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"
                 return "<h2>Purify, but reset hex points, provenance, and refinement.</h2><br><h3>Req: " + formatWhole(player.hpu.purityReq) + " Refinements</h3>"
             },
-            canClick() { return player.hpu.purityGain.gte(1) && (!hasMilestone("hre", 15) || inChallenge("hrm", 15))},
+            canClick() { return player.hpu.purityGain.gte(1) && (!hasMilestone("hre", 17) || inChallenge("hrm", 15))},
             unlocked: true,
             onClick() {
                 let amt = new Decimal(1)
-                if (hasMilestone("hre", 13)) amt = player.hpu.purityGain
+                if (hasMilestone("hre", 15)) amt = player.hpu.purityGain
                 player.hpu.purity = player.hpu.purity.add(amt)
                 player.hpu.totalPurity = player.hpu.totalPurity.add(amt)
 
@@ -95,7 +95,7 @@ addLayer("hpu", {
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "2px solid black", borderRadius: "15px"}
-                if (hasMilestone("hre", 15) && !inChallenge("hrm", 15)) look.cursor = "default !important"
+                if (hasMilestone("hre", 17) && !inChallenge("hrm", 15)) look.cursor = "default !important"
                 return look
             },
         },
@@ -118,7 +118,7 @@ addLayer("hpu", {
         3: {
             title() {
                 let str = "<h3>Purified Provenances</h3><br>Lv." + formatWhole(player.hpu.purifier[0]) + "<br>^" + format(player.hpu.purifierEffects[0]) + " Refiner 2's Effects"
-                if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -134,7 +134,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifier[1]) + "<br>x" + format(player.hpu.purifierEffects[1]) + " 1st & 4th Miracles"
                 if (inChallenge("hrm", 12)) str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifier[1]) + "<br>x" + format(player.hpu.purifierEffects[1]) + " Blessings and Boons"
-                if (player.hpu.purifierEffects[1].gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[1].gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -149,7 +149,7 @@ addLayer("hpu", {
         5: {
             title() {
                 let str = "<h3>Elevated Exponent</h3><br>Lv." + formatWhole(player.hpu.purifier[2]) + "<br>^" + format(player.hpu.purifierEffects[2]) + " Non-Hex Refiner Effects"
-                if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 101)},
@@ -172,7 +172,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifier[3]) + "<br>^" + format(player.hpu.purifierEffects[3]) + " Hex Point Booster"
                 if (inChallenge("hrm", 12)) str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifier[3]) + "<br>^" + format(player.hpu.purifierEffects[3]) + " 1st Refiners Effects"
-                if (player.hpu.purifierEffects[3].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[3].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -188,7 +188,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Amended Automation</h3><br>Lv." + formatWhole(player.hpu.purifier[4]) + "<br>+" + formatWhole(player.hpu.purifierEffects[4].mul(100)) + "% blessings/s"
                 str = str.concat("<br><small>(" + format(player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4])) + "/s)</small>")
-                if (player.hpu.purifierEffects[4].gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[4].gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 if (inChallenge("hrm", 11)) str = str.concat("<br><small style='color:red'>[DISABLED BY CREATOR REALM]</small>")
                 return str
             },
@@ -209,7 +209,7 @@ addLayer("hpu", {
             title() {
                 let str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " 4th Grace Effect"
                 if (inChallenge("hrm", 12)) str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " Base Α-Jinx Effect"
-                if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTLOCKED]</small>")
+                if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1)},
@@ -263,7 +263,7 @@ addLayer("hpu", {
         ["blank", "10px"],
         ["row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpu.purity) + "</h3> purity." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return hasMilestone("hre", 13) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, () => {
+            ["raw-html", () => {return hasMilestone("hre", 15) ? "(+" + formatWhole(player.hpu.purityGain) + ")" : "" }, () => {
                 let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                 player.hpu.purityGain.gt(0) ? look.color = "white" : look.color = "gray"
                 return look

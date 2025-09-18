@@ -147,7 +147,6 @@ function updateWidth() {
 	let screenWidth = window.innerWidth
 	let splitScreen = screenWidth >= 1024
 	if (options.forceOneTab) splitScreen = false
-	if (player.navTab == "none") splitScreen = true
 	tmp.other.screenWidth = screenWidth
 	tmp.other.screenHeight = window.innerHeight
 
@@ -254,7 +253,6 @@ function constructTabFormat(layer, id, family){
 
 function updateTabFormats() {
 	updateTabFormat(player.tab)
-	updateTabFormat(player.navTab)
 }
 
 function updateTabFormat(layer) {

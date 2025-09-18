@@ -57,8 +57,10 @@ function drawComponentBranches(layer, data, prefix) {
 function isVisibleInViewport(element) {
     let rect = element.getBoundingClientRect()
 	let par = document.documentElement.getBoundingClientRect()
-	if (document.getElementById("layerHolder").contains(element)) {
-		par = document.getElementById("layerHolder").getBoundingClientRect()
+	if (document.getElementById("layerHolder") != null) {
+		if (document.getElementById("layerHolder").contains(element)) {
+			par = document.getElementById("layerHolder").getBoundingClientRect()
+		}
 	}
 	if (document.getElementById("scrCon") != null) {
 		if (document.getElementById("scrCon").contains(element)) {

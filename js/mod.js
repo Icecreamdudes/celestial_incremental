@@ -609,7 +609,7 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.8.3 - Hex Hotfix 3</h3>
+	<h3>v1.8.3 - Hex Hotfix 3</h3><br>
 		Qol:<br>
 			- Added tooltips on features that work outside of hex<br>
 			- Made mobile universe buttons slightly wider<br><br>
@@ -622,7 +622,7 @@ let changelog = `<h1>Changelog:</h1><br>
 			- Fixed funify unlock upgrade not autobuying.<br>
 			- Fixed singularity autocrunch not setting if set to time.<br>
 			- Fixed one of the cante puzzle questions.<br>
-			- Fixed a jinx softcap not working.<br>
+			- Fixed a jinx softcap not working.<br><br>
 	<h3>v1.8.2 - Hex Hotfix 2</h3><br>
 		Qol:<br>
 			- Changed the Uni-bar to scroll instead of using pages.<br>

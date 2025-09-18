@@ -269,7 +269,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(4).pow(3).add(1), // Dark Points Gain
+                    getLevelableAmount(this.layer, this.id).mul(4).add(1).pow(3), // Dark Points Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -304,7 +304,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(3).add(1), // Rank Point Gain
+                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(3), // Rank Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -339,7 +339,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(6).add(1), // Tier Point Gain
+                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(6), // Tier Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -374,7 +374,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(9).add(1), // Tetr Point Gain
+                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(9), // Tetr Point Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -409,7 +409,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2).pow(3).add(1), // Dark Prestige Points
+                    getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(3), // Dark Prestige Points
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -444,7 +444,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(1.8).pow(1.8).add(1), //  Generators
+                    getLevelableAmount(this.layer, this.id).mul(1.8).add(1).pow(1.8), //  Generators
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -479,7 +479,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2).pow(2.5).add(1), // Generator Power
+                    getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(2.5), // Generator Power
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -514,7 +514,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(1.2).pow(2).add(1), // Grass value
+                    getLevelableAmount(this.layer, this.id).mul(1.2).add(1).pow(2), // Grass value
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -549,7 +549,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(1.2).pow(2).add(1), // Grass capacity
+                    getLevelableAmount(this.layer, this.id).mul(1.2).add(1).pow(2), // Grass capacity
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -621,7 +621,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(4).add(1), // Rank Req
+                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(4), // Rank Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -656,7 +656,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2.8).pow(4).add(1), // Tier Req
+                    getLevelableAmount(this.layer, this.id).mul(2.8).add(1).pow(4), // Tier Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -691,7 +691,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(2.6).pow(4).add(1), // Tetr Req
+                    getLevelableAmount(this.layer, this.id).mul(2.6).add(1).pow(4), // Tetr Req
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -726,7 +726,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(3).pow(12).add(1), // Pent Points gain
+                    getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(12), // Pent Points gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -796,7 +796,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).pow(1.5).add(1), // Normality Gain
+                    getLevelableAmount(this.layer, this.id).add(1).pow(1.5), // Normality Gain
                 ]
             },
             sacValue() { return new Decimal(1)},
@@ -831,7 +831,7 @@ addLayer("st", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).mul(7).pow(4).add(1), // Starmetal Req
+                    getLevelableAmount(this.layer, this.id).mul(7).add(1).pow(4), // Starmetal Req
                 ]
             },
             sacValue() { return new Decimal(1)},

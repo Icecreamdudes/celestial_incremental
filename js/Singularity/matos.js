@@ -4541,7 +4541,7 @@ function flashScreen(message, duration) {
     overlay.style.top = "0";
     overlay.style.width = "100vw";
     overlay.style.height = "100vh";
-    overlay.style.background = "#fff";
+    overlay.style.background = "black";
     overlay.style.zIndex = "999999";
     overlay.style.display = "flex";
     overlay.style.alignItems = "center";
@@ -4552,7 +4552,7 @@ function flashScreen(message, duration) {
     // Create text
     const text = document.createElement("div");
     text.innerText = message;
-    text.style.color = "#000";
+    text.style.color = "white";
     text.style.fontSize = "3vw";
     text.style.fontWeight = "bold";
     text.style.textAlign = "center";

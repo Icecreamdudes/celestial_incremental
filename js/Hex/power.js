@@ -651,6 +651,7 @@ addLayer("hpw", {
             title: "Might A:1",
             unlocked() {return challengeCompletions("hrm", 11) >= 1 && hasUpgrade("bi", 27)},
             description: "Boost check back xp based on power.",
+            tooltip: "Realm mights work outside of hex.",
             branches: [1001],
             cost() {return new Decimal(6)},
             canAfford() { return hasUpgrade("hpw", 1001)},
@@ -1075,16 +1076,10 @@ addLayer("hpw", {
                     ["blank", "5px"],
                     ["clickable", 2],
                     ["row", [
-                        ["blank", ["280px", "140px"]],
+                        ["blank", ["140px", "140px"]],
                         ["upgrade", 1],
                         ["upgrade", 2],
                         ["style-row", [["upgrade", 1011]], {width: "140px", height: "140px"}],
-                        ["style-column", [
-                            ["raw-html", "Realm mights work outside of hex.", {color: "rgba(0,0,0,0.6)", userSelect: "none", fontSize: "14px", fontFamily: "monospace"}],
-                        ], () => {
-                            if (hasUpgrade("bi", 27)) return {width: "110px", height: "110px", backgroundColor: "#933", border: "5px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "25px"}
-                            return {width: "140px", height: "140px", visibility: "hidden"}
-                        }],
                     ]],
                     ["row", [
                         ["blank", ["140px", "140px"]],

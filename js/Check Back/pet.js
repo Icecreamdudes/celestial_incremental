@@ -2812,7 +2812,7 @@ addLayer("pet", {
             // BUY CODE
             pay(amt) { player.cb.paragonShards = player.cb.paragonShards.sub(amt) },
             canAfford() { return player.cb.paragonShards.gte(this.xpReq()) },
-            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.65).add(3).floor() },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(0.6).add(3).floor() },
             currency() { return player.cb.paragonShards },
             buy() {
                 this.pay(this.xpReq())

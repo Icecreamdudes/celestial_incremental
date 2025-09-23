@@ -15,7 +15,6 @@ galaxy.log = (msg) => {
 }
 
 galaxy.initGalaxyIframeApi = () => {
-    console.log("Initializing Galaxy saving...");
     window.addEventListener("message", e=> {
         if (e.origin === GALAXY_URL) {
             const data = e.data;

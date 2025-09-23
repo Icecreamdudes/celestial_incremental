@@ -41,11 +41,11 @@ addLayer("credits", {
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
         4: {
-            title() { return "Saving" },
+            title() { return "Savebank" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "saving"
+                player.tab = "savebank"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },

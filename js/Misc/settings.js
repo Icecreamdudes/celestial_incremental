@@ -32,11 +32,11 @@ addLayer("settings", {
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
         4: {
-            title() { return "Saving" },
+            title() { return "Savebank" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "saving"
+                player.tab = "savebank"
             },
             style: { width: '125px', minHeight: '50px', color: "white", background: "black", borderRadius: '0px', border: "2px solid white", margin: "0px 5px" },
         },
@@ -69,7 +69,7 @@ addLayer("settings", {
     tabFormat: [
         ["row", [["clickable", 2], ["clickable", 3], ["clickable", 4], ["clickable", 5], ["clickable", 6]]],
         ["blank", "50px"],
-
+        
         ["row", [
             ["raw-html", () => "<button class=opt onclick=switchTheme()>Change Theme</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
             ["raw-html", () => "<button class=opt onclick=toggleOpt('hideMilestonePopups'); needsCanvasUpdate = true>Hide Milestone Popups:<br>" + options.hideMilestonePopups + "</button>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
@@ -81,6 +81,43 @@ addLayer("settings", {
         ["blank", "25px"],
         ["raw-html", () => "</td><td><div style=\"margin: 0 10px\"><input type=range id=volume name=Music Volume min=1 max=10 value=" + options.musicVolume + " oninput=updateMusicVolume()><br>", {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["raw-html", () =>  "Volume: " + options.musicVolume, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
+        ["blank", "25px"],
+
+        ["raw-html", "<h1 style='color: white'>Local Save</h1>"],
+        ["blank", "10px"],
+        ["row",[
+            ["raw-html", () => "<button class=opt onclick=save()>Save</button>", { color: "white", "font-size": "18px", "font-family": "monospace" }],
+            ["raw-html", () => "<button class=opt onclick=toggleOpt('autosave')>Autosave:<br>" + options.autosave + "</button>", { color: "white", "font-size": "18px", "font-family": "monospace" }],
+            ["raw-html", () => "<button class=opt onclick=hardReset() style='color:darkred'>HARD RESET</button>", { color: "red", "font-size": "18px", "font-family": "monospace" },],
+        ]],
+        ["row",[
+            ["raw-html", () => "<button class=opt onclick=exportSave()>Export to clipboard</button>", { color: "white", "font-size": "18px", "font-family": "monospace" }],
+            ["raw-html", () => "<button class=opt onclick=importSave()>Import string</button>",{ color: "white", "font-size": "18px", "font-family": "monospace" }],
+            ["raw-html", () => "<button class=opt onclick=exportFile()>Export file</button>",{ color: "white", "font-size": "18px", "font-family": "monospace" }],
+            ["raw-html", () => "<label class=opt for='importfile' style='display:flex;align-items:center;justify-content:center;width:92px;height:92px;'>Import<br>file</label><input id='importfile' type='file' onchange='importFile()' style='display:none' />", { color: "white", "font-size": "13.3333px", "font-family": "monospace", }]
+        ]],
+
+        ["blank", "10px"],
+        ["raw-html", "<h1 style='color: white'>Cloud Save</h1>"],
+
+        ["raw-html", () => {
+            if (galaxy.connected) {
+                return ("<h3 style='color: white'>Connected to Galaxy</h3><br>" + galaxy.message);
+            } else {
+                return "<h3 style='color: white'>You are not on galaxy.click / not logged in.</h3>";
+            }
+        }],
+        ["row", () => {
+            if (galaxy.connected) {
+                return [
+                    ["raw-html", "<button class=opt onclick=galaxy.sendSave()>Save</button>", { color: "white", "font-size": "18px", "font-family": "monospace", }],
+                    ["raw-html", "<button class=opt onclick=galaxy.requestSave()>Load</button>", { color: "white", "font-size": "18px", "font-family": "monospace", }],
+                    ["raw-html", "<button class=opt onclick=toggleOpt('cloudSave')>Autosave:<br>" + options.cloudSave + "</button>", { color: "white", "font-size": "18px", "font-family": "monospace", }],
+                    ["raw-html", "<button class=opt onclick=incrementSlotNumber()>Slot:" + options.cloudSaveSlot + "</button>", { color: "white", "font-size": "18px", "font-family": "monospace", }],
+                ];
+            }
+        }],
+
         ["blank", "25px"],
         ["raw-html", () => hotkey, {"color": "white", "font-size": "18px", "font-family": "monospace",}],
         ["blank", "25px"],

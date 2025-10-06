@@ -199,7 +199,16 @@ addLayer("ep2", {
         player.ep2.cookies = player.ep2.cookies.add(player.ep2.cookiesPerSecond.mul(delta))
 
         player.ep2.cookiesPerClick = new Decimal(1)
-        player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.add(player.ep2.cookiesPerSecond.mul(levelableEffect("pet", 2001)))
+        if (hasUpgrade("ep2", 101)) player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.mul(2)
+        if (hasUpgrade("ep2", 102)) player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.mul(2)
+        if (hasUpgrade("ep2", 103)) player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.mul(2)
+        let val = player.ep2.totalBuildings.mul(0.1)
+        if (hasUpgrade("ep2", 105)) val = val.mul(5)
+        if (hasUpgrade("ep2", 106)) val = val.mul(10)
+        if (hasUpgrade("ep2", 107)) val = val.mul(10)
+        
+        if (hasUpgrade("ep2", 104)) player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.add(val)
+        player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.add(player.ep2.cookiesPerSecond.mul(levelableEffect("pet", 2001)[0]))
 
         player.ep2.averageGoldenCooldown = new Decimal(600)
         if (hasUpgrade("ep2", 9001)) player.ep2.averageGoldenCooldown = player.ep2.averageGoldenCooldown.div(1.5)
@@ -215,7 +224,7 @@ addLayer("ep2", {
             let time = Decimal.mul(player.ep2.averageGoldenCooldown.div(5), Math.random()).sub(player.ep2.averageGoldenCooldown.div(10))
             player.ep2.goldenTimer = player.ep2.averageGoldenCooldown.add(time)
             player.ep2.goldenTimerMax = player.ep2.averageGoldenCooldown.add(time)
-            if (Math.random() < levelableEffect("pet", 2003)) {
+            if (Math.random() < levelableEffect("pet", 2003)[0]) {
                 makeShinies(WRATH_COOKIE, 1)
             } else {
                 makeShinies(GOLDEN_COOKIE, 1)
@@ -223,7 +232,7 @@ addLayer("ep2", {
         }
 
         let goldenBarDiv = new Decimal(1)
-        goldenBarDiv = goldenBarDiv.mul(levelableEffect("pet", 2002))
+        goldenBarDiv = goldenBarDiv.mul(levelableEffect("pet", 2002)[0])
         if (hasUpgrade("ep2", 9102)) goldenBarDiv = goldenBarDiv.mul(1.5)
 
         let base = new Decimal(100)
@@ -240,7 +249,7 @@ addLayer("ep2", {
         if (Decimal.gte(player.ep2.barClicks, player.ep2.barMax)) {
             player.ep2.barClicks = 0
             player.ep2.currScale = player.ep2.currScale.add(1)
-            if (Math.random() < levelableEffect("pet", 2003)) {
+            if (Math.random() < levelableEffect("pet", 2003)[0]) {
                 makeShinies(WRATH_COOKIE, 1)
             } else {
                 makeShinies(GOLDEN_COOKIE, 1)
@@ -277,7 +286,7 @@ addLayer("ep2", {
     },
     bars: {
         clickBar: {
-            unlocked: true,
+            unlocked() {return getLevelableAmount("pet", 2002).gte(1)},
             direction: RIGHT,
             width: 350,
             height: 10,
@@ -474,8 +483,8 @@ addLayer("ep2", {
         101: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(1)},
-            title: "Reinforced Points",
-            description: "Points are twice as efficient.",
+            title: "Crumbly Points",
+            description: "Points and cookie clicks are twice as efficient.",
             cost: new Decimal(100),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -485,8 +494,8 @@ addLayer("ep2", {
         102: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(1)},
-            title: "<span style='color:#FF89E7cc'>Polished Points</span>",
-            description: "Points are twice as efficient.",
+            title: "<span style='color:#FF89E7cc'>Doughy Points</span>",
+            description: "Points and cookie clicks are twice as efficient.",
             cost: new Decimal(500),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -496,8 +505,8 @@ addLayer("ep2", {
         103: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(5)},
-            title: "<span style='color:#00DEFFcc'>Gilded Points</span>",
-            description: "Points are twice as efficient.",
+            title: "<span style='color:#00DEFFcc'>Sweetened Points</span>",
+            description: "Points and cookie clicks are twice as efficient.",
             cost: new Decimal(10000),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -507,8 +516,8 @@ addLayer("ep2", {
         104: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(25)},
-            title: "<span style='color:#FFCC2Fcc'>Pointed Points</span>",
-            description: "Points gain +0.1 cookies per building.",
+            title: "<span style='color:#FFCC2Fcc'>Flavored Points</span>",
+            description: "Points and cookie clicks gain +0.1 cookies per building.",
             cost: new Decimal(100000),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -518,7 +527,7 @@ addLayer("ep2", {
         105: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(50)},
-            title: "<span style='color:#E9D673cc'>Sharper Points</span>",
+            title: "<span style='color:#E9D673cc'>Chocolatey Points</span>",
             description: "Multiplies gain from Pointed Points by x5.",
             cost: new Decimal(1e7),
             currencyLocation() { return player.ep2 },
@@ -529,7 +538,7 @@ addLayer("ep2", {
         106: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(100)},
-            title: "<span style='color:#A8BF91cc'>Whetted Points</span>",
+            title: "<span style='color:#A8BF91cc'>Sugary Points</span>",
             description: "Multiplies gain from Pointed Points by x10.",
             cost: new Decimal(1e8),
             currencyLocation() { return player.ep2 },
@@ -540,7 +549,7 @@ addLayer("ep2", {
         107: {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(150)},
-            title: "<span style='color:#6E5755cc'>Serrated Points</span>",
+            title: "<span style='color:#6E5755cc'>Buttery Points</span>",
             description: "Multiplies gain from Pointed Points by x10.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.ep2 },
@@ -1734,10 +1743,12 @@ addLayer("ep2", {
                 if (hasUpgrade("ep2", 101)) eff = eff.mul(2)
                 if (hasUpgrade("ep2", 102)) eff = eff.mul(2)
                 if (hasUpgrade("ep2", 103)) eff = eff.mul(2)
-                if (hasUpgrade("ep2", 104)) eff = eff.add(player.ep2.totalBuildings.mul(0.1))
-                if (hasUpgrade("ep2", 105)) eff = eff.mul(5)
-                if (hasUpgrade("ep2", 106)) eff = eff.mul(10)
-                if (hasUpgrade("ep2", 107)) eff = eff.mul(10)
+                let val = player.ep2.totalBuildings.mul(0.1)
+                if (hasUpgrade("ep2", 105)) val = val.mul(5)
+                if (hasUpgrade("ep2", 106)) val = val.mul(10)
+                if (hasUpgrade("ep2", 107)) val = val.mul(10)
+
+                if (hasUpgrade("ep2", 104)) eff = eff.add(val)
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
             unlocked: true,
@@ -2257,7 +2268,7 @@ addLayer("ep2", {
                         ["left-row", [], () => {return getLevelableAmount("pet", 2003).gte(1) ? {width: "350px"} : {display: "none !important"}}],
                         ["style-row", [
                             ["raw-html", "Meta Upgrades", {color: "white", textShadow: "0px 1px 0px #000,0px 0px 1px #fff"}],
-                        ], {width: "350px", height: "30px", background: "#181818", borderTop: "8px solid #422B21"}],
+                        ], () => {return player.ep2.totalBuildings.gte(15) ? {width: "350px", height: "30px", background: "#181818", borderTop: "8px solid #422B21"} : {display: "none !important"}}],
                         ["left-row", [["cookie-upgrade", 1], ["cookie-upgrade", 2], ["cookie-upgrade", 3], ["cookie-upgrade", 4], ["cookie-upgrade", 5], ["cookie-upgrade", 6], ["cookie-upgrade", 7]], {width: "350px"}],
                         ["left-row", [["cookie-upgrade", 8], ["cookie-upgrade", 9], ["cookie-upgrade", 10], ["cookie-upgrade", 11], ["cookie-upgrade", 12], ["cookie-upgrade", 13], ["cookie-upgrade", 14]], {width: "350px"}],
                     ], {width: "365px", height: "672px"}],
@@ -2298,7 +2309,7 @@ addLayer("ep2", {
                             ["bar", "clickBar"],
                             ["bar", "goldenBar"],
                         ], {width: "350px", height: "20px"}],
-                        ["raw-html", () => {return "<div class='bottomTooltip'>Golden Click Bar<hr><small>" + formatWhole(player.ep2.barClicks) + "/" + formatWhole(player.ep2.barMax) + "<hr>Scaling Resets in: " + formatTime(player.ep2.scaleCooldown) + "</small></div>"}],
+                        ["raw-html", () => {return getLevelableAmount("pet", 2002).gte(1) ? "<div class='bottomTooltip'>Golden Click Bar<hr><small>" + formatWhole(player.ep2.barClicks) + "/" + formatWhole(player.ep2.barMax) + "<hr>Scaling Resets in: " + formatTime(player.ep2.scaleCooldown) + "</small></div>" : ""}],
                     ], {width: "350px", height: "20px", borderTop: "8px solid #422B21"}],
                 ], {width: "350px", height: "78px", background: "rgba(0,0,0,0.8)"}],
             ], {width: "350px", height: "800px", borderRight: "8px solid #422B21"}],

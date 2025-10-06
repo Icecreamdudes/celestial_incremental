@@ -1,6 +1,7 @@
 ﻿addLayer("ev", {
     name: "Evolution", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "E", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -47,114 +48,145 @@
             style: { width: "200px", minHeight: "100px", border: "3px solid #1500bf", fontSize: "20px", color: "#1500bf", borderRadius: "15px", background: "linear-gradient(90deg, #d487fd, #4b79ff)"},
         },
         100: {
-            title() { return "<img src='" + tmp.pet.levelables[103].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/goldsmithEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[103].canClick && !player.ev.evolutionsUnlocked[0] },
             tooltip() { return "██████████ ████ ██ █████ ██<br>multiply ██ gain" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(0)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #AB791E", borderRadius: "0px", padding: "0px" },
         },
         101: {
-            title() { return "<img src='" + tmp.pet.levelables[204].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/mrRedSharkEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[204].canClick && !player.ev.evolutionsUnlocked[1] },
             tooltip() { return "████████ ███ efficiency ██ XP<br>███████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(1)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #730001", borderRadius: "0px", padding: "0px" },
         },
         102: {
-            title() { return "<img src='" + tmp.pet.levelables[203].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/insaneFaceEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[203].canClick && !player.ev.evolutionsUnlocked[2] && (player.in.unlockedInfinity || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "Gives ███ daily ███████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(2)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #00188F", borderRadius: "0px", padding: "0px" },
         },
         103: {
-            title() { return "<img src='" + tmp.pet.levelables[101].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/voidGwaEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[101].canClick && !player.ev.evolutionsUnlocked[3] && (player.in.unlockedBreak || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "Unlocks █████ Negative ████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(3)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #000000", borderRadius: "0px", padding: "0px" },
         },
         104: {
-            title() { return "<img src='" + tmp.pet.levelables[202].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/sunEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[202].canClick && !player.ev.evolutionsUnlocked[4] && player.cb.highestLevel.gte(250)},
             tooltip() { return "██ ██████ automation ███████<br>sacrifices" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(4)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #FF3000", borderRadius: "0px", padding: "0px" },
         },
         105: {
-            title() { return "<img src='" + tmp.pet.levelables[302].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/d20EvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[302].canClick && !player.ev.evolutionsUnlocked[5] && player.cb.highestLevel.gte(250)},
             tooltip() { return "██-unlock █ previous ████████,<br>███████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(5)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #005C34", borderRadius: "0px", padding: "0px" },
         },
         106: {
-            title() { return "<img src='" + tmp.pet.levelables[106].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/mutantSpiderEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[106].canClick && !player.ev.evolutionsUnlocked[6] && (player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23))},
             tooltip() { return "██████ ███ halt ███████ options" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(6)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #0C0047", borderRadius: "0px", padding: "0px" },
         },
         107: {
-            title() { return "<img src='" + tmp.pet.levelables[303].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/moonEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[303].canClick && !player.ev.evolutionsUnlocked[7] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "██████ ███ grass ███, █████<br>█████ buffs" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(7)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #666666", borderRadius: "0px", padding: "0px" },
         },
         108: {
-            title() { return "<img src='" + tmp.pet.levelables[206].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/marcelAcoplaoEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[206].canClick && !player.ev.evolutionsUnlocked[8] && (hasUpgrade("bi", 24) || player.s.highestSingularityPoints.gt(0))},
             tooltip() { return "Gain ███ █████ shards ██ ████<br>█████ back ███████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(8)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #432D4A", borderRadius: "0px", padding: "0px" },
         },
         109: {
-            title() { return "<img src='" + tmp.pet.levelables[104].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/paragonCheckpointEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[104].canClick && !player.ev.evolutionsUnlocked[9] && hasMilestone("s", 12)},
             tooltip() { return "██████ █ ███ way ██ ████<br>offerings, ███ more ██████████" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(9)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #2CA400", borderRadius: "0px", padding: "0px" },
         },
         110: {
-            title() { return "<img src='" + tmp.pet.levelables[205].image + "'style='width:100px;height:100px;margin:0px;margin-bottom:-4px'></img>" },
+            title() { return "<img src='resources/Pets/eyeEvoPet.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
             canClick() { return true},
             unlocked() { return tmp.pet.levelables[205].canClick && !player.ev.evolutionsUnlocked[10] && hasMilestone("s", 12)},
             tooltip() { return "█████████ shards ██ speed ██<br>█████ back" },
             onClick() {
                 player.ev.evolutionDisplayIndex = new Decimal(10)
             },
-            style: { width: "100px", minHeight: "100px", border: "0px", borderRadius: "0px", padding: "0px" },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #3F3F3F", borderRadius: "0px", padding: "0px" },
+        },
+
+        201: {
+            title() { return "<img src='resources/Pets/cookie/simpleCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && getLevelableAmount("pet", 2001).lt(1)},
+            tooltip() { return "Pet █████████ ████ multiply ███" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(101)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
+        },
+        202: {
+            title() { return "<img src='resources/Pets/cookie/goldenCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && hasUpgrade("s", 21) && getLevelableAmount("pet", 2002).lt(1)},
+            tooltip() { return "██████ ███ golden ██████ upgrades" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(102)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
+        },
+        203: {
+            title() { return "<img src='resources/Pets/cookie/wrathCookieEvo.png'style='width:90px;height:90px;margin:0px;margin-bottom:-4px'></img>" },
+            canClick() { return true},
+            unlocked() { return tmp.pet.levelables[403].canClick && player.ep2.obtainedShards && player.ma.matosUnlock && getLevelableAmount("pet", 2002).gte(1) && getLevelableAmount("pet", 2003).lt(1)},
+            tooltip() { return "██████ ███ wrath ██████ upgrades" },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(103)
+            },
+            style: { width: "100px", minHeight: "100px", border: "5px solid #16364a", borderRadius: "0px", padding: "0px" },
         },
     },
     evos: {
@@ -449,6 +481,84 @@
                 setLevelableAmount("pet", 1205, new Decimal(1))
             }
         },
+
+        101: {
+            title() { return "Simple Cookie" },
+            description() {
+                return formatWhole(player.ep2.chocoShards) + "/1 Chocolate Shard" +
+                "<br>" + formatWhole(player.cb.petPoints) + "/1,000 Pet Points" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/2 Cookie Levels" +
+                "<br>" + formatWhole(player.ca.rememberanceCores) + "/10 Rememberance Cores"
+            },
+            canClick() {
+                return (player.ep2.chocoShards.gte(1) && player.cb.petPoints.gte(1000) && player.ca.rememberanceCores.gte(10)
+                && getLevelableAmount("pet", 403).gte(2))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.ep2.chocoShards = player.ep2.chocoShards.sub(1)
+                player.cb.petPoints = player.cb.petPoints.sub(1000)
+                player.ca.rememberanceCores = player.ca.rememberanceCores.sub(10)
+
+                setLevelableAmount("pet", 2001, new Decimal(1))
+            }
+        },
+        102: {
+            title() { return "Golden Cookie" },
+            description() {
+                return formatWhole(player.ep2.chocoShards) + "/2 Chocolate Shards" +
+                "<br>" + formatWhole(player.cb.petPoints) + "/2,777 Pet Points" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/4 Cookie Levels" +
+                "<br>" + formatWhole(player.ca.rememberanceCores) + "/17 Remembrance Cores" +
+                "<br>" + formatWhole(player.sma.starmetalAlloy) + "/777 Starmetal Alloy"
+            },
+            canClick() {
+                return (player.ep2.chocoShards.gte(2) && player.cb.petPoints.gte(2777) && player.ca.rememberanceCores.gte(17)
+                && player.sma.starmetalAlloy.gte(777) && getLevelableAmount("pet", 403).gte(3))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.ep2.chocoShards = player.ep2.chocoShards.sub(2)
+                player.cb.petPoints = player.cb.petPoints.sub(2777)
+                player.ca.rememberanceCores = player.ca.rememberanceCores.sub(17)
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(777)
+
+                setLevelableAmount("pet", 2002, new Decimal(1))
+            }
+        },
+        103: {
+            title() { return "Wrath Cookie" },
+            description() {
+                return formatWhole(player.ep2.chocoShards) + "/6 Chocolate Shards" +
+                "<br>" + formatWhole(player.cb.petPoints) + "/6,666 Pet Points" +
+                "<br>"  + formatWhole(getLevelableAmount("pet", 403)) + "/6 Cookie Levels" +
+                "<br>" + formatWhole(player.ca.rememberanceCores) + "/36 Remembrance Cores" +
+                "<br>" + formatWhole(player.ma.commonMatosFragments) + "/6,666 Common Matos Fragments" +
+                "<br>" + formatWhole(player.ma.rareMatosFragments) + "/666 Rare Matos Fragments" +
+                "<br>" + formatWhole(player.ma.epicMatosFragments) + "/66 Epic Matos Fragments" +
+                "<br>" + formatWhole(player.ma.legendaryMatosFragments) + "/6 Legendary Matos Fragments"
+                
+            },
+            canClick() {
+                return (player.ep2.chocoShards.gte(6) && player.cb.petPoints.gte(6666) && player.ca.rememberanceCores.gte(36)
+                && player.ma.commonMatosFragments.gte(6666) && player.ma.rareMatosFragments.gte(666) && player.ma.epicMatosFragments.gte(66)
+                && player.ma.legendaryMatosFragments.gte(6) && getLevelableAmount("pet", 403).gte(6))
+            },
+            onClick() {
+                player.ev.evolutionDisplayIndex = new Decimal(-1)
+
+                player.ep2.chocoShards = player.ep2.chocoShards.sub(6)
+                player.cb.petPoints = player.cb.petPoints.sub(6666)
+                player.ca.rememberanceCores = player.ca.rememberanceCores.sub(36)
+                player.ma.commonMatosFragments = player.ma.commonMatosFragments.sub(6666)
+                player.ma.rareMatosFragments = player.ma.rareMatosFragments.sub(666)
+                player.ma.epicMatosFragments = player.ma.epicMatosFragments.sub(66)
+
+                setLevelableAmount("pet", 2003, new Decimal(1))
+            }
+        },
     },
     bars: {
         pityEvoBar: {
@@ -515,7 +625,9 @@
                 ["row", [
                     ["bt-clickable", 100], ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
                     ["bt-clickable", 105], ["bt-clickable", 107], ["bt-clickable", 108], ["bt-clickable", 109], ["bt-clickable", 110],
-                    ["bt-clickable", 106]
+                    ["bt-clickable", 106],
+
+                    ["bt-clickable", 201], ["bt-clickable", 202], ["bt-clickable", 203]
                 ]],
                 ["blank", "10px"],
                 ["raw-html", function () {
@@ -542,6 +654,7 @@
 addLayer("ev0", {
     name: "Goldsmith", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Gs", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -587,7 +700,6 @@ addLayer("ev0", {
 
         player.ev0.coinShardEffect = player.ev0.coinShards.pow(0.4).add(1)
     },
-    branches: ["branch"],
     clickables: {},
     bars: {},
     upgrades: {},
@@ -911,6 +1023,7 @@ addLayer("ev0", {
 addLayer("ev1", {
     name: "MrRedShark", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Rs", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -927,7 +1040,6 @@ addLayer("ev1", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
     },
-    branches: ["branch"],
     clickables: {
         2: {
             title() { return "Buy Max On" },
@@ -1511,6 +1623,7 @@ addLayer("ev1", {
 addLayer("ev2", {
     name: "Insane Face", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "If", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1522,10 +1635,8 @@ addLayer("ev2", {
         cooldown: new Decimal(0),
         cooldownMax: new Decimal(86400),
         xpReward: new Decimal(150),
-    }
-    },
-    automate() {
-    },
+    }},
+    automate() {},
     nodeStyle: {
         background: "#106ccc",
 		backgroundOrigin: "border-box",
@@ -1542,7 +1653,6 @@ addLayer("ev2", {
 
         player.ev2.cooldown = player.ev2.cooldown.sub(onepersec.mul(delta))
     },
-    branches: ["branch"],
     clickables: {
         11: {
             title() { return player.ev2.cooldown.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev2.cooldown) + "." : "<h3>Collect Daily Reward!"},
@@ -1568,18 +1678,14 @@ addLayer("ev2", {
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
     },
-    dailyReward()
-    {
-        if (player.ev2.xpDay)
-        {
+    dailyReward() {
+        if (player.ev2.xpDay) {
             player.cb.xp = player.cb.xp.add(player.ev2.xpReward)
             player.cb.totalxp = player.cb.totalxp.add(player.ev2.xpReward)
             callAlert("You gained " + format(player.ev2.xpReward) + " XP!");
-        } else if (player.ev2.petDay)
-        {
+        } else if (player.ev2.petDay) {
             layers.ev2.dailyRewardPet();
         }
-
         player.ev2.day = player.ev2.day.add(1)
     },
     dailyRewardPet() {
@@ -1623,13 +1729,6 @@ addLayer("ev2", {
             callAlert("You gained 5 Slaxes!", "resources/Pets/slaxCommonPet.png");
         }
     },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
     tabFormat: [
         ["blank", "10px"],
         ["style-row", [
@@ -1648,6 +1747,7 @@ addLayer("ev2", {
 addLayer("ev4", {
     name: "Sun", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Su", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1666,8 +1766,6 @@ addLayer("ev4", {
     tooltip: "Sun",
     color: "#febc06",
     update(delta) {
-        let onepersec = player.cb.cbTickspeed
-
         player.ev4.offeringReq = player.cb.totalAutomationShards.mul(20).add(100)
 
         player.ev4.offeringsBase = new Decimal(1)
@@ -1678,31 +1776,9 @@ addLayer("ev4", {
         player.ev4.offeringsBase = player.ev4.offeringsBase.mul(buyableEffect("ep0", 12))
         if (hasUpgrade("cs", 1202)) player.ev4.offeringsBase = player.ev4.offeringsBase.mul(1.5)
 
-        if (player.ev4.offerings.gte(player.ev4.offeringReq))
-        {
+        if (player.ev4.offerings.gte(player.ev4.offeringReq)) {
             layers.ev4.gainAutomationShard()
         }
-    },
-    branches: ["branch"],
-    clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
     },
     gainAutomationShard() {
         let leftover = new Decimal(0)
@@ -1733,7 +1809,6 @@ addLayer("ev4", {
             },
         },
     },
-    upgrades: {},
     buyables: {
         11: {
             cost(x) { return new Decimal(1.2).pow(x || getBuyableAmount(this.layer, this.id)).mul(1).floor() },
@@ -1800,10 +1875,6 @@ addLayer("ev4", {
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {},
     tabFormat: [
         ["blank", "10px"],
         ["left-row", [
@@ -1837,17 +1908,16 @@ addLayer("ev4", {
 addLayer("ev8", {
     name: "Marcel", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Mc", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
 
-        evoButtonUnlocks: [true, false, false, false,],
         evoButtonTimersMax: [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),],
         evoButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         evoButtonBase: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),],
 
-        paragonButtonUnlocks: [true, false, false,],
         paragonButtonTimersMax: [new Decimal(180000),new Decimal(450000),new Decimal(864000),],
         paragonButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),],
         paragonButtonBase: [new Decimal(1),new Decimal(3),new Decimal(5),],
@@ -1874,11 +1944,6 @@ addLayer("ev8", {
         for (let i = 0; i < player.ev8.evoButtonTimers.length; i++) {
             player.ev8.evoButtonTimers[i] = player.ev8.evoButtonTimers[i].sub(onepersec.mul(delta))
         }
-        if (hasMilestone("s", 14)) {
-            player.ev8.evoButtonUnlocks[1] = true
-            player.ev8.evoButtonUnlocks[2] = true
-            player.ev8.evoButtonUnlocks[3] = true
-        }
 
         player.ev8.paragonButtonTimersMax = [new Decimal(180000),new Decimal(450000),new Decimal(864000),]
         player.ev8.paragonButtonBase = [new Decimal(1),new Decimal(3),new Decimal(5),]
@@ -1888,18 +1953,14 @@ addLayer("ev8", {
         for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++) {
             player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(onepersec.mul(delta))
         }
-        if (hasMilestone("s", 14)) {
-            player.ev8.paragonButtonUnlocks[1] = true
-            player.ev8.paragonButtonUnlocks[2] = true
-        }
     },
     branches: ["branch"],
     clickables: {
         //evo
         11: {
             title() { return player.ev8.evoButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[0]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.evoButtonUnlocks[0] },
+            canClick() { return player.ev8.evoButtonTimers[0].lt(0) && this.unlocked },
+            unlocked: true,
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[0])
                 player.ev8.evoButtonTimers[0] = player.ev8.evoButtonTimersMax[0]
@@ -1910,7 +1971,7 @@ addLayer("ev8", {
         12: {
             title() { return player.ev8.evoButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[1]) + " Evo Shards."},
             canClick() { return player.ev8.evoButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.evoButtonUnlocks[1] },
+            unlocked() { return hasMilestone("s", 14) },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[1])
                 player.ev8.evoButtonTimers[1] = player.ev8.evoButtonTimersMax[1]
@@ -1921,7 +1982,7 @@ addLayer("ev8", {
         13: {
             title() { return player.ev8.evoButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[2]) + " Evo Shards."},
             canClick() { return player.ev8.evoButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.evoButtonUnlocks[2] },
+            unlocked() { return hasMilestone("s", 14) },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[2])
                 player.ev8.evoButtonTimers[2] = player.ev8.evoButtonTimersMax[2]
@@ -1932,7 +1993,7 @@ addLayer("ev8", {
         14: {
             title() { return player.ev8.evoButtonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[3]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[3]) + " Evo Shards."},
             canClick() { return player.ev8.evoButtonTimers[3].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.evoButtonUnlocks[3] },
+            unlocked() { return hasMilestone("s", 14) },
             onClick() {
                 player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[3])
                 player.ev8.evoButtonTimers[3] = player.ev8.evoButtonTimersMax[3]
@@ -1962,8 +2023,8 @@ addLayer("ev8", {
         //paragon
         101: {
             title() { return player.ev8.paragonButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[0]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.paragonButtonUnlocks[0] },
+            canClick() { return player.ev8.paragonButtonTimers[0].lt(0) && this.unlocked },
+            unlocked: true,
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[0])
                 player.ev8.paragonButtonTimers[0] = player.ev8.paragonButtonTimersMax[0]
@@ -1974,7 +2035,7 @@ addLayer("ev8", {
         102: {
             title() { return player.ev8.paragonButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[1]) + " Paragon Shards."},
             canClick() { return player.ev8.paragonButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.paragonButtonUnlocks[1] },
+            unlocked() { return hasMilestone("s", 14) },
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[1])
                 player.ev8.paragonButtonTimers[1] = player.ev8.paragonButtonTimersMax[1]
@@ -1985,7 +2046,7 @@ addLayer("ev8", {
         103: {
             title() { return player.ev8.paragonButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[2]) + " Paragon Shards."},
             canClick() { return player.ev8.paragonButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ev8.paragonButtonUnlocks[2] },
+            unlocked() { return hasMilestone("s", 14) },
             onClick() {
                 player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[2])
                 player.ev8.paragonButtonTimers[2] = player.ev8.paragonButtonTimersMax[2]
@@ -2213,6 +2274,7 @@ addLayer("ev8", {
 addLayer("ev10", {
     name: "Eye", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Ey", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -2236,7 +2298,6 @@ addLayer("ev10", {
        paragonSacrificeCooldownTimerMax: new Decimal(43200),
 
        activeBoost: new Decimal(0),
-
     }},
     automate() {},
     nodeStyle: {

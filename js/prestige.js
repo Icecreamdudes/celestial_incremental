@@ -1,6 +1,7 @@
 ﻿addLayer("p", {
     name: "Prestige", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -23,6 +24,7 @@
             buyUpgrade("p", 11)
             buyUpgrade("p", 12)
             buyUpgrade("p", 13)
+            buyUpgrade("p", 10)
             buyUpgrade("p", 14)
             buyUpgrade("p", 15)
             buyUpgrade("p", 16)
@@ -83,7 +85,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.co.cores.prestige.effect[0])
 
         // POWER MODIFIERS
-        if (hasUpgrade("hpw", 1022)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)
+        if (hasUpgrade("hpw", 1021)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(1.36)
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(buyableEffect("fu", 33))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(player.co.cores.prestige.effect[1])
 
@@ -118,10 +120,11 @@
         player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
-        if (hasUpgrade("hpw", 1021)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1021))
+        if (hasUpgrade("hpw", 1023)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1023))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
         if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
-        if (hasUpgrade("ev1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ev1", 11))
+        if (hasUpgrade("ep1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep1", 11))
+        if (hasUpgrade("ep2", 4)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep2", 4))
         if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
         player.p.crystalsToGet = player.p.crystalsToGet.mul(player.co.cores.prestige.effect[2])
@@ -325,14 +328,24 @@
             title: "Prestige Upgrade III",
             unlocked() { return true },
             description: "Unlocks Factor VII.",
-            cost: new Decimal(5),
+            cost: new Decimal(4),
+            currencyLocation() { return player.p },
+            currencyDisplayName: "Prestige Points",
+            currencyInternalName: "prestigePoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        10: {
+            title: "Prestige Upgrade IV",
+            unlocked() { return true },
+            description: "Multiply Factor Effect Base by x1.2.",
+            cost: new Decimal(8),
             currencyLocation() { return player.p },
             currencyDisplayName: "Prestige Points",
             currencyInternalName: "prestigePoints",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
-            title: "Prestige Upgrade IV",
+            title: "Prestige Upgrade V",
             unlocked() { return true },
             description: "You can buy max ranks, tiers, and tetr",
             cost: new Decimal(16),
@@ -342,7 +355,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         15: {
-            title: "Prestige Upgrade V",
+            title: "Prestige Upgrade VI",
             unlocked() { return true },
             description: "Autobuys factors I-VIII.",
             cost: new Decimal(64),
@@ -353,7 +366,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         16: {
-            title: "Prestige Upgrade VI",
+            title: "Prestige Upgrade VII",
             unlocked() { return hasUpgrade("i", 15) },
             description: "Unlock a second tetr effect that buffs factor power.",
             cost: new Decimal(4096),
@@ -363,7 +376,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         17: {
-            title: "Prestige Upgrade VII",
+            title: "Prestige Upgrade VIII",
             unlocked() { return hasUpgrade("p", 16) },
             description: "Automates rank gain.",
             cost: new Decimal(32768),
@@ -373,7 +386,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         18: {
-            title: "Prestige Upgrade VIII",
+            title: "Prestige Upgrade IX",
             unlocked() { return hasUpgrade("p", 17) },
             description: "Automates tier gain.",
             cost: new Decimal(524288),
@@ -383,7 +396,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         19: {
-            title: "Prestige Upgrade IX",
+            title: "Prestige Upgrade X",
             unlocked() { return hasUpgrade("p", 18) && tmp.f.buyables[26].unlocked },
             description: "Unlocks Power Factor VIII, and more tree buyables.",
             cost: new Decimal(4782969),
@@ -393,7 +406,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         21: {
-            title: "Prestige Upgrade X",
+            title: "Prestige Upgrade XI",
             unlocked() { return hasUpgrade("p", 19) },
             description: "Autobuys power factors I-VIII",
             cost: new Decimal(67108864),
@@ -403,7 +416,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         22: {
-            title: "Prestige Upgrade XI",
+            title: "Prestige Upgrade XII",
             unlocked() { return hasUpgrade("p", 21) },
             description: "Automates tetr gain.",
             cost: new Decimal(1162261467),
@@ -413,7 +426,7 @@
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         23: {
-            title: "Prestige Upgrade XII",
+            title: "Prestige Upgrade XIII",
             unlocked() { return hasUpgrade("p", 22) && hasMilestone("r", 11) },
             description: "Unlocks Tree Factor IV.",
             cost: new Decimal.pow(5, 25),
@@ -709,8 +722,9 @@
                     ["blank", "15px"],
                     ["row", [["clickable", 11]]],
                     ["blank", "25px"],
-                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
-                        ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "800px"}],
+                    ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 10], ["upgrade", 14],
+                        ["upgrade", 15], ["upgrade", 16], ["upgrade", 17], ["upgrade", 18], ["upgrade", 19],
+                        ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "650px"}],
                 ]
             },
             "Crystallize": {

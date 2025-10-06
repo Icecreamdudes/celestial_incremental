@@ -32,18 +32,6 @@ addLayer("od", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        // TAB FUNCTIONALITY
-        if (player.subtabs["od"]['stuff'] == 'Portal') {
-            player.po.lastUniverse = 'od'
-            player.tab = "po"
-            player.subtabs["od"]['stuff'] = 'Features'
-        }
-        if (player.subtabs["od"]['stuff'] == 'Settings') {
-            player.po.lastUniverse = 'od'
-            player.tab = "settings"
-            player.subtabs["od"]['stuff'] = 'Features'
-        }
-
         // ORDINAL GAIN
         player.od.ops = new Decimal(1)
         player.od.co = player.od.co.add(player.od.ops.mul(delta))
@@ -92,16 +80,6 @@ addLayer("od", {
                     ["tree", tree],
                 ]
             },
-            "Portal": {
-                buttonStyle() { return { color: "black", borderRadius: "5px", 'border-color': 'purple', background: 'linear-gradient(45deg, #8a00a9, #0061ff)', } },
-                unlocked() { return true},
-                content: []
-            },
-            "Settings": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [],
-            },
         },
     },
     tabFormat: [
@@ -109,10 +87,10 @@ addLayer("od", {
             ["style-column", [
                 ["raw-html", () => {return layers.od.ordinalDisplay(player.od.co, player.od.ob)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => {return "(+" + formatWhole(player.od.ops) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ], {width:"500px", height: "73px", borderRight: "2px solid white"}],
+            ], {width:"500px", height: "73px", background: "#0c3200", borderRight: "2px solid white", borderRadius: "18px 0 0 18px"}],
             ["style-row", [
                 ["raw-html", () => {return formatWhole(player.od.ob)}, {color: "white", fontSize: "30px", fontFamily: "monospace"}],
-            ], {width:"75px", height: "73px", backgroundColor: "#333333", borderRadius: "0px 20px 20px 0px"}],
+            ], {width:"75px", height: "73px", backgroundColor: "#103f00", borderRadius: "0 18px 18px 0"}],
         ], {width: "577px", border: "2px solid white", borderRadius: "20px"}],
         ["blank", "25px"],
         ["microtabs", "stuff", { 'border-width': '0px' }],

@@ -3,11 +3,10 @@ var particleID = 0;
 var mouseX = 0;
 var mouseY = 0;
 
-function makeParticles(data, amount=1, type = "normal") {
+function makeParticles(data, amount=1, type = "normal", extra = {}) {
     for (let x = 0; x < amount; x++) {
         let particle = newParticles[type]()
         for (thing in data) {
-
             switch(thing) {
                 case 'onClick': // Functions that should be copied over
                 case 'onMouseEnter':
@@ -19,6 +18,9 @@ function makeParticles(data, amount=1, type = "normal") {
                     particle[thing]=run(data[thing], data, x)
                     
             }
+        }
+        for (thing in extra) {
+            particle[thing] = run(extra[thing], extra, x)
         }
         if (data.dir === undefined) {
             particle.dir = particle.angle
@@ -39,8 +41,8 @@ function makeParticles(data, amount=1, type = "normal") {
 }
 
 // Makes a particle at a random location that stays still until it despawns
-function makeShinies(data, amount=1) {
-    makeParticles(data, amount, "shiny")
+function makeShinies(data, amount=1, extra = {}) {
+    makeParticles(data, amount, "shiny", extra)
 }
 
 
@@ -106,8 +108,8 @@ const newParticles = {
         return {
             time: 10,
             id: particleID,
-            x: Math.random() * (tmp.other.screenWidth - 100) + 50,
-            y: Math.random() * (tmp.other.screenHeight - 100) + 50,
+            x: Math.random() * (tmp.other.screenWidth*0.8) + tmp.other.screenWidth*0.13,
+            y: Math.random() * (tmp.other.screenHeight*0.8) + tmp.other.screenHeight*0.2,
             width: 50,
             height: 50,
             image: "resources/genericParticle.png",

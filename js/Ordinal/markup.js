@@ -54,7 +54,7 @@ addLayer("mu", {
     },
     clickables: {
         101: {
-            title() { return "Reset ordinal, but gain +" + formatWhole(player.mu.pg) + " ordinal power." },
+            title() { return "Reset ordinal, but gain<br>+" + formatWhole(player.mu.pg) + " ordinal power." },
             canClick() { return player.mu.pg.gte(100) },
             unlocked() { return true },
             onClick() {
@@ -66,9 +66,8 @@ addLayer("mu", {
                 player.mu.cp = player.mu.cp.add(player.mu.pg)
             },
             style() {
-                let look = {width: "300px", minHeight: "100px", fontSize: '12px', border: '3px solid white', borderRadius: "15px"}
-                this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
-                this.canClick() ? look.color = "white" : look.color = "black"
+                let look = {width: "300px", minHeight: "100px", color: "white", fontSize: '12px', border: '3px solid white', borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "rgba(0,0,0,0.5)" : look.backgroundColor = "rgba(191, 143, 143, 0.5)"
                 return look
             },
         },
@@ -90,50 +89,29 @@ addLayer("mu", {
                 player.od.ob = player.od.ob.sub(1)
             },
             style() {
-                let look = {width: "300px", minHeight: "100px", fontSize: '12px', border: '3px solid white', borderRadius: "15px"}
-                this.canClick() ? look.backgroundColor = "black" : look.backgroundColor = "#bf8f8f"
-                this.canClick() ? look.color = "white" : look.color = "black"
+                let look = {width: "300px", minHeight: "100px", color: "white", fontSize: '12px', border: '3px solid white', borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "rgba(0,0,0,0.5)" : look.backgroundColor = "rgba(191, 143, 143, 0.5)"
                 return look
             },
         },
-    },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {
-        Content: {
-            "Markup": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["scroll-column", [
-                        ["blank", "25px"],
-                        ["row", [
-                            ["clickable", 101], ["raw-html", "&nbsp;", {fontSize: "25px"}], ["clickable", 102],
-                        ]],
-                    ], {width: "800px", height: "550px"}],
-                ]
-            },
-        }
     },
     tabFormat: [
         ["style-row", [
             ["style-column", [
                 ["raw-html", () => {return layers.od.ordinalDisplay(player.od.co, player.od.ob)}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                 ["raw-html", () => {return "(+" + formatWhole(player.od.ops) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ], {width:"500px", height: "73px", borderRight: "2px solid white"}],
+            ], {width:"500px", height: "73px", background: "#0c3200", borderRight: "2px solid white", borderRadius: "18px 0 0 18px"}],
             ["style-row", [
                 ["raw-html", () => {return formatWhole(player.od.ob)}, {color: "white", fontSize: "30px", fontFamily: "monospace"}],
-            ], {width:"75px", height: "73px", backgroundColor: "#333333", borderRadius: "0px 20px 20px 0px"}],
+            ], {width:"75px", height: "73px", backgroundColor: "#103f00", borderRadius: "0 18px 18px 0"}],
         ], {width: "577px", border: "2px solid white", borderRadius: "20px"}],
         ["blank", "25px"],
-        ["raw-html", () => {return "You have " + format(player.mu.cp) + " Ordinal Power."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+        ["raw-html", () => {return "You have " + formatSimple(player.mu.cp) + " Ordinal Power."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
         ["blank", "25px"],
-        ["microtabs", "Content", { 'border-width': '0px' }],
-        ["blank", "25px"],
+        ["row", [
+            ["clickable", 101], ["raw-html", "&nbsp;", {fontSize: "25px"}], ["clickable", 102],
+        ]],
+        ["blank", "25px"]
     ],
     layerShown() { return player.startedGame == true && layerShown("od") },
     deactivated() { return true},

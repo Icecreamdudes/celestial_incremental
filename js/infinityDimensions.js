@@ -1,6 +1,7 @@
 ﻿addLayer("id", {
     name: "Infinity Dimensions", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ID", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -60,7 +61,7 @@
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(buyableEffect("id", 11))
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(buyableEffect("r", 14))
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.ca.replicantiEffect2)
-        if (hasUpgrade("hpw", 1041)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(upgradeEffect("hpw", 1041))
+        if (hasUpgrade("hpw", 1043)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(upgradeEffect("hpw", 1043))
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(levelableEffect("pet", 208)[0])
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.sd.singularityPowerEffect2)
         if (hasMilestone("fa", 16)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.fa.milestoneEffect[5])
@@ -83,7 +84,7 @@
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("id", i+12).div(10))
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("r", 14))
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.ca.replicantiEffect2)
-            if (hasUpgrade("hpw", 1041)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(upgradeEffect("hpw", 1041))
+            if (hasUpgrade("hpw", 1043)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(upgradeEffect("hpw", 1043))
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(levelableEffect("pet", 208)[0])
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.sd.singularityPowerEffect2)
             if (hasMilestone("fa", 16)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.fa.milestoneEffect[5])

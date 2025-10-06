@@ -1,6 +1,7 @@
 ﻿addLayer("ip", {
     name: "Infinity", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "∞", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -538,51 +539,51 @@
             ],
         },
         21: {
-            requirementDescription: "<h3>80 Infinities",
+            requirementDescription: "<h3>75 Infinities",
             effectDescription() { return "Skip the big crunch screen, and automatically reset." },
-            done() { return player.in.infinities.gte(80) && hasChallenge("ip", 14) },
+            done() { return player.in.infinities.gte(75) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         22: {
-            requirementDescription: "<h3>150 Infinities",
+            requirementDescription: "<h3>100 Infinities",
             effectDescription() { return "Gain 10% of grasshoppers and code experience per second." },
-            done() { return player.in.infinities.gte(150) && hasChallenge("ip", 14) },
+            done() { return player.in.infinities.gte(100) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         23: {
-            requirementDescription: "<h3>777 Infinities",
-            effectDescription() { return "Unlocks the point halter (Next to OTF)." },
-            done() { return player.in.infinities.gte(777) && hasChallenge("ip", 14) },
+            requirementDescription: "<h3>250 Infinities",
+            effectDescription() { return "Unlocks the point halter and universe pauser." },
+            done() { return player.in.infinities.gte(250) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         24: {
-            requirementDescription: "<h3>4000 Infinities",
+            requirementDescription: "<h3>1000 Infinities",
             effectDescription() { return "Check back pet effects are always active." },
-            done() { return player.in.infinities.gte(4000) && hasChallenge("ip", 14) },
+            done() { return player.in.infinities.gte(1000) && hasChallenge("ip", 14) },
             unlocked() { return hasChallenge("ip", 14) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         25: {
-            requirementDescription: "<h3>15000 Infinities",
+            requirementDescription: "<h3>5000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(15000) && player.in.unlockedBreak },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(5000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         26: {
-            requirementDescription: "<h3>30000 Infinities",
+            requirementDescription: "<h3>10000 Infinities",
             effectDescription() { return "Tav's domain doesn't reset infinity milestones." },
-            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(30000) && player.in.unlockedBreak },
+            done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(10000) && player.in.unlockedBreak },
             unlocked() { return player.in.unlockedBreak },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         27: {
-            requirementDescription: "<h3>70000 Infinities",
+            requirementDescription: "<h3>20000 Infinities",
             effectDescription() { return "Unlock autocrunchers for inf and negative inf resets.<br>(IN BREAK INFINITY)" },
-            done() { return player.in.infinities.gte(70000) && player.in.unlockedBreak && player.ev.evolutionsUnlocked[3] },
+            done() { return player.in.infinities.gte(20000) && player.in.unlockedBreak && player.ev.evolutionsUnlocked[3] },
             unlocked() { return player.in.unlockedBreak && player.ev.evolutionsUnlocked[3]},
             style: {width: "600px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -669,6 +670,8 @@
             unlocked() { return hasChallenge("ip", 13) },
             onEnter() {
                 layers.in.bigCrunch()
+                player.r.pentToGet = new Decimal(0)
+                player.r.pent = new Decimal(0)
             },
             onExit() {
                 layers.in.bigCrunch()

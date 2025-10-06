@@ -1,6 +1,7 @@
 ﻿addLayer("m", {
     name: "Mods", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "M", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -138,12 +139,13 @@
         if (player.pol.pollinatorsIndex == 6) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorsEffect[11])
         if (player.pol.pollinatorEffects.butterfly.enabled) player.m.modsToGet = player.m.modsToGet.mul(player.pol.pollinatorEffects.butterfly.effects[1])
         player.m.modsToGet = player.m.modsToGet.mul(buyableEffect("p", 12))
+        if (hasUpgrade("ep2", 12)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ep2", 12))
         player.m.modsToGet = player.m.modsToGet.mul(player.i.preOTFMult)
         player.m.modsToGet = player.m.modsToGet.mul(player.co.cores.code.effect[2])
         if (hasUpgrade("cs", 702)) player.m.modsToGet = player.m.modsToGet.mul(1e15)
 
         // POWER MODIFIERS
-        if (hasUpgrade("hpw", 1043)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
+        if (hasUpgrade("hpw", 1042)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
         player.m.modsToGet = player.m.modsToGet.pow(player.cs.scraps.code.effect)
         if (hasUpgrade("cs", 703)) player.m.modsToGet = player.m.modsToGet.pow(1.1)
 
@@ -414,7 +416,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(2).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

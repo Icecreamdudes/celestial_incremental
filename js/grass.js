@@ -1,6 +1,7 @@
 ﻿addLayer('g', {
     name: 'Grass', // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: 'G', // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1224,7 +1225,7 @@ const updateGrass = (delta) => {
     if (hasUpgrade("cs", 501)) player.g.grassVal = player.g.grassVal.mul("1e450")
 
     // POWER MODIFIERS
-    if (hasUpgrade("hpw", 1032)) player.g.grassVal = player.g.grassVal.pow(1.18)
+    if (hasUpgrade("hpw", 1031)) player.g.grassVal = player.g.grassVal.pow(1.18)
     player.g.grassVal = player.g.grassVal.pow(buyableEffect('st', 101))
 
     // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
@@ -1331,7 +1332,7 @@ const updateGoldGrass = (delta) => {
     if (player.ma.matosDefeated) player.g.goldGrassVal = player.g.goldGrassVal.mul(1e20)
 
     // POWER MODIFIERS
-    if (hasUpgrade("hpw", 1033)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
+    if (hasUpgrade("hpw", 1032)) player.g.goldGrassVal = player.g.goldGrassVal.pow(1.06)
 
     // GOLDEN GRASS PER SECOND
     player.g.goldGrass = player.g.goldGrass.add(player.g.goldGrassVal.mul(buyableEffect('gh', 18).mul(delta)))
@@ -1418,7 +1419,7 @@ const updateMoonstone = (delta) => {
     if (hasUpgrade('ev8', 17)) player.g.moonstoneVal = player.g.moonstoneVal.mul(2)
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.co.cores.grass.effect[2])
     player.g.moonstoneVal = player.g.moonstoneVal.mul(levelableEffect("pu", 205)[1])
-    player.g.moonstoneVal = player.g.moonstoneVal.mul(buyableEffect("ep2", 11))
+    if (hasUpgrade("ep2", 7)) player.g.moonstoneVal = player.g.moonstoneVal.mul(upgradeEffect("ep2", 7))
     if (hasMilestone("r", 28)) player.g.moonstoneVal = player.g.moonstoneVal.mul(player.r.pentMilestone18Effect)
     player.g.moonstoneVal = player.g.moonstoneVal.mul(player.ro.rocketPartsEffect)
     if (player.ma.matosDefeated) player.g.moonstoneVal = player.g.moonstoneVal.mul(5)

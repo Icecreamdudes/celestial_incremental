@@ -1,6 +1,7 @@
 var tmp = {}
 var temp = tmp // Proxy for tmp
 var funcs = {}
+var unifuncs = {}
 var NaNalert = false;
 
 // Tmp will not call these
@@ -25,14 +26,17 @@ var traversableClasses = []
 
 function setupTemp() {
 	tmp = {}
+	tmp.uni = {}
 	tmp.pointGen = {}
 	tmp.backgroundStyle = {}
 	tmp.displayThings = []
 	tmp.scrolled = 0
 	tmp.gameEnded = false
 	funcs = {}
+	unifuncs = {}
 	
 	setupTempData(layers, tmp, funcs)
+	setupUniTemp(universes, tmp.uni, unifuncs)
 	for (layer in layers){
 		tmp[layer].resetGain = {}
 		tmp[layer].nextAt = {}
@@ -83,12 +87,46 @@ function setupTempData(layerData, tmpData, funcsData) {
 		}
 		else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
 			funcsData[item] = layerData[item]
+			if (boolNames.includes(item)) {
+				tmpData[item] = false
+			} else {
+				tmpData[item] = decimalOne // The safest thing to put probably?
+			}
+		} else {
+			tmpData[item] = layerData[item]
+		}
+	}	
+}
+
+function setupUniTemp(uniData, tmpData, funcsData) {
+	for (item in uniData){
+		if (uniData[item] == null) {
+			tmpData[item] = null
+		}
+		else if (uniData[item] instanceof Decimal)
+			tmpData[item] = uniData[item]
+		else if (Array.isArray(uniData[item])) {
+			tmpData[item] = []
+			funcsData[item] = []
+			setupUniTemp(uniData[item], tmpData[item], funcsData[item])
+		}
+		else if ((!!uniData[item]) && (uniData[item].constructor === Object)) {
+			tmpData[item] = {}
+			funcsData[item] = []
+			setupUniTemp(uniData[item], tmpData[item], funcsData[item])
+		}
+		else if ((!!uniData[item]) && (typeof uniData[item] === "object") && traversableClasses.includes(uniData[item].constructor.name)) {
+			tmpData[item] = new uniData[item].constructor()
+			funcsData[item] = new uniData[item].constructor()
+		}
+		else if (isFunction(uniData[item]) && !activeFunctions.includes(item)){
+			funcsData[item] = uniData[item]
 			if (boolNames.includes(item))
 				tmpData[item] = false
 			else
 				tmpData[item] = decimalOne // The safest thing to put probably?
 		} else {
-			tmpData[item] = layerData[item]
+			tmpData[item] = uniData[item]
 		}
 	}	
 }
@@ -99,6 +137,8 @@ function updateTemp() {
 		setupTemp()
 
 	updateTempData(layers, tmp, funcs, undefined, true)
+
+	updateUniTemp(universes, tmp.uni, unifuncs, undefined, true)
 
 	for (layer in layers){
 		tmp[layer].resetGain = getResetGain(layer)
@@ -126,12 +166,12 @@ function updateTemp() {
 function updateTempData(layerData, tmpData, funcsData, useThis, firstStep = false) {
 	for (item in funcsData){
 		if (firstStep) {
-			if (layers[item].deactivated) {
-				if (layers[item].deactivated()) {
-					tmp[item].deactivated = true
-					tmp[item].layerShown = layers[item].layerShown()
-					continue
-				}
+			if (layerDeactivated(item)) {
+				tmp[item].deactivated = true
+				tmp[item].layerShown = layers[item].layerShown()
+				continue
+			} else {
+				tmp[item].deactivated = false
 			}
 		}
 		if (Array.isArray(layerData[item])) {
@@ -151,10 +191,34 @@ function updateTempData(layerData, tmpData, funcsData, useThis, firstStep = fals
 	}	
 }
 
+function updateUniTemp(uniData, tmpData, funcsData, useThis, firstStep = false) {
+	for (item in funcsData){
+		if (firstStep) {
+			if (universes[item].deactivated) {
+				if (universes[item].deactivated()) {
+					tmp.uni[item].deactivated = true
+					tmp.uni[item].uniShown = universes[item].uniShown()
+					continue
+				}
+			}
+		}
+		if (Array.isArray(uniData[item])) {
+			updateUniTemp(uniData[item], tmpData[item], funcsData[item], useThis)
+		} else if ((!!uniData[item]) && (uniData[item].constructor === Object) || (typeof uniData[item] === "object") && traversableClasses.includes(uniData[item].constructor.name)) {
+			updateUniTemp(uniData[item], tmpData[item], funcsData[item], useThis)
+		} else if (isFunction(uniData[item]) && !isFunction(tmpData[item])){
+			let value
+
+			if (useThis !== undefined) value = uniData[item].bind(useThis)()
+			else value = uniData[item]()
+			Vue.set(tmpData, item, value)
+		}
+	}	
+}
+
 function updateChallengeTemp(layer) {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges)
 }
-
 
 function updateBuyableTemp(layer) {
 	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables)

@@ -5,6 +5,7 @@ addLayer("pu", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        paused: false,
 
         selectedPunchcards: [0, 0, 0],
         storedSelections: new Decimal(0),
@@ -1436,5 +1437,6 @@ addLayer("pu", {
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
+    deactivated() {return player.pu.paused},
     layerShown() { return player.startedGame == true },
 })

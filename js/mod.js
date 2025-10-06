@@ -20,6 +20,7 @@
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
+		"Check Back/cookie.js",
 		"mining.js", "DarkU1/punchcards.js",
 
 
@@ -34,25 +35,14 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 180, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 185, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "The Hexing Revamp",
 }
 
 function miscCode() {
-	player.minUniTab = 1
-	player.maxUniTab = 1
-
-	// SET MIN UNI-TAB
-	if (layerShown("h")) player.minUniTab = 0
-	if (player.cp.cantepocalypseActive) player.minUniTab = 2
-
-	// SET MAX UNI-TAB
-	if (layerShown("cp")) player.maxUniTab = 2
-	if (player.sma.inStarmetalChallenge) player.maxUniTab = 1
-
-	// PREVENT TAB BEING OUT OF BOUNDS
-	if (player.uniTab < player.minUniTab) player.uniTab = player.minUniTab
-	if (player.uniTab > player.maxUniTab) player.uniTab = player.maxUniTab
+	if (player.startedGame == false && player.tab == "i") {
+        player.startedGame = true
+    }
 }
 
 function updateStyles() {
@@ -99,6 +89,7 @@ function updateStyles() {
 
 	// ===------   LAYER BACKGROUND   ------=== //
 	let layerBG = ""
+	let layerBonus = ["", ""]
 
 	// Find background color
 	switch(player.tab) {
@@ -234,7 +225,7 @@ function updateStyles() {
 			break;
 	}
 
-	// Set background color
+	// Set background info
 	document.body.style.setProperty('--background', layerBG)
 
 	// FANCY BACKGROUNDS (THAT SUCK TO MAKE)
@@ -401,31 +392,52 @@ function updateStyles() {
     	if (eclipse) eclipse.remove();
 	}
 
+	if (player.tab == "mu" || player.tab == "od") {
+		if (!document.getElementById("grid-bg")) {
+	        const gridBackground = document.createElement("div");
+        	gridBackground.id = "grid-bg";
+    	    gridBackground.style.position = "fixed";
+	        gridBackground.style.top = "0";
+        	gridBackground.style.left = "0";
+    	    gridBackground.style.width = "100%";
+	        gridBackground.style.height = "100%";
+        	gridBackground.style.overflow = "hidden";
+    	    gridBackground.style.zIndex = "-2006"; // Ensure it stays in the background
+	        gridBackground.style.background = "#061900"; // Galaxy gradient
+			gridBackground.style.backgroundImage = "linear-gradient(#092600 2px, transparent 2px), linear-gradient(to right, #092600 2px, #061900 2px)";
+			gridBackground.style.backgroundSize = "40px 40px";
+        	document.body.appendChild(gridBackground);
+	    }
+	} else {
+		const grid = document.getElementById("grid-bg");
+    	if (grid) grid.remove();
+	}
+
 	// ===------   SIDE BACKGROUND   ------=== //
 	let sideBG = ""
 
 	// Find background color
 	if (options.menuType == "Tree") {
 		switch(player.universe) {
-			case 2: 
+			case "U2": 
 				sideBG = "#000f0c"
 				break;
-			case -666:
+			case "UA":
 				sideBG = "linear-gradient(180deg, #333, #222)"
 				break;
-			case 1.5:
+			case "A1":
 				sideBG = "#102143"
 				break;
-			case 3:
+			case "U3":
 				sideBG = "#130100"
 				break;
-			case -0.1:
+			case "D1":
 				sideBG = "black"
 				break;
-			case 2.5:
+			case "A2":
 				sideBG = "radial-gradient(circle, #151230, #000000)"
 				break;
-			case 0.5:
+			case "CB":
 				sideBG = "#010812"
 				break;
 			default:
@@ -436,10 +448,10 @@ function updateStyles() {
 	if (options.menuType == "Tab") {
 		if (window.innerWidth > 1250) {
 			sideBG = "linear-gradient(to right, #444 103px, #7a7a7a 103px, #7a7a7a 106px, #161616 106px)"
-			if (player.universe == -0.1) sideBG = "linear-gradient(to right, #0f011c 103px, #7a7a7a 103px, #7a7a7a 106px, black 106px)"
+			if (player.universe == "D1") sideBG = "linear-gradient(to right, #0f011c 103px, #7a7a7a 103px, #7a7a7a 106px, black 106px)"
 		} else {
 			sideBG = "linear-gradient(to bottom, #444 80px, #7a7a7a 80px, #7a7a7a 83px, #161616 83px)"
-			if (player.universe == -0.1) sideBG = "linear-gradient(to bottom, #0f011c 80px, #7a7a7a 80px, #7a7a7a 83px, black 83px)"
+			if (player.universe == "D1") sideBG = "linear-gradient(to bottom, #0f011c 80px, #7a7a7a 80px, #7a7a7a 83px, black 83px)"
 		}
 	}
 
@@ -450,76 +462,76 @@ function updateStyles() {
 	// Find music value
 	switch(player.tab) {
 		case "po":
-			player.musuniverse = 0
+			player.musuniverse = "PO"
 			break;
 		case "c": case "gt":
-			player.musuniverse = -1
+			player.musuniverse = "CS"
 			break;
 		case "h": case "hpr": case "hre": case "hbl": case "hcu":
 		case "hpu": case "hpw": case "hrm":
-			player.musuniverse = -666
+			player.musuniverse = "UA"
 			break;
 		case "i": case "r": case "f": case "p": case "t":
 		case "g": case "pe": case "pol": case "gh": case "rf":
 		case "de": case "m": case "d": case "re": case "fa":
-			player.musuniverse = 1
+			player.musuniverse = "U1"
 			break;
 		case "in": case "ad": case "ip": case "id": case "tad":
 		case "ta": case "bi": case "om": case "ga": case "ca":
 		case "ro":
-            player.musuniverse = 2
+            player.musuniverse = "U2"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
 		case "rg": case "gs": case "oi": case "fu":
-            player.musuniverse = 1.5
+            player.musuniverse = "A1"
 			break;
 		case "s": case "co": case "ra": case "sd": case "cs":
 		case "sma": case "ma": case "cof": case "sme":
-            player.musuniverse = 3
+            player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
 		case "dgr": case "dn": 
-            player.musuniverse = -0.1
+            player.musuniverse = "D1"
 			break;
 		case "ch":
-            player.musuniverse = -0.5
+            player.musuniverse = "CH"
 			break;
 		case "au2": case "st": case "pl":
-			player.musuniverse = 2.5
+			player.musuniverse = "A2"
 			break;
 		case "mi":
-			player.musuniverse = 0.6
+			player.musuniverse = "MI"
 			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
 		case "ep2": case "ep3": case "ep4": case "ep5":
-            player.musuniverse = 0.5
+            player.musuniverse = "CB"
 			break;
 		case "od": case "mu":
-            player.musuniverse = 1337
+            player.musuniverse = "OD"
 			break;
 	}
 
 	// Play/Stop Music
 	if (options.musicToggle) {
 		switch(player.musuniverse) {
-			case 0:
+			case "PO":
 				playAndLoopAudio("music/portal.mp3", options.musicVolume/10)
 				break;
-			case -666:
+			case "UA":
 				playAndLoopAudio("music/hex.mp3", options.musicVolume/10)
 				break;
-			case 1:
+			case "U1":
 				if (player.startedGame && player.ip.activeChallenge == null && !inChallenge("tad", 11)) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
 				if (player.ip.activeChallenge != null || inChallenge("tad", 11)) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
 				break;
-			case 2:
+			case "U2":
 				playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
 				break;
-			case 1.5:
+			case "A1":
 				playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
 				break;
-			case 3:
+			case "U3":
 				if (player.ma.inBlackHeart == false) {
                 	if (!player.ma.matosDefeated) playAndLoopAudio("music/singularity.mp3", options.musicVolume/10);
                 	if (player.ma.matosDefeated) playAndLoopAudio("music/singularity2.mp3", options.musicVolume/10);
@@ -534,24 +546,24 @@ function updateStyles() {
                 	} //use blackHeart.mp3 for depth 2, matosTheme.mp3 for depth 3
             	}
 				break;
-			case -0.1:
+			case "D1":
 				if (!player.pet.activeAbilities[0]) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
 				if (player.pet.activeAbilities[0]) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
 				break;
-			case -0.5:
+			case "CH":
 				if (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
 				if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
 				break;
-			case 2.5:
+			case "A2":
 				playAndLoopAudio("music/space.mp3", options.musicVolume/10)
 				break;
-			case 0.6:
+			case "MI":
 				playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
 				break;
-			case 0.5:
+			case "CB":
 				playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
 				break;
-			case -1:
+			case "CS":
 				switch(player.c.currentCutscene) {
 					case 0: case 1: case 3: case 6: case 7:
 					case 9: case 11: case 12:
@@ -609,6 +621,36 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.8.5 - Epic Pet Revamp Pt.1</h3><br>
+		Content:<br>
+			- Cookie pet has been completely revamped.<br>
+			- 3 new pet evolutions.<br>
+			- Added universe pausing, which is included with halter.<br>
+			- Added new late game hex of power mights.<br><br>
+		Balancing:<br>
+			- Added a new prestige upgrade that slightly buffs factor base.<br>
+			- Squared "Basic Multiplier" mod buyable's effect.<br>
+			- Reduced infinity milestone requirements.<br>
+			- Re-arranged early Tav upgrades to improve progression.<br>
+			- Added a +1 NIP buff to Tav's 2nd upgrade to speed up early Tav.<br>
+			- Buffed base blessing gain formula.<br>
+			- Made some hex of power mights cheaper.<br>
+			- Moved around the unlockable realm mights to improve progression.<br>
+			- Made hex of vex only reset curse content.<br>
+			- Buffed RE-4 to compensate for RE-5 no longer buffing hex points.<br>
+			- Nerfed base singularity pet costs by 10 fragments.<br>
+			- Added a matos buyable that buffs eclipse based on SP.<br><br>
+		Bugfixes:<br>
+			- Fixed Point Factor 7 applying its buff twice.<br>
+			- Redid the CB offline code to hopefully prevent bugs.<br>
+			- Hopefully fixed pent autobuying in IC4.<br>
+			- Fixed fear challenge not disabling itself on singularity resets.<br>
+			- Fixed "Sel Boost" matos buyable buffing eclipse.<br>
+			- Fixed kept celestialite combo value not being floored.<br>
+			- Fixed best depth 2 combo's 2nd effect not being shown when unlocked.<br>
+			- Fixed eclipse feature accidentally being unlocked without having the pet.<br>
+			- Fixed eclipse timer being affected by CB Tickspeed.<br>
+			- Fixed star dust buyables having unreachable caps.<br><br>
 	<h3>v1.8.3 - Hex Hotfix 3</h3><br>
 		Qol:<br>
 			- Added tooltips on features that work outside of hex<br>
@@ -1067,7 +1109,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
 	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone",
 	"petButton5", "petButton6", "refreshBanner", "commonPetBanner", "uncommonPetBanner",
-	"rarePetBanner", "singularityReset", "offlineCooldown", "startCutscene19", "startCutscene20",
+	"rarePetBanner", "singularityReset", "instantProduction", "startCutscene19", "startCutscene20",
 	"startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset",
 	"normalityReset", "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28",
 	"startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset",
@@ -1076,7 +1118,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39",
+	"startCutscene38", "startCutscene39", "cookieClick"
 
 ]
 
@@ -1106,11 +1148,8 @@ function addedPlayerData() { return {
 
 	//meta stuff
 	gain: new Decimal(0),
-	universe: 1,
-	musuniverse: 1,
-	uniTab: 1,
-	minUniTab: 1,
-	maxUniTab: 2,
+	universe: "U1",
+	musuniverse: "U1",
 	hideMenu: true,
 }}
 
@@ -1344,5 +1383,11 @@ function fixOldSave(oldVersion){
 		player.cs.scraps.antimatter.amount = new Decimal(player.cs.resourceCoreScraps[9]).abs()
 		player.cs.scraps.infinity.amount = new Decimal(player.cs.resourceCoreScraps[10]).abs()
 		player.cs.scraps.checkback.amount = new Decimal(player.cs.paragonScraps).abs()
+	}
+
+	if (oldVersion < 185) {
+		setBuyableAmount("ep2", 11, new Decimal(0))
+		setBuyableAmount("ep2", 12, new Decimal(0))
+		setBuyableAmount("ep2", 13, new Decimal(0))
 	}
 }

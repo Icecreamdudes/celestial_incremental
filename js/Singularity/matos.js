@@ -1,6 +1,7 @@
 ﻿addLayer("ma", {
     name: "Matos, Celestial of Machinery", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "⊘", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U3",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -140,12 +141,6 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.ma.eclipseStats = [
-            new Decimal(25),
-            new Decimal(25),
-            new Decimal(25),
-        ]
-
         for (let prop in player.co.cores) {
             if (player.co.cores[prop].strength == 4) {
                 player.ma.hasMaxStrengthCore = true
@@ -182,15 +177,13 @@
         player.ma.eclipseStats[1] = player.ma.eclipseStats[1].add(buyableEffect("ma", 202))
         player.ma.eclipseStats[2] = player.ma.eclipseStats[2].add(buyableEffect("ma", 203))
 
-        if (player.pet.levelables[501][0].gte(1))
-        {
+        if (player.pet.levelables[501][0].gte(1)) {
             player.ma.healthMax[3] = player.ma.eclipseStats[1].add(50)
             player.ma.damage[3] = player.ma.eclipseStats[0].mul(0.04).add(1)
             player.ma.cooldown[3] = Decimal.div(5, player.ma.eclipseStats[2].mul(0.01).add(1))
             player.ma.cooldown2[3] = Decimal.div(30, player.ma.eclipseStats[2].mul(0.008).add(1))
             //player.ma.cooldown3[3] = Decimal.div(30, player.ma.eclipseStats[2].mul(0.008).add(1))
-        } else
-        {
+        } else {
             player.ma.healthMax[3] = new Decimal(0)
             player.ma.damage[3] = new Decimal(0)
             player.ma.cooldown[3] = new Decimal(0)
@@ -201,18 +194,23 @@
         player.ma.damage[0] = player.ma.damage[0].mul(buyableEffect("ma", 101))
         player.ma.damage[1] = player.ma.damage[1].mul(buyableEffect("ma", 102))
         player.ma.damage[2] = player.ma.damage[2].mul(buyableEffect("ma", 103))
-        player.ma.damage[3] = player.ma.damage[3].mul(buyableEffect("ma", 103))
+        player.ma.damage[3] = player.ma.damage[3].mul(buyableEffect("ma", 104))
 
         player.ma.healthMax[0] = player.ma.healthMax[0].mul(buyableEffect("ma", 101))
         player.ma.healthMax[1] = player.ma.healthMax[1].mul(buyableEffect("ma", 102))
         player.ma.healthMax[2] = player.ma.healthMax[2].mul(buyableEffect("ma", 103))
-        player.ma.healthMax[3] = player.ma.healthMax[3].mul(buyableEffect("ma", 103))
+        player.ma.healthMax[3] = player.ma.healthMax[3].mul(buyableEffect("ma", 104))
 
         player.ma.healthRegen[0] = buyableEffect("ma", 35)
         player.ma.healthRegen[1] = buyableEffect("ma", 36)
         player.ma.healthRegen[2] = buyableEffect("ma", 37)
         player.ma.healthRegen[3] = buyableEffect("ma", 38)
 
+        for (let i = 0; i < player.ma.healthMax.length; i++) {
+            if (hasUpgrade("ep2", 9101)) player.ma.healthMax[i] = player.ma.healthMax[i].mul(upgradeEffect("ep2", 9101))
+            if (hasUpgrade("ep2", 9103)) player.ma.damage[i] = player.ma.damage[i].mul(upgradeEffect("ep2", 9103))
+            if (hasUpgrade("ep2", 9105)) player.ma.healthRegen[i] = player.ma.healthRegen[i].mul(upgradeEffect("ep2", 9105))
+        }
 
         player.ma.motivationEffect = player.ma.motivationCount.pow(0.5).mul(0.02).add(1)
 
@@ -532,6 +530,7 @@
         if (hasMilestone("ma", 106)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
         if (hasMilestone("ma", 206)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
         if (hasMilestone("ma", 306)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
+        if (hasUpgrade("ep2", 9107)) player.ma.comboSoftcapMult = player.ma.comboSoftcapMult.sub(0.001)
 
         //Kept code
         player.ma.keptCombo[0] = new Decimal(0.1)
@@ -744,14 +743,14 @@
                 }
                 player.ma.attacksDone = player.ma.attacksDone.add(1)
             }
-            if (player.ma.celestialiteHealth.lt(50) && player.ma.attacksDone.eq(14)) {
+            if (player.ma.celestialiteHealth.lt(50) && player.ma.attacksDone.lt(15)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
                 flashScreen("BUT I CAN'T LET YOU GUYS CONTINUE", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
                     setTimeout(() => {
                         ultimateAttackSequence();
                     }, 3000)
-                    player.ma.attacksDone = player.ma.attacksDone.add(1)
+                    player.ma.attacksDone = new Decimal(15)
                 }
             }
         }
@@ -932,7 +931,7 @@
                 }
 
                 player.ma.currentDepth = new Decimal(1)
-                if (player.ma.keepCombo1) player.ma.combo = player.ma.bestComboDepth1.mul(player.ma.keptCombo[0])
+                if (player.ma.keepCombo1) player.ma.combo = player.ma.bestComboDepth1.mul(player.ma.keptCombo[0]).floor()
                 layers.ma.generateCelestialite()
 
                 player.ma.depth1Cooldown = player.ma.depth1CooldownMax
@@ -970,7 +969,7 @@
                 layers.ma.generateCelestialite()
 
                 player.ma.currentDepth = new Decimal(2)
-                if (player.ma.keepCombo2) player.ma.combo = player.ma.bestComboDepth2.mul(player.ma.keptCombo[1])
+                if (player.ma.keepCombo2) player.ma.combo = player.ma.bestComboDepth2.mul(player.ma.keptCombo[1]).floor()
                 layers.ma.generateCelestialite()
 
                 player.ma.depth2Cooldown = player.ma.depth2CooldownMax
@@ -1069,7 +1068,7 @@
                 layers.ma.generateCelestialite()
 
                 player.ma.currentDepth = new Decimal(3)
-                if (player.ma.keepCombo3) player.ma.combo = player.ma.bestComboDepth3.mul(player.ma.keptCombo[2])
+                if (player.ma.keepCombo3) player.ma.combo = player.ma.bestComboDepth3.mul(player.ma.keptCombo[2]).floor()
                 layers.ma.generateCelestialite()
 
                 player.ma.depth3Cooldown = player.ma.depth3CooldownMax
@@ -2228,7 +2227,7 @@
             width: 200,
             height: 50,
             progress() {
-                if (player.ma.deadCharacters[0]) new Decimal(0)
+                if (player.ma.deadCharacters[0]) return new Decimal(0)
                 return player.ma.health[0].div(player.ma.healthMax[0])
             },
             borderStyle: {borderRadius: "15px"},
@@ -2245,7 +2244,7 @@
             width: 200,
             height: 50,
             progress() {
-                if (player.ma.deadCharacters[1]) new Decimal(0)
+                if (player.ma.deadCharacters[1]) return new Decimal(0)
                 return player.ma.health[1].div(player.ma.healthMax[1])
             },
             borderStyle: {borderRadius: "15px"},
@@ -2262,7 +2261,7 @@
             width: 200,
             height: 50,
             progress() {
-                if (player.ma.deadCharacters[2]) new Decimal(0)
+                if (player.ma.deadCharacters[2]) return new Decimal(0)
                 return player.ma.health[2].div(player.ma.healthMax[2])
             },
             borderStyle: {borderRadius: "15px"},
@@ -2279,7 +2278,7 @@
             width: 200,
             height: 50,
             progress() {
-                if (player.ma.deadCharacters[3]) new Decimal(0)
+                if (player.ma.deadCharacters[3]) return new Decimal(0)
                 return player.ma.health[3].div(player.ma.healthMax[3])
             },
             borderStyle: {borderRadius: "15px"},
@@ -3671,6 +3670,40 @@
             },
             style: {width: "275px", height: "150px", backgroundColor: "#aa0000", backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
         },
+        104: {
+            costBase() { return new Decimal(1e100) },
+            costGrowth() { return new Decimal(1e10) },
+            purchaseLimit() { return new Decimal(250) },
+            currency() { return player.s.singularityPoints},
+            pay(amt) { player.s.singularityPoints = this.currency().sub(amt).floor() },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1)},
+            unlocked() { return hasUpgrade("ma", 18) },
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            title() {
+                return "Eclipse Boost"
+            },
+            display() {
+                return "which are boosting Eclipse's max health and damage by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Singularity Points"
+            },
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor()
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id)).floor()
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: "275px", height: "150px", backgroundColor: "#aa0000", backgroundImage: "linear-gradient(180deg, red 0%, black 125%)", backgroundOrigin: "border-box"}
+        },
         //eclipse
         201: {
             costBase() { return new Decimal(5) },
@@ -4053,6 +4086,7 @@
                     ["raw-html", () => {return "You have <h3>" + formatWhole(player.sma.eclipseShards) + "</h3> eclipse shards"}, {color: "#f5ff68", fontSize: "24px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["ex-buyable", 201], ["ex-buyable", 202], ["ex-buyable", 203]]],
+                    ["row", [["ex-buyable", 104]]],
                 ]
             },
             "Black Heart": {
@@ -4070,7 +4104,7 @@
                         ["style-row", [], () => {return player.ma.secondAreaUnlock ? {width: "600px", height: "5px"} : {display: "none !important"}}],
                         ["raw-html", () => {return player.ma.secondAreaUnlock ? "Depth 2 highest combo: " + formatWhole(player.ma.bestComboDepth2) + " kills" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return player.ma.secondAreaUnlock ? "Boosts NIP gain by x" + format(player.ma.bestComboDepth2Effect) : "" }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return hasMilestone("ma", 2202) ? "Boosts rare matos fragment gain by x" + formatShort(player.ma.bestComboDepth2Effect2) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return hasMilestone("ma", 202) ? "Boosts rare matos fragment gain by x" + formatShort(player.ma.bestComboDepth2Effect2) : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         
                         ["style-row", [], () => {return hasUpgrade("ma", 27) ? {width: "600px", height: "5px"} : {display: "none !important"}}],
                         ["raw-html", () => {return hasUpgrade("ma", 27) ? "Depth 3 highest combo: " + formatWhole(player.ma.bestComboDepth3) + " kills" : "" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],

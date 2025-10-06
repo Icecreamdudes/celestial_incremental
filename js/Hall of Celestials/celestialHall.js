@@ -283,5 +283,5 @@ addLayer("ch", {
         ["buttonless-microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge}
 })

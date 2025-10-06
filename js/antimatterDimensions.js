@@ -1,6 +1,7 @@
 ﻿addLayer("ad", {
     name: "Antimatter Dimensions", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "AD", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -101,7 +102,7 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.co.cores.antimatter.effect[0])
 
         // POWER MODIFIERS
-        if (hasUpgrade("hpw", 1052)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
+        if (hasUpgrade("hpw", 1051)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))
@@ -152,7 +153,7 @@
 
             // POWER MODIFIERS
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(player.co.cores.antimatter.effect[1])
-            if (hasUpgrade("hpw", 1052)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(1.05)
+            if (hasUpgrade("hpw", 1051)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(1.05)
         }
         
         // SPECIALIZED MODIFIERS
@@ -482,8 +483,6 @@
             },
             effect(x) {
                 let mult = new Decimal(2).mul(buyableEffect("ca", 21))
-                if (hasUpgrade("ev2", 11)) mult = mult.mul(upgradeEffect("ev2", 11))
-
                 if (hasUpgrade("cs", 1001)) mult = mult.pow(10)
                 return mult.pow(getBuyableAmount(this.layer, this.id))
             },

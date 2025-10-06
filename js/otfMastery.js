@@ -1,6 +1,7 @@
 ﻿addLayer("om", {
     name: "Otherworldy Feature Mastery", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OM", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -86,10 +87,10 @@
         player.om.diceMasteryPointsEffect = player.om.diceMasteryPoints.pow(0.1).div(8).add(1)
         player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPoints.pow(0.08).div(10).add(1)
         player.om.hexMasteryPointsEffect = player.om.hexMasteryPoints.pow(0.14).add(1)
-        if (hasUpgrade("hpw", 1051)) {
-            player.om.diceMasteryPointsEffect = player.om.diceMasteryPointsEffect.pow(upgradeEffect("hpw", 1051))
-            player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(upgradeEffect("hpw", 1051))
-            player.om.hexMasteryPointsEffect = player.om.hexMasteryPointsEffect.pow(upgradeEffect("hpw", 1051))
+        if (hasUpgrade("hpw", 1053)) {
+            player.om.diceMasteryPointsEffect = player.om.diceMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
+            player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
+            player.om.hexMasteryPointsEffect = player.om.hexMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
         }
 
         if (hasUpgrade("s", 12)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(Decimal.mul(player.om.diceMasteryPointsToGet.mul(delta), 0.04))

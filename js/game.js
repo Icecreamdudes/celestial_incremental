@@ -268,8 +268,7 @@ function startChallenge(layer, x) {
 	updateChallengeTemp(layer)
 }
 
-function canCompleteChallenge(layer, x)
-{
+function canCompleteChallenge(layer, x) {
 	if (x != player[layer].activeChallenge) return
 	let challenge = tmp[layer].challenges[x]
 	if (challenge.canComplete !== undefined) return challenge.canComplete
@@ -368,7 +367,7 @@ function gameLoop(diff) {
 		for (item in TREE_LAYERS[x]) {
 			let layer = TREE_LAYERS[x][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
-			if (layers[layer].automate) layers[layer].automate();
+			if (layers[layer].automate && !tmp[layer].deactivated) layers[layer].automate();
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
 	}
@@ -377,7 +376,7 @@ function gameLoop(diff) {
 		for (item in OTHER_LAYERS[row]) {
 			let layer = OTHER_LAYERS[row][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
-			if (layers[layer].automate) layers[layer].automate();
+			if (layers[layer].automate && !tmp[layer].deactivated) layers[layer].automate();
 				player[layer].best = player[layer].best.max(player[layer].points)
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
@@ -410,7 +409,8 @@ var interval = setInterval(function() {
 	let trueDiff = diff
 	if (player.devSpeed) diff *= player.devSpeed
 	player.time = now
-	if (needCanvasUpdate){ resizeCanvas();
+	if (needCanvasUpdate) {
+		resizeCanvas();
 		needCanvasUpdate = false;
 	}
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30

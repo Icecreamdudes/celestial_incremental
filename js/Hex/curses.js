@@ -1,6 +1,7 @@
 addLayer("hcu", {
     name: "Hex of Curses",
     symbol: "Cu", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Curses", // Decides the nodes tooltip
     nodeStyle: {background: "linear-gradient(140deg, #b2d8d8 0%, #8eacac 100%)", backgroundOrigin: "borderBox", borderColor: "#596c6c"},
     color: "#b2d8d8", // Decides the nodes color.
@@ -36,7 +37,7 @@ addLayer("hcu", {
         // CURSE EXPONENT
         player.hcu.cursesGain = player.hcu.cursesGain.pow(buyableEffect("hcu", 106))
         if (hasUpgrade("hve", 63)) player.hcu.cursesGain = player.hcu.cursesGain.pow(1.03)
-        if (hasUpgrade("hpw", 103)) player.hcu.cursesGain = player.hcu.cursesGain.pow(upgradeEffect("hpw", 103))
+        if (hasUpgrade("hpw", 102)) player.hcu.cursesGain = player.hcu.cursesGain.pow(upgradeEffect("hpw", 102))
 
         // SOFTCAPS AND PER SECOND
         if (inChallenge("hrm", 12)) player.hcu.cursesGain = player.hcu.cursesGain.pow(0.6)
@@ -57,7 +58,7 @@ addLayer("hcu", {
         player.hcu.jinxAddCap = new Decimal(0)
         if (hasUpgrade("hbl", 1)) player.hcu.jinxAddCap = player.hcu.jinxAddCap.add(upgradeEffect("hbl", 1))
         if (hasMilestone("hbl", 3)) player.hcu.jinxAddCap = player.hcu.jinxAddCap.add(6)
-        if (hasUpgrade("hpw", 32)) player.hcu.jinxAddCap = player.hcu.jinxAddCap.add(upgradeEffect("hpw", 32))
+        if (hasUpgrade("hpw", 33)) player.hcu.jinxAddCap = player.hcu.jinxAddCap.add(upgradeEffect("hpw", 33))
         player.hcu.jinxAddCap = player.hcu.jinxAddCap.add(player.hve.vexEffects[0])
         if (inChallenge("hrm", 15)) player.hcu.jinxAddCap = player.hcu.jinxAddCap.div(2)
 
@@ -673,7 +674,7 @@ addLayer("hcu", {
             ["raw-html", "Hex of Curses", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
         ], {width: "800px", height: "50px", backgroundColor: "#354040", border: "3px solid white", borderRadius: "20px"}],
         ["blank", "10px"],
-        ["row", [
+        ["tooltip-row", [
             ["raw-html", () => {return "You have <h3>" + format(player.hcu.curses) + "</h3> Curses." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.hcu.cursesGain) + "/s)" }, () => {
                 let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
@@ -682,6 +683,7 @@ addLayer("hcu", {
             }],
             ["raw-html", () => {return player.hcu.cursesGain.gte(1e12) && inChallenge("hrm", 12) ? "<small>[SOFTCAPPED<sup>2</sup>]</small>" :
                 player.hcu.cursesGain.gte(1e12) || inChallenge("hrm", 12) ? "<small>[SOFTCAPPED]</small>" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", "<div class='bottomTooltip'>Base Formula<hr><small>log6(Blessings)</small></div>"],
         ]],
         ["blank", "10px"],
         ["clickable", 1],

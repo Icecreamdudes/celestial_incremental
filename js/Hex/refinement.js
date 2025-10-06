@@ -1,6 +1,7 @@
 addLayer("hre", {
     name: "Hex of Refinement",
     symbol: "Rf", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Refinement", // Decides the nodes tooltip
     color: "#444", // Decides the nodes color.
     nodeStyle: {backgroundColor: "black", borderColor: "#ccc", color: "#ccc"}, // Decides the nodes style, in CSS format.
@@ -45,7 +46,7 @@ addLayer("hre", {
             let effPow = player.hre.refinementEffect[2][0]
             if (hasUpgrade("hbl", 6)) effPow = effPow.add(upgradeEffect("hbl", 6))
             if (hasMilestone("hbl", 5)) effPow = effPow.add(0.3)
-            if (hasUpgrade("hpw", 102)) effPow = effPow.add(upgradeEffect("hpw", 102))
+            if (hasUpgrade("hpw", 101)) effPow = effPow.add(upgradeEffect("hpw", 101))
             if (hasUpgrade("hpw", 132)) effPow = effPow.add(0.5)
             player.hre.refinementEffect[0][0] = player.hre.refinementEffect[0][0].pow(effPow)
             player.hre.refinementEffect[0][1] = player.hre.refinementEffect[0][1].pow(effPow)

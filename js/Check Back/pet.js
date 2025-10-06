@@ -3147,12 +3147,12 @@ addLayer("pet", {
             lore() { return "Perhaps going back to basics might help you learn more about these cookies." }, 
             description() {
                 return "Unlock pet buildings.<br>" +
-                    "Cookie clicking gains +" + formatWhole(this.effect().mul(100)) + "% of your CPS.<br>"
+                    "Cookie clicking gains +" + formatWhole(this.effect()[0].mul(100)) + "% of your CPS.<br>"
             },
             // levelLimit() { return new Decimal(99) },
             effect() {
-                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).div(100)
-                return getLevelableAmount(this.layer, this.id).div(1000).add(0.09)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return [getLevelableAmount(this.layer, this.id).div(100), new Decimal(1)]
+                return [getLevelableAmount(this.layer, this.id).div(1000).add(0.09), new Decimal(1)]
             },
             levelTooltip() { return "Costs Chocolate Shards." },
             // CLICK CODE
@@ -3185,11 +3185,11 @@ addLayer("pet", {
             description() {
                 return "Unlock golden cookie upgrades.<br>" +
                     "Cookie clicking now fills a golden click bar.<br>" + 
-                    "Golden click bar scaling is x" + formatSimple(this.effect(), 1) + " slower."
+                    "Golden click bar scaling is x" + formatSimple(this.effect()[0], 1) + " slower."
             },
             // levelLimit() { return new Decimal(99) },
             effect() {
-                return Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).sub(1)).max(1)
+                return [Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).sub(1)).max(1), new Decimal(1)]
             },
             levelTooltip() { return "Costs Chocolate Shards." },
             // CLICK CODE
@@ -3221,12 +3221,12 @@ addLayer("pet", {
             lore() { return "Not sure what makes it so angry, hopefully we won't have to know." }, 
             description() {
                 return "Unlock wrath cookie upgrades.<br>" +
-                    "Golden cookies have a " + formatSimple(this.effect().mul(100), 1) + "% chance to instead be a<br>wrath cookie.<br>"
+                    "Golden cookies have a " + formatSimple(this.effect()[0].mul(100), 1) + "% chance to instead be a<br>wrath cookie.<br>"
             },
             // levelLimit() { return new Decimal(99) },
             effect() {
-                if (getLevelableAmount(this.layer, this.id).lt(10)) return getLevelableAmount(this.layer, this.id).mul(0.02)
-                return getLevelableAmount(this.layer, this.id).mul(0.002).add(0.018)
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return [getLevelableAmount(this.layer, this.id).mul(0.02), new Decimal(1)]
+                return [getLevelableAmount(this.layer, this.id).mul(0.002).add(0.018), new Decimal(1)]
             },
             levelTooltip() { return "Costs Chocolate Shards." },
             // CLICK CODE

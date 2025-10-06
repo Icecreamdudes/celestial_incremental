@@ -469,8 +469,8 @@ addLayer("po", {
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
-                        ["raw-html", "Welcome to the Universe Pauser.<br>Paused universes have offline progress.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ], {width: "600px", height: "50px", background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px"}],
+                        ["raw-html", "Welcome to the Universe Pauser.<br><small>Paused universes have offline progress.<br>Effect values are not saved on page refresh.</small>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "600px", height: "75px", background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px"}],
                     ["blank", "10px"],
                     ["row", [
                         ["style-column", [

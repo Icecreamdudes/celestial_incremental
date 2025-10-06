@@ -1386,6 +1386,11 @@ function fixOldSave(oldVersion){
 	}
 
 	if (oldVersion < 185) {
+		if (!player.cp.cantepocalypseActive) {
+			player.universe = "U1"
+		} else {
+			player.universe = "A1"
+		}
 		setBuyableAmount("ep2", 11, new Decimal(0))
 		setBuyableAmount("ep2", 12, new Decimal(0))
 		setBuyableAmount("ep2", 13, new Decimal(0))

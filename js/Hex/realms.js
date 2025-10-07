@@ -1,6 +1,7 @@
 addLayer("hrm", {
     name: "Hex of Realms",
     symbol: "Re", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Realms", // Decides the nodes tooltip
     color: "white", // Decides the nodes color.
     nodeStyle: {color: "#ccc", background: "linear-gradient(180deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", borderColor: "#0061ff"}, // Decides the nodes style, in CSS format.
@@ -168,7 +169,7 @@ addLayer("hrm", {
             currency() { return player.hrm.realmEssence},
             pay(amt) { player.hrm.realmEssence = this.currency().sub(amt) },
             effect(x) {
-                return Decimal.pow(1.5, getBuyableAmount(this.layer, this.id))
+                return Decimal.pow(2, getBuyableAmount(this.layer, this.id))
             },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
@@ -176,7 +177,7 @@ addLayer("hrm", {
             display() {
                 return "<h3>RE-4</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/60)\n\
-                    Multiply hex points by x1.5<br><small>(ignoring softcaps)</small>\n\
+                    Multiply hex points by x2<br><small>(ignoring softcaps)</small>\n\
                     Currently: x" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Realm Essence"
             },
@@ -205,7 +206,7 @@ addLayer("hrm", {
             display() {
                 return "<h3>RE-5</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/20)\n\
-                    Raise all first realm might effects.\n\
+                    Raise all third realm might effects.\n\
                     Currently: ^" + format(tmp[this.layer].buyables[this.id].effect) + "\n\ \n\
                     Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Realm Essence"
             },

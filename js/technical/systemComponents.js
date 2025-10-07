@@ -222,7 +222,7 @@ var systemComponents = {
 
 	'particle': {
 		props: ['data', 'index'],
-		template: `<div><div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]"
+		template: `<div><div class='particle instant' v-bind:class="[data.class]" v-bind:style="[constructParticleStyle(data), data.style]"
 			v-on:click="run(data.onClick, data)"  v-on:mouseenter="run(data.onMouseEnter, data)" v-on:mouseleave="run(data.onMouseLeave, data)" ><span v-html="data.text"></span>
 		</div>
 		<svg version="2" v-if="data.color">

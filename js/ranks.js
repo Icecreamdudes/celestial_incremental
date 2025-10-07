@@ -1,6 +1,7 @@
 ﻿﻿addLayer("r", {
     name: "Ranks", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "R", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -72,7 +73,7 @@
         player.r.rankEffect = player.r.rank.mul(0.4).add(1).pow(1.055)
         if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
-        if (hasUpgrade("hpw", 1012)) player.r.rankEffect = player.r.rankEffect.pow(1.18)
+        if (hasUpgrade("hpw", 1011)) player.r.rankEffect = player.r.rankEffect.pow(1.18)
         player.r.rankReq = layers.r.getRankReq()
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)
@@ -100,7 +101,7 @@
         let tiersGain = player.r.rank.div(3).mul(levelableEffect("pet", 204)[1]).pow(Decimal.div(10, 11)).floor()
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
-        if (hasUpgrade("hpw", 1012)) player.r.tierEffect = player.r.tierEffect.pow(1.18)
+        if (hasUpgrade("hpw", 1011)) player.r.tierEffect = player.r.tierEffect.pow(1.18)
         player.r.tierReq = layers.r.getTierReq()
         if (player.r.rank.gte(player.r.tierReq) && hasUpgrade("p", 14)) {
              player.r.tiersToGet = tiersGain.sub(player.r.tier)
@@ -117,11 +118,11 @@
 
         player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
-        if (hasUpgrade("hpw", 1012)) player.r.tetrEffect = player.r.tetrEffect.pow(1.18)
+        if (hasUpgrade("hpw", 1011)) player.r.tetrEffect = player.r.tetrEffect.pow(1.18)
         
         player.r.tetrEffect2 = player.r.tetr.pow(0.6).add(1)
         player.r.tetrEffect2 = player.r.tetrEffect2.pow(player.p.crystalEffect)
-        if (hasUpgrade("hpw", 1012)) player.r.tetrEffect2 = player.r.tetrEffect2.pow(1.18)
+        if (hasUpgrade("hpw", 1011)) player.r.tetrEffect2 = player.r.tetrEffect2.pow(1.18)
         player.r.tetrReq = layers.r.getTetrReq()
         if (player.r.tier.gte(player.r.tetrReq) && hasUpgrade("p", 14)) {
             player.r.tetrsToGet = tetrGain.sub(player.r.tetr)
@@ -137,11 +138,16 @@
         player.r.pentEffect = player.r.pent.add(1).pow(3)
         if (hasUpgrade("cs", 102)) player.r.pentEffect = player.r.pentEffect.mul(Decimal.pow(1.08, player.r.pent))
         player.r.pentEffect = player.r.pentEffect.pow(player.p.crystalEffect)
-        if (hasUpgrade("hpw", 1012)) player.r.pentEffect = player.r.pentEffect.pow(1.18)
+        if (hasUpgrade("hpw", 1011)) player.r.pentEffect = player.r.pentEffect.pow(1.18)
+
+        let pentDiv = new Decimal(1)
+        pentDiv = pentDiv.mul(buyableEffect("g", 19))
+        if (hasUpgrade("ep2", 8)) pentDiv = pentDiv.mul(upgradeEffect("ep2", 8))
+        
         if (player.r.pent.lt(5)) player.r.pentReq = player.r.pent.add(1).pow(42.5).mul(1e28)
         if (player.r.pent.gte(5)) player.r.pentReq = player.r.pent.add(1).pow(75).mul(1e32).pow(1.1)
         if (player.r.pent.gte(30)) player.r.pentReq = Decimal.pow(1e10, player.r.pent)
-        player.r.pentReq = player.r.pentReq.div(buyableEffect("g", 19))
+        player.r.pentReq = player.r.pentReq.div(pentDiv)
 
         if (player.r.pentPause.gt(0)) {
             layers.r.pentReset();
@@ -150,12 +156,12 @@
 
         player.r.pentToGet = new Decimal(1)
         if (hasUpgrade("i", 32) && !inChallenge("ip", 14)) {
-            if (player.points.lt(new Decimal(6e57).div(buyableEffect("g", 19)))) {
-                player.r.pentToGet = player.points.mul(buyableEffect("g", 19)).div(1e28).pow(1/42.5).floor().sub(player.r.pent)
-            } else if (player.points.gte(new Decimal(6e57).div(buyableEffect("g", 19))) && player.points.lt(new Decimal(4e152).div(buyableEffect("g", 19)))) {
-                player.r.pentToGet = player.points.mul(buyableEffect("g", 19)).pow(10/11).div(1e32).pow(1/75).floor().sub(player.r.pent)
-            } else if (player.points.gte(new Decimal(4e152).div(buyableEffect("g", 19)))) {
-                player.r.pentToGet = Decimal.ln(player.points.mul(buyableEffect("g", 19))).div(Decimal.ln(1e10)).add(1).floor().sub(player.r.pent)
+            if (player.points.lt(new Decimal(6e57).div(pentDiv))) {
+                player.r.pentToGet = player.points.mul(pentDiv).div(1e28).pow(1/42.5).floor().sub(player.r.pent)
+            } else if (player.points.gte(new Decimal(6e57).div(pentDiv)) && player.points.lt(new Decimal(4e152).div(pentDiv))) {
+                player.r.pentToGet = player.points.mul(pentDiv).pow(10/11).div(1e32).pow(1/75).floor().sub(player.r.pent)
+            } else if (player.points.gte(new Decimal(4e152).div(pentDiv))) {
+                player.r.pentToGet = Decimal.ln(player.points.mul(pentDiv)).div(Decimal.ln(1e10)).add(1).floor().sub(player.r.pent)
             }
         }
         if (player.points.lt(player.r.pentReq)) {
@@ -173,10 +179,12 @@
 
         player.r.challengeIVEffect = Decimal.pow(400, player.r.pent)
 
-        if (hasUpgrade("i", 32) && !inChallenge("ip", 14) && player.points.gte(player.r.pentReq)) {
-            player.r.pent = player.r.pent.add(player.r.pentToGet)
-        } else if (hasUpgrade("i", 27) && player.points.gte(player.r.pentReq)) {
-            player.r.pent = player.r.pent.add(1)
+        if (!inChallenge("ip", 14) && player.points.gte(player.r.pentReq)) {
+            if (hasUpgrade("i", 32)) {
+                player.r.pent = player.r.pent.add(player.r.pentToGet)
+            } else if (hasUpgrade("i", 27)) {
+                player.r.pent = player.r.pent.add(1)
+            }
         }
 
         //Time reversal
@@ -189,6 +197,7 @@
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(buyableEffect("oi", 23))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(levelableEffect("pet", 209)[2])
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
+            if (hasUpgrade("ep2", 2)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep2", 2))
             if (hasUpgrade("s", 14)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("s", 14))
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.d.diceEffects[17])
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(levelableEffect("pu", 207)[1])
@@ -391,7 +400,7 @@
                     return "<h2>Reset all content before grass, but pent.</h2><br><h3>Req: " + formatWhole(player.r.pentReq) + " Points<br><small style='color:darkred'>[SOFTCAPPED<sup>2</sup>]</small></h3>"
                 }
             },
-            canClick() { return player.r.pentToGet.gt(0) && !hasUpgrade("i", 32) },
+            canClick() { return player.r.pentToGet.gt(0) && (!hasUpgrade("i", 32) || inChallenge("ip", 14)) },
             unlocked() { return true },
             onClick() {
                 player.r.pent = player.r.pent.add(player.r.pentToGet)

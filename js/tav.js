@@ -1,6 +1,7 @@
 ﻿addLayer("ta", {
     name: "Tav, Celestial of Limits", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "<h2>→", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -113,11 +114,11 @@
         }
 
         if (player.ta.reachedNegativeInfinity && !player.ta.unlockedReverseBreak) {
-            if ((!hasUpgrade("ta", 13) && player.ta.negativeInfinityPoints.lt(1000)) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) 
+            if ((!hasUpgrade("ta", 12) && player.ta.negativeInfinityPoints.lt(1000)) && player.ta.reachedNegativeInfinity && (!player.s.highestSingularityPoints.gt(0) || player.ad.antimatter.gte(1e308))) 
             {
                 player.tab = "revc"
             }
-            else if (hasUpgrade("ta", 13) || player.ta.negativeInfinityPoints.gte(1000))
+            else if (hasUpgrade("ta", 12) || player.ta.negativeInfinityPoints.gte(1000))
             {
                 layers.revc.reverseCrunch()
                 player.ta.negativeInfinityPoints = player.ta.negativeInfinityPoints.add(player.ta.negativeInfinityPointsToGet)
@@ -129,6 +130,7 @@
         if (!player.ta.unlockedReverseBreak) player.ta.negativeInfinityPointsToGet = new Decimal(1)
         if (player.ta.unlockedReverseBreak && !hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(2, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
         if (player.ta.unlockedReverseBreak && hasMilestone("r", 26)) player.ta.negativeInfinityPointsToGet = Decimal.pow(5, player.ad.antimatter.div(1e308).add(1).log(1e308)).mul(10)
+        if (hasUpgrade('ta', 12)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.add(1)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.pow(buyableEffect("m", 16))
 
         // NIP MULTIPLIERS
@@ -144,7 +146,7 @@
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("tad", 22))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("r", 13))
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(buyableEffect("m", 18))
-        if (hasUpgrade("hpw", 1053)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(100)
+        if (hasUpgrade("hpw", 1052)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(100)
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(levelableEffect("pet", 208)[1])
         if (hasMilestone("fa", 15)) player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.fa.milestoneEffect[4])
         player.ta.negativeInfinityPointsToGet = player.ta.negativeInfinityPointsToGet.mul(player.sd.singularityPowerEffect)
@@ -174,7 +176,7 @@
             player.ta.dimensionPowerEffects[i] = player.ta.dimensionPower[i].pow(0.6).div(10).add(1)
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("ip", 13))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("ta", 35))
-            if (hasUpgrade('ta', 12)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ta", 12))
+            if (hasUpgrade('ta', 13)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ta", 13))
             if (hasUpgrade('ip', 44)) player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(upgradeEffect("ip", 44))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("om", 14))
             player.ta.dimensionPowerPerSecond[i] = player.ta.dimensionPowerPerSecond[i].mul(buyableEffect("gh", 36))
@@ -574,7 +576,7 @@
     upgrades: {
         11: {
             title: "Negative Upgrade I",
-            unlocked() { return true },
+            unlocked: true,
             description: "Unlocks Buyables.",
             cost: new Decimal(1),
             currencyLocation() { return player.ta },
@@ -584,9 +586,19 @@
         },
         12: {
             title: "Negative Upgrade II",
-            unlocked() { return true },
-            description: "NIP boosts Dimension Power gain.",
+            unlocked: true,
+            description: "Skip the reverse crunch button, and +1 base NIP gain.",
             cost: new Decimal(3),
+            currencyLocation() { return player.ta },
+            currencyDisplayName: "Negative Infinity Points",
+            currencyInternalName: "negativeInfinityPoints",
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
+        },
+        13: {
+            title: "Negative Upgrade III",
+            unlocked: true,
+            description: "NIP boosts Dimension Power gain.",
+            cost: new Decimal(8),
             currencyLocation() { return player.ta },
             currencyDisplayName: "Negative Infinity Points",
             currencyInternalName: "negativeInfinityPoints",
@@ -595,16 +607,6 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        13: {
-            title: "Negative Upgrade III",
-            unlocked() { return hasUpgrade("ta", 12) },
-            description: "Skip the reverse crunch button.",
-            cost: new Decimal(8),
-            currencyLocation() { return player.ta },
-            currencyDisplayName: "Negative Infinity Points",
-            currencyInternalName: "negativeInfinityPoints",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
         14: {
             title: "Negative Upgrade IV",

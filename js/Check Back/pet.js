@@ -7,6 +7,7 @@ addLayer("pet", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
+        paused: false,
 
         petCooldownDiv: new Decimal(1),
         petPointMult: new Decimal(1),
@@ -239,7 +240,7 @@ addLayer("pet", {
 
         if (getLevelableBool("pu", 303)) player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(levelableEffect("pu", 303)[0])
         
-        let abilityTimeDecrease = onepersec
+        let abilityTimeDecrease = new Decimal(1)
         if (getLevelableBool("pu", 303)) abilityTimeDecrease = abilityTimeDecrease.div(levelableEffect("pu", 303)[0])
         player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimers[0].sub(abilityTimeDecrease.mul(delta))
 
@@ -1248,7 +1249,7 @@ addLayer("pet", {
         103: {
             image() { return this.canClick() ? "resources/Pets/unsmithCommonPet.png" : "resources/secret.png"},
             title() { return "Unsmith" },
-            lore() { return "A creature that was synergized out of the purest form of SPV, which we don't know what it is yet... We will figure it out one day." }, 
+            lore() { return "A creature that was synergized out of the purest form of SPV. We don't know what it is yet... We will figure it out one day." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to factor power.<br>" +
                     "x" + format(this.effect()[1]) + " to mod gain."
@@ -2344,7 +2345,7 @@ addLayer("pet", {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
                     return new Decimal(25)
                 } else {
-                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
+                    return getLevelableAmount(this.layer, this.id).add(1).pow(1.2).mul(5).floor()
                 }
             },
             currency() { return getLevelableXP(this.layer, this.id) },
@@ -2391,7 +2392,7 @@ addLayer("pet", {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
                     return new Decimal(25)
                 } else {
-                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
+                    return getLevelableAmount(this.layer, this.id).add(1).pow(1.2).mul(5).floor()
                 }
             },
             currency() { return getLevelableXP(this.layer, this.id) },
@@ -2438,7 +2439,7 @@ addLayer("pet", {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
                     return new Decimal(25)
                 } else {
-                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(5).add(5).floor()
+                    return getLevelableAmount(this.layer, this.id).add(1).pow(1.2).mul(5).floor()
                 }
             },
             currency() { return getLevelableXP(this.layer, this.id) },
@@ -2483,9 +2484,9 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(40)
                 } else {
-                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
+                    return getLevelableAmount(this.layer, this.id).add(1).pow(1.2).mul(6).floor()
                 }
             },
             currency() { return player.pet.singularityFragments },
@@ -2530,9 +2531,9 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(40)
                 } else {
-                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
+                    return getLevelableAmount(this.layer, this.id).add(1).pow(1.2).mul(6).floor()
                 }
             },
             currency() { return player.pet.singularityFragments },
@@ -2577,9 +2578,9 @@ addLayer("pet", {
             canAfford() { return player.pet.singularityFragments.gte(this.xpReq()) },
             xpReq() {
                 if (getLevelableAmount(this.layer, this.id).eq(0)) {
-                    return new Decimal(50)
+                    return new Decimal(40)
                 } else {
-                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(6).add(8).floor()
+                    return getLevelableAmount(this.layer, this.id).add(1).pow(1.2).mul(6).floor()
                 }
             },
             currency() { return player.pet.singularityFragments },
@@ -3140,6 +3141,117 @@ addLayer("pet", {
                 return look
             } 
         },
+        2001: {
+            image() { return this.canClick() ? "resources/Pets/cookie/simpleCookieEvo.png" : "resources/secret.png"},
+            title() { return "Simple Cookie" },
+            lore() { return "Perhaps going back to basics might help you learn more about these cookies." }, 
+            description() {
+                return "Unlock pet buildings.<br>" +
+                    "Cookie clicking gains +" + formatWhole(this.effect()[0].mul(100)) + "% of your CPS.<br>"
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return [getLevelableAmount(this.layer, this.id).div(100), new Decimal(1)]
+                return [getLevelableAmount(this.layer, this.id).div(1000).add(0.09), new Decimal(1)]
+            },
+            levelTooltip() { return "Costs Chocolate Shards." },
+            // CLICK CODE
+            unlocked() { return player.ep2.obtainedShards },
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.ep2.chocoShards = player.ep2.chocoShards.sub(amt) },
+            canAfford() { return player.ep2.chocoShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.2).floor() },
+            currency() { return player.ep2.chocoShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#86562E"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#16364a" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        2002: {
+            image() { return this.canClick() ? "resources/Pets/cookie/goldenCookieEvo.png" : "resources/secret.png"},
+            title() { return "Golden Cookie" },
+            lore() { return "These shiny cookies seem to make a strange shard, more research is needed." }, 
+            description() {
+                return "Unlock golden cookie upgrades.<br>" +
+                    "Cookie clicking now fills a golden click bar.<br>" + 
+                    "Golden click bar scaling is x" + formatSimple(this.effect()[0], 1) + " slower."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() {
+                return [Decimal.pow(1.2, getLevelableAmount(this.layer, this.id).sub(1)).max(1), new Decimal(1)]
+            },
+            levelTooltip() { return "Costs Chocolate Shards." },
+            // CLICK CODE
+            unlocked() { return player.ep2.obtainedShards && hasUpgrade("s", 21)},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.ep2.chocoShards = player.ep2.chocoShards.sub(amt) },
+            canAfford() { return player.ep2.chocoShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.4).floor() },
+            currency() { return player.ep2.chocoShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#86562E"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#16364a" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
+        2003: {
+            image() { return this.canClick() ? "resources/Pets/cookie/wrathCookieEvo.png" : "resources/secret.png"},
+            title() { return "Wrath Cookie" },
+            lore() { return "Not sure what makes it so angry, hopefully we won't have to know." }, 
+            description() {
+                return "Unlock wrath cookie upgrades.<br>" +
+                    "Golden cookies have a " + formatSimple(this.effect()[0].mul(100), 1) + "% chance to instead be a<br>wrath cookie.<br>"
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() {
+                if (getLevelableAmount(this.layer, this.id).lt(10)) return [getLevelableAmount(this.layer, this.id).mul(0.02), new Decimal(1)]
+                return [getLevelableAmount(this.layer, this.id).mul(0.002).add(0.018), new Decimal(1)]
+            },
+            levelTooltip() { return "Costs Chocolate Shards." },
+            // CLICK CODE
+            unlocked() { return player.ep2.obtainedShards && player.ma.matosUnlock},
+            canClick() { return getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { player.ep2.chocoShards = player.ep2.chocoShards.sub(amt) },
+            canAfford() { return player.ep2.chocoShards.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).pow(1.6).floor() },
+            currency() { return player.ep2.chocoShards },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barShown() { return this.canClick() },
+            barStyle() { return {backgroundColor: "#86562E"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#16364a" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }
+        },
     },
     refreshBanner() {
         player.pet.bannerID[0] = 101 + getRandomInt(8)
@@ -3454,7 +3566,7 @@ addLayer("pet", {
                         ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
                         ["always-scroll-column", [
                             ["style-column", [
-                                ["raw-html", "Evo-Shard", {color: "#d487fd", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "Evolution Shards", {color: "#d487fd", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#2a1b32", borderBottom: "3px solid #d487fd", userSelect: "none"}],
                             ["style-column", [
                                 ["row", [["levelable", 1103], ["levelable", 1204], ["levelable", 1203], ["levelable", 1101], ["levelable", 1206]]],
@@ -3462,11 +3574,18 @@ addLayer("pet", {
                             ], {width: "525px", backgroundColor: "#150d19", padding: "5px"}],
 
                             ["style-column", [
-                                ["raw-html", "Para-Shard", {color: "#4c64ff", fontSize: "20px", fontFamily: "monospace"}],
+                                ["raw-html", "Paragon Shards", {color: "#4c64ff", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "535px", height: "40px", backgroundColor: "#0f1433", borderTop: "3px solid #4c64ff", borderBottom: "3px solid #4c64ff", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
                                 ["row", [["levelable", 1202], ["levelable", 1302], ["levelable", 1303], ["levelable", 1205], ["levelable", 1106]]],
                             ], () => { return player.cb.highestLevel.gte(250) ? {width: "525px", backgroundColor: "#070a19", padding: "5px"} : {display: "none !important"}}],
+
+                            ["style-column", [
+                                ["raw-html", "Chocolate Shards", {color: "#86562E", fontSize: "20px", fontFamily: "monospace"}],
+                            ], () => { return player.ep2.obtainedShards ? {width: "535px", height: "40px", backgroundColor: "#1a1109", borderTop: "3px solid #86562E", borderBottom: "3px solid #86562E", userSelect: "none"} : {display: "none !important"}}],
+                            ["style-column", [
+                                ["row", [["levelable", 2001], ["levelable", 2002], ["levelable", 2003]]],
+                            ], () => { return player.ep2.obtainedShards ? {width: "525px", backgroundColor: "#0d0804", padding: "5px"} : {display: "none !important"}}],
                         ], {width: "550px", height: "522px"}],
                     ], {width: "550px", height: "700px", backgroundColor: "#161616"}],
                 ],
@@ -3714,7 +3833,8 @@ addLayer("pet", {
             ["buttonless-microtabs", "content", { 'border-width': '0px' }],
         ], {border: "3px solid white"}],
     ],
-    layerShown() { return player.startedGame == true }
+    deactivated() {return player.pet.paused},
+    layerShown() {return player.startedGame == true },
 })
 function randomInt(min, max) {
     min = Math.ceil(min.toNumber());

@@ -27,28 +27,32 @@ var colors_theme
 function drawTree() {
 	if (!retrieveCanvasData()) return;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	for (layer in layers){
-		if (tmp[layer].layerShown == true && tmp[layer].branches){
-			for (branch in tmp[layer].branches)
-				{
-					drawTreeBranch(layer, tmp[layer].branches[branch])
+	if (player) {
+		let tree = universes[player.universe]?.tree
+		if (typeof tree !== "undefined") {
+			for (row in tree) {
+				for (thing in tree[row]) {
+					let layer = tree[row][thing]
+					if (tmp[layer].layerShown == true && tmp[layer].branches){
+						for (branch in tmp[layer].branches) {
+							drawTreeBranch(layer, tmp[layer].branches[branch])
+						}
+					}
 				}
+			}
 		}
-		drawComponentBranches(layer, tmp[layer].upgrades, "upgrade-")
-		drawComponentBranches(layer, tmp[layer].buyables, "buyable-")
-		drawComponentBranches(layer, tmp[layer].clickables, "clickable-")
-
+		drawComponentBranches(player.tab, tmp[player.tab].upgrades, "upgrade-")
+		drawComponentBranches(player.tab, tmp[player.tab].buyables, "buyable-")
+		drawComponentBranches(player.tab, tmp[player.tab].clickables, "clickable-")
 	}
 }
 
 function drawComponentBranches(layer, data, prefix) {
 	for(id in data) {
 		if (data[id].branches) {
-			for (branch in data[id].branches)
-			{
+			for (branch in data[id].branches) {
 				drawTreeBranch(id, data[id].branches[branch], prefix + layer + "-")
 			}
-
 		}
 	}
 
@@ -80,12 +84,11 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
 	let num2 = data
 	let color_id = 1
 	let width = 15
-	if (Array.isArray(data)){
+	if (Array.isArray(data)) {
 		num2 = data[0]
 		color_id = data[1]
 		width = data[2] || width
 	}
-
 	if(typeof(color_id) == "number")
 		color_id = colors_theme[color_id]
 	if (prefix) {

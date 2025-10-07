@@ -68,10 +68,6 @@ addLayer("i", {
 
         stopRain()
 
-        if (player.startedGame == false && player.tab == "i") {
-            player.startedGame = true
-        }
-
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
@@ -90,9 +86,6 @@ addLayer("i", {
         //----------------------------------------
 
         // START OF CELESTIAL POINT MODIFIERS
-        if (player.startedGame == true && player.c.cutscene1 == false) {
-            player.gain = new Decimal(1)
-        }
         player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
         player.gain = player.gain.mul(player.r.tierEffect)
@@ -108,7 +101,6 @@ addLayer("i", {
         player.gain = player.gain.mul(player.r.tetrEffect)
         if (hasUpgrade("p", 11)) player.gain = player.gain.mul(3)
         if (hasUpgrade("p", 12)) player.gain = player.gain.mul(player.p.prestigeEffect)
-        player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(player.f.factorPowerEffect)
         player.gain = player.gain.mul(buyableEffect("t", 15))
         player.gain = player.gain.mul(buyableEffect("g", 14))
@@ -152,6 +144,7 @@ addLayer("i", {
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
         player.gain = player.gain.mul(player.i.preOTFMult)
         player.gain = player.gain.mul(player.co.cores.point.effect[0])
+        if (hasUpgrade("ep2", 1)) player.gain = player.gain.mul(upgradeEffect("ep2", 1))
 
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)

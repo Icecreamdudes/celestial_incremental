@@ -621,7 +621,7 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v1.8.5 - Epic Pet Revamp Pt.1</h3><br>
+	<h3>v1.8.5 - Epic Pet Revamp Part 1</h3><br>
 		Content:<br>
 			- Cookie pet has been completely revamped.<br>
 			- 3 new pet evolutions.<br>

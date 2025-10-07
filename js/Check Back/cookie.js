@@ -205,7 +205,7 @@ addLayer("ep2", {
         let val = player.ep2.totalBuildings.mul(0.1)
         if (hasUpgrade("ep2", 105)) val = val.mul(5)
         if (hasUpgrade("ep2", 106)) val = val.mul(10)
-        if (hasUpgrade("ep2", 107)) val = val.mul(10)
+        if (hasUpgrade("ep2", 107)) val = val.mul(20)
         
         if (hasUpgrade("ep2", 104)) player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.add(val)
         player.ep2.cookiesPerClick = player.ep2.cookiesPerClick.add(player.ep2.cookiesPerSecond.mul(levelableEffect("pet", 2001)[0]))
@@ -550,7 +550,7 @@ addLayer("ep2", {
             img: "resources/currencies/celestial_points.png",
             unlocked() {return getBuyableAmount("ep2", 1).gte(150)},
             title: "<span style='color:#6E5755cc'>Buttery Points</span>",
-            description: "Multiplies gain from Pointed Points by x10.",
+            description: "Multiplies gain from Pointed Points by x20.",
             cost: new Decimal(1e10),
             currencyLocation() { return player.ep2 },
             currencyDisplayName: "Cookies",
@@ -1746,7 +1746,7 @@ addLayer("ep2", {
                 let val = player.ep2.totalBuildings.mul(0.1)
                 if (hasUpgrade("ep2", 105)) val = val.mul(5)
                 if (hasUpgrade("ep2", 106)) val = val.mul(10)
-                if (hasUpgrade("ep2", 107)) val = val.mul(10)
+                if (hasUpgrade("ep2", 107)) val = val.mul(20)
 
                 if (hasUpgrade("ep2", 104)) eff = eff.add(val)
                 return eff.mul(getBuyableAmount(this.layer, this.id))

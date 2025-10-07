@@ -213,7 +213,6 @@
         player.ma.healthRegen[2] = buyableEffect("ma", 37)
         player.ma.healthRegen[3] = buyableEffect("ma", 38)
 
-
         player.ma.motivationEffect = player.ma.motivationCount.pow(0.5).mul(0.02).add(1)
 
         for (let i = 0; i < player.ma.damage.length; i++) {
@@ -222,6 +221,7 @@
                 player.ma.damage[i] = player.ma.damage[i].mul(1.5)
             }
             player.ma.damage[i] = player.ma.damage[i].mul(player.ma.motivationEffect)
+            if (hasMilestone("fi", 101)) player.ma.damage[i] = player.ma.damage[i].mul(player.fi.milestone101Effect)
         }
 
         if (player.ma.energyBoostDuration.gt(0)) {
@@ -229,7 +229,6 @@
             player.ma.cooldown2[player.ma.energyBoostSelected] = player.ma.cooldown2[player.ma.energyBoostSelected].div(2) 
             player.ma.cooldown3[player.ma.energyBoostSelected] = player.ma.cooldown3[player.ma.energyBoostSelected].div(2) 
         }
-
 
         for (let i = 0; i < player.ma.attackTimer.length; i++) {
             player.ma.healthMax[i] = player.ma.healthMax[i].mul(buyableEffect("ma", 14))

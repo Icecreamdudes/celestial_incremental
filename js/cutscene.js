@@ -767,7 +767,77 @@ if (player.c.cutscene[72] && hasMilestone("s", 17))
     });
     player.c.cutscene[72] = false
 }
-
+if (player.c.cutscene[73] && (player.tab == "ch" || !player.c.cutscene[74]))
+{
+    showCutscene(cutsceneDialogue74, {
+    cutsceneID: 74,
+    background: "linear-gradient(90deg, #260b36, #0920b5)",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[73] = false
+}
+if (player.c.cutscene[74] && hasMilestone("s", 19))
+{
+    showCutscene(cutsceneDialogue75, {
+    cutsceneID: 75,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[74] = false
+}
+if (player.c.cutscene[75] && hasUpgrade("s", 19))
+{
+    showCutscene(cutsceneDialogue76, {
+    cutsceneID: 76,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[75] = false
+}
+if (player.c.cutscene[76] && hasUpgrade("s", 21))
+{
+    showCutscene(cutsceneDialogue77, {
+    cutsceneID: 77,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[76] = false
+}
+if (player.c.cutscene[77] && (player.sma.inStarmetalChallenge || !player.c.cutscene[78]))
+{
+    showCutscene(cutsceneDialogue78, {
+    cutsceneID: 78,
+    background: "#000000ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[77] = false
+}
+if (player.c.cutscene[78] && player.sma.starmetalAlloy.gte(1))
+{
+    showCutscene(cutsceneDialogue79, {
+    cutsceneID: 79,
+    background: "#260300",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[78] = false
+}
+if (player.c.cutscene[79] && player.sma.starmetalAlloy.gte(1))
+{
+    showCutscene(cutsceneDialogue80, {
+    cutsceneID: 80,
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[79] = false
+}
+if (player.c.cutscene[80] && player.ma.matosUnlockConditions[0])
+{
+    showCutscene(cutsceneDialogue81, {
+    cutsceneID: 81,
+    background: "#830b00ff",
+        portrait: "resources/secret.png"
+    });
+    player.c.cutscene[80] = false
+}
 player.c.ev2bg = "resources/gdbg.jpg"
 
 //Background
@@ -811,6 +881,7 @@ player.tab == "ro" || player.tab == "mi" ? "#3d3d3d" :
 player.tab == "au2" ? "#151230" : 
 player.tab == "cmc" || (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???" || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) ? "black" : 
 player.tab == "ba" && player.fi.battleTier.eq(1) ? "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)" : 
+player.tab == "ba" && player.fi.battleTier.eq(2) ? "linear-gradient(90deg, #5c090dff, #910050ff)" : 
 "#161616");
 
 if (player.tab === "au2" || player.tab === "au2t" || player.tab === "st" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {

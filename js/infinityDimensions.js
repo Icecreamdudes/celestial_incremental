@@ -72,6 +72,8 @@
         let max = Decimal.div(1, Decimal.pow(1.05, player.id.infinityPowerPerSecond.add(1).log(Decimal.pow(10, base)))).max(0.01)
         if (player.id.infinityPowerPerSecond.gt(1e300)) player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.div(1e300).pow(Decimal.div(base, player.id.infinityPowerPerSecond.plus(1).log(10)).min(max)).mul(1e300)
 
+        player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.mul(player.se.starsExploreEffect[0][2])
+
         // POWER MODIFIERS
         player.id.infinityPowerPerSecond = player.id.infinityPowerPerSecond.pow(buyableEffect("fu", 42))
 
@@ -93,6 +95,8 @@
             // SOFTCAP MODIFIER
             if (player.id.dimensionsPerSecond[i].gt(1e300)) player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].div(1e300).pow(0.95).mul(1e300)
 
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(buyableEffect("id", i+12).div(10))
+            player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].mul(player.se.starsExploreEffect[0][2])
             // POWER MODIFIERS
             player.id.dimensionsPerSecond[i] = player.id.dimensionsPerSecond[i].pow(buyableEffect("fu", 42))
 

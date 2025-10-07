@@ -697,8 +697,8 @@
         29: {
             requirementDescription: "<h3>Pent 50,000",
             effectDescription() { return "Produce 0.2% of moonstone value per second." },
-            done() { return player.r.pent.gte(50000) && this.unlocked() },
-            unlocked() { return hasUpgrade("s", 16) && hasMilestone("r", 28) },
+            done() { return (player.r.pent.gte(50000) || player.st.buyables[304].gte(1)) && this.unlocked()  },
+            unlocked() { return (hasUpgrade("s", 16) && hasMilestone("r", 28)) || player.st.buyables[304].gte(1) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
     },

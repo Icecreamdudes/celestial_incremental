@@ -85,9 +85,12 @@
             player.sma.inStarmetalChallenge = true
             player.universe = -0.1
             player.tab = "le"
-            layers.le.generateSelection();
+            player.uniTab = 1
+
+            layers.pu.generateSelection();
 
             player.subtabs["le"]["stuff"] = "Main"
+            player.subtabs.pu["stuff"] = "Selection"
         }
 
         player.sma.starmetalAlloy = player.sma.starmetalAlloy.floor()

@@ -49,11 +49,19 @@
         rocketIndex: new Decimal(0),
         activatedFuelReq: new Decimal(20),
         rocketPartsReq: new Decimal(6),
+        evoShardsReq: new Decimal(0),
+        paragonShardsReq: new Decimal(0),
 
         starPause: new Decimal(0),
         
         rocketCooldown: new Decimal(0),
-        rocketCooldownMax: new Decimal(300),
+        rocketCooldownMax: [new Decimal(300), new Decimal(1200)],
+
+        //rocket upgrade
+        rocketIndex: new Decimal(0),
+
+        rocket2Unlocked: false,
+        
     }},
     automate() {},
     nodeStyle() {
@@ -81,16 +89,21 @@
         player.ro.activatedFuelToGet = player.ro.activatedFuelToGet.mul(buyableEffect("cof", 19))
         player.ro.activatedFuelEffect = player.ro.activatedFuel.pow(4).add(1)
 
+        player.ro.activatedFuel = player.ro.activatedFuel.add(player.ro.activatedFuelToGet.mul(buyableEffect("st", 204).mul(delta)))
+
         player.ro.rocketPartsContributions[0] = player.gh.steel.add(1).log(10).pow(0.2)
-        player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5)
+        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5)
+        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[1] = player.sma.starmetalAlloy.div(300).pow(0.5).add(1)
         player.ro.rocketPartsContributions[2] = player.p.crystals.add(1).log(10).div(100)
-        player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100)
+        if (player.st.buyables[203].lt(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100)
+        if (player.st.buyables[203].gte(1)) player.ro.rocketPartsContributions[3] = player.g.moonstone.pow(0.4).div(100).add(1)
 
         player.ro.rocketPartsToGet = player.ro.rocketPartsContributions[0].mul(player.ro.rocketPartsContributions[1]).mul(player.ro.rocketPartsContributions[2]).mul(player.ro.rocketPartsContributions[3]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(levelableEffect("pet", 501)[1]).floor()
         player.ro.rocketPartsToGet = player.ro.rocketPartsToGet.mul(buyableEffect("cof", 19))
         player.ro.rocketPartsEffect = player.ro.rocketParts.mul(2).pow(0.9).add(1)
 
+        player.ro.rocketParts = player.ro.rocketParts.add(player.ro.rocketPartsToGet.mul(buyableEffect("st", 205).mul(delta)))
 
         //passenger selection
         if (player.ro.rarityIndex.eq(0)) player.ro.petTitle = tmp.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title
@@ -102,8 +115,8 @@
         player.ro.spacePetXPToGet = Decimal.pow(player.ro.petLevel, 1.2).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
 
-        player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length))
-        player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length))
+        player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length)).add(player.ro.evoShardsReq)
+        player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length)).add(player.ro.paragonShardsReq)
 
         for (let i = 0; i < player.ro.selectedPassengersCommon.length; i++) {
             player.ro.commonXPToGet[i] = Decimal.pow(player.pet.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][0], 1.2).add(1)
@@ -113,24 +126,36 @@
         }
 
         player.ro.rocketImages = [
-            "<img src='resources/rocket1.png' style='width:calc(270%);height:calc(270%);margin:-120px -110px;padding-top:0%'></img>",
+            "<img src='resources/rocket1.png' style='width:calc(270%);height:calc(270%);margin:-130px -130px;padding-top:0%'></img>",
+            "<img src='resources/rocket2.png' style='width:calc(160%);height:calc(160%);margin:-50px -130px;padding-top:0%'></img>",
         ]
         player.ro.rocketNames = [
             "Small Rocket<br><h6>Minimum: 20 Fuel, 6 Parts",
+            "Medium Rocket<br><h6>Minimum: 100,000 Fuel, 10,000,000 Parts, 3 Evo Shards, 1 Paragon Shard",
         ]
         if (player.ro.rocketIndex.eq(0)) {
-            player.ro.rocketCooldownMax = new Decimal(300)
             player.ro.rocketPartsReq = new Decimal(6)
             player.ro.activatedFuelReq = new Decimal(20)
-        }
-        
 
+            player.ro.evoShardsReq = new Decimal(0)
+            player.ro.paragonShardsReq = new Decimal(0)
+        }
+        if (player.ro.rocketIndex.eq(1)) {
+            player.ro.rocketPartsReq = new Decimal(10000000)
+            player.ro.activatedFuelReq = new Decimal(100000) //,make it include shards
+            
+            player.ro.evoShardsReq = new Decimal(3)
+            player.ro.paragonShardsReq = new Decimal(1)
+        }
+    
         player.ro.starPause = player.ro.starPause.sub(1)
         if (player.ro.starPause.gt(0)) {
             layers.ro.starReset();
         }
 
         player.ro.rocketCooldown = player.ro.rocketCooldown.sub(onepersec.mul(delta))
+
+        player.ro.rocketCooldownMax = [new Decimal(300), new Decimal(1200)]
     },
     starReset() {
         clickClickable("co", 1000)
@@ -149,6 +174,36 @@
         }
     },
     clickables: {
+        1: {
+            title() { return "<h4>Decrease Rocket" },
+            canClick() { return player.ro.rocketIndex.gt(0) },
+            unlocked() { return player.ro.rocket2Unlocked },
+            onClick() {
+                player.ro.rocketIndex = player.ro.rocketIndex.sub(1)
+
+                player.ro.rocketCooldown = player.ro.rocketCooldownMax[player.ro.rocketIndex]
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", backgroundColor: "#191e40", border: "3px solid #0a0c19", borderRadius: "15px"}
+                if (this.canClick()) {look.backgroundColor = "#191e40";look.color = "white"} else {look.backgroundColor = "#bf8f8f";look.color = "black"}
+                return look
+            },
+        },
+        2: {
+            title() { return "<h4>Increase Rocket" },
+            canClick() { return player.ro.rocketIndex.lt(player.ro.rocketImages.length - 1) },
+            unlocked() { return player.ro.rocket2Unlocked },
+            onClick() {
+                player.ro.rocketIndex = player.ro.rocketIndex.add(1)
+
+                player.ro.rocketCooldown = player.ro.rocketCooldownMax[player.ro.rocketIndex]
+            },
+            style() {
+                let look = {width: "100px", minHeight: "100px", color: "white", backgroundColor: "#191e40", border: "3px solid #0a0c19", borderRadius: "15px"}
+                if (this.canClick()) {look.backgroundColor = "#191e40";look.color = "white"} else {look.backgroundColor = "#bf8f8f";look.color = "black"}
+                return look
+            },
+        },
         11: {
             title() { return "<h2>Make Activated Fuel" },
             canClick() { return player.ro.activatedFuelToGet.gte('1') },
@@ -270,7 +325,7 @@
                 }
 
                 player.ro.starPause = new Decimal(8)
-                player.ro.rocketCooldown = player.ro.rocketCooldownMax
+                player.ro.rocketCooldown = player.ro.rocketCooldownMax[player.ro.rocketIndex]
 
                 player.au2.au2Unlocked = true
             },
@@ -278,7 +333,7 @@
             style: { 
                 border: "3px solid rgb(27, 0, 36)", 
                 width: '150px', 
-                minHeight: '225px', 
+                minHeight: '200px', 
                 borderRadius: '15px', 
                 backgroundColor: "#1b1173", 
                 color: "white",
@@ -288,7 +343,34 @@
                 overflow: "hidden", // Prevent content overflow
             },
         },
+        16: {
+            title() { return "<h2>Upgrade" },
+            canClick() { return player.cb.evolutionShards.gte('70') && player.cb.paragonShards.gte('15') && player.fi.temporalShards.gte('4') && player.au2.stars.gte('1e9') && player.sma.starmetalAlloy.gte('100000') 
+                && player.cof.coreFragments[0].gte('50') && player.cof.coreFragments[1].gte('50') && player.cof.coreFragments[2].gte('50') && player.cof.coreFragments[3].gte('50') && player.cof.coreFragments[4].gte('50')
+                && player.cof.coreFragments[5].gte('50') && player.cof.coreFragments[6].gte('50')
+            },
+            unlocked: true,
+            onClick() {
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(70)
+                player.cb.paragonShards = player.cb.paragonShards.sub(15)
+                player.fi.temporalShards = player.fi.temporalShards.sub(4)
 
+                player.au2.stars = player.au2.stars.sub(1e9)
+                player.sma.starmetalAlloy = player.sma.starmetalAlloy.sub(100000)
+
+                for (let i = 0; i < 7; i++)
+                {
+                    player.cof.coreFragments[i] = player.cof.coreFragments[i].sub(50)
+                }
+
+                player.ro.rocket2Unlocked = true
+            },
+            style() {
+                let look = {width: "300px", minHeight: "120px", color: "white", backgroundColor: "#191e40", border: "3px solid #0a0c19", borderRadius: "15px"}
+                this.canClick() ? look.backgroundColor = "#191e40" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
         100: {
             title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[101].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
@@ -800,21 +882,43 @@
                         ["raw-html", function () { return player.ro.rocketNames[player.ro.rocketIndex] }, { "color": "#dbdbdb", "font-size": "36px", "font-family": "monospace" }],
                     ], {width: "1000px", border: "3px solid #dbdbdb", borderBottom: "0px", backgroundColor: "#1c1c1c", paddingTop: "5px", paddingBottom: "5px", borderRadius: "15px 15px 0px 0px"}], 
                     ["style-row", [
-                        ["style-column", [
+                    ["style-column", [
                     ["blank", "25px"],
-
-                                                        ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.au2.stars) + "</h3> stars." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "You will gain " + formatWhole(player.au2.starsToGet) + " stars on launch." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "Evolution shard cost: " + formatWhole(player.ro.evoCost) + "" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Paragon shard cost: " + formatWhole(player.ro.paragonCost) + "" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["style-row", [["clickable", 15],]],
+                    ["style-row", [["clickable", 1], ["blank", "25px"], ["clickable", 15], ["blank", "25px"], ["clickable", 2],]],
                     ["blank", "25px"],
+                    ["raw-html", function () { return player.ro.rocket2Unlocked ? "Switching rockets will reset the cooldown." : "" }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ["raw-html", function () { return "Launching the rocket performs a singularity equivalent reset, uses activated fuel and rocket parts, and resets selected pet levels." }, { "color": "white", "font-size": "18px", "font-family": "monospace" }],
                     ["blank", "25px"],
                 ], {width: "1000px", borderRight: "2px solid srgb(27, 0, 36)"}],
                     ], {width: "1000px", border: "3px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "0px 0px 15px 15px"}],
+                ]
+            },
+                "Rocket Upgrade": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return player.st.buyables[305].gte(1) && !player.ro.rocket2Unlocked },
+                content: [
+                    ["blank", "25px"],
+                    ["style-column", [
+                    ["style-row", [
+                     ["raw-html", function () { return "Rocket Upgrade Workshop" }, { "color": "white", "font-size": "36px", "font-family": "monospace" }],
+                    ], {width: "1000px", height: "100px", border: "0px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "15px 15px 15px 15px"}],
+                    ["style-column", [
+                    ["raw-html", function () { return "Evolution Shards: " + formatWhole(player.cb.evolutionShards) + "/70" }, { "color": "#d487fd", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Paragon Shards: " + formatWhole(player.cb.paragonShards) + "/15" }, { "color": "#4b79ff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Temporal Shards: " + formatWhole(player.fi.temporalShards) + "/4" }, { "color": "#77b0ffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Stars: " + format(player.au2.stars) + "/1e9" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Starmetal Alloy: " + format(player.sma.starmetalAlloy) + "/100,000" }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "50 of every core fragment type." }, { "color": "#ffffff", "font-size": "24px", "font-family": "monospace" }],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 16],]],
+                    ], {width: "1000px", height: "400px", border: "0px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "15px 15px 15px 15px"}],
+                    ], {width: "1000px", height: "500px", border: "3px solid #dbdbdb", backgroundColor: "#1c1c1c", borderRadius: "15px 15px 15px 15px"}],
                 ]
             },
         },

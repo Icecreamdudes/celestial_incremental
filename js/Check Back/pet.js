@@ -98,6 +98,7 @@ addLayer("pet", {
         player.pet.petPointMult = player.pet.petPointMult.mul(player.pet.gemEffects[1])
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("ep4", 12))
         player.pet.petPointMult = player.pet.petPointMult.mul(buyableEffect("pl", 14))
+        if (hasMilestone("db", 101)) player.pet.petPointMult = player.pet.petPointMult.mul(1.15)
 
         // PET BUTTON COOLDOWN CALC
         for (let i = 0; i < player.pet.petButtonTimer.length; i++) {
@@ -2609,7 +2610,7 @@ addLayer("pet", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.au2.stars.pow(0.2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // stars (Based on Stars)
+                    player.au2.stars.pow(0.04).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.01)), // stars (Based on Stars)
                     player.au2.stars.pow(0.15).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // fuel (Based on Stars)
                     player.au2.stars.pow(0.1).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // rocket parts (Based on Stars)
                 ]

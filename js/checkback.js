@@ -45,10 +45,10 @@ addLayer("cb", {
 
         //xpboost
         XPBoost: new Decimal(1),
-        XPBoostBase: [new Decimal(0.2), new Decimal(0.5)],
-        XPBoostTimers: [new Decimal(0), new Decimal(0),],
-        XPBoostTimersMax: [new Decimal(10800), new Decimal(129600)],
-        XPBoostReq: [new Decimal(100),new Decimal(500),],
+        XPBoostBase: [new Decimal(0.2), new Decimal(0.5), new Decimal(1.5)],
+        XPBoostTimers: [new Decimal(0), new Decimal(0),  new Decimal(0),],
+        XPBoostTimersMax: [new Decimal(10800), new Decimal(43200), new Decimal(129600)],
+        XPBoostReq: [new Decimal(100),new Decimal(500),new Decimal(10000000),],
 
         XPBoostEffect: new Decimal(1),
 
@@ -84,10 +84,11 @@ addLayer("cb", {
         //cante?
         canteEnergyXPButtonBase: [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ],
         canteEnergyPetButtonBase: [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14), new Decimal(30)],
-        canteEnergyXPBoostButtonBase: [new Decimal(10), new Decimal(30)],
+        canteEnergyXPBoostButtonBase: [new Decimal(10), new Decimal(30), new Decimal(80)],
 
         time: new Decimal(0), // Offline Time
-        alertToggle: true
+        alertToggle: true,
+
     }},
     automate() {},
     nodeStyle() {},
@@ -170,6 +171,8 @@ addLayer("cb", {
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("pl", 12))
             if (hasMilestone("db", 101)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(1.25)
             if (player.ma.matosDefeated) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(2)
+            if (hasUpgrade("fi", 11)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("fi", 11))
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.se.starsExploreEffect[2][0])
         }
 
 
@@ -210,16 +213,19 @@ addLayer("cb", {
 
         //xpboost
 
-        player.cb.XPBoostBase = [new Decimal(0.2),new Decimal(0.5),]
+        player.cb.XPBoostBase = [new Decimal(0.2),new Decimal(0.5),new Decimal(1.5),]
         if (player.cb.level.lt(10000)) {
             player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(100).pow(1.2))
             player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(80).pow(1.1))
+            player.cb.XPBoostBase[2] = player.cb.XPBoostBase[2].mul(player.cb.level.div(60))
         } else if (player.cb.level.lt(100000)) {
             player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(40))
             player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(50))
+            player.cb.XPBoostBase[2] = player.cb.XPBoostBase[2].mul(player.cb.level.div(60))
         } else {
             player.cb.XPBoostBase[0] = player.cb.XPBoostBase[0].mul(player.cb.level.div(16.8).pow(0.9))
             player.cb.XPBoostBase[1] = player.cb.XPBoostBase[1].mul(player.cb.level.div(21.5).pow(0.9))
+            player.cb.XPBoostBase[2] = player.cb.XPBoostBase[2].mul(player.cb.level.div(25.5).pow(0.9))
         }
         for (let i = 0; i < player.cb.XPBoostBase.length; i++) {
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("pet", 1203)[1])
@@ -234,11 +240,12 @@ addLayer("cb", {
             if (player.ma.matosDefeated) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.5)
         }
 
-        player.cb.XPBoostReq = [new Decimal(100), new Decimal(500)]
-        player.cb.XPBoostTimersMax = [new Decimal(10800), new Decimal(129600)]
+        player.cb.XPBoostReq = [new Decimal(100), new Decimal(500), new Decimal(1e6)]
+        player.cb.XPBoostTimersMax = [new Decimal(10800), new Decimal(43200), new Decimal(129600)]
         for (let i = 0; i < player.cb.XPBoostTimersMax.length; i++) {
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(levelableEffect("pet", 401)[2])
             player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(buyableEffect("ep5", 13))
+            if (hasUpgrade("fi", 14)) player.cb.XPBoostTimersMax[i] = player.cb.XPBoostTimersMax[i].div(2)
         }
         for (let i = 0; i < player.cb.XPBoostTimers.length; i++) {
             player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(onepersec.mul(delta))
@@ -359,7 +366,7 @@ addLayer("cb", {
         //cante
         player.cb.canteEnergyXPButtonBase = [new Decimal(0.2), new Decimal(0.3), new Decimal(0.5), new Decimal(0.02), new Decimal(1.4), new Decimal(2.5), new Decimal(5), new Decimal(12) ]
         player.cb.canteEnergyPetButtonBase = [new Decimal(1.6), new Decimal(3), new Decimal(5.5), new Decimal(9), new Decimal(7), new Decimal(14), new Decimal(30)]
-        player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30)]
+        player.cb.canteEnergyXPBoostButtonBase = [new Decimal(10), new Decimal(30), new Decimal(80)]
 
         player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))
 
@@ -1304,7 +1311,40 @@ addLayer("cb", {
                 return look
             },
         },
+        303: {
+            title() { return player.cb.XPBoostTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.XPBoostTimers[2]) + "." : "<h3>+" + format(player.cb.XPBoostBase[2]) + " XP Boost."},
+            canClick() { return player.cb.XPBoostTimers[2].lt(0) },
+            unlocked() { return hasUpgrade("fi", 13)},
+            tooltip() { return player.cb.highestLevel.gte(250) ? "Paragon Shard Rarity: 50%" : ""},
+            onClick() {
+                if (player.cb.highestLevel.gte(player.cb.XPBoostReq[2])) {
+                    player.cb.XPBoost = player.cb.XPBoost.add(player.cb.XPBoostBase[2])
+                    player.cb.XPBoostTimers[2] = player.cb.XPBoostTimersMax[2]
 
+                    if (player.cb.highestLevel.gt(250)) {
+                        let random = getRandomInt(2)
+                        if (random == 1) {
+                            player.cb.paragonShards = player.cb.paragonShards.add(1);
+                            player.cb.pityParaCurrent = new Decimal(0);
+                            if (player.cb.alertToggle) callAlert("You gained a PARAGON SHARD! (50%)", "resources/paragonShard.png");
+                        } else {
+                            player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(25);
+                        }
+                    }
+                    player.cb.level = new Decimal(1)
+                    player.cb.xp = new Decimal(0)
+                    player.cb.totalxp = new Decimal(4.5)
+                    if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(player.cb.canteEnergyXPBoostButtonBase[2].mul(player.ca.canteEnergyMult))
+                } else {
+                    callAlert("You must be level " + formatWhole(player.cb.XPBoostReq[2]) + " to reset for this button.");
+                }
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", borderRadius: "30px / 15px"}
+                this.canClick() ? look.backgroundColor = "#00B229" : look.backgroundColor = "#bf8f8f"
+                return look
+            },
+        },
         // AUTOMATION
         401: {
             title() { return "1" },
@@ -2776,16 +2816,6 @@ addLayer("cb", {
                 unlocked() { return player.cb.highestLevel.gte(10) },
                 embedLayer: 'pet',
             },
-            "Evolution": {
-                buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", backgroundImage: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px" }},
-                unlocked() { return player.cb.highestLevel.gte(35)  },
-                embedLayer: 'ev'
-            },
-            "Fighting": {
-                buttonStyle() { return {color: "#2e0000ff", borderColor: "#2e0000ff", backgroundImage: "linear-gradient(90deg, #ad0000ff, #920044ff)", borderRadius: "5px" }},
-                unlocked() { return player.ma.matosDefeated },
-                embedLayer: 'fi'
-            },
             "Buyables": {
                 buttonStyle() { return {color: "#094599", borderColor: "#094599", borderRadius: "5px"}},
                 unlocked() { return (hasChallenge("ip", 17) || hasMilestone("s", 14)) },
@@ -2796,6 +2826,16 @@ addLayer("cb", {
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 21], ["ex-buyable", 22], ["ex-buyable", 23]], {maxWidth: "900px"}],
                 ]
+            },
+            "Evolution": {
+                buttonStyle() { return {color: "#1500bf", borderColor: "#1500bf", backgroundImage: "linear-gradient(90deg, #d487fd, #4b79ff)", borderRadius: "5px" }},
+                unlocked() { return player.cb.highestLevel.gte(35)  },
+                embedLayer: 'ev'
+            },
+            "Fighting": {
+                buttonStyle() { return {color: "#2e0000ff", borderColor: "#2e0000ff", backgroundImage: "linear-gradient(90deg, #ad0000ff, #920044ff)", borderRadius: "5px" }},
+                unlocked() { return player.ma.matosDefeated },
+                embedLayer: 'fi'
             },
         },
         buttons: {
@@ -3068,7 +3108,7 @@ addLayer("cb", {
                     ["blank", "10px"],
                     ["row", [
                         ["column", [
-                            ["clickable", 301], ["clickable", 302],
+                            ["clickable", 301], ["clickable", 302], ["clickable", 303],
                             ["style-row", [], {width: "200px", height: "50px"}],
                         ]],
                         ["style-column", [

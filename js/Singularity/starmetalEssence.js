@@ -58,12 +58,14 @@
             if (player.sme.buyables[i].gte(1)) player.sme.generatorTimers[i] = player.sme.generatorTimers[i].add(onepersec.mul(delta))
 
             player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].mul(player.sme.starmetalEssenceSoftcap)
+            if (hasUpgrade("fi", 12)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(2)
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("sme", i))
             if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i]))
             {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
                 player.sme.generatorTimers[i] = new Decimal(0)
             }
+
         }
         
         if (player.sme.leaveInput.gte(1)) player.sme.leaveAmount = player.sme.leaveInput
@@ -261,6 +263,8 @@
                     player.fi.petMaxHP[0][0], // Health
                     player.fi.petDamage[0][0], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[0][0],
+                    player.fi.petMaxDamage[0][0],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -302,6 +306,8 @@
                     player.fi.petMaxHP[0][1], // Health
                     player.fi.petDamage[0][1], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[0][1],
+                    player.fi.petMaxDamage[0][1],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -343,6 +349,8 @@
                     player.fi.petMaxHP[0][2], // Health
                     player.fi.petDamage[0][2], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[0][2],
+                    player.fi.petMaxDamage[0][2],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -384,6 +392,8 @@
                     player.fi.petMaxHP[0][3], // Health
                     player.fi.petDamage[0][3], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[0][3],
+                    player.fi.petMaxDamage[0][3],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -425,6 +435,8 @@
                     player.fi.petMaxHP[0][4], // Health
                     player.fi.petDamage[0][4], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[0][4],
+                    player.fi.petMaxDamage[0][4],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -466,6 +478,8 @@
                     player.fi.petMaxHP[0][5], // Health
                     player.fi.petDamage[0][5], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[0][5],
+                    player.fi.petMaxDamage[0][5],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -509,6 +523,8 @@
                     player.fi.petMaxHP[1][0], // Health
                     player.fi.petDamage[1][0], // Damage
                     false, //activation
+                    player.fi.petMaxMaxHP[1][0],
+                    player.fi.petMaxDamage[1][0],
                 ]
             },
             sacValue() { return new Decimal(0)},
@@ -978,8 +994,7 @@
                 content:
                 [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "We need to wait for forwaken's update gng"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "To make sure you don't forget this feature basically you bind punchcards with starmetal essence to boost it's passive and active effects."}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", function () { return "Coming Soon?"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                 ]
             },
         },

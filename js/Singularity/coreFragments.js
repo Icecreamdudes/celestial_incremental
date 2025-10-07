@@ -73,39 +73,39 @@
         ]
 
         //ancient
-        player.cof.fragmentScore[0] = player.points.plus(1).log10().pow(0.45).div(33).div(5)
+        player.cof.fragmentScore[0] = player.points.plus(1).log10().pow(0.7).div(33).div(5)
         player.cof.fragmentScore[0] = player.cof.fragmentScore[0].mul(player.f.factorPower.plus(1).log10().pow(0.446).div(33))
         player.cof.fragmentScore[0] = player.cof.fragmentScore[0].mul(player.p.prestigePoints.plus(1).log10().pow(0.444).div(33))
 
         //natural
-        player.cof.fragmentScore[1] = player.t.trees.plus(1).log10().pow(0.35).div(6).div(1.25)
+        player.cof.fragmentScore[1] = player.t.trees.plus(1).log10().pow(0.425).div(6).div(1.25)
         player.cof.fragmentScore[1] = player.cof.fragmentScore[1].mul(player.g.grass.plus(1).log10().pow(0.35).div(5))
         player.cof.fragmentScore[1] = player.cof.fragmentScore[1].mul(player.gh.grasshoppers.plus(1).log10().pow(0.35).div(5))
 
         //technological
-        player.cof.fragmentScore[2] = player.m.codeExperience.plus(1).log10().pow(0.4).div(4)
-        player.cof.fragmentScore[2] = player.cof.fragmentScore[2].mul(player.gh.steel.plus(1).log10().pow(0.375).div(2))
+        player.cof.fragmentScore[2] = player.m.codeExperience.plus(1).log10().pow(0.45).div(4)
+        player.cof.fragmentScore[2] = player.cof.fragmentScore[2].mul(player.gh.steel.plus(1).log10().pow(0.39).div(2))
         player.cof.fragmentScore[2] = player.cof.fragmentScore[2].mul(player.oi.oil.plus(1).log10().pow(0.35).div(2))
 
         //paradox
-        player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.4).div(4).mul(1.25)
-        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.in.infinities.plus(1).log10().div(1.2))
-        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.ta.negativeInfinityPoints.plus(1).log10().pow(0.4).div(2))
+        player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.6).div(4).mul(1.25)
+        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.in.infinities.plus(1).log10())
+        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.ta.negativeInfinityPoints.plus(1).log10().pow(0.55).div(2.25))
 
         //radioactive
-        player.cof.fragmentScore[4] = player.s.singularityPoints.plus(1).log10().pow(0.6).div(3).mul(2.5)
+        player.cof.fragmentScore[4] = player.s.singularityPoints.plus(1).log10().pow(0.65).div(3).mul(2.5)
         player.cof.fragmentScore[4] = player.cof.fragmentScore[4].mul(player.ra.radiation.plus(1).log10().div(1.5))
-        player.cof.fragmentScore[4] = player.cof.fragmentScore[4].mul(player.sd.singularityPower.plus(1).log10().pow(0.55).div(15))
+        player.cof.fragmentScore[4] = player.cof.fragmentScore[4].mul(player.sd.singularityPower.plus(1).log10().pow(0.555).div(17,5))
 
         //cosmic
-        player.cof.fragmentScore[5] = player.ad.antimatter.plus(1).log10().pow(0.535).div(3).mul(2)
-        player.cof.fragmentScore[5] = player.cof.fragmentScore[5].mul(player.au2.stars.plus(1).log10().pow(1.8).div(6))
-        player.cof.fragmentScore[5] = player.cof.fragmentScore[5].mul(player.ca.replicanti.plus(1).log10().pow(0.575).div(12))
+        player.cof.fragmentScore[5] = player.ad.antimatter.plus(1).log10().pow(0.5).div(3).mul(2)
+        player.cof.fragmentScore[5] = player.cof.fragmentScore[5].mul(player.au2.stars.plus(1).log10().pow(1.6).div(6))
+        player.cof.fragmentScore[5] = player.cof.fragmentScore[5].mul(player.ca.replicanti.plus(1).log10().pow(0.55).div(12))
 
         //temporal
-        player.cof.fragmentScore[6] = player.cb.level.plus(1).log10().pow(1.35)
-        player.cof.fragmentScore[6] = player.cof.fragmentScore[6].mul(player.cb.XPBoost.plus(1).log10().pow(1.3))
-        player.cof.fragmentScore[6] = player.cof.fragmentScore[6].mul(player.cb.petPoints.plus(1).log10().pow(1.275))
+        player.cof.fragmentScore[6] = player.cb.level.plus(1).log10().pow(1.25)
+        player.cof.fragmentScore[6] = player.cof.fragmentScore[6].mul(player.cb.XPBoost.plus(1).log10().pow(1.25))
+        player.cof.fragmentScore[6] = player.cof.fragmentScore[6].mul(player.cb.petPoints.plus(1).log10().pow(1.25))
 
         let maxIndex = 0
         for (let i = 1; i < player.cof.fragmentScore.length; i++) {
@@ -116,7 +116,9 @@
         player.cof.highestScore = maxIndex
 
         for (let i = 0; i < player.cof.coreFragments.length; i++) {
-            player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(300).floor()
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("st", 110))
+
+            player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(100).floor()
             player.cof.coreFragments[i] = player.cof.coreFragments[i].floor()
         }
 
@@ -803,7 +805,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.cof.coreFragments[5] },
             pay(amt) { player.cof.coreFragments[5] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(0.45).mul(0.1).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.4).mul(0.1).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

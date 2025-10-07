@@ -94,6 +94,40 @@
 
         player.le.eclipseShardsValue = new Decimal(5)
         player.le.eclipseShardsValue = player.le.eclipseShardsValue.mul(buyableEffect("le", 11)).floor()
+
+        if (player.sme.starmetalResetToggle && player.du.points.gte(player.le.starmetalAlloyReq) && !player.pet.activeAbilities[0])
+        {
+            player.le.resetAmount = player.le.resetAmount.add(1)
+            if (player.le.highestReset.lt(player.le.resetAmount)) player.le.highestReset = player.le.resetAmount
+            player.le.starmetalAlloyPause = new Decimal(10)
+
+            player.pu.storedSelections = player.pu.storedSelections.add(1)
+
+            player.le.starmetalAlloyToGet = player.le.starmetalAlloyToGet.add(player.le.starmetalAlloyToGetToGet)
+        }
+        if (player.sme.autoLeaveToggle && player.le.starmetalAlloyToGetTrue.gte(player.sme.leaveAmount) && !player.pet.activeAbilities[0])
+        {
+            player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
+            player.le.starmetalAlloyPauseAgain = new Decimal(10)
+            for (let prop in player.pu.levelables) {
+                if (getLevelableBool("pu", prop)) {
+                    addLevelableXP("pu", prop, player.le.starmetalAlloyToGetTrue.floor())
+                }
+                setLevelableBool("pu", prop, false)
+            }
+            player.le.starmetalAlloyToGet = new Decimal(0)
+            player.le.resetAmount = new Decimal(0)
+
+            if (!hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(0)
+            if (hasUpgrade("sma", 15)) player.pu.storedSelections = new Decimal(1)
+
+            player.sma.inStarmetalChallenge = false
+            player.universe = 3
+            player.tab = "sma"
+            player.subtabs.pu["stuff"] = "Collection"
+
+            layers.pu.generateSelection();
+        }
     },
     bars: {},
     clickables: {
@@ -196,6 +230,19 @@
                 player.pet.activeAbilities[0] = false
                 player.pet.legendaryPetAbilityTimers[0] = new Decimal(0)
                 layers.pu.generateSelection();
+            },
+            style() {
+                let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
+                !this.canClick() ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
+        },
+        15: {
+            title() { return "<h2>Disable Auto-Enter." },
+            canClick() { return true },
+            unlocked() { return player.sme.autoEnterToggle },
+            onClick() {
+                player.sme.autoEnterToggle = false
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", fontSize: "9px", borderRadius: "15px", color: "white", border: "2px solid #384166"}
@@ -888,6 +935,8 @@
                     ["raw-html", () => { return "Empty your stored starmetal alloy,<br>gaining +" + formatWhole(player.le.starmetalAlloyToGetTrue) + " starmetal alloy when you leave." }, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["row", [["clickable", 12]]],
+                    ["blank", "25px"],                   
+                    ["row", [["clickable", 15]]],
                 ]
             },
             "Shards": {

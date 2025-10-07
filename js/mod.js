@@ -22,7 +22,7 @@
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
 		"Singularity/matos.js", "Singularity/core.js", "Singularity/matosAttacks.js", "Singularity/matosAttacks.js", "Singularity/coreFragments.js", 
-		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js",
+		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js", "AltU2/exploration.js", "AltU2/iridite.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
@@ -243,7 +243,7 @@ function updateStyles() {
 	document.body.style.setProperty('--background', layerBG)
 
 	// FANCY BACKGROUNDS (THAT SUCK TO MAKE)
-	if (player.tab === "au2" || player.tab === "st" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
+	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "se" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
 	    // Add the galaxy background if it doesn't already exist
     	if (!document.getElementById("galaxy-background")) {
 	        const galaxyBackground = document.createElement("div");
@@ -544,8 +544,8 @@ function updateStyles() {
 				if (player.pet.activeAbilities[0]) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
 				break;
 			case -0.5:
-				if (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
-				if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
+				if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
+				//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
 				break;
 			case 2.5:
 				playAndLoopAudio("music/space.mp3", options.musicVolume/10)
@@ -554,7 +554,9 @@ function updateStyles() {
 				playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
 				break;
 			case 0.5:
-				playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
+				if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
+				if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
+				if (player.fi.battleTier.eq(2)) playAndLoopAudio("music/tier2.mp3", options.musicVolume/10)
 				break;
 			default:
 				stopAudio()
@@ -612,6 +614,14 @@ function updateStyles() {
             if (cutsceneID == 71) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
             if (cutsceneID == 72) playAndLoopAudio("music/somethingSomething.mp3", options.musicVolume/10);
             if (cutsceneID == 73) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 74) playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10);
+            if (cutsceneID == 75) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 76) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 77) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 78) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 79) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+			//no music for cutsceneID == 80
+            if (cutsceneID == 81) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
         }
         if (window.cinematicCutsceneActive && options.musicToggle)
         {
@@ -1105,7 +1115,8 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath"
+	"startCutscene38", "startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath",
+	"petAbility", "celestialiteAbility", "arriveAtStar"
 
 ]
 

@@ -59,37 +59,58 @@ addLayer("pl", {
             title() { return "<h2>Sacrifice your stars" },
             canClick() { return true },
             unlocked() { return true },
-            onClick() {
-                let starsToSacrifice = player.pl.starInputAmount;
-                player.au2.stars = player.au2.stars.sub(starsToSacrifice);
+onClick() {
+    let starsToSacrifice = player.pl.starInputAmount;
+    player.au2.stars = player.au2.stars.sub(starsToSacrifice);
 
-                if (starsToSacrifice.gt(500)) {
-                    // Predict planet gain (expected value, fast)
-                    let planetsGained = new Decimal(0);
-                    let planets = player.pl.planets;
-                    let stars = new Decimal(starsToSacrifice);
+    let planets = player.pl.planets;
+    let stars = new Decimal(starsToSacrifice);
 
-                    while (stars.gt(0)) {
-                        let chance = Decimal.div(0.1, planets.add(1));
-                        planetsGained = planetsGained.add(chance);
-                        planets = planets.add(chance);
-                        stars = stars.sub(1);
-                    }
-                    player.pl.planets = player.pl.planets.add(planetsGained.floor());
-                } else {
-                    // Simulate each star individually (random, slow)
-                    let planets = player.pl.planets;
-                    let gained = new Decimal(0);
-                    for (let i = 0; i < starsToSacrifice.toNumber(); i++) {
-                        let chance = Decimal.div(0.1, planets.add(1)).toNumber();
-                        if (Math.random() < chance) {
-                            gained = gained.add(1);
-                            planets = planets.add(1);
-                        }
-                    }
-                    player.pl.planets = player.pl.planets.add(gained.floor());
-                }
-            },
+if (starsToSacrifice.gt(500)) {
+    // Split into 50 intervals for better approximation
+    let intervals = 50;
+    let intervalSize = stars.div(intervals).floor();
+    // Calculate leftover manually (stars - intervalSize * intervals)
+    let leftover = stars.sub(intervalSize.mul(intervals));
+    let gain = new Decimal(0);
+    let currentPlanets = planets;
+
+    for (let i = 0; i < intervals; i++) {
+        // Add 1 to some intervals to account for leftovers
+        let thisInterval = intervalSize.add(i < leftover.toNumber() ? 1 : 0);
+        if (thisInterval.lte(0)) continue;
+
+        // Calculate start and end planet chance for this interval
+        let startChance = currentPlanets.gte(500)
+            ? Decimal.div(0.1, currentPlanets.pow(1.5).add(1))
+            : Decimal.div(0.1, currentPlanets.add(1));
+        let endPlanets = currentPlanets.add(thisInterval);
+        let endChance = endPlanets.gte(500)
+            ? Decimal.div(0.1, endPlanets.pow(1.5).add(1))
+            : Decimal.div(0.1, endPlanets.add(1));
+        let avgChance = startChance.add(endChance).div(2);
+
+        gain = gain.add(thisInterval.mul(avgChance));
+        currentPlanets = endPlanets;
+    }
+
+    player.pl.planets = player.pl.planets.add(gain.floor());
+} else {
+    // Simulate each star individually (random, slow)
+    let gained = new Decimal(0);
+    let currentPlanets = planets;
+    for (let i = 0; i < starsToSacrifice.toNumber(); i++) {
+        let chance = currentPlanets.gte(500)
+            ? Decimal.div(0.1, currentPlanets.pow(1.5).add(1)).toNumber()
+            : Decimal.div(0.1, currentPlanets.add(1)).toNumber();
+        if (Math.random() < chance) {
+            gained = gained.add(1);
+            currentPlanets = currentPlanets.add(1);
+        }
+    }
+    player.pl.planets = player.pl.planets.add(gained.floor());
+}
+},
             style: {width: "300px", minHeight: "50px", borderRadius: "0 15px 15px 0"},
         },
     },

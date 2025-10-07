@@ -116,7 +116,6 @@ addLayer("po", {
         if (player.po.halterInput.lt(1)) player.po.halterEffects[player.po.halterIndex] = new Decimal(1)
 
     },
-    branches: ["branch"],
     clickables: {
         2: {
             title() { return "Keep OTFs on reset. (Currently off)" },
@@ -317,14 +316,225 @@ addLayer("po", {
                 borderRadius: "20px",
             },
         },
+
+        101: {
+            title() {return player.uni.U1.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("U1")},
+            onClick() {
+                pauseUniverse("U1")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.U1.paused) {look.backgroundColor = "#aaa"} else {look.backgroundColor = "#fff"}
+                return look
+            }
+        },
+        102: {
+            title() {return player.uni.U2.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("U2")},
+            onClick() {
+                pauseUniverse("U2")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.U2.paused) {look.backgroundColor = "#0f871c"} else {look.backgroundColor = "#10e96b"}
+                return look
+            }
+        },
+        103: {
+            title() {return player.uni.U3.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("U3")},
+            onClick() {
+                pauseUniverse("U3")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.U3.paused) {look.backgroundColor = "#880000"} else {look.backgroundColor = "#bb0000"}
+                return look
+            }
+        },
+
+        201: {
+            title() {return player.uni.CB.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("CB")},
+            onClick() {
+                pauseUniverse("CB")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.CB.paused) {look.backgroundColor = "#06306b"} else {look.backgroundColor = "#2157a3"}
+                return look
+            }
+        },
+        202: {
+            title() {return player.uni.UA.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("UA")},
+            onClick() {
+                pauseUniverse("UA")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", color: "white", background: "black", border: "5px solid", borderRadius: "0 0 12px 12px"}
+                if (player.uni.UA.paused) {look.borderColor = "#0043b2"} else {look.borderColor = "#0061ff"}
+                return look
+            }
+        },
+
+        301: {
+            title() {return player.uni.A1.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("A1")},
+            onClick() {
+                pauseUniverse("A1")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.A1.paused) {look.backgroundColor = "#064461"} else {look.backgroundColor = "#4A7D94"}
+                return look
+            }
+        },
+        302: {
+            title() {return player.uni.A2.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("A2")},
+            onClick() {
+                pauseUniverse("A2")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.A2.paused) {look.backgroundColor = "#36305D"} else {look.backgroundColor = "#5A4FCF"}
+                return look
+            }
+        },
+
+        401: {
+            title() {return player.pet.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("CB") && player.cb.highestLevel.gte(10)},
+            onClick() {
+                if (player.pet.paused) {
+                    player.pet.paused = false
+                } else {
+                    player.pet.paused = true
+                }
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.pet.paused) {look.backgroundColor = "#3656b2"} else {look.backgroundColor = "#5f89ff"}
+                return look
+            }
+        },
+        402: {
+            title() {return player.pu.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return hasUpgrade("sma", 14)},
+            onClick() {
+                if (player.pu.paused) {
+                    player.pu.paused = false
+                } else {
+                    player.pu.paused = true
+                }
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.pu.paused) {look.backgroundColor = "#6272b2"} else {look.backgroundColor = "#97acff"}
+                return look
+            }
+        },
     },
-    bars: {},
-    upgrades: {},
-    buyables: {},
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
+        halt: {
+            "Halter": {
+                buttonStyle() {return {color: "white", borderRadius: "5px"}},
+                unlocked: true,
+                content: [
+                    ["blank", "25px"],
+                    ["raw-html", () => {return "<h3>" + player.po.halterText[player.po.halterIndex]}],
+                    ["blank", "10px"],
+                    ["text-input", "halterInput", {width: "300px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", border: "2px solid white", borderRadius: "15px", padding: "0 25px 0 25px"}],
+                    ["blank", "25px"],
+                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
+                    ["blank", "25px"],
+                    ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
+                    ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)"],
+                ],
+            },
+            "Pauser": {
+                buttonStyle() {return {color: "white", borderRadius: "5px"}},
+                unlocked: true,
+                content: [
+                    ["blank", "25px"],
+                    ["style-column", [
+                        ["raw-html", "Welcome to the Universe Pauser.<br><small>Paused universes have offline progress.<br>Effect values are not saved on page refresh.</small>", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ], {width: "600px", height: "75px", background: "rgba(0,0,0,0.3)", border: "3px solid white", borderRadius: "15px"}],
+                    ["blank", "10px"],
+                    ["row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 101],
+                        ], () => {return uniShown("U1") ? {width: "200px", height: "100px", background: "#ccc", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe 2", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 102],
+                        ], () => {return uniShown("U2") ? {width: "200px", height: "100px", background: "#10B844", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe 3", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 103],
+                        ], () => {return uniShown("U3") ? {width: "200px", height: "100px", background: "#aa0000", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                    ]],
+                    ["row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Check Back", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 201],
+                        ], () => {return uniShown("CB") ? {width: "200px", height: "100px", background: "#094599", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Pets", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 401],
+                        ], () => {return uniShown("CB") && player.cb.highestLevel.gte(10) ? {width: "200px", height: "100px", background: "#4e7cff", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe α", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 202],
+                        ], () => {return uniShown("UA") ? {width: "200px", height: "100px", background: "black", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                    ]],
+                    ["row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Alt-Universe 1", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 301],
+                        ], () => {return uniShown("A1") ? {width: "200px", height: "100px", background: "#28617B", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Punchcards", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 402],
+                        ], () => {return hasUpgrade("sma", 14) ? {width: "200px", height: "100px", background: "#8CA3FF", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Alt-Universe 2", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 302],
+                        ], () => {return uniShown("A2") ? {width: "200px", height: "100px", background: "#484096", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                    ]],
+                ],
+            },
+        },
         stuff: {
             "Otherworldly Features": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
@@ -346,18 +556,13 @@ addLayer("po", {
                     for (i = 0; i < player.po.halterEffects.length; i++) {
                         if (player.po.halterEffects[0].gt(1)) halt = true
                     }
+                    for (thing in universes) {
+                        if (player.uni[thing].paused) halt = true
+                    }
                     return hasMilestone("ip", 23) || halt
                 },
                 content: [
-                    ["blank", "25px"],
-                    ["raw-html", () => {return "<h3>" + player.po.halterText[player.po.halterIndex]}],
-                    ["blank", "10px"],
-                    ["text-input", "halterInput", {width: "300px", height: "50px", color: "white", textAlign: "left", fontSize: "32px", background: "rgba(0,0,0,0.5)", border: "0", border: "2px solid white", borderRadius: "15px", padding: "0 25px 0 25px"}],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 4], ["clickable", 5], ["clickable", 6], ["clickable", 7], ["clickable", 8]]],
-                    ["blank", "25px"],
-                    ["raw-html", "<h3>Enter a number greater than 1. You thought you could get away with dividing by 0?"],
-                    ["raw-html", "<h4>This can help by letting you progress in OTFS while infinity is fixed. (and a whole bunch of other stuff eventually)"],
+                    ["microtabs", "halt", {borderWidth: "0px"}],
                 ]
             },
         },

@@ -1,6 +1,7 @@
 addLayer("hpr", {
     name: "Hex of Provenance",
     symbol: "Pr", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Provenance", // Decides the nodes tooltip
     nodeStyle: {background: "linear-gradient(140deg, #0061ff 0%, #004dcc 100%)", backgroundOrigin: "borderBox", borderColor: "#00307f"},
     color: "#0061ff", // Decides the nodes color.
@@ -57,7 +58,7 @@ addLayer("hpr", {
         player.hpr.effectMult = player.hre.refinementEffect[2][0]
         if (hasUpgrade("hbl", 6)) player.hpr.effectMult = player.hpr.effectMult.mul(upgradeEffect("hbl", 6))
         if (hasMilestone("hbl", 5)) player.hpr.effectMult = player.hpr.effectMult.mul(1.3)
-        if (hasUpgrade("hpw", 102)) player.hpr.effectMult = player.hpr.effectMult.mul(upgradeEffect("hpw", 102))
+        if (hasUpgrade("hpw", 101)) player.hpr.effectMult = player.hpr.effectMult.mul(upgradeEffect("hpw", 101))
 
         // Disable effects
         if (inChallenge("hrm", 16)) player.hpr.effectMult = new Decimal(0)

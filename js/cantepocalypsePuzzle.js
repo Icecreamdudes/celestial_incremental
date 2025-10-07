@@ -62,7 +62,7 @@ addLayer("cap", {
         player.cap.quizNumber = player.cap.quizInput
 
         player.cap.quizQuestions = [
-            "What numbered Tree Factor does Prestige Upgrade XII unlock?",
+            "What numbered Tree Factor does Prestige Upgrade XIII unlock?",
             "What is the buy cap of grass buyable 'Grass Grow Rate'?",
             "What is the XPBoost cost of an antimatter crate?",
             "How many booster dice effects are initially unlocked?",

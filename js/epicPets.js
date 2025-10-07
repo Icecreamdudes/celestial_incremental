@@ -1,6 +1,7 @@
 ﻿addLayer("ep0", {
     name: "Dotknight", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Dk", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -14,6 +15,8 @@
         dotknightPointButtonTimersMax: [new Decimal(60), new Decimal(240), new Decimal(600),],
 
         dotknightUnlockText: '',
+        //Cursword
+        //Pointurret
     }
     },
     automate() {
@@ -32,9 +35,9 @@
         for (let i = 0; i < player.ep0.dotknightPointsToGet.length; i++)
         {
             player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(player.ep0.dotknightLevelEffect)
-            if (hasUpgrade("ep2", 13)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(upgradeEffect("ep2", 13))
             if (hasUpgrade("ev8", 21)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(1.4)
             player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(buyableEffect("ep1", 13))
+            if (hasUpgrade("ep2", 11)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(upgradeEffect("ep2", 11))
         }
 
         for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++)
@@ -59,7 +62,6 @@
             player.ep0.dotknightUnlockText = "You will unlock the next button at level ???"
         }
     },
-    branches: ["branch"],
     clickables: {
         11: {
             title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
@@ -263,7 +265,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.ep0.dotknightPoints},
             pay(amt) { player.ep0.dotknightPoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.1).add(1) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -271,7 +273,7 @@
                 return "Dotknight Cookies"
             },
             display() {
-                return 'which are boosting cookie point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
+                return 'which are boosting cookies per second by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Dotknight Points'
             },
             buy(mult) {
@@ -336,6 +338,7 @@
 addLayer("ep1", {
     name: "Dragon", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Dr", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -368,8 +371,8 @@ addLayer("ep1", {
         {
             player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(player.ep1.dragonLevelEffect)
             if (hasUpgrade("ep0", 13)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep0", 13))
+            if (hasUpgrade("ep2", 10)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep2", 10))
             if (hasUpgrade("ev8", 21)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(1.4)
-            player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(buyableEffect("ep2", 13))
         }
 
         for (let i = 0; i < player.ep1.dragonPointButtonTimers.length; i++)
@@ -394,7 +397,6 @@ addLayer("ep1", {
             player.ep1.dragonUnlockText = "You will unlock the next button at level ???"
         }
     },
-    branches: ["branch"],
     clickables: {
         11: {
             title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
@@ -512,13 +514,13 @@ addLayer("ep1", {
         13: {
             title: "Dragon Upgrade III",
             unlocked() { return true },
-            description() { return "Boosts cookie points based on dragon points." },
+            description() { return "Boosts cookies per second based on dragon points." },
             cost: new Decimal(500),
             currencyLocation() { return player.ep1 },
             currencyDisplayName: "Dragon Points",
             currencyInternalName: "dragonPoints",
             effect() {
-                return player.ep1.dragonPoints.pow(0.25).div(20).add(1)
+                return player.ep1.dragonPoints.add(1).log(2).mul(0.1).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -669,374 +671,10 @@ addLayer("ep1", {
     ],
     layerShown() { return player.startedGame == true && getLevelableAmount("pet", 402).gte(1) }
 })
-addLayer("ep2", {
-    name: "Cookie", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "Co", // This appears on the layer's node. Default is the id with the first letter capitalized
-    row: 1,
-    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
-    startData() { return {
-        unlocked: true,
-
-        cookiePoints: new Decimal(0),
-        cookieLevelEffect: new Decimal(1),
-        cookiePointsToGet: [new Decimal(10), new Decimal(25), new Decimal(60),],
-        cookiePointButtonUnlocks: [false, false, false,],
-        cookiePointButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0),],
-        cookiePointButtonTimersMax: [new Decimal(600), new Decimal(1500), new Decimal(4000),],
-
-        cookieUnlockText: '',
-    }
-    },
-    automate() {
-    },
-    nodeStyle: {
-        backgroundColor: "#b9966d",
-    },
-    tooltip: "Cookie",
-    color: "#cb79ed",
-    update(delta) {
-        let onepersec = new Decimal(1)
-
-        player.ep2.cookieLevelEffect = getLevelableAmount("pet", 403).pow(1.12).div(12).add(1)
-
-        player.ep2.cookiePointsToGet = [new Decimal(10), new Decimal(25), new Decimal(60),]
-        for (let i = 0; i < player.ep2.cookiePointsToGet.length; i++)
-        {
-            player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(player.ep2.cookieLevelEffect)
-            if (hasUpgrade("ep1", 13)) player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(upgradeEffect("ep1", 13))
-            if (hasUpgrade("ev8", 21)) player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(1.4)
-            player.ep2.cookiePointsToGet[i] = player.ep2.cookiePointsToGet[i].mul(buyableEffect("ep0", 13))
-        }
-
-        for (let i = 0; i < player.ep2.cookiePointButtonTimers.length; i++)
-        {
-            player.ep2.cookiePointButtonTimers[i] = player.ep2.cookiePointButtonTimers[i].sub(onepersec.mul(delta))
-        }
-        player.ep2.cookiePointButtonTimersMax = [new Decimal(600), new Decimal(1500), new Decimal(4000),]
-
-        if (getLevelableAmount("pet", 403).gte(1))
-        {
-            player.ep2.cookiePointButtonUnlocks[0] = true
-            player.ep2.cookieUnlockText = "You will unlock the next button at level 2!"
-        }
-        if (getLevelableAmount("pet", 403).gte(2))
-        {
-            player.ep2.cookiePointButtonUnlocks[1] = true
-            player.ep2.cookieUnlockText = "You will unlock the next button at level 7!"
-        }
-        if (getLevelableAmount("pet", 403).gte(7))
-        {
-            player.ep2.cookiePointButtonUnlocks[2] = true
-            player.ep2.cookieUnlockText = "You will unlock the next button at level ???"
-        }
-    },
-    branches: ["branch"],
-    clickables: {
-        11: {
-            title() { return player.ep2.cookiePointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[0]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[0]) + " Cookie Points."},
-            canClick() { return player.ep2.cookiePointButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ep2.cookiePointButtonUnlocks[0] },
-            tooltip() { return "Evolution Shard Rarity: 10%<br>Paragon Shard Rarity: 1%"},
-            onClick() {
-                player.ep2.cookiePoints = player.ep2.cookiePoints.add(player.ep2.cookiePointsToGet[0])
-                player.ep2.cookiePointButtonTimers[0] = player.ep2.cookiePointButtonTimersMax[0]
-
-                let random = getRandomInt(10)
-                if (random == 1) {
-                    player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                    player.cb.pityEvoCurrent = new Decimal(0);
-                    callAlert("You gained an Evolution Shard! (10%)", "resources/evoShard.png");
-                } else {
-                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(10);
-                }
-
-                let random1 = getRandomInt(100)
-                if (random1 == 1) {
-                    player.cb.paragonShards = player.cb.paragonShards.add(1);
-                    player.cb.pityParaCurrent = new Decimal(0);
-                    callAlert("You gained a Paragon Shard! (1%)", "resources/paragonShard.png");
-                } else {
-                    player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(1);
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
-        },
-        12: {
-            title() { return player.ep2.cookiePointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[1]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[1]) + " Cookie Points."},
-            canClick() { return player.ep2.cookiePointButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ep2.cookiePointButtonUnlocks[1] },
-            tooltip() { return "Evolution Shard Rarity: 20%<br>Paragon Shard Rarity: 2.5%"},
-            onClick() {
-                player.ep2.cookiePoints = player.ep2.cookiePoints.add(player.ep2.cookiePointsToGet[1])
-                player.ep2.cookiePointButtonTimers[1] = player.ep2.cookiePointButtonTimersMax[1]
-
-                let random = getRandomInt(5)
-                if (random == 1) {
-                    player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                    player.cb.pityEvoCurrent = new Decimal(0);
-                    callAlert("You gained an Evolution Shard! (20%)", "resources/evoShard.png");
-                } else {
-                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(20);
-                }
-
-                let random1 = getRandomInt(40)
-                if (random1 == 1) {
-                    player.cb.paragonShards = player.cb.paragonShards.add(1);
-                    player.cb.pityParaCurrent = new Decimal(0);
-                    callAlert("You gained a Paragon Shard! (2.5%)", "resources/paragonShard.png");
-                } else {
-                    player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(2.5);
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
-        },
-        13: {
-            title() { return player.ep2.cookiePointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep2.cookiePointButtonTimers[2]) + "." : "<h3>+" + format(player.ep2.cookiePointsToGet[2]) + " Cookie Points."},
-            canClick() { return player.ep2.cookiePointButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ep2.cookiePointButtonUnlocks[2] },
-            tooltip() { return "Evolution Shard Rarity: 33%<br>Paragon Shard Rarity: 4%"},
-            onClick() {
-                player.ep2.cookiePoints = player.ep2.cookiePoints.add(player.ep2.cookiePointsToGet[2])
-                player.ep2.cookiePointButtonTimers[2] = player.ep2.cookiePointButtonTimersMax[2]
-
-                    let random = getRandomInt(3)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained an Evolution Shard! (33%)", "resources/evoShard.png");
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(33);
-                    }
-
-                    let random1 = getRandomInt(25)
-                    if (random1 == 1) {
-                        player.cb.paragonShards = player.cb.paragonShards.add(1);
-                        player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained a Paragon Shard! (4%)", "resources/paragonShard.png");
-                    } else {
-                        player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(4);
-                    }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
-        },
-
-        99: {
-            title() {return "Claim All"},
-            canClick() {return tmp.ep2.clickables[11].canClick || tmp.ep2.clickables[12].canClick || tmp.ep2.clickables[13].canClick},
-            unlocked() {return player.ep2.cookiePointButtonUnlocks[1] },
-            onClick() {
-                clickClickable("ep2", 11)
-                clickClickable("ep2", 12)
-                clickClickable("ep2", 13)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "140px", minHeight: "40px", borderRadius: "0px", margin: "5px"}
-                this.canClick() ? look.backgroundColor = "#cb79ed" : look.backgroundColor = "#bf8f8f"
-                return look
-            },
-        },
-    },
-    bars: {
-    },
-    upgrades: {
-        11:
-        {
-            title: "Cookie Upgrade I",
-            unlocked() { return true },
-            description() { return "Boosts dimension boost base based on cookie points." },
-            cost: new Decimal(100),
-            currencyLocation() { return player.ep2 },
-            currencyDisplayName: "Cookie Points",
-            currencyInternalName: "cookiePoints",
-            effect() {
-                return player.ep2.cookiePoints.add(1).log(10).pow(0.5).div(10).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        12:
-        {
-            title: "Cookie Upgrade II",
-            unlocked() { return true },
-            description() { return "Boosts challenge dice points based on cookie points." },
-            cost: new Decimal(250),
-            currencyLocation() { return player.ep2 },
-            currencyDisplayName: "Cookie Points",
-            currencyInternalName: "cookiePoints",
-            effect() {
-                return player.ep2.cookiePoints.pow(1.1).div(2).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-        13:
-        {
-            title: "Cookie Upgrade III",
-            unlocked() { return true },
-            description() { return "Boosts dotknight points based on cookie points." },
-            cost: new Decimal(500),
-            currencyLocation() { return player.ep2 },
-            currencyDisplayName: "Cookie Points",
-            currencyInternalName: "cookiePoints",
-            effect() {
-                return player.ep2.cookiePoints.pow(0.25).div(20).add(1)
-            },
-            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
-        },
-    },
-    buyables: {
-        11: {
-            costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(100) },
-            currency() { return player.ep2.cookiePoints},
-            pay(amt) { player.ep2.cookiePoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.2).add(1) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Cookie Moonstone"
-            },
-            display() {
-                return 'which are boosting moonstone gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Cookie Points'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        12: {
-            costBase() { return new Decimal(40) },
-            costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(100) },
-            currency() { return player.ep2.cookiePoints},
-            pay(amt) { player.ep2.cookiePoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(3).pow(2).add(1) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Cookie Grass-Skippers"
-            },
-            display() {
-                return 'which are boosting grass-skipper gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Cookie Points'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-        13: {
-            costBase() { return new Decimal(50) },
-            costGrowth() { return new Decimal(1.2) },
-            purchaseLimit() { return new Decimal(100) },
-            currency() { return player.ep2.cookiePoints},
-            pay(amt) { player.ep2.cookiePoints = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id).mul(0.05).add(1) },
-            unlocked() { return true },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Cookie Dragons"
-            },
-            display() {
-                return 'which are boosting dragon point gain by x' + format(tmp[this.layer].buyables[this.id].effect) + '.\n\
-                    Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Cookie Points'
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', }
-        },
-    },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
-    microtabs: {
-        stuff: {
-            "Main": {
-                buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "10px"],
-                    ["raw-html", function () { return player.ep2.cookieUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Cookie Level: x<h3>" + format(player.ep2.cookieLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["blank", "10px"],
-                    ["clickable", 11],
-                    ["clickable", 12],
-                    ["clickable", 13],
-                    ["clickable", 99],
-                ]
-            },
-            "Buyables and Upgrades": {
-                buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
-                unlocked() { return true },
-                content:
-                [
-                    ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13]], {maxWidth: "900px"}],
-                ]
-            },
-        },
-    },
-
-    tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ep2.cookiePoints) + "</h3> cookie points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
-        ["microtabs", "stuff", { 'border-width': '0px' }],
-        ["blank", "25px"],
-    ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 403).gte(1) }
-})
 addLayer("ep3", {
     name: "Kres", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Kr", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1320,6 +958,7 @@ addLayer("ep3", {
 addLayer("ep4", {
     name: "Nav", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Na", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -1603,6 +1242,7 @@ addLayer("ep4", {
 addLayer("ep5", {
     name: "Sel", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Se", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {

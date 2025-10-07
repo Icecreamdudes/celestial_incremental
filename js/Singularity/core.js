@@ -162,6 +162,7 @@ addLayer("co", {
         if (!player.ma.matosDefeated) return "Co"
         return "<s>Co</s>"
     }, // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U3",
     startData() { return {
         cores: {
             point: {
@@ -967,6 +968,9 @@ addLayer("co", {
                 player.oi.buyables[i] = new Decimal(0)
             }
         }
+
+        //     <----     DISABLE FEAR     ---->
+        player.fu.activeChallenge = null
 
         //     <----     RADIATION LAYER     ---->
         player.ra.radiation = new Decimal(0)

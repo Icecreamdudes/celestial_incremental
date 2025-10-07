@@ -137,6 +137,26 @@ function loadVue() {
 
 	// data = an array of Components to be displayed in a column
 	// look = Object that defines style
+	Vue.component('top-column', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key}
+		},
+		template: `
+		<div class="upgScrollCol instant" >
+			<div class="upgScrollCol" v-bind:style="look" >
+				<div v-for="(item, index) in data">
+					<div v-if="!Array.isArray(item)" v-bind:is="item" :layer= "layer" v-bind:style="tmp[layer].componentStyles[item]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==3" v-bind:style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" :key="key + '-' + index"></div>
+					<div v-else-if="item.length==2" v-bind:is="item[0]" :layer= "layer" :data= "item[1]" v-bind:style="tmp[layer].componentStyles[item[0]]" :key="key + '-' + index"></div>
+				</div>
+			</div>
+		</div>
+		`
+	})
+
+	// data = an array of Components to be displayed in a column
+	// look = Object that defines style
 	Vue.component('style-column', {
 		props: ['layer', 'data', 'look'],
 		computed: {
@@ -1157,6 +1177,82 @@ function loadVue() {
 	`
 	})
 
+	Vue.component('cookie-building', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-if="tmp[layer].buyables && tmp[layer].buyables[data]!== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
+			<button v-bind:class="{cookieBuilding: true, tooltipBox: true, cookieCan: tmp[layer].buyables[data].canBuy, locked: !tmp[layer].buyables[data].canBuy, bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit)}"
+			v-bind:style="[tmp[layer].buyables[data].canBuy ? {'opacity':'1'} : {'opacity':'0.6'}, tmp[layer].componentStyles.buyable, tmp[layer].buyables[data].style]"
+			v-on:click="if(!interval) buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+				<div style="margin:-7px 0 -7px -7px">
+					<img v-bind:src="tmp[layer].buyables[data].img" width="64px" height="64px"></img>
+					<div style="display:inline-block;width:272px;height:64px">
+						<span style="position:absolute;top:0;left:57px;font-size:28px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px"
+							v-html="getBuyableAmount(layer, data).lte(0) ? tmp[layer].buyables[data].title :
+							data > 100 ? tmp[layer].buyables[data].title + '<small style=font-size:13px> (x' + format(buyableEffect(layer, data), 2) + 'cps)</small>' :
+							tmp[layer].buyables[data].title + '<small style=font-size:13px> (+' + formatSimple(buyableEffect(layer, data), 1) + 'cps)</small>'"></span>
+						<img src='resources/checkback/small_cookie.png' width='13px' height='13px' style='position:absolute;bottom:7px;left:57px'></img>
+						<span style="position:absolute;bottom:6px;left:72px;font-size:13px;text-shadow:#000 0 0 4px,#000 0 1px 0" v-bind:style="[tmp[layer].buyables[data].canBuy ? {'color':'#6f6'} : {'color':'#f66'}]" v-html="formatWhole(tmp[layer].buyables[data].cost)"></span>
+						<span style="position:absolute;top:1px;right:5px;font-size:40px;opacity:0.2;color:#000" v-html="getBuyableAmount(layer, data).gt(0) ? formatWhole(getBuyableAmount(layer, data)) : ''"></span>
+					</div>
+				</div>
+				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
+			</button>
+		</div>
+		`,
+		data() { return { interval: false, time: 0,}},
+		methods: {
+			start() {
+				if (!this.interval) {
+					this.interval = setInterval((function() {
+						if(this.time >= 5)
+							buyBuyable(this.layer, this.data)
+						this.time = this.time+1
+					}).bind(this), 50)}
+			},
+			stop() {
+				clearInterval(this.interval)
+				this.interval = false
+			  	this.time = 0
+			}
+		},
+	})
+
+	Vue.component('cookie-upgrade', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)"
+			v-bind:class="{[layer]: true, tooltipBox: true, cookieUpgrade: true, cookieBought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), cookieCan: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
+			v-bind:style="[hasUpgrade(layer, data) || canAffordUpgrade(layer, data) ? {'opacity': '1'} : {'opacity': '0.6'}, hasUpgrade(layer, data) ? {'border-image': 'url(resources/checkback/upgBorderBought.png) 24'} : {}, tmp[layer].upgrades[data].style]" @touchmove="hover" @mouseenter="hover">
+				<img v-bind:src="tmp[layer].upgrades[data].img" width="40px" height="40px"></img>
+				<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>
+			</button>
+		`,
+		methods: {
+			hover() {
+				player.ep2.upgIndex = this.data
+			},
+		},
+	})
+
+	Vue.component('cookie-display', {
+		props: ['layer', 'data'],
+		template: `
+			<div class="cookieUpgDisplay">
+				<span style="position:absolute;top:4px;left:15px;font-size:20px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px" v-html="player.ep2.upgIndex != 0 ? tmp.ep2.upgrades[player.ep2.upgIndex].title : ''"></span>
+				<span v-if="player.ep2.upgIndex != 0" style="position:absolute;top:7px;right:15px;font-size:14px;text-shadow:#000 0 0 4px,#000 0 1px 0">
+					<img v-if="!hasUpgrade('ep2', player.ep2.upgIndex)" src='resources/checkback/small_cookie.png' width='13px' height='13px' style='margin:-3px'></img>
+					<span v-if="!hasUpgrade('ep2', player.ep2.upgIndex)" v-bind:style="[canAffordUpgrade('ep2', player.ep2.upgIndex) ? {'color':'#6f6'} : {'color':'#f66'}]" v-html="formatWhole(tmp.ep2.upgrades[player.ep2.upgIndex].cost)"></span>
+					<span v-if="hasUpgrade('ep2', player.ep2.upgIndex)" v-html="'Owned'"></span>
+				</span>
+				<div style="position:absolute;top:30px;left:15px;width:335px;height:2px;border:0;background:#888"></div>
+				<span style="position:absolute;top:34px;left:15px;font-size:14px;letter-spacing:-1px;text-align:left;padding-right:15px" v-html="player.ep2.upgIndex != 0 ? tmp.ep2.upgrades[player.ep2.upgIndex].description : ''"></span>
+			</div>
+		`
+	})
+
+		// <br><br><img src='resources/checkback/small_cookie.png' width='13px' height='13px' style='margin:-3px'></img>
+		// <span style="text-shadow:#000 0 0 4px,#000 0 1px 0" v-bind:style="[canAffordUpgrade(layer, data) ? {'color':'#6f6'} : {'color':'#f66'}]" v-html="formatWhole(tmp[layer].upgrades[data].cost)"></span>
 	// SYSTEM COMPONENTS
 	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])

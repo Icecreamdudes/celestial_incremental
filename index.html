@@ -16,6 +16,7 @@
 	<script src="https://unpkg.com/vue@2.7.16/dist/vue.min.js"></script>
 	<script src="js/technical/break_eternity.js"></script>
 	<script src="js/technical/layerSupport.js"></script>
+	<script src="js/technical/uniSupport.js"></script>
 
 	<script src="js/mod.js"></script>
 	<script src="js/technical/loader.js"></script>
@@ -40,52 +41,28 @@
 	<div id="app">
 		<div class="uiHolder" v-if="!player.hideMenu" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
 			<div class="uniHolder">
-				<button class="uniButton" v-if="layerShown('i')" v-bind:style="constructUniButtonStyle('i') " onclick="player.universe=1"><span class="buttonText">1</span></button>
-				<button class="uniButton" v-if="layerShown('h')" v-bind:style="constructUniButtonStyle('h') " onclick="player.universe=-666"><span class="buttonText">H</span></button>
- 				<button class="uniButton" v-if="layerShown('in')" v-bind:style="constructUniButtonStyle('in') " onclick="player.universe=2"><span class="buttonText">2</span></button>
- 				<button class="uniButton" v-if="layerShown('cp')" v-bind:style="constructUniButtonStyle('cp') " onclick="player.universe=1.5"><span class="buttonText">A1</span></button>
-				<button class="uniButton" v-if="layerShown('au2')" v-bind:style="constructUniButtonStyle('au2') " onclick="player.universe=2.5"><span class="buttonText">A2</span></button>
- 				<button class="uniButton" v-if="layerShown('s')" v-bind:style="constructUniButtonStyle('s') " onclick="player.universe=3"><span class="buttonText">3</span></button>
- 				<button class="uniButton" v-if="layerShown('du')" v-bind:style="constructUniButtonStyle('du') " onclick="player.universe=-0.1"><span class="buttonText">D1</span></button>
-				<button class="uniButton" v-if="layerShown('ch')" v-bind:style="constructUniButtonStyle('ch') " onclick="player.universe=-0.5"><span class="buttonText">γ</span></button>
+				<button class="uniButton" v-if="uniShown('U1')" v-bind:style="universes.U1.nodeStyle()" :disabled="player.uni.U1.paused" onclick="player.universe='U1'"><span class="buttonText">1</span></button>
+				<button class="uniButton" v-if="uniShown('UA')" v-bind:style="universes.UA.nodeStyle()" :disabled="player.uni.UA.paused" onclick="player.universe='UA'"><span class="buttonText">H</span></button>
+ 				<button class="uniButton" v-if="uniShown('U2')" v-bind:style="universes.U2.nodeStyle()" :disabled="player.uni.U2.paused" onclick="player.universe='U2'"><span class="buttonText">2</span></button>
+ 				<button class="uniButton" v-if="uniShown('A1')" v-bind:style="universes.A1.nodeStyle()" :disabled="player.uni.A1.paused" onclick="player.universe='A1'"><span class="buttonText">A1</span></button>
+				<button class="uniButton" v-if="uniShown('A2')" v-bind:style="universes.A2.nodeStyle()" :disabled="player.uni.A2.paused" onclick="player.universe='A2'"><span class="buttonText">A2</span></button>
+ 				<button class="uniButton" v-if="uniShown('U3')" v-bind:style="universes.U3.nodeStyle()" :disabled="player.uni.U3.paused" onclick="player.universe='U3'"><span class="buttonText">3</span></button>
+ 				<button class="uniButton" v-if="uniShown('D1')" v-bind:style="universes.D1.nodeStyle()" onclick="player.universe='D1'"><span class="buttonText">D1</span></button>
+				<button class="uniButton" v-if="uniShown('CH')" v-bind:style="universes.CH.nodeStyle()" onclick="player.universe='CH'"><span class="buttonText">γ</span></button>
 			</div>
 			<div class="layerHolder">
 				<div v-bind:class="{titleHolder:true,darkTitle:player.sma.inStarmetalChallenge}">
-					<p v-if="player.universe == 1">Universe 1<br>Overworld</p>
-					<p v-if="player.universe == -666">Universe α<br>Hex</p>
-					<p v-if="player.universe == 2">Universe 2<br>Antimatter World</p>
-					<p v-if="player.universe == 1.5">Alt-Universe 1<br>Cantepocalypse</p>
-					<p v-if="player.universe == 3">Universe 3<br>Domain of Singularity</p>
-					<p v-if="player.universe == -0.5">Universe γ<br>Hall of Celestials</p>
-					<p v-if="player.universe == -0.1">Dark Universe 1<br>Shadow Overworld</p>
-					<p v-if="player.universe == 2.5">Alt-Universe 2<br>Cosmic Cosmos</p>
-					<p v-if="player.universe == 0.5">Check Back</p>
+					<p v-html="universes[player.universe].name" v-if="typeof universes[player.universe] === 'object'"></p>
 				</div>
 				<span v-if="options.menuType == 'Tree'">
-					<tree :layer="'i'" :data="tree1" v-if="player.universe == 1"></tree>
-					<tree :layer="'h'" :data="treeh" v-if="player.universe == -666"></tree>
-					<tree :layer="'in'" :data="tree2" v-if="player.universe == 2"></tree>
-					<tree :layer="'cp'" :data="treeA1" v-if="player.universe == 1.5"></tree>
-					<tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tree>
-					<tree :layer="'ch'" :data="treeCH" v-if="player.universe == -0.5"></tree>
-					<tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tree>
-					<tree :layer="'au2'" :data="treeAU2" v-if="player.universe == 2.5"></tree>
-					<tree :layer="'cb'" :data="treeCB" v-if="player.universe == 0.5"></tree>
+					<tree :data="universes[player.universe].tree" v-if="typeof universes[player.universe] === 'object'"></tree>
 				</span>
 				<span v-if="options.menuType == 'Tab'">
-					<tab-tree :layer="'i'" :data="tree1" v-if="player.universe == 1"></tab-tree>
-					<tab-tree :layer="'h'" :data="treeh" v-if="player.universe == -666"></tab-tree>
-					<tab-tree :layer="'in'" :data="tree2" v-if="player.universe == 2"></tab-tree>
-					<tab-tree :layer="'cp'" :data="treeA1" v-if="player.universe == 1.5"></tab-tree>
-					<tab-tree :layer="'s'" :data="tree3" v-if="player.universe == 3"></tab-tree>
-					<tab-tree :layer="'ch'" :data="treeCH" v-if="player.universe == -0.5"></tab-tree>
-					<tab-tree :layer="'du'" :data="treeD" v-if="player.universe == -0.1"></tab-tree>
-					<tab-tree :layer="'au2'" :data="treeAU2" v-if="player.universe == 2.5"></tab-tree>
-					<tab-tree :layer="'cb'" :data="treeCB" v-if="player.universe == 0.5"></tab-tree>
+					<tab-tree :data="universes[player.universe].tree" v-if="typeof universes[player.universe] === 'object'"></tab-tree>
 				</span>
 			</div>
 			<div class="miscMenu">
-				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('cb')" onclick="player.universe=0.5;showTab('cb')">
+				<button class="miscButton" v-if="!player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge" :disabled="!layerShown('cb')||player.uni.CB.paused" onclick="player.universe='CB';showTab('cb')">
 					<img class="miscImg" src="resources/ui/checkback.png" v-if="layerShown('cb')"></img>
 					<div class="miscText" v-if="!layerShown('cb')">?</div>
 				</button>

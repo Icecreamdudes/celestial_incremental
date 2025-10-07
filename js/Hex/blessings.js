@@ -1,6 +1,7 @@
 addLayer("hbl", {
     name: "Hex of Blessings",
     symbol: "Bl", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Blessings", // Decides the nodes tooltip
     nodeStyle: {background: "linear-gradient(140deg, #ffbf00 0%, #cc9800 100%)", backgroundOrigin: "borderBox", borderColor: "#7f5f00"},
     color: "#ffbf00", // Decides the nodes color.
@@ -28,7 +29,7 @@ addLayer("hbl", {
     },
     update(delta) {
         player.hbl.blessingsGain = new Decimal(0)
-        if (player.hre.refinement.gte(18)) player.hbl.blessingsGain = player.hre.refinement.sub(16).pow(1.6).div(2)
+        if (player.hre.refinement.gte(18)) player.hbl.blessingsGain = player.hre.refinement.sub(17).pow(1.6)
         player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hbl.boosterEffects[4])
         if (hasMilestone("hbl", 1)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(2)
         if (hasMilestone("hbl", 1) || inChallenge("hrm", 12)) player.hbl.blessingsGain = player.hbl.blessingsGain.mul(player.hpu.purifierEffects[1])
@@ -43,7 +44,8 @@ addLayer("hbl", {
         // POWER AND AUTOMATION
         if (hasUpgrade("hve", 62)) player.hbl.blessingsGain = player.hbl.blessingsGain.pow(1.03)
 
-        let bps = player.hpu.purifierEffects[4]
+        let bps = new Decimal(0)
+        if (!inChallenge("hrm", 11)) bps = player.hpu.purifierEffects[4]
         if (hasMilestone("s", 13) && !inChallenge("hrm", 11)) bps = bps.add(0.06)
         player.hbl.blessingPerSec = player.hbl.blessingsGain.mul(bps)
         if (inChallenge("hrm", 13)) player.hbl.blessingPerSec = player.hbl.blessingPerSec.sub(player.hbl.blessings.mul(0.06))
@@ -63,9 +65,12 @@ addLayer("hbl", {
 
         if (inChallenge("hrm", 13)) player.hbl.boonsGain = player.hbl.boonsGain.sub(player.hbl.boons.mul(0.06))
         if (player.hbl.boons.add(player.hbl.boonsGain.mul(delta)).gt(0)) player.hbl.boons = player.hbl.boons.add(player.hbl.boonsGain.mul(delta))
-        if (hasUpgrade("hpw", 51) && !inChallenge("hrm", 15)) {
+        if (hasUpgrade("hpw", 52) && !inChallenge("hrm", 15)) {
+            let val = 0.1
+            if (hasUpgrade("hpw", 51)) val = val * 10
+            if (hasUpgrade("hpw", 53)) val = val * 10
             for (let i = 0; i < 6; i++) {
-                player.hbl.boosterXP[i] = player.hbl.boosterXP[i].add(player.hbl.boons.mul(0.1).mul(delta))
+                player.hbl.boosterXP[i] = player.hbl.boosterXP[i].add(player.hbl.boons.mul(val).mul(delta))
             }
         }
 
@@ -591,7 +596,7 @@ addLayer("hbl", {
             ["raw-html", "Hex of Blessings", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
         ], {width: "800px", height: "50px", backgroundColor: "#4c3900", border: "3px solid white", borderRadius: "20px"}],
         ["blank", "10px"],
-        ["row", [
+        ["tooltip-row", [
             ["raw-html", () => {return "You have <h3>" + format(player.hbl.blessings) + "</h3> blessings." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + format(player.hbl.blessingsGain) + ")" }, () => {
                 let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
@@ -599,6 +604,7 @@ addLayer("hbl", {
                 return look
             }],
             ["raw-html", () => {return player.hbl.blessingPerSec.eq(0) ? "" : player.hbl.blessingPerSec.gt(0) ? "(+" + format(player.hbl.blessingPerSec) + "/s)" : "<span style='color:red'>(" + format(player.hbl.blessingPerSec) + "/s)</span>" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
+            ["raw-html", "<div class='bottomTooltip'>Base Formula<hr><small>(Refinements-17)^1.6</small></div>"],
         ]],
         ["raw-html", () => {return inChallenge("hrm", 11) ? "Bless resets left: " + formatWhole(player.hrm.blessLimit) + "/6" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
         ["blank", "10px"],

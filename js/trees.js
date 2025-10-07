@@ -1,6 +1,7 @@
 ﻿addLayer("t", {
     name: "Trees", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "T", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -71,7 +72,7 @@
         player.t.treesToGet = player.t.treesToGet.mul(player.co.cores.tree.effect[0])
 
         // POWER MODIFIERS
-        if (hasUpgrade("hpw", 1023)) player.t.treesToGet = player.t.treesToGet.pow(1.24)
+        if (hasUpgrade("hpw", 1022)) player.t.treesToGet = player.t.treesToGet.pow(1.24)
         player.t.treesToGet = player.t.treesToGet.pow(player.co.cores.tree.effect[1])
         if (hasUpgrade("cs", 401)) player.t.treesToGet = player.t.treesToGet.pow(1.1)
 
@@ -171,6 +172,7 @@
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).pow(1.3)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -209,6 +211,7 @@
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.25).add(1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -247,6 +250,7 @@
             pay(amt) { player.p.prestigePoints = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -285,6 +289,7 @@
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.2).add(1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -323,6 +328,7 @@
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).pow(1.35).add(1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -361,6 +367,7 @@
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -399,6 +406,7 @@
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.1).add(1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },
@@ -437,6 +445,7 @@
             pay(amt) { player.t.trees = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.05).add(1)
+                if (hasUpgrade("ep2", 5)) eff = eff.pow(upgradeEffect("ep2", 5))
                 if (hasUpgrade("cs", 403)) eff = eff.pow(3)
                 return eff
             },

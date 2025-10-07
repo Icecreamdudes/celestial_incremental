@@ -1892,7 +1892,7 @@ addLayer("ep2", {
             unlocked() {return getLevelableAmount("pet", 403).gte(4)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
-            img: "resources/currencies/Grass.png",
+            img: "resources/currencies/grass.png",
             title: "Grass",
             buy() {
                 this.pay(this.cost())

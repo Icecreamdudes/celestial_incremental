@@ -2,6 +2,7 @@
 addLayer("pl", {
     name: "Planets", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "♄", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -120,10 +121,10 @@ if (starsToSacrifice.gt(500)) {
         11: {
             costBase() { return new Decimal(25) },
             costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.5).mul(0.1).add(1) },
+            effect(x) { return Decimal.pow(1.12, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -154,7 +155,7 @@ if (starsToSacrifice.gt(500)) {
         12: {
             costBase() { return new Decimal(5) },
             costGrowth() { return new Decimal(1.25) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(50) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
@@ -188,7 +189,7 @@ if (starsToSacrifice.gt(500)) {
         13: {
             costBase() { return new Decimal(10) },
             costGrowth() { return new Decimal(1.375) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(35) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.03).add(1) },
@@ -221,8 +222,8 @@ if (starsToSacrifice.gt(500)) {
         },
         14: {
             costBase() { return new Decimal(15) },
-            costGrowth() { return new Decimal(1.5) },
-            purchaseLimit() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(1.45) },
+            purchaseLimit() { return new Decimal(30) },
             currency() { return player.pl.spaceDust},
             pay(amt) { player.pl.spaceDust = this.currency().sub(amt) },
             effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1) },

@@ -2,6 +2,7 @@ var treeAU2 = [["st"], ["pl", "se"], ["ir"]]
 addLayer("au2", {
     name: "Alt-Universe 2: Cosmic Cosmos", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "A2", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "A2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -67,6 +68,7 @@ addLayer("au2", {
 
         if (player.ro.rocketIndex.eq(1)) player.au2.starsToGet = player.au2.starsToGet.mul(5)
         player.au2.starsToGet = player.au2.starsToGet.mul(player.se.starExploreEffect[0][0]).floor()
+        if (hasUpgrade("fi", 23)) player.au2.starsToGet = player.au2.starsToGet.mul(upgradeEffect("fi", 23))
     },
     clickables: {
         1: {

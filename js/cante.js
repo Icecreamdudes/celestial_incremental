@@ -1,6 +1,7 @@
 ﻿addLayer("ca", {
     name: "Cante, Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol() { return "Ξ"} , // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U2",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -40,8 +41,7 @@
         defeatedCante: false,
     }},
     automate() {
-        if (hasMilestone("s", 16))
-        {
+        if (hasMilestone("s", 16)) {
             buyBuyable("ca", 11)
             buyBuyable("ca", 12)
             buyBuyable("ca", 13)
@@ -78,7 +78,7 @@
         player.ca.replicantiMult = player.ca.replicantiMult.mul(levelableEffect("pet", 108)[0])
         if (hasUpgrade("ep0", 11)) player.ca.replicantiMult = player.ca.replicantiMult.mul(upgradeEffect("ep0", 11))
         if (hasUpgrade("bi", 117)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
-        if (hasUpgrade("hpw", 1063)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
+        if (hasUpgrade("hpw", 1062)) player.ca.replicantiMult = player.ca.replicantiMult.mul(3)
         
         player.ca.replicantiMult = player.ca.replicantiMult.div(player.ca.replicantiSoftcap)
 

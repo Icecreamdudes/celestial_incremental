@@ -585,7 +585,7 @@ h1, h2, h3, b, input {
 	cursor: pointer;
 }
 
-	.can:not(.tabNode):hover {
+	.can:hover {
 		transform: scale(1.15, 1.15);
 		box-shadow: 0 0 20px var(--points)
 	}
@@ -1537,3 +1537,146 @@ button > * {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+
+.goldenCookie {
+	width: 96px !important;
+	height: 96px !important;
+	border-radius: 50%;
+	cursor: pointer;
+	margin: -5%;
+}
+
+.goldenCookie:hover {
+	filter:brightness(125%) drop-shadow(0px 0px 3px rgba(255,255,255,1));
+	-webkit-filter:brightness(125%) drop-shadow(0px 0px 3px rgba(255,255,255,1));
+}
+
+.goldenEffectText {
+	width: 400px !important;
+	height: auto !important;
+	border-radius: 16px;
+	color: white;
+	pointer-events: none;
+	background: rgba(0,0,0,0.5);
+	box-shadow: 0px 0px 8px 8px rgba(0,0,0,0.5);
+	text-shadow: 1px 1px 1px #000,0px 0px 6px #000;
+	font-size: 24px;
+	line-height: 0.8;
+}
+
+.bigCookie {
+	position: relative;
+	width:256px;
+	height:256px;
+	background:url(../resources/checkback/big_cookie.png);/* somehow necessary; an empty div with no background seems to be click-through */
+	background-size:256px 256px;
+	cursor:pointer;
+	border-radius:128px;
+	border:none;
+	overflow:visible;
+	outline:none;
+	-webkit-transition: -webkit-transform 0.1s ease-out;
+	-moz-transition: -moz-transform 0.1s ease-out;
+	-ms-transition: -ms-transform 0.1s ease-out;
+	-o-transition: -o-transform 0.1s ease-out;
+	transition: transform 0.1s ease-out;
+}
+
+.bigCookie:hover {
+	-webkit-transform:scale(1.05,1.05);
+	-moz-transform:scale(1.05,1.05);
+	-ms-transform:scale(1.05,1.05);
+	-o-transform:scale(1.05,1.05);
+	transform:scale(1.05,1.05);
+}
+
+.bigCookie:active {
+	-webkit-transform:scale(0.98,0.98);
+	-moz-transform:scale(0.98,0.98);
+	-ms-transform:scale(0.98,0.98);
+	-o-transform:scale(0.98,0.98);
+	transform:scale(0.98,0.98);
+}
+
+.bigCookieNumbers {
+	width: 200px !important;
+	height: auto !important;
+	color: white;
+	pointer-events:none;
+	font-size: 24px;
+}
+
+.cookieCan {
+	cursor: pointer;
+}
+
+.cookieCan.cookieUpgrade {
+	box-shadow:0px 0px 10px #f33 inset, 0px 0px 10px #f33
+}
+
+.cookieBuilding {
+	width: 350px;
+	height: 64px;
+	background: #B4AD9D;
+	border-top: 7px solid #747162;
+	border-bottom: 7px solid #45402D;
+	border-left: 7px solid #969384;
+	border-right: 7px solid #45402D;
+	border-radius: 0;
+	color: white;
+	font-size: 10px;
+	position: relative;
+	padding: 0;
+}
+
+.cookieBuilding:hover {
+	box-shadow:0px 0px 16px #fed inset, 0px 0px 1px #000;
+	z-index:20;
+	filter:brightness(115%);
+	-webkit-filter:brightness(115%);
+}
+
+.shopButton {
+	background: #181818;
+	border: 0;
+	border-radius: 0;
+	color: rgba(255,255,255,0.5);
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.shopButton:hover,.shopButton.selected {
+	text-shadow:0px 1px 0px #000,0px 0px 1px #fff,0px 0px 4px #fff;
+	color: rgba(255,255,255,1);
+}
+
+.cookieUpgrade {
+	width: 50px;
+	height: 50px;
+	color: white;
+	border: 5px solid transparent;
+	border-image: url(../resources/checkback/upgBorder.png) 24;
+	font-size: 10px;
+	line-height: 0.9;
+	letter-spacing: -1px;
+	border-radius: 0;
+	padding: 0;
+}
+
+.cookieBought {
+	cursor: default;
+}
+
+.cookieUpgrade:hover {
+	filter:brightness(125%) drop-shadow(0px 3px 2px #000);
+	-webkit-filter:brightness(125%) drop-shadow(0px 3px 2px #000);
+}
+
+.cookieUpgDisplay {
+	width: 365px;
+	height: 72px;
+	position: relative;
+	color: #ccc;
+	background: #181818;
+	border-bottom: 8px solid #422B21;
+}

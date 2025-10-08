@@ -164,5 +164,6 @@
         ["raw-html", () => { return player.pet.legendaryPetAbilityTimers[0].gt(0) ? "ECLIPSE IS ACTIVE: " + formatTime(player.pet.legendaryPetAbilityTimers[0]) + "." : ""}, {color: "#FEEF5F", fontSize: "20px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
     ],
-    layerShown() { return hasUpgrade("le", 101) }
+    layerShown() { return hasUpgrade("le", 101) },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

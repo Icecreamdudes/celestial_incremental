@@ -1,7 +1,8 @@
-﻿﻿var treeCB = [["cb"], ["ev0", "ev1", "ev2", "ev4", "ev8", "ev10"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]]
+﻿var treeCB = [["ev4", "ev8", "ev10"], ["ev0", "ev1", "ev2"], ["cb"], ["ep0", "ep1", "ep2"], ["ep3", "ep4", "ep5"]]
 addLayer("cb", {
     name: "Check Back", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CB", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -92,7 +93,6 @@ addLayer("cb", {
     }},
     automate() {},
     nodeStyle() {},
-
     tooltip: "Check Back",
     color: "#094599",
     update(delta) {
@@ -103,10 +103,6 @@ addLayer("cb", {
         player.cb.cbTickspeed = new Decimal(1)
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.hrm.realmEssenceEffects[1])
         if (hasUpgrade("cs", 1203)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(1.1)
-
-        if (player.cb.time.gt(0)) {
-            layers.cb.offlineCooldown()
-        }
 
         if (player.cb.totalxp == 4.5 && player.cb.level > 1) {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
@@ -161,7 +157,7 @@ addLayer("cb", {
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cb.XPBoostEffect)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.d.diceEffects[12])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(buyableEffect("g", 25))
-            if (hasUpgrade("hpw", 1011)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("hpw", 1011))
+            if (hasUpgrade("hpw", 1013)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("hpw", 1013))
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cs.scraps.checkback.effect)
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.co.cores.checkback.effect[0])
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(levelableEffect("pu", 202)[2])
@@ -420,86 +416,15 @@ addLayer("cb", {
         player.cb.xp = new Decimal(0)
         player.cb.xp = player.cb.xp.add(leftover)
     },
-    offlineCooldown() {
-        let time = player.cb.time
-        time = time.mul(player.cb.cbTickspeed)
-        player.cb.time = new Decimal(0)
-
-        // XP Buttons
-        for (let i = 0; i < player.cb.buttonTimers.length; i++) {
-            player.cb.buttonTimers[i] = player.cb.buttonTimers[i].sub(time)
-        }
-
-        // Pet Buttons
-        for (let i = 0; i < player.cb.petButtonTimers.length; i++) {
-            player.cb.petButtonTimers[i] = player.cb.petButtonTimers[i].sub(time)
-        }
-
-        // Pet Point Buttons
-        for (let i = 0; i < player.pet.petButtonTimer.length; i++) {
-            player.pet.petButtonTimer[i] = player.pet.petButtonTimer[i].sub(time)
-        }
-
-        // XP Boost Buttons
-        for (let i = 0; i < player.cb.XPBoostTimers.length; i++) {
-            player.cb.XPBoostTimers[i] = player.cb.XPBoostTimers[i].sub(time)
-        }
-
-        // Automation Timers (only triggers once)
-        for (let i = 0; i < player.cb.buttonAutomationTimers.length; i++) {
-            if (player.cb.buttonAutomationAllocation[i].gt(0)) player.cb.buttonAutomationTimers[i] = player.cb.buttonAutomationTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.cb.petAutomationTimers.length; i++) {
-            if (player.cb.petAutomationAllocation[i].gt(0)) player.cb.petAutomationTimers[i] = player.cb.petAutomationTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.cb.boostAutomationTimers.length; i++) {
-            if (player.cb.boostAutomationAllocation[i].gt(0)) player.cb.boostAutomationTimers[i] = player.cb.boostAutomationTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.cb.pointAutomationTimers.length; i++) {
-            if (player.cb.pointAutomationAllocation[i].gt(0)) player.cb.pointAutomationTimers[i] = player.cb.pointAutomationTimers[i].sub(time)
-        }
-
-        // Pet Shop
-        player.pet.shopResetTimer = player.pet.shopResetTimer.sub(time)
-
-        // Epic Fragmentation Timer
-        player.pet.bannerResetTimer = player.pet.bannerResetTimer.sub(time)
-        for (let i = 0; i < player.pet.bannerButtonTimers.length; i++) {
-            player.pet.bannerButtonTimers[i] = player.pet.bannerButtonTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.pet.singularityButtonTimers.length; i++) {
-            player.pet.singularityButtonTimers[i] = player.pet.singularityButtonTimers[i].sub(time)
-        }
-
-        // Epic Pet Timers
-        for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++) {
-            player.ep0.dotknightPointButtonTimers[i] = player.ep0.dotknightPointButtonTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.ep1.dragonPointButtonTimers.length; i++) {
-            player.ep1.dragonPointButtonTimers[i] = player.ep1.dragonPointButtonTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.ep2.cookiePointButtonTimers.length; i++) {
-            player.ep2.cookiePointButtonTimers[i] = player.ep2.cookiePointButtonTimers[i].sub(time)
-        }
-
-        // Legendary Pet Timer
-        player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(time)
-        player.pet.summonTimer = player.pet.summonTimer.sub(time)
-
-        // Goldsmith Evo
-        player.ev0.coinDust = player.ev0.coinDust.add(player.ev0.coinDustPerSecond.mul(time))
-        player.ev0.coinShards = player.ev0.coinShards.add(player.ev0.coinShardsPerSecond.mul(time))
-
-        // Daily Reward (Insane Face Evo)
-        player.ev2.cooldown = player.ev2.cooldown.sub(time)
-
-        // Shard Buttons (Marcel Evo)
-        for (let i = 0; i < player.ev8.evoButtonTimers.length; i++) {
-            player.ev8.evoButtonTimers[i] = player.ev8.evoButtonTimers[i].sub(time)
-        }
-        for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++) {
-            player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(time)
-        }
+    instantProduction(time) {
+        layers.cb.update(time)
+        layers.pet.update(time)
+        layers.ep0.update(time)
+        layers.ep1.update(time)
+        layers.ep2.update(time)
+        layers.ev0.update(time)
+        layers.ev2.update(time)
+        layers.ev8.update(time)
     },
     branches: ["m"],
     clickables: {
@@ -3371,5 +3296,5 @@ addLayer("cb", {
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return (player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14)) && player.tab != "cmc"}
+    layerShown() { return player.startedGame == true && hasUpgrade("i", 19) || hasMilestone("ip", 12) || (hasUpgrade("de", 13) && inChallenge("tad", 11)) || hasMilestone("s", 14)}
 })

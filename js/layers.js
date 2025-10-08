@@ -72,87 +72,6 @@ addLayer("i", {
 
        // stopRain()
 
-        if (player.startedGame == false && player.tab == "i") {
-            player.startedGame = true
-        }
-
-        if (player.startedGame == true && player.c.cutscene1 == false) {
-            player.gain = new Decimal(1)
-        }
-
-        if (player.tab == "cb" || player.tab == "ep0" || player.tab == "ep1" || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4" || player.tab == "ep5" || player.tab == "ev" || player.tab == "ev0"
-          || player.tab == "ev1" || player.tab == "ev2" || player.tab == "ev4" || player.tab == "ev8" || player.tab == "ev9" || player.tab == "ev10") {
-            if (options.newMenu == false) player.universe = 0.5
-            player.musuniverse = 0.5
-        }
-        if (player.tab == "mi") {
-            if (options.newMenu == false) player.universe = 0.6
-            player.musuniverse = 0.6
-        }
-        if (player.tab == "i" || player.tab == "u1u" || player.tab == "u1t" || player.tab == "u1l"  || player.tab == "u1c"  || player.tab == "h" || player.tab == "r" || player.tab == "f" || player.tab == "p" || player.tab == "t" || player.tab == "g"
-          || player.tab == "pe" || player.tab == "pol" || player.tab == "gh" || player.tab == "rf" || player.tab == "de" || player.tab == "m" || player.tab == "d" || player.tab == "rm" ||
-        player.tab == "re" || player.tab == "fa" ) {
-            if (options.newMenu == false) player.universe = 1
-            player.musuniverse = 1
-        }
-
-        if (player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "id" || player.tab == "tad" || player.tab == "ta" || player.tab == "bi" || player.tab == "om"
-          || player.tab == "ga" || player.tab == "ca" || player.tab == "u2t" || player.tab == "u2l" || player.tab == "ro"  ) {
-            if (options.newMenu == false) player.universe = 2
-            player.musuniverse = 2
-        }
-        if (player.tab == "sme" || player.tab == "cof" || player.tab == "coa" || player.tab == "cop" || player.tab == "ra" || player.tab == "cs" || player.tab == "sd" || player.tab == "u3t" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3b" || player.tab == "sma"|| player.tab == "ma") {
-            if (options.newMenu == false) player.universe = 3
-            player.musuniverse = 3
-        }
-        if (player.tab == "ch" || player.tab == "cmh" || player.tab == "cmc" ) {
-            if (options.newMenu == false) player.universe = -0.5
-            player.musuniverse = -0.5
-        }
-        if (player.tab == "dut" || player.tab == "du" || player.tab == "dg" || player.tab == "dgr" || player.tab == "dn" || player.tab == "dp" || player.tab == "dr" || player.tab == "le"  ) {
-            if (options.newMenu == false) player.universe = -0.1
-            player.musuniverse = -0.1
-        }
-        if (player.tab == "cp" || player.tab == "ar" || player.tab == "pr" || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi"
-          || player.tab == "a1u" || player.tab == "a1t" || player.tab == "a1s"|| player.tab == "fu") {
-            if (options.newMenu == false) player.universe = 1.5
-            player.musuniverse = 1.5
-            //startRain("#1486ff");
-        } else {
-            //stopRain();
-        }
-        if (player.tab == "au2" || player.tab == "au2t" || player.tab == "st" || player.tab == "pl") {
-            if (options.newMenu == false) player.universe = 2.5
-            player.musuniverse = 2.5
-        }
-
-        if (player.tab == "po" || player.tab == "otherfeat" || player.tab == "halter") {
-            if (options.newMenu == false) player.universe = 0
-            player.musuniverse = 0
-        }
-
-        if (player.tab == "c" || player.tab == "gt") {
-            if (options.newMenu == false) player.universe = -1
-            player.musuniverse = -1
-        }
-
-        if (player.tab == "od" || player.tab == "mu") {
-            if (options.newMenu == false) player.universe = 1337
-            player.musuniverse = 1337
-        }
-
-
-
-        //stopRain();
-       /* if (player.universe == 1.5)
-        {
-            startRain("#1486ff");
-        }
-         else
-        {
-            stopRain();
-        } */
-
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
@@ -174,9 +93,6 @@ addLayer("i", {
         //----------------------------------------
 
         // START OF CELESTIAL POINT MODIFIERS
-        if (player.startedGame == true && player.c.cutscene1 == false) {
-            player.gain = new Decimal(1)
-        }
         player.gain = new Decimal(1)
         player.gain = player.gain.mul(player.r.rankEffect)
         player.gain = player.gain.mul(player.r.tierEffect)
@@ -192,7 +108,6 @@ addLayer("i", {
         player.gain = player.gain.mul(player.r.tetrEffect)
         if (hasUpgrade("p", 11)) player.gain = player.gain.mul(3)
         if (hasUpgrade("p", 12)) player.gain = player.gain.mul(player.p.prestigeEffect)
-        player.gain = player.gain.mul(buyableEffect("f", 17))
         player.gain = player.gain.mul(player.f.factorPowerEffect)
         player.gain = player.gain.mul(buyableEffect("t", 15))
         player.gain = player.gain.mul(buyableEffect("g", 14))
@@ -236,6 +151,7 @@ addLayer("i", {
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
         player.gain = player.gain.mul(player.i.preOTFMult)
         player.gain = player.gain.mul(player.co.cores.point.effect[0])
+        if (hasUpgrade("ep2", 1)) player.gain = player.gain.mul(upgradeEffect("ep2", 1))
 
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)

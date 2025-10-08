@@ -1888,7 +1888,30 @@ const cutsceneDialogue81 = [ //Matos requirement #1
 
 
 ]; 
+const cutsceneDialogue82 = [ //Matos requirement #2
+    { text: "As one of the runes in the altar activates, you are sent to a flashback." },
+    { text: "You arrive at what seems like a large temple." },
+    { text: "It is the same temple you and the others have visited." },
+    { text: "A ritual has finished." },
+    { text: "A celestial has been created." },
+    { text: "You hear a voice echo from the center of the temple." },
+    { text: "Your prayers have been answered. You have been granted with the power you deserve.", portrait: "resources/nova.png"  }, //TODO: Draw a sprite for this
+    { text: "Along with getting the rights to exterminate the people of this planet, I do request you a favor.", portrait: "resources/nova.png"  }, 
+    { text: "I want you to free me.", portrait: "resources/nova.png"  }, 
+    { text: "One day, three people will arrive on this planet.", portrait: "resources/nova.png"  }, 
+    { text: "Three people terrorized by my celestials.", portrait: "resources/nova.png"  }, 
+    { text: "Three people whose souls are intertwined with the souls of celestials.", portrait: "resources/nova.png"  }, 
+    { text: "Once those souls align perfectly with the markings of this temple,", portrait: "resources/nova.png"  }, 
+    { text: "I will be freed from my chains.", portrait: "resources/nova.png"  }, 
+    { text: "After that, I will grant you your freedom.", portrait: "resources/nova.png"  },
+    { text: "Three people..." },
+    { text: "Terrorized by celestials..." },
+    { text: "Kres. Nav. Sel." },
+    { text: "You must warn them!" },
+    { text: "You are being used!!!" },
 
+
+]; 
 
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {

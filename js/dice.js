@@ -1,6 +1,7 @@
 ﻿addLayer("d", {
     name: "Dice", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "D", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -260,7 +261,6 @@
 
         // CHALLENGE DICE EFFECTS
         player.d.challengeDicePointsEffect = player.d.challengeDicePoints.pow(0.75).add(1)
-        if (hasUpgrade("ev2", 12)) player.d.challengeDicePointsEffect = player.d.challengeDicePointsEffect.mul(upgradeEffect("ev2", 12))
         
         player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e10).add(1)
         if (player.d.challengeDicePoints.gte("1e1000")) player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e100).add(90)
@@ -655,6 +655,7 @@
         for (let i = 0; i < player.d.diceRolls.length; i++) {
             player.d.diceScore = player.d.diceScore.add(player.d.diceRolls[i])
         }
+        if (hasUpgrade("ep2", 13)) player.d.diceScore = player.d.diceScore.mul(upgradeEffect("ep2", 13))
         if (hasUpgrade("cs", 801)) player.d.diceScore = player.d.diceScore.mul(10)
         if (hasUpgrade("cs", 803)) player.d.diceScore = player.d.diceScore.mul(player.d.challengeDicePointsEffect2)
 
@@ -1009,6 +1010,7 @@
             pay(amt) { player.d.challengeDicePoints = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.05)
+                if (hasUpgrade("ep2", 13)) eff = eff.mul(upgradeEffect("ep2", 13))
                 if (hasUpgrade("cs", 801)) eff = eff.mul(10)
                 if (hasUpgrade("cs", 803)) eff = eff.mul(player.d.challengeDicePointsEffect2)
                 eff = eff.add(1).pow(player.cs.scraps.dice.effect).sub(1)

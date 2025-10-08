@@ -1,6 +1,7 @@
 ﻿addLayer("f", {
     name: "Factors", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "F", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -115,8 +116,10 @@
         player.f.factorBase = new Decimal(0.05)
         player.f.factorBase = player.f.factorBase.add(buyableEffect("gh", 16))
         if (hasUpgrade("ad", 19)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ad", 19))
+        if (hasUpgrade("ep2", 3)) player.f.factorBase = player.f.factorBase.add(upgradeEffect("ep2", 3))
+        if (hasUpgrade("p", 10)) player.f.factorBase = player.f.factorBase.mul(1.2)
         if (player.pol.pollinatorEffects.beetle.enabled) player.f.factorBase = player.f.factorBase.mul(player.pol.pollinatorEffects.beetle.effects[1])
-        if (hasUpgrade("hpw", 1013)) player.f.factorBase = player.f.factorBase.mul(120)
+        if (hasUpgrade("hpw", 1012)) player.f.factorBase = player.f.factorBase.mul(120)
         player.f.factorBase = player.f.factorBase.mul(player.co.cores.factor.effect[2])
         if (hasUpgrade("cs", 203)) player.f.factorBase = player.f.factorBase.mul(8000)
         if (hasUpgrade("cs", 701)) player.f.factorBase = player.f.factorBase.mul(player.m.codeExperienceEffect)

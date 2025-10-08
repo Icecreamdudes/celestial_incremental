@@ -841,48 +841,7 @@ if (player.c.cutscene[80] && player.ma.matosUnlockConditions[0])
 player.c.ev2bg = "resources/gdbg.jpg"
 
 //Background
-document.body.style.setProperty('--background', (player.c.cutscene1 == true || player.c.cutscene2 || player.c.cutscene13) && player.tab == "c" ? "black":
 
-player.tab == "t" ? "#02172f" : 
-player.tab == "g" ? "#042347" : 
-player.tab == "gh" ? "#073b77" : 
-player.tab == "cb" || player.tab == "ps" ? "#021124" : 
-player.tab == "po" ? "linear-gradient(45deg, #8a00a9, #0061ff)" : 
-player.tab == "ev" ? "linear-gradient(90deg, #5C1E7E, #1E3066)" : 
-player.tab == "eva" ? "linear-gradient(90deg, #220b2f, #0c1329)" : 
-player.tab == "ev0" ? "linear-gradient(-45deg, #655421, #fad25a)" : 
-player.tab == "ev1" ? "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)" : 
-player.tab == "bigc" ? "#b87c34" : 
-player.tab == "in" || player.tab == "ad" || player.tab == "ip" || player.tab == "ga" || player.tab == "ta" || player.tab == "bi" || player.tab == "om" || player.tab == "id" || player.tab == "u2l" || player.tab == "u2t" ? "#001f18" : 
-player.tab == "ev2" ? 'url(' + player.c.ev2bg + ')' : 
-player.tab == "revc" ? "#31aeb0" : 
-player.tab == "tad" ? "#b2d8d8" : 
-player.tab == "h" && player.subtabs["h"]['stuff'] == 'RAGE POWER' ? "#341414" : 
-player.tab == "ca" ? "#2a3e66" : 
-player.tab == "cap" ? "#1f1e33" : 
-player.tab == "cp" || player.tab == "ar" || player.tab == "pr"  || player.tab == "an" || player.tab == "rt" || player.tab == "rg" || player.tab == "gs" || player.tab == "oi" || 
-player.tab == "a1u" || player.tab == "a1s" || player.tab == "a1t" || player.tab == "fu" ? "#204387" : 
-player.tab == "ev4" ? "linear-gradient(-90deg, #f38004, #fc3404)" : 
-player.tab == "ev8" ? "#242525" : 
-player.tab == "rm" ? "linear-gradient(90deg, #311100, #313000, #163100, #003105, #003121, #002C31, #001431, #000031, #300031)" : 
-(player.tab == "s" || player.tab == "cop"  || player.tab == "cs" || (player.tab == "ma" && !player.ma.inBlackHeart) || player.tab == "sma" || player.tab == "coa" || player.tab == "u3b" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd") && !player.ma.matosDefeated ? "#260300" : 
-(player.tab == "s" || player.tab == "cs" || (player.tab == "ma" && !player.ma.inBlackHeart) || player.tab == "sma" || player.tab == "u3b" || player.tab == "sme" || player.tab == "cof" || player.tab == "u3u" || player.tab == "u3m" || player.tab == "u3l" || player.tab == "u3t" || player.tab == "ra" || player.tab == "sd") && player.ma.matosDefeated ? "linear-gradient(-180deg,rgb(168, 16, 49) 0%, rgb(117, 4, 4) 100%)" : 
-(player.tab == "coa" || player.tab == "cop") && player.ma.matosDefeated ? "linear-gradient(-180deg,rgb(0, 0, 0) 0%, rgb(15, 15, 15) 100%)" : 
-player.tab == "epic" || player.tab == "ep0" || player.tab == "ep1"  || player.tab == "ep2" || player.tab == "ep3" || player.tab == "ep4"  || player.tab == "ep5" ? "#7d3f98" : 
-(player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") || player.tab == "cmh" ? "linear-gradient(90deg, #260b36, #0920b5)" : 
-player.tab == "ev9" ? "linear-gradient(-90deg, #b03b38, #b3622d, #b3a73d, #6ca022, #3f9079)" : 
-player.tab == "leg" ? "#eed200" : 
-player.tab == "ma" && player.ma.currentDepth.eq(2) ? "linear-gradient(-180deg,rgb(114, 4, 85) 0%, rgb(37, 1, 33) 100%)" : 
-(player.tab == "ma" && player.ma.currentDepth.eq(3)) || (player.tab == "c" && (player.c.currentCutscene == 33 || player.c.currentCutscene == 34)|| (player.c.currentCutscene == 35 && player.c.cutsceneIndex < 24)) ? "linear-gradient(-180deg,rgb(114, 8, 4) 0%, rgb(114, 4, 85) 100%)" : 
-player.sma.inStarmetalChallenge || (player.ma.inBlackHeart && player.tab != "ba") ? "black" : 
-!player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #57636d, #2e3d49)" :
-player.sma.inStarmetalChallenge && (player.tab == "settings" || player.tab == "stats" || player.tab == "savebank" || player.tab == "changelog" || player.tab == "credits") ? "linear-gradient(90deg, #1b242b, #12181d)" :
-player.tab == "ro" || player.tab == "mi" ? "#3d3d3d" : 
-player.tab == "au2" ? "#151230" : 
-player.tab == "cmc" || (player.tab == "ch" && player.subtabs["ch"]["stuff"] == "???" || (player.c.currentCutscene == 35 && player.c.cutsceneIndex >= 24)) ? "black" : 
-player.tab == "ba" && player.fi.battleTier.eq(1) ? "linear-gradient(-90deg, #5c2109ff, #5c0e04ff)" : 
-player.tab == "ba" && player.fi.battleTier.eq(2) ? "linear-gradient(90deg, #5c090dff, #910050ff)" : 
-"#161616");
 
 if (player.tab === "au2" || player.tab === "au2t" || player.tab === "st" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
     // Add the galaxy background if it doesn't already exist

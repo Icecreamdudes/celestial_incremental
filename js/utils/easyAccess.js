@@ -1,21 +1,21 @@
 function hasUpgrade(layer, id) {
-	return ((player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString())) && !tmp[layer].deactivated)
+	return ((player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString())))
 }
 
 function hasMilestone(layer, id) {
-	return ((player[layer].milestones.includes(toNumber(id)) || player[layer].milestones.includes(id.toString())) && !tmp[layer].deactivated)
+	return ((player[layer].milestones.includes(toNumber(id)) || player[layer].milestones.includes(id.toString())))
 }
 
 function hasAchievement(layer, id) {
-	return ((player[layer].achievements.includes(toNumber(id)) || player[layer].achievements.includes(id.toString())) && !tmp[layer].deactivated)
+	return ((player[layer].achievements.includes(toNumber(id)) || player[layer].achievements.includes(id.toString())))
 }
 
 function hasChallenge(layer, id) {
-	return ((player[layer].challenges[id]) && !tmp[layer].deactivated)
+	return ((player[layer].challenges[id]))
 }
 
 function maxedChallenge(layer, id) {
-	return ((player[layer].challenges[id] >= tmp[layer].challenges[id].completionLimit) && !tmp[layer].deactivated)
+	return ((player[layer].challenges[id] >= tmp[layer].challenges[id].completionLimit))
 }
 
 function challengeCompletions(layer, id) {
@@ -103,11 +103,14 @@ function buyableEffect(layer, id) {
 }
 
 function levelableEffect(layer, id) {
-	if (layer != "pet" || ((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11))) && !inChallenge("ip", 13))) {
-		return (tmp[layer].levelables[id].effect)
-	} else {
-		return [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+	if (tmp[layer].levelables[id].effect != decimalOne) {
+		if (layer != "pet") {
+			return (tmp[layer].levelables[id].effect)
+		} else if (((player.points.gte(1e100) || hasMilestone("ip", 24) || (hasUpgrade("de", 13) && inChallenge("tad", 11)))) && !inChallenge("ip", 13)) {
+			return (tmp[layer].levelables[id].effect)
+		}
 	}
+	return [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
 }
 
 function clickableEffect(layer, id) {

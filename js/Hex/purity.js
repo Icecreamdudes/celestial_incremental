@@ -1,6 +1,7 @@
 addLayer("hpu", {
     name: "Hex of Purity",
     symbol: "Pu", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Purity", // Decides the nodes tooltip
     nodeStyle: {background: "linear-gradient(140deg, #e0d4ad 0%, #b3a98a 100%)", backgroundOrigin: "borderBox", borderColor: "#706a56"},
     color: "#e0d4ad", // Decides the nodes color.
@@ -33,7 +34,16 @@ addLayer("hpu", {
             player.hpu.totalPurity = player.hpu.totalPurity.add(player.hpu.purityGain)
         }
 
-        if (hasUpgrade("hpw", 101)) player.hpu.purifier[2] = player.hpu.totalPurity
+        let extra = new Decimal(0)
+        if (hasUpgrade("hpw", 41)) extra = extra.add(1)
+        if (hasUpgrade("hve", 33)) extra = extra.add(1)
+
+        if (hasUpgrade("hpw", 1101)) player.hpu.purifier[0] = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1102)) player.hpu.purifier[1] = player.hpu.totalPurity.add(extra)
+        if (hasUpgrade("hpw", 1103)) player.hpu.purifier[2] = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1104)) player.hpu.purifier[3] = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1105)) player.hpu.purifier[4] = player.hpu.totalPurity.add(extra)
+        if (hasUpgrade("hpw", 1106)) player.hpu.purifier[5] = player.hpu.totalPurity
 
         player.hpu.purifierEffects[0] = player.hpu.purifier[0].mul(0.1).add(1)
         if (player.hpu.purifierEffects[0].gt(1.5)) player.hpu.purifierEffects[0] = player.hpu.purifierEffects[0].div(1.5).pow(0.6).mul(1.5)
@@ -41,6 +51,7 @@ addLayer("hpu", {
 
         player.hpu.purifierEffects[1] = Decimal.pow(1.5, player.hpu.purifier[1])
         if (player.hpu.purifierEffects[1].gt(8)) player.hpu.purifierEffects[1] = player.hpu.purifierEffects[1].div(8).pow(0.6).mul(8)
+        if (hasUpgrade("hpw", 1102)) player.hpu.purifierEffects[1] = player.hpu.purifierEffects[1].pow(0.5)
 
         player.hpu.purifierEffects[2] = player.hpu.purifier[2].mul(0.1).add(1)
         if (player.hpu.purifierEffects[2].gt(1.5)) player.hpu.purifierEffects[2] = player.hpu.purifierEffects[2].div(1.5).pow(0.6).mul(1.5)
@@ -121,14 +132,21 @@ addLayer("hpu", {
                 if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1)},
+            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1101)},
             unlocked: true,
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
                 player.hpu.purifier[0] = player.hpu.purifier[0].add(amt)
             },
-            style: {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"},
+            style() {
+                let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
+                if (hasUpgrade("hpw", 1101)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.cursor = "default !important"
+                }
+                return look
+            },
         },
         4: {
             title() {
@@ -137,14 +155,21 @@ addLayer("hpu", {
                 if (player.hpu.purifierEffects[1].gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1)},
+            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1102)},
             unlocked: true,
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
                 player.hpu.purifier[1] = player.hpu.purifier[1].add(amt)
             },
-            style: {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"},
+            style() {
+                let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
+                if (hasUpgrade("hpw", 1102)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.cursor = "default !important"
+                }
+                return look
+            },
         },
         5: {
             title() {
@@ -152,7 +177,7 @@ addLayer("hpu", {
                 if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 101)},
+            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1103)},
             unlocked: true,
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
@@ -161,7 +186,7 @@ addLayer("hpu", {
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
-                if (hasUpgrade("hpw", 101)) {
+                if (hasUpgrade("hpw", 1103)) {
                     look.backgroundColor = "#77bf5f"
                     look.cursor = "default !important"
                 }
@@ -175,14 +200,21 @@ addLayer("hpu", {
                 if (player.hpu.purifierEffects[3].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1)},
+            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1104)},
             unlocked() { return hasUpgrade("hpw", 31) },
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
                 player.hpu.purifier[3] = player.hpu.purifier[3].add(amt)
             },
-            style: {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"},
+            style() {
+                let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
+                if (hasUpgrade("hpw", 1104)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.cursor = "default !important"
+                }
+                return look
+            },
         },
         7: {
             title() {
@@ -192,7 +224,7 @@ addLayer("hpu", {
                 if (inChallenge("hrm", 11)) str = str.concat("<br><small style='color:red'>[DISABLED BY CREATOR REALM]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1) && !inChallenge("hrm", 11)},
+            canClick() {return player.hpu.purity.gte(1) && !inChallenge("hrm", 11) && !hasUpgrade("hpw", 1105)},
             unlocked() { return hasUpgrade("hpw", 31) },
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
@@ -201,6 +233,10 @@ addLayer("hpu", {
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
+                if (hasUpgrade("hpw", 1105)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.cursor = "default !important"
+                }
                 if (inChallenge("hrm", 11)) look.opacity = "0.5"
                 return look
             },
@@ -212,14 +248,21 @@ addLayer("hpu", {
                 if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
-            canClick() {return player.hpu.purity.gte(1)},
+            canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1106)},
             unlocked() { return hasUpgrade("hpw", 31) },
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
                 player.hpu.purifier[5] = player.hpu.purifier[5].add(amt)
             },
-            style: {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"},
+            style() {
+                let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
+                if (hasUpgrade("hpw", 1106)) {
+                    look.backgroundColor = "#77bf5f"
+                    look.cursor = "default !important"
+                }
+                return look
+            },
         },
         101: {
             title: "1",

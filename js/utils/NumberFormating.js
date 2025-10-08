@@ -70,10 +70,10 @@ function format(decimal, precision = 2, small) {
         return format(decimal, precision) + "⁻¹"
 }
 
-function formatWhole(decimal) {
+function formatWhole(decimal, precision = 2) {
     decimal = new Decimal(decimal)
-    if (decimal.gte(1e9)) return format(decimal, 2)
-    if (decimal.lte(0.99) && !decimal.eq(0)) return format(decimal, 2)
+    if (decimal.gte(1e9)) return format(decimal, precision)
+    if (decimal.lte(0.99) && !decimal.eq(0)) return format(decimal, precision)
     return format(decimal, 0)
 }
 
@@ -145,6 +145,32 @@ function toPlaces(x, precision, maxAccepted) {
         result = new Decimal(maxAccepted - Math.pow(0.1, precision)).toStringWithDecimalPlaces(precision)
     }
     return result
+}
+
+function formatSimple(decimal, precision = 1) {
+    decimal = new Decimal(decimal)
+    if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
+        player.hasNaN = true;
+        return "NaN"
+    }
+    if (decimal.sign < 0) return "-" + formatSimple(decimal.neg(), precision)
+    if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity"
+    if (decimal.gte("1e1000000")) return exponentialFormat(decimal, 0, false)
+    else if (decimal.gte("1e10000")) return exponentialFormat(decimal, 0)
+    else if (decimal.gte(1e9)) return exponentialFormat(decimal, 2)
+    else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
+    else if (decimal.gte(0.0001) && decimal.mag % 1 == 0) return regularFormat(decimal, 0)
+    else if (decimal.gte(0.0001)) return regularFormat(decimal, precision)
+    else if (decimal.eq(0)) return (0).toFixed(0)
+
+    decimal = invertOOM(decimal)
+    let val = ""
+    if (decimal.lt("1e1000")) {
+        val = exponentialFormat(decimal, precision)
+        return val.replace(/([^(?:e|F)]*)$/, '-$1')
+    }
+    else
+        return format(decimal, precision) + "⁻¹"
 }
 
 // Will also display very small numbers

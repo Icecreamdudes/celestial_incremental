@@ -51,6 +51,7 @@ addLayer("fi", {
         temporalDust: new Decimal(0),
 
         tier1BestWave: new Decimal(0),
+        tier2BestWave: new Decimal(0),
 
         //milestones
         milestone101Effect: new Decimal(1),
@@ -556,6 +557,77 @@ addLayer("fi", {
             }
         },
         //next upgrade, unlocks new pet evolutions
+
+
+        //tier 2
+        21: {
+            title: "Matossian Reduction",
+            unlocked() { return hasMilestone("fi", 102)},
+            description: "Reduce matos softcap scaling by -0.1%",
+            cost: new Decimal("30"),
+            currencyLocation() { return player.fi },
+            currencyDisplayName: "Temporal Dust",
+            currencyInternalName: "temporalDust",
+            style() {
+                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
+                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
+                return look
+            }
+        },
+        22: {
+            title: "Cookie Hunter",
+            unlocked() { return hasMilestone("fi", 102)},
+            description: "Boost cookie gain based on best tier 2 wave.",
+            cost: new Decimal("5"),
+            currencyLocation() { return player.fi },
+            currencyDisplayName: "Temporal Shards",
+            currencyInternalName: "temporalShards",
+            effect() {
+                return player.fi.tier2BestWave.mul(0.5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
+                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
+                return look
+            }
+        },
+        23: {
+            title: "Iridian Boost",
+            unlocked() { return hasMilestone("fi", 102)},
+            description: "Boost star gain based on temporal shards.",
+            cost: new Decimal("80"),
+            currencyLocation() { return player.fi },
+            currencyDisplayName: "Temporal Dust",
+            currencyInternalName: "temporalDust",
+            effect() {
+                return player.fi.temporalShards.pow(1.5).mul(0.4).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
+                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
+                return look
+            }
+        },
+        24: {
+            title: "Union of Red",
+            unlocked() { return hasMilestone("fi", 102)},
+            description: "Boost hex of power based on singularity points.",
+            cost: new Decimal("12"),
+            currencyLocation() { return player.fi },
+            currencyDisplayName: "Temporal Shards",
+            currencyInternalName: "temporalShards",
+            effect() {
+                return player.s.singularityPoints.plus(1).log10().pow(0.5).add(1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+            style() {
+                let look = {width: "150px", height: "110px", color: "rgba(255, 255, 255, 1)", border: "3px solid rgba(0,0,0,1)", borderRight: "0px solid rgba(0,0,0,1)", transform: "scale(1)", borderRadius: "0px",}
+                hasUpgrade(this.layer, this.id) ? look.background = "#06366e" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #06366e 0%,  #105cb3ff 100%)"
+                return look
+            }
+        },
     },
     buyables: {},
     milestones: {
@@ -748,43 +820,19 @@ addLayer("fi", {
                       
                     ], {width: '550px', height: '135px', borderBottom: "3px solid rgb(218, 218, 218)", }],
                     ], {width: '550px', height: '135px', borderBottom: "3px solid rgb(218, 218, 218)", }], 
-                    ["style-row", [
-                    ], {width: '550px', height: '485px', borderBottom: "3px solid rgb(218, 218, 218)", }], 
-                    ], {width: "550px", height: "700px", backgroundImage: "linear-gradient(90deg, #2e7ae4, #4ac5e6)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
-                ],
-            },
-            "Shop": {
-                buttonStyle() { return {color: "#06366e"}},
-                unlocked() { return true },
-                content: [
-                    ["style-column", [
-                    ["style-row", [
-                ["tooltip-row", [
-                ["raw-html", "<img src='resources/battle/temporalDust.png'style='width:60px;height:60px;margin:5px'></img>", {width: "70px", height: "70px", display: "block"}],
-                ["raw-html", () => { return "You have " + formatWhole(player.fi.temporalDust) + " temporal dust."}, {width: "180px", height: "50px", color: "#06366e", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Temporal Dust<hr><small>(Gained from battle)</small></div>"],
-                      ]],
-                ["tooltip-row", [
-                ["raw-html", "<img src='resources/battle/temporalShards.png'style='width:60px;height:60px;margin:5px'></img>", {width: "70px", height: "70px", display: "block"}],
-                ["raw-html", () => { return "You have " + formatWhole(player.fi.temporalShards) + " temporal shards."}, {width: "180px", height: "50px", color: "#06366e", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                ["raw-html", "<div class='bottomTooltip'>Temporal Shards<hr><small>(Gained from battle)</small></div>"],
-                      ]],                
-                    ], {width: '550px', height: '80px', borderBottom: "3px solid rgb(218, 218, 218)", }], 
-                    ["style-row", [
+                                        ["style-row", [
                     ["always-scroll-row", [
                     ["tooltip-row", [
-                ["raw-html", () => { return "Tier I Upgrades"}, {width: "125px", height: "120px", color: "white", backgroundColor: "#06366e",  display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
-                      ]],   
-                    ["upgrade", 11], 
-                    ["upgrade", 12], 
-                    ["upgrade", 13], 
-                    ["upgrade", 14], 
-                    ["upgrade", 15], 
-                      
+                    ["raw-html", () => { return "Tier II Upgrades"}, {width: "125px", height: "120px", color: "white", backgroundColor: "#06366e",  display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                    ]],     
+                    ["upgrade", 21], 
+                    ["upgrade", 22], 
+                    ["upgrade", 23], 
+                    ["upgrade", 24], 
                     ], {width: '550px', height: '135px', borderBottom: "3px solid rgb(218, 218, 218)", }],
                     ], {width: '550px', height: '135px', borderBottom: "3px solid rgb(218, 218, 218)", }], 
                     ["style-row", [
-                    ], {width: '550px', height: '485px', borderBottom: "3px solid rgb(218, 218, 218)", }], 
+                    ], {width: '550px', height: '350px', borderBottom: "3px solid rgb(218, 218, 218)", }], 
                     ], {width: "550px", height: "700px", backgroundImage: "linear-gradient(90deg, #2e7ae4, #4ac5e6)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
                 ],
             },

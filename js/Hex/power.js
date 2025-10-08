@@ -1,6 +1,7 @@
 addLayer("hpw", {
     name: "Hex of Power",
     symbol: "Pw", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Power", // Decides the nodes tooltip
     color: "#ff5555", // Decides the nodes color.
     nodeStyle: {borderColor: "#5e0000"}, // Decides the nodes style, in CSS format.
@@ -23,6 +24,7 @@ addLayer("hpw", {
         if (hasUpgrade("cs", 202)) player.hpw.powerGain = player.hpw.powerGain.mul(2)
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pu", 203)[2])
         player.hpw.powerGain = player.hpw.powerGain.mul(levelableEffect("pet", 1106)[1])
+        if (hasUpgrade("fi", 24)) player.hpw.powerGain = player.hpw.powerGain.mul(upgradeEffect("fi", 24))
 
         player.hpw.powerGain = player.hpw.powerGain.floor() // To keep power to whole numbers
 
@@ -193,7 +195,7 @@ addLayer("hpw", {
             currencyDisplayName: "Power",
             currencyInternalName: "power",
             effect() {
-                if (hasUpgrade("hpw", 1031)) return player.hpw.power.add(1).pow(3).pow(buyableEffect("hrm", 5)).log(1.6).add(1).mul(6)
+                if (hasUpgrade("hpw", 32)) return player.hpw.power.add(1).pow(3).log(1.6).add(1).mul(6)
                 return player.hpw.power.add(1).log(2).add(1).mul(3)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
@@ -204,13 +206,13 @@ addLayer("hpw", {
             unlocked: true,
             description: "Double power gain.",
             branches: [12],
-            cost() {return new Decimal(3).pow(player.hpw.upgScale[1])},
+            cost() {return new Decimal(2).pow(player.hpw.upgScale[1])},
             canAfford() { return hasUpgrade("hpw", 12)},
             onPurchase() {player.hpw.upgScale[1] = player.hpw.upgScale[1] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px", borderRadius: "15px"},
         },
         12: {
             title: "Might 2:2",
@@ -275,6 +277,19 @@ addLayer("hpw", {
         32: {
             title: "Might 4:2",
             unlocked: true,
+            description: "Improve Might 1:2's effect.",
+            branches: [31, 33],
+            cost() {return new Decimal(6).pow(player.hpw.upgScale[3])},
+            canAfford() { return hasUpgrade("hpw", 31) && hasUpgrade("hpw", 33)},
+            onPurchase() {player.hpw.upgScale[3] = player.hpw.upgScale[3] + 1},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px", borderRadius: "15px"},
+        },
+        33: {
+            title: "Might 4:3",
+            unlocked: true,
             description: "Boost jinx cap based on jinx score.",
             branches: [22],
             cost() {return new Decimal(27).pow(player.hpw.upgScale[3])},
@@ -310,9 +325,9 @@ addLayer("hpw", {
             title: "Might 5:2",
             unlocked: true,
             description: "Unlock Hex of Vexes.",
-            branches: [32],
+            branches: [33],
             cost() {return new Decimal(240).pow(player.hpw.upgScale[4])},
-            canAfford() { return hasUpgrade("hpw", 32)},
+            canAfford() { return hasUpgrade("hpw", 33)},
             onPurchase() {player.hpw.upgScale[4] = player.hpw.upgScale[4] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
@@ -322,7 +337,24 @@ addLayer("hpw", {
         51: {
             title: "Might 6:1",
             unlocked: true,
-            description: "Deposit 10% of boons per second.",
+            description: "Multiply Might 6:2's effect by x10.",
+            branches: [52],
+            cost() {return new Decimal(360).pow(player.hpw.upgScale[5])},
+            canAfford() { return hasUpgrade("hpw", 52)},
+            onPurchase() {player.hpw.upgScale[5] = player.hpw.upgScale[5] + 1},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px", borderRadius: "15px"},
+        },
+        52: {
+            title: "Might 6:2",
+            unlocked: true,
+            description() {
+                if (hasUpgrade("hpw", 51) && hasUpgrade("hpw", 53)) return "Deposit 1,000% of boons per second."
+                if (hasUpgrade("hpw", 51) || hasUpgrade("hpw", 53)) return "Deposit 100% of boons per second."
+                return "Deposit 10% of boons per second."
+            },
             branches: [41, 42],
             cost() {return new Decimal(3600).pow(player.hpw.upgScale[5])},
             canAfford() { return hasUpgrade("hpw", 41) || hasUpgrade("hpw", 42)},
@@ -332,13 +364,26 @@ addLayer("hpw", {
             currencyInternalName: "power",
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
+        53: {
+            title: "Might 6:3",
+            unlocked: true,
+            description: "Multiply Might 6:2's effect by x10.",
+            branches: [52],
+            cost() {return new Decimal(360).pow(player.hpw.upgScale[5])},
+            canAfford() { return hasUpgrade("hpw", 52)},
+            onPurchase() {player.hpw.upgScale[5] = player.hpw.upgScale[5] + 1},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px", borderRadius: "15px"},
+        },
         61: {
             title: "Might 7:1",
             unlocked: true,
             description: "Reduce the softcap on Amended Automation.",
-            branches: [51],
+            branches: [52],
             cost() {return new Decimal(12000).pow(player.hpw.upgScale[6])},
-            canAfford() { return hasUpgrade("hpw", 51)},
+            canAfford() { return hasUpgrade("hpw", 52)},
             onPurchase() {player.hpw.upgScale[6] = player.hpw.upgScale[6] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
@@ -349,9 +394,9 @@ addLayer("hpw", {
             title: "Might 7:2",
             unlocked: true,
             description: "Add a new effect that buffs jinx total to Hex of Vexes.",
-            branches: [51],
+            branches: [52],
             cost() {return new Decimal(12000).pow(player.hpw.upgScale[6])},
-            canAfford() { return hasUpgrade("hpw", 51)},
+            canAfford() { return hasUpgrade("hpw", 52)},
             onPurchase() {player.hpw.upgScale[6] = player.hpw.upgScale[6] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
@@ -380,13 +425,13 @@ addLayer("hpw", {
             unlocked: true,
             description: "Double power gain.",
             branches: [71],
-            cost() {return new Decimal(900).pow(player.hpw.upgScale[7])},
+            cost() {return new Decimal(600).pow(player.hpw.upgScale[7])},
             canAfford() { return hasUpgrade("hpw", 71)},
             onPurchase() {player.hpw.upgScale[7] = player.hpw.upgScale[7] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px", borderRadius: "15px"},
         },
         81: {
             title: "Might 9:1",
@@ -430,19 +475,6 @@ addLayer("hpw", {
         101: {
             title: "Might 11:1",
             unlocked: true,
-            description: "Elevated Exponent level is set to your total purities.",
-            branches: [91],
-            cost() {return new Decimal(6e6).pow(player.hpw.upgScale[10])},
-            canAfford() { return hasUpgrade("hpw", 91)},
-            onPurchase() {player.hpw.upgScale[10] = player.hpw.upgScale[10] + 1},
-            currencyLocation() { return player.hpw },
-            currencyDisplayName: "Power",
-            currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
-        },
-        102: {
-            title: "Might 11:2",
-            unlocked: true,
             description() {
                 if (inChallenge("hrm", 16)) return "Boost refiner 1 effects based on boons."
                 return "Boost provenance effects based on boons."
@@ -464,8 +496,8 @@ addLayer("hpw", {
             }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
         },
-        103: {
-            title: "Might 11:3",
+        102: {
+            title: "Might 11:2",
             unlocked: true,
             description: "Raise curse gain based on jinx score.",
             branches: [92],
@@ -489,9 +521,9 @@ addLayer("hpw", {
             title: "Might 12:1",
             unlocked: true,
             description: "Gain 3 free purities.",
-            branches: [102],
+            branches: [101],
             cost() {return new Decimal(3.6e7).pow(player.hpw.upgScale[11])},
-            canAfford() { return hasUpgrade("hpw", 102)},
+            canAfford() { return hasUpgrade("hpw", 101)},
             onPurchase() {
                 player.hpu.purity = player.hpu.purity.add(3)
                 player.hpu.totalPurity = player.hpu.totalPurity.add(3)
@@ -506,9 +538,9 @@ addLayer("hpw", {
             title: "Might 12:2",
             unlocked: true,
             description: "Divide vex requirement by /1e6.",
-            branches: [103],
+            branches: [102],
             cost() {return new Decimal(3.6e7).pow(player.hpw.upgScale[11])},
-            canAfford() { return hasUpgrade("hpw", 103)},
+            canAfford() { return hasUpgrade("hpw", 102)},
             onPurchase() {player.hpw.upgScale[11] = player.hpw.upgScale[11] + 1},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
@@ -539,7 +571,7 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "10px", borderRadius: "15px"},
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px", borderRadius: "15px"},
         },
         132: {
             title: "Might 14:2",
@@ -627,9 +659,9 @@ addLayer("hpw", {
             title: "Might E:0",
             unlocked() { return hasUpgrade("bi", 27) },
             description: "Unlock the Dream Realm challenge.",
-            branches: [103],
+            branches: [102],
             cost() {return new Decimal(10077696)},
-            canAfford() { return hasUpgrade("hpw", 103)},
+            canAfford() { return hasUpgrade("hpw", 102)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
@@ -650,7 +682,7 @@ addLayer("hpw", {
         1011: {
             title: "Might A:1",
             unlocked() {return challengeCompletions("hrm", 11) >= 1 && hasUpgrade("bi", 27)},
-            description: "Boost check back xp based on power.",
+            description: "Raise rank, tier, tetr, and pent effects by ^1.18.",
             tooltip: "Realm mights work outside of hex.",
             branches: [1001],
             cost() {return new Decimal(6)},
@@ -658,16 +690,12 @@ addLayer("hpw", {
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            effect() {
-                return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
-            },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1012: {
             title: "Might A:2",
             unlocked() {return challengeCompletions("hrm", 11) >= 2 && hasUpgrade("bi", 27)},
-            description: "Raise rank, tier, tetr, and pent effects by ^1.18.",
+            description: "Multiply factor base by x120.",
             branches: [1001],
             cost() {return new Decimal(36)},
             canAfford() { return hasUpgrade("hpw", 1001)},
@@ -679,35 +707,35 @@ addLayer("hpw", {
         1013: {
             title: "Might A:3",
             unlocked() {return challengeCompletions("hrm", 11) >= 3 && hasUpgrade("bi", 27)},
-            description: "Multiply factor base by x120.",
+            description: "Boost check back xp based on power.",
             branches: [1001],
             cost() {return new Decimal(216)},
             canAfford() { return hasUpgrade("hpw", 1001)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
+            effect() {
+                return player.hpw.power.add(1).log(10).mul(0.05).add(1).pow(buyableEffect("hrm", 5))
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f00"},
         },
         1021: {
             title: "Might B:1",
             unlocked() {return challengeCompletions("hrm", 12) >= 1 && hasUpgrade("bi", 27)},
-            description: "Boost crystals and steel based on power.",
+            description: "Raise prestige points gain by ^1.36.",
             branches: [1002],
             cost() {return new Decimal(36)},
             canAfford() { return hasUpgrade("hpw", 1002)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            effect() {
-                return player.hpw.power.pow(0.2).add(1).pow(buyableEffect("hrm", 5))
-            },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f80"},
         },
         1022: {
             title: "Might B:2",
             unlocked() {return challengeCompletions("hrm", 12) >= 2 && hasUpgrade("bi", 27)},
-            description: "Raise prestige points gain by ^1.36.",
+            description: "Raise tree gain by ^1.24.",
             branches: [1002],
             cost() {return new Decimal(216)},
             canAfford() { return hasUpgrade("hpw", 1002)},
@@ -719,19 +747,23 @@ addLayer("hpw", {
         1023: {
             title: "Might B:3",
             unlocked() {return challengeCompletions("hrm", 12) >= 3 && hasUpgrade("bi", 27)},
-            description: "Raise tree gain by ^1.24.",
+            description: "Boost crystals and steel based on power.",
             branches: [1002],
             cost() {return new Decimal(1296)},
             canAfford() { return hasUpgrade("hpw", 1002)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
+            effect() {
+                return player.hpw.power.pow(0.2).add(1).pow(buyableEffect("hrm", 5))
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #f80"},
         },
         1031: {
             title: "Might C:1",
             unlocked() {return challengeCompletions("hrm", 13) >= 1 && hasUpgrade("bi", 27)},
-            description: "Improve Might 1:2's effect.",
+            description: "Raise grass gain by ^1.18.",
             branches: [1003],
             cost() {return new Decimal(216)},
             canAfford() { return hasUpgrade("hpw", 1003)},
@@ -743,7 +775,7 @@ addLayer("hpw", {
         1032: {
             title: "Might C:2",
             unlocked() {return challengeCompletions("hrm", 13) >= 2 && hasUpgrade("bi", 27)},
-            description: "Raise grass gain by ^1.18.",
+            description: "Raise golden grass gain by ^1.06.",
             branches: [1003],
             cost() {return new Decimal(1296)},
             canAfford() { return hasUpgrade("hpw", 1003)},
@@ -755,35 +787,35 @@ addLayer("hpw", {
         1033: {
             title: "Might C:3",
             unlocked() {return challengeCompletions("hrm", 13) >= 3 && hasUpgrade("bi", 27)},
-            description: "Raise golden grass gain by ^1.06.",
+            description: "Boost pollinators based on power.",
             branches: [1003],
             cost() {return new Decimal(7776)},
             canAfford() { return hasUpgrade("hpw", 1003)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
+            effect() {
+                return player.hpw.power.pow(0.15).add(1).pow(buyableEffect("hrm", 5))
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #ff0"},
         },
         1041: {
             title: "Might D:1",
             unlocked() {return challengeCompletions("hrm", 14) >= 1 && hasUpgrade("bi", 27)},
-            description: "Boost infinity dimensions based on power.",
+            description: "Raise grasshopper gain by ^1.1.",
             branches: [1004],
             cost() {return new Decimal(46656)},
             canAfford() { return hasUpgrade("hpw", 1004)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            effect() {
-                return player.hpw.power.pow(0.3).add(1).pow(buyableEffect("hrm", 5))
-            },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #0f0"},
         },
         1042: {
             title: "Might D:2",
             unlocked() {return challengeCompletions("hrm", 14) >= 2 && hasUpgrade("bi", 27)},
-            description: "Raise grasshopper gain by ^1.1.",
+            description: "Raise mod gain by ^1.1.",
             branches: [1004],
             cost() {return new Decimal(279936)},
             canAfford() { return hasUpgrade("hpw", 1004)},
@@ -795,35 +827,35 @@ addLayer("hpw", {
         1043: {
             title: "Might D:3",
             unlocked() {return challengeCompletions("hrm", 14) >= 3 && hasUpgrade("bi", 27)},
-            description: "Raise mod gain by ^1.1.",
+            description: "Boost infinity dimensions based on power.",
             branches: [1004],
             cost() {return new Decimal(1679616)},
             canAfford() { return hasUpgrade("hpw", 1004)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
+            effect() {
+                return player.hpw.power.pow(0.3).add(1).pow(buyableEffect("hrm", 5))
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #0f0"},
         },
         1051: {
             title: "Might E:1",
             unlocked() {return challengeCompletions("hrm", 15) >= 1 && hasUpgrade("bi", 27)},
-            description: "Boost mastery point effects based on power.",
+            description: "Raise AD and antimatter by ^1.05.",
             branches: [1005],
             cost() {return new Decimal(1679616)},
             canAfford() { return hasUpgrade("hpw", 1005)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            effect() {
-                return Decimal.pow(1.06, player.hpw.power.add(1).log(6)).pow(buyableEffect("hrm", 5))
-            },
-            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1052: {
             title: "Might E:2",
             unlocked() {return challengeCompletions("hrm", 15) >= 2 && hasUpgrade("bi", 27)},
-            description: "Raise AD and antimatter by ^1.05.",
+            description: "Multiply NIP by x100.",
             branches: [1005],
             cost() {return new Decimal(10077696)},
             canAfford() { return hasUpgrade("hpw", 1005)},
@@ -835,35 +867,35 @@ addLayer("hpw", {
         1053: {
             title: "Might E:3",
             unlocked() {return challengeCompletions("hrm", 15) >= 3 && hasUpgrade("bi", 27)},
-            description: "Multiply NIP by x100.",
+            description: "Boost mastery point effects based on power.",
             branches: [1005],
             cost() {return new Decimal(60466176)},
             canAfford() { return hasUpgrade("hpw", 1005)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
+            effect() {
+                return Decimal.pow(1.06, player.hpw.power.add(1).log(6)).pow(buyableEffect("hrm", 5))
+            },
+            effectDisplay() { return "^" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #00f"},
         },
         1061: {
             title: "Might F:1",
             unlocked() {return challengeCompletions("hrm", 16) >= 1 && hasUpgrade("bi", 27)},
-            description: "Boost infinity points based on power.",
+            description: "Gain 10% infinities per second.",
             branches: [1006],
             cost() {return new Decimal(362797056)},
             canAfford() { return hasUpgrade("hpw", 1006)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
-            effect() {
-                return player.hpw.power.pow(0.24).add(1).pow(buyableEffect("hrm", 5))
-            },
-            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #80f"},
         },
         1062: {
             title: "Might F:2",
             unlocked() {return challengeCompletions("hrm", 16) >= 2 && hasUpgrade("bi", 27)},
-            description: "Gain 10% infinities per second.",
+            description: "Triple replicanti mult.",
             branches: [1006],
             cost() {return new Decimal(2176782336)},
             canAfford() { return hasUpgrade("hpw", 1006)},
@@ -875,14 +907,91 @@ addLayer("hpw", {
         1063: {
             title: "Might F:3",
             unlocked() {return challengeCompletions("hrm", 16) >= 3 && hasUpgrade("bi", 27)},
-            description: "Triple replicanti mult.",
+            description: "Boost infinity points based on power.",
             branches: [1006],
             cost() {return new Decimal(13060694016)},
             canAfford() { return hasUpgrade("hpw", 1006)},
             currencyLocation() { return player.hpw },
             currencyDisplayName: "Power",
             currencyInternalName: "power",
+            effect() {
+                return player.hpw.power.pow(0.25).add(1).pow(buyableEffect("hrm", 5))
+            },
+            effectDisplay() { return "x" + format(upgradeEffect(this.layer, this.id)) }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", margin: "10px", borderRadius: "15px", border: "3px solid #80f"},
+        },
+
+        1101: {
+            title: "Might 𝕡:1",
+            unlocked: true,
+            description: "Automate Purified Provenances.",
+            branches: [1102],
+            cost() {return new Decimal(1e20)},
+            canAfford() { return hasUpgrade("hpw", 1102)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "40px 30px 0 10px", borderRadius: "15px"},
+        },
+        1102: {
+            title: "Might 𝕡:2",
+            unlocked: true,
+            description: "Automate Multiplied Miracles, but nerf effect.",
+            branches: [101],
+            cost() {return new Decimal(1e18)},
+            canAfford() { return hasUpgrade("hpw", 101)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px 5px 20px 35px", borderRadius: "15px"},
+        },
+        1103: {
+            title: "Might 𝕡:3",
+            unlocked: true,
+            description: "Automate Elevated Exponent.",
+            branches: [1102],
+            cost() {return new Decimal(1e19)},
+            canAfford() { return hasUpgrade("hpw", 1102)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "0 30px 40px 10px", borderRadius: "15px"},
+        },
+        1104: {
+            title: "Might 𝕡:4",
+            unlocked: true,
+            description: "Automate Healed Hexes.",
+            branches: [1101],
+            cost() {return new Decimal(1e23)},
+            canAfford() { return hasUpgrade("hpw", 1101)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "40px 10px 0 30px", borderRadius: "15px"},
+        },
+        1105: {
+            title: "Might 𝕡:5",
+            unlocked: true,
+            description: "Automate Amended Automation.",
+            branches: [1102],
+            cost() {return new Decimal(1e21)},
+            canAfford() { return hasUpgrade("hpw", 1102)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "20px 35px 20px 5px", borderRadius: "15px"},
+        },
+        1106: {
+            title: "Might 𝕡:6",
+            unlocked: true,
+            description: "Automate Cleansed Curses.",
+            branches: [1103],
+            cost() {return new Decimal(1e22)},
+            canAfford() { return hasUpgrade("hpw", 1103)},
+            currencyLocation() { return player.hpw },
+            currencyDisplayName: "Power",
+            currencyInternalName: "power",
+            style: {width: "100px", minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", margin: "0 10px 40px 30px", borderRadius: "15px"},
         },
     },
     buyables: {
@@ -1089,35 +1198,31 @@ addLayer("hpw", {
                         ["style-row", [["upgrade", 1012]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
-                        ["style-row", [["upgrade", 1021]], {width: "140px", height: "140px"}],
-                        ["blank", ["70px", "140px"]],
+                        ["blank", ["140px", "140px"]],
                         ["upgrade", 21],
                         ["upgrade", 22],
                         ["style-row", [["upgrade", 1013]], {width: "140px", height: "140px"}],
-                        ["blank", ["70px", "140px"]],
+                    ]],
+                    ["row", [
+                        ["style-row", [["upgrade", 1021]], {width: "140px", height: "140px"}],
+                        ["upgrade", 31],
+                        ["upgrade", 32],
+                        ["upgrade", 33],
+                        ["style-row", [["upgrade", 1031]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
                         ["style-row", [["upgrade", 1022]], {width: "140px", height: "140px"}],
                         ["style-row", [["upgrade", 1002]], {width: "140px", height: "140px"}],
-                        ["upgrade", 31],
-                        ["upgrade", 32],
-                        ["blank", ["70px", "140px"]],
-                        ["style-row", [["upgrade", 1031]], {width: "140px", height: "140px"}],
-                        ["blank", ["70px", "140px"]],
-                    ]],
-                    ["row", [
-                        ["blank", ["70px", "140px"]],
-                        ["style-row", [["upgrade", 1023]], {width: "140px", height: "140px"}],
-                        ["blank", ["70px", "140px"]],
                         ["upgrade", 41],
                         ["upgrade", 42],
                         ["style-row", [["upgrade", 1003]], {width: "140px", height: "140px"}],
                         ["style-row", [["upgrade", 1032]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
-                        ["blank", ["280px", "140px"]],
+                        ["style-row", [["upgrade", 1023]], {width: "140px", height: "140px"}],
                         ["upgrade", 51],
-                        ["blank", ["140px", "140px"]],
+                        ["upgrade", 52],
+                        ["upgrade", 53],
                         ["style-row", [["upgrade", 1033]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
@@ -1140,27 +1245,30 @@ addLayer("hpw", {
                         ["blank", ["210px", "140px"]],
                     ]],
                     ["row", [
-                        ["blank", ["210px", "140px"]],
+                        ["upgrade", 1104],
+                        ["upgrade", 1101],
                         ["upgrade", 91],
                         ["upgrade", 92],
                         ["blank", ["70px", "140px"]],
                         ["style-row", [["upgrade", 1051]], {width: "140px", height: "140px"}],
+                        ["blank", ["70px", "140px"]],
                     ]],
                     ["row", [
-                        ["blank", ["140px", "140px"]],
+                        ["upgrade", 1105],
+                        ["upgrade", 1102],
                         ["upgrade", 101],
                         ["upgrade", 102],
-                        ["upgrade", 103],
                         ["style-row", [["upgrade", 1005]], {width: "140px", height: "140px"}],
                         ["style-row", [["upgrade", 1052]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
-                        ["blank", ["210px", "140px"]],
+                        ["upgrade", 1106],
+                        ["upgrade", 1103],
                         ["upgrade", 111],
                         ["upgrade", 112],
                         ["blank", ["70px", "140px"]],
                         ["style-row", [["upgrade", 1053]], {width: "140px", height: "140px"}],
-
+                        ["blank", ["70px", "140px"]],
                     ]],
                     ["row", [
                         ["blank", ["210px", "140px"]],
@@ -1231,13 +1339,14 @@ addLayer("hpw", {
             ["raw-html", "Hex of Power", {color: "white", fontSize: "30px", fontFamily: "monospace"}],
         ], {width: "800px", height: "50px", backgroundColor: "#4c1919", border: "3px solid white", borderRadius: "20px"}],
         ["blank", "10px"],
-        ["row", [
+        ["tooltip-row", [
             ["raw-html", () => {return "You have <h3>" + formatWhole(player.hpw.power) + "</h3> Power." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
             ["raw-html", () => {return "(+" + formatWhole(player.hpw.powerGain) + ")"}, () => {
                 let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
                 player.hbl.blessings.gte(6e5) ? look.color = "white" : look.color = "gray"
                 return look
             }],
+            ["raw-html", "<div class='bottomTooltip'>Base Formula<hr><small>2^(log6(Blessings/600k))</small></div>"],
         ]],
         ["blank", "10px"],
         ["clickable", 1],

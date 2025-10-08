@@ -1,6 +1,7 @@
 ﻿addLayer("rt", {
     name: "Repli-Trees", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "RT", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "A1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -89,6 +90,7 @@
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(buyableEffect("gs", 17))
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.oilEffect)
         player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(player.oi.linkingPowerEffect[3])
+        if (hasUpgrade("ep2", 6)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.mul(upgradeEffect("ep2", 6))
 
         // REPLI-TREE NERFS
         if (inChallenge("fu", 11)) player.rt.repliTreesToGet = player.rt.repliTreesToGet.pow(0.2)

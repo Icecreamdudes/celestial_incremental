@@ -1,6 +1,7 @@
 ﻿addLayer("sma", {
     name: "Starmetal Alloy", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "SMA", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U3",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -118,7 +119,7 @@
         12: {
             title() { return "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." },
             canClick: true,
-            unlocked: true,
+            unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
                 player.pet.activeAbilities[0] = true

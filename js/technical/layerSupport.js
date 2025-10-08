@@ -7,8 +7,21 @@ const decimalNaN = new Decimal(NaN)
 const defaultGlow = "#ff0000"
 
 
-function layerShown(layer){
+function layerShown(layer) {
     return tmp[layer].layerShown;
+}
+
+function layerDeactivated(layer) {
+    if (typeof layers[layer].universe !== "undefined") {
+        if (player.uni[layers[layer].universe].paused) return true
+    }
+    if (typeof layers[layer].deactivated === "function") {
+        return layers[layer].deactivated()
+    } else if (typeof layers[layer].deactivated !== "undefined") {
+        return layers[layer].deactivated
+    } else {
+        return false
+    }
 }
 
 var LAYERS = Object.keys(layers);

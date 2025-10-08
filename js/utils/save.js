@@ -4,7 +4,6 @@ function save(force) {
 	if (NaNalert && !force) return
 	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
 	localStorage.setItem(modInfo.id+"_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
-
 }
 function startPlayerBase() {
 	return {
@@ -19,6 +18,7 @@ function startPlayerBase() {
 		hasNaN: false,
 
 		points: modInfo.initialStartPoints,
+		uni: {},
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
 	};
@@ -54,6 +54,9 @@ function getStartPlayer() {
 		}
 
 	}
+	for (uni in universes) {
+		playerdata.uni[uni] = getStartUniData(uni);
+	}
 	return playerdata;
 }
 function getStartLayerData(layer) {
@@ -88,6 +91,20 @@ function getStartLayerData(layer) {
 	layerdata.prevTab = ""
 
 	return layerdata;
+}
+function getStartUniData(uni) {
+	unidata = {};
+	if (universes[uni].startData)
+		unidata = universes[uni].startData();
+
+	if (unidata.unlocked === undefined)
+		unidata.unlocked = true;
+	if (unidata.paused === undefined)
+		unidata.paused = false;
+	if (unidata.pauseTime === undefined)
+		unidata.pauseTime = Date.now();
+
+	return unidata;
 }
 function getStartBuyables(layer) {
 	let data = {};
@@ -207,9 +224,6 @@ function load() {
 		loadOptions();
 	}
 
-	player.cb.time = player.cb.time.add((Date.now() - player.time) / 1000);
-
-	player.time = Date.now();
 	versionCheck();
 	changeTheme();
 	changeTreeQuality();
@@ -221,6 +235,8 @@ function load() {
 	updateTemp();
 	updateTabFormats()
 	loadVue();
+	if (!player.uni.CB.paused) layers.cb.instantProduction(new Decimal((Date.now() - player.time) / 1000))
+	player.time = Date.now();
 }
 
 function loadOptions() {

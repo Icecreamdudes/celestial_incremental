@@ -73,6 +73,7 @@ const POLLINATOR_INFO = {
 addLayer("pol", {
     name: "Pollinators", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "PO", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "U1",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -167,6 +168,7 @@ addLayer("pol", {
             if (hasUpgrade("bi", 17)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("bi", 17))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(levelableEffect("pet", 307)[0])
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
+            if (hasUpgrade("hpw", 1033)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("hpw", 1033))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(levelableEffect("pu", 206)[1])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)

@@ -1,6 +1,7 @@
 addLayer("hsa", {
     name: "Hex of Sacrifice",
     symbol: "Sa", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Sacrifice", // Decides the nodes tooltip
     color: "#fffdd0", // Decides the nodes color.
     nodeStyle: {background: "linear-gradient(180deg, #fffdd0, #fdfff6)", borderColor: "#7F7E68"}, // Decides the nodes style, in CSS format.

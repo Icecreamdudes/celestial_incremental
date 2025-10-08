@@ -1011,5 +1011,6 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.sma.inStarmetalChallenge }
+    layerShown() { return player.sma.inStarmetalChallenge },
+    deactivated() { return !player.sma.inStarmetalChallenge},
 })

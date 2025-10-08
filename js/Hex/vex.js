@@ -2,6 +2,7 @@ const VEXROW = [1, 2, 1, 3, 2, 1, 4, 3, 2, 4, 5, 3, 6, 4, 5, 6, 5, 6]
 addLayer("hve", {
     name: "Hex of Vexes",
     symbol: "Ve", // Decides what text appears on the node.
+    universe: "UA",
     tooltip: "Vexes", // Decides the nodes tooltip
     nodeStyle: {background: "linear-gradient(140deg, #808 0%, #707 100%)", backgroundOrigin: "borderBox", borderColor: "#404"},
     color: "#808", // Decides the nodes color.
@@ -35,7 +36,7 @@ addLayer("hve", {
     clickables: {
         1: {
             title() {
-                let str = "<h3>Vex, but reset pre-power content.<br><small>Req: " + format(player.hve.vexReq) + " curses</small></h3>"
+                let str = "<h3>Vex, but reset curse content.<br><small>Req: " + format(player.hve.vexReq) + " curses</small></h3>"
                 if (player.hve.vexTotal.gte(12)) str = str.concat("<br><small style='color:red'>[SOFTCAPPED]</small>")
                 return str
             },
@@ -58,7 +59,15 @@ addLayer("hve", {
                     player.hve.rowCurrent[i] = rowTot[i] - player.hve.rowSpent[i]
                 }
 
-                layers.hpw.powerReset(2)
+                player.hcu.curses = new Decimal(0)
+                player.hcu.cursesGain = new Decimal(0)
+                for (let i = 101; i < 109; i++) {
+                    player.hcu.buyables[i] = new Decimal(0)
+                }
+                if (!hasMilestone("hpw", 4)) player.hcu.buyables[109] = new Decimal(0)
+                player.hcu.buyables[110] = new Decimal(0)
+                player.hcu.buyables[111] = new Decimal(0)
+                if (!hasMilestone("hpw", 4)) player.hcu.buyables[112] = new Decimal(0)
             },
             style() {
                 let look = {width: "300px", minHeight: "80px", fontSize: "9px", border: "2px solid black", borderRadius: "15px"}
@@ -68,11 +77,11 @@ addLayer("hve", {
             },
         },
         2: {
-            title() { return "Respec your vexes<br><small style='font-size:11px'>(Does a vex reset)</small>"},
+            title() { return "Respec your vexes<br><small style='font-size:11px'>(Resets pre-power content)</small>"},
             canClick() { return player.hve.rowSpent.some((x) => x > 0)},
             unlocked: true,
             onClick() {
-                if (confirm("Are you sure you want to do a vex reset?")) {
+                if (confirm("Are you sure you want to reset pre-power content??")) {
                     player.hve.vex = player.hve.vexTotal
                     for (i = 0; i < 6; i++) {
                         player.hve.rowCurrent[i] = player.hve.rowCurrent[i] + player.hve.rowSpent[i]

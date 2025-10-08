@@ -523,9 +523,8 @@ addLayer("pet", {
                 player.pet.activeAbilities[0] = true
 
                 player.sma.inStarmetalChallenge = true
-                player.universe = -0.1
+                player.universe = "D1"
                 player.tab = "le"
-                player.uniTab = 1
 
                 layers.le.starmetalResetAgain()
                 layers.pu.generateSelection();

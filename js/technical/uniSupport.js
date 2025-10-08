@@ -170,7 +170,7 @@ addUniverse("U3", {
         }
         return style
     },
-    uniShown() { return player.startedGame && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
 })
 
 addUniverse("D1", {
@@ -197,7 +197,7 @@ addUniverse("D1", {
 addUniverse("CB", {
     name: "Check Back",
     symbol: "CB",
-    tree: [["cb"], ["ev0", "ev1", "ev2", "ev4", "ev8", "ev10"], ["ep0", "ep1", "ep2", "ep3", "ep4", "ep5"]],
+    tree: [["cb"], ["ev0", "ev1", "ev2"], ["ev4", "ev8", "ev10"], ["ep0", "ep1", "ep2"], ["ep3", "ep4", "ep5"]],
     nodeStyle() {
         return {
             background: "#094599",

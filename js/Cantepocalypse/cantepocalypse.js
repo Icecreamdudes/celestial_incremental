@@ -49,7 +49,7 @@ addLayer("cp", {
         let onepersec = new Decimal(1)
 
         if (player.tab == "cp" && player.cap.cantepocalypsePrep == true) {
-            player.uniTab = 2
+            player.universe = "A1"
             player.cap.cantepocalypsePrep = false
             player.subtabs["cap"]['stuff'] = 'Main'
             player.cp.cantepocalypseActive = true

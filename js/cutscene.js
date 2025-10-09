@@ -1299,6 +1299,16 @@
             },
             onHold() { clickClickable(this.layer, this.id) },
         },
+        13: {
+            title() { return "Emergency Escape" },
+            canClick() { return true},
+            unlocked() { return player.c.cutsceneIndex >= player.c.cutsceneText.length },
+            onClick() {
+                player.c.currentCutscene = 0
+                player.tab = "i"
+                player.c.cutsceneIndex = 0
+            },
+        },
     },
     tabFormat: [
         ["blank", "125px"],
@@ -1306,6 +1316,8 @@
         ["raw-html", () => { return player.c.evoCutscene ? player.c.cutsceneText[player.c.cutsceneIndex] : ""}, {color: "white", fontSize: "32px", fontFamily: "Verdana, sans-serif"}],
         ["blank", "25px"],
         ["row", [["clickable", 12], ["clickable", 11]]],
+        ["blank", "25px"],
+        ["clickable", 13],
     ],
     layerShown() { return true }
 })

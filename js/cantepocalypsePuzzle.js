@@ -86,6 +86,8 @@ addLayer("cap", {
         }
         if (player.universe == "A1") {
             player.cap.cantepocalypsePrep = false
+            player.subtabs["cap"]['stuff'] = 'Main'
+            player.cp.cantepocalypseActive = true
         }
 
         player.cap.quizAnswers = [

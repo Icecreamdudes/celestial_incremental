@@ -2565,11 +2565,11 @@ addLayer("cb", {
             },
             display() {
                 if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
-                    return "which are reducing the pity requirement by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    return "which are reducing the pity requirement by -" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                         Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
                 } else {
                     let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
-                    return "which are reducing the pity requirement by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    return "which are reducing the pity requirement by -" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                         Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
                 }
             },

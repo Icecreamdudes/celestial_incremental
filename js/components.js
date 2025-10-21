@@ -673,7 +673,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].levelables && tmp[layer].levelables[data]!== undefined && tmp[layer].levelables[data].unlocked" style="display: grid">
-			<button v-bind:class="{ levelableHolder: true, can: tmp[layer].levelables[data].canClick, locked: !tmp[layer].levelables[data].canClick}"
+			<button v-bind:class="{ levelableHolder: true, tooltipBox: true, can: tmp[layer].levelables[data].canClick, locked: !tmp[layer].levelables[data].canClick}"
 			v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].levelables[data].style]"
 			v-on:click="clickLevelable(layer, data)" :id='"levelable-" + layer + "-" + data'>
 				<div class="levelableTop">
@@ -688,6 +688,7 @@ function loadVue() {
 					</div>
 					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
+				<tooltip v-if="tmp[layer].levelables[data].tooltip" :text="tmp[layer].levelables[data].tooltip"></tooltip>
 			</button>
 		</div>
 		`
@@ -1250,9 +1251,48 @@ function loadVue() {
 			</div>
 		`
 	})
+	Vue.component('glossary', {
+		props: ['layer', 'data'],
+		template: `
+		<div v-bind:class="{hoverable: true, selected: player[layer].glossaryRig == data}" v-if="run(layers[layer].glossary[data].display, layers[layer].glossary[data])" :disabled="player[layer].glossary[data].eq(0)" v-on:click="layers[layer].glossary[data].onClick ? run(layers[layer].glossary[data].onClick, layers[layer].glossary[data]) : ''" v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%)'} : {}" @mouseenter="hover" @touchstart="hover" @touchmove="hover">
+			<svg width='60pt' height='60pt' viewBox='0 0 60 60' v-bind:style="player[layer].glossary[data].eq(0) ? {'filter': 'brightness(50%) drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))'} : {}" style="filter:drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.5))" v-html="layers[layer].glossary[data].svg"></svg>
+		</div>
+		`,
+		methods: {
+			hover() {
+				if (player[this.layer].glossary[this.data].gt(0) && layers[this.layer].glossary[this.data].onHover) run(layers[this.layer].glossary[this.data].onHover, layers[this.layer].glossary[this.data])
+			},
+		},
+	})
 
-		// <br><br><img src='resources/checkback/small_cookie.png' width='13px' height='13px' style='margin:-3px'></img>
-		// <span style="text-shadow:#000 0 0 4px,#000 0 1px 0" v-bind:style="[canAffordUpgrade(layer, data) ? {'color':'#6f6'} : {'color':'#f66'}]" v-html="formatWhole(tmp[layer].upgrades[data].cost)"></span>
+	Vue.component('glossary-display', {
+		props: ['layer', 'data'],
+		template: `
+			<div class="glossaryUpgDisplay">
+				<span style="position:absolute;top:4px;left:15px;font-size:20px;text-shadow:#000 0px 1px 4px;letter-spacing:-1px" v-html="player.fl.glossaryIndex != 0 ? layers.fl.glossary[player.fl.glossaryIndex].name : ''"></span>
+				<span style="position:absolute;top:7px;right:15px;font-size:14px;text-shadow:#000 0 0 4px,#000 0 1px 0" v-html="player.fl.glossaryIndex != 0 ? 'You have: ' + formatSimple(player.fl.glossary[player.fl.glossaryIndex], 1) : ''"></span>
+				<div style="position:absolute;top:30px;left:15px;width:505px;height:2px;border:0;background:#888"></div>
+				<span style="position:absolute;top:34px;left:15px;font-size:14px;letter-spacing:-1px;text-align:left;padding-right:15px" v-html="player.fl.glossaryIndex != 0 ? run(layers.fl.glossary[player.fl.glossaryIndex].getTitle, layers.fl.glossary[player.fl.glossaryIndex]) : ''"></span>
+			</div>
+		`
+	})
+
+	// [TEXT, SUBTAB, TAB, ENABLE]
+	Vue.component('category-button', {
+		props: ['layer', 'data'],
+		template: `
+			<button class="shopButton" v-bind:class="{selected: player.subtabs[layer][data[1]] == data[2]}" :disabled="data[3]" v-on:click="player.subtabs[layer][data[1]] = data[2]" v-html="!data[3] ? data[0] : ''" ></button>
+		`
+	}),
+
+	// [TEXT, UNLOCK, DEFAULT_COLOR, CONDITION, CONDITION_COLOR]
+	Vue.component('color-text', {
+		props: ['layer', 'data'],
+		template: `
+			<span class="instant" v-if="data[1]" v-bind:style="data[3] ? {'color': data[2]} : {'color': data[4]}" style="pointer-events:none;user-select:none" v-html="data[0]"></span>
+		`
+	})
+
 	// SYSTEM COMPONENTS
 	Vue.component('node-mark', systemComponents['node-mark'])
 	Vue.component('tab-buttons', systemComponents['tab-buttons'])

@@ -257,6 +257,7 @@ addLayer("ep2", {
         }
 
         if (!player.ep2.obtainedShards && player.ep2.chocoShards.gte(1)) player.ep2.obtainedShards = true
+        if (typeof player.ep2.barClicks != "number") player.ep2.barClicks = 0
     },
     clickables: {
         1: {
@@ -2362,6 +2363,7 @@ function startAutoClick() {
         } else {
             time++
         }
+        if (player.tab != "ep2") autoClickInterval = clearInterval(autoClickInterval)
     }, 150);
 }
 

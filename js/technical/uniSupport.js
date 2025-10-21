@@ -225,3 +225,23 @@ addUniverse("CH", {
     },
     uniShown() { return player.startedGame && player.fu.defeatedJocus && !player.sma.inStarmetalChallenge},
 })
+
+addUniverse("UB", {
+    name: "Universe β<br>Hive",
+    symbol: "β",
+    tree: [["bee", "fl"], ["bpl", "ne"], ["bb", "wa", "ho"], ["al"]],
+    nodeStyle() {
+        let style = {
+            background: "linear-gradient(45deg, #f6e000 0%, #f9c901 100%)",
+            backgroundOrigin: "border-box",
+            borderColor: "#6b4701",
+        }
+        if (player.universe=="UB") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && player.pol.unlockHive >= 2 && !player.sma.inStarmetalChallenge},
+})

@@ -191,7 +191,7 @@ addLayer("pol", {
             player.pol.pollinators = player.pol.pollinators.add(player.pol.pollinatorsPerSecond.mul(delta))
         }  
 
-        if (player.pol.pollinators.gte(1e500) && player.pol.unlockHive < 1) {
+        if (player.pol.pollinators.gte(1e80) && player.pol.unlockHive < 1) {
             player.pol.unlockHive = 1
         }
 
@@ -453,23 +453,17 @@ addLayer("pol", {
             },
         },
         100: {
-            title() { return "<h1>UNLOCK" },
+            title() { return "<h1>UNLOCK ???" },
             canClick() {
-                return player.pol.pollinators.gte(1e100) && getLevelableAmount("pet", 102).gte(20) && getLevelableAmount("pet", 104).gte(20)
-                && getLevelableAmount("pet", 202).gte(15) && getLevelableAmount("pet", 203).gte(15) && getLevelableAmount("pet", 303).gte(8)
-                && getLevelableAmount("pet", 305).gte(8) && getLevelableAmount("pet", 402).gte(4)
+                return player.pol.pollinators.gte(1e100) && getLevelableAmount("pu", 108).gte(15) && getLevelableAmount("pu", 205).gte(15)
+                    && getLevelableAmount("pu", 206).gte(15) && getLevelableAmount("pu", 301).gte(15)
             },
-            unlocked() { return true},
+            unlocked: true,
             onClick() {
                 player.pol.unlockHive = 2
                 player.subtabs["pol"]['stuff'] = 'Main'
-                //if (options.newMenu) {
-                //    player.tab = 'uh'
-                //} else {
-                //    player.tab = 'uh'
-                //}
             },
-            style: { width: '400px', "min-height": '160px' },
+            style: {width: "400px", minHeight: "160px", border: "3px solid black", borderRadius: "30px"},
         }
     },
     bars: {},
@@ -891,22 +885,22 @@ addLayer("pol", {
             },
             "???": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return false /*player.pol.unlockHive == 1*/ },
+                unlocked() { return player.pol.unlockHive == 1 },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "Unlock ???:" }, { color: "white", fontSize: "36px", fontFamily: "monospace" }],
+                    ["style-column", [
+                        ["raw-html", "Unlock ???:", {color: "white", fontSize: "36px", fontFamily: "monospace"}],
+                        ["blank", "10px"],
+                        ["h-line", []],
+                        ["blank", "10px"],
+                        ["raw-html", () => {return format(player.pol.pollinators) + "/1e100 Pollinators" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return formatWhole(getLevelableAmount("pu", 108)) + "/15 Grass based on Grass Levels" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return formatWhole(getLevelableAmount("pu", 205)) + "/15 Grass based on Generators Levels" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return formatWhole(getLevelableAmount("pu", 206)) + "/15 Grass based on Prestige Levels" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return formatWhole(getLevelableAmount("pu", 301)) + "/15 Multipurpose I Levels" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ], {padding: "10px 20px", backgroundColor: "#281c00", border: "3px solid #513800", borderRadius: "20px"}],
                     ["blank", "25px"],
-                    ["raw-html", function () { return format(player.pol.pollinators) + "/1e100 Pollinators" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 101)) + "/20 Egg Guy Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 104)) + "/20 Gd Checkpoint Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 202)) + "/15 Star Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 203)) + "/15 Normal Face Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 303)) + "/8 Drippy Ufo Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 305)) + "/8 Antimatter Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return formatWhole(getLevelableAmount("pet", 402)) + "/4 Dragon Level" }, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", "COMING SOON", { color: "white", fontSize: "24px", fontFamily: "monospace" }],
-                    //["row", [["clickable", 100]]],
+                    ["clickable", 100],
                 ]
             }
         },

@@ -21,6 +21,9 @@
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"Check Back/cookie.js",
+		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
+		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js",
+		
 		"mining.js", "DarkU1/punchcards.js",
 
 
@@ -194,6 +197,13 @@ function updateStyles() {
 			break;
 		case "au2":
 			layerBG = "#151230"
+			break;
+		case "bee": case "fl": case "bpl": case "ne": case "bb":
+		case "ho": case "wa":
+			layerBG = "#2a1c00"
+			break;
+		case "al":
+			layerBG = "#1f001f"
 			break;
 		case "cb":
 			layerBG = "#021124"
@@ -437,6 +447,9 @@ function updateStyles() {
 			case "A2":
 				sideBG = "radial-gradient(circle, #151230, #000000)"
 				break;
+			case "UB":
+				sideBG = "#150e00"
+				break;
 			case "CB":
 				sideBG = "#010812"
 				break;
@@ -502,6 +515,10 @@ function updateStyles() {
 		case "mi":
 			player.musuniverse = "MI"
 			break;
+		case "bee": case "fl": case "bpl": case "ne": case "bb":
+		case "ho": case "wa": case "al":
+			player.musuniverse = "UB"
+			break;
 		case "cb": case "ev0": case "ev1": case "ev2": case "ev4":
 		case "ev8": case "ev10": case "ep0": case "ep1":
 		case "ep2": case "ep3": case "ep4": case "ep5":
@@ -559,6 +576,9 @@ function updateStyles() {
 				break;
 			case "MI":
 				playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
+				break;
+			case "UB":
+				playAndLoopAudio("music/hive.mp3", options.musicVolume/10)
 				break;
 			case "CB":
 				playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
@@ -1118,7 +1138,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "cookieClick"
+	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower"
 
 ]
 

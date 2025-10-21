@@ -42,6 +42,7 @@ addLayer("hcu", {
         // SOFTCAPS AND PER SECOND
         if (inChallenge("hrm", 12)) player.hcu.cursesGain = player.hcu.cursesGain.pow(0.6)
         if (player.hcu.cursesGain.gte(1e12)) player.hcu.cursesGain = player.hcu.cursesGain.div(1e12).pow(0.6).mul(1e12)
+        if (player.hcu.cursesGain.gte("1e1200")) player.hcu.cursesGain = player.hcu.cursesGain.div("1e1200").pow(0.1).mul("1e1200")
         player.hcu.curses = player.hcu.curses.add(player.hcu.cursesGain.mul(delta))
 
         // JINX TOTAL
@@ -306,10 +307,15 @@ addLayer("hcu", {
         106: {
             costBase() { return new Decimal(1e18).div(player.hcu.jinxDiv) },
             costGrowth() { return new Decimal(1e6)},
-            purchaseLimit() { return new Decimal(30).add(player.hcu.jinxAddCap).div(3).floor() },
+            purchaseLimit() {
+                if (new Decimal(30).add(player.hcu.jinxAddCap).div(3).gte(100)) return new Decimal(30).add(player.hcu.jinxAddCap).pow(0.5).add(83).floor()
+                return new Decimal(30).add(player.hcu.jinxAddCap).div(3).floor()
+            },
             currency() { return player.hcu.curses},
             pay(amt) { player.hcu.curses = this.currency().sub(amt).max(0) },
-            effect(x) { return Decimal.pow(1.01, getBuyableAmount(this.layer, this.id)) },
+            effect(x) {
+                if (getBuyableAmount(this.layer, this.id).gte(100)) return getBuyableAmount(this.layer, this.id).mul(0.01).add(1.7)
+                return Decimal.pow(1.01, getBuyableAmount(this.layer, this.id)) },
             unlocked() { return true },
             cost(x = getBuyableAmount(this.layer, this.id)) {
                 let cst = this.costGrowth().pow(x).mul(this.costBase())
@@ -319,7 +325,11 @@ addLayer("hcu", {
             },
             canAfford() { return this.currency().gte(this.cost()) },
             title() { return "Ζ-Jinx" },
-            display() { return "Curses are raised to the power of 1.01" },
+            display() {
+                let str = "Curses are raised to the power of 1.01"
+                if (getBuyableAmount(this.layer, this.id).gte(100)) str = str.concat("<br><small style='color:red'>[SOFTCAPPED]</small>")
+                return str
+            },
             total() { return "(Total: ^" + format(tmp[this.layer].buyables[this.id].effect) + ")"},
             buy(mult) {
                 if (mult != true) {
@@ -681,7 +691,7 @@ addLayer("hcu", {
                 player.hcu.cursesGain.gt(0) ? look.color = "white" : look.color = "gray"
                 return look
             }],
-            ["raw-html", () => {return player.hcu.cursesGain.gte(1e12) && inChallenge("hrm", 12) ? "<small>[SOFTCAPPED<sup>2</sup>]</small>" :
+            ["raw-html", () => {return (player.hcu.cursesGain.gte(1e12) && inChallenge("hrm", 12)) || player.hcu.cursesGain.gte("1e1200") ? "<small>[SOFTCAPPED<sup>2</sup>]</small>" :
                 player.hcu.cursesGain.gte(1e12) || inChallenge("hrm", 12) ? "<small>[SOFTCAPPED]</small>" : "" }, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
             ["raw-html", "<div class='bottomTooltip'>Base Formula<hr><small>log6(Blessings)</small></div>"],
         ]],

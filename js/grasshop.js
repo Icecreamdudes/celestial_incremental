@@ -64,7 +64,8 @@
         if (player.gh.grasshoppersToGet.lt(50000))  player.gh.grasshoppersToGet = player.g.grass.div(10000).pow(0.55)
         if (player.gh.grasshoppersToGet.gte(50000))  player.gh.grasshoppersToGet = player.g.grass.div(15000).pow(0.45).add(10000)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 201)[1])
-        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.diceEffects[6])
+        player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.d.boosterEffects[6])
+        if (hasAchievement("achievements", 23)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(2)
         if (player.po.rocketFuel) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.rf.rocketFuelEffect)
         player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(levelableEffect("pet", 304)[0])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("ad", 16))
@@ -127,9 +128,10 @@
 
         // START OF FERTILIZER MODIFIERS
         player.gh.fertilizerPerSecond = player.gh.grasshoppers.pow(1.4).div(10)
+        if (hasAchievement("achievements", 15)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(1.5)
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 201)[2])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(levelableEffect("pet", 301)[0])
-        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.diceEffects[7])
+        player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.d.boosterEffects[7])
         player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(player.rf.abilityEffects[3])
         if (hasUpgrade("ad", 16) && !inChallenge("ip", 14)) player.gh.fertilizerPerSecond = player.gh.fertilizerPerSecond.mul(upgradeEffect("ad", 16))
 
@@ -240,6 +242,8 @@
             canClick() { return player.gh.grasshoppersToGet.gte(1) && player.points.gte(1e35) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 13)) completeAchievement("achievements", 13)
+                if (!hasAchievement("achievements", 23) && player.gh.grasshoppersToGet.gte(1e25)) completeAchievement("achievements", 23)
                 player.gh.grasshopPause = new Decimal(3)
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
 
@@ -631,6 +635,7 @@
             },
             branches: [14, 15],
             buy() {
+                if (!hasAchievement("achievements", 16)) completeAchievement("achievements", 16)
                 if (player.gh.studyMax == false && !hasMilestone("ip", 17)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -694,7 +699,7 @@
             display() {
                 return "<h3>Grass Study IV</h3>\n\
                     (" + formatWhole(getBuyableAmount(this.layer, this.id)) + "/100)\n\
-                    Produce " + format(tmp[this.layer].buyables[this.id].effect.mul(100), 1) + "% of golden grass value per second.\n\ \n\
+                    Produce " + formatSimple(tmp[this.layer].buyables[this.id].effect.mul(100), 1) + "% of golden grass value per second.\n\ \n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             branches: [16, 15],

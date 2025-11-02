@@ -100,7 +100,7 @@ addLayer("hcu", {
             },
             effectBase() {
                 let base = new Decimal(2).add(buyableEffect("hcu", 102))
-                if (inChallenge("hrm", 12)) base = base.pow(player.hpu.purifierEffects[5])
+                if (inChallenge("hrm", 12)) base = base.pow(player.hpu.purifiers[5].effect)
                 return base
             },
             effect(x) { return Decimal.pow(this.effectBase(), getBuyableAmount(this.layer, this.id).add(tmp[this.layer].buyables[this.id].extraAmount)) },

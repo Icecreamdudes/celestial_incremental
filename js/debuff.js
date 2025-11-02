@@ -288,7 +288,7 @@
         player.d.buyables[15] = new Decimal(0)
 
         for (let i = 0; i < 11; i++) {
-            player.d.diceEffects[i] = new Decimal(1)
+            player.d.boosterEffects[i] = new Decimal(1)
         }
 
         //rf

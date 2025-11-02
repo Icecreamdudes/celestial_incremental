@@ -276,6 +276,9 @@
             title: 'Grass Upgrade III',
             unlocked() { return hasMilestone('r', 11) },
             description() { return 'Unlocks Golden Grass.' },
+            onPurchase() {
+                if (!hasAchievement("achievements", 11)) completeAchievement("achievements", 11)
+            },
             cost: new Decimal(800),
             currencyLocation() { return player.g },
             currencyDisplayName: 'Grass',
@@ -404,6 +407,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Grass'
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 9)) completeAchievement("achievements", 9)
                 if (mult != true && !hasMilestone("r", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -608,6 +612,7 @@
                     Cost: ' + format(tmp[this.layer].buyables[this.id].cost) + ' Golden Grass'
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 12)) completeAchievement("achievements", 12)
                 if (mult != true && !hasMilestone("r", 13)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -1189,6 +1194,8 @@ const updateGrass = (delta) => {
     // START OF GRASS MODIFIERS
     player.g.grassVal = new Decimal(1)
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('g', 11))
+    if (hasAchievement("achievements", 11)) player.g.grassVal = player.g.grassVal.mul(1.25)
+    if (hasAchievement("achievements", 14)) player.g.grassVal = player.g.grassVal.mul(1.5)
     player.g.grassVal = player.g.grassVal.mul(player.g.goldGrassEffect)
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('t', 17))
     player.g.grassVal = player.g.grassVal.mul(player.gh.grasshopperEffects[4])
@@ -1203,7 +1210,7 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 8))
     if (hasUpgrade("cs", 201)) player.g.grassVal = player.g.grassVal.mul(buyableEffect('f', 104))
     player.g.grassVal = player.g.grassVal.mul(levelableEffect("pet", 104)[0])
-    player.g.grassVal = player.g.grassVal.mul(player.d.diceEffects[5])
+    player.g.grassVal = player.g.grassVal.mul(player.d.boosterEffects[5])
     player.g.grassVal = player.g.grassVal.mul(player.rf.abilityEffects[2])
     if (hasUpgrade('g', 11)) player.g.grassVal = player.g.grassVal.mul(player.p.prestigeEffect2)
     if (hasUpgrade('ad', 14)) player.g.grassVal = player.g.grassVal.mul(upgradeEffect('ad', 14))
@@ -1245,11 +1252,11 @@ const updateGrass = (delta) => {
     if (player.g.grassEffect.gte("1e25000")) player.g.grassEffect = player.g.grassEffect.div("1e25000").pow(Decimal.add(0.1, player.cs.scraps.grass.effect)).mul("1e25000")
 
     player.g.grassEffect2 = player.g.grass.pow(0.3).div(7).add(1)
-    if (hasMilestone("r", 13)) player.g.grassEffect2 = player.g.grass.pow(0.3).add(1)
     if (player.g.grassEffect2.gte("1e10000")) player.g.grassEffect2 = player.g.grassEffect2.div("1e10000").pow(Decimal.add(0.1, player.cs.scraps.grass.effect)).mul("1e10000")
     
     // GRASS REQUIREMENT
     player.g.grassReq = new Decimal(4).div(buyableEffect('g', 12))
+    if (hasAchievement("achievements", 9)) player.g.grassReq = player.g.grassReq.div(1.1)
 
     // GRASS CAP
     player.g.grassCap = new Decimal(100).add(buyableEffect('g', 13))
@@ -1344,6 +1351,7 @@ const updateGoldGrass = (delta) => {
 
     // GOLDEN GRASS REQUIREMENT
     player.g.goldGrassReq = new Decimal(40)
+    if (hasAchievement("achievements", 12)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.1)
     if (hasUpgrade('g', 16)) player.g.goldGrassReq = player.g.goldGrassReq.div(1.3)
     player.g.goldGrassReq = player.g.goldGrassReq.div(buyableEffect('gh', 12))
     player.g.goldGrassReq = player.g.goldGrassReq.div(levelableEffect("pet", 303)[1])

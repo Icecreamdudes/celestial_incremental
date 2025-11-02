@@ -615,7 +615,7 @@
                 ["raw-html", "<h5>Gained from failing to obtain Para Shards.", { "color": "#4C64FF", "font-size": "16px", "font-family": "monospace" }],
                 ["raw-html", "<h5>Reset when you gain uncertain Para Shards.", { "color": "#4C64FF", "font-size": "16px", "font-family": "monospace" }],
             ], () => { return player.cb.highestLevel.gte(250) ? {padding: "5px", borderLeft: "2px solid white"} : {display: "none !important"}}],
-        ], () => { return player.cb.highestLevel.gte(250) ? {width: "680px", border: "2px solid white", borderRadius: "10px", backgroundColor: "black"} : {width: "340px", border: "2px solid white", borderRadius: "10px", backgroundColor: "black"} }],
+        ], () => { return player.cb.highestLevel.gte(250) ? {width: "682px", border: "2px solid white", borderRadius: "10px", backgroundColor: "black"} : {width: "340px", border: "2px solid white", borderRadius: "10px", backgroundColor: "black"} }],
         ["blank", "10px"],
         ["style-column", [
             ["scroll-column", [
@@ -634,20 +634,20 @@
                     if (player.ev.evolutionDisplayIndex == -1) {
                         return "No Pet Selected"
                     } else {
-                        return tmp.ev.evos[player.ev.evolutionDisplayIndex].title
+                        return run(layers.ev.evos[player.ev.evolutionDisplayIndex].title, layers.ev.evos[player.ev.evolutionDisplayIndex])
                     }
                 }, {color: "#4b79ff", fontSize: "32px", fontFamily: "monospace"}],
                 ["raw-html", function () {
                     if (player.ev.evolutionDisplayIndex == -1) {
                         return ""
                     } else {
-                        return tmp.ev.evos[player.ev.evolutionDisplayIndex].description
+                        return run(layers.ev.evos[player.ev.evolutionDisplayIndex].description, layers.ev.evos[player.ev.evolutionDisplayIndex])
                     }
                 }, {color: "#4b79ff", fontSize: "28px", fontFamily: "monospace"}],
                 ["blank", "10px"],
-            ], {width: "680px", height: "525px", overflowX: "hidden"}],
-            ["style-column", [["clickable", 2]], {width: "680px", height: "125px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "0px 0px 10px 10px"}],
-        ], {width: "680px", height: "650px", border: "2px solid white", borderRadius: "10px", background: "linear-gradient(90deg, #5C1E7E, #1E3066)"}],
+            ], {width: "682px", height: "525px", overflowX: "hidden"}],
+            ["style-column", [["clickable", 2]], {width: "682px", height: "125px", backgroundColor: "rgba(0,0,0,0.4)", borderRadius: "0px 0px 10px 10px"}],
+        ], {width: "682px", height: "650px", border: "2px solid white", borderRadius: "10px", background: "linear-gradient(90deg, #5C1E7E, #1E3066)"}],
     ],
     layerShown() { return false }
 })
@@ -774,10 +774,10 @@ addLayer("ev0", {
             unlocked() { return true },
             canAfford() { return player.ev0.coinDust.gte(this.cost()) },
             title() {
-                return "Pet Button Cool Down"
+                return "Crate Button Cool Down"
             },
             display() {
-                return "which are dividing pet button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing crate button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
@@ -806,10 +806,10 @@ addLayer("ev0", {
             unlocked() { return true },
             canAfford() { return player.ev0.coinDust.gte(this.cost()) },
             title() {
-                return "Rare Pet Button Cool Down"
+                return "Pet Point Button Cool Down"
             },
             display() {
-                return "which are dividing pet button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are dividing pet point button cooldown by /" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Coin Dust"
             },
             buy(mult) {
@@ -1577,36 +1577,36 @@ addLayer("ev1", {
         ["style-row", [
             ["style-column", [
                 ["style-column", [
-                    ["raw-html", function () { return "Button 1 Base: " + format(player.cb.buttonBaseXP[0]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 1 Cooldown: " + formatTime(player.cb.buttonTimersMax[0]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 1 Base: " + format(player.cb.xpTimers[0].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 1 Cooldown: " + formatTime(player.cb.xpTimers[0].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 2 Base: " + format(player.cb.buttonBaseXP[1]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 2 Cooldown: " + formatTime(player.cb.buttonTimersMax[1]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 2 Base: " + format(player.cb.xpTimers[1].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 2 Cooldown: " + formatTime(player.cb.xpTimers[1].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 3 Base: " + format(player.cb.buttonBaseXP[2]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 3 Cooldown: " + formatTime(player.cb.buttonTimersMax[2]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 3 Base: " + format(player.cb.xpTimers[2].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 3 Cooldown: " + formatTime(player.cb.xpTimers[2].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 4 Base: " + format(player.cb.buttonBaseXP[3]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 4 Cooldown: " + formatTime(player.cb.buttonTimersMax[3]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 4 Base: " + format(player.cb.xpTimers[3].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 4 Cooldown: " + formatTime(player.cb.xpTimers[3].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 5 Base: " + format(player.cb.buttonBaseXP[4]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 5 Cooldown: " + formatTime(player.cb.buttonTimersMax[4]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 5 Base: " + format(player.cb.xpTimers[4].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 5 Cooldown: " + formatTime(player.cb.xpTimers[4].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 6 Base: " + format(player.cb.buttonBaseXP[5]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 6 Cooldown: " + formatTime(player.cb.buttonTimersMax[5]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 6 Base: " + format(player.cb.xpTimers[5].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 6 Cooldown: " + formatTime(player.cb.xpTimers[5].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 7 Base: " + format(player.cb.buttonBaseXP[6]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 7 Cooldown: " + formatTime(player.cb.buttonTimersMax[6]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 7 Base: " + format(player.cb.xpTimers[6].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 7 Cooldown: " + formatTime(player.cb.xpTimers[6].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
                 ["style-column", [
-                    ["raw-html", function () { return "Button 8 Base: " + format(player.cb.buttonBaseXP[7]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["raw-html", function () { return "Button 8 Cooldown: " + formatTime(player.cb.buttonTimersMax[7]) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 8 Base: " + format(player.cb.xpTimers[7].base) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", function () { return "Button 8 Cooldown: " + formatTime(player.cb.xpTimers[7].max) }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                 ], {height: "65px"}],
             ], {width: "375px"}],
             ["style-column", [
@@ -1649,7 +1649,7 @@ addLayer("ev2", {
 
         player.ev2.xpReward = new Decimal(150)
         player.ev2.xpReward = player.ev2.xpReward.add(player.ev2.day.sub(1).mul(15).pow(.8))
-        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.buttonBaseXP[0])
+        player.ev2.xpReward = player.ev2.xpReward.mul(player.cb.xpTimers[0].base)
 
         player.ev2.cooldown = player.ev2.cooldown.sub(onepersec.mul(delta))
     },
@@ -1914,6 +1914,47 @@ addLayer("ev8", {
     startData() { return {
         unlocked: true,
 
+        evoTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(18000),
+                base: new Decimal(1),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(54000),
+                base: new Decimal(2),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(108000),
+                base: new Decimal(4),
+            },
+            3: {
+                current: new Decimal(0),
+                max: new Decimal(324000),
+                base: new Decimal(9),
+            },
+        },
+
+        paraTimers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(180000),
+                base: new Decimal(1),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(450000),
+                base: new Decimal(3),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(864000),
+                base: new Decimal(5),
+            },
+        },
+
         evoButtonTimersMax: [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),],
         evoButtonTimers: [new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),],
         evoButtonBase: [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),],
@@ -1936,67 +1977,67 @@ addLayer("ev8", {
     update(delta) {
         let onepersec = player.cb.cbTickspeed
 
-        player.ev8.evoButtonTimersMax = [new Decimal(18000),new Decimal(54000),new Decimal(108000),new Decimal(324000),]
-        player.ev8.evoButtonBase = [new Decimal(1),new Decimal(2),new Decimal(4),new Decimal(9),]
-        for (let i = 0; i < player.ev8.evoButtonTimersMax.length; i++) {
-            if (hasUpgrade("ev8", 11)) player.ev8.evoButtonTimersMax[i] = player.ev8.evoButtonTimersMax[i].div(1.1)
-        }
-        for (let i = 0; i < player.ev8.evoButtonTimers.length; i++) {
-            player.ev8.evoButtonTimers[i] = player.ev8.evoButtonTimers[i].sub(onepersec.mul(delta))
+        player.ev8.evoTimers[0].max = new Decimal(18000)
+        player.ev8.evoTimers[1].max = new Decimal(54000)
+        player.ev8.evoTimers[2].max = new Decimal(108000)
+        player.ev8.evoTimers[3].max = new Decimal(324000)
+        for (let thing in player.ev8.evoTimers) {
+            if (hasUpgrade("ev8", 11)) player.ev8.evoTimers[thing].max = player.ev8.evoTimers[thing].max.div(1.1)
+            
+            player.ev8.evoTimers[thing].current = player.ev8.evoTimers[thing].current.sub(onepersec.mul(delta))
         }
 
-        player.ev8.paragonButtonTimersMax = [new Decimal(180000),new Decimal(450000),new Decimal(864000),]
-        player.ev8.paragonButtonBase = [new Decimal(1),new Decimal(3),new Decimal(5),]
-        for (let i = 0; i < player.ev8.paragonButtonTimersMax.length; i++) {
-            if (hasUpgrade("ev8", 11)) player.ev8.paragonButtonTimersMax[i] = player.ev8.paragonButtonTimersMax[i].div(1.1)
-        }
-        for (let i = 0; i < player.ev8.paragonButtonTimers.length; i++) {
-            player.ev8.paragonButtonTimers[i] = player.ev8.paragonButtonTimers[i].sub(onepersec.mul(delta))
+        player.ev8.paraTimers[0].max = new Decimal(180000)
+        player.ev8.paraTimers[1].max = new Decimal(450000)
+        player.ev8.paraTimers[2].max = new Decimal(864000)
+        for (let thing in player.ev8.paraTimers) {
+            if (hasUpgrade("ev8", 11)) player.ev8.paraTimers[thing].max = player.ev8.paraTimers[thing].max.div(1.1)
+
+            player.ev8.paraTimers[thing].current = player.ev8.paraTimers[thing].current.sub(onepersec.mul(delta))
         }
     },
-    branches: ["branch"],
     clickables: {
         //evo
         11: {
-            title() { return player.ev8.evoButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[0]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[0].lt(0) && this.unlocked },
+            title() { return player.ev8.evoTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[0].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[0].base) + " Evo Shards."},
+            canClick() { return player.ev8.evoTimers[0].current.lt(0) && this.unlocked },
             unlocked: true,
             onClick() {
-                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[0])
-                player.ev8.evoButtonTimers[0] = player.ev8.evoButtonTimersMax[0]
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoTimers[0].base)
+                player.ev8.evoTimers[0].current = player.ev8.evoTimers[0].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
-            title() { return player.ev8.evoButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[1]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[1].lt(0) && this.unlocked() },
+            title() { return player.ev8.evoTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[1].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[1].base) + " Evo Shards."},
+            canClick() { return player.ev8.evoTimers[1].current.lt(0) && this.unlocked() },
             unlocked() { return hasMilestone("s", 14) },
             onClick() {
-                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[1])
-                player.ev8.evoButtonTimers[1] = player.ev8.evoButtonTimersMax[1]
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoTimers[1].base)
+                player.ev8.evoTimers[1].current = player.ev8.evoTimers[1].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
-            title() { return player.ev8.evoButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[2]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[2].lt(0) && this.unlocked() },
+            title() { return player.ev8.evoTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[2].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[2].base) + " Evo Shards."},
+            canClick() { return player.ev8.evoTimers[2].current.lt(0) && this.unlocked() },
             unlocked() { return hasMilestone("s", 14) },
             onClick() {
-                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[2])
-                player.ev8.evoButtonTimers[2] = player.ev8.evoButtonTimersMax[2]
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoTimers[2].base)
+                player.ev8.evoTimers[2].current = player.ev8.evoTimers[2].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         14: {
-            title() { return player.ev8.evoButtonTimers[3].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoButtonTimers[3]) + "." : "<h3>+" + formatWhole(player.ev8.evoButtonBase[3]) + " Evo Shards."},
-            canClick() { return player.ev8.evoButtonTimers[3].lt(0) && this.unlocked() },
+            title() { return player.ev8.evoTimers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.evoTimers[3].current) + "." : "<h3>+" + formatWhole(player.ev8.evoTimers[3].base) + " Evo Shards."},
+            canClick() { return player.ev8.evoTimers[3].current.lt(0) && this.unlocked() },
             unlocked() { return hasMilestone("s", 14) },
             onClick() {
-                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoButtonBase[3])
-                player.ev8.evoButtonTimers[3] = player.ev8.evoButtonTimersMax[3]
+                player.cb.evolutionShards = player.cb.evolutionShards.add(player.ev8.evoTimers[3].base)
+                player.ev8.evoTimers[3].current = player.ev8.evoTimers[3].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
@@ -2022,34 +2063,34 @@ addLayer("ev8", {
         },
         //paragon
         101: {
-            title() { return player.ev8.paragonButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[0]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[0]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[0].lt(0) && this.unlocked },
+            title() { return player.ev8.paraTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[0].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[0].base) + " Paragon Shards."},
+            canClick() { return player.ev8.paraTimers[0].current.lt(0) && this.unlocked },
             unlocked: true,
             onClick() {
-                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[0])
-                player.ev8.paragonButtonTimers[0] = player.ev8.paragonButtonTimersMax[0]
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paraTimers[0].base)
+                player.ev8.paraTimers[0].current = player.ev8.paraTimers[0].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         102: {
-            title() { return player.ev8.paragonButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[1]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[1]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[1].lt(0) && this.unlocked() },
+            title() { return player.ev8.paraTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[1].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[1].base) + " Paragon Shards."},
+            canClick() { return player.ev8.paraTimers[1].current.lt(0) && this.unlocked() },
             unlocked() { return hasMilestone("s", 14) },
             onClick() {
-                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[1])
-                player.ev8.paragonButtonTimers[1] = player.ev8.paragonButtonTimersMax[1]
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paraTimers[1].base)
+                player.ev8.paraTimers[1].current = player.ev8.paraTimers[1].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         103: {
-            title() { return player.ev8.paragonButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paragonButtonTimers[2]) + "." : "<h3>+" + formatWhole(player.ev8.paragonButtonBase[2]) + " Paragon Shards."},
-            canClick() { return player.ev8.paragonButtonTimers[2].lt(0) && this.unlocked() },
+            title() { return player.ev8.paraTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ev8.paraTimers[2].current) + "." : "<h3>+" + formatWhole(player.ev8.paraTimers[2].base) + " Paragon Shards."},
+            canClick() { return player.ev8.paraTimers[2].current.lt(0) && this.unlocked() },
             unlocked() { return hasMilestone("s", 14) },
             onClick() {
-                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paragonButtonBase[2])
-                player.ev8.paragonButtonTimers[2] = player.ev8.paragonButtonTimersMax[2]
+                player.cb.paragonShards = player.cb.paragonShards.add(player.ev8.paraTimers[2].base)
+                player.ev8.paraTimers[2].current = player.ev8.paraTimers[2].max
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
@@ -2072,7 +2113,6 @@ addLayer("ev8", {
             },
         },
     },
-    bars: {},
     upgrades: {
         11: {
             title: "Shard Research I",
@@ -2087,7 +2127,7 @@ addLayer("ev8", {
         12: {
             title: "Shard Research II",
             unlocked() { return true },
-            description: "Divides pet button cooldown by /1.1.",
+            description: "Divides crate button cooldown by /1.1.",
             cost: new Decimal(10),
             currencyLocation() { return player.cb },
             currencyDisplayName: "Evolution Shards",
@@ -2204,15 +2244,6 @@ addLayer("ev8", {
             currencyInternalName: "paragonShards",
         }, */
     },
-    buyables: {
-    },
-    milestones: {
-
-    },
-    challenges: {
-    },
-    infoboxes: {
-    },
     microtabs: {
         stuff: {
             "Evo": {
@@ -2250,7 +2281,6 @@ addLayer("ev8", {
             },
         },
     },
-
     tabFormat: [
         ["blank", "10px"],
         ["left-row", [

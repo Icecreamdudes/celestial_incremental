@@ -120,7 +120,7 @@ function getStartLevelables(layer) {
 	if (layers[layer].levelables) {
 		for (id in layers[layer].levelables)
 			if (isPlainObject(layers[layer].levelables[id]))
-				data[id] = [decimalZero, decimalZero, false];
+				data[id] = [decimalZero, decimalZero, decimalZero];
 	}
 	return data;
 }

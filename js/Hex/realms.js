@@ -273,7 +273,7 @@ addLayer("hrm", {
             onExit() {
                 layers.hpw.powerReset(1)
             },
-            style: {width: '250px', height: '184px', backgroundColor: "#c44", border: "6px solid #800", borderRadius: "13px"},
+            style: {width: '250px', height: '204px', backgroundColor: "#c44", border: "6px solid #800", borderRadius: "13px"},
             buttonStyle() {
                 let look = {height: "40px", marginTop: "5px", marginBottom: "5px", borderRadius: "20px"}
                 if (this.canComplete() && inChallenge(this.layer, this.id)) look.border = "4px solid #77bf5f"
@@ -303,7 +303,7 @@ addLayer("hrm", {
             onExit() {
                 layers.hpw.powerReset(1)
             },
-            style: {width: '250px', height: '184px', backgroundColor: "#c84", border: "6px solid #840", borderRadius: "13px"},
+            style: {width: '250px', height: '204px', backgroundColor: "#c84", border: "6px solid #840", borderRadius: "13px"},
             buttonStyle() {
                 let look = {height: "40px", marginTop: "5px", marginBottom: "5px", borderRadius: "20px"}
                 if (this.canComplete() && inChallenge(this.layer, this.id)) look.border = "4px solid #77bf5f"
@@ -333,7 +333,7 @@ addLayer("hrm", {
             onExit() {
                 layers.hpw.powerReset(1)
             },
-            style: {width: '250px', height: '184px', backgroundColor: "#cc4", border: "6px solid #880", borderRadius: "13px"},
+            style: {width: '250px', height: '204px', backgroundColor: "#cc4", border: "6px solid #880", borderRadius: "13px"},
             buttonStyle() {
                 let look = {height: "40px", marginTop: "5px", marginBottom: "5px", borderRadius: "20px"}
                 if (this.canComplete() && inChallenge(this.layer, this.id)) look.border = "4px solid #77bf5f"
@@ -363,7 +363,7 @@ addLayer("hrm", {
             onExit() {
                 layers.hpw.powerReset(1)
             },
-            style: {width: '250px', height: '184px', backgroundColor: "#4c4", border: "6px solid #080", borderRadius: "13px"},
+            style: {width: '250px', height: '204px', backgroundColor: "#4c4", border: "6px solid #080", borderRadius: "13px"},
             buttonStyle() {
                 let look = {height: "40px", marginTop: "5px", marginBottom: "5px", borderRadius: "20px"}
                 if (this.canComplete() && inChallenge(this.layer, this.id)) look.border = "4px solid #77bf5f"
@@ -394,7 +394,7 @@ addLayer("hrm", {
             onExit() {
                 layers.hpw.powerReset(1)
             },
-            style: {width: '250px', height: '184px', backgroundColor: "#44c", border: "6px solid #008", borderRadius: "13px"},
+            style: {width: '250px', height: '204px', backgroundColor: "#44c", border: "6px solid #008", borderRadius: "13px"},
             buttonStyle() {
                 let look = {height: "40px", marginTop: "5px", marginBottom: "5px", borderRadius: "20px"}
                 if (this.canComplete() && inChallenge(this.layer, this.id)) look.border = "4px solid #77bf5f"
@@ -425,7 +425,7 @@ addLayer("hrm", {
             onExit() {
                 layers.hpw.powerReset(1)
             },
-            style: {width: '250px', height: '184px', backgroundColor: "#84c", border: "6px solid #408", borderRadius: "13px"},
+            style: {width: '250px', height: '204px', backgroundColor: "#84c", border: "6px solid #408", borderRadius: "13px"},
             buttonStyle() {
                 let look = {height: "40px", marginTop: "5px", marginBottom: "5px", borderRadius: "20px"}
                 if (this.canComplete() && inChallenge(this.layer, this.id)) look.border = "4px solid #77bf5f"
@@ -446,20 +446,20 @@ addLayer("hrm", {
                             ["raw-html", () => { return "Realm Completion Bonus: x" + format(new Decimal(player.hrm.realmEffect), 1) + " Power" }, {color: "white", fontSize: "22px", fontFamily: "monospace"}],
                         ], {width: "800px", height: "47px", backgroundColor: "rgba(0, 0, 0, 0.5)", borderBottom: "3px solid white", borderRadius: "17px 17px 0px 0px"}],
                         ["style-row", [
-                            ["style-row", [["challenge", 11]], {width: "250px", height: "184px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
-                            ["style-row", [["challenge", 12]], {width: "250px", height: "184px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
-                            ["style-row", [["challenge", 13]], {width: "250px", height: "184px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
-                        ], {width: "800px", height: "200px", backgroundColor: "rgba(0, 0, 0, 0.75)", paddingTop: "5px"}],
+                            ["style-row", [["challenge", 11]], {width: "250px", height: "204px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
+                            ["style-row", [["challenge", 12]], {width: "250px", height: "204px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
+                            ["style-row", [["challenge", 13]], {width: "250px", height: "204px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
+                        ], {width: "800px", height: "220px", backgroundColor: "rgba(0, 0, 0, 0.75)", paddingTop: "5px"}],
                         ["style-row", [
-                            ["style-row", [["challenge", 14]], {width: "250px", height: "184px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
-                            ["style-row", [["challenge", 15]], {width: "250px", height: "184px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
-                            ["style-row", [["challenge", 16]], {width: "250px", height: "184px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
-                        ], {width: "800px", height: "200px", backgroundColor: "rgba(0, 0, 0, 0.75)", paddingBottom: "5px"}],
+                            ["style-row", [["challenge", 14]], {width: "250px", height: "204px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
+                            ["style-row", [["challenge", 15]], {width: "250px", height: "204px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
+                            ["style-row", [["challenge", 16]], {width: "250px", height: "204px", backgroundColor: "rgba(0, 0, 0, 0.3)", border: "2px solid white", margin: "5px", borderRadius: "15px"}],
+                        ], {width: "800px", height: "220px", backgroundColor: "rgba(0, 0, 0, 0.75)", paddingBottom: "5px"}],
                         ["style-row", [
                             ["raw-html", "Unlock new realm challenges through mights", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ], {width: "800px", height: "37px", backgroundColor: "rgba(0, 0, 0, 0.5)", borderTop: "3px solid white", borderRadius: "0px 0px 17px 17px"}],
                     ], () => {
-                        let look = {width: "800px", height: "500px", background: "linear-gradient(90deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", border: "3px solid white", borderRadius: "20px"}
+                        let look = {width: "800px", height: "540px", background: "linear-gradient(90deg, #770000, #775400, #747700, #147700, #00772A, #007769, #004677, #000877, #330077, #710077)", border: "3px solid white", borderRadius: "20px"}
                         if (!hasUpgrade("bi", 27)) {look.opacity = "0.3";look.userSelect = "none"}
                         return look
                     }],

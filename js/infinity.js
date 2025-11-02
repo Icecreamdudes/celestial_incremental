@@ -123,9 +123,9 @@ addLayer("in", {
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.cs.scraps.infinity.effect)
 
         // START OF INFINITY POINT MODIFIERS
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosterEffects[2])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.hbl.boosters[2].effect)
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ip", 11))
-        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.diceEffects[11])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.d.boosterEffects[11])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(player.rf.abilityEffects[5])
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("cb", 12))
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.mul(buyableEffect("ta", 33))
@@ -293,7 +293,7 @@ addLayer("in", {
         player.d.dice = new Decimal(1)
 
         for (let i = 0; i < 11; i++) {
-            player.d.diceEffects[i] = new Decimal(1)
+            player.d.boosterEffects[i] = new Decimal(1)
         }
 
         for (let i = 11; i < 16; i++) {
@@ -461,6 +461,7 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
                 player.tab = "ip"
 
                 layers.bigc.crunch()

@@ -66,7 +66,18 @@ function addLevelableXP(layer, id, amt) {
 	player[layer].levelables[id][1] = player[layer].levelables[id][1].add(amt)
 }
 
-function getLevelableBool(layer, id) {
+function getLevelableBool(layer, id, bool = true) {
+	if (typeof player[layer].levelables[id][2] == "boolean") {
+		if (player[layer].levelables[id][2]) {
+			player[layer].levelables[id][2] = new Decimal(1)
+		} else {
+			player[layer].levelables[id][2] = new Decimal(0)
+		}
+	}
+	if (bool == true) {
+		if (player[layer].levelables[id][2].eq(0)) return false
+		return true
+	}
 	return (player[layer].levelables[id][2])
 }
 

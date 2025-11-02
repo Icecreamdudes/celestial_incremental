@@ -1,6 +1,7 @@
 addLayer("ne", {
     name: "Nectar", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "NE", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -58,8 +59,12 @@ addLayer("ne", {
         player.ne.beta.gain = player.ne.alpha.amount.div(100).pow(Decimal.add(0.65, buyableEffect("bee", 43)))
         player.ne.beta.gain = player.ne.beta.gain.mul(allGain)
 
+        if (hasUpgrade("al", 206) && hasUpgrade("ne", 103)) player.ne.beta.amount = player.ne.beta.amount.add(player.ne.beta.gain.div(2).mul(delta))
+
         player.ne.gamma.gain = player.ne.beta.amount.div(100).pow(Decimal.add(0.6, buyableEffect("bee", 43)))
         player.ne.gamma.gain = player.ne.gamma.gain.mul(allGain)
+
+        if (hasUpgrade("al", 209) && hasUpgrade("ne", 203)) player.ne.gamma.amount = player.ne.gamma.amount.add(player.ne.gamma.gain.div(4).mul(delta))
 
         player.ne.delta.gain = player.ne.gamma.amount.div(100).pow(Decimal.add(0.55, buyableEffect("bee", 43)))
         player.ne.delta.gain = player.ne.delta.gain.mul(allGain)
@@ -264,8 +269,8 @@ addLayer("ne", {
     },
     tabFormat: [
         ["row", [
-            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee." : "You have <h3>" + format(player.bee.bees) + "</h3> bees."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "25px"],
         ["row", [

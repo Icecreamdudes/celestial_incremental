@@ -51,7 +51,7 @@
         if (hasUpgrade("cs", 201)) player.t.treesToGet = player.t.treesToGet.mul(buyableEffect("f", 104))
         player.t.treesToGet = player.t.treesToGet.mul(player.m.modEffect)
         player.t.treesToGet = player.t.treesToGet.mul(levelableEffect("pet", 102)[1])
-        player.t.treesToGet = player.t.treesToGet.mul(player.d.diceEffects[3])
+        player.t.treesToGet = player.t.treesToGet.mul(player.d.boosterEffects[3])
         player.t.treesToGet = player.t.treesToGet.mul(player.rf.abilityEffects[1])
         if (hasUpgrade("g", 12)) player.t.treesToGet = player.t.treesToGet.mul(player.g.grassEffect2)
         if (hasMilestone("r", 19)) player.t.treesToGet = player.t.treesToGet.mul(player.r.pentMilestone9Effect[0])
@@ -95,7 +95,7 @@
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.gh.grasshopperEffects[3])
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(buyableEffect("gh", 17))
         player.t.leavesPerSecond = player.t.leavesPerSecond.mul(levelableEffect("pet", 202)[1])
-        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.diceEffects[4])
+        player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.d.boosterEffects[4])
         if (hasUpgrade("ip", 22) && !inChallenge("ip", 14)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(upgradeEffect("ip", 22))
         if (hasUpgrade("ad", 15) && !inChallenge("ip", 14)) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(upgradeEffect("ad", 15))
 
@@ -187,6 +187,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 8)) completeAchievement("achievements", 8)
                 if (mult != true && !hasMilestone("r", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -460,6 +461,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Trees"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 12)) completeAchievement("achievements", 12)
                 if (mult != true && !hasMilestone("r", 12)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)

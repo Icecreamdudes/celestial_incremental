@@ -1,6 +1,7 @@
 addLayer("bee", {
     name: "Bees", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "B", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -136,8 +137,8 @@ addLayer("bee", {
             style: { width: '175px', height: '60px', border: "3px solid rgba(0,0,0,0.3)", borderRadius: '0px'}
         },
         13: {
-            costBase() { return new Decimal(1e40) },
-            costGrowth() { return new Decimal(1e5) },
+            costBase() { return new Decimal(1e60) },
+            costGrowth() { return new Decimal(1e10) },
             purchaseLimit() { return new Decimal(5) },
             currency() { return player.bee.bees},
             pay(amt) { player.bee.bees = this.currency().sub(amt) },
@@ -979,8 +980,8 @@ addLayer("bee", {
     },
     tabFormat: [
         ["row", [
-            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee." : "You have <h3>" + format(player.bee.bees) + "</h3> bees."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
         ["row", [["clickable", 1], ["clickable", 2]]],

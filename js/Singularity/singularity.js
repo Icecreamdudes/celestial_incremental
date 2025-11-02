@@ -52,7 +52,7 @@ addLayer("s", {
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.diceEffects[18])
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.boosterEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
@@ -364,7 +364,7 @@ addLayer("s", {
         },
         13: {
             requirementDescription: "<h3>3 Singularities",
-            effectDescription: "Produce 6% of blessings per second (excluding RC1), produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
+            effectDescription: "Produce 5% of blessings per second (excluding RC1), produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
             done() { return player.s.singularities.gte(3) },
             style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },

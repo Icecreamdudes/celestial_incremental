@@ -45,7 +45,7 @@ addLayer("cap", {
         if (player.cap.reqDisplayIndex.eq(0)) {
             player.cap.reqDisplay = "Recall the challenges and reach further like you never have before."
         } else if (player.cap.reqDisplayIndex.eq(1)) {
-            player.cap.reqDisplay = "Be removed from all of your friendly companions."
+            player.cap.reqDisplay = "Gain a shard that automates a timely feature."
         } else if (player.cap.reqDisplayIndex.eq(2)) {
             player.cap.reqDisplay = "Revisit the previous celestial and go beyond."
         } else if (player.cap.reqDisplayIndex.eq(3)) {
@@ -107,19 +107,6 @@ addLayer("cap", {
             player.cap.cantepocalypseUnlock = true
         }
     },
-    checkPetReq() {
-        let total = new Decimal(0)
-        for (let i = 101; i < 308; i++) {
-            total = total.add(getLevelableXP("pet", i))
-            if (i == 109 || i == 209) i = i+91
-        }
-
-        if (total.eq(0)) {
-            return true
-        } else {
-            return false
-        }
-    },
     branches: ["ta", "om"],
     clickables: {
         11: {
@@ -137,7 +124,7 @@ addLayer("cap", {
             unlocked() { return !player.cap.reqsPassed[1] },
             onClick() {
                 player.cap.reqDisplayIndex = new Decimal(1)
-                player.cap.passingReqs[1] = layers.cap.checkPetReq()
+                player.cap.passingReqs[1] = player.cb.totalAutomationShards.gte(1)
             },
             style: { width: '75px', "min-height": '75px', borderRadius: "5px" },
         },

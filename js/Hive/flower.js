@@ -1,13 +1,38 @@
 addLayer("fl", {
     name: "Flowers", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "FL", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
         unlocked: true,
-        flowerTimers: [new Decimal(20), new Decimal(40), new Decimal(40), new Decimal(60), new Decimal(60)],
-        flowerTimersMax: [new Decimal(20), new Decimal(40), new Decimal(40), new Decimal(60), new Decimal(60)],
-        flowerTimerPause: [false, false, false, false, false],
+        timers: {
+            red: {
+                current: new Decimal(20),
+                max: new Decimal(20),
+                pause: false,
+            },
+            blue: {
+                current: new Decimal(40),
+                max: new Decimal(40),
+                pause: false,
+            },
+            green: {
+                current: new Decimal(40),
+                max: new Decimal(40),
+                pause: false,
+            },
+            pink: {
+                current: new Decimal(60),
+                max: new Decimal(60),
+                pause: false,
+            },
+            yellow: {
+                current: new Decimal(60),
+                max: new Decimal(60),
+                pause: false,
+            },
+        },
         pickingPower: new Decimal(1),
         flowerGain: new Decimal(1),
         glossaryBase: new Decimal(1),
@@ -114,30 +139,30 @@ addLayer("fl", {
     update(delta) {
         let onepersec = new Decimal(1)
 
-        player.fl.flowerTimersMax[0] = new Decimal(20)
-        player.fl.flowerTimersMax[0] = player.fl.flowerTimersMax[0].div(buyableEffect("bee", 21))
-        if (player.bee.totalResearch.gte(1) && !player.fl.flowerTimerPause[0]) player.fl.flowerTimers[0] = player.fl.flowerTimers[0].sub(delta)
+        player.fl.timers.red.max = new Decimal(20)
+        player.fl.timers.red.max = player.fl.timers.red.max.div(buyableEffect("bee", 21))
+        if (player.bee.totalResearch.gte(1) && !player.fl.timers.red.pause) player.fl.timers.red.current = player.fl.timers.red.current.sub(delta)
 
-        player.fl.flowerTimersMax[1] = new Decimal(40)
-        if (hasUpgrade("bpl", 18)) player.fl.flowerTimersMax[1] = player.fl.flowerTimersMax[1].div(2)
-        if (hasUpgrade("bpl", 14) && !player.fl.flowerTimerPause[1]) player.fl.flowerTimers[1] = player.fl.flowerTimers[1].sub(delta)
+        player.fl.timers.blue.max = new Decimal(40)
+        if (hasUpgrade("bpl", 18)) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
+        if (hasUpgrade("bpl", 14) && !player.fl.timers.blue.pause) player.fl.timers.blue.current = player.fl.timers.blue.current.sub(delta)
 
-        player.fl.flowerTimersMax[2] = new Decimal(40)
-        if (hasUpgrade("ne", 402)) player.fl.flowerTimersMax[2] = player.fl.flowerTimersMax[2].div(2)
-        if (hasUpgrade("ne", 201) && !player.fl.flowerTimerPause[2]) player.fl.flowerTimers[2] = player.fl.flowerTimers[2].sub(delta)
+        player.fl.timers.green.max = new Decimal(40)
+        if (hasUpgrade("ne", 402)) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
+        if (hasUpgrade("ne", 201) && !player.fl.timers.green.pause) player.fl.timers.green.current = player.fl.timers.green.current.sub(delta)
 
-        player.fl.flowerTimersMax[3] = new Decimal(60)
-        if (player.bb.breadMilestone >= 8) player.fl.flowerTimersMax[3] = player.fl.flowerTimersMax[3].div(player.bb.breadEffects[7])
-        if (buyableEffect("bee", 53).gte(1) && !player.fl.flowerTimerPause[3]) player.fl.flowerTimers[3] = player.fl.flowerTimers[3].sub(delta)
+        player.fl.timers.pink.max = new Decimal(60)
+        if (player.bb.breadMilestone >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(player.bb.breadEffects[7])
+        if (buyableEffect("bee", 53).gte(1) && !player.fl.timers.pink.pause) player.fl.timers.pink.current = player.fl.timers.pink.current.sub(delta)
 
-        player.fl.flowerTimersMax[4] = new Decimal(60)
-        if (player.ho.cell.gte(100)) player.fl.flowerTimersMax[4] = player.fl.flowerTimersMax[4].div(2)
-        if (player.ho.cell.gte(15)) player.fl.flowerTimers[4] = player.fl.flowerTimers[4].sub(delta)
+        player.fl.timers.yellow.max = new Decimal(60)
+        if (player.ho.cell.gte(100)) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
+        if (player.ho.cell.gte(15) && !player.fl.timers.yellow.paused) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
 
-        for (let i = 0; i < player.fl.flowerTimers.length; i++) {
-            if (player.fl.flowerTimers[i].lte(0)) {
-                layers.fl.generateFlower(i)
-                player.fl.flowerTimers[i] = player.fl.flowerTimersMax[i]
+        for (let thing in player.fl.timers) {
+            if (player.fl.timers[thing].current.lte(0)) {
+                layers.fl.generateFlower(thing)
+                player.fl.timers[thing].current = player.fl.timers[thing].max
             }
         }
 
@@ -173,7 +198,7 @@ addLayer("fl", {
         }
 
         player.fl.glossaryEffects.pollen = new Decimal(1)
-        for (let i = 201; i < 216; ) {
+        for (let i = 201; i < 226; ) {
             if (player.fl.glossary[i].gt(0)) {
                 player.fl.glossaryEffects.pollen = player.fl.glossaryEffects.pollen.mul(player.fl.glossary[i].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(4).mul(buyableEffect("bee", 35).add(1)).add(1))
             }
@@ -211,7 +236,7 @@ addLayer("fl", {
         let tier = Math.random()
         let rigBase = ((player.fl.glossaryRig-1)%5)+2
         switch(type) {
-            case 0:
+            case "red":
                 // PENTAGONAL RED
                 if (tier < 0.3 && buyableEffect("bee", 22).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 110 && player.fl.glossaryRig < 120) {
@@ -231,7 +256,7 @@ addLayer("fl", {
                         if (getGridData("fl", val)[0] <= 115) setGridData("fl", val, [115, new Decimal(30)])
                     }
                 // CUBIC RED
-                } else if (tier < 0.4 && buyableEffect("bee", 13).gt(0)) {
+                } else if (tier < 0.4 && buyableEffect("bee", 13).gt(0) && buyableEffect("bee", 22).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 120 && player.fl.glossaryRig < 130) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*100)])
                         break;
@@ -268,7 +293,7 @@ addLayer("fl", {
                     }
                 }
                 break;
-            case 1:
+            case "blue":
                 // PENTAGONAL BLUE
                 if (tier < 0.3 && buyableEffect("bee", 34).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 210 && player.fl.glossaryRig < 220) {
@@ -288,7 +313,7 @@ addLayer("fl", {
                         if (getGridData("fl", val)[0] <= 215) setGridData("fl", val, [215, new Decimal(90)])
                     }
                 // CUBIC BLUE
-                } else if (tier < 0.4 && buyableEffect("al", 102).gt(0)) {
+                } else if (tier < 0.4 && buyableEffect("al", 102).gt(0) && buyableEffect("bee", 34).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 220 && player.fl.glossaryRig < 230) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*300)])
                         break;
@@ -325,7 +350,7 @@ addLayer("fl", {
                     }
                 }
                 break;
-            case 2:
+            case "green":
                 // PENTAGONAL GREEN
                 if (tier < 0.3 && buyableEffect("bee", 44).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 310 && player.fl.glossaryRig < 320) {
@@ -345,7 +370,7 @@ addLayer("fl", {
                         if (getGridData("fl", val)[0] <= 315) setGridData("fl", val, [315, new Decimal(90)])
                     }
                 // CUBIC GREEN
-                } else if (tier < 0.4 && buyableEffect("al", 202).gt(0)) {
+                } else if (tier < 0.4 && buyableEffect("al", 202).gt(0) && buyableEffect("bee", 44).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 320 && player.fl.glossaryRig < 330) {
                         setGridData("fl", val, [player.fl.glossaryRig, new Decimal(rigBase*300)])
                         break;
@@ -382,7 +407,7 @@ addLayer("fl", {
                     }
                 }
                 break;
-            case 3:
+            case "pink":
                 // PENTAGONAL PINK
                 if (tier < 0.3 && player.bb.breadMilestone >= 7) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 410 && player.fl.glossaryRig < 420) {
@@ -402,7 +427,7 @@ addLayer("fl", {
                         if (getGridData("fl", val)[0] <= 415) setGridData("fl", val, [415, new Decimal(300)])
                     }
                 // CUBIC PINK
-                } else if (tier < 0.4 && buyableEffect("al", 103).gt(0)) {
+                } else if (tier < 0.4 && buyableEffect("al", 103).gt(0) && player.bb.breadMilestone >= 7) {
 
                 // REGULAR PINK
                 } else {
@@ -424,7 +449,7 @@ addLayer("fl", {
                     }
                 }
                 break;
-            case 4:
+            case "yellow":
                 // PENTAGONAL YELLOW
                 if (tier < 0.3 && buyableEffect("bee", 64).gt(0)) {
                     if (getGridData("fl", val)[0] <= player.fl.glossaryRig && player.fl.glossaryRig > 510 && player.fl.glossaryRig < 520) {
@@ -444,7 +469,7 @@ addLayer("fl", {
                         if (getGridData("fl", val)[0] <= 515) setGridData("fl", val, [515, new Decimal(300)])
                     }
                 // CUBIC YELLOW
-                } else if (tier < 0.4 && buyableEffect("al", 203).gt(0)) {
+                } else if (tier < 0.4 && buyableEffect("al", 203).gt(0) && buyableEffect("bee", 64).gt(0)) {
 
                 // REGULAR YELLOW
                 } else {
@@ -845,7 +870,7 @@ addLayer("fl", {
 
         221: {
             name: "Cubic 2-Petalled Blue Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[221].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Nectar"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[221].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(4).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Pollen"},
             svg: `
                 <ellipse id="petal2" transform="translate(24, 16)" rx="16" ry="14" cx="16" cy="14" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal1" transform="translate(4, 16)" rx="16" ry="14" cx="16" cy="14" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -860,7 +885,7 @@ addLayer("fl", {
         },
         222: {
             name: "Cubic 3-Petalled Blue Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[222].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Nectar"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[222].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(4).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Pollen"},
             svg: `
                 <ellipse id="petal3" transform="translate(17.5, 6.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal2" transform="translate(29.5, 28.5)" rx="12.5" cx="12.5" ry="12.5" cy="12.5" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -876,7 +901,7 @@ addLayer("fl", {
         },
         223: {
             name: "Cubic 4-Petalled Blue Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[223].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Nectar"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[223].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(4).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Pollen"},
             svg: `
                 <ellipse id="petal4" transform="translate(20, 6)" rx="10" cx="10" ry="10" cy="10" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal3" transform="translate(34, 20)" rx="10" cx="10" ry="10" cy="10" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -893,7 +918,7 @@ addLayer("fl", {
         },
         224: {
             name: "Cubic 5-Petalled Blue Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[224].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Nectar"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[224].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(4).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Pollen"},
             svg: `
                 <ellipse id="petal5" transform="translate(22.5, 9.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal4" transform="translate(34.5, 18.5)" rx="7.5" cx="7.5" ry="7.5" cy="7.5" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -911,7 +936,7 @@ addLayer("fl", {
         },
         225: {
             name: "Cubic 6-Petalled Blue Flower",
-            getTitle() {return "x" + formatShort(player.fl.glossary[225].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(10).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Nectar"},
+            getTitle() {return "x" + formatShort(player.fl.glossary[225].add(1).log(2).ceil().mul(0.1).mul(player.fl.glossaryBase).div(4).mul(buyableEffect("bee", 35).add(1)).add(1)) + " Pollen"},
             svg: `
                 <ellipse id="petal6" transform="translate(24, 12)" rx="6" cx="6" ry="6" cy="6" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
                 <ellipse id="petal5" transform="translate(34, 18)" rx="6" cx="6" ry="6" cy="6" fill="#80cec4" fill-rule="evenodd" stroke="#000000" stroke-width="2.4" stroke-linecap="square" stroke-linejoin="bevel"/>
@@ -1513,18 +1538,18 @@ addLayer("fl", {
             canClick: true,
             unlocked: true,
             onClick() {
-                if (player.fl.flowerTimerPause[0]) {
-                    player.fl.flowerTimerPause[0] = false
+                if (player.fl.timers.red.pause) {
+                    player.fl.timers.red.pause = false
                 } else {
-                    player.fl.flowerTimerPause[0] = true
+                    player.fl.timers.red.pause = true
                 }
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.flowerTimerPause[0]) {
-                    look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.flowerTimers[0].div(player.fl.flowerTimersMax[0]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[0].div(player.fl.flowerTimersMax[0]).mul(100).add(0.25).min(100))}%)`
+                if (player.fl.timers.red.pause) {
+                    look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).min(100))}%, black ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).add(0.25).min(100))}%)`
                 } else {
-                    look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.flowerTimers[0].div(player.fl.flowerTimersMax[0]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[0].div(player.fl.flowerTimersMax[0]).mul(100).add(0.25).min(100))}%)`
+                    look.background = `linear-gradient(to top, #b21c0e ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).min(100))}%, black ${format(player.fl.timers.red.current.div(player.fl.timers.red.max).mul(100).add(0.25).min(100))}%)`
                 }
                 return look
             }
@@ -1533,18 +1558,18 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return hasUpgrade("bpl", 14)},
             onClick() {
-                if (player.fl.flowerTimerPause[1]) {
-                    player.fl.flowerTimerPause[1] = false
+                if (player.fl.timers.blue.pause) {
+                    player.fl.timers.blue.pause = false
                 } else {
-                    player.fl.flowerTimerPause[1] = true
+                    player.fl.timers.blue.pause = true
                 }
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.flowerTimerPause[1]) {
-                    look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.flowerTimers[1].div(player.fl.flowerTimersMax[1]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[1].div(player.fl.flowerTimersMax[1]).mul(100).add(0.25).min(100))}%)`
+                if (player.fl.timers.blue.pause) {
+                    look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).min(100))}%, black ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).add(0.25).min(100))}%)`
                 } else {
-                    look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.flowerTimers[1].div(player.fl.flowerTimersMax[1]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[1].div(player.fl.flowerTimersMax[1]).mul(100).add(0.25).min(100))}%)`
+                    look.background = `linear-gradient(to top, #80cec4 ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).min(100))}%, black ${format(player.fl.timers.blue.current.div(player.fl.timers.blue.max).mul(100).add(0.25).min(100))}%)`
                 }
                 return look
             }
@@ -1553,18 +1578,18 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return hasUpgrade("ne", 201)},
             onClick() {
-                if (player.fl.flowerTimerPause[2]) {
-                    player.fl.flowerTimerPause[2] = false
+                if (player.fl.timers.green.pause) {
+                    player.fl.timers.green.pause = false
                 } else {
-                    player.fl.flowerTimerPause[2] = true
+                    player.fl.timers.green.pause = true
                 }
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.flowerTimerPause[2]) {
-                    look.background = `linear-gradient(to top, #659157 ${format(player.fl.flowerTimers[2].div(player.fl.flowerTimersMax[2]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[2].div(player.fl.flowerTimersMax[2]).mul(100).add(0.25).min(100))}%)`
+                if (player.fl.timers.green.pause) {
+                    look.background = `linear-gradient(to top, #659157 ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).min(100))}%, black ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).add(0.25).min(100))}%)`
                 } else {
-                    look.background = `linear-gradient(to top, #659157 ${format(player.fl.flowerTimers[2].div(player.fl.flowerTimersMax[2]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[2].div(player.fl.flowerTimersMax[2]).mul(100).add(0.25).min(100))}%)`
+                    look.background = `linear-gradient(to top, #659157 ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).min(100))}%, black ${format(player.fl.timers.green.current.div(player.fl.timers.green.max).mul(100).add(0.25).min(100))}%)`
                 }
                 return look
             }
@@ -1573,18 +1598,18 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return buyableEffect("bee", 53).gte(1)},
             onClick() {
-                if (player.fl.flowerTimerPause[3]) {
-                    player.fl.flowerTimerPause[3] = false
+                if (player.fl.timers.pink.pause) {
+                    player.fl.timers.pink.pause = false
                 } else {
-                    player.fl.flowerTimerPause[3] = true
+                    player.fl.timers.pink.pause = true
                 }
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.flowerTimerPause[3]) {
-                    look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.flowerTimers[3].div(player.fl.flowerTimersMax[3]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[3].div(player.fl.flowerTimersMax[3]).mul(100).add(0.25).min(100))}%)`
+                if (player.fl.timers.pink.pause) {
+                    look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).min(100))}%, black ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).add(0.25).min(100))}%)`
                 } else {
-                    look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.flowerTimers[3].div(player.fl.flowerTimersMax[3]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[3].div(player.fl.flowerTimersMax[3]).mul(100).add(0.25).min(100))}%)`
+                    look.background = `linear-gradient(to top, #FDE3E6 ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).min(100))}%, black ${format(player.fl.timers.pink.current.div(player.fl.timers.pink.max).mul(100).add(0.25).min(100))}%)`
                 }
                 return look
             }
@@ -1593,18 +1618,18 @@ addLayer("fl", {
             canClick: true,
             unlocked() {return player.ho.cell.gte(15)},
             onClick() {
-                if (player.fl.flowerTimerPause[4]) {
-                    player.fl.flowerTimerPause[4] = false
+                if (player.fl.timers.yellow.pause) {
+                    player.fl.timers.yellow.pause = false
                 } else {
-                    player.fl.flowerTimerPause[4] = true
+                    player.fl.timers.yellow.pause = true
                 }
             },
             style() {
                 let look = {width: "10px", minHeight: "480px", height: "480px", border: "0", borderRadius: "0", padding: "0", marginTop: "4px", transform: "scale(1)", boxShadow: "0 0 black"}
-                if (player.fl.flowerTimerPause[4]) {
-                    look.background = `linear-gradient(to top, #fae033 ${format(player.fl.flowerTimers[4].div(player.fl.flowerTimersMax[4]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[4].div(player.fl.flowerTimersMax[4]).mul(100).add(0.25).min(100))}%)`
+                if (player.fl.timers.yellow.pause) {
+                    look.background = `linear-gradient(to top, #fae033 ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).min(100))}%, black ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).add(0.25).min(100))}%)`
                 } else {
-                    look.background = `linear-gradient(to top, #fae033 ${format(player.fl.flowerTimers[4].div(player.fl.flowerTimersMax[4]).mul(100).min(100))}%, black ${format(player.fl.flowerTimers[4].div(player.fl.flowerTimersMax[4]).mul(100).add(0.25).min(100))}%)`
+                    look.background = `linear-gradient(to top, #fae033 ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).min(100))}%, black ${format(player.fl.timers.yellow.current.div(player.fl.timers.yellow.max).mul(100).add(0.25).min(100))}%)`
                 }
                 return look
             }
@@ -1644,9 +1669,12 @@ addLayer("fl", {
                             ["category-button", [() => {return "Yellow<br><small>x" + formatShort(player.fl.glossaryEffects.honey) + "</small>"}, "Glossary", "Yellow", () => {return player.ho.cell.lt(15)}], {width: "103px", height: "40px", background: "#252107"}],
                         ], {width: "535px", height: "40px", background: "#181818", borderBottom: "5px solid #3e3117"}],
                         ["buttonless-microtabs", "Glossary", {borderWidth: "0"}],
-                        ["style-column", [
-                            ["raw-html", () => {return "Currently rigging: " + layers.fl.glossary[player.fl.glossaryRig].name}, {color: "#ccc", fontSize: "16px", fontFamily: "monospace"}],
-                            ["raw-html", "(Rigged flowers are guaranteed to be rolled if its tier is picked)", {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
+                        ["style-row", [
+                            ["raw-html", "<button class='shopButton' style='width:65px;height:65px;background:#251d0d;font-size:12px' onclick='player.fl.glossaryRig=0'>Disable<br>Rigging</button>"],
+                            ["style-column", [
+                                ["raw-html", () => {return "Currently rigging: " + layers.fl.glossary[player.fl.glossaryRig].name}, {color: "#ccc", fontSize: "14px", fontFamily: "monospace"}],
+                                ["raw-html", "(Rigged flowers are guaranteed to be rolled if its tier is picked)", {color: "#ccc", fontSize: "12px", fontFamily: "monospace"}],
+                            ], {width: "465px", height: "65px", borderLeft: "5px solid #3e3117"}],
                         ], () => {return player.al.cocoonLevel >= 3 ? {width: "535px", height: "65px", background: "#251d0d", borderTop: "5px solid #3e3117"} : {width: "535px", height: "70px"}}],
                     ], {width: "535px", height: "480px", backgroundColor: "#312712", border: "5px solid #3e3117"}],
                 ]
@@ -1700,8 +1728,8 @@ addLayer("fl", {
     },
     tabFormat: [
         ["row", [
-            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee." : "You have <h3>" + format(player.bee.bees) + "</h3> bees."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
         ["style-row", [

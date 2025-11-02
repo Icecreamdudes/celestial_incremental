@@ -170,7 +170,7 @@ addUniverse("U3", {
         }
         return style
     },
-    uniShown() { return player.startedGame && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && (player.ca.defeatedCante || player.s.highestSingularityPoints.gt(0)) && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
 })
 
 addUniverse("D1", {

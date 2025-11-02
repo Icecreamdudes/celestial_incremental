@@ -3,6 +3,7 @@ const bbMilestone = [new Decimal(1), new Decimal(25), new Decimal(1000), new Dec
 addLayer("bb", {
     name: "Bee Bread", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "BB", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -57,8 +58,15 @@ addLayer("bb", {
         player.bb.beeBread = player.bb.beeBread.add(player.bb.beeBreadPerSecond.mul(delta))
 
 
+        // Bee Bread Tier Multiplier
+        player.bb.breadTierMult = new Decimal(2)
+        player.bb.breadTierMult = player.bb.breadTierMult.mul(buyableEffect("bee", 52))
+        if (hasUpgrade("al", 107)) player.bb.breadTierMult = player.bb.breadTierMult.mul(10)
+
+        // Raise by BB tier
+        player.bb.breadTierMult = player.bb.breadTierMult.pow(player.bb.breadTier.sub(1)) // Bread Tier Multiplier
+
         // Bee Bread Effects
-        player.bb.breadTierMult = new Decimal(2).mul(buyableEffect("bee", 52)).pow(player.bb.breadTier.sub(1)) // Bread Tier Multiplier
         player.bb.breadEffects[0] = player.bb.beeBread.mul(player.bb.breadTierMult).pow(0.3).add(1) // BPS
         player.bb.breadEffects[1] = player.bb.beeBread.div(bbMilestone[1]).mul(player.bb.breadTierMult).pow(0.2).add(1) // Pollen
         player.bb.breadEffects[2] = player.bb.beeBread.div(bbMilestone[2]).mul(player.bb.breadTierMult).pow(0.2).add(1).log(10).add(0.8).min(5) // Pollen Cooldown
@@ -163,12 +171,12 @@ addLayer("bb", {
     microtabs: {},
     tabFormat: [
         ["row", [
-            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee." : "You have <h3>" + format(player.bee.bees) + "</h3> bees."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["row", [
-            ["raw-html", () => {return "You have <h3>" + format(player.bpl.pollen) + "</h3> pollen."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bpl.pollenGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return "You have <h3>" + format(player.bpl.pollen) + "</h3> pollen"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bpl.pollenGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
         ["style-row", [["clickable", 11], ["style-row", [], {width: "3px", height: "100px", background: "#1e160f"}], ["clickable", 12]], {border: "3px solid #1e160f", backgroundColor: "#986F4C"}],
@@ -184,7 +192,10 @@ addLayer("bb", {
             ["color-text", [() => {return "Bee gain: x" + formatSimple(player.bb.breadEffects[0], 2)}, true, "white", () => {return player.bb.breadMilestone >= 1}, "gray"]],
             ["color-text", [() => {return "Pollen gain: x" + formatSimple(player.bb.breadEffects[1], 2)}, () => {return player.bb.breadMilestoneHighest >= 1}, "white", () => {return player.bb.breadMilestone >= 2}, "gray"]],
             ["color-text", [() => {return "Pollen cooldown: /" + formatSimple(player.bb.breadEffects[2], 2) + " <small>[Cap /5]</small>"}, () => {return player.bb.breadMilestoneHighest >= 2}, "white", () => {return player.bb.breadMilestone >= 3}, "gray"]],
-            ["color-text", [() => {return player.bb.breadEffects[3].gte(0) ? "Glossary effect base: +" + commaFormat(player.bb.breadEffects[3], 2) + " <small>[Cap +1.5]</small>" : "Glossary effect base: " + commaFormat(player.bb.breadEffects[3], 2) + " <small>[Cap +1.5]</small>"}, () => {return player.bb.breadMilestoneHighest >= 3}, "white", () => {return player.bb.breadMilestone >= 4}, "gray"]],
+            ["color-text", [() => {
+                if (player.bb.breadEffects[3].gte(0)) return "Glossary effect base: +" + commaFormat(player.bb.breadEffects[3], 2) + " <small>[Cap +1.5]</small>"
+                return "Glossary effect base: " + commaFormat(player.bb.breadEffects[3], 2) + " <small>[Cap +1.5]</small>"
+            }, () => {return player.bb.breadMilestoneHighest >= 3}, "white", () => {return player.bb.breadMilestone >= 4}, "gray"]],
             ["color-text", [() => {return "Pollen conversion rate: x" + formatSimple(player.bb.breadEffects[4], 2)}, () => {return player.bb.breadMilestoneHighest >= 4}, "white", () => {return player.bb.breadMilestone >= 5}, "gray"]],
             ["color-text", [() => {return "Picking Power: x" + formatSimple(player.bb.breadEffects[5], 2)}, () => {return player.bb.breadMilestoneHighest >= 5}, "white", () => {return player.bb.breadMilestone >= 6}, "gray"]],
             ["color-text", [() => {return "Unlock +" + formatWhole(player.bb.breadEffects[6]) + " pentagonal pink flowers <small>[Cap +5]</small>"}, () => {return player.bb.breadMilestoneHighest >= 6}, "white", () => {return player.bb.breadMilestone >= 7}, "gray"]],

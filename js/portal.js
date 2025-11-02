@@ -123,7 +123,7 @@ addLayer("po", {
                 return "You only gain them back once you reach the req.";
             },
             canClick() { return true },
-            unlocked() { return ((hasMilestone("ip", 18)|| player.s.highestSingularityPoints.gt(0)) && !player.po.keepOTFS)},
+            unlocked() { return ((hasMilestone("ip", 18) || player.s.highestSingularityPoints.gt(0) || player.po.breakInfinity) && !player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = true
             },
@@ -136,7 +136,7 @@ addLayer("po", {
         3: {
             title() { return "Don't keep OTFs on reset. (Currently on)" },
             canClick() { return true },
-            unlocked() { return ((hasMilestone("ip", 18)|| player.s.highestSingularityPoints.gt(0)) && player.po.keepOTFS)},
+            unlocked() { return ((hasMilestone("ip", 18) || player.s.highestSingularityPoints.gt(0) || player.po.breakInfinity) && player.po.keepOTFS)},
             onClick() {
                 player.po.keepOTFS = false
             },
@@ -224,6 +224,7 @@ addLayer("po", {
             canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
             onClick() {
+                if (!hasAchievement("achievements", 19)) completeAchievement("achievements", 19)
                 player.po.dice = true
             },
             style: {
@@ -383,6 +384,19 @@ addLayer("po", {
                 return look
             }
         },
+        203: {
+            title() {return player.uni.UB.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
+            canClick: true,
+            unlocked() {return uniShown("UB")},
+            onClick() {
+                pauseUniverse("UB")
+            },
+            style() {
+                let look = {width: "200px", minHeight: "50px", border: "3px solid rgba(0,0,0,0.2)", borderRadius: "0 0 12px 12px"}
+                if (player.uni.UB.paused) {look.backgroundColor = "#938600"} else {look.backgroundColor = "#f6e000"}
+                return look
+            }
+        },
 
         301: {
             title() {return player.uni.A1.paused ? "PAUSED<br>▶" : "UNPAUSED<br>⏸"},
@@ -531,6 +545,14 @@ addLayer("po", {
                             ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
                             ["clickable", 302],
                         ], () => {return uniShown("A2") ? {width: "200px", height: "100px", background: "#484096", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
+                    ]],
+                    ["row", [
+                        ["style-column", [
+                            ["style-column", [
+                                ["raw-html", "Universe β", {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+                            ], {width: "200px", height: "47px", borderBottom: "3px solid white"}],
+                            ["clickable", 203],
+                        ], () => {return uniShown("UB") ? {width: "200px", height: "100px", background: "#c4b300", border: "3px solid white", borderRadius: "15px", margin: "5px"} : {display: "none !important"}}],
                     ]],
                 ],
             },

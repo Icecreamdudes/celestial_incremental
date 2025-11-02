@@ -20,7 +20,7 @@
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
-		"Check Back/cookie.js",
+		"Check Back/cookie.js", "Misc/achievements.js",
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js",
 		
@@ -38,7 +38,7 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 185, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	num: 190, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
 	name: "The Hexing Revamp",
 }
 
@@ -103,6 +103,10 @@ function updateStyles() {
 		case "settings": case "savebank": case "changelog": case "credits":
 			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #57636d, #2e3d49)"
 			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #1b242b, #12181d)"
+			break;
+		case "achievements":
+			if (!player.sma.inStarmetalChallenge) layerBG = "linear-gradient(45deg, #450054, #00307f)"
+			if (player.sma.inStarmetalChallenge) layerBG = "linear-gradient(90deg, #0d0010, #000919)"
 			break;
 		case "po":
 			layerBG = "linear-gradient(45deg, #450054, #00307f)"
@@ -1414,5 +1418,24 @@ function fixOldSave(oldVersion){
 		setBuyableAmount("ep2", 11, new Decimal(0))
 		setBuyableAmount("ep2", 12, new Decimal(0))
 		setBuyableAmount("ep2", 13, new Decimal(0))
+	}
+
+	if (oldVersion < 190) {
+		for (let i = 0; i < player.cb.buttonAutomationAllocation.length; i++) {
+			player.cb.automationShards = player.cb.automationShards.add(player.cb.buttonAutomationAllocation[i])
+		}
+		for (let i = 0; i < player.cb.petAutomationAllocation.length; i++) {
+			player.cb.automationShards = player.cb.automationShards.add(player.cb.petAutomationAllocation[i])
+		}
+		for (let i = 0; i < player.hbl.boosterLevels.length; i++) {
+			player.hbl.boosters[i].level = player.hbl.boosterLevels[i]
+			player.hbl.boosters[i].xp = player.hbl.boosterXP[i]
+		}
+		for (let i = 0; i < player.hpu.purifier.length; i++) {
+			player.hpu.purifiers[i].amount = player.hpu.purifier[i]
+		}
+		for (let i in player.d.boosterEffects) {
+			player.d.boosterEffects[i] = new Decimal(player.d.diceEffects[i])
+		}
 	}
 }

@@ -667,7 +667,7 @@ addLayer("co", {
         player.d.upgrades.splice(0, player.d.upgrades.length)
 
         for (let i = 0; !hasUpgrade("s", 13) ? i < 15 : i < 11; i++) {
-            player.d.diceEffects[i] = new Decimal(1)
+            player.d.boosterEffects[i] = new Decimal(1)
         }
 
         //     <----     ROCKETFUEL LAYER     ---->
@@ -1054,8 +1054,10 @@ addLayer("co", {
         player.hpu.totalPurity = new Decimal(0)
         player.hpu.purityGain = new Decimal(0)
         if (!hasMilestone("s", 20)) player.hpu.purifierAssign = 1
-        player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
+        for (let i in player.hpu.purifiers) {
+            player.hpu.purifiers[i].amount = new Decimal(0)
+            if (i != "2" || i != "5") player.hpu.purifiers[i].effect = new Decimal(1)
+        }
 
         //     <----     HEX OF CURSES LAYER     ---->
         player.hcu.curses = new Decimal(0)
@@ -1088,14 +1090,12 @@ addLayer("co", {
         player.hbl.minRefineInput = new Decimal(18)
         player.hbl.minRefine = new Decimal(18)
         if (!hasMilestone("s", 20)) player.hbl.boosterDeposit = 0.05
-        player.hbl.boosterLevels[0] = new Decimal(0)
-        player.hbl.boosterLevels[1] = new Decimal(0)
-        if (!hasMilestone("s", 20)) player.hbl.boosterLevels[2] = new Decimal(0)
-        player.hbl.boosterLevels[3] = new Decimal(0)
-        player.hbl.boosterLevels[4] = new Decimal(0)
-        if (!hasMilestone("s", 20)) player.hbl.boosterLevels[5] = new Decimal(0)
-        player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+        for (let i in player.hbl.boosters) {
+            if (hasMilestone("s", 20) && (i == "2" || i == "5")) continue;
+            player.hbl.boosters[i].level = new Decimal(0)
+            player.hbl.boosters[i].xp = new Decimal(0)
+            if (i != "5") player.hbl.boosters[i].effect = new Decimal(1)
+        }
 
         if (!hasMilestone("s", 20)) player.hbl.upgrades.splice(0, player.hbl.upgrades.length)
 

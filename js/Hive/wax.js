@@ -3,6 +3,7 @@ const baseWax = [new Decimal(1.112e99), new Decimal(1e109), new Decimal(1e119), 
 addLayer("wa", {
     name: "Wax", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "WA", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {

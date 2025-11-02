@@ -1,6 +1,7 @@
 addLayer("bpl", {
     name: "Pollen", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "PL", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -51,6 +52,7 @@ addLayer("bpl", {
         if (hasUpgrade("bpl", 15)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("bpl", 15))
         if (player.bb.breadMilestone >= 2) player.bpl.pollenGain = player.bpl.pollenGain.mul(player.bb.breadEffects[1])
         player.bpl.pollenGain = player.bpl.pollenGain.mul(buyableEffect("al", 101))
+        if (hasUpgrade("al", 108)) player.bpl.pollenGain = player.bpl.pollenGain.mul(upgradeEffect("al", 108))
 
         // Pollen Timer Calculations
         player.bpl.pollenTimerMax = new Decimal(5)
@@ -87,11 +89,13 @@ addLayer("bpl", {
 
         // Bee Role Automation
         if (hasUpgrade("al", 103)) player.bpl.roles.drone.amount = player.bpl.roles.drone.amount.add(player.bpl.roles.drone.gain.mul(delta))
-        if (hasUpgrade("al", 106)) player.bpl.roles.worker.amount = player.bpl.roles.worker.amount.add(player.bpl.roles.worker.gain.mul(0.5).mul(delta))
+        if (hasUpgrade("al", 106) && hasUpgrade("bpl", 13)) player.bpl.roles.worker.amount = player.bpl.roles.worker.amount.add(player.bpl.roles.worker.gain.div(2).mul(delta))
+        if (hasUpgrade("al", 109) && hasUpgrade("bpl", 16)) player.bpl.roles.queen.amount = player.bpl.roles.queen.amount.add(player.bpl.roles.queen.gain.div(4).mul(delta))
     },
     clickables: {
         11: {
             title: "Convert your Pollen into Drone Bees",
+            tooltip() {return "+" + formatSimple(player.bpl.roles.drone.gain, 1) + "<br>On Conversion"},
             canClick: true,
             unlocked: true,
             onClick() {
@@ -102,6 +106,7 @@ addLayer("bpl", {
         },
         12: {
             title: "Convert your Pollen into Worker Bees",
+            tooltip() {return "+" + formatSimple(player.bpl.roles.worker.gain, 1) + "<br>On Conversion"},
             canClick() { return hasUpgrade("bpl", 13) },
             unlocked: true,
             onClick() {
@@ -112,6 +117,7 @@ addLayer("bpl", {
         },
         13: {
             title: "Convert your Pollen into Queen Bees",
+            tooltip() {return "+" + formatSimple(player.bpl.roles.queen.gain, 1) + "<br>On Conversion"},
             canClick() { return hasUpgrade("bpl", 16) },
             unlocked: true,
             onClick() {
@@ -244,12 +250,12 @@ addLayer("bpl", {
     microtabs: {},
     tabFormat: [
         ["row", [
-            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee." : "You have <h3>" + format(player.bee.bees) + "</h3> bees."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["row", [
-            ["raw-html", () => {return "You have <h3>" + format(player.bpl.pollen) + "</h3> pollen."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bpl.pollenGain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return "You have <h3>" + format(player.bpl.pollen) + "</h3> pollen"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bpl.pollenGain) + ")"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["bar", "pollenBar"],
         ["blank", "25px"],

@@ -19,6 +19,11 @@
 	width: 300px;
 }
 
+.popup-wide {
+	width: 325px !important;
+	margin-left: -25px !important;
+}
+
 .achievement-popup {
 	background: #7182BC;
 }

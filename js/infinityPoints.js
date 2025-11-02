@@ -60,6 +60,7 @@
             canClick() { return player.points.gte('1e308') },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
                 if (inChallenge("tad", 11))
                 {
                     if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && (player.po.hex || hasUpgrade("s", 18)) && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))

@@ -64,7 +64,7 @@
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.gh.grasshopperEffects[2])
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("m", 14))
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(levelableEffect("pet", 102)[0])
-        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.diceEffects[2])
+        player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.d.boosterEffects[2])
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(upgradeEffect("ip", 21))
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.hre.refinementEffect[1][1])
            
@@ -281,6 +281,8 @@
             canClick() { return player.p.prestigePointsToGet.gte(1) && player.points.gte(100000)},
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 5)) completeAchievement("achievements", 5)
+                if (!hasAchievement("achievements", 14) && player.r.rank.eq(0) && player.r.tier.eq(0) && player.r.tetr.eq(0)) completeAchievement("achievements", 14)
                 layers.p.prestigeReset()
                 player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet)
             },
@@ -765,11 +767,11 @@
         ["row", [
             ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
-        ]],
+        ], () => {return hasUpgrade("p", 12) ? {} : {display: "none !important"}}],
         ["row", [
             ["raw-html", () => {return hasUpgrade("g", 11) ? "Boosts grass value by x" + format(player.p.prestigeEffect2) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("g", 11) && player.p.prestigePoints.gte("1e150020") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
-        ]],
+        ], () => {return hasUpgrade("g", 11) ? {} : {display: "none !important"}}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

@@ -59,7 +59,7 @@
         if (player.rf.rocketFuelToGet.gt(1e20)) player.rf.rocketFuelToGet = player.gh.grasshoppers.pow(0.01).div(50000).add(1e20)
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(levelableEffect("pet", 303)[0])
         if (hasUpgrade("ip", 34) && !inChallenge("ip", 14)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("ip", 34))
-        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.diceEffects[13])
+        player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(player.d.boosterEffects[13])
         if (hasUpgrade("rf", 15)) player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(upgradeEffect("rf", 15))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("cb", 11))
         player.rf.rocketFuelToGet = player.rf.rocketFuelToGet.mul(buyableEffect("ta", 44))

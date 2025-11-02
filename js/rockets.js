@@ -92,8 +92,8 @@
 
 
         //passenger selection
-        if (player.ro.rarityIndex.eq(0)) player.ro.petTitle = tmp.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title
-        if (player.ro.rarityIndex.eq(1)) player.ro.petTitle = tmp.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))].title
+        if (player.ro.rarityIndex.eq(0)) player.ro.petTitle = run(layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))])
+        if (player.ro.rarityIndex.eq(1)) player.ro.petTitle = run(layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))])
 
         if (player.ro.rarityIndex.eq(0)) player.ro.petLevel = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][0]
         if (player.ro.rarityIndex.eq(1)) player.ro.petLevel = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][0]
@@ -289,7 +289,7 @@
         },
 
         100: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[101].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/gwaCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -310,7 +310,7 @@
             },
         },
         101: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[102].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/eggCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -331,7 +331,7 @@
             },
         },
         102: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[103].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/unsmithCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -352,7 +352,7 @@
             },
         },
         103: {
-            title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[104].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+            title() { return this.canClick() ? "<img src='resources/Pets/checkpointCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
             canClick() { return true },
             unlocked() { return true },
             onClick() {
@@ -373,7 +373,7 @@
             },
         },
 104: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[105].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/slaxCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -394,7 +394,7 @@
     },
 },
 105: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[106].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/spiderCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -415,7 +415,7 @@
     },
 },
 106: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[107].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/blobCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -436,7 +436,7 @@
     },
 },
 107: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[108].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/replicatorCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -457,7 +457,7 @@
     },
 },
 108: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[109].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/smokeCommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -478,7 +478,7 @@
     },
 },
 200: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[201].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/testeUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -499,7 +499,7 @@
     },
 },
 201: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[202].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/starUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -520,7 +520,7 @@
     },
 },
 202: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[203].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/normalFaceUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -541,7 +541,7 @@
     },
 },
 203: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[204].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/sharkUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -562,7 +562,7 @@
     },
 },
 204: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[205].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/eyeUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -583,7 +583,7 @@
     },
 },
 205: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[206].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/clockUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -604,7 +604,7 @@
     },
 },
 206: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[207].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/trollUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -625,7 +625,7 @@
     },
 },
 207: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[208].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/infinityBreakerUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {
@@ -646,7 +646,7 @@
     },
 },
 208: {
-    title() { return this.canClick() ? "<img src='" + tmp.pet.levelables[209].image + "' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
+    title() { return this.canClick() ? "<img src='resources/Pets/johnUncommonPet.png' style='width:94%;height:94%;margin:3%;padding-top:3%'></img>" : "" },
     canClick() { return true },
     unlocked() { return true },
     onClick() {

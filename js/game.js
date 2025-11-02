@@ -384,7 +384,6 @@ function gameLoop(diff) {
 
 	for (layer in layers){
 		if (layers[layer].milestones) updateMilestones(layer);
-		if (layers[layer].achievements) updateAchievements(layer)
 	}
 
 }

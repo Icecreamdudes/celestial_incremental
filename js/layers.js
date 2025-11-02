@@ -74,7 +74,7 @@ addLayer("i", {
         player.i.preOTFMult = player.i.preOTFMult.mul(levelableEffect("pu", 301)[1])
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.i.preOTFMult = player.i.preOTFMult.mul(player.hre.refinementEffect[5][1])
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
-        player.i.preOTFMult = player.i.preOTFMult.mul(player.d.diceEffects[15])
+        player.i.preOTFMult = player.i.preOTFMult.mul(player.d.boosterEffects[15])
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
 
         //----------------------------------------
@@ -109,7 +109,7 @@ addLayer("i", {
         player.gain = player.gain.mul(buyableEffect("m", 14))
         if (player.cb.effectActivate) player.gain = player.gain.mul(player.cb.levelEffect)
         player.gain = player.gain.mul(levelableEffect("pet", 101)[0])
-        player.gain = player.gain.mul(player.d.diceEffects[0])
+        player.gain = player.gain.mul(player.d.boosterEffects[0])
         if (!inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         player.gain = player.gain.mul(player.ad.antimatterEffect)
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[0][0])
@@ -173,8 +173,9 @@ addLayer("i", {
             progress() {
                 return player.points.add(1).log10().div("308.25")
             },
+            baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
             fillStyle: { backgroundColor: "#b28500" },
-            borderStyle: { border: "3px solid" },
+            borderStyle: { border: "3px solid", borderRadius: "20px"},
             display() {
                 return "<h2>" + format(player.points.add(1).log10().div("308.25").mul(100)) + "%</h2>";
             },
@@ -265,6 +266,9 @@ addLayer("i", {
             title: "Check Back",
             unlocked() { return hasUpgrade("i", 18) },
             description: "Unlocks Check Back.",
+            onPurchase() {
+                if (!hasAchievement("achievements", 18)) completeAchievement("achievements", 18)
+            },
             cost: new Decimal(1e100),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
@@ -442,9 +446,6 @@ addLayer("i", {
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
         },
     },
-    buyables: {},
-    milestones: {},
-    challenges: {},
     infoboxes: {
         1: {
             title: "Superphysical Values",
@@ -473,7 +474,9 @@ addLayer("i", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["blank", "25px"],
+                    ["blank", "10px"],
+                    ["bar", "infbar"],
+                    ["blank", "15px"],
                     ["style-row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14], ["upgrade", 15], ["upgrade", 16],
                         ["upgrade", 17], ["upgrade", 18], ["upgrade", 19], ["upgrade", 21], ["upgrade", 22], ["upgrade", 23],
                         ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],

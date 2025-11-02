@@ -1,7 +1,8 @@
-const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000)]
+const COCOON_MILESTONE = [new Decimal(1), new Decimal(10), new Decimal(100), new Decimal(1000), new Decimal(10000)]
 addLayer("al", {
     name: "Aleph, the Celestial of Swarms", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "ℵ", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -70,7 +71,9 @@ addLayer("al", {
 
         // FLOWER
         player.subtabs.fl.Glossary = "Red"
-        player.fl.flowerTimerPause = [false, false, false, false, false]
+        for (let thing in player.fl.timers) {
+            player.fl.timers[thing].pause = false
+        }
         player.fl.pickingPower = new Decimal(1)
         player.fl.flowerGain = new Decimal(1)
         player.fl.glossaryBase = new Decimal(1)
@@ -81,6 +84,7 @@ addLayer("al", {
             player.fl.glossaryEffects[i] = new Decimal(1)
         }
         player.fl.glossaryIndex = 0
+        player.fl.glossaryRig = 0
         for (let i = 1; i < 506; ) {
             setGridData("fl", i, [0, new Decimal(1)])
 
@@ -257,6 +261,52 @@ addLayer("al", {
                 return look
             },
         },
+        107: {
+            title: "Honeycomb <small>(3, 1)</small>",
+            unlocked: true,
+            description: "Boost BB tier multiplier by x10.",
+            cost: new Decimal(350),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        108: {
+            title: "Honeycomb <small>(3, 2)</small>",
+            unlocked: true,
+            description: "Boost pollen gain based on bees.",
+            cost: new Decimal(1200),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            effect() {
+                return player.bee.bees.add(1).log(1e10).add(1)
+            },
+            effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
+        109: {
+            title: "Honeycomb <small>(3, 3)</small>",
+            unlocked: true,
+            description: "Produce 25% of bee queens per second.",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Honeycombs",
+            currencyInternalName: "honeycomb",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e5bd3f"
+                return look
+            },
+        },
 
         201: {
             title: "Royal J. <small>(1, 1)</small>",
@@ -342,6 +392,50 @@ addLayer("al", {
                 return look
             },
         },
+        207: {
+            title: "Royal J. <small>(3, 1)</small>",
+            unlocked: true,
+            description: "Boost cell effect bases by x1.1.",
+            cost: new Decimal(350),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        208: {
+            title: "Royal J. <small>(3, 2)</small>",
+            unlocked: true,
+            description: "Remove flower cell's cap.",
+            cost: new Decimal(1200),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+        209: {
+            title: "Royal J. <small>(3, 3)</small>",
+            unlocked: true,
+            description: "Produce 25% of nectar γ per second.",
+            cost: new Decimal(5000),
+            currencyLocation() { return player.al },
+            currencyDisplayName: "Royal Jelly",
+            currencyInternalName: "royalJelly",
+            style() {
+                let look = {minHeight: "100px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background = "#bf8f8f" : look.background = "#e172b5"
+                return look
+            },
+        },
+
+        // Add an upgrade that makes flower cell also buff flower gain.
     },
     buyables: {
         101: {
@@ -505,20 +599,27 @@ addLayer("al", {
             width: 125,
             height: 600,
             progress() {
-                let base = 0.1
+                let base = 1/15
                 if (player.al.highestHoneycomb.lte(0)) return new Decimal(0)
                 if (player.al.highestHoneycomb.lt(1)) return player.al.highestHoneycomb.mul(base)
                 if (player.al.highestHoneycomb.lt(10)) return player.al.highestHoneycomb.sub(1).div(9).mul(base).add(base)
                 if (player.al.highestHoneycomb.lt(100)) return player.al.highestHoneycomb.sub(10).div(90).mul(base).add(base*2)
                 if (player.al.highestHoneycomb.lt(1000)) return player.al.highestHoneycomb.sub(100).div(900).mul(base).add(base*3)
-                return new Decimal(0.4)
+                if (player.al.highestHoneycomb.lt(10000)) return player.al.highestHoneycomb.sub(1000).div(9000).mul(base).add(base*4)
+                if (player.al.highestHoneycomb.lt(1000000)) return player.al.highestHoneycomb.sub(10000).div(990000).mul(base).add(base*5)
+                return new Decimal(6/15)
             },
             baseStyle: {background: "linear-gradient(0deg, #140e00, #3c2a00)", marginRight: "-3px"},
-            fillStyle: {backgroundColor: "#b79732cc"},
+            fillStyle: {backgroundColor: "#3F3411cc"},
             borderStyle: {border: "3px solid #625432", borderTopLeftRadius: "100px 200px", borderTopRightRadius: "0", borderBottomLeftRadius: "80px 360px", borderBottomRightRadius: "0"},
             textStyle: {userSelect: "none"},
             display() {
                 let str = "<div style='width:125px;height:600px;display:flex;flex-direction:column'>"
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
@@ -538,20 +639,27 @@ addLayer("al", {
             width: 125,
             height: 600,
             progress() {
-                let base = 0.1
+                let base = 1/15
                 if (player.al.highestRoyalJelly.lte(0)) return new Decimal(0)
                 if (player.al.highestRoyalJelly.lt(1)) return player.al.highestRoyalJelly.mul(base)
                 if (player.al.highestRoyalJelly.lt(10)) return player.al.highestRoyalJelly.sub(1).div(9).mul(base).add(base)
                 if (player.al.highestRoyalJelly.lt(100)) return player.al.highestRoyalJelly.sub(10).div(90).mul(base).add(base*2)
                 if (player.al.highestRoyalJelly.lt(1000)) return player.al.highestRoyalJelly.sub(100).div(900).mul(base).add(base*3)
-                return new Decimal(0.4)
+                if (player.al.highestRoyalJelly.lt(10000)) return player.al.highestRoyalJelly.sub(1000).div(9000).mul(base).add(base*4)
+                if (player.al.highestRoyalJelly.lt(1000000)) return player.al.highestRoyalJelly.sub(10000).div(990000).mul(base).add(base*5)
+                return new Decimal(6/15)
             },
             baseStyle: {background: "linear-gradient(0deg, #140e00, #3c2a00)"},
-            fillStyle: {backgroundColor: "#b45b90cc"},
+            fillStyle: {backgroundColor: "#3F2033cc"},
             borderStyle: {border: "3px solid #625432", borderTopLeftRadius: "0", borderTopRightRadius: "150px 178px", borderBottomLeftRadius: "0", borderBottomRightRadius: "150px 246px"},
             textStyle: {userSelect: "none"},
             display() {
                 let str = "<div style='width:125px;height:600px;display:flex;flex-direction:column'>"
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
+                str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
                 str = str.concat("<div style='width:125px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid #625432'></div>")
@@ -577,16 +685,17 @@ addLayer("al", {
                         ["style-column", [
                             ["style-column", [
                                 ["row", [
-                                    ["raw-html", () => {return "You have " + formatWhole(player.al.honeycomb) + " Honeycombs."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ["raw-html", () => {return "(+" + formatWhole(player.al.honeycombGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "5px"}],
+                                    ["raw-html", () => {return "You have " + formatWhole(player.al.honeycomb) + " Honeycombs"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return "(+" + formatWhole(player.al.honeycombGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
                                 ]],
                                 ["blank", "10px"],
                                 ["clickable", 1],
                             ], {width: "400px", height: "147px", background: "#2d250c", borderBottom: "3px solid #a900a9", borderRadius: "17px 14px 0 0"}],
-                            ["top-column", [
+                            ["always-scroll-column", [
                                 ["blank", "10px"],
                                 ["row", [["upgrade", 101], ["upgrade", 102], ["upgrade", 103]]],
                                 ["row", [["upgrade", 104], ["upgrade", 105], ["upgrade", 106]]],
+                                ["row", [["upgrade", 107], ["upgrade", 108], ["upgrade", 109]]],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
                                 ["buyable", 101], ["buyable", 102], ["buyable", 103],
@@ -595,20 +704,21 @@ addLayer("al", {
                         ["style-column", [
                             ["style-column", [
                                 ["row", [
-                                    ["raw-html", () => {return "You have " + formatWhole(player.al.royalJelly) + " Royal Jelly."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ["raw-html", () => {return "(+" + formatWhole(player.al.royalJellyGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "5px"}],
+                                    ["raw-html", () => {return "You have " + formatWhole(player.al.royalJelly) + " Royal Jelly"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                                    ["raw-html", () => {return "(+" + formatWhole(player.al.royalJellyGain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
                                 ]],
                                 ["blank", "10px"],
                                 ["clickable", 2],
                             ], {width: "400px", height: "147px", background: "#2d1624", borderBottom: "3px solid #a900a9", borderRadius: "17px 14px 0 0"}],
-                            ["top-column", [
+                            ["always-scroll-column", [
                                 ["blank", "10px"],
                                 ["row", [["upgrade", 201], ["upgrade", 202], ["upgrade", 203]]],
                                 ["row", [["upgrade", 204], ["upgrade", 205], ["upgrade", 206]]],
+                                ["row", [["upgrade", 207], ["upgrade", 208], ["upgrade", 209]]],
                             ], {width: "400px", height: "327px", borderBottom: "3px solid #a900a9"}],
                             ["style-row", [
                                 ["buyable", 201], ["buyable", 202], ["buyable", 203],
-                            ], {width: "400px", height: "120px", background: "#2d1624", borderRadius: "0 0 14px 17px"}],
+                            ], {width: "400px", height: "120px", background: "#2d1624", borderRadius: "0 0 17px 14px"}],
                         ], {width: "400px", height: "600px", background: "#160b12", borderLeft: "3px solid #a900a9", borderRadius: "17px", marginLeft: "-1.5px"}],
                     ], {width: "803px", height: "600px", background: "#a900a9", border: "3px solid #a900a9", borderRadius: "20px"}],
                 ],
@@ -655,35 +765,51 @@ addLayer("al", {
                                     ["style-row", [
                                         ["style-row", [
                                             ["color-text", [() => {return "1"}, true, "white", () => {return player.al.highestHoneycomb.gte(1) && player.al.highestRoyalJelly.gte(1)}, "gray"]],
-                                        ], {width: "95px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
                                             ["color-text", [() => {return "x1.5 Aleph Resources"}, true, "white", () => {return player.al.highestHoneycomb.gte(1) && player.al.highestRoyalJelly.gte(1)}, "gray"]],
-                                        ], {width: "300px", height: "35px"}],
+                                        ], {width: "280px", height: "35px"}],
                                     ], {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"}],
                                     ["style-row", [
                                         ["style-row", [
                                             ["color-text", [() => {return "10"}, true, "white", () => {return player.al.highestHoneycomb.gte(10) && player.al.highestRoyalJelly.gte(10)}, "gray"]],
-                                        ], {width: "95px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
                                             ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.highestHoneycomb.gte(10) && player.al.highestRoyalJelly.gte(10)}, "gray"]],
-                                        ], {width: "300px", height: "35px"}],
+                                        ], {width: "280px", height: "35px"}],
                                     ], () => {return player.al.highestHoneycomb.gte(1) && player.al.highestRoyalJelly.gte(1) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                     ["style-row", [
                                         ["style-row", [
                                             ["color-text", [() => {return "100"}, true, "white", () => {return player.al.highestHoneycomb.gte(100) && player.al.highestRoyalJelly.gte(100)}, "gray"]],
-                                        ], {width: "95px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
                                             ["color-text", [() => {return "Unlock flower rigging"}, true, "white", () => {return player.al.highestHoneycomb.gte(100) && player.al.highestRoyalJelly.gte(100)}, "gray"]],
-                                        ], {width: "300px", height: "35px"}],
+                                        ], {width: "280px", height: "35px"}],
                                     ], () => {return player.al.highestHoneycomb.gte(10) && player.al.highestRoyalJelly.gte(10) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                     ["style-row", [
                                         ["style-row", [
                                             ["color-text", [() => {return "1,000"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000) && player.al.highestRoyalJelly.gte(1000)}, "gray"]],
-                                        ], {width: "95px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
                                         ["style-row", [
                                             ["color-text", [() => {return "Unlock a new bee research"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000) && player.al.highestRoyalJelly.gte(1000)}, "gray"]],
-                                        ], {width: "300px", height: "35px"}],
+                                        ], {width: "280px", height: "35px"}],
                                     ], () => {return player.al.highestHoneycomb.gte(100) && player.al.highestRoyalJelly.gte(100) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["color-text", [() => {return "10,000"}, true, "white", () => {return player.al.highestHoneycomb.gte(10000) && player.al.highestRoyalJelly.gte(10000)}, "gray"]],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ["style-row", [
+                                            ["color-text", [() => {return "Release a part of Aleph"}, true, "white", () => {return player.al.highestHoneycomb.gte(10000) && player.al.highestRoyalJelly.gte(10000)}, "gray"]],
+                                        ], {width: "280px", height: "35px"}],
+                                    ], () => {return player.al.highestHoneycomb.gte(1000) && player.al.highestRoyalJelly.gte(1000) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
+                                    ["style-row", [
+                                        ["style-row", [
+                                            ["color-text", [() => {return "1,000,000"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000000) && player.al.highestRoyalJelly.gte(1000000)}, "gray"]],
+                                        ], {width: "115px", height: "35px", borderRight: "1px solid #a900a9"}],
+                                        ["style-row", [
+                                            ["color-text", [() => {return "TEMP"}, true, "white", () => {return player.al.highestHoneycomb.gte(1000000) && player.al.highestRoyalJelly.gte(1000000)}, "gray"]],
+                                        ], {width: "280px", height: "35px"}],
+                                    ], () => {return player.al.highestHoneycomb.gte(10000) && player.al.highestRoyalJelly.gte(10000) ? {width: "398px", height: "35px", background: "#190019", borderBottom: "1px solid #a900a9"} : {display: "none !important"}}],
                                 ], {width: "398px", height: "410px"}],
                                 ["style-column", [
                                     
@@ -697,12 +823,12 @@ addLayer("al", {
     },
     tabFormat: [
         ["style-row", [
-            ["raw-html", () => {return "You have " + format(player.bb.beeBread) + " Bee Bread."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(" + format(player.bb.beeBreadPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return "You have " + format(player.bb.beeBread) + " Bee Bread"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(" + format(player.bb.beeBreadPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["style-row", [
-            ["raw-html", () => {return "You have " + format(player.ho.honey) + " Honey."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(" + format(player.ho.honeyPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return "You have " + format(player.ho.honey) + " Honey"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(" + format(player.ho.honeyPerSecond) + "/s)"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
         ["microtabs", "Tabs", {borderWidth: "0"}],

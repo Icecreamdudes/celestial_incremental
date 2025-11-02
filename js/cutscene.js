@@ -74,7 +74,7 @@
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 3) {
             player.c.cutscenes[2] = false
-            player.tab = "in"
+            player.tab = "ip"
             player.c.cutscenes[2] = false
         }
 
@@ -155,7 +155,7 @@
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 8) {
             player.c.cutscenes[7] = false
-            player.tab = "in"
+            player.tab = "ip"
             player.c.cutscenes[7] = false
         }
 
@@ -171,7 +171,7 @@
         }
         if (player.c.cutsceneIndex == player.c.cutsceneText.length && player.c.currentCutscene == 9) {
             player.c.cutscenes[8] = false
-            player.tab = "in"
+            player.tab = "ip"
             player.c.cutscenes[8] = false
         }
 

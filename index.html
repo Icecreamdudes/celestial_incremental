@@ -75,6 +75,9 @@
 					<img class="miscImg" src="resources/ui/halter.png" v-if="tmp.po.microtabs.stuff.Halter.unlocked"></img>
 					<div class="miscText" v-if="!tmp.po.microtabs.stuff.Halter.unlocked">?</div>
 				</button>
+				<button v-bind:class="{miscButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="showTab('achievements')">
+					<img class="miscImg" src="resources/ui/achievements.png"></img>
+				</button>
 				<button v-bind:class="{miscButton:true,darkButton:player.sma.inStarmetalChallenge}" onclick="showTab('settings')" style="border-right:0px">
 					<img class="miscImg" src="resources/ui/settings.png"></img>
 				</button>
@@ -130,10 +133,13 @@
 		<!-- Popups -->
 		<div class="popup-container">
 			<transition-group name="fade">
-				<div v-for="popup,index in activePopups" class="popup" v-bind:class="popup.type"
+				<div v-for="popup,index in activePopups" class="popup" v-bind:class="[popup.type, popup.image ? 'popup-wide' : '']"
 					 v-bind:key="'p' + popup.id" v-on:click="() => {activePopups.splice(index, 1)}" v-bind:style="popup.color ? {'background-color': popup.color} : {}">
-					<h3>{{popup.title}}</h3><br>
-					<h2 v-html="popup.message"></h2>
+					<img v-if="popup.image" style="float:left;border-radius:10px;margin:5px;margin-top:-8px;border:3px solid" v-bind:src="popup.image" width="70px" height="70px"></img>
+					<div>
+						<h3>{{popup.title}}</h3><br>
+						<h2 v-html="popup.message"></h2>
+					</div>
 				</div>
 			</transition-group>
 		</div>

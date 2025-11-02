@@ -170,7 +170,7 @@ addLayer("pol", {
             if (hasMilestone("gs", 18)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.gs.milestone8Effect)
             if (hasUpgrade("hpw", 1033)) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(upgradeEffect("hpw", 1033))
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(levelableEffect("pu", 206)[1])
-            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.diceEffects[16])
+            player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.d.boosterEffects[16])
             player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.i.postOTFMult)
             if (player.pol.pollinatorEffects.plant.enabled) player.pol.pollinatorsPerSecond = player.pol.pollinatorsPerSecond.mul(player.pol.pollinatorEffects.plant.effects[0])
 

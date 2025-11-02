@@ -58,9 +58,8 @@
             unlocked: true,
             onClick() {
                 player.sma.inStarmetalChallenge = true
-                player.universe = -0.1
+                player.universe = "D1"
                 player.tab = "le"
-                player.uniTab = 1
 
                 layers.le.starmetalResetAgain()
                 
@@ -76,13 +75,12 @@
             canClick: true,
             unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
-                player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
-                player.pet.activeAbilities[0] = true
+                player.pet.legPetTimers[0].current = player.pet.legPetTimers[0].max
+                player.pet.legPetTimers[0].active = true
 
                 player.sma.inStarmetalChallenge = true
-                player.universe = -0.1
+                player.universe = "D1"
                 player.tab = "le"
-                player.uniTab = 1
 
                 layers.le.starmetalResetAgain()
                 layers.pu.generateSelection();

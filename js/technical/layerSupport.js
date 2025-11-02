@@ -106,6 +106,8 @@ function setupLayer(layer){
             if (isPlainObject(layers[layer].achievements[thing])){
                 layers[layer].achievements[thing].id = thing
                 layers[layer].achievements[thing].layer = layer
+                if (layers[layer].achievements[thing].complete === undefined)
+                    layers[layer].achievements[thing].complete = false
                 if (layers[layer].achievements[thing].unlocked === undefined)
                     layers[layer].achievements[thing].unlocked = true
             }

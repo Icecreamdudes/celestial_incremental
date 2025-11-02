@@ -50,7 +50,7 @@
         player.m.codeExperienceToGet = player.t.trees.div(1e7).pow(0.3)
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(buyableEffect("m", 11))
         player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(levelableEffect("pet", 201)[0])
-        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.diceEffects[10])
+        player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(player.d.boosterEffects[10])
         if (hasUpgrade("ad", 21) && !inChallenge("ip", 14)) player.m.codeExperienceToGet = player.m.codeExperienceToGet.mul(upgradeEffect("ad", 21))
 
         // CHALLENGE MODIFIERS
@@ -96,7 +96,7 @@
         player.m.linesOfCodePerSecond = player.m.codeExperience.pow(1.5)
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(buyableEffect("m", 12))
         player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(levelableEffect("pet", 202)[0])
-        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.diceEffects[9])
+        player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(player.d.boosterEffects[9])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.linesOfCodePerSecond = player.m.linesOfCodePerSecond.mul(upgradeEffect("ip", 23))
 
         // CHALLENGE MODIFIERS
@@ -130,7 +130,7 @@
         if (hasUpgrade("g", 21)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("g", 21))
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 203)[1])
         if (hasMilestone("r", 19)) player.m.modsToGet = player.m.modsToGet.mul(player.r.pentMilestone9Effect[1])
-        player.m.modsToGet = player.m.modsToGet.mul(player.d.diceEffects[8])
+        player.m.modsToGet = player.m.modsToGet.mul(player.d.boosterEffects[8])
         player.m.modsToGet = player.m.modsToGet.mul(levelableEffect("pet", 302)[1])
         if (hasUpgrade("ip", 23) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ip", 23))
         if (hasUpgrade("ad", 18) && !inChallenge("ip", 14)) player.m.modsToGet = player.m.modsToGet.mul(upgradeEffect("ad", 18))
@@ -193,6 +193,7 @@
             canClick() { return player.m.codeExperienceToGet.gte(1) && player.points.gte(1e65) && player.t.trees.gte(10000000) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 17)) completeAchievement("achievements", 17)
                 player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
             },
@@ -416,7 +417,7 @@
             purchaseLimit() { return new Decimal(1000) },
             currency() { return player.m.mods},
             pay(amt) { player.m.mods = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).pow(2).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).add(1).pow(2) },
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

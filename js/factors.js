@@ -80,7 +80,7 @@
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.gh.grasshopperEffects[1])
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(buyableEffect("m", 14))
         player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(levelableEffect("pet", 103)[0])
-        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.d.diceEffects[1])
+        player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.d.boosterEffects[1])
         if (hasUpgrade("p", 16)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(player.r.tetrEffect2)
         if (hasUpgrade("ip", 14) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 14))
         if (hasUpgrade("ip", 21) && !inChallenge("ip", 14)) player.f.factorPowerPerSecond = player.f.factorPowerPerSecond.mul(upgradeEffect("ip", 21))
@@ -124,9 +124,6 @@
         if (hasUpgrade("cs", 203)) player.f.factorBase = player.f.factorBase.mul(8000)
         if (hasUpgrade("cs", 701)) player.f.factorBase = player.f.factorBase.mul(player.m.codeExperienceEffect)
     },
-    clickables: {},
-    bars: {},
-    upgrades: {},
     buyables: {
         // Grass Factors
         1: {
@@ -150,6 +147,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -187,6 +185,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -224,6 +223,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -261,6 +261,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -298,6 +299,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -335,6 +337,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -372,6 +375,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -409,6 +413,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fertilizer"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 15)) completeAchievement("achievements", 15)
                 if (mult != true && !hasMilestone("r", 16)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -447,11 +452,13 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 3) && buyableEffect("f", 11).mul(buyableEffect("f", 12)).mul(buyableEffect("f", 13)).mul(buyableEffect("f", 14)).gte(1.95)) completeAchievement("achievements", 3)
                 if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                    
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
@@ -484,6 +491,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 3) && buyableEffect("f", 11).mul(buyableEffect("f", 12)).mul(buyableEffect("f", 13)).mul(buyableEffect("f", 14)).gte(1.95)) completeAchievement("achievements", 3)
                 if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -521,6 +529,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 3) && buyableEffect("f", 11).mul(buyableEffect("f", 12)).mul(buyableEffect("f", 13)).mul(buyableEffect("f", 14)).gte(1.95)) completeAchievement("achievements", 3)
                 if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -558,6 +567,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 3) && buyableEffect("f", 11).mul(buyableEffect("f", 12)).mul(buyableEffect("f", 13)).mul(buyableEffect("f", 14)).gte(1.95)) completeAchievement("achievements", 3)
                 if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -706,6 +716,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Celestial Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 6)) completeAchievement("achievements", 6)
                 if (mult != true && !hasUpgrade("p", 15)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -744,6 +755,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -781,6 +793,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -818,6 +831,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -855,6 +869,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -892,6 +907,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -929,6 +945,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -966,6 +983,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)
@@ -1003,6 +1021,7 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Prestige Points"
             },
             buy(mult) {
+                if (!hasAchievement("achievements", 7)) completeAchievement("achievements", 7)
                 if (mult != true && !hasUpgrade("p", 21)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
                     this.pay(buyonecost)

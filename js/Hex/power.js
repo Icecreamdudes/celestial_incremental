@@ -54,15 +54,16 @@ addLayer("hpw", {
         player.hpu.purity = player.hpu.keptPurity
         player.hpu.totalPurity = player.hpu.keptPurity
         player.hpu.purityGain = new Decimal(0)
-        player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
+        for (let i in player.hpu.purifiers) {
+            player.hpu.purifiers[i].amount = new Decimal(0)
+            if (i != "2" || i != "5") player.hpu.purifiers[i].effect = new Decimal(1)
+        }
         
         let extra = new Decimal(0)
         if (hasUpgrade("hpw", 41)) extra = extra.add(1)
         if (type == 2 && hasUpgrade("hve", 33)) extra = extra.add(1)
         player.hpu.purifier[1] = extra
         player.hpu.purifier[4] = extra
-
-        player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
 
         // CURSES
         player.hcu.curses = new Decimal(0)
@@ -95,14 +96,12 @@ addLayer("hpw", {
         player.hbl.boons = new Decimal(0)
         player.hbl.boonsGain = new Decimal(0)
         player.hbl.blessAutomation = false
-        player.hbl.boosterLevels[0] = new Decimal(0)
-        player.hbl.boosterLevels[1] = new Decimal(0)
-        if (!hasMilestone("hpw", 2)) player.hbl.boosterLevels[2] = new Decimal(0)
-        player.hbl.boosterLevels[3] = new Decimal(0)
-        player.hbl.boosterLevels[4] = new Decimal(0)
-        if (!hasMilestone("hpw", 2)) player.hbl.boosterLevels[5] = new Decimal(0)
-        player.hbl.boosterXP = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
-        player.hbl.boosterEffects = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+        for (let i in player.hbl.boosters) {
+            if (hasMilestone("hpw", 2) && (i == "2" || i == "5")) continue;
+            player.hbl.boosters[i].level = new Decimal(0)
+            player.hbl.boosters[i].xp = new Decimal(0)
+            if (i != "5") player.hbl.boosters[i].effect = new Decimal(1)
+        }
         for (let i = 0; i < player.hbl.upgrades.length; i++) {
             if ((type != 1 || hasMilestone("s", 20)) && +player.hbl.upgrades[i] > player.hpw.vigor) {
                 player.hbl.upgrades.splice(i, 1);
@@ -173,6 +172,7 @@ addLayer("hpw", {
             title: "Might 1:1",
             unlocked: true,
             description: "Boost blessings based on power.",
+            tooltip: "(log6(Power+1)+1)*2",
             cost() {return new Decimal(1).pow(player.hpw.upgScale[0])},
             onPurchase() {player.hpw.upgScale[0] = player.hpw.upgScale[0] + 1},
             currencyLocation() { return player.hpw },
@@ -188,6 +188,10 @@ addLayer("hpw", {
             title: "Might 1:2",
             unlocked: true,
             description: "Boost hex points based on power.",
+            tooltip() {
+                if (hasUpgrade("hpw", 32)) return "(log1.6((Power+1)^3)+1)*6"
+                return "(log2(Power+1)+1)*3"
+            },
             cost() {return new Decimal(1).pow(player.hpw.upgScale[0])},
             onPurchase() {player.hpw.upgScale[0] = player.hpw.upgScale[0] + 1},
             currencyLocation() { return player.hpw },
@@ -277,6 +281,7 @@ addLayer("hpw", {
             title: "Might 4:2",
             unlocked: true,
             description: "Improve Might 1:2's effect.",
+            tooltip: "(log2(Power+1)+1)*3<br>↓<br>(log1.6((Power+1)^3)+1)*6",
             branches: [31, 33],
             cost() {return new Decimal(6).pow(player.hpw.upgScale[3])},
             canAfford() { return hasUpgrade("hpw", 31) && hasUpgrade("hpw", 33)},
@@ -1185,8 +1190,8 @@ addLayer("hpw", {
                     ["clickable", 2],
                     ["row", [
                         ["blank", ["140px", "140px"]],
-                        ["upgrade", 1],
-                        ["upgrade", 2],
+                        ["bt-upgrade", 1],
+                        ["bt-upgrade", 2],
                         ["style-row", [["upgrade", 1011]], {width: "140px", height: "140px"}],
                     ]],
                     ["row", [
@@ -1205,7 +1210,7 @@ addLayer("hpw", {
                     ["row", [
                         ["style-row", [["upgrade", 1021]], {width: "140px", height: "140px"}],
                         ["upgrade", 31],
-                        ["upgrade", 32],
+                        ["bt-upgrade", 32],
                         ["upgrade", 33],
                         ["style-row", [["upgrade", 1031]], {width: "140px", height: "140px"}],
                     ]],

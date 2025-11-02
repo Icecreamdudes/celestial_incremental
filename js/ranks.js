@@ -62,19 +62,25 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-        //Rank and Tier effects/costs
+        //Rank effects/costs
+        let rankDiv = new Decimal(1)
+        if (hasAchievement("achievements", 2)) rankDiv = rankDiv.mul(1.2)
+        if (hasAchievement("achievements", 4)) rankDiv = rankDiv.mul(1.15)
+        if (hasAchievement("achievements", 5)) rankDiv = rankDiv.mul(1.1)
+        rankDiv = rankDiv.mul(levelableEffect("pet", 204)[0])
 
-        let ranksGainPreS = player.points.div(10).mul(levelableEffect("pet", 204)[0]).pow(Decimal.div(20, 29)).floor()
-        let ranksGainPostS = player.points.div(10).mul(levelableEffect("pet", 204)[0]).pow(0.25).floor()
-        let ranksGainPostS2 = player.points.div(10).mul(levelableEffect("pet", 204)[0]).pow(Decimal.div(1, 10)).floor()
-        let ranksGainHardcap = player.points.plus(1).mul(levelableEffect("pet", 204)[0]).log10().div(10).pow(Decimal.div(1, 50)).floor()
-        let ranksGainPostS3 = Decimal.pow(10, player.points.div("1e100000").mul(levelableEffect("pet", 204)[0]).log("1e100")).mul("1e4000")
+
+        let ranksGainPreS = player.points.div(10).mul(rankDiv).pow(Decimal.div(20, 29)).floor()
+        let ranksGainPostS = player.points.div(10).mul(rankDiv).pow(0.25).floor()
+        let ranksGainPostS2 = player.points.div(10).mul(rankDiv).pow(Decimal.div(1, 10)).floor()
+        let ranksGainHardcap = player.points.plus(1).mul(rankDiv).log10().div(10).pow(Decimal.div(1, 50)).floor()
+        let ranksGainPostS3 = Decimal.pow(10, player.points.div("1e100000").mul(rankDiv).log("1e100")).mul("1e4000")
 
         player.r.rankEffect = player.r.rank.mul(0.4).add(1).pow(1.055)
         if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
         if (hasUpgrade("hpw", 1011)) player.r.rankEffect = player.r.rankEffect.pow(1.18)
-        player.r.rankReq = layers.r.getRankReq()
+        player.r.rankReq = layers.r.getRankReq(rankDiv)
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)
         }
@@ -98,11 +104,17 @@
             player.r.rank = player.r.rank.add(player.r.ranksToGet)
         }
 
-        let tiersGain = player.r.rank.div(3).mul(levelableEffect("pet", 204)[1]).pow(Decimal.div(10, 11)).floor()
+        // Tier Effects/costs
+        let tierDiv = new Decimal(1)
+        if (hasAchievement("achievements", 4)) tierDiv = tierDiv.mul(1.15)
+        if (hasAchievement("achievements", 5)) tierDiv = tierDiv.mul(1.1)
+        tierDiv = tierDiv.mul(levelableEffect("pet", 204)[1])
+
+        let tiersGain = player.r.rank.div(3).mul(tierDiv).pow(Decimal.div(10, 11)).floor()
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
         if (hasUpgrade("hpw", 1011)) player.r.tierEffect = player.r.tierEffect.pow(1.18)
-        player.r.tierReq = layers.r.getTierReq()
+        player.r.tierReq = layers.r.getTierReq(tierDiv)
         if (player.r.rank.gte(player.r.tierReq) && hasUpgrade("p", 14)) {
              player.r.tiersToGet = tiersGain.sub(player.r.tier)
         }
@@ -114,7 +126,12 @@
             player.r.tier = player.r.tier.add(player.r.tiersToGet)
         }
 
-        let tetrGain = player.r.tier.div(2).mul(levelableEffect("pet", 204)[2]).pow(Decimal.div(25, 27)).floor()
+        // Tetr Effects/costs
+        let tetrDiv = new Decimal(1)
+        if (hasAchievement("achievements", 5)) tetrDiv = tetrDiv.mul(1.1)
+        tetrDiv = tetrDiv.mul(levelableEffect("pet", 204)[2])
+
+        let tetrGain = player.r.tier.div(2).mul(tetrDiv).pow(Decimal.div(25, 27)).floor()
 
         player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
@@ -123,7 +140,7 @@
         player.r.tetrEffect2 = player.r.tetr.pow(0.6).add(1)
         player.r.tetrEffect2 = player.r.tetrEffect2.pow(player.p.crystalEffect)
         if (hasUpgrade("hpw", 1011)) player.r.tetrEffect2 = player.r.tetrEffect2.pow(1.18)
-        player.r.tetrReq = layers.r.getTetrReq()
+        player.r.tetrReq = layers.r.getTetrReq(tetrDiv)
         if (player.r.tier.gte(player.r.tetrReq) && hasUpgrade("p", 14)) {
             player.r.tetrsToGet = tetrGain.sub(player.r.tetr)
         }
@@ -141,6 +158,7 @@
         if (hasUpgrade("hpw", 1011)) player.r.pentEffect = player.r.pentEffect.pow(1.18)
 
         let pentDiv = new Decimal(1)
+        if (hasAchievement("achievements", 17)) pentDiv = pentDiv.mul(8)
         pentDiv = pentDiv.mul(buyableEffect("g", 19))
         if (hasUpgrade("ep2", 8)) pentDiv = pentDiv.mul(upgradeEffect("ep2", 8))
         
@@ -199,7 +217,7 @@
             if (hasUpgrade("ep0", 12)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep0", 12))
             if (hasUpgrade("ep2", 2)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("ep2", 2))
             if (hasUpgrade("s", 14)) player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(upgradeEffect("s", 14))
-            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.d.diceEffects[17])
+            player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.d.boosterEffects[17])
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(levelableEffect("pu", 207)[1])
             player.r.timeCubesPerSecond = player.r.timeCubesPerSecond.mul(player.i.postOTFMult)
 
@@ -231,24 +249,24 @@
             player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(player.cs.scraps.point.effect)
         }
     },
-    getRankReq() {
+    getRankReq(divider = new Decimal(1)) {
         if (player.r.rank.lte(20)) {
-            return player.r.rank.add(1).pow(1.45).div(levelableEffect("pet", 204)[0]).mul(10)
+            return player.r.rank.add(1).pow(1.45).div(divider).mul(10)
         } else if (player.r.rank.gt(20) && player.r.rank.lte(100)) {
-            return (player.r.rank.sub(17)).pow(4).div(levelableEffect("pet", 204)[0]).mul(10)
+            return (player.r.rank.sub(17)).pow(4).div(divider).mul(10)
         } else if (player.r.rank.gt(100) && player.r.rank.lt("1e4000")) {
-            return (player.r.rank.sub(97)).pow(10).div(levelableEffect("pet", 204)[0]).mul(10)
+            return (player.r.rank.sub(97)).pow(10).div(divider).mul(10)
         } else if (player.r.rank.gte("1e4000") && !hasUpgrade("cs", 101)) {
-            return Decimal.pow(10, player.r.rank.pow(50).mul(10)).div(levelableEffect("pet", 204)[0]).sub(1)
+            return Decimal.pow(10, player.r.rank.pow(50).mul(10)).div(divider).sub(1)
         } else if (player.r.rank.gte("1e4000") && hasUpgrade("cs", 101)) {
-            return Decimal.pow("1e100", player.r.rank.div("1e4000").ln(10).div(Decimal.ln(10))).div(levelableEffect("pet", 204)[0]).mul("1e100000")
+            return Decimal.pow("1e100", player.r.rank.div("1e4000").ln(10).div(Decimal.ln(10))).div(divider).mul("1e100000")
         }
     },
-    getTierReq() {
-        return player.r.tier.add(1).pow(1.1).div(levelableEffect("pet", 204)[1]).mul(3).ceil()
+    getTierReq(divider = new Decimal(1)) {
+        return player.r.tier.add(1).pow(1.1).div(divider).mul(3).ceil()
     },
-    getTetrReq() {
-        return player.r.tetr.add(1).pow(1.08).div(levelableEffect("pet", 204)[2]).mul(2).ceil()
+    getTetrReq(divider = new Decimal(1)) {
+        return player.r.tetr.add(1).pow(1.08).div(divider).mul(2).ceil()
     },
     rankReset() {
         player.points = new Decimal(0)
@@ -349,6 +367,7 @@
             canClick() { return player.points.gte(player.r.rankReq) && !hasUpgrade("p", 17) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 1)) completeAchievement("achievements", 1)
                 player.r.rank = player.r.rank.add(player.r.ranksToGet)
                 layers.r.rankReset()
             },
@@ -364,6 +383,7 @@
             canClick() { return player.r.rank.gte(player.r.tierReq) && !hasUpgrade("p", 18) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 2)) completeAchievement("achievements", 2)
                 player.r.tier = player.r.tier.add(player.r.tiersToGet)
                 layers.r.tierReset()
             },
@@ -380,6 +400,7 @@
             canClick() { return player.r.tier.gte(player.r.tetrReq) && !hasUpgrade("p", 22) && !hasMilestone("s", 19)},
             unlocked() { return hasUpgrade("i", 13) },
             onClick() {
+                if (!hasAchievement("achievements", 4)) completeAchievement("achievements", 4)
                 player.r.tetr = player.r.tetr.add(player.r.tetrsToGet)
                 layers.r.tetrReset()
             },
@@ -403,6 +424,8 @@
             canClick() { return player.r.pentToGet.gt(0) && (!hasUpgrade("i", 32) || inChallenge("ip", 14)) },
             unlocked() { return true },
             onClick() {
+                if (!hasAchievement("achievements", 10)) completeAchievement("achievements", 10)
+                if (!hasAchievement("achievements", 24) && player.r.pent.gte(30)) completeAchievement("achievements", 24)
                 player.r.pent = player.r.pent.add(player.r.pentToGet)
                 player.r.pentPause = new Decimal(3)
             },

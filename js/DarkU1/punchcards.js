@@ -104,7 +104,7 @@ addLayer("pu", {
             canClick() { return player.pu.storedSelections.gte(1) && player.pu.selectedPunchcards[player.pu.selectionIndex] != 0},
             unlocked: true,
             onClick() {
-                setLevelableBool("pu", player.pu.selectedPunchcards[player.pu.selectionIndex], true)
+                setLevelableBool("pu", player.pu.selectedPunchcards[player.pu.selectionIndex], new Decimal(1))
                 player.pu.storedSelections = player.pu.storedSelections.sub(1)
 
                 layers.pu.generateSelection();
@@ -517,7 +517,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -571,7 +571,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -680,8 +680,8 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.pet.activeAbilities[0] && player.le.highestReset.gte(3)) || this.canClick()},
-            canSelect() {return player.pet.activeAbilities[0] && player.le.resetAmount.gte(3)},
+            unlocked() {return (player.pet.legPetTimers[0].active && player.le.highestReset.gte(3)) || this.canClick()},
+            canSelect() {return player.pet.legPetTimers[0].active && player.le.resetAmount.gte(3)},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -847,7 +847,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -902,7 +902,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(3) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.activeAbilities[0]},
+            canSelect() {return player.le.resetAmount.gte(3) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -956,7 +956,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return player.le.highestReset.gte(4) || this.canClick()},
-            canSelect() {return player.le.resetAmount.gte(4) && !player.pet.activeAbilities[0]},
+            canSelect() {return player.le.resetAmount.gte(4) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1117,8 +1117,8 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (player.pet.activeAbilities[0] && player.le.highestReset.gte(3)) || this.canClick()},
-            canSelect() {return player.pet.activeAbilities[0] && player.le.resetAmount.gte(3)},
+            unlocked() {return (player.pet.legPetTimers[0].active && player.le.highestReset.gte(3)) || this.canClick()},
+            canSelect() {return player.pet.legPetTimers[0].active && player.le.resetAmount.gte(3)},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1173,7 +1173,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return hasUpgrade("sma", 17) || this.canClick()},
-            canSelect() {return hasUpgrade("sma", 17) && !player.pet.activeAbilities[0]},
+            canSelect() {return hasUpgrade("sma", 17) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1226,7 +1226,7 @@ addLayer("pu", {
             },
             // CLICK CODE
             unlocked() {return hasUpgrade("sma", 17) || this.canClick()},
-            canSelect() {return hasUpgrade("sma", 17) && !player.pet.activeAbilities[0]},
+            canSelect() {return hasUpgrade("sma", 17) && !player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1278,8 +1278,8 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (hasUpgrade("sma", 17) && player.pet.activeAbilities[0]) || this.canClick()},
-            canSelect() {return hasUpgrade("sma", 17) && player.pet.activeAbilities[0]},
+            unlocked() {return (hasUpgrade("sma", 17) && player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return hasUpgrade("sma", 17) && player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1331,8 +1331,8 @@ addLayer("pu", {
                 return eff
             },
             // CLICK CODE
-            unlocked() {return (hasUpgrade("sma", 17) && player.pet.activeAbilities[0]) || this.canClick()},
-            canSelect() {return hasUpgrade("sma", 17) && player.pet.activeAbilities[0]},
+            unlocked() {return (hasUpgrade("sma", 17) && player.pet.legPetTimers[0].active) || this.canClick()},
+            canSelect() {return hasUpgrade("sma", 17) && player.pet.legPetTimers[0].active},
             canClick() {return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0) || getLevelableBool(this.layer, this.id)},
             onClick() {return layers[this.layer].levelables.index = this.id},
             // LEVEL CODE
@@ -1362,14 +1362,14 @@ addLayer("pu", {
                             ["style-column", [
                                 ["raw-html", () => {
                                     if (player.pu.storedSelections.lte(0)) return "No Punchcard Selected."
-                                    let str = tmp.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].title
+                                    let str = run(layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].title, layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]])
                                     return str.substring(0, str.indexOf("<small style='color:gray'>"))
                                 }, {color: "white", fontSize: "24px !important", fontFamily: "monospace"}],
                             ], {width: "500px", height: "47px", borderBottom: "3px solid white"}],
                             ["style-column", [
                                 ["raw-html", () => {
                                     if (player.pu.storedSelections.lte(0)) return ""
-                                    let str = tmp.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].description
+                                    let str = run(layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]].description, layers.pu.levelables[player.pu.selectedPunchcards[player.pu.selectionIndex]])
                                     str = str.substring(str.indexOf("<u>Active</u><br>")+17)
                                     return str.substring(0, str.indexOf("</span>"))
                                 }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],

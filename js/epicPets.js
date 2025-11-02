@@ -9,17 +9,27 @@
 
         dotknightPoints: new Decimal(0),
         dotknightLevelEffect: new Decimal(1),
-        dotknightPointsToGet: [new Decimal(1), new Decimal(3), new Decimal(8),],
-        dotknightPointButtonUnlocks: [false, false, false,],
-        dotknightPointButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0),],
-        dotknightPointButtonTimersMax: [new Decimal(60), new Decimal(240), new Decimal(600),],
+        timers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(60),
+                base: new Decimal(2),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(240),
+                base: new Decimal(5),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(600),
+                base: new Decimal(12),
+            },
+        },
 
-        dotknightUnlockText: '',
         //Cursword
         //Pointurret
     }
-    },
-    automate() {
     },
     nodeStyle: {
         backgroundColor: "#9176af",
@@ -31,46 +41,32 @@
 
         player.ep0.dotknightLevelEffect = getLevelableAmount("pet", 401).pow(1.1).div(10).add(1)
 
-        player.ep0.dotknightPointsToGet = [new Decimal(1), new Decimal(3), new Decimal(8),]
-        for (let i = 0; i < player.ep0.dotknightPointsToGet.length; i++)
-        {
-            player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(player.ep0.dotknightLevelEffect)
-            if (hasUpgrade("ev8", 21)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(1.4)
-            player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(buyableEffect("ep1", 13))
-            if (hasUpgrade("ep2", 11)) player.ep0.dotknightPointsToGet[i] = player.ep0.dotknightPointsToGet[i].mul(upgradeEffect("ep2", 11))
+        player.ep0.timers[0].base = new Decimal(2)
+        player.ep0.timers[1].base = new Decimal(5)
+        player.ep0.timers[2].base = new Decimal(12)
+        for (let thing in player.ep0.timers) {
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(player.ep0.dotknightLevelEffect)
+            if (hasUpgrade("ev8", 21)) player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(1.4)
+            player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(buyableEffect("ep1", 13))
+            if (hasUpgrade("ep2", 11)) player.ep0.timers[thing].base = player.ep0.timers[thing].base.mul(upgradeEffect("ep2", 11))
         }
 
-        for (let i = 0; i < player.ep0.dotknightPointButtonTimers.length; i++)
-        {
-            player.ep0.dotknightPointButtonTimers[i] = player.ep0.dotknightPointButtonTimers[i].sub(onepersec.mul(delta))
-        }
-        player.ep0.dotknightPointButtonTimersMax = [new Decimal(60), new Decimal(240), new Decimal(600),]
-
-        if (getLevelableAmount("pet", 401).gte(1))
-        {
-            player.ep0.dotknightPointButtonUnlocks[0] = true
-            player.ep0.dotknightUnlockText = "You will unlock the next button at level 3!"
-        }
-        if (getLevelableAmount("pet", 401).gte(3))
-        {
-            player.ep0.dotknightPointButtonUnlocks[1] = true
-            player.ep0.dotknightUnlockText = "You will unlock the next button at level 6!"
-        }
-        if (getLevelableAmount("pet", 401).gte(6))
-        {
-            player.ep0.dotknightPointButtonUnlocks[2] = true
-            player.ep0.dotknightUnlockText = "You will unlock the next button at level ???"
+        player.ep0.timers[0].max = new Decimal(60)
+        player.ep0.timers[1].max = new Decimal(240)
+        player.ep0.timers[2].max = new Decimal(600)
+        for (let thing in player.ep0.timers) {
+            player.ep0.timers[thing].current = player.ep0.timers[thing].current.sub(onepersec.mul(delta))
         }
     },
     clickables: {
         11: {
-            title() { return player.ep0.dotknightPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[0]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ep0.dotknightPointButtonUnlocks[0] },
+            title() { return player.ep0.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[0].current) + "." : "<h3>+" + format(player.ep0.timers[0].base) + " Dotknight Points."},
+            canClick() { return player.ep0.timers[0].current.lt(0) },
+            unlocked: true,
             tooltip() { return "Evo Shard Rarity: 1%"},
             onClick() {
-                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.dotknightPointsToGet[0])
-                player.ep0.dotknightPointButtonTimers[0] = player.ep0.dotknightPointButtonTimersMax[0]
+                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[0].base)
+                player.ep0.timers[0].current = player.ep0.timers[0].max
 
                     let random = getRandomInt(100)
                     if (random == 1) {
@@ -85,13 +81,13 @@
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
-            title() { return player.ep0.dotknightPointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[1]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[1]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ep0.dotknightPointButtonUnlocks[1] },
+            title() { return player.ep0.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[1].current) + "." : "<h3>+" + format(player.ep0.timers[1].base) + " Dotknight Points."},
+            canClick() { return player.ep0.timers[1].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 401).gte(3) },
             tooltip() { return "Evo Shard Rarity: 2%"},
             onClick() {
-                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.dotknightPointsToGet[1])
-                player.ep0.dotknightPointButtonTimers[1] = player.ep0.dotknightPointButtonTimersMax[1]
+                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[1].base)
+                player.ep0.timers[1].current = player.ep0.timers[1].max
 
                     let random = getRandomInt(50)
                     if (random == 1) {
@@ -106,13 +102,13 @@
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
-            title() { return player.ep0.dotknightPointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.dotknightPointButtonTimers[2]) + "." : "<h3>+" + format(player.ep0.dotknightPointsToGet[2]) + " Dotknight Points."},
-            canClick() { return player.ep0.dotknightPointButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ep0.dotknightPointButtonUnlocks[2] },
+            title() { return player.ep0.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep0.timers[2].current) + "." : "<h3>+" + format(player.ep0.timers[2].base) + " Dotknight Points."},
+            canClick() { return player.ep0.timers[2].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 401).gte(6) },
             tooltip() { return "DOUBLE Evo Shard Rarity: 2%"},
             onClick() {
-                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.dotknightPointsToGet[2])
-                player.ep0.dotknightPointButtonTimers[2] = player.ep0.dotknightPointButtonTimersMax[2]
+                player.ep0.dotknightPoints = player.ep0.dotknightPoints.add(player.ep0.timers[2].base)
+                player.ep0.timers[2].current = player.ep0.timers[2].max
 
                     let random = getRandomInt(50)
                     if (random == 1) {
@@ -126,11 +122,10 @@
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
-
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep0.clickables[11].canClick || tmp.ep0.clickables[12].canClick || tmp.ep0.clickables[13].canClick},
-            unlocked() {return player.ep0.dotknightPointButtonUnlocks[1]},
+            unlocked() {return getLevelableAmount("pet", 401).gte(3)},
             onClick() {
                 clickClickable("ep0", 11)
                 clickClickable("ep0", 12)
@@ -143,8 +138,6 @@
                 return look
             },
         },
-    },
-    bars: {
     },
     upgrades: {
         11: {
@@ -294,19 +287,15 @@
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "10px"],
-                    ["raw-html", function () { return player.ep0.dotknightUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Dotknight Level: x<h3>" + format(player.ep0.dotknightLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => {return getLevelableAmount("pet", 401).gte(6) ? "" : getLevelableAmount("pet", 401).gte(3) ? "You will unlock the next button at level 6!" : "You will unlock the next button at level 3!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Dotknight Level: x<h3>" + format(player.ep0.dotknightLevelEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 11],
                     ["clickable", 12],
@@ -317,8 +306,7 @@
             "Buyables and Upgrades": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
@@ -327,9 +315,8 @@
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", () => { return "You have <h3>" + format(player.ep0.dotknightPoints) + "</h3> dotknight points." }, {color: "white", fontSize: "32px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
@@ -346,16 +333,24 @@ addLayer("ep1", {
 
         dragonPoints: new Decimal(0),
         dragonLevelEffect: new Decimal(1),
-        dragonPointsToGet: [new Decimal(0.04), new Decimal(0.1), new Decimal(0.2),],
-        dragonPointButtonUnlocks: [false, false, false,],
-        dragonPointButtonTimers: [new Decimal(0), new Decimal(0), new Decimal(0),],
-        dragonPointButtonTimersMax: [new Decimal(1), new Decimal(3), new Decimal(8),],
-
-        dragonUnlockText: '',
-    }
-    },
-    automate() {
-    },
+        timers: {
+            0: {
+                current: new Decimal(0),
+                max: new Decimal(1),
+                base: new Decimal(0.2),
+            },
+            1: {
+                current: new Decimal(0),
+                max: new Decimal(3),
+                base: new Decimal(0.5),
+            },
+            2: {
+                current: new Decimal(0),
+                max: new Decimal(8),
+                base: new Decimal(1),
+            },
+        },
+    }},
     nodeStyle: {
         backgroundColor: "#689b3a",
     },
@@ -366,46 +361,32 @@ addLayer("ep1", {
 
         player.ep1.dragonLevelEffect = getLevelableAmount("pet", 402).pow(1.15).div(14).add(1)
 
-        player.ep1.dragonPointsToGet = [new Decimal(0.2), new Decimal(0.45), new Decimal(0.9),]
-        for (let i = 0; i < player.ep1.dragonPointsToGet.length; i++)
-        {
-            player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(player.ep1.dragonLevelEffect)
-            if (hasUpgrade("ep0", 13)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep0", 13))
-            if (hasUpgrade("ep2", 10)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(upgradeEffect("ep2", 10))
-            if (hasUpgrade("ev8", 21)) player.ep1.dragonPointsToGet[i] = player.ep1.dragonPointsToGet[i].mul(1.4)
+        player.ep1.timers[0].base = new Decimal(0.2)
+        player.ep1.timers[1].base = new Decimal(0.5)
+        player.ep1.timers[2].base = new Decimal(1)
+        for (let thing in player.ep1.timers) {
+            player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(player.ep1.dragonLevelEffect)
+            if (hasUpgrade("ep0", 13)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(upgradeEffect("ep0", 13))
+            if (hasUpgrade("ep2", 10)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(upgradeEffect("ep2", 10))
+            if (hasUpgrade("ev8", 21)) player.ep1.timers[thing].base = player.ep1.timers[thing].base.mul(1.4)
         }
 
-        for (let i = 0; i < player.ep1.dragonPointButtonTimers.length; i++)
-        {
-            player.ep1.dragonPointButtonTimers[i] = player.ep1.dragonPointButtonTimers[i].sub(onepersec.mul(delta))
-        }
-        player.ep1.dragonPointButtonTimersMax = [new Decimal(1), new Decimal(3), new Decimal(8),]
-
-        if (getLevelableAmount("pet", 402).gte(1))
-        {
-            player.ep1.dragonPointButtonUnlocks[0] = true
-            player.ep1.dragonUnlockText = "You will unlock the next button at level 2!"
-        }
-        if (getLevelableAmount("pet", 402).gte(2))
-        {
-            player.ep1.dragonPointButtonUnlocks[1] = true
-            player.ep1.dragonUnlockText = "You will unlock the next button at level 7!"
-        }
-        if (getLevelableAmount("pet", 402).gte(7))
-        {
-            player.ep1.dragonPointButtonUnlocks[2] = true
-            player.ep1.dragonUnlockText = "You will unlock the next button at level ???"
+        player.ep1.timers[0].max = new Decimal(1)
+        player.ep1.timers[1].max = new Decimal(3)
+        player.ep1.timers[2].max = new Decimal(8)
+        for (let thing in player.ep1.timers) {
+            player.ep1.timers[thing].current = player.ep1.timers[thing].current.sub(onepersec.mul(delta))
         }
     },
     clickables: {
         11: {
-            title() { return player.ep1.dragonPointButtonTimers[0].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[0]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[0]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[0].lt(0) && this.unlocked() },
-            unlocked() { return player.ep1.dragonPointButtonUnlocks[0] },
+            title() { return player.ep1.timers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[0].current) + "." : "<h3>+" + format(player.ep1.timers[0].base) + " Dragon Points."},
+            canClick() { return player.ep1.timers[0].current.lt(0) },
+            unlocked: true,
             tooltip() { return "Paragon Shard Rarity: 0.04%"},
             onClick() {
-                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.dragonPointsToGet[0])
-                player.ep1.dragonPointButtonTimers[0] = player.ep1.dragonPointButtonTimersMax[0]
+                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[0].base)
+                player.ep1.timers[0].current = player.ep1.timers[0].max
 
                     let random = getRandomInt(2500)
                     if (random == 1)
@@ -421,13 +402,13 @@ addLayer("ep1", {
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         12: {
-            title() { return player.ep1.dragonPointButtonTimers[1].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[1]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[1]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[1].lt(0) && this.unlocked() },
-            unlocked() { return player.ep1.dragonPointButtonUnlocks[1] },
+            title() { return player.ep1.timers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[1].current) + "." : "<h3>+" + format(player.ep1.timers[1].base) + " Dragon Points."},
+            canClick() { return player.ep1.timers[1].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 402).gte(2) },
             tooltip() { return "Paragon Shard Rarity: 0.1%"},
             onClick() {
-                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.dragonPointsToGet[1])
-                player.ep1.dragonPointButtonTimers[1] = player.ep1.dragonPointButtonTimersMax[1]
+                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[1].base)
+                player.ep1.timers[1].current = player.ep1.timers[1].max
 
                     let random = getRandomInt(1000)
                     if (random == 1) {
@@ -442,13 +423,13 @@ addLayer("ep1", {
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
         13: {
-            title() { return player.ep1.dragonPointButtonTimers[2].gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.dragonPointButtonTimers[2]) + "." : "<h3>+" + format(player.ep1.dragonPointsToGet[2]) + " Dragon Points."},
-            canClick() { return player.ep1.dragonPointButtonTimers[2].lt(0) && this.unlocked() },
-            unlocked() { return player.ep1.dragonPointButtonUnlocks[2] },
+            title() { return player.ep1.timers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.ep1.timers[2].current) + "." : "<h3>+" + format(player.ep1.timers[2].base) + " Dragon Points."},
+            canClick() { return player.ep1.timers[2].current.lt(0) && this.unlocked() },
+            unlocked() { return getLevelableAmount("pet", 402).gte(7) },
             tooltip() { return "Paragon Shard Rarity: 0.2%"},
             onClick() {
-                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.dragonPointsToGet[2])
-                player.ep1.dragonPointButtonTimers[2] = player.ep1.dragonPointButtonTimersMax[2]
+                player.ep1.dragonPoints = player.ep1.dragonPoints.add(player.ep1.timers[2].base)
+                player.ep1.timers[2].current = player.ep1.timers[2].max
 
                     let random = getRandomInt(500)
                     if (random == 1) {
@@ -462,11 +443,10 @@ addLayer("ep1", {
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '200px', "min-height": '50px', 'border-radius': "30px / 15px" },
         },
-
         99: {
             title() {return "Claim All"},
             canClick() {return tmp.ep1.clickables[11].canClick || tmp.ep1.clickables[12].canClick || tmp.ep1.clickables[13].canClick},
-            unlocked() {return player.ep1.dragonPointButtonUnlocks[1]},
+            unlocked() {return getLevelableAmount("pet", 402).gte(2)},
             onClick() {
                 clickClickable("ep1", 11)
                 clickClickable("ep1", 12)
@@ -479,8 +459,6 @@ addLayer("ep1", {
                 return look
             },
         },
-    },
-    bars: {
     },
     upgrades: {
         11: {
@@ -630,19 +608,15 @@ addLayer("ep1", {
             style: { width: '275px', height: '150px', }
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "10px"],
-                    ["raw-html", function () { return player.ep1.dragonUnlockText }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Dragon Level: x<h3>" + format(player.ep1.dragonLevelEffect) + "</h3>." }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
+                    ["raw-html", () => {return getLevelableAmount("pet", 402).gte(7) ? "" : getLevelableAmount("pet", 402).gte(2) ? "You will unlock the next button at level 7!" : "You will unlock the next button at level 2!"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["raw-html", () => {return "Dragon Level: x<h3>" + format(player.ep1.dragonLevelEffect) + "</h3>."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ["blank", "10px"],
                     ["clickable", 11],
                     ["clickable", 12],
@@ -653,8 +627,7 @@ addLayer("ep1", {
             "Buyables and Upgrades": {
                 buttonStyle() { return { color: "black", borderColor: "black", backgroundColor: "#cb79ed", borderRadius: "5px"} },
                 unlocked() { return true },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
                     ["blank", "25px"],
@@ -663,9 +636,8 @@ addLayer("ep1", {
             },
         },
     },
-
     tabFormat: [
-        ["raw-html", function () { return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points." }, { "color": "white", "font-size": "32px", "font-family": "monospace" }],
+        ["raw-html", () => {return "You have <h3>" + format(player.ep1.dragonPoints) + "</h3> dragon points."}, {color: "white", fontSize: "32px", fontFamily: "monospace"}],
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],

@@ -1,6 +1,7 @@
 addLayer("ho", {
     name: "Honey", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "HO", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "UB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -64,25 +65,29 @@ addLayer("ho", {
         if (hasUpgrade("ho", 6)) player.ho.honeyPerSecond = player.ho.honeyPerSecond.mul(upgradeEffect("ho", 6))
         player.ho.honey = player.ho.honey.add(player.ho.honeyPerSecond.mul(delta))
 
+        let base = new Decimal(1)
+        base = base.mul(buyableEffect("bee", 63))
+        if (hasUpgrade("al", 207)) base = base.mul(1.1)
+
         if (player.ho.cell.gte(1)) player.ho.effects.bee.xp = player.ho.effects.bee.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.bee.req = Decimal.pow(3, player.ho.effects.bee.level).mul(10)
-        player.ho.effects.bee.effect = Decimal.pow(Decimal.mul(0.3, buyableEffect("bee", 63)).add(1), player.ho.effects.bee.level)
+        player.ho.effects.bee.effect = Decimal.pow(Decimal.mul(0.3, base).add(1), player.ho.effects.bee.level)
 
         if (player.ho.cell.gte(5)) player.ho.effects.flower.xp = player.ho.effects.flower.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.flower.req = Decimal.pow(4, player.ho.effects.flower.level).mul(1000)
-        player.ho.effects.flower.effect = player.ho.effects.flower.level.mul(Decimal.mul(0.1, buyableEffect("bee", 63))).div(2)
+        player.ho.effects.flower.effect = player.ho.effects.flower.level.mul(Decimal.mul(0.1, base)).div(2)
 
         if (player.ho.cell.gte(50)) player.ho.effects.alpha.xp = player.ho.effects.alpha.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.alpha.req = Decimal.pow(5, player.ho.effects.alpha.level).mul(10000)
-        player.ho.effects.alpha.effect = Decimal.pow(Decimal.mul(0.25, buyableEffect("bee", 63)).add(1), player.ho.effects.alpha.level)
+        player.ho.effects.alpha.effect = Decimal.pow(Decimal.mul(0.25, base).add(1), player.ho.effects.alpha.level)
 
         if (player.ho.cell.gte(200)) player.ho.effects.nectar.xp = player.ho.effects.nectar.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.nectar.req = Decimal.pow(6, player.ho.effects.nectar.level).mul(100000)
-        player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, buyableEffect("bee", 63)).add(1), player.ho.effects.nectar.level)
+        player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.nectar.level)
         
         for (let i in player.ho.effects) {
             if (player.ho.effects[i].xp.gte(player.ho.effects[i].req)) {
-                if (i == "flower" && player.ho.effects[i].level.eq(25)) continue
+                if (i == "flower" && !hasUpgrade("al", 208) && player.ho.effects[i].level.eq(25)) continue
                 player.ho.effects[i].level = player.ho.effects[i].level.add(1)
                 player.ho.effects[i].xp = new Decimal(0)
             }
@@ -137,7 +142,7 @@ addLayer("ho", {
             width: 500,
             height: 50,
             progress() {
-                if (player.ho.effects.flower.level.gte(25)) return new Decimal(1)
+                if (!hasUpgrade("al", 208) && player.ho.effects.flower.level.gte(25)) return new Decimal(1)
                 return player.ho.effects.flower.xp.div(player.ho.effects.flower.req)
             },
             baseStyle: {background: "rgba(0,0,0,0.5)"},
@@ -145,8 +150,11 @@ addLayer("ho", {
             borderStyle: {border: "3px solid white", borderRadius: "25px"},
             textStyle: {userSelect: "none"},
             display() {
-                if (player.ho.effects.flower.level.gte(25)) return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [MAX] | x" + format(player.ho.effects.flower.effect) + " GEB"
-                return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB"
+                if (!hasUpgrade("al", 208)) {
+                    if (player.ho.effects.flower.level.gte(25)) return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [MAX] | x" + format(player.ho.effects.flower.effect) + " GEB"
+                    return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB"
+                }
+                return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + " | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB"
             },
         },
         effect3: {
@@ -276,7 +284,7 @@ addLayer("ho", {
             currencyDisplayName: "Honey",
             currencyInternalName: "honey",
             effect() {
-                return player.ne.gamma.amount.pow(0.03)
+                return player.ne.gamma.amount.add(1).pow(0.03)
             },
             effectDisplay() { return "x" + formatSimple(upgradeEffect(this.layer, this.id), 2) }, // Add formatting to the effect
             style: {width: "175px", minHeight: "80px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -312,12 +320,12 @@ addLayer("ho", {
     },
     tabFormat: [
         ["row", [
-            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee." : "You have <h3>" + format(player.bee.bees) + "</h3> bees."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return player.bee.bees.eq(1) ? "You have <h3>" + format(player.bee.bees) + "</h3> bee" : "You have <h3>" + format(player.bee.bees) + "</h3> bees"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.bee.bps) + "/s)" }, {color: "white", fontSize: "14px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["row", [
-            ["raw-html", () => {return "You have <h3>" + format(player.ne.delta.amount) + "</h3> Nectar δ."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-            ["raw-html", () => {return "(+" + format(player.ne.delta.gain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "5px"}],
+            ["raw-html", () => {return "You have <h3>" + format(player.ne.delta.amount) + "</h3> Nectar δ"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + format(player.ne.delta.gain) + ")"}, {color: "white", fontSize: "16px", fontFamily: "monospace", marginLeft: "10px"}],
         ]],
         ["blank", "10px"],
         ["row", [
@@ -325,7 +333,7 @@ addLayer("ho", {
                 ["top-column", [
                     ["blank", "15px"],
                     ["row", [
-                        ["raw-html", () => {return "You have " + format(player.ho.honey) + " Honey."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => {return "You have " + format(player.ho.honey) + " Honey"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "<small>(+" + format(player.ho.honeyPerSecond) + "/s)</small>"}, {color: "white", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
                     ["blank", "15px"],

@@ -11,8 +11,32 @@ addLayer("hpu", {
         totalPurity: new Decimal(0),
         purityReq: new Decimal(42),
         purityGain: new Decimal(0),
-        purifier: [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)],
-        purifierEffects: [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(1), new Decimal(0)],
+        purifiers: {
+            0: {
+                amount: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            1: {
+                amount: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            2: {
+                amount: new Decimal(0),
+                effect: new Decimal(0),
+            },
+            3: {
+                amount: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            4: {
+                amount: new Decimal(0),
+                effect: new Decimal(1),
+            },
+            5: {
+                amount: new Decimal(0),
+                effect: new Decimal(0),
+            },
+        },
         keptPurity: new Decimal(0),
         purifierAssign: 1,
     }},
@@ -38,39 +62,39 @@ addLayer("hpu", {
         if (hasUpgrade("hpw", 41)) extra = extra.add(1)
         if (hasUpgrade("hve", 33)) extra = extra.add(1)
 
-        if (hasUpgrade("hpw", 1101)) player.hpu.purifier[0] = player.hpu.totalPurity
-        if (hasUpgrade("hpw", 1102)) player.hpu.purifier[1] = player.hpu.totalPurity.add(extra)
-        if (hasUpgrade("hpw", 1103)) player.hpu.purifier[2] = player.hpu.totalPurity
-        if (hasUpgrade("hpw", 1104)) player.hpu.purifier[3] = player.hpu.totalPurity
-        if (hasUpgrade("hpw", 1105)) player.hpu.purifier[4] = player.hpu.totalPurity.add(extra)
-        if (hasUpgrade("hpw", 1106)) player.hpu.purifier[5] = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1101)) player.hpu.purifiers[0].amount = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1102)) player.hpu.purifiers[1].amount = player.hpu.totalPurity.add(extra)
+        if (hasUpgrade("hpw", 1103)) player.hpu.purifiers[2].amount = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1104)) player.hpu.purifiers[3].amount = player.hpu.totalPurity
+        if (hasUpgrade("hpw", 1105)) player.hpu.purifiers[4].amount = player.hpu.totalPurity.add(extra)
+        if (hasUpgrade("hpw", 1106)) player.hpu.purifiers[5].amount = player.hpu.totalPurity
 
-        player.hpu.purifierEffects[0] = player.hpu.purifier[0].mul(0.1).add(1)
-        if (player.hpu.purifierEffects[0].gt(1.5)) player.hpu.purifierEffects[0] = player.hpu.purifierEffects[0].div(1.5).pow(0.6).mul(1.5)
-        if (inChallenge("hrm", 16) && player.hpu.purifierEffects[0].gt(3)) player.hpu.purifierEffects[0] = new Decimal(3)
+        player.hpu.purifiers[0].effect = player.hpu.purifiers[0].amount.mul(0.1).add(1)
+        if (player.hpu.purifiers[0].effect.gt(1.5)) player.hpu.purifiers[0].effect = player.hpu.purifiers[0].effect.div(1.5).pow(0.6).mul(1.5)
+        if (inChallenge("hrm", 16) && player.hpu.purifiers[0].effect.gt(3)) player.hpu.purifiers[0].effect = new Decimal(3)
 
-        player.hpu.purifierEffects[1] = Decimal.pow(1.5, player.hpu.purifier[1])
-        if (player.hpu.purifierEffects[1].gt(8)) player.hpu.purifierEffects[1] = player.hpu.purifierEffects[1].div(8).pow(0.6).mul(8)
-        if (hasUpgrade("hpw", 1102)) player.hpu.purifierEffects[1] = player.hpu.purifierEffects[1].pow(0.5)
+        player.hpu.purifiers[1].effect = Decimal.pow(1.5, player.hpu.purifiers[1].amount)
+        if (player.hpu.purifiers[1].effect.gt(8)) player.hpu.purifiers[1].effect = player.hpu.purifiers[1].effect.div(8).pow(0.6).mul(8)
+        if (hasUpgrade("hpw", 1102)) player.hpu.purifiers[1].effect = player.hpu.purifiers[1].effect.pow(0.5)
 
-        player.hpu.purifierEffects[2] = player.hpu.purifier[2].mul(0.1).add(1)
-        if (player.hpu.purifierEffects[2].gt(1.5)) player.hpu.purifierEffects[2] = player.hpu.purifierEffects[2].div(1.5).pow(0.6).mul(1.5)
+        player.hpu.purifiers[2].effect = player.hpu.purifiers[2].amount.mul(0.1).add(1)
+        if (player.hpu.purifiers[2].effect.gt(1.5)) player.hpu.purifiers[2].effect = player.hpu.purifiers[2].effect.div(1.5).pow(0.6).mul(1.5)
 
-        player.hpu.purifierEffects[3] = player.hpu.purifier[3].mul(0.1).add(1)
-        if (player.hpu.purifierEffects[3].gt(1.5)) player.hpu.purifierEffects[3] = player.hpu.purifierEffects[3].div(1.5).pow(0.6).mul(1.5)
+        player.hpu.purifiers[3].effect = player.hpu.purifiers[3].amount.mul(0.1).add(1)
+        if (player.hpu.purifiers[3].effect.gt(1.5)) player.hpu.purifiers[3].effect = player.hpu.purifiers[3].effect.div(1.5).pow(0.6).mul(1.5)
 
-        player.hpu.purifierEffects[4] = new Decimal(0)
-        if (player.hpu.purifier[4].gt(0) && !inChallenge("hrm", 11)) player.hpu.purifierEffects[4] = Decimal.pow(2, player.hpu.purifier[4].sub(1)).mul(0.2)
-        if (player.hpu.purifierEffects[4].gt(3.2) && !hasUpgrade("hpw", 61)) player.hpu.purifierEffects[4] = player.hpu.purifierEffects[4].div(3.2).pow(0.6).mul(3.2)
-        if (player.hpu.purifierEffects[4].gt(3.2) && hasUpgrade("hpw", 61)) player.hpu.purifierEffects[4] = player.hpu.purifierEffects[4].div(3.2).pow(0.7).mul(3.2)
+        player.hpu.purifiers[4].effect = new Decimal(0)
+        if (player.hpu.purifiers[4].amount.gt(0) && !inChallenge("hrm", 11)) player.hpu.purifiers[4].effect = Decimal.pow(2, player.hpu.purifiers[4].amount.sub(1)).mul(0.2)
+        if (player.hpu.purifiers[4].effect.gt(3.2) && !hasUpgrade("hpw", 61)) player.hpu.purifiers[4].effect = player.hpu.purifiers[4].effect.div(3.2).pow(0.6).mul(3.2)
+        if (player.hpu.purifiers[4].effect.gt(3.2) && hasUpgrade("hpw", 61)) player.hpu.purifiers[4].effect = player.hpu.purifiers[4].effect.div(3.2).pow(0.7).mul(3.2)
 
         if (!inChallenge("hrm", 12)) {
-            player.hpu.purifierEffects[5] = player.hpu.purifier[5].mul(0.15).add(1)
-            if (player.hpu.purifierEffects[5].gt(1.75)) player.hpu.purifierEffects[5] = player.hpu.purifierEffects[5].div(1.75).pow(0.6).mul(1.75)
+            player.hpu.purifiers[5].effect = player.hpu.purifiers[5].amount.mul(0.15).add(1)
+            if (player.hpu.purifiers[5].effect.gt(1.75)) player.hpu.purifiers[5].effect = player.hpu.purifiers[5].effect.div(1.75).pow(0.6).mul(1.75)
         }
         if (inChallenge("hrm", 12)) {
-            player.hpu.purifierEffects[5] = player.hpu.purifier[5].mul(0.1).add(1)
-            if (player.hpu.purifierEffects[5].gt(1.5)) player.hpu.purifierEffects[5] = player.hpu.purifierEffects[5].div(1.5).pow(0.6).mul(1.5)
+            player.hpu.purifiers[5].effect = player.hpu.purifiers[5].amount.mul(0.1).add(1)
+            if (player.hpu.purifiers[5].effect.gt(1.5)) player.hpu.purifiers[5].effect = player.hpu.purifiers[5].effect.div(1.5).pow(0.6).mul(1.5)
         }
 
         player.hpu.keptPurity = new Decimal(0)
@@ -116,20 +140,22 @@ addLayer("hpu", {
             unlocked: true,
             onClick() {
                 player.hpu.purity = player.hpu.totalPurity
-                player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
+                for (let i in player.hpu.purifiers) {
+                    player.hpu.purifiers[i].amount = new Decimal(0)
+                }
 
                 let extra = new Decimal(0)
                 if (hasUpgrade("hpw", 41)) extra = extra.add(1)
                 if (hasUpgrade("hve", 33)) extra = extra.add(1)
-                player.hpu.purifier[1] = extra
-                player.hpu.purifier[4] = extra
+                player.hpu.purifiers[1].amount = extra
+                player.hpu.purifiers[4].amount = extra
             },
             style: {width: "250px", minHeight: "40px", border: "2px solid black", borderRadius: "15px"},
         },
         3: {
             title() {
-                let str = "<h3>Purified Provenances</h3><br>Lv." + formatWhole(player.hpu.purifier[0]) + "<br>^" + format(player.hpu.purifierEffects[0]) + " Refiner 2's Effects"
-                if (player.hpu.purifierEffects[0].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Purified Provenances</h3><br>Lv." + formatWhole(player.hpu.purifiers[0].amount) + "<br>^" + format(player.hpu.purifiers[0].effect) + " Refiner 2's Effects"
+                if (player.hpu.purifiers[0].effect.gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1101)},
@@ -137,7 +163,7 @@ addLayer("hpu", {
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
-                player.hpu.purifier[0] = player.hpu.purifier[0].add(amt)
+                player.hpu.purifiers[0].amount = player.hpu.purifiers[0].amount.add(amt)
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
@@ -150,9 +176,9 @@ addLayer("hpu", {
         },
         4: {
             title() {
-                let str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifier[1]) + "<br>x" + format(player.hpu.purifierEffects[1]) + " 1st & 4th Miracles"
-                if (inChallenge("hrm", 12)) str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifier[1]) + "<br>x" + format(player.hpu.purifierEffects[1]) + " Blessings and Boons"
-                if (player.hpu.purifierEffects[1].gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifiers[1].amount) + "<br>x" + format(player.hpu.purifiers[1].effect) + " 1st & 4th Miracles"
+                if (inChallenge("hrm", 12)) str = "<h3>Multiplied Miracles</h3><br>Lv." + formatWhole(player.hpu.purifiers[1].amount) + "<br>x" + format(player.hpu.purifiers[1].effect) + " Blessings and Boons"
+                if (player.hpu.purifiers[1].effect.gt(8)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1102)},
@@ -160,7 +186,7 @@ addLayer("hpu", {
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
-                player.hpu.purifier[1] = player.hpu.purifier[1].add(amt)
+                player.hpu.purifiers[1].amount = player.hpu.purifiers[1].amount.add(amt)
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
@@ -173,8 +199,8 @@ addLayer("hpu", {
         },
         5: {
             title() {
-                let str = "<h3>Elevated Exponent</h3><br>Lv." + formatWhole(player.hpu.purifier[2]) + "<br>^" + format(player.hpu.purifierEffects[2]) + " Non-Hex Refiner Effects"
-                if (player.hpu.purifierEffects[2].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Elevated Exponent</h3><br>Lv." + formatWhole(player.hpu.purifiers[2].amount) + "<br>^" + format(player.hpu.purifiers[2].effect) + " Non-Hex Refiner Effects"
+                if (player.hpu.purifiers[2].effect.gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1103)},
@@ -182,7 +208,7 @@ addLayer("hpu", {
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
-                player.hpu.purifier[2] = player.hpu.purifier[2].add(amt)
+                player.hpu.purifiers[2].amount = player.hpu.purifiers[2].amount.add(amt)
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
@@ -195,9 +221,9 @@ addLayer("hpu", {
         },
         6: {
             title() {
-                let str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifier[3]) + "<br>^" + format(player.hpu.purifierEffects[3]) + " Hex Point Booster"
-                if (inChallenge("hrm", 12)) str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifier[3]) + "<br>^" + format(player.hpu.purifierEffects[3]) + " 1st Refiners Effects"
-                if (player.hpu.purifierEffects[3].gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifiers[3].amount) + "<br>^" + format(player.hpu.purifiers[3].effect) + " Hex Point Booster"
+                if (inChallenge("hrm", 12)) str = "<h3>Healed Hexes</h3><br>Lv." + formatWhole(player.hpu.purifiers[3].amount) + "<br>^" + format(player.hpu.purifiers[3].effect) + " 1st Refiners Effects"
+                if (player.hpu.purifiers[3].effect.gt(1.5)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1104)},
@@ -205,7 +231,7 @@ addLayer("hpu", {
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
-                player.hpu.purifier[3] = player.hpu.purifier[3].add(amt)
+                player.hpu.purifiers[3].amount = player.hpu.purifiers[3].amount.add(amt)
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
@@ -218,9 +244,9 @@ addLayer("hpu", {
         },
         7: {
             title() {
-                let str = "<h3>Amended Automation</h3><br>Lv." + formatWhole(player.hpu.purifier[4]) + "<br>+" + formatWhole(player.hpu.purifierEffects[4].mul(100)) + "% blessings/s"
-                str = str.concat("<br><small>(" + format(player.hbl.blessingsGain.mul(player.hpu.purifierEffects[4])) + "/s)</small>")
-                if (player.hpu.purifierEffects[4].gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Amended Automation</h3><br>Lv." + formatWhole(player.hpu.purifiers[4].amount) + "<br>+" + formatWhole(player.hpu.purifiers[4].effect.mul(100)) + "% blessings/s"
+                str = str.concat("<br><small>(" + format(player.hbl.blessingsGain.mul(player.hpu.purifiers[4].effect)) + "/s)</small>")
+                if (player.hpu.purifiers[4].effect.gt(3.2)) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 if (inChallenge("hrm", 11)) str = str.concat("<br><small style='color:red'>[DISABLED BY CREATOR REALM]</small>")
                 return str
             },
@@ -229,7 +255,7 @@ addLayer("hpu", {
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
-                player.hpu.purifier[4] = player.hpu.purifier[4].add(amt)
+                player.hpu.purifiers[4].amount = player.hpu.purifiers[4].amount.add(amt)
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}
@@ -243,9 +269,9 @@ addLayer("hpu", {
         },
         8: {
             title() {
-                let str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " 4th Grace Effect"
-                if (inChallenge("hrm", 12)) str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifier[5]) + "<br>^" + format(player.hpu.purifierEffects[5]) + " Base Α-Jinx Effect"
-                if (player.hpu.purifierEffects[5].gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifierEffects[5].gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
+                let str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifiers[5].amount) + "<br>^" + format(player.hpu.purifiers[5].effect) + " 4th Grace Effect"
+                if (inChallenge("hrm", 12)) str = "<h3>Cleansed Curses</h3><br>Lv." + formatWhole(player.hpu.purifiers[5].amount) + "<br>^" + format(player.hpu.purifiers[5].effect) + " Base Α-Jinx Effect"
+                if (player.hpu.purifiers[5].effect.gt(1.75) || (inChallenge("hrm", 12) && player.hpu.purifiers[5].effect.gt(1.5))) str = str.concat("<br><small style='color:darkred'>[SOFTCAPPED]</small>")
                 return str
             },
             canClick() {return player.hpu.purity.gte(1) && !hasUpgrade("hpw", 1106)},
@@ -253,7 +279,7 @@ addLayer("hpu", {
             onClick() {
                 let amt = player.hpu.purity.min(player.hpu.purifierAssign)
                 player.hpu.purity = player.hpu.purity.sub(amt)
-                player.hpu.purifier[5] = player.hpu.purifier[5].add(amt)
+                player.hpu.purifiers[5].amount = player.hpu.purifiers[5].amount.add(amt)
             },
             style() {
                 let look = {width: "250px", minHeight: "100px", border: "2px solid black", borderRadius: "15px", margin: "3px"}

@@ -76,9 +76,6 @@
         if (inChallenge("ip", 15)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.85)
         if (hasUpgrade("d", 14)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("d", 14))
         if (inChallenge("ip", 18)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.6)
-        if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(0.35)
-        if (inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.pow(buyableEffect("de", 16))
-        if (hasUpgrade("de", 11) && inChallenge("tad", 11)) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(upgradeEffect("de", 11))
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bee.enabled) player.gh.grasshoppersToGet = player.gh.grasshoppersToGet.mul(player.pol.pollinatorEffects.bee.effects[0])

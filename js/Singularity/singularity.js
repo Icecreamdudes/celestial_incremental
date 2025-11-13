@@ -1,5 +1,4 @@
-﻿var tree3 = [["s"], ["co", "cof"], ["ra", "cs", "sd"], ["sma", "sme"], ["ma"]]
-addLayer("s", {
+﻿addLayer("s", {
     name: "Genesis", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "GE", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U3",
@@ -364,7 +363,7 @@ addLayer("s", {
         },
         13: {
             requirementDescription: "<h3>3 Singularities",
-            effectDescription: "Produce 5% of blessings per second (excluding RC1), produce 10% of alternate infinities per second, produce 1% of galaxy dust per second, autobuy infinity power and alt inf buyables, and unlock radiation.",
+            effectDescription: "Produce 5% of blessings per second (excluding RC1), produce 1% of galaxy dust per second, autobuy infinity power, and unlock radiation.",
             done() { return player.s.singularities.gte(3) },
             style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -376,7 +375,7 @@ addLayer("s", {
         },
         15: {
             requirementDescription: "<h3>5 Singularities",
-            effectDescription: "Keep check back buyables and infinity challenges on singularity resets, and unlock singularity point buyables.",
+            effectDescription: "Keep check back buyables, infinitum upgrades, and infinity challenges on singularity resets, and unlock singularity point buyables.",
             done() { return player.s.singularities.gte(5) },
             style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },

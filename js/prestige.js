@@ -75,7 +75,6 @@
         if (inChallenge("ip", 15)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.65)
         if (inChallenge("ip", 18)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.5)
         if (player.de.antidebuffIndex.eq(1)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.p.prestigePointsToGet = player.p.prestigePointsToGet.pow(0.3)
 
         // CONTINUED REGULAR MODIFIERS
         player.p.prestigePointsToGet = player.p.prestigePointsToGet.mul(buyableEffect("p", 11))
@@ -611,19 +610,19 @@
         },
         16: {
             costBase() { return new Decimal(150) },
-            costGrowth() { return new Decimal(1.3) },
-            purchaseLimit() { return new Decimal(500) },
+            costGrowth() { return new Decimal(1.5) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.04).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Broken Infinity Crystallizer"
+                return "Matter Crystallizer"
             },
             display() {
-                return "which are multiplying broken infinity gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying matter gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy(mult) {
@@ -679,19 +678,19 @@
         },
         18: {
             costBase() { return new Decimal(400) },
-            costGrowth() { return new Decimal(1.4) },
-            purchaseLimit() { return new Decimal(500) },
+            costGrowth() { return new Decimal(2) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.p.crystals},
             pay(amt) { player.p.crystals = this.currency().sub(amt) },
-            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.03).add(1)},
+            effect(x) {return getBuyableAmount(this.layer, this.id).mul(0.04).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
-                return "Tav's Domain Infinity Crystallizer"
+                return "Infinitum Crystallizer"
             },
             display() {
-                return "which are multiplying the alternate broken infinity gain by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are multiplying infinitum by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Crystals"
             },
             buy(mult) {

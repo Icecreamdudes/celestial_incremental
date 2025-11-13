@@ -1,5 +1,4 @@
-﻿var treeAU2 = [["st"], ["pl"]]
-addLayer("au2", {
+﻿addLayer("au2", {
     name: "Alt-Universe 2: Cosmic Cosmos", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "A2", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A2",
@@ -48,7 +47,7 @@ addLayer("au2", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["tree", treeAU2],
+                    ["tree", universes.A2.tree],
                 ]
             },
         },

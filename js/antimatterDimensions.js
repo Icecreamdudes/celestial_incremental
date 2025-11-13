@@ -70,15 +70,12 @@
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.ta.dimensionPowerEffects[0])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ip", 14))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("ta", 36))
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("bi", 13))
 
         // CHALLENGE MODIFIERS
-        if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.55)
-        if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("de", 12))
-        if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("de", 18))
+        // if (inChallenge("tad", 11)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(0.55)
 
         // CONTINUED REGULAR MODIFIERS
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("tad", 13))
+        // player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("tad", 13))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.om.hexMasteryPointsEffect)
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("om", 15))
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(buyableEffect("gh", 35))
@@ -110,7 +107,6 @@
         // ANTIMATTER EFFECT
         if (!hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(3).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
         if (hasUpgrade("bi", 22) && player.ad.antimatter.gte(0)) player.ad.antimatterEffect = player.points.pow(player.points.add(1).log10().pow(2)).add(1).log10().add(1).pow(player.ad.antimatter.add(1).log10().pow(0.3))
-        if (inChallenge("tad", 11)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(buyableEffect("de", 18))
         if (hasUpgrade("bi", 108)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(1.6)
         if (hasUpgrade("bi", 114)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(3)
         if (hasUpgrade("ma", 19)) player.ad.antimatterEffect = player.ad.antimatterEffect.pow(20)
@@ -133,10 +129,6 @@
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.ta.dimensionPowerEffects[i+1])
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ip", 14))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("ta", 36))
-            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("bi", 13))
-            if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].pow(0.55)
-            if (inChallenge("tad", 11)) player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("de", 12))
-            player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("tad", 13))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.om.hexMasteryPointsEffect)
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(buyableEffect("gh", 37))
             player.ad.dimensionsPerSecond[i] = player.ad.dimensionsPerSecond[i].mul(player.id.infinityPowerEffect)

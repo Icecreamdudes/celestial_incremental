@@ -1,5 +1,4 @@
-﻿var treeCH = [["ch"]]
-addLayer("ch", {
+﻿addLayer("ch", {
     name: "Hall", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "CH", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,

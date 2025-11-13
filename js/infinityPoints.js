@@ -61,35 +61,9 @@
             unlocked() { return true },
             onClick() {
                 if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
-                if (inChallenge("tad", 11))
-                {
-                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && (player.po.hex || hasUpgrade("s", 18)) && !player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(0))
-                    {
-                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
-                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
-                    }
-                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && (!player.po.hex || hasUpgrade("s", 18)) && !player.po.dice && player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(1))
-                    {
-                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
-                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
-                    }
-                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && (!player.po.hex || hasUpgrade("s", 18)) && player.po.dice && !player.po.rocketFuel && inChallenge("tad", 11) && player.tad.currentConversion.eq(2))
-                    {
-                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
-                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
-                    }
-                }
-                if (hasUpgrade("bi", 14))
-                {
-                  //  player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-                 //   player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-                 //   player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-                }
-                if (!hasMilestone("ip", 21))
-                {
+                if (!hasMilestone("ip", 21)) {
                     player.tab = "bigc"
-                } else if (hasMilestone("ip", 21))
-                {
+                } else if (hasMilestone("ip", 21)) {
                     layers.bigc.crunch()
                 }
             },

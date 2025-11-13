@@ -1,5 +1,4 @@
-﻿var tree = [["i", "in", "s"], ["cp", "au2"], ["ch", "od"]]
-addLayer("po", {
+﻿addLayer("po", {
     name: "Portal", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "P", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -49,7 +48,7 @@ addLayer("po", {
         }
 
         player.po.featureSlotsMax = new Decimal(1)
-        if ((inChallenge("tad", 11) && hasUpgrade("de", 14)) || hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
+        if (hasUpgrade("i", 28)) player.po.featureSlotsMax = player.po.featureSlotsMax.add(1)
 
         player.po.featureSlots = player.po.featureSlotsMax
         if (player.po.dice) {
@@ -73,11 +72,6 @@ addLayer("po", {
         if (player.subtabs["po"]['stuff'] == 'LORE' && player.tab != "lo") {
             player.tab = "lo"
             player.subtabs["po"]['stuff'] = 'Portals'
-        }
-
-        if (inChallenge("tad", 11) && player.po.breakInfinity) {
-            player.po.breakInfinity = false
-            player.po.featureSlots = player.po.featureSlots.sub(1)
         }
 
         player.po.halterText =
@@ -221,7 +215,7 @@ addLayer("po", {
             display() {
                 return player.po.dice ? "<h1>The die will decide your fate.<br>On" : "<h1>The die will decide your fate.<br>Off<br><h2>Req: 1e150 points";
             },
-            canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e150) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gte(1) && player.points.gte(1e150) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16) },
             onClick() {
                 if (!hasAchievement("achievements", 19)) completeAchievement("achievements", 19)
@@ -241,7 +235,7 @@ addLayer("po", {
             display() {
                 return player.po.rocketFuel ? "<h1>Fly me to the moon.<br>On" : "<h1>Fly me to the moon.<br>Off<br><h2>Req: 1e170 points";
             },
-            canClick() { return player.po.featureSlots.gte(1) && (player.points.gte(1e170) || inChallenge("tad", 11)) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
+            canClick() { return player.po.featureSlots.gte(1) && player.points.gte(1e170) && (!inChallenge("ip", 14) || inChallenge("ip", 14) && player.r.pent.gte(15)) },
             unlocked() { return hasMilestone("ip", 1) && !inChallenge("ip", 11) && !inChallenge("ip", 13) && !inChallenge("ip", 15) && !inChallenge("ip", 16)  },
             onClick() {
                 player.po.rocketFuel = true
@@ -300,10 +294,10 @@ addLayer("po", {
         14: {
             title() { return "<h1>BREAK INFINITY" },
             display() {
-                return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated<br>Can't activate in Tav's domain";
+                return player.po.breakInfinity ? "<h1>Get past limits.<br>On" : "<h1>Get past limits.<br>Off<br><h2>Req: Tav Defeated";
             },
-            canClick() { return player.po.featureSlots.gte(1) && (player.in.unlockedBreak || hasMilestone("s", 11)) && !inChallenge("tad", 11)},
-            unlocked() { return player.in.unlockedBreak },
+            canClick() { return player.po.featureSlots.gte(1)},
+            unlocked() { return player.in.unlockedBreak || hasMilestone("s", 11) },
             onClick() {
                 player.po.breakInfinity = true
             },

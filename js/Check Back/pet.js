@@ -146,8 +146,6 @@ addLayer("pet", {
         summonTimer: new Decimal(21600),
 
         // PET SHOP
-        shopResetTimer: new Decimal(0),
-        shopResetTimerMax: new Decimal(21600),
         shopIndex: 101,
         shopBulk: new Decimal(1),
         shopInput: new Decimal(1),
@@ -525,9 +523,6 @@ addLayer("pet", {
         }
 
         if (player.pet.shopInput.gte(1)) player.pet.shopBulk = player.pet.shopInput.floor()
-
-        player.pet.shopResetTimerMax = new Decimal(21600)
-        player.pet.shopResetTimer = player.pet.shopResetTimer.sub(onepersec.mul(delta))
 
         //legendary pets
 
@@ -1087,15 +1082,22 @@ addLayer("pet", {
                 if (player.pet.shopIndex >= 100 && player.pet.shopIndex < 200) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.common[player.pet.shopIndex-101].cost)
                     player.pet.shop.common[player.pet.shopIndex-101].current = player.pet.shop.common[player.pet.shopIndex-101].max
+                    doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " " + run(layers.pet.levelables[player.pet.shopIndex].title, layers.pet.levelables[player.pet.shopIndex]), "Pet Obtained!", 5, "#9bedff", run(layers.pet.levelables[player.pet.shopIndex].image, layers.pet.levelables[player.pet.shopIndex]))
                 } else if (player.pet.shopIndex >= 200 && player.pet.shopIndex < 300) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.uncommon[player.pet.shopIndex-201].cost)
                     player.pet.shop.uncommon[player.pet.shopIndex-201].current = player.pet.shop.uncommon[player.pet.shopIndex-201].max
+                    doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " " + run(layers.pet.levelables[player.pet.shopIndex].title, layers.pet.levelables[player.pet.shopIndex]), "Pet Obtained!", 5, "#88e688", run(layers.pet.levelables[player.pet.shopIndex].image, layers.pet.levelables[player.pet.shopIndex]))
                 } else if (player.pet.shopIndex >= 300 && player.pet.shopIndex < 400) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.rare[player.pet.shopIndex-301].cost)
                     player.pet.shop.rare[player.pet.shopIndex-301].current = player.pet.shop.rare[player.pet.shopIndex-301].max
+                    doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " " + run(layers.pet.levelables[player.pet.shopIndex].title, layers.pet.levelables[player.pet.shopIndex]), "Pet Obtained!", 5, "#4e7cff", run(layers.pet.levelables[player.pet.shopIndex].image, layers.pet.levelables[player.pet.shopIndex]))
                 } else if (player.pet.shopIndex >= 400 && player.pet.shopIndex < 500) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.epic[player.pet.shopIndex-401].cost)
                     player.pet.shop.epic[player.pet.shopIndex-401].current = player.pet.shop.epic[player.pet.shopIndex-401].max
+                    if (player.pet.shopIndex == 401) doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Dotknight Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png")
+                    if (player.pet.shopIndex == 402) doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Dragon Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png")
+                    if (player.pet.shopIndex == 403) doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Cookie Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png")
+                    if (player.pet.shopIndex == 404) doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Singularity Fragment", "Fragment Obtained!", 5, "#cb79ed", "resources/singularityEpicPetFragment.png")
                 }
                 if (player.pet.shopIndex != 404) {
                     addLevelableXP("pet", player.pet.shopIndex, player.pet.shopBulk)
@@ -1132,20 +1134,29 @@ addLayer("pet", {
                 if (player.pet.shopIndex > 0 && player.pet.shopIndex < 11) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.shard[player.pet.shopIndex-1].cost)
                     player.pet.shop.shard[player.pet.shopIndex-1].current = player.pet.shop.shard[player.pet.shopIndex-1].max
-                    if (player.pet.shopIndex == 1) player.cb.evolutionShards = player.cb.evolutionShards.add(player.pet.shopBulk);
-                    if (player.pet.shopIndex == 2) player.cb.paragonShards = player.cb.paragonShards.add(player.pet.shopBulk);
-                    if (player.pet.shopIndex == 3) player.ep2.chocoShards = player.ep2.chocoShards.add(player.pet.shopBulk);
+                    if (player.pet.shopIndex == 1) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(player.pet.shopBulk);
+                        doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                    }
+                    if (player.pet.shopIndex == 2) {
+                        player.cb.paragonShards = player.cb.paragonShards.add(player.pet.shopBulk);
+                        doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Paragon Shard!", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
+                    }
+                    if (player.pet.shopIndex == 3) {
+                        player.ep2.chocoShards = player.ep2.chocoShards.add(player.pet.shopBulk);
+                        doPopup("none", "+" + formatWhole(player.pet.shopBulk) + " Chocolate Shard!", "Shard Obtained!", 5, "#2D6C95", "resources/checkback/choco_shard.png")
+                    }
                 } else if (player.pet.shopIndex > 10 && player.pet.shopIndex < 100) {
                     player.cb.petPoints = player.cb.petPoints.sub(player.pet.shop.crate[player.pet.shopIndex-11].cost)
                     player.pet.shop.crate[player.pet.shopIndex-11].current = player.pet.shop.crate[player.pet.shopIndex-11].max
                     // ADD BULK
                     if (player.pet.shopIndex == 11) layers.cb.petButton1(player.pet.shopBulk);
-                    if (player.pet.shopIndex == 12) layers.cb.petButton2();
-                    if (player.pet.shopIndex == 13) layers.cb.petButton3();
-                    if (player.pet.shopIndex == 14) layers.cb.petButton4();
-                    if (player.pet.shopIndex == 15) layers.cb.petButton5();
-                    if (player.pet.shopIndex == 16) layers.cb.petButton6();
-                    if (player.pet.shopIndex == 17) layers.cb.petButton7();
+                    if (player.pet.shopIndex == 12) layers.cb.petButton2(player.pet.shopBulk);
+                    if (player.pet.shopIndex == 13) layers.cb.petButton3(player.pet.shopBulk);
+                    if (player.pet.shopIndex == 14) layers.cb.petButton4(player.pet.shopBulk);
+                    if (player.pet.shopIndex == 15) layers.cb.petButton5(player.pet.shopBulk);
+                    if (player.pet.shopIndex == 16) layers.cb.petButton6(player.pet.shopBulk);
+                    if (player.pet.shopIndex == 17) layers.cb.petButton7(player.pet.shopBulk);
                 }
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -2204,14 +2215,14 @@ addLayer("pet", {
             description() {
                 return "x" + format(this.effect()[0]) + " to infinity dimensions.<br>" +
                     "x" + format(this.effect()[1]) + " to negative infinity points.<br>" +
-                    "x" + format(this.effect()[2]) + " to broken infinities."
+                    "x" + format(this.effect()[2]) + " to T1 alternate infinities."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(1.25).mul(0.7).add(1), // Infinity Dimensions
                     getLevelableAmount(this.layer, this.id).pow(1.8).mul(3).add(1), // Negative Infinity Points
-                    getLevelableAmount(this.layer, this.id).pow(1.2).add(1), // Broken Infinities
+                    getLevelableAmount(this.layer, this.id).mul(0.2).add(1), // T1 Alternate Infinities
                 ]
             },
             sacValue() { return new Decimal(3)},
@@ -2243,14 +2254,14 @@ addLayer("pet", {
             lore() { return "Just a cartoon doodle dude that got transported here for literally no reason." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to dimension power.<br>" +
-                    "x" + format(this.effect()[1]) + " to alternative infinities.<br>" +
+                    "x" + format(this.effect()[1]) + " to matter.<br>" +
                     "x" + format(this.effect()[2]) + " to time cubes."
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(1.3).mul(0.4).add(1), // Dimension Power
-                    getLevelableAmount(this.layer, this.id).pow(1.1).mul(0.5).add(1), // Alternative Infinities
+                    getLevelableAmount(this.layer, this.id).mul(0.5).add(1), // Matter
                     getLevelableAmount(this.layer, this.id).pow(1.2).add(1), // Time Cubes
                 ]
             },
@@ -2401,9 +2412,9 @@ addLayer("pet", {
             pointValue() { return new Decimal(10).mul(player.pet.petPointMult).mul(getLevelableAmount(this.layer, this.id).mul(0.5).add(1))},
             pointCooldown() { return new Decimal(900).div(player.pet.petCooldownDiv)},
             canteBase() { return new Decimal(0.8)},
-            pointTooltip() { return "Also subtract 5 minutes off the shop reset timer :)" },
+            pointTooltip() { return "" },
             pointClick() {
-                player.pet.shopResetTimer = player.pet.shopResetTimer.sub(300)
+                
                 return this.pointValue()
             },
             // CLICK CODE
@@ -2455,7 +2466,7 @@ addLayer("pet", {
                     player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                     if (inChallenge("ip", 17)) player.cb.IC7shardCount++
                     player.cb.pityEvoCurrent = new Decimal(0)
-                    if (player.subtabs['cb']['stuff'] == "Pets") callAlert("You gained an Evolution Shard! (25%)", "resources/evoShard.png")
+                    doPopup("none", "+1 Evolution Shard! (25%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                 } else {
                     player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(25)
                 }
@@ -2556,7 +2567,7 @@ addLayer("pet", {
                     if (random == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        if (player.subtabs['cb']['stuff'] == "Pets") callAlert("You gained a PARAGON SHARD! (2%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (2%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(2);
                     }
@@ -3061,15 +3072,15 @@ addLayer("pet", {
             lore() { return "Seems to be like gwa, but its appearance is inverted. It has a strange force that prevents you from getting near it." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to infinities.<br>" +
-                    "x" + format(this.effect()[1]) + " to broken infinities.<br>" +
-                    "x" + format(this.effect()[2]) + " to alternate infinities.<br>"
+                    "x" + format(this.effect()[1]) + " to infinitums.<br>" +
+                    "x" + format(this.effect()[2]) + " to all alternate infinities.<br>"
             },
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    getLevelableAmount(this.layer, this.id).div(5).add(1), // Infinities
-                    getLevelableAmount(this.layer, this.id).div(5).add(1), // Broken Infinities
-                    getLevelableAmount(this.layer, this.id).div(5).add(1), // Alternate Infinities
+                    getLevelableAmount(this.layer, this.id).div(2).add(1), // Infinities
+                    getLevelableAmount(this.layer, this.id).div(2).add(1), // Infinitums
+                    getLevelableAmount(this.layer, this.id).div(3).add(1), // Alternate Infinities
                 ]
             },
             levelTooltip() { return "Costs Evo Shards." },
@@ -3687,22 +3698,22 @@ addLayer("pet", {
             let gainedFragments = 1
             if (random == 0) {
                 addLevelableXP("pet", 401, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment4.png");
             } else if (random == 1) {
                 addLevelableXP("pet", 402, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment4.png");
             } else if (random == 2) {
                 addLevelableXP("pet", 403, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment4.png");
             }
         }
     },
@@ -3721,22 +3732,22 @@ addLayer("pet", {
             let gainedFragments = getRandomInt(2) + 1
             if (random == 0) {
                 addLevelableXP("pet", 401, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment4.png");
             } else if (random == 1) {
                 addLevelableXP("pet", 402, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment4.png");
             } else if (random == 2) {
                 addLevelableXP("pet", 403, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment4.png");
             }
         }
     },
@@ -3753,23 +3764,23 @@ addLayer("pet", {
             let gainedFragments = getRandomInt(2) + 2
             if (random == 0) {
                 addLevelableXP("pet", 401, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dotknightEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dotknightEpicPetFragment4.png");
             } else if (random == 1) {
                 addLevelableXP("pet", 402, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/dragonEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/dragonEpicPetFragment4.png");
             }
             else if (random == 2) {
                 addLevelableXP("pet", 403, gainedFragments)
-                if (random1 == 0) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment1.png");
-                if (random1 == 1) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment2.png");
-                if (random1 == 2) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment3.png");
-                if (random1 == 3) callAlert("You gained " + formatWhole(gainedFragments) + " ???!", "resources/cookieEpicPetFragment4.png");
+                if (random1 == 0) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment1.png");
+                if (random1 == 1) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment2.png");
+                if (random1 == 2) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment3.png");
+                if (random1 == 3) doPopup("none", "+" + formatWhole(gainedFragments) + " ???!", "Pet Obtained!", 5, "#cb79ed", "resources/cookieEpicPetFragment4.png");
             }
         }
     },
@@ -3778,7 +3789,7 @@ addLayer("pet", {
         if (rng > 0.3) {
             let gainedFragments = getRandomInt(2) + 2
             player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
-            callAlert("You gained " + formatWhole(gainedFragments) + " Singularity Fragments!", "resources/singularityEpicPetFragment.png");
+            doPopup("none", "+" + formatWhole(gainedFragments) + " Singularity Fragments!", "Resource Obtained!", 5, "#cb79ed", "resources/singularityEpicPetFragment.png")
         } else if (rng > 0.15) {
             layers.cb.petButton1()
         } else if (rng < 0.15) {
@@ -3790,7 +3801,7 @@ addLayer("pet", {
         if (rng > 0.3) {
             let gainedFragments = getRandomInt(3) + 4
             player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
-            callAlert("You gained " + formatWhole(gainedFragments) + " Singularity Fragments!", "resources/singularityEpicPetFragment.png");
+            doPopup("none", "+" + formatWhole(gainedFragments) + " Singularity Fragments!", "Resource Obtained!", 5, "#cb79ed", "resources/singularityEpicPetFragment.png")
         } else if (rng > 0.18) {
             layers.cb.petButton6()
         } else if (rng > 0.02) {
@@ -3801,13 +3812,13 @@ addLayer("pet", {
             player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
             player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
             player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
-            callAlert("You gained " + formatWhole(gainedGems) + " of each Legendary Gem!", "resources/Pets/legendarybg.png");
+            doPopup("none", "+" + formatWhole(gainedGems) + " of each Legendary Gem!", "Resource Obtained!", 5, "#eed200", "resources/Pets/legendarybg.png")
         }
     },
     legendarySummon() {
         if (player.pet.eclipsePity == 4) {
             player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
-            callAlert("Eclipse becomes stronger. (PITY ROLL)", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            doPopup("none", "Eclipse becomes stronger", "Pet Obtained!", 5, "#eed200", "resources/Pets/eclipseLegendaryPet.png") //Make sure to change this when you add more legendary pets
             player.pet.eclipsePity = 0
             return
         }
@@ -3823,7 +3834,7 @@ addLayer("pet", {
             player.pet.levelables[107][1] = player.pet.levelables[107][1].add(gain)
             player.pet.levelables[108][1] = player.pet.levelables[108][1].add(gain)
             player.pet.levelables[109][1] = player.pet.levelables[109][1].add(gain)
-            callAlert("You gained " + formatWhole(gain) + " of every common pet!", "resources/Pets/commonbg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of every common pet!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/commonbg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.4) {
             let gain = player.pet.petPointMult.mul(2.5).floor()
@@ -3836,7 +3847,7 @@ addLayer("pet", {
             player.pet.levelables[207][1] = player.pet.levelables[207][1].add(gain)
             player.pet.levelables[208][1] = player.pet.levelables[208][1].add(gain)
             player.pet.levelables[209][1] = player.pet.levelables[209][1].add(gain)
-            callAlert("You gained " + formatWhole(gain) + " of every uncommon pet!", "resources/Pets/uncommonbg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of every uncommon pet!", "Pet Obtained!", 5, "#88e688", "resources/Pets/uncommonbg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.6) {
             let gain = player.pet.petPointMult.mul(0.8).floor()
@@ -3849,7 +3860,7 @@ addLayer("pet", {
             player.pet.levelables[307][1] = player.pet.levelables[307][1].add(gain)
             player.pet.levelables[308][1] = player.pet.levelables[308][1].add(gain)
             player.pet.levelables[309][1] = player.pet.levelables[309][1].add(gain)
-            callAlert("You gained " + formatWhole(gain) + " of every rare pet!", "resources/Pets/rarebg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of every rare pet!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/rarebg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.7) {
             let gain = player.pet.petPointMult.floor()
@@ -3858,17 +3869,17 @@ addLayer("pet", {
             addLevelableXP("pet", 402, gain)
             addLevelableXP("pet", 403, gain)
 
-            callAlert("You gained " + gain + " of every epic and singularity fragment!", "resources/Pets/epicbg.png")
+            doPopup("none", "+" + formatWhole(gain) + " of every epic and singularity fragment!", "Pet Obtained!", 5, "#cb79ed", "resources/Pets/epicbg.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else if (random < 0.8) {
             let gain = player.pet.petPointMult.mul(10000)
 
             player.cb.petPoints = player.cb.petPoints.add(gain)
-            callAlert("You gained " + formatWhole(gain) + " pet points!", "resources/petPoint.png")
+            doPopup("none", "+" + formatWhole(gain) + " pet points!", "Resource Obtained!", 5, "#A2D800", "resources/petPoint.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else {
             player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
-            callAlert("Eclipse becomes stronger.", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            doPopup("none", "Eclipse becomes stronger", "Pet Obtained!", 5, "#eed200", "resources/Pets/eclipseLegendaryPet.png") //Make sure to change this when you add more legendary pets
         }
     },
     bars: {

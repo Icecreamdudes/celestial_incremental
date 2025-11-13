@@ -1,5 +1,4 @@
-﻿var treeD = [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv"]]
-addLayer("du", {
+﻿addLayer("du", {
     name: "Dark Universe I: Abscence of Light", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "1", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -87,7 +86,7 @@ addLayer("du", {
                 unlocked() { return true },
                 content: [
                     ["blank", "25px"],
-                    ["tree", treeD],
+                    ["tree", universes.D1.tree],
                 ]
             },
         },

@@ -72,7 +72,7 @@
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained an Evolution Shard! (1%)", "resources/evoShard.png");
+                        doPopup("none", "+1 Evolution Shard! (1%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
                     }
@@ -93,7 +93,7 @@
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained an Evolution Shard! (2%)", "resources/evoShard.png");
+                        doPopup("none", "+1 Evolution Shard! (2%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
                     }
@@ -114,7 +114,7 @@
                     if (random == 1) {
                         player.cb.evolutionShards = player.cb.evolutionShards.add(1);
                         player.cb.pityEvoCurrent = new Decimal(0);
-                        callAlert("You gained 2 Evolution Shards! (2%)", "resources/evoShard.png");
+                        doPopup("none", "+2 Evolution Shard! (2%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
                         player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(4)
                     }
@@ -393,7 +393,7 @@ addLayer("ep1", {
                     {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained an Paragon Shard! (0.04%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (0.04%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.04);
                     }
@@ -414,7 +414,7 @@ addLayer("ep1", {
                     if (random == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained an Paragon Shard! (0.1%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (0.1%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.1);
                     }
@@ -435,7 +435,7 @@ addLayer("ep1", {
                     if (random == 1) {
                         player.cb.paragonShards = player.cb.paragonShards.add(1);
                         player.cb.pityParaCurrent = new Decimal(0);
-                        callAlert("You gained a Paragon Shard! (0.2%)", "resources/paragonShard.png");
+                        doPopup("none", "+1 Paragon Shard! (0.2%)", "Shard Obtained!", 5, "#4c64ff", "resources/paragonShard.png")
                     } else {
                         player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(0.2);
                     }

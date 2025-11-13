@@ -207,7 +207,7 @@ var systemComponents = {
 
 	'tooltip': {
 		props: ['text'],
-		template: `<div class="tooltip" v-html="text" v-bind:style="text == '' ? {display:none !important} : {}"></div>
+		template: `<div class="tooltip" v-html="text" v-bind:style="text == '' ? {display: 'none !important'} : {}"></div>
 		`
 	},
 

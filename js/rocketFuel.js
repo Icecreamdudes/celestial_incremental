@@ -130,7 +130,7 @@
         }
 
         // ABILITY AUTOMATION
-        if (hasUpgrade("tad", 12)) {
+        if (player.tad.altInfinities.broken.amount.gte(100)) {
             layers.rf.rocketFuelAbility(0, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(1, player.rf.rocketFuel)
             layers.rf.rocketFuelAbility(2, player.rf.rocketFuel)
@@ -371,7 +371,7 @@
 
                 if (new Decimal(random).lte(prob)) {
                     addLevelableXP("pet", 303, 1);
-                    callAlert("You gained a Drippy Ufo!", "resources/Pets/ufoRarePet.png");
+                    doPopup("none", "+1 Drippy Ufo!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/ufoRarePet.png")
                 }
             break;
             case 5:

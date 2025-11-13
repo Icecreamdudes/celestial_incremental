@@ -81,7 +81,7 @@ addLayer("hpr", {
         player.hpr.rankEffect[5][0] = player.hpr.rank[5].pow(4).mul(32).mul(player.hpr.effectMult).add(1)
         player.hpr.rankEffect[5][1] = player.hpr.rank[5].pow(2.6).mul(16).mul(player.hpr.effectMult).add(1)
 
-        if (hasUpgrade("tad", 11)) {
+        if (hasUpgrade("tad", 1001)) {
             for (let i = 0; i < 6; i++) {
                 player.hpr.rankEffect[i][0] = player.hpr.rankEffect[i][0].pow(1.1)
             }

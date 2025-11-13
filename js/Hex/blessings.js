@@ -440,13 +440,13 @@ addLayer("hbl", {
         4: {
             title: "Grace IV",
             unlocked() { return hasUpgrade("bi", 12) },
-            description: "Alternative infinities boost curse gain.",
+            description: "Infinitums boost curse gain.",
             cost: new Decimal(720),
             currencyLocation() { return player.hbl },
             currencyDisplayName: "Blessings",
             currencyInternalName: "blessings",
             effect() {
-                let eff = player.tad.shatteredInfinities.mul(player.tad.disfiguredInfinities).mul(player.tad.corruptedInfinities).add(1).log(6).pow(2).add(1).pow(player.hpu.purifiers[5].effect)
+                let eff = player.tad.infinitum.add(1).log(6).pow(4).add(1).pow(player.hpu.purifiers[5].effect)
                 if (inChallenge("hrm", 12)) eff = eff.pow(0.3)
                 return eff
             },

@@ -1,5 +1,4 @@
-﻿var treeh = [["hpr", "hsa"], ["hre", "hpu"], ["hbl", "hcu", "hve"], ["hpw", "hrm"]]
-addLayer("h", {
+﻿addLayer("h", {
     name: "Hex", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "H", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "UA",

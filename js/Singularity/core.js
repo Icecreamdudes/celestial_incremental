@@ -824,14 +824,6 @@ addLayer("co", {
         player.ta.upgrades.splice(0, player.ta.upgrades.length)
 
         //     <----     TAV'S DOMAIN LAYER     ---->
-        player.tad.activeChallenge = null
-        player.tad.currentConversion = new Decimal(-1)
-        player.tad.shatteredInfinities = new Decimal(0)
-        player.tad.shatteredInfinitiesToGet = new Decimal(0)
-        player.tad.disfiguredInfinities = new Decimal(0)
-        player.tad.disfiguredInfinitiesToGet = new Decimal(0)
-        player.tad.corruptedInfinities = new Decimal(0)
-        player.tad.corruptedInfinitiesToGet = new Decimal(0)
 
         player.tad.upgrades.splice(0, player.tad.upgrades.length)
 
@@ -840,14 +832,8 @@ addLayer("co", {
         }
 
         //     <----     BREAK INFINITY LAYER     ---->
-        player.bi.brokenInfinities = new Decimal(0)
-        player.bi.brokenInfinitiesToGet = new Decimal(0)
         if (!hasMilestone("s", 18)) player.bi.IACtoggle = false
         if (!hasMilestone("s", 18)) player.bi.NACtoggle = false
-
-        for (let i in player.bi.buyables) {
-            player.bi.buyables[i] = new Decimal(0)
-        }
 
         player.bi.upgrades.splice(0, player.bi.upgrades.length)
 

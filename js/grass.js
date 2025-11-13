@@ -1220,8 +1220,6 @@ const updateGrass = (delta) => {
     player.g.grassVal = player.g.grassVal.div(player.pe.pestEffect[4])
     if (inChallenge('ip', 13)) player.g.grassVal = player.g.grassVal.pow(0.75)
     if (player.de.antidebuffIndex.eq(2)) player.g.grassVal = player.g.grassVal.mul(player.de.antidebuffEffect)
-    if (inChallenge('tad', 11)) player.g.grassVal = player.g.grassVal.pow(0.4)
-    if (inChallenge('tad', 11)) player.g.grassVal = player.g.grassVal.pow(buyableEffect('de', 15))
 
     // CONTINUED REGULAR MODIFIERS
     if (player.pol.pollinatorEffects.wind.enabled) player.g.grassVal = player.g.grassVal.mul(player.pol.pollinatorEffects.wind.effects[0])

@@ -272,7 +272,7 @@ function updateMilestones(layer) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id)
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete()
-			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup("milestone", run(layers[layer].milestones[id].requirementDescription, layers[layer].milestones[id]), "Milestone Gotten!", 3, tmp[layer].color);
+			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup("milestone", run(layers[layer].milestones[id].requirementDescription, layers[layer].milestones[id]), "Milestone Gotten!", 3, tmp[layer].color);
 			player[layer].lastMilestone = id
 		}
 	}
@@ -381,15 +381,23 @@ var popupID = 0;
 // Function to show popups
 function doPopup(type = "none", text = "This is a test popup.", title = "", timer = 3, color = "", image = false) {
 	switch (type) {
+		case "milestone":
+			if (options.hideMilestonePopups) return
+			popupTitle = "Milestone Gotten!";
+			popupType = "milestone-popup"
+			break;
 		case "achievement":
+			if (options.hideAchievementPopups) return
 			popupTitle = "Achievement Unlocked!";
 			popupType = "achievement-popup"
 			break;
 		case "challenge":
+			if (options.hideGeneralPopups) return
 			popupTitle = "Challenge Complete";
 			popupType = "challenge-popup"
 			break;
 		default:
+			if (options.hideGeneralPopups) return
 			popupTitle = "Something Happened?";
 			popupType = "default-popup"
 			break;

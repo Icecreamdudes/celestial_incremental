@@ -8,7 +8,7 @@
 		"prestige.js", "trees.js", "grass.js", "grasshop.js", "mods.js",
 		"checkback.js", "portal.js", "dice.js", "evolution.js", "rocketFuel.js",
 		"infinity.js", "antimatterDimensions.js", "infinityPoints.js", "pests.js", "debuff.js",
-		"tav.js", "tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
+		"tav.js", "Infinity/tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
 		"infinityDimensions.js", "cante.js", "cantepocalypsePuzzle.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
 		"Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js", "factory.js",
@@ -158,7 +158,9 @@ function updateStyles() {
 			layerBG = "#31aeb0"
 			break;
 		case "tad":
-			layerBG = "#b2d8d8"
+			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "#b2d8d8"
+			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "#c8c9fc"
+			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "#9dc7fe"
 			break;
 		case "ca":
 			layerBG = "#2a3e66"
@@ -543,11 +545,15 @@ function updateStyles() {
 				playAndLoopAudio("music/hex.mp3", options.musicVolume/10)
 				break;
 			case "U1":
-				if (player.startedGame && player.ip.activeChallenge == null && !inChallenge("tad", 11)) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
-				if (player.ip.activeChallenge != null || inChallenge("tad", 11)) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
+				if (player.startedGame && player.ip.activeChallenge == null) playAndLoopAudio("music/universe1.mp3", options.musicVolume/10)
+				if (player.ip.activeChallenge != null) playAndLoopAudio("music/tav.mp3", options.musicVolume/10)
 				break;
 			case "U2":
-				playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
+				if (player.tab != "tad") {
+					playAndLoopAudio("music/universe2.mp3", options.musicVolume/10)
+				} else {
+					playAndLoopAudio("music/tavDomain.mp3", options.musicVolume/10)
+				}
 				break;
 			case "A1":
 				playAndLoopAudio("music/alt-uni1.mp3", options.musicVolume/10)
@@ -1268,12 +1274,12 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 404, player.cb.epicPetLevels[3])
 		setLevelableAmount("pet", 405, player.cb.epicPetLevels[4])
 		setLevelableAmount("pet", 406, player.cb.epicPetLevels[5])
-		player.pet.singularityFragments = player.cb.epicPetFragments[3]
+		player.pet.singularityFragments = new Decimal(player.cb.epicPetFragments[3])
 		
-		player.pet.lastDicePetRoll = player.cb.lastDicePetRoll
-		player.pet.highestDicePetCombo = player.cb.highestDicePetCombo
-		player.pet.dicePetCombo = player.cb.dicePetCombo
-		player.pet.dicePetPointsGain = player.cb.dicePetPointsGain
+		player.pet.lastDicePetRoll = new Decimal(player.cb.lastDicePetRoll)
+		player.pet.highestDicePetCombo = new Decimal(player.cb.highestDicePetCombo)
+		player.pet.dicePetCombo = new Decimal(player.cb.dicePetCombo)
+		player.pet.dicePetPointsGain = new Decimal(player.cb.dicePetPointsGain)
 
 		setLevelableAmount("pet", 1103, player.cb.evolvedLevels[0])
 		setLevelableAmount("pet", 1204, player.cb.evolvedLevels[1])
@@ -1287,8 +1293,14 @@ function fixOldSave(oldVersion){
 		setLevelableAmount("pet", 1104, player.cb.evolvedLevels[9])
 		setLevelableAmount("pet", 1205, player.cb.evolvedLevels[10])
 
-		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
-		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
+		if (typeof player.d.diceEffects[14] == "object") {
+			if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		}
+		if (typeof player.rf.abilityEffects[7] == "object") {
+			if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
+		}
+
+		return
 	}
 	if (oldVersion < 161) {
 		if (player.points.gt("1e100000")) {
@@ -1299,8 +1311,12 @@ function fixOldSave(oldVersion){
 		}
 	}
 	if (oldVersion < 180) {
-		if (player.d.diceEffects[13].gt(10000)) player.d.diceEffects[13] = new Decimal(10000)
-		if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		if (typeof player.d.diceEffects[13] == "object") {
+			if (player.d.diceEffects[13].gt(10000)) player.d.diceEffects[13] = new Decimal(10000)
+		}
+		if (typeof player.d.diceEffects[14] == "object") {
+			if (player.d.diceEffects[14].gt(100)) player.d.diceEffects[14] = new Decimal(100)
+		}
 		if (player.rf.abilityEffects[7].gt(1000)) player.rf.abilityEffects[7] = new Decimal(1000)
 		if (player.id.infinityPower.gte(1e300)) player.id.infinityPower = new Decimal(1e300)
 		if (player.sd.singularityPower.gte(1e300)) player.sd.singularityPower = new Decimal(1e300)

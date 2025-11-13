@@ -1,5 +1,4 @@
-﻿var tree1 = [["i"], ["r", "f"], ["p", "t", "g"], ["gh", "pe", "pol", "m"], ["de", "rf", "d"], ["cb", "oi", "fa"]]
-addLayer("i", {
+﻿addLayer("i", {
     name: "Origin", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "OR", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -131,10 +130,6 @@ addLayer("i", {
         if (hasUpgrade("rf", 16)) player.gain = player.gain.mul(upgradeEffect("rf", 16))
         if (inChallenge("ip", 18)) player.gain = player.gain.pow(0.4)
         if (player.de.antidebuffIndex.eq(0)) player.gain = player.gain.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.gain = player.gain.pow(0.45)
-        if (inChallenge("tad", 11)) player.gain = player.gain.pow(buyableEffect("de", 11))
-        if (inChallenge("tad", 11)) player.gain = player.gain.mul(player.de.tavPointsEffect)
-        if (hasUpgrade("de", 15) && inChallenge("tad", 11)) player.gain = player.gain.mul(upgradeEffect("de", 15))
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.beetle.enabled) player.gain = player.gain.mul(player.pol.pollinatorEffects.beetle.effects[0])
@@ -288,7 +283,7 @@ addLayer("i", {
         22: {
             title: "Pollinate",
             unlocked() { return player.in.unlockedBreak},
-            description: "Use the experience of debuffs and pests to create Pollinators.",
+            description: "Use the experience of pests to create Pollinators.",
             cost: new Decimal("1e450"),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
@@ -561,7 +556,7 @@ function callAlert(message, imageUrl, imagePosition = 'top') {
         modalContainer.style.display = 'flex';
         modalContainer.style.alignItems = 'center';
         modalContainer.style.justifyContent = 'center';
-        modalContainer.style.zIndex = '5';
+        modalContainer.style.zIndex = '5000';
 
         // Apply background color and increase width
         modalContent.style.background = '#ccc'; // Grey background

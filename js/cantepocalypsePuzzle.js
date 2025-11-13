@@ -1,5 +1,4 @@
-﻿var tree = [["cp"]]
-addLayer("cap", {
+﻿addLayer("cap", {
     name: "Cante, the Celestial of Replicanti", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Ξ", // This appears on the layer's node. Default is the id with the first letter capitalized
     row: 1,
@@ -55,9 +54,9 @@ addLayer("cap", {
         if (hasUpgrade("i", 37) && hasUpgrade("i", 38) && hasUpgrade("i", 39) && hasUpgrade("i", 41)) {
             player.cap.passingReqs[0] = true
         }
-        if (hasUpgrade("tad", 14) && hasUpgrade("tad", 15) && hasUpgrade("tad", 16)) {
-            player.cap.passingReqs[2] = true
-        }
+        //if (hasUpgrade("tad", 14) && hasUpgrade("tad", 15) && hasUpgrade("tad", 16)) {
+        //    player.cap.passingReqs[2] = true
+        //}
 
         player.cap.quizNumber = player.cap.quizInput
 
@@ -249,7 +248,7 @@ addLayer("cap", {
                     ["blank", "25px"],
                     ["raw-html", function () { return "THERE IS NO RETURN..." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
                     ["blank", "25px"],
-                    ["tree", tree],
+                    ["tree", ["cp"]],
                 ]
             },
         },

@@ -88,7 +88,7 @@
         boosterDiceAutomation: false,
     }},
     automate() {
-        if (hasUpgrade("d", 11) || hasUpgrade("tad", 13))
+        if (hasUpgrade("d", 11) || player.tad.altInfinities.shattered.amount.gte(100))
         {
             buyBuyable("d", 11)
             buyBuyable("d", 12)
@@ -373,7 +373,7 @@
         12: {
             title() { return player.d.boosterDiceCooldown.gt(0) ? formatTime(player.d.boosterDiceCooldown) : "<h2>Roll to change currency boost!"},
             canClick() { return player.d.boosterDiceCooldown.lt(0) },
-            tooltip() { return "<h3>" + player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(5).floor() + "% chance for a pet???" },
+            tooltip() { return "<h3>" + player.d.dicePoints.add(1).log10().pow(0.8).div(5).add(5).floor() + "% chance for a pet???</h3>" },
             unlocked() { return true },
             onClick() {
                 let riggy = false
@@ -412,8 +412,8 @@
                 if (new Decimal(random).lte(prob)) {
                     if (!hasAchievement("achievements", 21)) completeAchievement("achievements", 21)
                     addLevelableXP("pet", 302, 1);
-                    if (player.cb.highestLevel.lt(35)) callAlert("You gained a Dice! (Rare pets unlock at check back level 35)", "resources/Pets/diceRarePet.png");
-                    if (player.cb.highestLevel.gte(35)) callAlert("You gained a Dice!", "resources/Pets/diceRarePet.png");
+                    if (player.cb.highestLevel.lt(35)) doPopup("none", "+1 Dice!<br>(Rare pets unlock at CB level 35)", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/diceRarePet.png")
+                    if (player.cb.highestLevel.gte(35)) doPopup("none", "+1 Dice!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/diceRarePet.png")
                 }
 
                 if (inChallenge("ip", 15))
@@ -930,16 +930,16 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                if (mult != true && !hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -964,16 +964,16 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                if (mult != true && !hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -998,16 +998,16 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                if (mult != true && !hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }
@@ -1032,16 +1032,16 @@
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Dice Points"
             },
             buy(mult) {
-                if (mult != true && !hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) {
+                if (mult != true && !hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) {
                     let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(buyonecost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(buyonecost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
                 } else {
                     let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
                     if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
                     let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (!hasUpgrade("d", 11) && !hasUpgrade("tad", 13)) this.pay(cost)
+                    if (!hasUpgrade("d", 11) && player.tad.altInfinities.shattered.amount.lt(100)) this.pay(cost)
 
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
                 }

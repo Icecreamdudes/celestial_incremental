@@ -111,9 +111,9 @@
         }
 
         //6
-        if (player.c.cutscenes[5] && inChallenge("tad", 11)) {
+        if (player.c.cutscenes[5] && player.tab == "tad") {
             player.c.currentCutscene = 6
-        } else if (inChallenge("tad", 11) && player.tab != "c") {
+        } else if (player.tab == "tad" && player.tab != "c") {
             player.c.currentCutscene = 0
         }
         if (player.c.currentCutscene == 6) {

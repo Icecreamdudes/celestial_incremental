@@ -887,7 +887,7 @@ addLayer("hpw", {
         1061: {
             title: "Might F:1",
             unlocked() {return challengeCompletions("hrm", 16) >= 1 && hasUpgrade("bi", 27)},
-            description: "Gain 10% infinities per second.",
+            description: "+25% crate roll multiplier.",
             branches: [1006],
             cost() {return new Decimal(362797056)},
             canAfford() { return hasUpgrade("hpw", 1006)},

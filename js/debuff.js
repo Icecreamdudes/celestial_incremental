@@ -43,13 +43,13 @@
 
         if (player.de.antidebuffPointsToGet.lt(1e24)) player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e14).pow(0.45)
         if (player.de.antidebuffPointsToGet.gte(1e24)) player.de.antidebuffPointsToGet = player.gh.grasshoppers.div(1e12).pow(0.3)
-        player.de.antidebuffPointsToGet = player.de.antidebuffPointsToGet.mul(buyableEffect("tad", 16))
+        // player.de.antidebuffPointsToGet = player.de.antidebuffPointsToGet.mul(buyableEffect("tad", 16))
 
         player.de.antidebuffPointsEffect = player.de.antidebuffPoints.pow(0.54321).mul(10).add(1)
 
         player.de.antidebuffEffect = layers.de.getAntidebuffEffect(player.de.antidebuffIndex)
 
-        if (hasUpgrade("de", 17) && inChallenge("tad", 11)) player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet.mul(delta))
+        // if (hasUpgrade("de", 17) && inChallenge("tad", 11)) player.de.antidebuffPoints = player.de.antidebuffPoints.add(player.de.antidebuffPointsToGet.mul(delta))
 
         if (inChallenge("ip", 18) && player.de.antidebuffIndex.neq(6) && player.de.antidebuffIndex.neq(0)) {
             player.points = player.points.sub(player.points.mul(0.95 * delta))
@@ -107,7 +107,7 @@
         player.de.tavPointsToGet = player.points.pow(0.08).add(1)
         player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("de", 14))
         if (hasUpgrade("de", 19)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(upgradeEffect("de", 19))
-        if (hasUpgrade("tad", 14)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("tad", 14))
+        // if (hasUpgrade("tad", 14)) player.de.tavPointsToGet = player.de.tavPointsToGet.mul(buyableEffect("tad", 14))
         if (player.de.tavPointsToGet.gte(1e100)) player.de.tavPointsToGet = new Decimal(1e100)
 
         if (hasUpgrade("de", 18)) player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet.mul(0.1).mul(delta))
@@ -116,7 +116,7 @@
         player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("de", 13))
         if (hasUpgrade("de", 12)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 12))
         if (hasUpgrade("de", 19)) player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(upgradeEffect("de", 19))
-        player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("tad", 15))
+        // player.de.tavEssencePerSecond = player.de.tavEssencePerSecond.mul(buyableEffect("tad", 15))
 
         player.de.tavEssence = player.de.tavEssence.add(player.de.tavEssencePerSecond.mul(delta))
 
@@ -387,7 +387,6 @@
             canClick() { return player.de.tavPointsToGet.gte(1) && player.points.gte(1e9) },
             unlocked() { return true },
             onClick() {
-                player.tad.domainResetPause = new Decimal(5)
                 layers.in.bigCrunch();
                 player.de.tavPoints = player.de.tavPoints.add(player.de.tavPointsToGet)
             },
@@ -529,7 +528,7 @@
             currencyDisplayName: "Tav Essence",
             currencyInternalName: "tavEssence",
             effect() {
-                return player.bi.brokenInfinities.mul(100).pow(1.6).add(1)
+                return new Decimal(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
@@ -822,7 +821,7 @@
             },
             "Tav's Domain Debuffs": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return inChallenge("tad", 11) },
+                unlocked() { return false },
                 content: [
                     ["blank", "25px"],
                     ["style-column", [
@@ -839,7 +838,7 @@
             },
             "Upgrades": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return inChallenge("tad", 11) },
+                unlocked() { return false },
                 content: [
                     ["blank", "25px"],
                     ["row", [
@@ -866,9 +865,9 @@
                         ["raw-html", () => {return "You have " + format(player.de.antidebuffPoints) + " antidebuff points"}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                         ["raw-html", () => {return "(+" + format(player.de.antidebuffPointsToGet) + ")"}, {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}],
                     ]],
-                    ["raw-html", () => {return inChallenge("tad", 11) ? "<s>Divides pest gain by /" + format(player.de.antidebuffPointsEffect) : "Divides pest gain by /" + format(player.de.antidebuffPointsEffect)}, () => {
+                    ["raw-html", () => {return false ? "<s>Divides pest gain by /" + format(player.de.antidebuffPointsEffect) : "Divides pest gain by /" + format(player.de.antidebuffPointsEffect)}, () => {
                         let look = {color: "white", fontSize: "20px", fontFamily: "monospace"}
-                        inChallenge("tad", 11) ? look.color = "gray" : look.color = "white"
+                        false ? look.color = "gray" : look.color = "white"
                         return look
                     }],
                     ["blank", "25px"],
@@ -877,9 +876,9 @@
                     ["style-column", [
                         ["style-column", [
                             ["raw-html", () => { return player.de.antidebuffText }, {color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                            ["raw-html", () => { return !inChallenge("tad", 11) ? "When an effect is activated, all other resources are depleted by 95% per second." : "<s>When an effect is activated, all other resources are depleted by 95% per second."}, () => {
+                            ["raw-html", () => { return true ? "When an effect is activated, all other resources are depleted by 95% per second." : "<s>When an effect is activated, all other resources are depleted by 95% per second."}, () => {
                                 let look = {color: "white", fontSize: "14px", fontFamily: "monospace"}
-                                inChallenge("tad", 11) ? look.color = "gray" : look.color = "white"
+                                false ? look.color = "gray" : look.color = "white"
                                 return look
                             }],
                         ], {borderBottom: "3px solid #4e386e", padding: "10px 0"}],
@@ -891,7 +890,7 @@
             },
             "Tav's Compensation": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return inChallenge("tad", 11) },
+                unlocked() { return false },
                 content: [
                     ["blank", "25px"],
                     ["row", [
@@ -928,6 +927,6 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && (inChallenge("ip", 18) || inChallenge("tad", 11)) },
-    deactivated() { return !(inChallenge("ip", 18) || inChallenge("tad", 11))},
+    layerShown() { return player.startedGame == true && inChallenge("ip", 18) },
+    deactivated() { return !inChallenge("ip", 18)},
 })

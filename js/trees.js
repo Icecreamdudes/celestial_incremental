@@ -62,7 +62,6 @@
         // CHALLENGE MODIFIERS
         if (inChallenge("ip", 13)) player.t.treesToGet = player.t.treesToGet.pow(0.75)
         if (player.de.antidebuffIndex.eq(3)) player.t.treesToGet = player.t.treesToGet.mul(player.de.antidebuffEffect)
-        if (inChallenge("tad", 11)) player.t.treesToGet = player.t.treesToGet.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bat.enabled) player.t.treesToGet = player.t.treesToGet.mul(player.pol.pollinatorEffects.bat.effects[1])
@@ -112,7 +111,6 @@
         // CHALLENGE MODIFIERS
         player.t.leavesPerSecond = player.t.leavesPerSecond.div(player.pe.pestEffect[3])
         if (inChallenge("ip", 13)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.75)
-        if (inChallenge("tad", 11)) player.t.leavesPerSecond = player.t.leavesPerSecond.pow(0.5)
 
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.bat.enabled) player.t.leavesPerSecond = player.t.leavesPerSecond.mul(player.pol.pollinatorEffects.bat.effects[0])

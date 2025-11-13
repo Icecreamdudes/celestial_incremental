@@ -1542,6 +1542,15 @@ button > * {
     transform: translate(-50%, -50%);
   }
 
+.evoContainer {
+	background: rgba(0,0,0,0.2);
+	border-radius: 15px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
 .goldenCookie {
 	width: 96px !important;
 	height: 96px !important;

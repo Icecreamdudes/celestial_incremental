@@ -427,13 +427,13 @@
         107: {
             title: "Light Starmetal Upgrade VII",
             unlocked() { return hasUpgrade("sma", 106)},
-            description: "Produce 1% core scrap per second.",
+            description: "Produce 1% core scrap per second and singularity doesn't reset anything check back related",
             cost: new Decimal("500"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
             currencyInternalName: "starmetalAlloy",
             style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "175px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }
@@ -441,7 +441,7 @@
         108: {
             title: "Light Starmetal Upgrade VIII",
             unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
-            description: "Number of dice sides is multiplied based on best depth 1 combo.",
+            description: "Number of dice sides is multiplied based on best depth 1 combo, and singularity preserves pent milestones and halter values.",
             cost: new Decimal("1111"),
             currencyLocation() { return player.sma },
             currencyDisplayName: "Starmetal Alloy",
@@ -451,37 +451,7 @@
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
-                return look
-            }
-        },
-        107:
-        {
-            title: "Secondary Starmetal Upgrade VII",
-            unlocked() { return hasUpgrade("sma", 106) && player.ma.secondAreaUnlock},
-            description: "Singularity doesn't reset anything check back related.",
-            cost: new Decimal("1500"),
-            currencyLocation() { return player.sma },
-            currencyDisplayName: "Starmetal Alloy",
-            currencyInternalName: "starmetalAlloy",
-            style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
-                hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
-                return look
-            }
-        },
-        108:
-        {
-            title: "Secondary Starmetal Upgrade VIII",
-            unlocked() { return hasUpgrade("sma", 107) && player.ma.secondAreaUnlock},
-            description: "Singularity preserves pent milestones and halter values.",
-            cost: new Decimal("3333"),
-            currencyLocation() { return player.sma },
-            currencyDisplayName: "Starmetal Alloy",
-            currencyInternalName: "starmetalAlloy",
-            style() {
-                let look = {width: "150px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
+                let look = {width: "200px", color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"}
                 hasUpgrade(this.layer, this.id) ? look.background = "#77bf5f" : !canAffordUpgrade(this.layer, this.id) ? look.background =  "#bf8f8f" : look.background = "linear-gradient(120deg, #e6eb57 0%, #bf9a32 25%, #eb6077 50%, #d460eb, 75%, #60cfeb 100%)"
                 return look
             }

@@ -14,13 +14,13 @@
             true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true,true, true, true,
         ],
 
-        //OTF
-        cutsceneDice: true,
-        cutsceneRocketFuel: true,
-        cutsceneHex: true,
+//OTF
+cutsceneDice: true,
+cutsceneRocketFuel: true,
+cutsceneHex: true,
 
-        //celestial
-        tavCutscene: false,
+//celestial
+tavCutscene: false,
 
         //Cutscene Info
         cutsceneText: [

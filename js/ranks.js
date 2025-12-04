@@ -74,7 +74,7 @@
         if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
         if (hasUpgrade("hpw", 1011)) player.r.rankEffect = player.r.rankEffect.pow(1.18)
-     //   player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("sb", 106))
+        player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("sb", 106))
         player.r.rankReq = layers.r.getRankReq()
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)

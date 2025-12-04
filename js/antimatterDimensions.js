@@ -101,11 +101,12 @@
         if (hasUpgrade("ip", 43)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(upgradeEffect("ip", 43))
         if (hasMilestone("fa", 12)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.fa.milestoneEffect[1])
         player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.mul(player.co.cores.antimatter.effect[0])
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
-        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
 
         // POWER MODIFIERS
         if (hasUpgrade("hpw", 1051)) player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(1.05)
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(levelableEffect("ir", 3)[0])
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("sb", 105))
+        player.ad.antimatterPerSecond = player.ad.antimatterPerSecond.pow(buyableEffect("cof", 21))
 
         // ANTIMATTER PER SECOND
         player.ad.antimatter = player.ad.antimatter.add(player.ad.antimatterPerSecond.mul(delta))

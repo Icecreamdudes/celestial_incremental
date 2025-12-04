@@ -141,9 +141,11 @@ addLayer("pet", {
         // =- LEGENDARY GEMS -=
         player.pet.legendaryGemsToGetMin = player.cb.XPBoost.pow(0.2).div(2).floor()
         player.pet.legendaryGemsToGetMin = player.pet.legendaryGemsToGetMin.mul(levelableEffect("ir", 5)[1])
+        player.pet.legendaryGemsToGetMin = player.pet.legendaryGemsToGetMin.mul(buyableEffect("cof", 33))
 
         player.pet.legendaryGemsToGetMax = player.cb.XPBoost.pow(0.25).div(2).floor()
         player.pet.legendaryGemsToGetMax = player.pet.legendaryGemsToGetMax.mul(levelableEffect("ir", 5)[1])
+        player.pet.legendaryGemsToGetMax = player.pet.legendaryGemsToGetMax.mul(buyableEffect("cof", 33))
 
         player.pet.legendaryGemTimerMax = new Decimal(86400)
         player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(onepersec.mul(delta))

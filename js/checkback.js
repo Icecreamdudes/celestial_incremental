@@ -171,6 +171,7 @@ addLayer("cb", {
             if (hasUpgrade("fi", 11)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("fi", 11))
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.se.starsExploreEffect[2][0])
             if (hasUpgrade("ir", 13)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("ir", 13))
+            player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.cof.coreFragmentEffects[6])
         }
 
 
@@ -194,6 +195,7 @@ addLayer("cb", {
             player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(levelableEffect("pu", 201)[2])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(1.15)
+            player.cb.buttonTimersMax[i] = player.cb.buttonTimersMax[i].div(buyableEffect("cof", 31))
         }
 
         player.cb.petButtonTimersMax = [new Decimal(900), new Decimal(2700), new Decimal(5400), new Decimal(28800), new Decimal(7200), new Decimal(42000), new Decimal(86400)]

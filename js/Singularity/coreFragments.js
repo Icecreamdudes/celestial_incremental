@@ -21,14 +21,7 @@
         7 - Celestial Core Fragments (Secret) 
         */
         coreFragmentEffects: [
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1), new Decimal(1),],
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-            [new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),],
-            [new Decimal(1),],   
+            new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1),new Decimal(1), new Decimal(1)
         ],
         coreFragmentNames: [
             "Ancient Core Fragments",
@@ -637,7 +630,7 @@
             purchaseLimit() { return new Decimal(200) },
             currency() { return player.cof.coreFragments[4] },
             pay(amt) { player.cof.coreFragments[4] = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).div(8).pow(1.2).add(1)},
+            effect(x) { return getBuyableAmount(this.layer, this.id).pow(1.2).add(1)},
             unlocked() { return true },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
             canAfford() { return this.currency().gte(this.cost()) },

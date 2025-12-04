@@ -102,6 +102,8 @@ addLayer("ba", {
         1 - crit chance
         2 - multihit
         */
+
+        abilityID: [0, 1]
     }},
     automate() {},
     nodeStyle() {},

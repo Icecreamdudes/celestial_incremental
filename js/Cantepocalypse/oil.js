@@ -64,6 +64,7 @@
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pu", 104)[2])
         player.oi.oilToGet = player.oi.oilToGet.mul(levelableEffect("pet", 405)[1])
         player.oi.oilToGet = player.oi.oilToGet.mul(buyableEffect("st", 107))
+        if (hasUpgrade("ir", 12)) player.oi.oilToGet = player.oi.oilToGet.mul(upgradeEffect("ir", 12))
 
         // KEEP AFTER
         if (inChallenge("fu", 11)) player.oi.oilToGet = player.oi.oilToGet.pow(0.2)
@@ -685,7 +686,7 @@
                         ], {width: "273px", height: "100px"}],
                     ], {width: "825px", borderLeft: "3px solid #0c1a36", borderRight: "3px solid #0c1a36", borderBottom: "3px solid #0c1a36"}],
                     ["style-column", [
-                        ["raw-html", () => { return "(Each linking power is based on it's respective currency)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "(Each linking power is based on its respective currency)"}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "825px", height: "30px", backgroundColor: "#0c1a36", borderLeft: "3px solid #0c1a36", borderRight: "3px solid #0c1a36", borderBottom: "3px solid #0c1a36"}],
                     ["blank", "25px"],
                     ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13],

@@ -1686,6 +1686,38 @@ addLayer("st", {
             },
             style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(50deg, #201c2eff 0%, #0e0920ff 50%, #090222ff 100%)", border: "5px solid #010003ff", borderColor: "#010003ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
         },
+        206: {
+            costBase() { return new Decimal(1e13) },
+            costGrowth() { return new Decimal(1.1) },
+            purchaseLimit() { return new Decimal(1) },
+            currency() { return player.au2.stars},
+            pay(amt) { player.au2.stars = this.currency().sub(amt) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01)  },
+            unlocked() { return player.ir.ufoDefeated && player.st.buyables[205].gte(25)},
+            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
+            canAfford() { return this.currency().gte(this.cost()) },
+            display() {
+                return "Unlocks a new ship.\n\
+                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Stars"
+            },
+            branches: [205],
+            buy(mult) {
+                if (mult != true) {
+                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
+                    this.pay(buyonecost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+                } else {
+                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
+                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
+                    this.pay(cost)
+
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
+                }
+            },
+            style: {width: '140px', height: '140px', color: "white", background: "linear-gradient(50deg, #9c86ebff 0%, #433186ff 50%, #231947ff 100%)", border: "5px solid #010003ff", borderColor: "#010003ff", borderRadius: "5px", boxSizing: "border-box", margin: "15px 25px 15px 25px"}
+        },
         //planets
         301: {
             costBase() { return new Decimal(3) },
@@ -2064,6 +2096,7 @@ addLayer("st", {
                         ]],                        
                         ["row", [
                             ["ex-buyable", 205],
+                            ["ex-buyable", 206],
                         ]],
                         ["blank", "10px"],
                     ], {width: "550px", height: "700px", backgroundColor: "#4a4a4a80", border: "3px solid white", borderRadius: "15px 0 0 15px"}],

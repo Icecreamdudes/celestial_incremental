@@ -33,6 +33,7 @@
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ma", 24))
         player.dn.normalityToGet = player.dn.normalityToGet.mul(levelableEffect("st", 207)[0])
         player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("st", 106))
+        player.dn.normalityToGet = player.dn.normalityToGet.mul(buyableEffect("ds", 104))
 
         player.dn.normalityEffect = player.dn.normality.mul(10).pow(3).add(1)
 
@@ -83,7 +84,6 @@
         player.dg.buyables[14] = new Decimal(0)
         player.dg.buyables[15] = new Decimal(0)
         player.dg.buyables[16] = new Decimal(0)
-
     },
     upgrades: {
         11: {
@@ -119,6 +119,20 @@
             unlocked() { return hasUpgrade("sma", 18) },
             description: "Autobuy grass buyables.",
             cost: new Decimal(1e15),
+            currencyLocation() { return player.dn },
+            currencyDisplayName: "Normality",
+            currencyInternalName: "normality",
+            style() {
+                let look = {borderRadius: "10px", color: "white", border: "2px solid #c1df00", margin: "1.5px"}
+                hasUpgrade(this.layer, this.id) ? look.backgroundColor = "#1a3b0f" : !canAffordUpgrade(this.layer, this.id) ? look.backgroundColor =  "#361e1e" : look.backgroundColor = "black"
+                return look
+            }
+        },
+        14: {
+            title: "Normality Upgrade IV",
+            unlocked() { return player.ir.iriditeUnlocked },
+            description: "Unlock space energy.",
+            cost: new Decimal(1e35),
             currencyLocation() { return player.dn },
             currencyDisplayName: "Normality",
             currencyInternalName: "normality",
@@ -239,7 +253,7 @@
     microtabs: {
         stuff: {
             "Main": {
-                buttonStyle() { return {borderColor: "#c1df00"}},
+                buttonStyle() { return {borderColor: "#c1df00", borderRadius: "10px"}},
                 unlocked: true,
                 content: [
                     ["blank", "10px"],
@@ -258,7 +272,7 @@
                     ["blank", "25px"],
                     ["style-row", [["dark-buyable", 11], ["dark-buyable", 12], ["dark-buyable", 13]], {maxWidth: "900px"}],
                     ["blank", "25px"],
-                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13]]],
+                    ["row", [["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14]]],
                 ]
             },
         },

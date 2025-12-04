@@ -159,6 +159,7 @@ addLayer("i", {
         player.gain = player.gain.pow(player.sd.singularityPowerEffect3)
         player.gain = player.gain.pow(player.st.starPowerEffect)
         player.gain = player.gain.pow(player.se.starsExploreEffect[0][1])
+        player.gain = player.gain.pow(levelableEffect("ir", 2)[0])
 
         // ABNORMAL MODIFIERS, PLACE NEW MODIFIERS BEFORE THIS
         if (inChallenge("ip", 18) && player.points.gt(player.points.mul(0.9 * delta))) player.points = player.points.sub(player.points.mul(0.9 * delta))
@@ -515,6 +516,8 @@ addLayer("i", {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true},
                 content: [
+                    ["blank", "25px"],
+                    ["raw-html", function () { return "Note: THIS FEATURE IS HEAVILY BUGGED AND UNOPTIMIZED" }, { "color": "red", "font-size": "24px", "font-family": "monospace" }],
                     ["blank", "25px"],
                     ["raw-html", function () { return "(Note: Cutscene requirements must be met in order to rewatch a cutscene.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                     ["raw-html", function () { return "(Cutscene IDs start at 0.)" }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

@@ -116,8 +116,8 @@
             style: {width: "600px", minHeight: "200px", color: "white", backgroundImage: "radial-gradient(circle, black 60%, #13292f 70%, #54265e 80%, #8d3947 90%, #e6eb57 110%)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px"},
         },
         12: {
-            title() { return "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." },
-            canClick: true,
+            title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h1>START WARPING LIGHT<br><h3>And enter an eclipse..." : "<h1>Check Back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "."},
+            unlocked() {return player.pet.legendaryPetAbilityCooldowns[0].lte(0)},
             unlocked() {return getLevelableAmount("pet", 501).gte(1)},
             onClick() {
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]

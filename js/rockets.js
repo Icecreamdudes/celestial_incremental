@@ -328,6 +328,9 @@
                 player.ro.starPause = new Decimal(8)
                 player.ro.rocketCooldown = player.ro.rocketCooldownMax[player.ro.rocketIndex]
 
+                player.cb.evolutionShards = player.cb.evolutionShards.sub(player.ro.evoCost)
+                player.cb.paragonShards = player.cb.paragonShards.sub(player.ro.paragonCost)
+
                 player.au2.au2Unlocked = true
             },
             onHold() { clickClickable(this.layer, this.id) },

@@ -80,6 +80,7 @@
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("ma", 23))
         if (hasUpgrade("sma", 204)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(upgradeEffect("sma", 204))
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ds.spaceEffect)
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)
@@ -155,6 +156,8 @@
             canClick() { return player.le.starmetalAlloyToGet.gte(1) },
             unlocked() { return true },
             onClick() {
+                player.sb.storedSpaceEnergy = player.sb.storedSpaceEnergy.add(player.ds.storedSpaceEnergyToGet)
+
                 player.sma.starmetalAlloy = player.sma.starmetalAlloy.add(player.le.starmetalAlloyToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
@@ -207,6 +210,7 @@
             canClick() { return player.le.eclipseShardsToGet.gte(1) },
             unlocked() { return true },
             onClick() {
+
                 player.sma.eclipseShards = player.sma.eclipseShards.add(player.le.eclipseShardsToGetTrue.floor())
                 player.le.starmetalAlloyPauseAgain = new Decimal(10)
                 for (let prop in player.pu.levelables) {
@@ -575,6 +579,21 @@
                 i--;
             }
         }
+
+        player.ds.spaceEnergy = new Decimal(0)
+        player.ds.length = new Decimal(1)
+        player.ds.width = new Decimal(1)
+        player.ds.depth = new Decimal(1)
+        player.ds.buyables[11] = new Decimal(0)
+        player.ds.buyables[12] = new Decimal(0)
+        player.ds.buyables[13] = new Decimal(0)
+
+        player.ds.buyables[101] = new Decimal(0)
+        player.ds.buyables[102] = new Decimal(0)
+        player.ds.buyables[103] = new Decimal(0)
+        player.ds.buyables[104] = new Decimal(0)
+        player.ds.buyables[105] = new Decimal(0)
+        player.ds.buyables[106] = new Decimal(0)
     },
     upgrades: {
         11: {

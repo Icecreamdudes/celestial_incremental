@@ -2,6 +2,7 @@
 addLayer("fi", {
     name: "Fighting", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Fight", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -11,10 +12,10 @@ addLayer("fi", {
         battleCapacityAvailable: new Decimal(4),
         battleCapacityCost: new Decimal(1),
 
-        petMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250)]],
-        petMaxMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250)]],
-        petDamage: [[new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),], [new Decimal(25)]],
-        petMaxDamage: [[new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),], [new Decimal(25)]],
+        petMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250), new Decimal(250)]],
+        petMaxMaxHP: [[new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),new Decimal(150),], [new Decimal(250), new Decimal(250)]],
+        petDamage: [[new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),], [new Decimal(25), new Decimal(25)]],
+        petMaxDamage: [[new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),new Decimal(25),], [new Decimal(25), new Decimal(25)]],
 
         petTitle: "",
         
@@ -131,8 +132,10 @@ addLayer("fi", {
             let starmetalLevel = player.sme.levelables[petID][0];
             let baseHP = rarity === 0 ? new Decimal(150) : new Decimal(250);
             let baseDMG = new Decimal(25);
-            player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(25));
-            player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(5));
+            if (rarity == 0) player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(25));
+            if (rarity == 1) player.fi.petMaxMaxHP[rarity][i] = baseHP.add(starmetalLevel.mul(125));
+            if (rarity == 0) player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(5));
+            if (rarity == 1) player.fi.petMaxDamage[rarity][i] = baseDMG.add(starmetalLevel.mul(25));
             }
         }
 
@@ -390,7 +393,12 @@ addLayer("fi", {
                 player.ba.celestialiteIndex = new Decimal(0)
                 layers.ba.selectCelestialites()
 
-                
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("A2")
+                pauseUniverse("U3")
             },
             style() {
                 let look = {width: "300px", minHeight: "75px", borderRadius: "30px / 15px"}
@@ -467,7 +475,12 @@ addLayer("fi", {
                 player.ba.celestialiteIndex = new Decimal(0)
                 layers.ba.selectCelestialites()
 
-                
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("A2")
+                pauseUniverse("U3")
             },
             style() {
                 let look = {width: "300px", minHeight: "75px", borderRadius: "30px / 15px"}
@@ -690,7 +703,7 @@ addLayer("fi", {
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201],]],
+                                ["row", [["levelable", 201],["levelable", 202],]],
                             ], {width: "525px", backgroundColor: "#2f2a00", padding: "5px"}],
 
                         ], {width: "550px", height: "522px"}],
@@ -729,7 +742,7 @@ addLayer("fi", {
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "62px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201],]],
+                                ["row", [["levelable", 201],["levelable", 202],]],
                             ], {width: "525px", backgroundColor: "#2f2a00", padding: "5px"}],
 
                         ], {width: "550px", height: "522px"}],
@@ -772,7 +785,7 @@ addLayer("fi", {
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "535px", height: "62px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201],]],
+                                ["row", [["levelable", 201],["levelable", 202],]],
                             ], {width: "525px", backgroundColor: "#2f2a00", padding: "5px"}],
 
                         ], {width: "550px", height: "522px"}],
@@ -846,6 +859,7 @@ addLayer("fi", {
                     ["milestone", 102], 
                     ["milestone", 103], 
                     ], {width: "550px", height: "100px", backgroundImage: "linear-gradient(-90deg, #2e7ae4, #073e8bff)", borderBottom: "2px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],
+                    
                     ["style-row", [
                     ], {width: '550px', height: '600px', backgroundImage: "repeating-linear-gradient(45deg, #032049ff 0 15px, #02142cff 0 30px)", }], 
                     ], {width: "550px", height: "700px", backgroundImage: "linear-gradient(-90deg, #2e7ae4, #073e8bff)", border: "0px solid rgb(218, 218, 218)", borderRadius: "0px 0px 0px 0px"}],

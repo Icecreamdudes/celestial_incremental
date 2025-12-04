@@ -1,7 +1,6 @@
 ﻿addLayer("sme", {
     name: "Starmetal Essence", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "SME", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "U3",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -60,7 +59,9 @@
 
             player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].mul(player.sme.starmetalEssenceSoftcap)
             if (hasUpgrade("fi", 12)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(2)
+            if (hasMilestone("db", 103)) player.sme.generatorTimersMax[i] = player.sme.generatorTimersMax[i].div(1.4)
             player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(buyableEffect("sme", i))
+            player.sme.generatorProduction[i] = player.sme.generatorProduction[i].mul(levelableEffect("pet", 502)[1])
             if (player.sme.generatorTimers[i].gte(player.sme.generatorTimersMax[i]))
             {
                 player.sme.starmetalEssence = player.sme.starmetalEssence.add(player.sme.generatorProduction[i])
@@ -555,6 +556,49 @@
                 return look
             }  
         },
+        202: {
+            image() { return this.canClick() ? "resources/Pets/geroaLegendaryPet.png" : "resources/secret.png"},
+            title() { return "Geroa" },
+            description() {
+                return "Max HP: " + format(this.effect()[0]) + "<br>Damage: " + format(this.effect()[1])
+            },
+            levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    player.fi.petMaxHP[1][1], // Health
+                    player.fi.petDamage[1][1], // Damage
+                    false, //activation
+                    player.fi.petMaxMaxHP[1][1],
+                    player.fi.petMaxDamage[1][1],
+                ]
+            },
+            sacValue() { return new Decimal(0)},
+            // CLICK CODE
+            unlocked() { return hasUpgrade("ir", 16) },
+            canClick() { return player.pet.levelables[502][0].gte(1) },
+            onClick() { 
+                player.fi.rarityIndex = 1
+                player.fi.petIndex = 1
+                return layers[this.layer].levelables.index = this.id 
+            },
+            // BUY CODE
+            pay(amt) { player.sme.starmetalEssence = player.sme.starmetalEssence.sub(amt) },
+            canAfford() { return player.sme.starmetalEssence.gte(this.xpReq()) },
+            xpReq() { return getLevelableAmount(this.layer, this.id).add(1).pow(4).mul(1000).floor() },
+            currency() { return player.sme.starmetalEssence },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {background: "linear-gradient(-120deg,rgb(122, 235, 87) 0%,rgb(142, 191, 50) 25%,#eb6077 50%,rgb(235, 96, 177), 75%,rgb(96, 105, 235) 100%)",}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                player.sme.levelables[202][2] ? look.backgroundColor = "#a60000ff" : this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            }  
+        },
     },
     buyables: {
         0: {
@@ -963,7 +1007,7 @@
                 [
                     ["blank", "25px"],
                     ["raw-html", function () { return "Starmetal Binding is used in Check Back's fighting system. (Which is unlocked after Matos)"}, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                                        ["style-column", [
+                    ["style-column", [
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px' }],
@@ -980,9 +1024,9 @@
             
                             ["style-column", [
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
-                            ], {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
+                             ], {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"}],
                             ["style-column", [
-                                ["row", [["levelable", 201],]],
+                                ["row", [["levelable", 201],["levelable", 202],]],
                             ], {width: "525px", backgroundColor: "#2f2a00", padding: "5px"}],
 
                         ], {width: "550px", height: "522px"}],

@@ -1,4 +1,4 @@
-var treeAU2 = [["st"], ["pl", "se"], ["ir"]]
+var treeAU2 = [["st"], ["pl", "se"], ["ir"], ["sb"]]
 addLayer("au2", {
     name: "Alt-Universe 2: Cosmic Cosmos", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "A2", // This appears on the layer's node. Default is the id with the first letter capitalized
@@ -67,8 +67,10 @@ addLayer("au2", {
         }
 
         if (player.ro.rocketIndex.eq(1)) player.au2.starsToGet = player.au2.starsToGet.mul(5)
-        player.au2.starsToGet = player.au2.starsToGet.mul(player.se.starExploreEffect[0][0]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(player.se.starsExploreEffect[0][0]).floor()
         if (hasUpgrade("fi", 23)) player.au2.starsToGet = player.au2.starsToGet.mul(upgradeEffect("fi", 23))
+        player.au2.starsToGet = player.au2.starsToGet.mul(levelableEffect("ir", 1)[0]).floor()
+        player.au2.starsToGet = player.au2.starsToGet.mul(buyableEffect("sb", 101)).floor()
     },
     clickables: {
         1: {

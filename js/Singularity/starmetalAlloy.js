@@ -40,21 +40,21 @@
         if (player.sma.input.gt(0) && player.sma.type) player.sma.amount = player.sma.input
 
         if (player.s.singularityPointsToGet.gte(player.sma.amount) && player.sma.toggle && !player.sma.type) {
-            player.coa.singularityPause = new Decimal(6)
-            if (player.cop.processedCoreFuel.neq(-1) && player.cs.scrapCoreOnReset) layers.cs.scrapCore();
-            layers.coa.generateCore();
-            player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
-            player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
-            player.re.halterEssence = player.re.halterEssence.add(player.rm.halterBoostEffect)
-            player.ra.storedRadiation = player.ra.radiation
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
 
-            player.coa.singularityPause = new Decimal(12)
-            if (!hasMilestone("s", 18)) player.tab = "i"
+                let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
+                if (!player.ma.matosDefeated) {
+                    player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
+                    player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                }
+                player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
+                player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
+                player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
+                player.hrm.totalRealmEssence = player.hrm.totalRealmEssence.add(player.hrm.realmEssenceGain)
+                player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
 
-            if (hasMilestone("s", 11))
-            {
-                player.in.infinities = new Decimal(8)
-            }
+                layers.co.singularityReset()
+                setTimeout(() => {layers.co.singularityReset()}, 100)
 
         }
 
@@ -62,21 +62,21 @@
             player.sma.time = player.sma.time.add(onepersec.mul(delta));
             if (player.sma.time.gte(player.sma.amount)) {
                 player.sma.time = new Decimal(0)
-                player.coa.singularityPause = new Decimal(6)
-                if (player.cop.processedCoreFuel.neq(-1) && player.cs.scrapCoreOnReset) layers.cs.scrapCore();
-                layers.coa.generateCore();
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+
+                let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
+                if (!player.ma.matosDefeated) {
+                    player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
+                    player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                }
                 player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
                 player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
-                player.re.halterEssence = player.re.halterEssence.add(player.rm.halterBoostEffect)
-                player.ra.storedRadiation = player.ra.radiation
+                player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
+                player.hrm.totalRealmEssence = player.hrm.totalRealmEssence.add(player.hrm.realmEssenceGain)
+                player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
 
-                player.coa.singularityPause = new Decimal(12)
-                if (!hasMilestone("s", 18)) player.tab = "i"
-
-                if (hasMilestone("s", 11))
-                {
-                    player.in.infinities = new Decimal(8)
-                }
+                layers.co.singularityReset()
+                setTimeout(() => {layers.co.singularityReset()}, 100)
 
         }
         }

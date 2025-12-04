@@ -1784,20 +1784,21 @@
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked() { return true },
             onClick() {
-                if (player.cs.scrapCoreOnReset && player.cop.processedCoreFuel.neq(-1)) layers.cs.scrapCore();
-                layers.coa.generateCore();
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+
+                let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
+                if (!player.ma.matosDefeated) {
+                    player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)
+                    player.co.cores[player.co.resetIndex].xp = player.co.cores[player.co.resetIndex].xp.add(val)
+                }
                 player.s.singularities = player.s.singularities.add(player.s.singularitiesToGet)
                 player.s.singularityPoints = player.s.singularityPoints.add(player.s.singularityPointsToGet)
-                player.re.halterEssence = player.re.halterEssence.add(player.rm.halterBoostEffect)
+                player.hrm.realmEssence = player.hrm.realmEssence.add(player.hrm.realmEssenceGain)
+                player.hrm.totalRealmEssence = player.hrm.totalRealmEssence.add(player.hrm.realmEssenceGain)
                 player.ra.storedRadiation = player.ra.storedRadiation.add(player.ra.radiation)
 
-                player.coa.singularityPause = new Decimal(12)
-                if (!hasMilestone("s", 18)) player.tab = "i"
-
-                if (hasMilestone("s", 11))
-                {
-                    player.in.infinities = new Decimal(8)
-                }
+                layers.co.singularityReset()
+                setTimeout(() => {layers.co.singularityReset()}, 100)
 
             },
             onHold() { clickClickable(this.layer, this.id) },

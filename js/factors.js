@@ -109,6 +109,7 @@
         // FACTOR POWER EFFECT
         player.f.factorPowerEffect = player.f.factorPower.pow(0.5).div(3).add(1)
         if (player.f.factorPowerEffect.gte("1e25000")) player.f.factorPowerEffect = player.f.factorPowerEffect.div("1e25000").pow(Decimal.add(0.1, player.cs.scraps.factor.effect)).mul("1e25000")
+        player.f.factorPowerEffect = player.f.factorPowerEffect.pow(buyableEffect("sb", 106))
 
         //----------------------------------------
 

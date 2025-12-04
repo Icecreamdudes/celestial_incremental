@@ -25,7 +25,7 @@
         };
     },
     tooltip: "Boosters",
-    branches: [["le", "#4f0694"]],
+    branches: [["dr", "#309"]],
     color: "#6e64c4",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -112,9 +112,19 @@
             },
         },
         102: {
-            requirementDescription: "<h3>8 Best Booster",
+            requirementDescription: "<h3>5 Best Boosters",
             effectDescription: "x1.2 to starmetal alloy and eclipse shard gain.",
-            done() { return player.db.bestBoosters.gte(8) },
+            done() { return player.db.bestBoosters.gte(5) },
+            style() {
+                let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
+                if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
+                return look
+            },
+        },
+        103: {
+            requirementDescription: "<h3>10 Best Boosters",
+            effectDescription: "/1.4 to starmetal essence generator time.",
+            done() { return player.db.bestBoosters.gte(10) && player.ma.matosDefeated },
             style() {
                 let look = {width: "500px", minHeight: "75px", color: "white", border: "3px solid #6e64c4", borderRadius: "10px", margin: "-1.5px"}
                 if (hasMilestone("db", this.id)) {look.backgroundColor = "#1a3b0f"} else {look.backgroundColor = "#361e1e"}
@@ -144,14 +154,21 @@
                 unlocked() { return true },
                 content: [
                     ['blank', '25px'],
+                    ["row", [
+                    ["column", [
                     ["raw-html", "<h3>Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [["milestone", 11]]],
                     ["row", [["milestone", 12]]],
                     ["row", [["milestone", 13]]],
+                    ]],
                     ['blank', '25px'],
+                    ["column", [
                     ["raw-html", "<h3>Permanent Milestones", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
                     ["row", [["milestone", 101]]],
                     ["row", [["milestone", 102]]],
+                    ["row", [["milestone", 103]]],
+                    ]],
+                    ]],
                 ]
             },
         },

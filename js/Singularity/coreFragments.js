@@ -89,9 +89,9 @@
         player.cof.fragmentScore[2] = player.cof.fragmentScore[2].mul(player.oi.oil.plus(1).log10().pow(0.35).div(2))
 
         //paradox
-        player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.6).div(4).mul(1.25)
+        player.cof.fragmentScore[3] = player.in.infinityPoints.plus(1).log10().pow(0.52).div(4).mul(1.25)
         player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.in.infinities.plus(1).log10())
-        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.ta.negativeInfinityPoints.plus(1).log10().pow(0.55).div(2.25))
+        player.cof.fragmentScore[3] = player.cof.fragmentScore[3].mul(player.ta.negativeInfinityPoints.plus(1).log10().pow(0.45).div(2.25))
 
         //radioactive
         player.cof.fragmentScore[4] = player.s.singularityPoints.plus(1).log10().pow(0.65).div(3).mul(2.5)
@@ -118,6 +118,7 @@
 
         for (let i = 0; i < player.cof.coreFragments.length; i++) {
             player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("st", 110))
+            player.cof.fragmentScore[i] = player.cof.fragmentScore[i].mul(buyableEffect("sb", 102))
 
             player.cof.coreFragmentsToGet[i] = player.cof.fragmentScore[i].div(100).floor()
             player.cof.coreFragments[i] = player.cof.coreFragments[i].floor()

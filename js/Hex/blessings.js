@@ -490,7 +490,7 @@ addLayer("hbl", {
             requirementDescription: "<h3>120,000 Blessings",
             effectDescription() {
                 if (inChallenge("hrm", 16)) return "Boost refiner 1 effects by +^0.3."
-                return "Boost provenenace effects by x1.3."
+                return "Boost provenance effects by x1.3."
             },
             done() { return player.hbl.blessings.gte(120000) && tmp.hbl.microtabs.blessing.Miracles.unlocked},
             style: {width: "500px", height: "50px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},

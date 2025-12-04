@@ -48,6 +48,8 @@ addLayer("pet", {
         summonTimer: new Decimal(0),
         summonTimer: new Decimal(21600),
 
+        summonIndex: new Decimal(0),
+
         // PET SHOP
         shopResetTimer: new Decimal(0),
         shopResetTimerMax: new Decimal(21600),
@@ -69,11 +71,15 @@ addLayer("pet", {
         crateBought: [0, 0, 0, 0, 0, 0],
 
         //leg
-        legendaryPetAbilityTimers: [new Decimal(0),],
-        legendaryPetAbilityTimersMax: [new Decimal(600),],
+        legendaryPetAbilityCooldowns: [new Decimal(0),new Decimal(0),],
+        legendaryPetAbilityCooldownsMax: [new Decimal(3600),new Decimal(7200),],
+
+        legendaryPetAbilityTimers: [new Decimal(0),new Decimal(0),],
+        legendaryPetAbilityTimersMax: [new Decimal(600),new Decimal(300),],
         eclipsePity: 0,
 
-        activeAbilities: [false,],
+        activeAbilities: [false,false,],
+        
     }},
     automate() {},
     nodeStyle() {},
@@ -134,7 +140,10 @@ addLayer("pet", {
 
         // =- LEGENDARY GEMS -=
         player.pet.legendaryGemsToGetMin = player.cb.XPBoost.pow(0.2).div(2).floor()
+        player.pet.legendaryGemsToGetMin = player.pet.legendaryGemsToGetMin.mul(levelableEffect("ir", 5)[1])
+
         player.pet.legendaryGemsToGetMax = player.cb.XPBoost.pow(0.25).div(2).floor()
+        player.pet.legendaryGemsToGetMax = player.pet.legendaryGemsToGetMax.mul(levelableEffect("ir", 5)[1])
 
         player.pet.legendaryGemTimerMax = new Decimal(86400)
         player.pet.legendaryGemTimer = player.pet.legendaryGemTimer.sub(onepersec.mul(delta))
@@ -236,7 +245,7 @@ addLayer("pet", {
 
         //legendary pets
 
-        player.pet.legendaryPetAbilityTimersMax = [new Decimal(600),]
+        player.pet.legendaryPetAbilityTimersMax = [new Decimal(600),new Decimal(300),]
         player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(levelableEffect("pu", 303)[1])
 
         if (getLevelableBool("pu", 303)) player.pet.legendaryPetAbilityTimersMax[0] = player.pet.legendaryPetAbilityTimersMax[0].mul(levelableEffect("pu", 303)[0])
@@ -276,6 +285,12 @@ addLayer("pet", {
             } else {
                 player.pet.activeAbilities[i] = false
             }
+        }
+
+        //cooldown
+        player.pet.legendaryPetAbilityCooldownsMax = [new Decimal(3600),new Decimal(7200),]
+        for (let i = 0; i < player.pet.legendaryPetAbilityCooldowns.length; i++) {
+            player.pet.legendaryPetAbilityCooldowns[i] = player.pet.legendaryPetAbilityCooldowns[i].sub(delta)
         }
     },
     clickables: {
@@ -514,11 +529,12 @@ addLayer("pet", {
 
         //legendary pet skills
         31: {
-            title: "<h3>Activate Skill</h3>",
+            title() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) ? "<h3>Activate Skill</h3>" : "Check Back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[0]) + "."},
             tooltip() { return "Activates the eclipse in DU1 for 10 minutes, unlocking alternate gameplay mechanics. (Also throws you into DU1 cause why not)"},
-            canClick: true,
+            canClick() { return player.pet.legendaryPetAbilityCooldowns[0].lte(0) },
             unlocked() { return layers.pet.levelables.index == 501 },
             onClick () {
+                player.pet.legendaryPetAbilityCooldowns[0] = player.pet.legendaryPetAbilityCooldownsMax[0]
                 player.pet.legendaryPetAbilityTimers[0] = player.pet.legendaryPetAbilityTimersMax[0]
                 player.pet.activeAbilities[0] = true
 
@@ -534,7 +550,20 @@ addLayer("pet", {
             },
             style: {width: '125px', minHeight: '40px', backgroundColor: "#eed200", color: "black", borderRadius: '0px', fontSize: '8px'},
         },
-        
+        32: {
+            title() { return player.pet.legendaryPetAbilityCooldowns[1].lte(0) ? "<h3>Activate Skill</h3>" : player.pet.legendaryPetAbilityTimers[1].gte(0) ? "Active: " + formatTime(player.pet.legendaryPetAbilityTimers[1]) + "." : "Check Back in " + formatTime(player.pet.legendaryPetAbilityCooldowns[1]) + "."},
+            tooltip() { return "Boosts your damage in space battles by x1.5 for the next 5 minutes. Also unlocks a new ship."},
+            canClick() { return player.pet.legendaryPetAbilityCooldowns[1].lte(0) },
+            unlocked() { return layers.pet.levelables.index == 502 },
+            onClick () {
+                player.pet.legendaryPetAbilityCooldowns[1] = player.pet.legendaryPetAbilityCooldownsMax[1]
+                player.pet.legendaryPetAbilityTimers[1] = player.pet.legendaryPetAbilityTimersMax[1]
+                player.pet.activeAbilities[1] = true
+                //write code
+            },
+            style: {width: '125px', minHeight: '40px', backgroundColor: "#eed200", color: "black", borderRadius: '0px', fontSize: '8px'},
+        },
+
         // START OF FRAGMENTATION CLICKABLES
         100: {
             title() { return player.pet.bannerButtonTimers[player.pet.bannerIndex].gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.bannerButtonTimers[player.pet.bannerIndex]) + "." : "<h3>Fragment a pet for rewards!"},
@@ -749,6 +778,37 @@ addLayer("pet", {
                 return look
             },
         },
+
+        // legendary pet selection
+        301: {
+            title() { return "<img src='resources/pets/eclipseLegendaryPet.png'style='width:80px;height:80px;margin:0px'></img>" },
+            canClick() { return true },
+            unlocked() { return true },
+            onClick() {
+                player.pet.summonIndex = new Decimal(0)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px", borderRadius: "15px"}
+                player.pet.summonIndex.eq(0) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
+                return look
+            },
+        },
+        302: {
+            title() { return "<img src='resources/pets/geroaLegendaryPet.png'style='width:80px;height:80px;margin:0px'></img>" },
+            canClick() { return true },
+            unlocked() { return hasUpgrade("ir", 16) },
+            onClick() {
+                player.pet.summonIndex = new Decimal(1)
+            },
+            onHold() { clickClickable(this.layer, this.id) },
+            style() {
+                let look = {width: "100px", minHeight: "100px", borderRadius: "15px"}
+                player.pet.summonIndex.eq(1) ? look.backgroundColor = "#fe2600ff" : look.backgroundColor = "#fe9400"
+                return look
+            },
+        },
+
         // PET SHOP
         1001: {
             title() { return player.pet.shopResetTimer.gt(0) ? "<h3>Check back in <br>" + formatTime(player.pet.shopResetTimer) + "." : "<h3>Reset Shop Prices"},
@@ -2601,7 +2661,7 @@ addLayer("pet", {
         501: {
             image() { return this.canClick() ? "resources/Pets/eclipseLegendaryPet.png" : "resources/secret.png"},
             title() { return "Eclipse" },
-            lore() { return "The true story of eclipse is extremely mysterious and shrouded in secrecy. Kres, Nav, and Sel only found him during their first encounter with Matos. Eclipse doesn't speak. They only listen. But Eclipse is an extremely powerful being, that helps the trio during their ventures." }, 
+            lore() { return "<h5>The true story of eclipse is extremely mysterious and shrouded in secrecy. Kres, Nav, and Sel only found him during their first encounter with Matos. Eclipse doesn't speak. They only listen. But Eclipse is an extremely powerful being, that helps the trio during their ventures." }, 
             description() {
                 return "x" + format(this.effect()[0]) + " to stars <small>(based on stars)</small>.<br>" +
                     "x" + format(this.effect()[1]) + " to activated fuel <small>(based on stars)</small>.<br>" +
@@ -2610,14 +2670,60 @@ addLayer("pet", {
             // levelLimit() { return new Decimal(99) },
             effect() { 
                 return [
-                    player.au2.stars.pow(0.04).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.01)), // stars (Based on Stars)
-                    player.au2.stars.pow(0.15).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // fuel (Based on Stars)
-                    player.au2.stars.pow(0.1).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // rocket parts (Based on Stars)
+                    player.au2.stars.pow(0.04).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.15)), // stars (Based on Stars)
+                    player.au2.stars.pow(0.15).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.15)), // fuel (Based on Stars)
+                    player.au2.stars.pow(0.1).div(2).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.15)), // rocket parts (Based on Stars)
                 ]
             },
             sacValue() { return new Decimal(100)},
             // CLICK CODE
             unlocked() { return player.cb.highestLevel.gte(100000) },
+            canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
+            onClick() { return layers[this.layer].levelables.index = this.id },
+            // BUY CODE
+            pay(amt) { setLevelableXP(this.layer, this.id, getLevelableXP(this.layer, this.id).sub(amt)) },
+            canAfford() { return getLevelableXP(this.layer, this.id).gte(this.xpReq()) },
+            xpReq() {
+                if (getLevelableAmount(this.layer, this.id).eq(0)) {
+                    return new Decimal(1)
+                } else {
+                    return getLevelableAmount(this.layer, this.id).pow(1.2).mul(2).floor()
+                }
+            },
+            currency() { return getLevelableXP(this.layer, this.id) },
+            buy() {
+                this.pay(this.xpReq())
+                setLevelableAmount(this.layer, this.id, getLevelableAmount(this.layer, this.id).add(1))
+            },
+            // STYLE
+            barStyle() { return {backgroundColor: "#0B6623"}},
+            style() {
+                let look = {width: "100px", minHeight: "125px"}
+                this.canClick() ? look.backgroundColor = "#eed200" : look.backgroundColor = "#222222"
+                layers[this.layer].levelables.index == this.id ? look.outline = "2px solid white" : look.outline = "0px solid white"
+                return look
+            } 
+        },
+        502: {
+            image() { return this.canClick() ? "resources/Pets/geroaLegendaryPet.png" : "resources/secret.png"},
+            title() { return "Geroa" },
+            lore() { return "<h6>Once a normal alien being from an unknown universe, Geroa lived a peaceful life until Iridite visited her planet. Iridite caused mass destruction, all in the name of her crazy scientific experimentation. Geroa was considered a valuable test subject by Iridite, and was granted with a fraction of celestial powers. Geroa is currently under the servitude of Iridite, but wants freedom and escape." }, 
+            description() {
+                return "/" + format(this.effect()[0]) + " to star exploration time.<br>" +
+                    "x" + format(this.effect()[1]) + " to starmetal essence <small>(based on starmetal alloy)</small>.<br>" +
+                    "x" + format(this.effect()[2]) + " to space rocks."
+            },
+            // levelLimit() { return new Decimal(99) },
+            effect() { 
+                return [
+                    getLevelableAmount(this.layer, this.id).pow(0.75).mul(0.1).add(1), // star exploration time
+                    player.sma.starmetalAlloy.pow(0.125).div(5).add(1).pow(getLevelableAmount(this.layer, this.id).pow(0.1)), // starmetal essence (Based on starmetal alloy)
+                    getLevelableAmount(this.layer, this.id).pow(0.75).mul(0.5).add(1), // space rocks
+                ]
+            },
+            sacValue() { return new Decimal(100)},
+            // CLICK CODE
+            unlocked() { return hasUpgrade("ir", 16) },
             canClick() { return getLevelableXP(this.layer, this.id).gt(0) || getLevelableAmount(this.layer, this.id).gt(0)},
             onClick() { return layers[this.layer].levelables.index = this.id },
             // BUY CODE
@@ -3403,8 +3509,16 @@ addLayer("pet", {
     },
     legendarySummon() {
         if (player.pet.eclipsePity == 4) {
-            player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
-            callAlert("Eclipse becomes stronger. (PITY ROLL)", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            if (player.pet.summonIndex.eq(0))
+            {
+                player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
+                callAlert("Eclipse becomes stronger.", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            }
+            if (player.pet.summonIndex.eq(1))
+            {
+                player.pet.levelables[502][1] = player.pet.levelables[502][1].add(1)
+                callAlert("Geroa gets enhancements.", "resources/Pets/geroaLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            }
             player.pet.eclipsePity = 0
             return
         }
@@ -3462,8 +3576,16 @@ addLayer("pet", {
             callAlert("You gained " + formatWhole(random3) + " pet points!", "resources/petPoint.png")
             player.pet.eclipsePity = player.pet.eclipsePity + 1
         } else {
-            player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
-            callAlert("Eclipse becomes stronger.", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            if (player.pet.summonIndex.eq(0))
+            {
+                player.pet.levelables[501][1] = player.pet.levelables[501][1].add(1)
+                callAlert("Eclipse becomes stronger.", "resources/Pets/eclipseLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            }
+            if (player.pet.summonIndex.eq(1))
+            {
+                player.pet.levelables[502][1] = player.pet.levelables[502][1].add(1)
+                callAlert("Geroa gets enhancements.", "resources/Pets/geroaLegendaryPet.png"); //Make sure to change this when you add more legendary pets
+            }
         }
     },
     bars: {
@@ -3500,7 +3622,7 @@ addLayer("pet", {
                         ["style-column", [
                             ["levelable-display", [
                                 ["style-row", [["clickable", 2]], {width: '100px', height: '40px'}],
-                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
+                                ["style-row", [["clickable", 5], ["clickable", 6], ["clickable", 31], ["clickable", 32], ["clickable", 8], ["clickable", 21]], {width: '125px', height: '40px'}],
                                 ["style-row", [["clickable", 3], ["clickable", 4], ["clickable", 22]], {width: '200px', height: '40px'}],
                             ]],
                         ], {width: "550px", height: "175px", borderBottom: "3px solid white"}],
@@ -3545,7 +3667,7 @@ addLayer("pet", {
                                 ["raw-html", "Legendary", {color: "#eed200", fontSize: "20px", fontFamily: "monospace"}],
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "535px", height: "40px", backgroundColor: "#2f2a00", borderTop: "3px solid #eed200", borderBottom: "3px solid #eed200", userSelect: "none"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["row", [["levelable", 501]]],
+                                ["row", [["levelable", 501], ["levelable", 502]]],
                             ], () => { return player.cb.highestLevel.gte(100000) ? {width: "525px", backgroundColor: "#171500", padding: "5px"} : {display: "none !important"}}],
 
                         ], {width: "550px", height: "522px"}],
@@ -3652,8 +3774,7 @@ addLayer("pet", {
                             ], {width: "150px", height: "50px"}],
                         ], {width: "450px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px", userSelect: "none"}],
                         ["blank", "20px"],
-                        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.pet.legendaryGemsToGetMin) + " to " + formatWhole(player.pet.legendaryGemsToGetMax) + "</h3> of each gem on reset. (based on XPBoost)" }, { "color": "black", "font-size": "20px", "font-family": "monospace" }],
-                        ["blank", "25px"],
+                        ["raw-html", function () { return "You will gain <h3>" + formatWhole(player.pet.legendaryGemsToGetMin) + " to " + formatWhole(player.pet.legendaryGemsToGetMax) + "</h3> of each gem on reset. <h4>(based on XPBoost)" }, { "color": "black", "font-size": "16px", "font-family": "monospace" }],
                         ["row", [["clickable", 201]]],
                         ["blank", "25px"],
                         ["style-column", [
@@ -3691,6 +3812,9 @@ addLayer("pet", {
                             ["blank", "10px"],
                             ["bar", "summonPity"],
                         ], () => {return player.cb.highestLevel.gte(100000) ? {width: "500px", border: "3px solid rgb(27, 0, 36)", backgroundColor: "#f5b942", paddingTop: "5px", paddingBottom: "20px", borderRadius: "15px"} : {display: "none !important"}}],
+                        ["blank", "25px"],
+                        ["raw-html", "Select Pet to Summon", {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+                        ["row", [["clickable", 301], ["clickable", 302]]],
                     ], {width: "550px", height: "700px", backgroundColor: "#eed200"}],
                 ],
             },

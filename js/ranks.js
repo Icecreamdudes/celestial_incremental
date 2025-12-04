@@ -74,6 +74,7 @@
         if (hasUpgrade("ad", 13)) player.r.rankEffect = player.r.rankEffect.mul(upgradeEffect("ad", 13))
         player.r.rankEffect = player.r.rankEffect.pow(player.p.crystalEffect)
         if (hasUpgrade("hpw", 1011)) player.r.rankEffect = player.r.rankEffect.pow(1.18)
+     //   player.r.rankEffect = player.r.rankEffect.pow(buyableEffect("sb", 106))
         player.r.rankReq = layers.r.getRankReq()
         if (player.points.gte(player.r.rankReq) && player.r.rank.add(player.r.ranksToGet).lte(20) && hasUpgrade("p", 14)) {
             player.r.ranksToGet = ranksGainPreS.sub(player.r.rank)
@@ -101,6 +102,7 @@
         let tiersGain = player.r.rank.div(3).mul(levelableEffect("pet", 204)[1]).pow(Decimal.div(10, 11)).floor()
         player.r.tierEffect = player.r.tier.mul(0.55).add(1).pow(1.1)
         player.r.tierEffect = player.r.tierEffect.pow(player.p.crystalEffect)
+        player.r.tierEffect = player.r.tierEffect.pow(buyableEffect("sb", 106))
         if (hasUpgrade("hpw", 1011)) player.r.tierEffect = player.r.tierEffect.pow(1.18)
         player.r.tierReq = layers.r.getTierReq()
         if (player.r.rank.gte(player.r.tierReq) && hasUpgrade("p", 14)) {
@@ -118,10 +120,12 @@
 
         player.r.tetrEffect = player.r.tetr.add(1).pow(1.2)
         player.r.tetrEffect = player.r.tetrEffect.pow(player.p.crystalEffect)
+        player.r.tetrEffect = player.r.tetrEffect.pow(buyableEffect("sb", 106))
         if (hasUpgrade("hpw", 1011)) player.r.tetrEffect = player.r.tetrEffect.pow(1.18)
         
         player.r.tetrEffect2 = player.r.tetr.pow(0.6).add(1)
         player.r.tetrEffect2 = player.r.tetrEffect2.pow(player.p.crystalEffect)
+        player.r.tetrEffect2 = player.r.tetrEffect2.pow(buyableEffect("sb", 106))
         if (hasUpgrade("hpw", 1011)) player.r.tetrEffect2 = player.r.tetrEffect2.pow(1.18)
         player.r.tetrReq = layers.r.getTetrReq()
         if (player.r.tier.gte(player.r.tetrReq) && hasUpgrade("p", 14)) {

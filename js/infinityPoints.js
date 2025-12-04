@@ -572,14 +572,14 @@
             requirementDescription: "<h3>5000 Infinities",
             effectDescription() { return "Keep Universe 1 upgrades." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(5000) && player.in.unlockedBreak },
-            unlocked() { return player.in.unlockedBreak },
+            unlocked() { return player.in.unlockedBreak && hasUpgrade("ta", 21) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         26: {
             requirementDescription: "<h3>10000 Infinities",
             effectDescription() { return "Tav's domain doesn't reset infinity milestones." },
             done() { return hasUpgrade("ta", 21) && player.in.infinities.gte(10000) && player.in.unlockedBreak },
-            unlocked() { return player.in.unlockedBreak },
+            unlocked() { return player.in.unlockedBreak && hasUpgrade("ta", 21) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         27: {

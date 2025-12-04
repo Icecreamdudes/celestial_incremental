@@ -1030,12 +1030,15 @@ addLayer("co", {
         player.hrm.dreamTimer = new Decimal(60)
         player.hrm.activeChallenge = null
         
+        if (!player.ir.iriditeDefeated)
+        {
         if (getBuyableAmount("hpw", 1).lt(1)) player.hrm.challenges[11] = 0
         if (getBuyableAmount("hpw", 2).lt(1)) player.hrm.challenges[12] = 0
         if (getBuyableAmount("hpw", 3).lt(1)) player.hrm.challenges[13] = 0
         if (getBuyableAmount("hpw", 4).lt(1)) player.hrm.challenges[14] = 0
         if (getBuyableAmount("hpw", 5).lt(1)) player.hrm.challenges[15] = 0
         if (getBuyableAmount("hpw", 6).lt(1)) player.hrm.challenges[16] = 0
+        }
 
         //     <----     HEX OF POWER LAYER     ---->
         if (player.hpw.totalPower.gte(buyableEffect("hrm", 1))) player.hpw.totalPower = buyableEffect("hrm", 1)
@@ -1046,8 +1049,11 @@ addLayer("co", {
         }
         if (!hasMilestone("s", 16)) player.hpw.vigor = 0
 
+        if (!player.ir.iriditeDefeated)
+        {
         player.hpw.upgrades.splice(0, player.hpw.upgrades.length)
         if (!hasMilestone("s", 16)) player.hpw.milestones.splice(0, player.hpw.milestones.length)
+        }
 
         //     <----     HEX OF PURITY LAYER     ---->
         player.hpu.purity = new Decimal(0)

@@ -583,7 +583,7 @@
             }
         }
 
-        if (player.tab == "c") {
+        if (player.tab == "c" || cutsceneActive) {
             player.ma.health[0] = player.ma.healthMax[0]
             player.ma.health[1] = player.ma.healthMax[1]
             player.ma.health[2] = player.ma.healthMax[2]
@@ -656,7 +656,7 @@
             }
             if (player.ma.celestialiteHealth.lt(4500) && player.ma.attacksDone.eq(5)) {
                 player.ma.celestialiteTimer = player.ma.celestialiteCooldown
-                flashScreen("Our great civilization will fluorish! The sun will shine! The sky will be clear!", 3000)
+                flashScreen("Our great civilization will flourish! The sun will shine! The sky will be clear!", 3000)
                 if (player.subtabs["ma"]["stuff"] != "Bullet Hell") {
                 setTimeout(() => {
                     layers.ma.generatePhase1Attack()
@@ -896,6 +896,13 @@
                 player.ma.inBlackHeart = true
 
                 player.subtabs["ma"]["stuff"] = "Prep"
+
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("A2")
+                pauseUniverse("CB")
             },
             style: {width: "400px", minHeight: "150px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", borderRadius: "20px"},
         },
@@ -907,6 +914,13 @@
                 player.ma.inBlackHeart = false
 
                 player.subtabs["ma"]["stuff"] = "Black Heart"
+
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("A2")
+                pauseUniverse("CB")
             },
             style() {
                 let look = {width: "200px", minHeight: "75px", color: "white", backgroundColor: "black", border: "3px solid #8a0e79", margin: "-1.5px"}
@@ -4052,7 +4066,8 @@
                         ["style-column", [], {width: "3px", height: "130px", backgroundColor: "#8a0e79"}],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", "Sel: Ranger Class", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return !player.ir.iriditeDefeated ? "Sel: Ranger Class" : ""}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return player.ir.iriditeDefeated ? "<s>Sel: Ranger Class</s>" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "40px", backgroundColor: "#065c19", borderBottom: "3px solid #8a0e79"}],
                             ["style-column", [
                                 ["raw-html", () => {return "Strength: <h3>" + formatWhole(player.ep5.selStats[0])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -4199,7 +4214,8 @@
                         ["style-column", [], {width: "3px", height: "200px", backgroundColor: "#8a0e79"}],
                         ["style-column", [
                             ["style-column", [
-                                ["raw-html", "Sel", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return !player.ir.iriditeDefeated ? "Sel" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.ir.iriditeDefeated ? "<s>Sel</s>" : ""}, {color: "red", fontSize: "24px", fontFamily: "monospace"}],
                             ], {width: "247px", height: "40px", backgroundColor: "#065c19", borderBottom: "3px solid #8a0e79", borderRadius: "0 17px 0 0"}],
                             ["style-column", [
                                 ["raw-html", () => {return "Max Health: <h3>" + format(player.ma.healthMax[2])}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
@@ -4314,7 +4330,8 @@
                                 ]],
                             ], () => {return player.ma.selectedCharacters[1] ? {width: "215px"} : {display: "none !important"}}],
                             ["style-column", [
-                                ["raw-html", "Sel", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return !player.ir.iriditeDefeated ? "Sel" : ""}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.ir.iriditeDefeated ? "<s>Sel</s>" : ""}, {color: "red", fontSize: "24px", fontFamily: "monospace"}],
                                 ["blank", "5px"],
                                 ["bar", "selHealth"],
                                 ["row", [

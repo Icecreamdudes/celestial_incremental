@@ -121,6 +121,7 @@ addLayer("cb", {
         player.cb.reqDiv = new Decimal(1)
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 203)[2])
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 304)[1])
+        player.cb.reqDiv = player.cb.reqDiv.mul(player.se.starsExploreEffect[2][1])
 
         player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 
@@ -169,6 +170,7 @@ addLayer("cb", {
             if (player.ma.matosDefeated) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(2)
             if (hasUpgrade("fi", 11)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("fi", 11))
             player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(player.se.starsExploreEffect[2][0])
+            if (hasUpgrade("ir", 13)) player.cb.buttonBaseXP[i] = player.cb.buttonBaseXP[i].mul(upgradeEffect("ir", 13))
         }
 
 
@@ -234,6 +236,7 @@ addLayer("cb", {
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("ep5", 12))
             player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(buyableEffect("pl", 13))
             if (player.ma.matosDefeated) player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(1.5)
+            player.cb.XPBoostBase[i] = player.cb.XPBoostBase[i].mul(levelableEffect("ir", 5)[1])
         }
 
         player.cb.XPBoostReq = [new Decimal(100), new Decimal(500), new Decimal(1e6)]

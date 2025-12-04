@@ -84,9 +84,9 @@
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
         player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("fu", 43))
 
-        player.om.diceMasteryPointsEffect = player.om.diceMasteryPoints.pow(0.1).div(8).add(1)
-        player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPoints.pow(0.08).div(10).add(1)
-        player.om.hexMasteryPointsEffect = player.om.hexMasteryPoints.pow(0.14).add(1)
+        player.om.diceMasteryPointsEffect = player.om.diceMasteryPoints.pow(0.1).div(8).add(1).pow(levelableEffect("ir", 6)[0])
+        player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPoints.pow(0.08).div(10).add(1).pow(levelableEffect("ir", 6)[0])
+        player.om.hexMasteryPointsEffect = player.om.hexMasteryPoints.pow(0.14).add(1).pow(levelableEffect("ir", 6)[0])
         if (hasUpgrade("hpw", 1053)) {
             player.om.diceMasteryPointsEffect = player.om.diceMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
             player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))

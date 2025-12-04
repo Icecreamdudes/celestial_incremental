@@ -673,7 +673,7 @@ function loadVue() {
 		props: ['layer', 'data'],
 		template: `
 		<div v-if="tmp[layer].levelables && tmp[layer].levelables[data]!== undefined && tmp[layer].levelables[data].unlocked" style="display: grid">
-			<button v-bind:class="{ levelableHolder: true, can: tmp[layer].levelables[data].canClick, locked: !tmp[layer].levelables[data].canClick}"
+			<button v-bind:class="{ tooltipBox: true, levelableHolder: true, can: tmp[layer].levelables[data].canClick, locked: !tmp[layer].levelables[data].canClick}"
 			v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].levelables[data].style]"
 			v-on:click="clickLevelable(layer, data)" :id='"levelable-" + layer + "-" + data'>
 				<div class="levelableTop">
@@ -688,6 +688,7 @@ function loadVue() {
 					</div>
 					<div v-bind:class="{levelableBarProgress: true, hide: !tmp[layer].levelables[data].barShown}" v-bind:style="[{'width': toNumber(tmp[layer].levelables[data].currency.div(tmp[layer].levelables[data].xpReq).mul(100))+'%'}, tmp[layer].levelables[data].barStyle]"></div>
 				</div>
+		<tooltip v-if="tmp[layer].levelables[data].tooltip" :text="tmp[layer].levelables[data].tooltip"></tooltip>
 			</button>
 		</div>
 		`

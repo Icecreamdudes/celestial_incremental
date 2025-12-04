@@ -384,7 +384,7 @@ h1, h2, h3, b, input {
 
 .levelableBottom {
 	width: 90%;
-	height: 20%;
+	height: calc(15% - 4px);
 	color: white;
 	background-color: black;
 	margin-bottom: 4%;
@@ -457,7 +457,7 @@ h1, h2, h3, b, input {
 
 .levelableDisplayBarHolder {
 	width: 90%;
-	height: 20%;
+	height: 15px;
 	color: white;
 	background-color: black;
 	margin-bottom: 4%;

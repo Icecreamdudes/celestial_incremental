@@ -157,6 +157,8 @@ addLayer("in", {
 
         // POWER MODIFIERS
         player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(player.co.cores.infinity.effect[1])
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(buyableEffect("sb", 103))
+        player.in.infinityPointsToGet = player.in.infinityPointsToGet.pow(levelableEffect("ir", 4)[1]).floor()
 
         // AUTOMATION
         if (hasUpgrade("s", 24)) player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet.mul(delta))
@@ -172,6 +174,7 @@ addLayer("in", {
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("pet", 1101)[0])
         if (hasUpgrade("ep2", 14)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(upgradeEffect("ep2", 14))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("ir", 2)[1])
 
         if (hasUpgrade("hpw", 1061)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.mul(0.1).mul(delta))
     },
@@ -397,7 +400,7 @@ addLayer("in", {
         },
         3: {
             title: "Otherworldly Features",
-            body() { return "Otherworldly Features were created by a group of celestials called the Novasent. So far, I have only discovered three of them: Dice, Rocket Fuel, and Hex. The superphysical values that are a part of OTFs are artificial. I find dice to be the most intriguing. The entropic value of these OTFs are fascinating. Randomness isn't too common within SPVs, and especially not artificial SPVs. Zar, the celestial that created this OTF, is a very mysterious celestial. I've heard that he is the strongest of all the novasent. Rocket fuel is also very powerful, as it can lead into multiple universes. It was created by Iridite, the Astral Celestial. I've spoken with her once. She is an insanely smart celestial, but she seems to have psychopathic tendencies. Apparently Iridite and Zar don't get along very well... Hex is the last of the main three OTFs.  This SPV is extremely rare, as instead of representing one number, it is a list of numbers. This one was created by Tera, the Celestial of Tiers. Tera is the most mysterious of the three novasent. I don't have any information on this celestial..." },
+            body() { return "Otherworldly Features were created by a group of celestials called the Novasent. So far, I have only discovered three of them: Dice, Rocket Fuel, and Hex. The superphysical values that are a part of OTFs are artificial. I find dice to be the most intriguing. The entropic value of these OTFs are fascinating. Randomness isn't too common within SPVs, and especially not artificial SPVs. Zar, the celestial that created this OTF, is a very mysterious celestial. I've heard that he is the strongest of all the novasent. Rocket fuel is also very powerful, as it can lead into multiple universes. It was created by Iridite, the Astral Celestial. I've spoken with her once. She is an insanely smart celestial, but she seems to have psychopathic tendencies. Apparently Iridite and Zar don't get along very well... Hex is the last of the main three OTFs.  This SPV is extremely rare, as instead of representing one number, it is a list of numbers. This one was created by Tera, the Celestial of Tiers. Tera is the most mysterious of the three novasent. I don't have any information on this celestial... Apparently there is an entire universe dedicated to Hex. How strange is that??" },
             unlocked() { return hasUpgrade("bi", 26) },      
         },
     },

@@ -65,7 +65,6 @@ function showCutscene(dialogue, options = {}) {
     const old = document.getElementById('cutscene-overlay');
     if (old) old.remove();
 
-    // --- UI creation (bigger) ---
     const overlay = document.createElement('div');
     overlay.id = 'cutscene-overlay';
     Object.assign(overlay.style, {
@@ -76,7 +75,7 @@ function showCutscene(dialogue, options = {}) {
         pointerEvents: 'auto'
     });
 
-    // Overlay image logic (supports per-dialogue overlayImage)
+    // Overlay image helper
     let overlayImg = null;
     function setOverlayImage(src, opacity) {
         if (!overlayImg) {
@@ -88,7 +87,6 @@ function showCutscene(dialogue, options = {}) {
                 maxHeight: '30vh',
                 pointerEvents: 'none',
             });
-            // Append image first so it is above the box visually (in DOM order)
             overlay.appendChild(overlayImg);
         }
         overlayImg.src = src || '';
@@ -99,7 +97,7 @@ function showCutscene(dialogue, options = {}) {
         setOverlayImage(options.overlayImage, options.overlayImageOpacity);
     }
 
-    // --- Cutscene text box ---
+    // Text box
     const box = document.createElement('div');
     Object.assign(box.style, {
         background: '#222',
@@ -114,12 +112,11 @@ function showCutscene(dialogue, options = {}) {
         fontSize: '28px',
         boxShadow: '0 0 48px #000',
         position: 'relative',
-        top: '320px', // adds space between image and box
+        top: '320px',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-end'
     });
-
     overlay.appendChild(box);
 
     const portrait = document.createElement('img');
@@ -142,6 +139,7 @@ function showCutscene(dialogue, options = {}) {
     textArea.style.fontSize = '28px';
     box.appendChild(textArea);
 
+    // Next button
     const nextBtn = document.createElement('button');
     nextBtn.textContent = 'Next';
     Object.assign(nextBtn.style, {
@@ -158,21 +156,37 @@ function showCutscene(dialogue, options = {}) {
     });
     box.appendChild(nextBtn);
 
+    // Skip button (new)
+    const skipBtn = document.createElement('button');
+    skipBtn.textContent = 'Skip';
+    Object.assign(skipBtn.style, {
+        position: 'absolute',
+        right: '36px',
+        top: '24px',
+        fontSize: '18px',
+        padding: '6px 14px',
+        borderRadius: '10px',
+        border: 'none',
+        background: '#e04b4b',
+        color: '#fff',
+        cursor: 'pointer'
+    });
+    box.appendChild(skipBtn);
+
     document.body.appendChild(overlay);
 
-    // --- Dialogue logic ---
     let typing = false;
     function typeLine(line, cb) {
         typing = true;
-        textArea.innerHTML = ''; // Use innerHTML for HTML support
-        let i = 0;
-        // If the line contains HTML tags, skip typing effect and show instantly
+        textArea.innerHTML = '';
+        // If line contains HTML show instantly
         if (/<[a-z][\s\S]*>/i.test(line)) {
             textArea.innerHTML = line;
             typing = false;
             if (cb) cb();
             return;
         }
+        let i = 0;
         function typeChar() {
             if (i <= line.length) {
                 textArea.textContent = line.slice(0, i);
@@ -186,13 +200,24 @@ function showCutscene(dialogue, options = {}) {
         typeChar();
     }
 
+    function cleanupAndEnd() {
+        if (overlay && overlay.parentNode) overlay.remove();
+        cutsceneActive = false;
+        cutsceneID = 0;
+        cutsceneIndex = 0;
+        cutsceneDialogue = null;
+        cutsceneOptions = null;
+        saveCutsceneState();
+        if (typeof stopAudio === 'function') stopAudio();
+        if (options.onEnd) options.onEnd();
+    }
+
     function showNext() {
         if (typing) return;
         if (idx < dialogue.length) {
             cutsceneIndex = idx + 1;
             saveCutsceneState();
             let entry = dialogue[idx];
-            // --- Overlay image per dialogue ---
             if (typeof entry === 'object' && entry.overlayImage) {
                 setOverlayImage(entry.overlayImage, entry.overlayImageOpacity);
             } else if (options.overlayImage) {
@@ -213,15 +238,7 @@ function showCutscene(dialogue, options = {}) {
             }
             idx++;
         } else {
-            overlay.remove();
-            cutsceneActive = false;
-            cutsceneID = 0;
-            cutsceneIndex = 0;
-            cutsceneDialogue = null;
-            cutsceneOptions = null;
-            saveCutsceneState();
-            if (typeof stopAudio === 'function') stopAudio();
-            if (options.onEnd) options.onEnd();
+            cleanupAndEnd();
         }
     }
 
@@ -230,10 +247,18 @@ function showCutscene(dialogue, options = {}) {
         if (e.target === overlay) showNext();
     };
 
-    // Start at the correct index
+    // Skip handlers
+    skipBtn.onclick = () => {
+        cleanupAndEnd();
+    };
+    // Expose global skip for console: window.skipCutscene()
+    window.skipCutscene = function () {
+        if (cutsceneActive) cleanupAndEnd();
+    };
+
+    // Start at correct index
     if (idx < dialogue.length) {
         let entry = dialogue[idx];
-        // --- Overlay image per dialogue (initial) ---
         if (typeof entry === 'object' && entry.overlayImage) {
             setOverlayImage(entry.overlayImage, entry.overlayImageOpacity);
         } else if (options.overlayImage) {
@@ -639,7 +664,8 @@ const cutsceneDialogue14 = [ //infinity (orange bg)
 ];
 const cutsceneDialogue15 = [ //flashback (white bg, music box music)
    { text: "You see yourself in a large hall.", },
-   { text: "Marcel is talking to two beings with a white fog over their head.", },
+   { text: "Marcel is talking to two beings.", },
+   { text: "One being with a white fog over their head, and another being with a black fog over their head.", },
    { text: "This appears to be a flashback. You are being presented with a vision of the past.", },
    { text: "My masters... We have lost another creation to ????.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
    { text: "I am sorry, but this job is just way too hard.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
@@ -1874,8 +1900,8 @@ const cutsceneDialogue81 = [ //Matos requirement #1
     { text: "You find yourself in an overly polluted world. Buildings stretch to the sky." },
     { text: "Architecture and ash extend so far that the sun is completely blocked." },
     { text: "From a distance, you hear prayers." },
-    { text: "You see a man wearing robes covered in blood, praying at a strange looking symbol." },
-    { text: "The man is dressed in all white, and is wearing a mask covering his entire face." }, //TODO: Draw a sprite for this
+    { text: "You see a man covered in blood, praying at a strange looking symbol." },
+    { text: "The man appears to be a scientist, with brown hair and glasses." }, //TODO: Draw a sprite for this
     { text: "Please Nova... I pray to you. Bring the skies back to blue. Bring the ground back to green.", portrait: "resources/humanMatos.png"  },
     { text: "Please bring us the peace and prosperity of a world untouched by the perils of industrialization.", portrait: "resources/humanMatos.png"  },
     { text: "You look in the distance. You see piles and piles of dead bodies." },
@@ -1908,10 +1934,639 @@ const cutsceneDialogue82 = [ //Matos requirement #2
     { text: "Terrorized by celestials..." },
     { text: "Kres. Nav. Sel." },
     { text: "You must warn them!" },
-    { text: "You are being used!!!" },
-
+    { text: "They are being used!!!" },
+    { text: "They are being manipulated!!!" },
+]; 
+const cutsceneDialogue83 = [ //Matos requirement #3
+    { text: "As one of the runes in the altar activates, you are sent to a flashback." },
+    { text: "You find yourself in a labratory." },
+    { text: "You see a man, covered in blood hold what seems to be like an early prototype of a singularity core." },
+    { text: "I have done it. I finally created a core using starmetal alloy.", portrait: "resources/humanMatos.png"  },
+    { text: "Nova, I have developed what you want.", portrait: "resources/humanMatos.png"  },
+    { text: "You hear a voice ring in your head." },
+    { text: "Very well done. Create enough of these and I will grant you your wishes.", portrait: "resources/nova.png"  },
+    { text: "You will obtain the power that you desire.", portrait: "resources/nova.png"  },
+    { text: "The world is a horrible place.", portrait: "resources/humanMatos.png"  },
+    { text: "Those at the top are horrible people, and they deserve to die.", portrait: "resources/humanMatos.png"  },
+    { text: "Those at the bottom are suffering, and they deserve liberation.", portrait: "resources/humanMatos.png"  },
+    { text: "The end of humanity itself is the best option.", portrait: "resources/humanMatos.png"  },
+    { text: "Who is this scientist?" },
+]; 
+const cutsceneDialogue84 = [ //Matos requirement #4 (Extinction of humanity and matos as a celestial.)
+    { text: "As one of the runes in the altar activates, you are sent to a flashback." },
+    { text: "You see a world covered in flames." },
+    { text: "Large beams of energy strike down on the ground." },
+    { text: "The tallest of buildings crash down." },
+    { text: "You see gallons of blood spew out from every direction." },
+    { text: "In the distance, you see a robotic figure in the air." },
+    { text: "You see the figure control thousands of singularity cores, each of them striking down massive beams of energy." },
+    { text: "The energy rips right through cities. The ground falls apart from the destruction." },
+    { text: "This is the end of humanity." },
+    { text: "Maybe celestials are truly destructive creatures after all." },
+]; 
+const cutsceneDialogue85 = [ //Unlocking Matos
+    { text: "You and the others stand in front of the altar. The center glows with a bright red hue." },
+    { text: "The altar shakes violently, and the ground starts opening up." },
+    { text: "I have returned... Thanks for freeing me yet again!", portrait: "resources/matos.png"  },
+    { text: "Now I can finally finish my job.", portrait: "resources/matos.png"  },
+    { text: "It's Matos... The same celestial you saw in the flashback." },
+    { text: "I don't give a single DAMN about what you want to do.", portrait: "resources/kres.png"  },
+    { text: "WE also have a job to finish.", portrait: "resources/kres.png"  },
+    { text: "Sel is struck with fear." },
+    { text: "That THING is a celestial???", portrait: "resources/sel.png"  },
+    { text: "Celestials come in all shapes and sizes.", portrait: "resources/nav.png"  },
+    { text: "Didn't you learn this in training?", portrait: "resources/nav.png"  },
+    { text: "All that matters is that this celestial gets destroyed.", portrait: "resources/player.png"  },
+    { text: "You damn fools... I have killed billions and billions of people.", portrait: "resources/matos.png"  },
+    { text: "You four mean absolutely nothing to me.", portrait: "resources/matos.png"  },
+    { text: "And does that matter? I've also killed celestials.", portrait: "resources/player.png"  },
+    { text: "As a matter of fact, I've found it quite easy so far.", portrait: "resources/player.png"  },
+    { text: "It is my goal to bring the end to all of them!", portrait: "resources/player.png"  },
+    { text: "The group is shocked." },
+    { text: "You've KILLED CELESTIALS BEFORE???", portrait: "resources/kres.png"  },
+    { text: "Why are you hiding this from us!", portrait: "resources/kres.png"  },
+    { text: "Damn it! Why did you do it! Why did you tell them???" },
+    { text: "Just trust me! I can help you get out here.", portrait: "resources/player.png"  },
+    { text: "You didn't have to do this!!!" },
+    { text: "I'll explain everything after this fight!", portrait: "resources/player.png"  },
+    { text: "Matos starts laughing like a madman." },
+    { text: "So we will fight! Very well then.", portrait: "resources/matos.png"  },
+    { text: "The ground opens up even wider." },
+    { text: "Matos proceeds to dive down into the hole." },
+    { text: "You start to feel a pulsing beat." },
+    { text: "Is that a heartbeat...", portrait: "resources/sel.png"  },
+    { text: "It must be Matos' celestial core.", portrait: "resources/kres.png"  },
+    { text: "We must go down and destroy it!", portrait: "resources/kres.png"  },
+    { text: "You see Eclipse in the distance, glowing with anger." },
+    { text: "...", portrait: "resources/eclipse.png"  },
+    { text: "Alright, let's go now.", portrait: "resources/kres.png"  },
+    { text: "Uhh guys, I don't know how to say this, but I don't really know how to fight.", portrait: "resources/player.png"  },
+    { text: "You've killed multiple celestials? How is that even the case?", portrait: "resources/nav.png"  },
+    { text: "Here's the thing: I've just used superphysical values to destroy their cores.", portrait: "resources/player.png"  },
+    { text: "I've never actually had one-on-one combat before.", portrait: "resources/player.png"  },
+    { text: "Here's what I can do.", portrait: "resources/player.png"  },
+    { text: "I can increase your power exponentially using my foresight and superphysical values.", portrait: "resources/player.png"  },
+    { text: "Kres pats you on the back." },
+    { text: "I think that's all we need.", portrait: "resources/kres.png"  },
+    { text: "Our goal is to kill the celestial with our own power.", portrait: "resources/kres.png"  },
+    { text: "Don't worry Mr.Foresight, we will give you some of the rewards too!", portrait: "resources/sel.png"  },
+    { text: "We'll invite you to join the Celestial Hunting Corporation after all of this is over.", portrait: "resources/nav.png"  },
+    { text: "Alright, let's go now. For real this time.", portrait: "resources/kres.png"  },
+]; 
+const cutsceneDialogue86 = [ //Unlock AU2
+    { text: "The rocket launches, and as it flies into the empty space, a tear forms in the fabric of reality." },
+    { text: "A superphysical link opens up to another universe." },
+    { text: "When you travel to it, you find yourself in a world filled with stars and nebulae." },
+    { text: "Galaxies stretch farther than the eye can see. The sky is illuminated with celestial objects." },
+    { text: "A complete opposite to the antimatter world..." },
+    { text: "How interesting." },
+]; 
+const cutsceneDialogue87 = [ //Entering depth 1
+    { text: "You and the others descend into the hole, and the beating sound intensifies." },
+    { text: 'So you guys are what they call "Celestial Hunters". Mere humans.', portrait: "resources/matos.png"  },
+    { text: 'A group of people who put all this time and effort into killing us, but fail repeatedly.', portrait: "resources/matos.png"  },
+    { text: 'These are my weakest celestialites. Descend deeper and you will face stronger celestialites.', portrait: "resources/matos.png"  },
+    { text: "Oh I've definitely fought against these guys before.", portrait: "resources/kres.png"  },
+    { text: "Yeah this shouldn't be a problem for us...", portrait: "resources/sel.png"  },
+    { text: "I can help you guys!", portrait: "resources/player.png"  },
+    { text: "You extend your arms out and pure superphysical energy surges out of your arms." },
+    { text: "The power of singularity points. The power of check back. Starmetal Alloy." },
+    { text: "You can't let this go to waste." },
+    { text: "The energy gets transferred over to your teammates." },
+    { text: "Wow... I feel a lot lighter now! Thank you Mr.Foresight.", portrait: "resources/nav.png"  },
+    { text: "Hell yeah. This is feels great!", portrait: "resources/kres.png"  },
+    { text: 'That power... It must be you!', portrait: "resources/matos.png"  },
+    { text: '...', portrait: "resources/eclipse.png"  },
+    { text: "Matos starts laughing." },
+    { text: "How confusing." },
+    { text: "Come on! Let's try to make it deeper into the hole!", portrait: "resources/kres.png"  },
+    { text: "I think his core is in there.", portrait: "resources/kres.png"  },
+]; 
+const cutsceneDialogue88 = [ //Entering depth 2
+    { text: "As you and the others go further in the hole, you notice the temperatures increase." },
+    { text: "How much further do we have to go... It's so damn hot in here.", portrait: "resources/sel.png"  },
+    { text: "Stop complaining! I can see the core from here.", portrait: "resources/nav.png"  },
+    { text: "Mr.Foresight please, can you do something to make it colder in here?", portrait: "resources/sel.png"  },
+    { text: "Nope.", portrait: "resources/player.png"  },
+    { text: "You see an army of stronger celestialites approach you." },
+    { text: "So this is the power of foresight. How interesting.", portrait: "resources/matos.png"  },
+    { text: "A power meant to counteract those of celestials.", portrait: "resources/matos.png"  },
+    { text: "Without HIS foresight, you three are absolutely nothing.", portrait: "resources/matos.png"  },
+    { text: "Either way, if you guys do defeat me... You have already lost!", portrait: "resources/matos.png"  },
+    { text: "What do you mean we've already lost???", portrait: "resources/kres.png"  },
+    { text: "Oh you will see...", portrait: "resources/matos.png"  },
+    { text: "You bastard!!! Stop gatekeeping!", portrait: "resources/nav.png"  },
+    { text: "The only thing we can do is defeat Matos' core.", portrait: "resources/player.png"  },
+    { text: "Let's go guys.", portrait: "resources/player.png"  },
+    { text: "God damn it...", portrait: "resources/sel.png"  },
+    { text: "Even if we die right here, defeating this celestial will prove that our lives weren't in vain!", portrait: "resources/kres.png"  },
+    { text: "You guys are all idiots.", portrait: "resources/matos.png"  },
+]; 
+const cutsceneDialogue89 = [ //Entering depth 3
+    { text: "You and the others somehow destroy this batch of celestialites." },
+    { text: "You are all lasting longer than I thought. How impresssive.", portrait: "resources/matos.png"  },
+    { text: "Another fleet of celestialites spawn." },
+    { text: "These celestialites radiate a significantly stronger superphysical presence." },
+    { text: "These are my strongest celestialites. Defeat them, and then you will get to me.", portrait: "resources/matos.png"  },
+    { text: "Damn it... Why are there more???", portrait: "resources/sel.png"  },
+    { text: "Sel grabs a strange drink in his bag, and he chugs it." },
+    { text: "What the hell? Where did you get that from???", portrait: "resources/nav.png"  },
+    { text: "I've been keeping this for years. Now is the time I use it.", portrait: "resources/sel.png"  },
+    { text: "You sense superphysical energy come from the drink." },
+    { text: "Interesting drink you got there Sel.", portrait: "resources/player.png"  },
+    { text: "It's a drink that the celestial hunting corporation gives us.", portrait: "resources/sel.png"  },
+    { text: "I don't know what it does, but it makes me feel even more energized.", portrait: "resources/sel.png"  },
+    { text: "Looks like superphysical performance enhancing drugs exist now." },
+    { text: "Listen to me Kres. Remember Jeremy? You came on this very mission with him.", portrait: "resources/sel.png"  },
+    { text: "Yes?", portrait: "resources/kres.png"  },
+    { text: "I've actually gone on a mission with him, and we were fighting a celestial.", portrait: "resources/sel.png"  },
+    { text: "That celestial was just a child, stuck in the body and mind of a celestial. He had dreams. Desires. He wanted to be free.", portrait: "resources/sel.png"  },
+    { text: "But Jeremy ignored all of that. He believed that all celestials existed for the purpose of destruction and suffering of others.", portrait: "resources/sel.png"  },
+    { text: "Somehow I knew. I saw the innocence in that celestial. What if Matos is just the same?", portrait: "resources/sel.png"  },
+    { text: "Look. Theres nothing we can do. Once someone turns into a celestial, they stay a celestial.", portrait: "resources/kres.png"  },
+    { text: "And from what I know about Matos is that he is out to kill us. Let's go.", portrait: "resources/kres.png"  },
+    { text: "Matos somehow overhears Sel's conversation." },
+    { text: "I was human a long time ago. But now I am a celestial. I have power! I have strength!", portrait: "resources/matos.png"  },
+    { text: "But I do not have freedom.", portrait: "resources/matos.png"  },
+    { text: "That's why I must free Nova... He will grant me with freedom, even if I die trying.", portrait: "resources/matos.png"  },
+    { text: "So I must complete the job I started!!!", portrait: "resources/matos.png"  },
+]; 
+const cutsceneDialogue90 = [ //Start of matos fight
+    { text: "As the fifth omega celestialite is slain, a light emanates from the deepest depths of the hole." },
+    { text: "Matos' form appears from the light. A metallic being made out of red-glowing rusted metal and steel." },
+    { text: "We have to fight... That???", portrait: "resources/sel.png"  },
+    { text: "Sel starts shaking in fear." },
+    { text: "I have gotten stronger ever since I devoured those celestial hunter souls...", portrait: "resources/matos.png"  },
+    { text: "Matos points at you." },
+    { text: "I've heard many things about you. You've been designed as a weapon to destroy us celestials.", portrait: "resources/matos.png"  },
+    { text: "You go by many names. The creation. The spawn of the proto-overworld. The savior.", portrait: "resources/matos.png"  },
+    { text: "You've been one heavy topic of discussion in the celestial community.", portrait: "resources/matos.png"  },
+    { text: "I can't kill you yet.", portrait: "resources/matos.png"  },
+    { text: "Matos glares at Sel, Kres, and Nav." },
+    { text: "However, you three can be put to good use.", portrait: "resources/matos.png"  },
+    { text: "Beams of superphysical energy come out of Matos and hold Kres, Sel and Nav." },
+    { text: "What is this weird feeling???", portrait: "resources/nav.png"  },
+    { text: "Strange symbols appear on Kres, Sel, and Nav's stomach." },
+    { text: "Are these celestial symbols?", portrait: "resources/kres.png"  },
+    { text: "I have been waiting thousands of years for this very moment.", portrait: "resources/matos.png"  },
+    { text: "Our battle will begin.", portrait: "resources/matos.png"  },
+]; 
+const cutsceneDialogue91 = [ //Matos is defeated
+    { text: "After a long and grueling battle, you and your team manage to defeat Matos' core." },
+    { text: "Matos' body starts to disintegrate, and the light that was emanating from him starts to fade." },
+    { text: "You fools actually did it... I guess that's the unstoppable force of foresight.", portrait: "resources/matos.png"  },
+    { text: "I have done my job. I have done my job well.", portrait: "resources/matos.png"  },
+    { text: "Now I can visit the land where the sun shines and the grass grows green.", portrait: "resources/matos.png"  },
+    { text: "This wretched land is no place for humanity to exist.", portrait: "resources/matos.png"  },
+    { text: "We actually did it.", portrait: "resources/sel.png"  },
+    { text: "Lets gooo!!! Imagine the promotion we'll be recieving when we return!", portrait: "resources/nav.png"  },
+    { text: "I have a bad feeling about this.", portrait: "resources/kres.png"  },
+    { text: "A giant beam of light shoots out of Matos' core, illuminating the night sky." },
+    { text: "I have freed Nova and the Novasent. They will be reborn, and they will be more powerful than ever.", portrait: "resources/matos.png"  },
+    { text: "The symbols on Kres, Nav, and Sel start to glow, and large amounts of energy get released into one large vortex." },
+    { text: "What is happening???", portrait: "resources/nav.png"  },
+    { text: "I don't know!", portrait: "resources/kres.png"  },
+    { text: "Man I just wanna go home...", portrait: "resources/sel.png"  },
+    { text: "Matos! Damn it! What are you doing???", portrait: "resources/player.png"  },
+    { text: "Defeating me won't allow your friends to leave this universe.", portrait: "resources/matos.png"  },
+    { text: "You must defeat... THEM.", portrait: "resources/matos.png"  },
+    { text: "Kres, Nav, and Sel drop unconscious, and the hole starts to collapse in on itself." },
+    { text: "Eclipse starts to morph wings, and picks up you and your entire team out of the hole using a gravitational force." },
+    { text: "What is going on right now? You are utterly shocked and confused." },
+    { text: "You look up. Three symbols fill the night sky. One was a dice, another was a star, and another was a ladder." },
+    { text: "A giant circle draws itself and connects the three symbols." },
+    { text: "A dot appears in the center of the circle, and shoots thirteen beams of energy." },
+    { text: "The singularity cores are destroyed." },
+    { text: "The superphysical presence is strong... Almost overwhelming." },
+    { text: "Another superphysical force fills the air." },
+]; 
+const cutsceneDialogue92 = [ //Nova's introduction
+    { text: "All of a sudden, you find youself in an empty void." },
+    { text: "You see a rainbow colored floating orb of energy that is the same symbol on the sky." },
+    { text: "The orb stars to speak." },
+    { text: "Nice to meet you.", portrait: "resources/nova.png"  },
+    { text: "I am Nova, the Celestial of Singularity.", portrait: "resources/nova.png"  },
+    { text: "So it must be YOU... YOU did this to Kres, Nav, and Sel. It was YOU!", portrait: "resources/player.png"  },
+    { text: "Calm down. Calm down. I only want to chat.", portrait: "resources/nova.png"  },
+    { text: "Matos and Jocus did their job well, I have to say.", portrait: "resources/nova.png"  },
+    { text: "In the grand scheme of things, they don't even matter.", portrait: "resources/nova.png"  },
+    { text: "I know you will kill me, but at your current level, you are no match for me.", portrait: "resources/nova.png"  },
+    { text: "As a matter of fact, most of us celestials have already accepted our fate.", portrait: "resources/nova.png"  },
+    { text: "If you've all accepted your fate, what is the point of even trying to fight back anyways?", portrait: "resources/player.png"  },
+    { text: "Most celestials want to die, but they have unfinished goals and aspirations.", portrait: "resources/nova.png"  },
+    { text: "For example, Matos wanted to liberate his civilization.", portrait: "resources/nova.png"  },
+    { text: "My goal? To get back at my damn brother.", portrait: "resources/nova.png"  },
+    { text: "Only hell knows what he could possibly be doing right now.", portrait: "resources/nova.png"  },
+    { text: "Now that I am freed, I will kill him.", portrait: "resources/nova.png"  },
+    { text: "What's up with your brother?", portrait: "resources/player.png"  },
+    { text: "...", portrait: "resources/nova.png"  },
+    { text: "Innocent lives are at stake here.", portrait: "resources/nova.png"  },
+    { text: "I know I am a celestial, and that doesn't matter to me, but...", portrait: "resources/nova.png"  },
+    { text: "There is a place where celestials live happily.", portrait: "resources/nova.png"  },
+    { text: "A place where celestials can safely refuge and avoid the tragedies associated with celestialhood.", portrait: "resources/nova.png"  },
+    { text: "My brother wants to take advantage of that place.", portrait: "resources/nova.png"  },
+    { text: "I must stop him, but he is not the only one who will put these celestials in danger.", portrait: "resources/nova.png"  },
+    { text: "I know you thirst for the blood of celestials as well.", portrait: "resources/nova.png"  },
+    { text: "You will also search for that land and you will kill for all the innocent celestials living there.", portrait: "resources/nova.png"  },
+    { text: "I can't let you do that either. I know you're a weapon meant to destroy celestials, but I won't let that stop me.", portrait: "resources/nova.png"  },
+    { text: "I will make sure you never gain access to that land. ", portrait: "resources/nova.png"  },
+    { text: "...", portrait: "resources/player.png"  },
+    { text: "So this is my identity now.", portrait: "resources/player.png"  },
+    { text: "A ruthless murderer.", portrait: "resources/player.png"  },
+    { text: "How ironic. You celestials kill and kill and now you want to avoid genocide?", portrait: "resources/player.png"  },
+    { text: "You guys are all idiots.", portrait: "resources/player.png"  },
+    { text: "So a land exists where celestials live freely... Despite their horrible crimes."  },
+    { text: "You can't tolerate this."  },
+]; 
+const cutsceneDialogue93 = [ //Waking up
+    { text: "You wake up, and see Kres, Nav, Sel, and Eclipse." },
+    { text: "The entire landscape has been altered." },
+    { text: "Massive beams of light fill the sky." },
+    { text: "What the hell happened here?", portrait: "resources/player.png"  },
+    { text: "Looks like we all passed out.", portrait: "resources/kres.png"  },
+    { text: "I think Matos' death caused this.", portrait: "resources/kres.png"  },
+    { text: "Why can't we just go home yet???", portrait: "resources/sel.png"  },
+    { text: "Shut up Sel. You've been complaining for the past few years.", portrait: "resources/nav.png"  },
+    { text: "Exactly! We've been here for years! Why can't we just get out of here already!", portrait: "resources/sel.png"  },
+    { text: "...", portrait: "resources/eclipse.png"  },
+    { text: "Looks like there are more celestials that we have to fight.", portrait: "resources/player.png"  },
+    { text: "Oh great. Another few years of living here.", portrait: "resources/nav.png"  },
+    { text: "Well it's not going to take years if we get working! Come on! We gotta figure this out!", portrait: "resources/kres.png"  },
+    { text: "You find scattered fragments of singularity cores throughout the land. You pick a piece up." },
+    { text: "Interesting... Maybe this can help us.", portrait: "resources/player.png"  },
+    { text: "Another celestial has been defeated, and many more are waiting." },
+]; 
+const cutsceneDialogue94 = [ //Check back fighting
+    { text: "Marcel visits you." },
+    { text: "Looks like you've defeated Matos. I'm pretty sure you want to refine your skills with superphysical combat.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+    { text: "Yeah. I want to get good at one-on-one combat, but I don't know where to start.", portrait: "resources/player.png"  },
+    { text: "Before we engage on a 1v1 training match, you should master your skills at using superphysical values to control others.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+    { text: "I have simulated a way for you to fight temporal celestialites. Once you get good enough, I'll teach you how to use your own strength to fight.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+    { text: "So how would I fight these temporal celestialites?", portrait: "resources/player.png"  },
+    { text: "Through the pets, of course.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+    { text: "You can use the power of starmetal essence to train the pets into superphysical fighters.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+    { text: "After that, only time will make them stronger.", portrait: "resources/Pets/marcelAcoplaoEvoPet.png"  },
+]; 
+const cutsceneDialogue95 = [ //rocket upgrade
+    { text: "The rocket doubles in size, and looks better than ever." }, 
+    { text: "However, you get a weird feeling about something." }, 
+    { text: "You decide to return your consciousness back to the domain of singularity." }, 
+    { text: "Something feels off..." }, 
+    { text: "Mr.Foresight! Come here! Now!!! It's an emergency!!!", portrait: "resources/kres.png"  },
+    { text: "What happened?", portrait: "resources/player.png"  },
+    { text: "You walk over to Kres, and you see Sel lying unconscious." }, 
+    { text: "A star symbol is glowing over his body. A celestial symbol." }, 
+    { text: "He's still breathing, but he won't wake up! It's like he's in a coma.", portrait: "resources/nav.png"  },
+    { text: "This must be the work of another celestial... Do you know what to do?", portrait: "resources/nav.png"  },
+    { text: "Damn......" }, 
+    { text: "Well this is no good." }, 
+    { text: "And even more strange, the symbol on Sel's body has a superphysical link to Alt-Universe 2." }, 
+    { text: "How peculiar." }, 
+    { text: "I might be able to help him, but it could take a while.", portrait: "resources/player.png"  },
+    { text: "How would you be able to do it?", portrait: "resources/kres.png"  },
+    { text: "I can't say, but I think I can help him.", portrait: "resources/player.png"  },
+    { text: "Alt-Universe 2... The world filled with stars. A celestial is there right now." }, 
+]; 
+const cutsceneDialogue96 = [ //star expo
+    { text: "You re-enter Alt-Universe 2, and a strong celestial presence hits you." }, 
+    { text: "A spaceship flies towards you." }, 
+    { text: "The door on the spaceship opens, and you enter it." }, 
+    { text: "You are greeted with the presence of a seemly alien-looking woman, with green skin." }, 
+    { text: "Who are you, and what do you want from me?", portrait: "resources/player.png"  },
+    { text: "I am Geroa, and I am under direct control by Iridite, the Astral Celestial.", portrait: "resources/geroa.png"  },
+    { text: "Your friend Sel, is being held hostage right now.", portrait: "resources/geroa.png"  },
+    { text: "What??? Why would you do this to him???", portrait: "resources/player.png"  },
+    { text: "It's not my fault. I was commanded to do it.", portrait: "resources/geroa.png"  },
+    { text: "Okay... So what do you want from me?", portrait: "resources/player.png"  },
+    { text: "I know you are going to kill Iridite, but I can't let that happen.", portrait: "resources/geroa.png"  },
+    { text: "Geroa starts blinking in a strange pattern." }, 
+    { text: "Is that morse code?" }, 
+    { text: "Shoot... only Sel knows how to decipher morse code." }, 
+    { text: "Listen to me... I need help. Please...", portrait: "resources/geroa.png"  },
+    { text: "Tears stream down Geroa's face." }, 
+    { text: "What is happening?" }, 
+    { text: "Is Iridite taking extreme control over Geroa?" }, 
+    { text: "How despicable." }, 
+    { text: "Geroa points at Sel." }, 
+    { text: "I need you to extract his soul using your powers, or else... Or else... Iridite...", portrait: "resources/geroa.png"  },
+    { text: "What??? I can't just do that! I don't even know how to...", portrait: "resources/player.png"  },
+    { text: "Why does Iridite want Sel's soul in the first place?", portrait: "resources/player.png"  },
+    { text: "...", portrait: "resources/geroa.png"  },
+    { text: "All of a sudden, Geroa contorts and writhes with pain." }, 
+    { text: "I'm sorry Iridite! I'm sorry! Please make it stop!!!", portrait: "resources/geroa.png"  },
+    { text: "Looks like I've said too much...", portrait: "resources/geroa.png"  },
+    { text: "Let's go visit Sel.", portrait: "resources/geroa.png"  },
+]; 
+const cutsceneDialogue97 = [ //star expo #2
+    { text: "You enter a room in the spaceship, and see Sel." }, 
+    { text: "He is tied to a chair with using a strange superphysical force." }, 
+    { text: "What is happening right now? Where am I?", portrait: "resources/sel.png"  },
+    { text: "Sel, I know this may seem crazy, but we're in a completely different universe.", portrait: "resources/player.png"  },
+    { text: "Who did this to me... I want to go home!", portrait: "resources/sel.png"  },
+    { text: "I didn't do anything.", portrait: "resources/player.png"  },
+    { text: "I'm sorry, but you're going to have to give me your soul. Don't make me do this the hard way.", portrait: "resources/geroa.png"  },
+    { text: "I'm so confused right now...", portrait: "resources/sel.png"  },
+    { text: "Don't worry Sel, I will try to stop this.", portrait: "resources/player.png"  },
+    { text: "You try using your superphysical powers, but they seem to not work in the ship." }, 
+    { text: "Listen to me Geroa, or whatever your name was. Bring me to Iridite now. I can help free you.", portrait: "resources/player.png"  },
+    { text: "Geroa nods in silence." }, 
+]; 
+const cutsceneDialogue98 = [ //star expo #3
+    { text: "You approach the next star, and you see Geroa shake in fear." }, 
+    { text: "I'm sorry Iridite... I'm sorry Iridite... I'll be the perfect creation you wanted... I'm sorry.", portrait: "resources/geroa.png"  },
+    { text: "Iridite? That name rings a bell.", portrait: "resources/sel.png"  },
+    { text: "Sel's eyes open wide." }, 
+    { text: "He remembers." }, 
+    { text: "Oh no... OH GOD NO...", portrait: "resources/sel.png"  },
+    { text: "The sudden insanity of the people around you confuses you." }, 
+    { text: "IRIDITE???", portrait: "resources/sel.png"  },
+    { text: "Sel starts shaking violently, trying to resist the restraints put on him." }, 
+    { text: "Geroa walks over to him and injects him with a tranquilizer, making him go unconscious." }, 
+    { text: "Even more tears stream down Geroa's face." }, 
+    { text: "Why does this have to happen??? Why???", portrait: "resources/geroa.png"  },
+    { text: "What is going on?" }, 
+    { text: "I'm very sorry foresight user. I don't feel Iridite's superphysical presence right now.", portrait: "resources/geroa.png"  },
+    { text: "You see, your friend Sel was one of Iridite's test subjects.", portrait: "resources/geroa.png"  },
+    { text: "Iridite experimented on many souls to see if she could create a celestial of her own.", portrait: "resources/geroa.png"  },
+    { text: "I am actually a half celestial myself.", portrait: "resources/geroa.png"  },
+    { text: "So what is Iridite going to do with Sel?", portrait: "resources/player.png"  },
+    { text: "Sel's soul frequency matches that of Iridites.", portrait: "resources/geroa.png"  },
+    { text: "Iridite wants to use his soul as the base to create an extremely powerful celestial.", portrait: "resources/geroa.png"  },
+    { text: "A celestial more powerful than Iridite herself.", portrait: "resources/geroa.png"  },
+    { text: "She's always been interested in creating celestials of her own ever since she heard about Tav.", portrait: "resources/geroa.png"  },
+    { text: "Tav, an innocent bunch of souls suffering in the bounds of a celestial body." }, 
+    { text: "You can't let this happen again." }, 
+    { text: "Please. You better help me. I've been a slave to Iridite for as long as I can remember.", portrait: "resources/geroa.png"  },
+    { text: "I don't even remember my family, or where I come from.", portrait: "resources/geroa.png"  },
+    { text: "I just don't want this to happen to anymore people.", portrait: "resources/geroa.png"  },
+    { text: "I'm too scared to stand up for myself, but since you're here, you can help me.", portrait: "resources/geroa.png"  },
+    { text: "I'll do it. I'll make sure to kill Iridite.", portrait: "resources/player.png"  },
+    { text: "Thank you.", portrait: "resources/geroa.png"  },
+]; 
+const cutsceneDialogue99 = [ //star expo #4
+    { text: "Sel wakes up." }, 
+    { text: "Iridite...", portrait: "resources/sel.png"  },
+    { text: "I can't let this happen!", portrait: "resources/sel.png"  },
+    { text: "Do you know what Iridite has done to my universe... My family???", portrait: "resources/sel.png"  },
+    { text: "This celestial has turned them all into monstrous beings.", portrait: "resources/sel.png"  },
+    { text: "Every day, and every night, I get horrible thoughts about what happened.", portrait: "resources/sel.png"  },
+    { text: "I want to forget, but I can't.", portrait: "resources/sel.png"  },
+    { text: "I just want to go home man... I'm tired of this celestial hunting business, but how else would I make money?", portrait: "resources/sel.png"  },
+    { text: "This celestial hunting corporation, how is it like?", portrait: "resources/player.png"  },
+    { text: "We all live in this giant station, on a pretty decent planet.", portrait: "resources/sel.png"  },
+    { text: "The people are nice, I guess. Once I get back I'm probably going to retire.", portrait: "resources/sel.png"  },
+    { text: "Do you think I can join this corporation?", portrait: "resources/player.png"  },
+    { text: "You'd certainly be a good candidate for joining, since you have foresight and all.", portrait: "resources/sel.png"  },
+    { text: "You're giving it a good thought." }, 
+    { text: "If you join, you'll be able to kill more celestials." }, 
+    { text: "Sounds like a deal." }, 
+]; 
+const cutsceneDialogue100 = [ //star expo #5 (visiting iridite)
+    { text: "You pass by another star." }, 
+    { text: "Iridite is really close by right now.", portrait: "resources/geroa.png"  },
+    { text: "Please... Mr.Foresight. Do you really think you can defeat Iridite?", portrait: "resources/sel.png"  },
+    { text: "I'm going to need your help Sel. You can help us fight.", portrait: "resources/player.png"  },
+    { text: "Do I have a choice?", portrait: "resources/sel.png"  },
+    { text: "Well, do you want to live?", portrait: "resources/player.png"  },
+    { text: "...", portrait: "resources/sel.png"  },
+    { text: "So I really don't have a choice.", portrait: "resources/sel.png"  },
+    { text: "I guess I am a celestial hunter after all.", portrait: "resources/sel.png"  },
+    { text: "You know what, I'll help as well. I don't care how much hell I go through. I just want to make things right.", portrait: "resources/geroa.png"  },
 
 ]; 
+const cutsceneDialogue101 = [ //unlocking iridite
+    { text: "You see the star in the distance increase in luminosity." }, 
+    { text: "Outside the ship, you see a giant beam of light appear." }, 
+    { text: "A glowing woman with long white hair, wings, and white robes appear, and teleports inside the ship." }, 
+    { text: "...", portrait: "resources/iridite.png"  },
+    { text: "So you must be the crazy foresight user! Matos must have given you one hell of a fight.", portrait: "resources/iridite.png"  },
+    { text: "I am so ready to see what you can do... I'm so curious!!!", portrait: "resources/iridite.png"  },
+    { text: "You will see what I can do. I will destroy you.", portrait: "resources/player.png"  },
+    { text: "After what you've done, to Sel. To Geroa. I can not let you keep doing this.", portrait: "resources/player.png"  },
+    { text: "Iridite laughs." }, 
+    { text: "You think my continued existence matters!? I've already contributed so much to the knowledge and science of celestials.", portrait: "resources/iridite.png"  },
+    { text: "Geroa is my greatest creation. She is half celestial and half other beings.", portrait: "resources/iridite.png"  },
+    { text: "Her existence proves the possiblity of partial celestials.", portrait: "resources/iridite.png"  },
+    { text: "Now, in order to create a powerful celestial of my own, I must use Sel's soul.", portrait: "resources/iridite.png"  },
+    { text: "I will combine Sel's soul with the souls of many others that I have collected.", portrait: "resources/iridite.png"  },
+    { text: "This celestial will be more powerful than myself.", portrait: "resources/iridite.png"  },
+    { text: "Now, Sel. Please give me your soul.", portrait: "resources/iridite.png"  },
+    { text: "God damn it!!!", portrait: "resources/sel.png"  },
+    { text: "Iridite starts to superphysically extract Sel's soul out of his body." }, 
+    { text: "Come on. Think. What can you do to stop this???" }, 
+    { text: "Superphysical values have the ability to affect physical objects." }, 
+    { text: "Think. Think.. Think..." }, 
+]; 
+const cutsceneDialogue102 = [ //entering battle
+    { text: "You visualize creating a ship of your own, fully made of superphysical values." }, 
+    { text: "You extend your arms out, and a ship surrounds itself around you." }, 
+    { text: "Sel's superphysical restraints break, and Geroa's ship implodes on itself." }, 
+    { text: "As your ship gets created out of thin air, Geroa and Sel enter it." }, 
+    { text: "This power... How amazing!!! I've never seen anything like this before!", portrait: "resources/iridite.png"  },
+    { text: "I will make sure you never harm another innocent life!", portrait: "resources/geroa.png"  },
+    { text: "I will stop you as well!", portrait: "resources/geroa.png"  },
+    { text: "Geroa, you're such an idiot.", portrait: "resources/iridite.png"  },
+    { text: "My research on you is already common knowledge in the celestial community.", portrait: "resources/iridite.png"  },
+    { text: "I don't need you anymore.", portrait: "resources/iridite.png"  },
+    { text: "The ship finishes materializing, and flies out into the distance." }, 
+    { text: "Oh wow! I didn't know you were capable of this.", portrait: "resources/sel.png"  },
+    { text: "Trust me, I didn't know I was either.", portrait: "resources/player.png"  },
+    { text: "I guess there are more powers you have that you need to figure out." }, 
+    { text: "Iridite spawns a barrage of asteroids." }, 
+    { text: "Now, let our fight begin. I'm excited to see what more you can do!", portrait: "resources/iridite.png"  },
+]; 
+const cutsceneDialogue103 = [ //asteroid
+    { text: "You dodge and shoot the asteroids on the ship, and reach a sense of flow-state." }, 
+    { text: "It still amazes you. How did you magically materialize this ship?" }, 
+    { text: "All of a sudden, it hits you. You begin to feel dizzy and nauseous in an instant." }, 
+    { text: "Is this newfound power starting to take a toll on your physical health, or do you just get dizzy?" }, 
+    { text: "Mr Foresight, I can take over. Back home, I was actually a part of my country's air force.", portrait: "resources/sel.png"  },
+    { text: "Space flight shouldn't be that hard, right?", portrait: "resources/sel.png"  },
+    { text: "Sel, please be careful! We can't lose this opportunity!", portrait: "resources/geroa.png"  },
+    { text: "If we fail now, who knows what's going to happen to us...", portrait: "resources/geroa.png"  },
+    { text: "Sel remembers his past traumas and experiences." }, 
+    { text: "I don't know if I can do this...", portrait: "resources/sel.png"  },
+    { text: "My whole life, I've experienced war.", portrait: "resources/sel.png"  },
+    { text: "The very moment I became free from war, Iridite came to my universe.", portrait: "resources/sel.png"  },
+    { text: "I don't think I want to do this.", portrait: "resources/sel.png"  },
+    { text: "Listen.", portrait: "resources/player.png"  },
+    { text: "You are the most skilled at this out of all of us here.", portrait: "resources/player.png"  },
+    { text: "We will have the highest probability of surviving if you take over.", portrait: "resources/player.png"  },
+    { text: "Don't listen to those thoughts, and maybe you can make a name for yourself in the CHC by defeating Iridite.", portrait: "resources/player.png"  },
+    { text: "You smile at Sel." }, 
+    { text: "Who knows, maybe you can retire once you get back!", portrait: "resources/player.png"  }, 
+    { text: "Alright then... I can do this!", portrait: "resources/sel.png"  },
+]; 
+const cutsceneDialogue104 = [ //celestialites
+    { text: "Iridite watches as your ship rips and tears through the asteroids." }, 
+    { text: "I'm impressed. You've managed to create a powerful weapon out of superphysical values.", portrait: "resources/iridite.png"  },
+    { text: "I'm also impressed at how suprisingly good I'm doing!", portrait: "resources/sel.png"  },
+    { text: "Well, let's see if you can handle these guys.", portrait: "resources/iridite.png"  },
+    { text: "What appear to be celestialites spawn out of Iridite's superphysical aura." }, 
+    { text: "These are all the results of my failed experiments. Let's see if you can handle them.", portrait: "resources/iridite.png"  },
+    { text: "These innocent souls are trapped in these celestialites?", portrait: "resources/player.png"  },
+    { text: "We must free them of their pain and suffering...", portrait: "resources/player.png"  },
+    { text: "Iridite's power begins to overwhelm you.", },
+]; 
+const cutsceneDialogue105 = [ //space energy (no music)
+    { text: "Amidst Iridite's chaos, you somehow find yourself trapped within the darkness of the shadow overworld." }, 
+    { text: "You notice a new superphysical energy emerge: Space energy." }, 
+    { text: "The feeling that emanates from this superphysical force feels familiar." }, 
+    { text: "A feeling that is powerful, and somewhat unsettling." }, 
+    { text: "How strange..." }, 
+]; 
+const cutsceneDialogue106 = [ //space buildings (hasUpgrade("ir", 15))
+    { text: "You find yourself returning to the hall of celestials for another flashback." }, 
+    { text: "??????, have you decided to incorporate superphysical materialization into the creation?", portrait: "resources/fogGuy1.png"  },
+    { text: "Of course I have. Why wouldn't I?", portrait: "resources/fogGuy2.png"  },
+    { text: "It will be very hard to control though. Not even I could do it properly.", portrait: "resources/fogGuy1.png"  },
+    { text: "I have found a workaround. The creation will materialize objects that reflect the properties of the universe he's in.", portrait: "resources/fogGuy2.png"  },
+    { text: "That way, the superphysical values can channel through more smoothly, and therefore produce physical objects easier.", portrait: "resources/fogGuy2.png"  },
+    { text: "Now that I think about it, that makes more sense.", portrait: "resources/fogGuy1.png"  },
+    { text: "No wonder why you were able to create a spaceship, in a space themed universe." }, 
+    { text: "The creation can only materialize objects when it's absolutely necessary.", portrait: "resources/fogGuy2.png"  },
+    { text: "Similar to the creation's ability to use developer powers.", portrait: "resources/fogGuy2.png"  },
+    { text: "Wouldn't it be better for the creation to be able to use these powers all the time?", portrait: "resources/fogGuy1.png"  },
+    { text: "You see, developer powers and superphysical materialization both require access into the superphysical plane.", portrait: "resources/fogGuy2.png"  },
+    { text: "That wouldn't be possible without the right conditions.", portrait: "resources/fogGuy2.png"  },
+    { text: "However, with training, controlling access to the superphysical plane can be possible.", portrait: "resources/fogGuy2.png"  },
+    { text: "We have a few master developers who are ready to train him once the time comes.", portrait: "resources/fogGuy2.png"  },
+    { text: "After the creation beats his first CONSTELLATION CELESTIAL, they will be ready.", portrait: "resources/fogGuy2.png"  },
+    { text: "Got it.", portrait: "resources/fogGuy1.png"  },
+    { text: "Master developers who will train you. After your first constellation celestial." }, 
+    { text: "This is an opportunity to gain immeasurable power." }, 
+    { text: "You must defeat Nova. Once you do, you will train under those developers." }, 
+    { text: "This opportunity excites you." }, 
+]; 
+const cutsceneDialogue107 = [ //ufo
+    { text: "Let's see if you can handle this creation!", portrait: "resources/iridite.png"  },
+    { text: "A UFO that runs on the energy of celestialites.", portrait: "resources/iridite.png"  },
+    { text: "Having another ship as a target will only make this job easier! It's what I'm used to.", portrait: "resources/sel.png"  },
+    { text: "Interesting, I didn't know celestialites can power machines!", portrait: "resources/player.png"  },
+    { text: "Oh really, I learned this trick a long, long time ago! Even before I became a celestial.", portrait: "resources/iridite.png"  },
+    { text: "You know, I was once a celestial hunter.", portrait: "resources/iridite.png"  },
+    { text: "...", portrait: "resources/sel.png"  },
+    { text: "Yes, yes. It may come as a suprise, as to how a hunter became a celestial.", portrait: "resources/iridite.png"  },
+    { text: "It has been one hell of a story as to how I became this way.", portrait: "resources/iridite.png"  },
+    { text: "You were a celestial hunter???", portrait: "resources/sel.png"  },
+    { text: "It was such a long time ago.", portrait: "resources/iridite.png"  },
+    { text: "I don't remember it very well.", portrait: "resources/iridite.png"  },
+    { text: "Me, Tera, and Zar. We were all hunters.", portrait: "resources/iridite.png"  },
+    { text: "A lot has happened since then.", portrait: "resources/iridite.png"  },
+    { text: "Celestial hunter or not... I'm still going to kill you!", portrait: "resources/sel.png"  },
+];  
+const cutsceneDialogue108 = [ //iridite flashback
+    { text: "White fog surrounds your field of vision. It must be another flashback.", },
+    { text: "You find yourself in a strange looking office.", },
+    { text: "You see a human woman with white hair. It must be Iridite's human form.", },
+    { text: "She is talking to a strange man wearing a tuxedo. You can't see his face.", },
+    { text: "??????. You will go on a very important mission. It is crucial that you pay attention closely.", portrait: "resources/chcMan.png"  }, //Illira
+    { text: "That name... you can't hear it, but it must be Iridite's human name.", },
+    { text: "I'm sure you are aware of the giant cloud of dark energy that has been growing around us.", portrait: "resources/chcMan.png"  },
+    { text: "Strange... What would a cloud of dark energy do with anything?", },
+    { text: "I want you to investigate the source of the dark energy.", portrait: "resources/chcMan.png"  },
+    { text: "We don't know where it's coming from, but it will pose a threat to our corporation.", portrait: "resources/chcMan.png"  },
+    { text: "I got you. I'm down to do anything.", portrait: "resources/humanIridite.png"  },
+    { text: "I have also appointed ???? and ???? with this job.", portrait: "resources/chcMan.png"  },
+    { text: "You guys aren't foresight users, but that should be okay since this job is only an investigation.", portrait: "resources/chcMan.png"  },
+    { text: "Oh its those guys... Those two get crazy a lot. I will find a way to manage.", portrait: "resources/humanIridite.png"  },
+    { text: "Successfully finding the source will get you three a massive promotion.", portrait: "resources/chcMan.png"  },
+    { text: "Sure. I'll try my best.", portrait: "resources/humanIridite.png"  },
+    { text: "How did those three become celestials? Was it Nova's doing? Only a couple more flashbacks can tell you the truth.", },
+];  
+const cutsceneDialogue109 = [ //iridite battle
+    { text: "Iridite starts glowing more, and gains an angry look on her face.", },
+    { text: "How are you guys still alive? Is the power of your foresight really that strong???", portrait: "resources/iridite.png"  },
+    { text: "It's not just the foresight, it's also Sel's amazing skill at piloting!", portrait: "resources/player.png"  },
+    { text: "Hell yeah!!!", portrait: "resources/sel.png"  },
+    { text: "You won't say it, but you're proud of Sel for conquering his fears against Iridite.", },
+    { text: "His will to live seems to exceed his faults.", },
+    { text: "Umm guys, I don't like the look of this.", portrait: "resources/geroa.png"  },
+    { text: "You start to feel a stronger superphysical force around Iridite.", },
+    { text: "Now, let's see how you face against my true strength!", portrait: "resources/iridite.png"  },
+];  
+const cutsceneDialogue110 = [ //mid battle cutscene 
+    { text: "God damn it... You guys just won't stop no matter what. I don't understand.", portrait: "resources/iridite.png"  },
+    { text: "It's too late to quit. I must prove myself the strongest out of all the novasent!", portrait: "resources/iridite.png"  },
+    { text: "Oh really, you're not too different than Matos. You are weak!", portrait: "resources/player.png"  },
+    { text: "The superphysical strength coming from your ship... It's too much!!!", portrait: "resources/iridite.png"  },
+    { text: "You do know, Iridite, I am a half-celestial! I also have foresight powers too.", portrait: "resources/geroa.png"  },
+    { text: "I will happily use those powers against you.", portrait: "resources/geroa.png"  },
+    { text: "That can't happen... Even half celestials are supposed to act like a celestial!", portrait: "resources/iridite.png"  },
+    { text: "You are meant to obey ME!", portrait: "resources/iridite.png"  },
+    { text: "I may have been designed to follow your commands.", portrait: "resources/geroa.png"  },
+    { text: "I may have the innate desire to destroy.", portrait: "resources/geroa.png"  },
+    { text: "That's not all I am though. I am still only half a celestial! I will let my other half assert its dominance!", portrait: "resources/geroa.png"  },
+    { text: "Damn it... My research was all for nothing! My whole celestial existence was pointless!", portrait: "resources/iridite.png"  },
+    { text: "I will kill all of you!", portrait: "resources/iridite.png"  },
+
+]; 
+const cutsceneDialogue111 = [ //end of battle
+    { text: "You notice Iridite's body start to form cracks.", },
+    { text: "My core... it's shattered.", portrait: "resources/iridite.png"  },
+    { text: "My entire life was meaningless.", portrait: "resources/iridite.png"  },
+    { text: "I have done absolutely nothing to help the CHC.", portrait: "resources/iridite.png"  },
+    { text: "I have done absolutely nothing to help the Novasent.", portrait: "resources/iridite.png"  },
+    { text: "Heck, I haven't even done anything to help my human family.", portrait: "resources/iridite.png"  },
+    { text: "My entire life was pointless.", portrait: "resources/iridite.png"  },
+    { text: "My research will have no contributions to celestial society.", portrait: "resources/iridite.png"  },
+    { text: "I did find out one thing though.", portrait: "resources/iridite.png"  },
+    { text: "The source of the dark energy cloud.", portrait: "resources/iridite.png"  },
+    { text: "What are you talking about?", portrait: "resources/geroa.png"  },
+    { text: "The dark energy cloud. The CHC told me about that a long time ago.", portrait: "resources/sel.png"  },
+    { text: "The dark energy cloud continues to grow in size... It will soon consume the entire dimensional realm.", portrait: "resources/iridite.png"  },
+    { text: "Zar. Tera. I'm sorry for everything. I wish we stayed celestial hunters. I wish our adventure lasted a little longer.", portrait: "resources/iridite.png"  },
+    { text: "My celestial tendencies have ruined everything.", portrait: "resources/iridite.png"  },
+    { text: "My life has been wasted away.", portrait: "resources/iridite.png"  },
+    { text: "As iridite's body fades into nothingness, you realize something.", },
+    { text: "Do celestials regain their humanity on the brink of death?", },
+    { text: "That dark energy arm... What's so important about it?", },
+    { text: "We won. We did it... Do I get to go home now?", portrait: "resources/sel.png"  },
+    { text: "I'm not sure about what will happen next.", portrait: "resources/player.png"  },
+    { text: "Strangely enough, you feel the superphysical force start to increase.", },
+    { text: "A rainbow colored orb appears in front of you.", }, //23
+    { text: "It's Nova.", },
+    { text: "So you kill Matos, and now you've killed Iridite.", portrait: "resources/nova.png"  },
+    { text: "Only two more novasent are out there, and I know you will kill them as well.", portrait: "resources/nova.png"  },
+    { text: "Who is this? Another celestial???", portrait: "resources/sel.png"  },
+    { text: "Nova starts laughing.", },
+    { text: "What do you want???", portrait: "resources/player.png"  },
+    { text: "I'm here because Iridite wasn't able to kill archer boy.", portrait: "resources/nova.png"  },
+    { text: "I'll just do it myself.", portrait: "resources/nova.png"  },
+    { text: "What is going on???", portrait: "resources/sel.png"  },
+    { text: "A hand protrudes out of the energy orb an impales Sel.", },
+    { text: "As the hand retracts, a green-colored key is revealed.", },
+    { text: "You are way too shocked to speak.", },
+    { text: "YOU MONSTER!! WHY WOULD YOU DO SUCH A THING???", portrait: "resources/geroa.png"  },
+    { text: "You.... YOU MUST BE NOVA!", portrait: "resources/geroa.png"  },
+    { text: "One down, two more to go.", portrait: "resources/nova.png"  },
+    { text: "...", portrait: "resources/player.png"  },
+    { text: "God damn it....", },
+];   
+const cutsceneDialogue112 = [ //dead sel
+    { text: "You quickly return back to the domain of singularity, and see Sel's dead body.", },
+    { text: "Mr.Foresight... What happened to Sel???", portrait: "resources/nav.png"  },
+    { text: "Listen. You guys are in danger. I don't know what's going on right now, but this isn't good.", portrait: "resources/player.png"  },
+    { text: "Nova, the Celestial of Singularity is hunting you down. He already got to Sel.", portrait: "resources/player.png"  },
+    { text: "Damn...... Why?????", portrait: "resources/kres.png"  },
+    { text: "I don't know, but there was a green key that came out of Sel.", portrait: "resources/player.png"  },
+    { text: "I'd assume that there are keys inside of you two as well.", portrait: "resources/player.png"  },
+    { text: "So Sel is really dead?", portrait: "resources/nav.png"  },
+    { text: "I don't know for sure, but it seems like he is.", portrait: "resources/player.png"  },
+    { text: "We defeated the celestial responsible for Sel's coma, but it was too late.", portrait: "resources/player.png"  },
+    { text: "If you two value your lives, I suggest figuring a way to get the key out of your body.", portrait: "resources/player.png"  },
+    { text: "I don't know how, or if it's even a physical object to begin with, but I would figure it out.", portrait: "resources/player.png"  },
+    { text: "If that key is superphysical, do you think you can take it out for us?", portrait: "resources/kres.png"  },
+    { text: "I'm not sure if even I can do that. There are some superphysical values only celestials can manipulate.", portrait: "resources/player.png"  },
+    { text: "Wait a minute... How did you defeat a celestial without leaving this universe?", portrait: "resources/nav.png"  },
+    { text: "I haven't told any of you guys this, but I can travel between universes using superphysical links.", portrait: "resources/player.png"  },
+    { text: "Before you ask though, I can only bring myself. I can't bring other people.", portrait: "resources/player.png"  },
+    { text: "That's interesting. I've never heard of that power before.", portrait: "resources/nav.png"  },
+    { text: "You two need to prepare for unexpected celestial encounters, so get ready.", portrait: "resources/player.png"  },
+    { text: "Is Sel really dead?", },
+    { text: "He never got to retire and live a peaceful life.", },
+    { text: "How sad...", },
+];   //REMINDER: CROSS OUT SEL'S NAME AFTER DEFEATING IRIDITE.
 
 // Example with custom background:
 // showCutscene(cutsceneDialogue1, {

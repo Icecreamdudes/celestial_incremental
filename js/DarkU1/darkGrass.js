@@ -36,7 +36,7 @@
         };
     },
     tooltip: "Dark Grass",
-    branches: [["dg", "#309"]],
+    branches: [["dg", "#309"], ["db", "#309"], ],
     color: "black",
     update(delta) {
         let onepersec = new Decimal(1)
@@ -63,6 +63,9 @@
         // MAX GRASS SOFTCAP
         if (player.dgr.maxGrass.gte(1e100)) player.dgr.maxGrass = player.dgr.maxGrass.div(1e100).pow(0.2).mul(1e100)
 
+        //post softcap
+        player.dgr.maxGrass = player.dgr.maxGrass.mul(buyableEffect("ds", 103))
+
         // GRASS VALUE
         player.dgr.grassValue = new Decimal(1)
         player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("dgr", 12))
@@ -76,6 +79,9 @@
 
         // GRASS VALUE SOFTCAP
         if (player.dgr.grassValue.gte(1e100)) player.dgr.grassValue = player.dgr.grassValue.div(1e100).pow(0.2).mul(1e100)
+
+        //post softcap
+        player.dgr.grassValue = player.dgr.grassValue.mul(buyableEffect("ds", 103))
 
         if (hasUpgrade("le", 22)) player.dgr.grassTimer = player.dgr.grassTimer.add(onepersec.mul(delta))
         player.dgr.grassTimerReq = new Decimal(5)

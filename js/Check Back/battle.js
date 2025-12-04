@@ -2,6 +2,7 @@
 addLayer("ba", {
     name: "Battle", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "Battle", // This appears on the layer's node. Default is the id with the first letter capitalized
+    universe: "CB",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -64,19 +65,19 @@ addLayer("ba", {
         abilityID: [],
         petAbilityNames: [
             [["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""]],
-            [["", "", ""],],
+            [["", "", ""],["", "", ""],],
         ],
         petAbilityAPCosts: [
             [["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""]],
-            [["", "", ""],],
+            [["", "", ""],["", "", ""],],
         ],
         petAbilityDescriptions: [
             [["", ""], ["", ""], ["", ""], ["", ""], ["", ""], ["", ""]],
-            [["", "", ""],],
+            [["", "", ""],["", "", ""],],
         ],
         petAbilitiesAvailable: [
             [[true, true], [true, true], [true, true], [true, true], [true, true], [true, true],],
-            [[true, true, true]],
+            [[true, true, true], [true, true, true]],
         ],
         spentAttackPower: new Decimal(0),
 
@@ -85,7 +86,9 @@ addLayer("ba", {
         immobilizedCelestialite: -1,
         cookieThorns: false,
         turret: false,
+        cosmicRay: false,
         selID: new Decimal(0),
+        geroaID: new Decimal(0),
         drainCelestialite: -1,
         eclipseID: new Decimal(0),
         motivatedPets: [],
@@ -289,6 +292,7 @@ addLayer("ba", {
             ],
             [
                 ["Drain", "Motivate", "Shield"],
+                ["Cosmic Ray", "Radioactive Missile", "Self-Repair"],
             ],
         ]
         player.ba.petAbilityDescriptions = 
@@ -325,6 +329,11 @@ addLayer("ba", {
                 "Random teammate deals x1.4 damage for the rest of the wave.", 
                 "Shields random teammate for the rest of the wave from 50% of incoming damage."
                 ],
+                [
+                "Deals 33% of damage any time a celestialite attacks for the round.", 
+                "Deals 100% of damage to a target celestialite, then 25% of damage to all the others.", 
+                "Heals back to 70% of HP. Only usable if currently less than 25% of HP."
+                ],
             ],
         ]
         player.ba.petAbilityAPCosts = 
@@ -339,6 +348,7 @@ addLayer("ba", {
             ],
             [
                 [new Decimal(6), new Decimal(6), new Decimal(4),],
+                [new Decimal(4), new Decimal(5), new Decimal(6),],
             ],
         ]
 
@@ -371,7 +381,7 @@ addLayer("ba", {
 
             if (player.ba.turret)
             {
-                let damage = player.ba.petDamages[player.ba.selID].mul(0.25)
+                let damage = player.ba.petDamages[player.ba.selID].mul(0.33)
                 let random = getRandomInt(player.ba.celestialiteIDs.length)
 
                 player.ba.celestialiteHealths[random] = player.ba.celestialiteHealths[random].sub(damage)
@@ -382,6 +392,12 @@ addLayer("ba", {
         {
             if (player.ba.actionTimer.lte(0))
             {
+                if (player.ba.cosmicRay)
+                {
+                    let damage = player.ba.petDamages[player.ba.geroaID].mul(0.25)
+                    player.ba.celestialiteHealths[player.ba.currentAttack] = player.ba.celestialiteHealths[player.ba.currentAttack].sub(damage)
+                    logPrintBattle("Geroa blasts a cosmic ray at " + player.ba.celestialiteNames[player.ba.celestialiteIDs[player.ba.currentAttack]] + " for " + formatWhole(damage) + " damage!" )
+                }
                 layers.ba.celestialiteAbility(player.ba.currentAttack)
                 player.ba.currentAttack++
                 player.ba.actionTimer = player.ba.actionTimerMax
@@ -414,7 +430,7 @@ addLayer("ba", {
 
             player.ba.immobilizedCelestialite = -1
             player.ba.targetCelestialite = -1
-
+            player.ba.cosmicRay = false
         }
 
         if (player.ba.wave.gte(player.fi.tier1BestWave) && player.fi.battleTier.eq(1))
@@ -581,7 +597,28 @@ addLayer("ba", {
             player.ba.motivatedPets = [randomIndex]; // Store the index for reference
 
             logPrintBattle("<span style='color: #ccb73dff;'>Eclipse motivates " + tmp.sme.levelables[player.ba.petIDs[randomIndex]].title + ", giving them x1.4 damage for the rest of the wave!");
-}
+        }
+        if (rarity == 1 && petID == 1 && attackID == 0)
+        {
+            player.ba.cosmicRay = true
+            player.ba.geroaID = petID2
+
+            logPrintBattle("<span style='color: #18c058ff;'>Geroa activates cosmic ray!");
+        }
+        if (rarity == 1 && petID == 1 && attackID == 1)
+        {
+            let damage = player.ba.petDamages[petID2].mul(1)
+            player.ba.celestialiteHealths[celestialiteID] = player.ba.celestialiteHealths[celestialiteID].sub(damage)
+
+            let damage2 = player.ba.petDamages[petID2].mul(0.25)
+            for (let i = 0; i < player.ba.celestialiteHealths.length; i++)
+            {
+                player.ba.celestialiteHealths[i] = player.ba.celestialiteHealths[i].sub(damage2)
+            }
+
+            logPrintBattle("<span style='color: #18c058ff;'>Geroa launches at a radioactive missile at the " + player.ba.celestialiteNames[player.ba.celestialiteIDs[celestialiteID]] + ", dealing " + formatWhole(damage) + " damage!" )
+            logPrintBattle("<span style='color: #18c058ff;'>The blast impact reaches all the other celestialites, dealing an adittional " + formatWhole(damage2) + " damage." )
+        }
     },
     celestialiteAbility(ID) 
     {
@@ -948,6 +985,13 @@ celestialiteDeath(index){
 
                 player.ba.petIndex = new Decimal(0)
                 player.ba.currentlyAttacking = false
+
+                pauseUniverse("U1")
+                pauseUniverse("UA")
+                pauseUniverse("U2")
+                pauseUniverse("A1")
+                pauseUniverse("A2")
+                pauseUniverse("U3")
             },
             style: { width: '100px', "min-height": '100px', 'color': "black", 'background-color': "white",},
         },

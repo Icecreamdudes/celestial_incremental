@@ -26,7 +26,7 @@
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
 		"mining.js", "DarkU1/punchcards.js", "cutsceneNew.js", "Check Back/fighting.js", "Check Back/battle.js",
-		"Check Back/cookie.js",
+		"Check Back/cookie.js", "AltU2/spaceBuildings.js", "DarkU1/spaceEnergy.js",
 
 
 		"Ordinal/ordinal.js", "Ordinal/markup.js",
@@ -40,8 +40,8 @@
 
 // Set your version in num and name
 let VERSION = {
-	num: 185, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
-	name: "The Hexing Revamp",
+	num: 189, // CHANGED TO NUMBER TO MAKE EASIER IN FUTURE (EX. 150 = v1.5.0)
+	name: "Novasent Update I: Iridite",
 }
 
 function miscCode() {
@@ -188,7 +188,7 @@ function updateStyles() {
 			if (player.ma.currentDepth.eq(3)) layerBG = "linear-gradient(-180deg, #720804 0%, #720455 100%)"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": case "db": case "dv": case "pu":
+		case "dgr": case "dn": case "db": case "dv": case "ds": case "pu":
 			layerBG = "black"
 			break;
 		case "ch":
@@ -238,7 +238,7 @@ function updateStyles() {
 	document.body.style.setProperty('--background', layerBG)
 
 	// FANCY BACKGROUNDS (THAT SUCK TO MAKE)
-	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "se" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
+	if (player.tab === "au2" || player.tab === "ir" || player.tab === "st" || player.tab === "sb" || player.tab === "se" || player.tab === "pl" || ((player.c.currentCutscene == 30 || player.c.currentCutscene == 31 || player.c.currentCutscene == 32) && player.tab == "c")) {
 	    // Add the galaxy background if it doesn't already exist
     	if (!document.getElementById("galaxy-background")) {
 	        const galaxyBackground = document.createElement("div");
@@ -499,13 +499,13 @@ function updateStyles() {
             player.musuniverse = "U3"
 			break;
 		case "du": case "le": case "dr": case "dp": case "dg":
-		case "dgr": case "dn": 
+		case "dgr": case "dn": case "ds":
             player.musuniverse = "D1"
 			break;
 		case "ch":
             player.musuniverse = "CH"
 			break;
-		case "au2": case "st": case "pl":
+		case "au2": case "st": case "pl": case "ir": case "se": case "sb":
 			player.musuniverse = "A2"
 			break;
 		case "mi":
@@ -559,17 +559,19 @@ function updateStyles() {
 				if (!player.pet.activeAbilities[0]) playAndLoopAudio("music/darkUni1.mp3", options.musicVolume/10)
 				if (player.pet.activeAbilities[0]) playAndLoopAudio("music/eclipse.mp3", options.musicVolume/10)
 				break;
-			case -0.5:
+			case "CH":
 				if (player.tab == "ch") playAndLoopAudio("music/hallOfCelestials.mp3", options.musicVolume/10)
 				//if (player.tab == "ch" && player.subtabs["ch"]["stuff"] != "???") playAndLoopAudio("music/aniciffoCutscene.mp3", options.musicVolume/10)
 				break;
 			case "A2":
-				playAndLoopAudio("music/space.mp3", options.musicVolume/10)
+				if (!player.ir.inBattle) playAndLoopAudio("music/space.mp3", options.musicVolume/10)
+				if (player.ir.inBattle && !player.ir.iriditeFightActive) playAndLoopAudio("music/spaceBattle.mp3", options.musicVolume/10)
+				if (player.ir.inBattle && player.ir.iriditeFightActive) playAndLoopAudio("music/iridite.mp3", options.musicVolume/10)
 				break;
 			case "MI":
 				playAndLoopAudio("music/mining.mp3", options.musicVolume/10)
 				break;
-			case 0.5:
+			case "CB":
 				if (player.fi.battleTier.eq(0)) playAndLoopAudio("music/checkback.mp3", options.musicVolume/10)
 				if (player.fi.battleTier.eq(1)) playAndLoopAudio("music/fighting.mp3", options.musicVolume/10)
 				if (player.fi.battleTier.eq(2)) playAndLoopAudio("music/tier2.mp3", options.musicVolume/10)
@@ -637,7 +639,39 @@ function updateStyles() {
             if (cutsceneID == 78) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
             if (cutsceneID == 79) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
 			//no music for cutsceneID == 80
-            if (cutsceneID == 81) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 81) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 82) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 83) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 84) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 85) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+			//no music for cutsceneID == 86
+            if (cutsceneID == 87) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 88) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 89) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 90) playAndLoopAudio("music/matosCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 91) playAndLoopAudio("music/matosCutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 92) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 93) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 94) playAndLoopAudio("music/marcel.mp3", options.musicVolume/10);
+            if (cutsceneID == 95) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 96) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 97) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 98) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 99) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 100) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 101) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 102) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 103) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 104) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+			//no music for cutsceneID == 105
+            if (cutsceneID == 106) playAndLoopAudio("music/cutsceneBox.mp3", options.musicVolume/10);
+            if (cutsceneID == 107) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 108) playAndLoopAudio("music/cutscenePiano.mp3", options.musicVolume/10);
+            if (cutsceneID == 109) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 110) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 111 && cutsceneIndex < 23) playAndLoopAudio("music/iriditeCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 111 && cutsceneIndex > 23) playAndLoopAudio("music/novaCutscene.mp3", options.musicVolume/10);
+            if (cutsceneID == 112) playAndLoopAudio("music/singularityWaltzPiano.mp3", options.musicVolume/10);
         }
         if (window.cinematicCutsceneActive && options.musicToggle)
         {
@@ -664,6 +698,26 @@ let credits = `<h1>Credits:</h1><br>
 		`
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.9 - The Novasent Update Part I: Iridite</h3><br>
+		Content:<br>
+			- Fully rewrote the cutscenes.<br>
+			- Added Core Fragments.<br>
+			- Added Starmetal Essence.<br>
+			- Added Check Back's fighting system.<br>
+			- Added Star Exploration.<br>
+			- Added Iridite, the Astral Celestial.<br>
+			- Added Space Battle.<br>
+			- Added 6 ships.<br>
+			- Added Iridite's bossfight.<br>
+			- Added Space Energy.<br>
+			- Added Space Buildings.<br>
+			- Added a new legendary pet.<br>
+	    QoL:<br>
+			- Fully revamped the cutscene system.<br>
+		Balancing:<br>
+			- A lot of things I don't remember.<br>
+		Bugfixes:<br>
+			- A lot of things I don't remember<br><br>
 	<h3>v1.8.5 - Epic Pet Revamp Part 1</h3><br>
 		Content:<br>
 			- Cookie pet has been completely revamped.<br>
@@ -1162,7 +1216,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
 	"startCutscene38", "startCutscene39", "selectCelestialites", "petDeath", "celestialiteDeath",
-	"petAbility", "celestialiteAbility", "arriveAtStar", "cookieClick"
+	"petAbility", "celestialiteAbility", "arriveAtStar", "cookieClick", "spaceEnergyReset"
 
 ]
 

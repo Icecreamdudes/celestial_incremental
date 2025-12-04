@@ -669,7 +669,7 @@
                 return buyableEffect("ad", 1).pow(0.2).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
-            style: { width: '150px', height: '100px', }
+            style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px", width: '150px', height: '100px', }
         },
     },
     buyables: {

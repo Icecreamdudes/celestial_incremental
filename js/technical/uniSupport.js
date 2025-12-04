@@ -135,7 +135,7 @@ addUniverse("A1", {
 addUniverse("A2", {
     name: "Alt-Universe 2<br>Cosmic Cosmos",
     symbol: "A2",
-    tree: [["st"], ["pl", "se"], ["ir"]],
+    tree: [["st"], ["pl", "se"], ["ir"], ["sb"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(315deg, #5A4FCF 0%, #242124 74%)",
@@ -176,7 +176,7 @@ addUniverse("U3", {
 addUniverse("D1", {
     name: "Dark Universe 1<br>Shadow Overworld",
     symbol: "D1",
-    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv"]],
+    tree: [["le"], ["dr", "dp"], ["dg", "db", "dgr"], ["dn", "dv", "ds"]],
     nodeStyle() {
         let style = {
             background: "linear-gradient(145deg, #2e2e2e 0%, #0d0d0d 100%)",

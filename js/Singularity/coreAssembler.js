@@ -1799,7 +1799,6 @@
                     player.in.infinities = new Decimal(8)
                 }
 
-                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
             },
             onHold() { clickClickable(this.layer, this.id) },
             style: { width: '600px', "min-height": '200px', 'background-image': 'linear-gradient(-120deg, #6b1919 0%, #cf3a29 100%)', borderRadius: "25px" },

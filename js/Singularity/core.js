@@ -1526,6 +1526,8 @@ addLayer("co", {
             canClick() { return player.in.infinityPoints.gte(1e40) },
             unlocked: true,
             onClick() {
+                player.cof.coreFragments[player.cof.highestScore] = player.cof.coreFragments[player.cof.highestScore].add(player.cof.coreFragmentsToGet[player.cof.highestScore])
+
                 let val = layers.co.coreXPCalc(player.co.resetIndex, player.s.singularityPointsToGet)
                 if (!player.ma.matosDefeated) {
                     player.co.cores[player.co.resetIndex].totalxp = player.co.cores[player.co.resetIndex].totalxp.add(val)

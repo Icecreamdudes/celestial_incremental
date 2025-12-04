@@ -1056,12 +1056,15 @@ addLayer("co", {
         }
 
         //     <----     HEX OF PURITY LAYER     ---->
+        if (!player.ir.iriditeDefeated)
+        {
         player.hpu.purity = new Decimal(0)
         player.hpu.totalPurity = new Decimal(0)
         player.hpu.purityGain = new Decimal(0)
         if (!hasMilestone("s", 20)) player.hpu.purifierAssign = 1
         player.hpu.purifier = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
+        }
 
         //     <----     HEX OF CURSES LAYER     ---->
         player.hcu.curses = new Decimal(0)
@@ -1076,11 +1079,14 @@ addLayer("co", {
         if (!hasMilestone("s", 20)) player.hcu.buyables[112] = new Decimal(0)
 
         //     <----     HEX OF VEXES LAYER     ---->
-        player.hve.vex = new Decimal(0)
-        player.hve.vexTotal = new Decimal(0)
-        player.hve.vexGain = new Decimal(0)
-        player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
-        player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+        if (!player.ir.iriditeDefeated)
+        {
+            player.hve.vex = new Decimal(0)
+            player.hve.vexTotal = new Decimal(0)
+            player.hve.vexGain = new Decimal(0)
+            player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
+            player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+        }
         
         player.hve.upgrades.splice(0, player.hve.upgrades.length)
 

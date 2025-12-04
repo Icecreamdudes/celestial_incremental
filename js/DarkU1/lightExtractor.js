@@ -81,6 +81,7 @@
         if (hasUpgrade("sma", 204)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(upgradeEffect("sma", 204))
         if (hasMilestone("db", 102)) player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(1.2)
         player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(player.ds.spaceEffect)
+        player.le.starmetalAlloyToGetTrue = player.le.starmetalAlloyToGetTrue.mul(buyableEffect("cof", 26))
 
         // Eclipse Shards
         player.le.eclipseShardsReq = Decimal.pow(1e1, player.le.resetAmount.add(1).pow(1.7).floor()).mul(1e3)

@@ -52,6 +52,8 @@ addLayer("hpw", {
         player.hrm.dreamTimer = new Decimal(60)
 
         // PURITY
+        if (!player.ir.iriditeDefeated)
+        {
         player.hpu.purity = player.hpu.keptPurity
         player.hpu.totalPurity = player.hpu.keptPurity
         player.hpu.purityGain = new Decimal(0)
@@ -64,6 +66,7 @@ addLayer("hpw", {
         player.hpu.purifier[4] = extra
 
         player.hpu.purifierEffects = [new Decimal(1), new Decimal(1), new Decimal(0), new Decimal(1), new Decimal(0), new Decimal(1)]
+        }
 
         // CURSES
         player.hcu.curses = new Decimal(0)
@@ -77,15 +80,18 @@ addLayer("hpw", {
         if (!hasMilestone("hpw", 4)) player.hcu.buyables[112] = new Decimal(0)
 
         // VEXES
-        if (type != 2) {
-            player.hve.vex = new Decimal(0)
-            player.hve.vexTotal = new Decimal(0)
-            player.hve.vexGain = new Decimal(0)
-            player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
-            player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
-            for (let i = 0; i < player.hve.upgrades.length; i++) {
-                player.hve.upgrades.splice(i, 1);
-                i--;
+        if (!player.ir.iriditeDefeated)
+        {
+            if (type != 2) {
+                player.hve.vex = new Decimal(0)
+                player.hve.vexTotal = new Decimal(0)
+                player.hve.vexGain = new Decimal(0)
+                player.hve.rowCurrent = [0, 0, 0, 0, 0, 0]
+                player.hve.rowSpent = [0, 0, 0, 0, 0, 0]
+                for (let i = 0; i < player.hve.upgrades.length; i++) {
+                    player.hve.upgrades.splice(i, 1);
+                    i--;
+                }
             }
         }
 

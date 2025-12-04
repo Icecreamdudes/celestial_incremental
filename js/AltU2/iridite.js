@@ -936,6 +936,8 @@ addLayer("ir", {
                         ["raw-html", () => { return "x50 dice sides." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Keep hex of power upgrades on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                         ["raw-html", () => { return "Keep hex of realms challenge completions on singularity reset." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "Keep hex of vexes on singularity resets and subsequent reset tiers." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
+                        ["raw-html", () => { return "Keep hex of purity on singularity resets and subsequent reset tiers." }, {color: "white", fontSize: "18px", fontFamily: "monospace"}],
                     ], {width: "1000px", border: "3px solid rgb(27, 0, 36)", backgroundImage: "linear-gradient(120deg, #480e8aff 0%, rgba(20, 7, 24, 1) 100%)", paddingTop: "5px", paddingBottom: "5px", borderRadius: "0px 0px 15px 15px"}]
                 ]
             },

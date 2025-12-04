@@ -54,6 +54,7 @@
                 .mul(buyableEffect("sma", 14))
                 .mul(levelableEffect("pet", 308)[1])
                 .mul(player.st.starPowerEffect3) 
+                .pow(buyableEffect("cof", 25))
 
             // Singularity Power Softcap
             let base = new Decimal(300)

@@ -176,7 +176,7 @@ addLayer("in", {
         if (hasUpgrade("ep2", 14)) player.in.infinitiesToGet = player.in.infinitiesToGet.mul(upgradeEffect("ep2", 14))
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(player.co.cores.infinity.effect[2])
         player.in.infinitiesToGet = player.in.infinitiesToGet.mul(levelableEffect("ir", 2)[1])
-        player.in.infinitiesToGet = player.in.infinitiesToGet.pow(buyableEffect("cof", 23))
+        player.in.infinitiesToGet = player.in.infinitiesToGet.mul(buyableEffect("cof", 23))
 
         if (hasUpgrade("hpw", 1061)) player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet.mul(0.1).mul(delta))
     },

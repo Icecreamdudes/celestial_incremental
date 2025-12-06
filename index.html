@@ -42,7 +42,7 @@
 		<div class="uiHolder" v-if="!player.hideMenu" v-bind:style="!player.startedGame || player.tab == 'c' ?{'left':'-110%'}:{'left':'0px'}">
 			<div class="uniHolder">
 				<button class="uniButton" v-if="uniShown('U1')" v-bind:style="universes.U1.nodeStyle()" :disabled="player.uni.U1.paused" onclick="player.universe='U1'"><span class="buttonText">1</span></button>
-				<button class="uniButton" v-if="uniShown('UA')" v-bind:style="universes.UA.nodeStyle()" :disabled="player.uni.UA.paused" onclick="player.universe='UA'"><span class="buttonText">H</span></button>
+				<button class="uniButton" v-if="uniShown('UA')" v-bind:style="universes.UA.nodeStyle()" :disabled="player.uni.UA.paused" onclick="player.universe='UA'"><span class="buttonText">α</span></button>
  				<button class="uniButton" v-if="uniShown('U2')" v-bind:style="universes.U2.nodeStyle()" :disabled="player.uni.U2.paused" onclick="player.universe='U2'"><span class="buttonText">2</span></button>
  				<button class="uniButton" v-if="uniShown('A1')" v-bind:style="universes.A1.nodeStyle()" :disabled="player.uni.A1.paused" onclick="player.universe='A1'"><span class="buttonText">A1</span></button>
 				<button class="uniButton" v-if="uniShown('A2')" v-bind:style="universes.A2.nodeStyle()" :disabled="player.uni.A2.paused" onclick="player.universe='A2'"><span class="buttonText">A2</span></button>
@@ -53,7 +53,7 @@
 			</div>
 			<div class="layerHolder">
 				<div v-bind:class="{titleHolder:true,darkTitle:player.sma.inStarmetalChallenge}">
-					<p v-html="universes[player.universe].name" v-if="typeof universes[player.universe] === 'object'"></p>
+					<p v-html="run(universes[player.universe].name, universes[player.universe])" v-if="typeof universes[player.universe] === 'object'"></p>
 				</div>
 				<span v-if="options.menuType == 'Tree'">
 					<tree :data="universes[player.universe].tree" v-if="typeof universes[player.universe] === 'object'"></tree>

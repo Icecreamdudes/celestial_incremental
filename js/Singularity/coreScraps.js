@@ -175,48 +175,8 @@
                 player.co.cores[player.cs.scrapIndex].level = new Decimal(0)
             },
             style() {
-                let look = {width: "274px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
+                let look = {width: "550px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
                 if (!this.canClick()) {
-                    look.color = "rgba(0,0,0,0.8)"
-                    look.backgroundColor = "#bf8f8f"
-                } else {
-                    look.color = "white"
-                    look.backgroundColor = "#666"
-                }
-                return look
-            },
-        },
-        2: {
-            title() {
-                if (!player.ev.evolutionsUnlocked[9]) return "LOCKED"
-                return "Sacrifice Scrap"
-            },
-            tooltip() {
-                let str = "+" + format(player.cs.scraps[player.cs.scrapIndex].amount.add(1).log(10).mul(player.ev4.offeringsBase)) + " Offerings"
-                str = str.concat("<br><small>(" + format(player.ev4.offerings) + "/" + formatWhole(player.ev4.offeringReq) + ")</small>")
-                if (player.ev.evolutionsUnlocked[9]) return str
-                return ""
-            },
-            canClick() { return player.cs.scraps[player.cs.scrapIndex].amount.gt(0) && player.ev.evolutionsUnlocked[9]},
-            unlocked: true,
-            onClick() {
-                player.ev4.offerings = player.ev4.offerings.add(player.cs.scraps[player.cs.scrapIndex].amount.add(1).log(10).mul(player.ev4.offeringsBase))
-                player.cs.scraps[player.cs.scrapIndex].amount = new Decimal(0)
-            },
-            style() {
-                let look = {width: "273px", minHeight: "47px", border: "3px solid #333", fontSize: "14px", borderRadius: "0px"}
-                if (player.ma.matosDefeated) {
-                    look.width = "800px"
-                } else if (hasUpgrade("sma", 107)) {
-                    look.width = "550px"
-                } else {
-                    look.width = "273px"
-                }
-                if (!player.ev.evolutionsUnlocked[9]) {
-                    look.color = "white"
-                    look.backgroundColor = "#333"
-                    look.cursor = "default"
-                } else if (!this.canClick()) {
                     look.color = "rgba(0,0,0,0.8)"
                     look.backgroundColor = "#bf8f8f"
                 } else {
@@ -612,7 +572,7 @@
         501: {
             title: "Mowed Grass",
             unlocked: true,
-            description: "Boost grass value by x1e450, but divide grass capacity by /45.",
+            description: "Boost grass value by x1e450, but halve grass mult capacity.",
             cost: new Decimal(1e3),
             currencyLocation() { return player.cs.scraps.grass },
             currencyDisplayName: "Grass Core Scraps",
@@ -964,7 +924,7 @@
         1202: {
             title: "Altered Altar",
             unlocked: true,
-            description: "Multiply offering gain by x1.5.",
+            description: "Multiply crate roll chance by x1.5.",
             cost: new Decimal(1e6),
             currencyLocation() { return player.cs.scraps.checkback },
             currencyDisplayName: "Check Back Core Scraps",
@@ -1339,16 +1299,14 @@
                                 look.borderColor = CORE_STRENGTH[player.co.cores[player.cs.scrapIndex].strength].color
                                 return look
                             }],
-                        ], () => {return !player.ma.matosDefeated ? {width: "247px", height: "250px"} : {display: "none !important"}}],
+                        ], () => {return player.ma.matosDefeated ? {display: "none !important"} : {width: "247px", height: "250px"}}],
                         ["style-column", [
                             ["buttonless-microtabs", "scrap", {borderWidth: "0px"}],
                             ["style-row", [
                                 ["clickable", 1],
-                                ["style-row", [], () => {return !hasUpgrade("sma", 107) ? {width: "3px", height: "47px", backgroundColor: "#ababab"} : {display: "none !important"}}],
-                                ["clickable", 2]
-                            ], () => {return !player.ma.matosDefeated ? {width: "550px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"} : {width: "800px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"}}],
-                        ], () => {return !player.ma.matosDefeated ? {width: "550px", height: "250px", borderLeft: "3px solid #ababab"} : {width: "800px", height: "250px"}}],
-                    ], {width: "800px", height: "250px", backgroundColor: "#4f4b45", border: "3px solid #ababab", borderRadius: "15px 15px 0 0"}],
+                            ], () => {return !hasUpgrade("sma", 107) ? {width: "550px", height: "47px", backgroundColor: "#111", borderTop: "3px solid #ababab"} : {display: "none !important"}}],
+                        ], () => {return player.ma.matosDefeated ? {width: "800px", height: "200px"} : {width: "550px", height: "250px", borderLeft: "3px solid #ababab"}}],
+                    ], () => {return player.ma.matosDefeated ? {width: "800px", height: "200px", backgroundColor: "#4f4b45", border: "3px solid #ababab", borderRadius: "15px 15px 0 0"} : {width: "800px", height: "250px", backgroundColor: "#4f4b45", border: "3px solid #ababab", borderRadius: "15px 15px 0 0"}}],
                     ["style-column", [
                         ["blank", "10px"],
                         ["row", [

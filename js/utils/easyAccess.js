@@ -66,7 +66,7 @@ function addLevelableXP(layer, id, amt) {
 	player[layer].levelables[id][1] = player[layer].levelables[id][1].add(amt)
 }
 
-function getLevelableBool(layer, id, bool = true) {
+function getLevelableTier(layer, id, bool = false) {
 	if (typeof player[layer].levelables[id][2] == "boolean") {
 		if (player[layer].levelables[id][2]) {
 			player[layer].levelables[id][2] = new Decimal(1)
@@ -81,7 +81,7 @@ function getLevelableBool(layer, id, bool = true) {
 	return (player[layer].levelables[id][2])
 }
 
-function setLevelableBool(layer, id, val) {
+function setLevelableTier(layer, id, val) {
 	player[layer].levelables[id][2] = val
 }
 

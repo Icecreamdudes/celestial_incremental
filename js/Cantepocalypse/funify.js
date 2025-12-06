@@ -134,8 +134,10 @@
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 15))
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("fu", 38))
         player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 1205)[1])
-        player.fu.funToGet = player.fu.funToGet.mul(levelableEffect("pet", 405)[2])
         player.fu.funToGet = player.fu.funToGet.mul(buyableEffect("st", 109))
+
+        // POWER MODIFIERS
+        player.fu.funToGet = player.fu.funToGet.pow(levelableEffect("pet", 405)[2])
 
         player.fu.fun = player.fu.fun.add(player.fu.funToGet.mul(buyableEffect("fu", 74)))
 
@@ -254,6 +256,17 @@
         player.rg.buyables[16] = new Decimal(0)
         player.rg.buyables[17] = new Decimal(0)
         player.rg.buyables[18] = new Decimal(0)
+
+        for (let i = 1; i < 509; ) {
+            setGridData("rg", i, new Decimal(1))
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
 
         if (!hasUpgrade("fu", 13) || inChallenge("fu", 11)) {
             player.gs.grassSkip = new Decimal(0)
@@ -583,13 +596,13 @@
         12: {
             title: "Fun Upgrade II",
             unlocked() { return hasUpgrade("fu", 11) },
-            description: "Boost oil gain based on perk point chance.",
+            description: "Boost oil gain based on perk points.",
             cost: new Decimal(7000),
             currencyLocation() { return player.fu },
             currencyDisplayName: "Fun",
             currencyInternalName: "fun",
             effect() {
-                return player.pr.perkPointsChance.add(1).pow(1.6)
+                return player.pr.perkPoints.add(1).log(1e5).add(1)
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
             style: {color: "rgba(0,0,0,0.8)", border: "3px solid rgba(0,0,0,0.5)", borderRadius: "15px", margin: "2px"},
@@ -1014,10 +1027,10 @@
         23: {
             costBase() { return new Decimal(7) },
             costGrowth() { return new Decimal(1.15) },
-            purchaseLimit() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(100) },
             currency() { return player.fu.fun},
             pay(amt) { player.fu.fun = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.15).add(1).pow(0.95) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).min(2)},
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -1025,7 +1038,7 @@
                 return "Fun Repli-Grass"
             },
             display() {
-                return "which are boosting repli-grass mult by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " to the repli-grass multiplier.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Fun."
             },
             buy(mult) {
@@ -2328,7 +2341,7 @@
             goal() { return new Decimal("10") },
             canComplete: function () { return player.gs.grassSkip.gte(10) },
             goalDescription() { return "10 Grass-Skip" },
-            rewardDescription: "Kill Jocus.",
+            rewardDescription: "x10 Singularity Points.",
             onEnter() {
                 if (!player.fu.enterFear) player.fu.enterFear = true
                 player.fu.funifyPause = new Decimal(12)

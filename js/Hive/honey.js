@@ -25,6 +25,7 @@ addLayer("ho", {
                 xp: new Decimal(0),
                 req: new Decimal(1),
                 effect: new Decimal(1),
+                effect2: new Decimal(1),
             },
             alpha: {
                 level: new Decimal(0),
@@ -33,6 +34,12 @@ addLayer("ho", {
                 effect: new Decimal(1),
             },
             nectar: {
+                level: new Decimal(0),
+                xp: new Decimal(0),
+                req: new Decimal(1),
+                effect: new Decimal(1),
+            },
+            pollen: {
                 level: new Decimal(0),
                 xp: new Decimal(0),
                 req: new Decimal(1),
@@ -76,6 +83,7 @@ addLayer("ho", {
         if (player.ho.cell.gte(5)) player.ho.effects.flower.xp = player.ho.effects.flower.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.flower.req = Decimal.pow(4, player.ho.effects.flower.level).mul(1000)
         player.ho.effects.flower.effect = player.ho.effects.flower.level.mul(Decimal.mul(0.1, base)).div(2)
+        player.ho.effects.flower.effect2 = player.ho.effects.flower.level.mul(Decimal.mul(0.1, base)).add(1)
 
         if (player.ho.cell.gte(50)) player.ho.effects.alpha.xp = player.ho.effects.alpha.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.alpha.req = Decimal.pow(5, player.ho.effects.alpha.level).mul(10000)
@@ -84,6 +92,10 @@ addLayer("ho", {
         if (player.ho.cell.gte(200)) player.ho.effects.nectar.xp = player.ho.effects.nectar.xp.add(player.ho.honey.mul(delta))
         player.ho.effects.nectar.req = Decimal.pow(6, player.ho.effects.nectar.level).mul(100000)
         player.ho.effects.nectar.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.nectar.level)
+
+        if (player.ho.cell.gte(1e30) && hasUpgrade("al", 214)) player.ho.effects.pollen.xp = player.ho.effects.pollen.xp.add(player.ho.honey.mul(delta))
+        player.ho.effects.pollen.req = Decimal.pow(10, player.ho.effects.pollen.level).mul(1e35)
+        player.ho.effects.pollen.effect = Decimal.pow(Decimal.mul(0.1, base).add(1), player.ho.effects.pollen.level)
         
         for (let i in player.ho.effects) {
             if (player.ho.effects[i].xp.gte(player.ho.effects[i].req)) {
@@ -150,6 +162,9 @@ addLayer("ho", {
             borderStyle: {border: "3px solid white", borderRadius: "25px"},
             textStyle: {userSelect: "none"},
             display() {
+                if (hasUpgrade("al", 213)) {
+                    return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + " | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB | x" + format(player.ho.effects.flower.effect2) + " Flowers"
+                }
                 if (!hasUpgrade("al", 208)) {
                     if (player.ho.effects.flower.level.gte(25)) return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [MAX] | x" + format(player.ho.effects.flower.effect) + " GEB"
                     return "Flower Cell Lv." + formatWhole(player.ho.effects.flower.level) + "/25 | [" + format(player.ho.effects.flower.xp) + "/" + format(player.ho.effects.flower.req) + "] | +" + commaFormat(player.ho.effects.flower.effect, 2) + " GEB"
@@ -189,14 +204,30 @@ addLayer("ho", {
                 return "Nectar Cell Lv." + formatWhole(player.ho.effects.nectar.level) + " | [" + format(player.ho.effects.nectar.xp) + "/" + format(player.ho.effects.nectar.req) + "] | x" + format(player.ho.effects.nectar.effect) + " Nectar"
             },
         },
+        effect5: {
+            unlocked() {return player.ho.cell.gte(1e30) && hasUpgrade("al", 214)},
+            direction: RIGHT,
+            width: 500,
+            height: 50,
+            progress() {
+                return player.ho.effects.pollen.xp.div(player.ho.effects.pollen.req)
+            },
+            baseStyle: {background: "rgba(0,0,0,0.5)"},
+            fillStyle: {backgroundColor: "#a27100"},
+            borderStyle: {border: "3px solid white", borderRadius: "25px"},
+            textStyle: {userSelect: "none"},
+            display() {
+                return "Pollen Cell Lv." + formatWhole(player.ho.effects.pollen.level) + " | [" + format(player.ho.effects.pollen.xp) + "/" + format(player.ho.effects.pollen.req) + "] | x" + format(player.ho.effects.pollen.effect) + " Pollen"
+            },
+        },
         cellBar: {
             unlocked: true,
             direction: UP,
             width: 250,
             height: 465,
             progress() {
-                let base = 0.1
-                if (true) base = 0.125
+                let base = 0.125
+                if (hasUpgrade("al", 214)) base = 1/9
                 if (player.ho.cell.lte(0)) return new Decimal(0)
                 if (player.ho.cell.lt(1)) return player.ho.cell.mul(base)
                 if (player.ho.cell.lt(5)) return player.ho.cell.sub(1).div(4).mul(base).add(base)
@@ -206,6 +237,7 @@ addLayer("ho", {
                 if (player.ho.cell.lt(200)) return player.ho.cell.sub(100).div(100).mul(base).add(base*5)
                 if (player.ho.cell.lt(1000)) return player.ho.cell.sub(200).div(800).mul(base).add(base*6)
                 if (player.ho.cell.lt(2500)) return player.ho.cell.sub(1000).div(1500).mul(base).add(base*7)
+                if (player.ho.cell.lt(1e30)) return player.ho.cell.sub(2500).div(1e30-2500).mul(base).add(base*8)
                 return new Decimal(1)
             },
             baseStyle: {background: "linear-gradient(0deg, #281c00, #3c2a00)"},
@@ -215,7 +247,7 @@ addLayer("ho", {
             display() {
                 let str = "<div style='width:250px;height:465px;display:flex;flex-direction:column'>"
                 if (false) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>?? Cells<hr style='width:200px;margin-bottom:3px'>Unlock Bee Bread Cell</div>")
-                if (false) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>?? Cells<hr style='width:200px;margin-bottom:3px'>Unlock Pollen Cell</div>")
+                if (hasUpgrade("al", 214)) str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>1e30 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Pollen Cell</div>")
                 str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>2,500 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Honey Upgrades</div>")
                 str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>1,000 Cells<hr style='width:200px;margin-bottom:3px'>Unlock a new honey research</div>")
                 str = str.concat("<div style='width:250px;flex:1;box-sizing:border-box;padding:5px;border-bottom:2px solid white'>200 Cells<hr style='width:200px;margin-bottom:3px'>Unlock Nectar Cell</div>")
@@ -344,6 +376,8 @@ addLayer("ho", {
                     ["bar", "effect3"],
                     ["blank", "10px"],
                     ["bar", "effect4"],
+                    ["blank", "10px"],
+                    ["bar", "effect5"],
                 ], {width: "550px", height: "450px"}],
                 ["style-row", [
                     ["upgrade", 1], ["upgrade", 2], ["upgrade", 3], ["upgrade", 4], ["upgrade", 5], ["upgrade", 6]

@@ -41,6 +41,12 @@
     color: "#8a00a9",
     update(delta) {
         let onepersec = new Decimal(1)
+        let mult = new Decimal(1)
+        mult = mult.mul(buyableEffect("om", 16))
+        if (player.tad.altInfinities.corrupted.milestone.gte(2)) mult = mult.mul(player.tad.altInfinities.corrupted.effect2)
+        mult = mult.mul(buyableEffect("p", 16))
+        mult = mult.mul(levelableEffect("pet", 109)[0])
+        mult = mult.mul(buyableEffect("fu", 43))
 
         if (player.po.dice && player.d.dicePoints.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.diceMasteryPointsToGet = player.d.dicePoints.plus(1).log10().pow(2.4).mul(10)
@@ -49,12 +55,7 @@
         }
         if (hasUpgrade("s", 12)) player.om.diceMasteryPointsToGet = player.ta.highestDicePoints.plus(1).log10().pow(2.4).mul(10)
         
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("om", 16))
-        // player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 19))
-        // player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("tad", 23))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
-        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(buyableEffect("fu", 43))
+        player.om.diceMasteryPointsToGet = player.om.diceMasteryPointsToGet.mul(mult)
 
         if (player.po.rocketFuel && player.rf.rocketFuel.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.rocketFuelMasteryPointsToGet = player.rf.rocketFuel.plus(1).log10().pow(2.7)
@@ -63,12 +64,7 @@
         }
         if (hasUpgrade("s", 12)) player.om.rocketFuelMasteryPointsToGet = player.ta.highestRocketFuel.plus(1).log10().pow(2.7)
 
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("om", 16))
-        // player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 18))
-        // player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("tad", 23))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
-        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(buyableEffect("fu", 43))
+        player.om.rocketFuelMasteryPointsToGet = player.om.rocketFuelMasteryPointsToGet.mul(mult)
 
         if ((player.po.hex || hasUpgrade("s", 18)) && player.h.hexPoint.gte(1)) {
             if (!hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.h.hexPoint.plus(1).log10().pow(1.65)
@@ -77,12 +73,7 @@
         }
         if (hasUpgrade("s", 12)) player.om.hexMasteryPointsToGet = player.ta.highestHexPoints.plus(1).log10().pow(1.65)
 
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("om", 16))
-        // player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 17))
-        // player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("tad", 23))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("p", 17))
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(levelableEffect("pet", 109)[0])
-        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(buyableEffect("fu", 43))
+        player.om.hexMasteryPointsToGet = player.om.hexMasteryPointsToGet.mul(mult)
 
         player.om.diceMasteryPointsEffect = player.om.diceMasteryPoints.pow(0.1).div(8).add(1)
         player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPoints.pow(0.08).div(10).add(1)
@@ -108,7 +99,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.om.diceMasteryPoints},
             pay(amt) { player.om.diceMasteryPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.05).add(1).min(6) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -142,7 +133,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.om.rocketFuelMasteryPoints},
             pay(amt) { player.om.rocketFuelMasteryPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.02).add(1).min(3) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -176,7 +167,7 @@
             purchaseLimit() { return new Decimal(100) },
             currency() { return player.om.hexMasteryPoints},
             pay(amt) { player.om.hexMasteryPoints = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.04).add(1) },
+            effect(x) { return getBuyableAmount(this.layer, this.id).mul(0.01).add(1).min(2) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },

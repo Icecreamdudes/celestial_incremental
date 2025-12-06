@@ -129,7 +129,7 @@ addLayer("achievements", {
             image: "resources/achievements/1_15.png",
             tooltip: "<h3>Small Returns</h3><hr style='margin-bottom:4px'>Buy a grass factor.<br><br>Reward: Increase fertilizer<br>gain by 50%.",
             color: "white",
-            complete() {return hasMilestone("r", 16) && !hasUpgrade("cs", 201)},
+            complete() {return hasMilestone("r", 16) || hasUpgrade("cs", 201)},
             unlocked: true,
             marked: true,
         },

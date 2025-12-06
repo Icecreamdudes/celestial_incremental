@@ -40,9 +40,9 @@
         let onepersec = new Decimal(1)
 
         player.dg.generatorsToGet = player.dp.prestigePoints.pow(0.35).floor()
-        if (getLevelableBool("pu", 106)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 106)[0])
-        if (getLevelableBool("pu", 106)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("dg", 14))
-        if (getLevelableBool("pu", 301)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 106, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 106)[0])
+        if (getLevelableTier("pu", 106, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(buyableEffect("dg", 14))
+        if (getLevelableTier("pu", 301, true)) player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorsToGet = player.dg.generatorsToGet.mul(levelableEffect("st", 106)[0])
         
         // GENERATOR SOFTCAP
@@ -52,9 +52,9 @@
 
         player.dg.generatorPower = player.dg.generatorPower.add(player.dg.generatorPowerPerSecond.mul(delta))
         player.dg.generatorPowerPerSecond = player.dg.generatorEffect
-        if (getLevelableBool("pu", 107)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 107)[0])
-        if (getLevelableBool("pu", 107)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(buyableEffect("dg", 15))
-        if (getLevelableBool("pu", 301)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 107, true)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 107)[0])
+        if (getLevelableTier("pu", 107, true)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(buyableEffect("dg", 15))
+        if (getLevelableTier("pu", 301, true)) player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("pu", 301)[0])
         player.dg.generatorPowerPerSecond = player.dg.generatorPowerPerSecond.mul(levelableEffect("st", 107)[0])
 
         // GENERATOR POWER SOFTCAP
@@ -123,7 +123,7 @@
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.2)
-                if (getLevelableBool("pu", 203)) eff = eff.pow(levelableEffect("pu", 203)[1])
+                if (getLevelableTier("pu", 203, true)) eff = eff.pow(levelableEffect("pu", 203)[1])
                 return eff
             },
             unlocked() { return true },
@@ -195,7 +195,7 @@
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
             effect(x) {
                 let eff = getBuyableAmount(this.layer, this.id).mul(0.5).add(1).pow(1.3)
-                if (getLevelableBool("pu", 204)) eff = eff.pow(levelableEffect("pu", 204)[1])
+                if (getLevelableTier("pu", 204, true)) eff = eff.pow(levelableEffect("pu", 204)[1])
                 return eff
             },
             unlocked() { return true },
@@ -232,7 +232,7 @@
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(1.2, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getLevelableBool("pu", 106) },
+            unlocked() { return getLevelableTier("pu", 106, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -266,7 +266,7 @@
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(1.15, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getLevelableBool("pu", 107) },
+            unlocked() { return getLevelableTier("pu", 107, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -300,7 +300,7 @@
             currency() { return player.dg.generatorPower},
             pay(amt) { player.dg.generatorPower = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(1.1, getBuyableAmount(this.layer, this.id)) },
-            unlocked() { return getLevelableBool("pu", 205) },
+            unlocked() { return getLevelableTier("pu", 205, true) },
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {

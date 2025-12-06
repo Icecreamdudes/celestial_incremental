@@ -49,14 +49,17 @@
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 1104)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.co.cores.radioactive.effect[0])
         if (hasUpgrade("sma", 101)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(upgradeEffect("sma", 101))
-        player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 308)[0])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(levelableEffect("pet", 404)[1])
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.d.boosterEffects[18])
         if (hasMilestone("r", 25)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.r.pentMilestone15Effect)
+        if (hasChallenge("fu", 11)) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(10)
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("ma", 17))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(buyableEffect("st", 303))
         player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(player.ma.bestComboDepth3Effect)
         if (player.ma.matosDefeated) player.s.singularityPointsToGet = player.s.singularityPointsToGet.mul(1e40)
+
+        // SINGULARITY RAISERS
+        player.s.singularityPointsToGet = player.s.singularityPointsToGet.pow(levelableEffect("pet", 308)[0])
 
         if (player.s.singularityPoints.gte(player.s.highestSingularityPoints)) {
             player.s.highestSingularityPoints = player.s.singularityPoints
@@ -351,7 +354,7 @@
     milestones: {
         11: {
             requirementDescription: "<h3>1 Singularity",
-            effectDescription: "Start every singularity reset with 8 infinities. No longer have to rebeat Tav (Break infinity always unlocked). Unlock realm essence and the factory.",
+            effectDescription: "Start every singularity reset with 8 infinities. Keep alt-infinity limit breaks. Unlock realm essence and the factory.",
             done() { return player.s.singularities.gte(1) },
             style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
@@ -393,9 +396,9 @@
         },
         18: {
             requirementDescription: "<h3>12 Singularities",
-            effectDescription: "Start singularity with alt-uni 1 unlocked, keep cante and rememberance cores, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
+            effectDescription: "Start singularity with alt-uni 1 unlocked, keep cante cores, rememberance cores, infinitum, and alt-infinities, singularity resets don't change the screen, and autocruncher toggles don't get reset.",
             done() { return player.s.singularities.gte(12) },
-            style: {width: "800px", height: "70px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
+            style: {width: "800px", height: "85px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
         },
         19: {
             requirementDescription: "<h3>25 Singularities",

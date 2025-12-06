@@ -41,10 +41,10 @@
         player.du.pointGain = player.du.pointGain.mul(player.dg.generatorPowerEffect)
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dg", 11))
         if (hasUpgrade("sma", 13)) player.du.pointGain = player.du.pointGain.mul(upgradeEffect("sma", 13))
-        if (getLevelableBool("pu", 101)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[0])
-        if (getLevelableBool("pu", 101)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[1])
-        if (getLevelableBool("pu", 203)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 203)[0])
-        if (getLevelableBool("pu", 301)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 301)[0])
+        if (getLevelableTier("pu", 101, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[0])
+        if (getLevelableTier("pu", 101, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 101)[1])
+        if (getLevelableTier("pu", 203, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 203)[0])
+        if (getLevelableTier("pu", 301, true)) player.du.pointGain = player.du.pointGain.mul(levelableEffect("pu", 301)[0])
         player.du.pointGain = player.du.pointGain.mul(buyableEffect("dgr", 14))
         player.du.pointGain = player.du.pointGain.mul(levelableEffect("st", 101)[0])
         player.du.pointGain = player.du.pointGain.mul(player.db.boosterEffect)
@@ -60,9 +60,9 @@
 
         // SOFTCAP
         if (player.du.points.lte(1e10)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).add(1).pow(levelableEffect("st", 201)[0])
-        if (player.du.points.lte(1e10) && getLevelableBool("pu", 201)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
+        if (player.du.points.lte(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.15).div(10).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
         if (player.du.points.gt(1e10)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).add(1).pow(levelableEffect("st", 201)[0])
-        if (player.du.points.gt(1e10) && getLevelableBool("pu", 201)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
+        if (player.du.points.gt(1e10) && getLevelableTier("pu", 201, true)) player.du.pointSoftcap = player.du.points.pow(0.30).div(15).div(levelableEffect("pu", 201)[1]).add(1).pow(levelableEffect("pu", 201)[0]).pow(levelableEffect("st", 201)[0])
 
         // SOFTCAP 2
         player.du.pointSoftcap2 = new Decimal(0.1)

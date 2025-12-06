@@ -142,6 +142,17 @@
             player.rg.buyables[16] = new Decimal(0)
             player.rg.buyables[17] = new Decimal(0)
             player.rg.buyables[18] = new Decimal(0)
+
+            for (let i = 1; i < 509; ) {
+                setGridData("rg", i, new Decimal(1))
+
+                // Increase i value
+                if (i % 10 == 8) {
+                    i = i+93
+                } else {
+                    i++
+                }
+            }
         }
 
         if (!hasUpgrade("s", 15)) {

@@ -20,7 +20,7 @@
 		"Singularity/starmetalEssence.js", "rockets.js", "AltU2/altUni2.js", "AltU2/stars.js", "AltU2/planets.js",
 		"Hex/hex.js", "Hex/provenance.js", "Hex/refinement.js", "Hex/blessings.js", "Hex/curses.js",
 		"Hex/purity.js", "Hex/power.js", "Hex/realms.js", "Hex/vex.js", "Hex/sacrifice.js",
-		"Check Back/cookie.js", "Misc/achievements.js",
+		"Check Back/cookie.js", "Check Back/coinDust.js", "Check Back/buttonEnhancement.js", "Check Back/dailyOrbs.js", "Misc/achievements.js",
 		"Hive/unih.js", "Hive/flower.js", "Hive/pollen.js", "Hive/nectar.js", "Hive/beebread.js",
 		"Hive/honey.js", "Hive/wax.js", "Hive/aleph.js",
 		
@@ -218,7 +218,7 @@ function updateStyles() {
 			layerBG = "linear-gradient(-45deg, #655421, #fad25a)"
 			break;
 		case "ev1":
-			layerBG = "linear-gradient(140deg, rgba(117,0,0,1) 0%, rgba(126,110,0,1) 20%, rgba(117,0,0,1) 40%, rgba(126,110,0,1) 60%, rgba(117,0,0,1) 80%, rgba(126,110,0,1) 100%)"
+			layerBG = "radial-gradient(#753c00, #750000)"
 			break;
 		case "ev2":
 			layerBG = "url(resources/gdbg.jpg)"
@@ -1123,21 +1123,21 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 // (The ones here are examples, all official functions are already taken care of)z
 var doNotCallTheseFunctionsEveryTick = [
 	"blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset",
-	"tierReset", "tetrReset", "prestigeReset", "loadGrass", "unloadGrass",
-	"pentReset", "loadGoldGrass", "unloadGoldGrass", "grasshopReset", "codeExperienceReset",
+	"tierReset", "tetrReset", "prestigeReset",
+	"pentReset", "grasshopReset", "codeExperienceReset",
 	"levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2",
 	"resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
 	"rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5",
 	"dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8",
-	"dailyReward", "dailyRewardPet", "petButton4", "hexReq", "hexGain",
+	"petButton4", "hexReq", "hexGain",
 	"startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12",
 	"startCutscene13", "antidebuffReset", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
 	"startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities",
 	"domainReset", "gainAutomationShard", "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet",
 	"sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset",
-	"replicantiMultiply", "gainCanteCore", "replicantiPointMultiply", "repliLeavesMultiply", "loadRepliGrass",
-	"unloadRepliGrass", "grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
-	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene", "loadMoonstone", "unloadMoonstone",
+	"replicantiMultiply", "gainCanteCore", "replicantiPointMultiply", "repliLeavesMultiply", "updateSoftcap",
+	"grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
+	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene",
 	"petButton5", "petButton6", "refreshBanner", "commonPetBanner", "uncommonPetBanner",
 	"rarePetBanner", "singularityReset", "instantProduction", "startCutscene19", "startCutscene20",
 	"startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset",
@@ -1148,7 +1148,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
 	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
 	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower"
+	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult"
 
 ]
 
@@ -1249,7 +1249,7 @@ function fixOldSave(oldVersion){
 		// Prevent old save grass buyables from being over cap
 		if (getBuyableAmount("g", 11).gt(1000)) setBuyableAmount("g", 11, 1000)
 		if (getBuyableAmount("g", 12).gt(200)) setBuyableAmount("g", 12, 200)
-		if (getBuyableAmount("g", 13).gt(500)) setBuyableAmount("g", 13, 500)
+		if (getBuyableAmount("g", 13).gt(5)) setBuyableAmount("g", 13, 5)
 		if (getBuyableAmount("g", 14).gt(1000)) setBuyableAmount("g", 14, 1000)
 		if (getBuyableAmount("g", 15).gt(1000)) setBuyableAmount("g", 15, 1000)
 		if (getBuyableAmount("g", 16).gt(1000)) setBuyableAmount("g", 16, 1000)

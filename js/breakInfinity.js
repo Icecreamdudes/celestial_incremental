@@ -284,7 +284,8 @@
         16: {
             title: "BI IP Upgrade V",
             unlocked() { return true },
-            description: "Unlock more alternate infinity buyables.",
+            description: "Unlock new Tav's Domain content.",
+            tooltip: "Reminder: There are Tav's Domain multipliers outside of the layer.",
             cost: new Decimal(2e11),
             currencyLocation() { return player.in },
             currencyDisplayName: "IP",

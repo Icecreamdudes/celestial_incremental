@@ -267,7 +267,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark celestial points.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(4).add(1).pow(3), // Dark Points Gain
@@ -302,7 +302,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark rank points.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(3), // Rank Point Gain
@@ -337,7 +337,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark tier points.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(6), // Tier Point Gain
@@ -372,7 +372,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark tetr points.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(9), // Tetr Point Gain
@@ -407,7 +407,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark prestige points.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(3), // Dark Prestige Points
@@ -442,7 +442,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to generators.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(1.8).add(1).pow(1.8), //  Generators
@@ -477,7 +477,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to generator power.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(2).add(1).pow(2.5), // Generator Power
@@ -512,7 +512,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark grass value.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(1.2).add(1).pow(2), // Grass value
@@ -547,7 +547,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark grass capacity.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(1.2).add(1).pow(2), // Grass capacity
@@ -584,7 +584,7 @@ addLayer("st", {
             description() {
                 return "^" + format(this.effect()[0]) + " to dark celestial point softcap.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).eq(0) ? new Decimal(1) : Decimal.pow(0.98, getLevelableAmount(this.layer, this.id)), // Softcap 
@@ -619,7 +619,7 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark rank req.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(4), // Rank Req
@@ -654,7 +654,7 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark tier req.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(2.8).add(1).pow(4), // Tier Req
@@ -689,7 +689,7 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark tetr req.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(2.6).add(1).pow(4), // Tetr Req
@@ -724,7 +724,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to dark pent points.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(3).add(1).pow(12), // Pent Points gain
@@ -759,7 +759,7 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to dark grass timer.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.8).mul(0.1).add(1)
@@ -794,7 +794,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to normality.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).add(1).pow(1.5), // Normality Gain
@@ -829,7 +829,7 @@ addLayer("st", {
             description() {
                 return "/" + format(this.effect()[0]) + " to starmetal req.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).mul(7).add(1).pow(4), // Starmetal Req
@@ -864,7 +864,7 @@ addLayer("st", {
             description() {
                 return "x" + format(this.effect()[0]) + " to stars.<br>"
             },
-            // levelLimit() { return new Decimal(99) },
+            levelLimit() { return new Decimal(50)},
             effect() { 
                 return [
                     getLevelableAmount(this.layer, this.id).pow(0.6).mul(0.3).add(1), // Points Gain

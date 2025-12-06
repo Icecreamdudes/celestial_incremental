@@ -174,7 +174,6 @@ addLayer("ep2", {
         shopMult: 1,
         upgIndex: 0,
     }},
-    automate() {},
     nodeStyle: {
         background: "radial-gradient(#C19F68, #86562E)",
         borderColor: "#422B21",
@@ -1844,7 +1843,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(2)},
+            unlocked: true,
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/leaves.png",
@@ -1867,7 +1866,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(3)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(2) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/trees.png",
@@ -1890,7 +1889,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(4)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(3) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/Grass.png",
@@ -1913,7 +1912,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(5)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(4) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/pent.png",
@@ -1936,7 +1935,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(6)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(5) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/grasshoppers.png",
@@ -1959,7 +1958,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(7)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(6) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/fertilizer.png",
@@ -1982,7 +1981,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(8)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(7) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/code_experience.png",
@@ -2005,7 +2004,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(9)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(8) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/mods.png",
@@ -2028,7 +2027,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(10)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(9) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/dice.png",
@@ -2051,7 +2050,7 @@ addLayer("ep2", {
                 }
                 return eff.mul(getBuyableAmount(this.layer, this.id))
             },
-            unlocked() {return getLevelableAmount("pet", 403).gte(11)},
+            unlocked() {return getLevelableAmount("pet", 403).gte(10) || getLevelableTier("pet", 403).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/currencies/infinity.png",
@@ -2068,8 +2067,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(1.5),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 401).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 401).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 401).add(getLevelableTier("pet", 401).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 401).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 401).gte(1) || getLevelableTier("pet", 401).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/dotknightPetBuilding.png",
@@ -2085,8 +2087,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(2),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 402).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 402).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 402).add(getLevelableTier("pet", 402).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 402).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 402).gte(1) || getLevelableTier("pet", 402).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/dragonPetBuilding.png",
@@ -2102,7 +2107,10 @@ addLayer("ep2", {
             costGrowth: new Decimal(4),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 403).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 403).add(getLevelableTier("pet", 403).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 403).add(1)).add(1)
+            },
             unlocked: true,
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
@@ -2119,8 +2127,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(8),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 404).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 404).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 404).add(getLevelableTier("pet", 404).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 404).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 404).gte(1) || getLevelableTier("pet", 404).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/kresPetBuilding.png",
@@ -2136,8 +2147,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(16),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 405).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 405).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 405).add(getLevelableTier("pet", 405).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 405).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 405).gte(1) || getLevelableTier("pet", 405).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/navPetBuilding.png",
@@ -2153,8 +2167,11 @@ addLayer("ep2", {
             costGrowth: new Decimal(32),
             currency() {return player.ep2.cookies},
             pay(amt) {player.ep2.cookies = player.ep2.cookies.sub(amt)},
-            effect(x) {return getLevelableAmount("pet", 406).pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).add(1)},
-            unlocked() {return getLevelableAmount("pet", 406).gte(1)},
+            effect(x) {
+                let amt = getLevelableAmount("pet", 406).add(getLevelableTier("pet", 406).mul(5).min(40))
+                return amt.pow(0.7).mul(0.01).mul(getBuyableAmount(this.layer, this.id)).mul(getLevelableTier("pet", 406).add(1)).add(1)
+            },
+            unlocked() {return getLevelableAmount("pet", 406).gte(1) || getLevelableTier("pet", 406).gte(1)},
             cost(x) {return Decimal.sumGeometricSeries(player.ep2.shopMult, this.costBase, this.costGrowth, (x || getBuyableAmount(this.layer, this.id)))},
             canAfford() {return player.ep2.cookies.gte(this.cost())},
             img: "resources/checkback/selPetBuilding.png",
@@ -2210,7 +2227,7 @@ addLayer("ep2", {
                         ["cookie-building", 14],
                         ["style-row", [
                             ["raw-html", () => {return "Next building unlocked at Pet Level " + formatWhole(getLevelableAmount("pet", 403).add(1))}, {color: "#ccc", fontSize: "13px", textShadow: "0px 1px 0px #000,0px 0px 1px #ccc"}],
-                        ], () => {return getLevelableAmount("pet", 403).lt(11) ? {width:"330px", height: "30px", background: "#181818", border: "2px solid #888", borderRadius: "5px", margin: "15px 0"} : {display: "none !important"}}],
+                        ], () => {return getLevelableAmount("pet", 403).lt(11) && getLevelableTier("pet", 403).lt(1) ? {width:"330px", height: "30px", background: "#181818", border: "2px solid #888", borderRadius: "5px", margin: "15px 0"} : {display: "none !important"}}],
                     ], {width: "365px", height: "722px"}],
                 ],
             },
@@ -2350,7 +2367,7 @@ addLayer("ep2", {
         ], {width: "723px", background: "repeating-linear-gradient(90deg, #2D6C95 0px, #2D6C95 50px, #2A5B83 50px, #2A5B83 100px)", border: "8px solid #422B21"}],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && getLevelableAmount("pet", 403).gte(1) }
+    layerShown() { return player.startedGame && (getLevelableAmount("pet", 403).gte(1) || getLevelableTier("pet", 403).gte(1)) }
 })
 
 let autoClickInterval
@@ -2363,7 +2380,9 @@ function startAutoClick() {
         } else {
             time++
         }
-        if (player.tab != "ep2") autoClickInterval = clearInterval(autoClickInterval)
+        if (player.tab != "ep2") {
+            stopAutoClick()
+        }
     }, 150);
 }
 

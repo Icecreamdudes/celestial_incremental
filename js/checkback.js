@@ -26,70 +26,61 @@ addLayer("cb", {
                 current: new Decimal(0),
                 max: new Decimal(60),
                 base: new Decimal(1),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(0.5),
+                average: new Decimal(0.02),
             },
             1: {
                 current: new Decimal(0),
                 max: new Decimal(180),
                 base: new Decimal(2),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(1),
+                average: new Decimal(0.02),
             },
             2: {
                 current: new Decimal(0),
                 max: new Decimal(300),
                 base: new Decimal(4),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(2),
+                average: new Decimal(0.02),
             },
             3: {
                 current: new Decimal(0),
                 max: new Decimal(5),
                 base: new Decimal(0.06),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(0.2),
+                average: new Decimal(0.02),
             },
             4: {
                 current: new Decimal(0),
                 max: new Decimal(1200),
                 base: new Decimal(25),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(5),
+                average: new Decimal(0.02),
             },
             5: {
                 current: new Decimal(0),
                 max: new Decimal(3600),
                 base: new Decimal(80),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(20),
+                average: new Decimal(0.02),
             },
             6: {
                 current: new Decimal(0),
                 max: new Decimal(14400),
                 base: new Decimal(220),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(50),
+                average: new Decimal(0.02),
             },
             7: {
                 current: new Decimal(0),
                 max: new Decimal(86400),
                 base: new Decimal(666),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                esc: new Decimal(98),
+                average: new Decimal(0.02),
             },
         },
 
         petPoints: new Decimal(0),
-
         cbTickspeed: new Decimal(1),
 
         //crates
@@ -97,51 +88,44 @@ addLayer("cb", {
             0: {
                 current: new Decimal(0),
                 max: new Decimal(900),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
             1: {
                 current: new Decimal(0),
                 max: new Decimal(2700),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
             2: {
                 current: new Decimal(0),
                 max: new Decimal(5400),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
             3: {
                 current: new Decimal(0),
                 max: new Decimal(21600),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
             4: {
                 current: new Decimal(0),
                 max: new Decimal(7200),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
             5: {
                 current: new Decimal(0),
                 max: new Decimal(36000),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
             6: {
                 current: new Decimal(0),
                 max: new Decimal(86400),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                base: new Decimal(1),
+                average: new Decimal(0),
             },
         },
 
@@ -159,70 +143,17 @@ addLayer("cb", {
                 current: new Decimal(0),
                 max: new Decimal(10800),
                 base: new Decimal(0.2),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                average: new Decimal(0),
             },
             1: {
                 current: new Decimal(0),
                 max: new Decimal(129600),
                 base: new Decimal(0.5),
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
+                average: new Decimal(0),
             },
         },
 
         XPBoostEffect: new Decimal(1),
-
-        //point
-        pointTimers: {
-            0: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            1: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            2: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            3: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            4: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            5: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            6: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            7: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-            8: {
-                autoCurrent: new Decimal(0),
-                autoMax: new Decimal(0),
-                autoAllocate: new Decimal(0),
-            },
-        },
 
         //paragon
         paragonShards: new Decimal(0),
@@ -231,24 +162,18 @@ addLayer("cb", {
         pityEvoCurrent: new Decimal(0),
         pityParaCurrent: new Decimal(0),
         pityMax: new Decimal(200),
-
-        //autom
-        totalAutomationShards: new Decimal(0),
-        automationShards: new Decimal(0),
-        autoAllocateAmt: new Decimal(1),
     }},
-    automate() {},
-    nodeStyle() {},
     tooltip: "Check Back",
     color: "#094599",
     update(delta) {
         let onepersec = new Decimal(1)
-        onepersec = onepersec.mul(player.ev10.checkbackBoost)
         onepersec = onepersec.mul(player.cb.cbTickspeed)
 
         player.cb.cbTickspeed = new Decimal(1)
         player.cb.cbTickspeed = player.cb.cbTickspeed.mul(player.hrm.realmEssenceEffects[1])
         if (hasUpgrade("cs", 1203)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(1.1)
+        player.cb.cbTickspeed = player.cb.cbTickspeed.mul(buyableEffect("ev2", 32))
+        if (player.ev2.doubleCurrent.gt(0)) player.cb.cbTickspeed = player.cb.cbTickspeed.mul(Decimal.add(2, buyableEffect("ev2", 33)))
 
         if (player.cb.totalxp == 4.5 && player.cb.level > 1) {
             player.cb.totalxp = layers.cb.levelToXP(player.cb.level).add(player.cb.xp)
@@ -267,6 +192,7 @@ addLayer("cb", {
         player.cb.reqDiv = new Decimal(1)
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 203)[2])
         player.cb.reqDiv = player.cb.reqDiv.mul(levelableEffect("pet", 304)[1])
+        player.cb.reqDiv = player.cb.reqDiv.mul(buyableEffect("ev2", 11))
 
         player.cb.req = layers.cb.levelToXP(player.cb.level.add(1)).sub(layers.cb.levelToXP(player.cb.level))
 
@@ -283,14 +209,14 @@ addLayer("cb", {
         if (hasUpgrade("bi", 25) && (player.po.dice)) player.cb.levelEffect = player.cb.levelEffect.pow(2)
         if (hasUpgrade("s", 17)) player.cb.levelEffect = player.cb.levelEffect.pow(5)
         
-        player.cb.xpTimers[0].base = new Decimal(1).mul(buyableEffect("ev1", 13))
-        player.cb.xpTimers[1].base = new Decimal(2).mul(buyableEffect("ev1", 15))
-        player.cb.xpTimers[2].base = new Decimal(4).mul(buyableEffect("ev1", 17))
-        player.cb.xpTimers[3].base = new Decimal(0.06).mul(buyableEffect("ev1", 11))
-        player.cb.xpTimers[4].base = new Decimal(25).mul(buyableEffect("ev1", 21))
-        player.cb.xpTimers[5].base = new Decimal(80).mul(buyableEffect("ev1", 23))
-        player.cb.xpTimers[6].base = new Decimal(220).mul(buyableEffect("ev1", 25))
-        player.cb.xpTimers[7].base = new Decimal(666).mul(buyableEffect("ev1", 27))
+        player.cb.xpTimers[0].base = new Decimal(1).mul(buyableEffect("ev1", 101))
+        player.cb.xpTimers[1].base = new Decimal(2).mul(buyableEffect("ev1", 111))
+        player.cb.xpTimers[2].base = new Decimal(4).mul(buyableEffect("ev1", 121))
+        player.cb.xpTimers[3].base = new Decimal(0.06).mul(buyableEffect("ev1", 131))
+        player.cb.xpTimers[4].base = new Decimal(25).mul(buyableEffect("ev1", 141))
+        player.cb.xpTimers[5].base = new Decimal(80).mul(buyableEffect("ev1", 151))
+        player.cb.xpTimers[6].base = new Decimal(220).mul(buyableEffect("ev1", 161))
+        player.cb.xpTimers[7].base = new Decimal(666).mul(buyableEffect("ev1", 171))
 
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(buyableEffect("gh", 21))
@@ -313,14 +239,14 @@ addLayer("cb", {
             if (player.ma.matosDefeated) player.cb.xpTimers[i].base = player.cb.xpTimers[i].base.mul(2)
         }
 
-        player.cb.xpTimers[0].max = new Decimal(60).div(buyableEffect("ev1", 14))
-        player.cb.xpTimers[1].max = new Decimal(180).div(buyableEffect("ev1", 16))
-        player.cb.xpTimers[2].max = new Decimal(300).div(buyableEffect("ev1", 18))
-        player.cb.xpTimers[3].max = new Decimal(5).div(buyableEffect("ev1", 12))
-        player.cb.xpTimers[4].max = new Decimal(1200).div(buyableEffect("ev1", 22))
-        player.cb.xpTimers[5].max = new Decimal(3600).div(buyableEffect("ev1", 24))
-        player.cb.xpTimers[6].max = new Decimal(14400).div(buyableEffect("ev1", 26))
-        player.cb.xpTimers[7].max = new Decimal(86400).div(buyableEffect("ev1", 28))
+        player.cb.xpTimers[0].max = new Decimal(60).div(buyableEffect("ev1", 102))
+        player.cb.xpTimers[1].max = new Decimal(180).div(buyableEffect("ev1", 112))
+        player.cb.xpTimers[2].max = new Decimal(300).div(buyableEffect("ev1", 122))
+        player.cb.xpTimers[3].max = new Decimal(5).div(buyableEffect("ev1", 132))
+        player.cb.xpTimers[4].max = new Decimal(1200).div(buyableEffect("ev1", 142))
+        player.cb.xpTimers[5].max = new Decimal(3600).div(buyableEffect("ev1", 152))
+        player.cb.xpTimers[6].max = new Decimal(14400).div(buyableEffect("ev1", 162))
+        player.cb.xpTimers[7].max = new Decimal(86400).div(buyableEffect("ev1", 172))
 
         for (let i in player.cb.xpTimers) {
             player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(buyableEffect("gh", 22))
@@ -331,15 +257,51 @@ addLayer("cb", {
             player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(levelableEffect("pu", 201)[2])
             if (player.rf.abilityTimers[6].gt(0)) player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(1.2)
             if (hasUpgrade("ev8", 15)) player.cb.xpTimers[i].max = player.cb.xpTimers[i].max.div(1.15)
+
+            // AVERAGE GAIN
+            if (layers.cb.clickables[Number(i)+11].unlocked()) {
+                player.cb.xpTimers[i].average = player.cb.xpTimers[i].base.div(player.cb.xpTimers[i].max)
+            } else {
+                player.cb.xpTimers[i].average = new Decimal(0)
+            }
         }
 
-        player.cb.crateTimers[0].max = new Decimal(900)
-        player.cb.crateTimers[1].max = new Decimal(2700)
-        player.cb.crateTimers[2].max = new Decimal(5400)
-        player.cb.crateTimers[3].max = new Decimal(28800)
-        player.cb.crateTimers[4].max = new Decimal(7200)
-        player.cb.crateTimers[5].max = new Decimal(42000)
-        player.cb.crateTimers[6].max = new Decimal(86400)
+        player.cb.xpTimers[0].esc = new Decimal(0.5).mul(buyableEffect("ev1", 104))
+        player.cb.xpTimers[1].esc = new Decimal(1).mul(buyableEffect("ev1", 114))
+        player.cb.xpTimers[2].esc = new Decimal(2).mul(buyableEffect("ev1", 124))
+        player.cb.xpTimers[3].esc = new Decimal(0.2).mul(buyableEffect("ev1", 134))
+        player.cb.xpTimers[4].esc = new Decimal(5).mul(buyableEffect("ev1", 144))
+        player.cb.xpTimers[5].esc = new Decimal(20).mul(buyableEffect("ev1", 154))
+        player.cb.xpTimers[6].esc = new Decimal(50).mul(buyableEffect("ev1", 164))
+        player.cb.xpTimers[7].esc = new Decimal(98).mul(buyableEffect("ev1", 174))
+
+        for (let i in player.cb.xpTimers) {
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(levelableEffect("pet", 1107)[1])
+            player.cb.xpTimers[i].esc = player.cb.xpTimers[i].esc.mul(buyableEffect("ev2", 31))
+        }
+
+        player.cb.crateTimers[0].base = buyableEffect("ev1", 201)
+        player.cb.crateTimers[1].base = buyableEffect("ev1", 211)
+        player.cb.crateTimers[2].base = buyableEffect("ev1", 221)
+        player.cb.crateTimers[3].base = buyableEffect("ev1", 231)
+        player.cb.crateTimers[4].base = buyableEffect("ev1", 241)
+        player.cb.crateTimers[5].base = buyableEffect("ev1", 251)
+        player.cb.crateTimers[6].base = buyableEffect("ev1", 261)
+        for (let i in player.cb.crateTimers) {
+            if (hasUpgrade("ev8", 14)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.2)
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(levelableEffect("pet", 1205)[2])
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ep0", 12))
+            player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(buyableEffect("ev2", 21))
+            if (hasUpgrade("cs", 1202)) player.cb.crateTimers[i].base = player.cb.crateTimers[i].base.mul(1.5)
+        }
+
+        player.cb.crateTimers[0].max = new Decimal(900).div(buyableEffect("ev1", 202))
+        player.cb.crateTimers[1].max = new Decimal(2700).div(buyableEffect("ev1", 212))
+        player.cb.crateTimers[2].max = new Decimal(5400).div(buyableEffect("ev1", 222))
+        player.cb.crateTimers[3].max = new Decimal(28800).div(buyableEffect("ev1", 232))
+        player.cb.crateTimers[4].max = new Decimal(7200).div(buyableEffect("ev1", 242))
+        player.cb.crateTimers[5].max = new Decimal(42000).div(buyableEffect("ev1", 252))
+        player.cb.crateTimers[6].max = new Decimal(86400).div(buyableEffect("ev1", 262))
         for (let i in player.cb.crateTimers) {
             player.cb.crateTimers[i].max = player.cb.crateTimers[i].max.div(levelableEffect("pet", 105)[0])
             player.cb.crateTimers[i].max = player.cb.crateTimers[i].max.div(levelableEffect("pet", 202)[2])
@@ -348,6 +310,13 @@ addLayer("cb", {
             player.cb.crateTimers[i].max = player.cb.crateTimers[i].max.div(levelableEffect("pet", 1104)[2])
 
             player.cb.crateTimers[i].current = player.cb.crateTimers[i].current.sub(onepersec.mul(delta))
+
+            // AVERAGE GAIN
+            if (layers.cb.clickables[Number(i)+101].unlocked()) {
+                player.cb.crateTimers[i].average = player.cb.crateTimers[i].base.div(player.cb.crateTimers[i].max)
+            } else {
+                player.cb.crateTimers[i].average = new Decimal(0)
+            }
         }
 
         //xpboost
@@ -382,8 +351,16 @@ addLayer("cb", {
         for (let i in player.cb.boostTimers) {
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(levelableEffect("pet", 401)[2])
             player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ep5", 13))
+            player.cb.boostTimers[i].max = player.cb.boostTimers[i].max.div(buyableEffect("ev2", 12))
 
             player.cb.boostTimers[i].current = player.cb.boostTimers[i].current.sub(onepersec.mul(delta))
+
+            // AVERAGE GAIN
+            if (layers.cb.clickables[Number(i)+301].unlocked()) {
+                player.cb.boostTimers[i].average = player.cb.boostTimers[i].base.div(player.cb.boostTimers[i].max)
+            } else {
+                player.cb.boostTimers[i].average = new Decimal(0)
+            }
         }
 
         if (player.cb.XPBoost.lte(1000)) {
@@ -391,111 +368,6 @@ addLayer("cb", {
         } else if (player.cb.XPBoost.gte(1000)) {
             player.cb.XPBoostEffect = Decimal.add(1000, player.cb.XPBoost.sub(1000).pow(0.5).mul(10))
         }
-        
-
-
-        //automation
-        for (let i in player.cb.xpTimers) {
-            if (player.cb.xpTimers[i].autoAllocate.gt(0)) {
-                player.cb.xpTimers[i].autoMax = player.cb.xpTimers[i].max.mul(10).div(player.cb.xpTimers[i].autoAllocate.pow(0.75))
-                player.cb.xpTimers[i].autoMax = player.cb.xpTimers[i].autoMax.div(buyableEffect("ma", 33))
-            }
-
-            if (player.cb.xpTimers[i].autoCurrent.gt(player.cb.xpTimers[i].max.mul(10).div(buyableEffect("ma", 33)))) player.cb.xpTimers[i].autoCurrent = player.cb.xpTimers[i].autoMax
-            if (player.cb.xpTimers[i].autoAllocate.gt(0)) player.cb.xpTimers[i].autoCurrent = player.cb.xpTimers[i].autoCurrent.sub(onepersec.mul(delta))
-
-            if (player.cb.xpTimers[i].autoCurrent.lt(0)) {
-                player.cb.xpTimers[i].autoCurrent = player.cb.xpTimers[i].autoMax
-                player.cb.xp = player.cb.xp.add(player.cb.xpTimers[i].base.mul(player.cb.xpMult))
-                player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[i].base.mul(player.cb.xpMult))
-                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][i].mul(player.ca.canteEnergyMult))
-            }
-        }
-
-        //pet
-        for (let i in player.cb.crateTimers) {
-            if (player.cb.crateTimers[i].autoAllocate.gt(0)) {
-                player.cb.crateTimers[i].autoMax = player.cb.crateTimers[i].max.mul(25).div(player.cb.crateTimers[i].autoAllocate.pow(0.75))
-                player.cb.crateTimers[i].autoMax = player.cb.crateTimers[i].autoMax.div(buyableEffect("ma", 34))
-            }
-
-            if (player.cb.crateTimers[i].autoCurrent.gt(player.cb.crateTimers[i].max.mul(25).div(buyableEffect("ma", 34)))) player.cb.crateTimers[i].autoCurrent = player.cb.crateTimers[i].autoMax
-            if (player.cb.crateTimers[i].autoAllocate.gt(0)) player.cb.crateTimers[i].autoCurrent = player.cb.crateTimers[i].autoCurrent.sub(onepersec.mul(delta))
-
-            if (player.cb.crateTimers[i].autoCurrent.lt(0)) {
-                switch (i) {
-                    case 0:
-                        layers.cb.petButton1()
-                        break;
-                    case 1:
-                        layers.cb.petButton2()
-                        break;
-                    case 2:
-                        layers.cb.petButton3()
-                        break;
-                    case 3:
-                        layers.cb.petButton4()
-                        break;
-                    case 4:
-                        layers.cb.petButton5()
-                        break;
-                    case 5:
-                        layers.cb.petButton6()
-                        break;
-                    case 6:
-                        layers.cb.petButton7()
-                        break;
-                }
-                player.cb.crateTimers[i].autoCurrent = player.cb.crateTimers[i].autoMax
-
-                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][i].mul(player.ca.canteEnergyMult))
-            }
-        }
-
-        // XPBoost
-        for (let i in player.cb.boostTimers) {
-            if (player.cb.boostTimers[i].autoAllocate.gt(0)) player.cb.boostTimers[i].autoMax = player.cb.boostTimers[i].max.mul(100).div(player.cb.boostTimers[i].autoAllocate.pow(0.75))
-
-            if (player.cb.boostTimers[i].autoCurrent.gt(player.cb.boostTimers[i].max.mul(100))) player.cb.boostTimers[i].autoCurrent = player.cb.boostTimers[i].autoMax
-            if (player.cb.boostTimers[i].autoAllocate.gt(0)) player.cb.boostTimers[i].autoCurrent = player.cb.boostTimers[i].autoCurrent.sub(onepersec.mul(delta))
-
-            if (player.cb.boostTimers[i].autoCurrent.lt(0)) {
-                player.cb.boostTimers[i].autoCurrent = player.cb.boostTimers[i].autoMax
-                player.cb.XPBoost = player.cb.XPBoost.add(player.cb.boostTimers[i].base)
-                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[2][i].mul(player.ca.canteEnergyMult))
-            }
-        }
-
-        // Pet Points
-        for (let i in player.cb.pointTimers) {
-            let pet = Number(i) + 301
-            if (player.cb.pointTimers[i].autoAllocate.gt(0)) player.cb.pointTimers[i].autoMax = tmp.pet.levelables[pet].pointCooldown.mul(50).div(player.cb.pointTimers[i].autoAllocate.pow(0.75))
-
-            if (player.cb.pointTimers[i].autoCurrent.gt(tmp.pet.levelables[pet].pointCooldown.mul(50))) player.cb.pointTimers[i].autoCurrent = player.cb.pointTimers[i].autoMax
-            if (player.cb.pointTimers[i].autoAllocate.gt(0)) player.cb.pointTimers[i].autoCurrent = player.cb.pointTimers[i].autoCurrent.sub(onepersec.mul(delta))
-
-            if (player.cb.pointTimers[i].autoCurrent.lt(0)) {
-                player.cb.pointTimers[i].autoCurrent = player.cb.pointTimers[i].autoMax
-                let pval = layers.pet.levelables[pet].pointClick()
-                player.cb.petPoints = player.cb.petPoints.add(pval)
-                if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(tmp.pet.levelables[pet].canteBase.mul(player.ca.canteEnergyMult))
-            }
-        }
-
-        let usedAutomationShards = new Decimal(0)
-        for (let i in player.cb.xpTimers) {
-            usedAutomationShards = usedAutomationShards.add(player.cb.xpTimers[i].autoAllocate)
-        }
-        for (let i in player.cb.crateTimers) {
-            usedAutomationShards = usedAutomationShards.add(player.cb.crateTimers[i].autoAllocate)
-        }
-        for (let i in player.cb.boostTimers) {
-            usedAutomationShards = usedAutomationShards.add(player.cb.boostTimers[i].autoAllocate)
-        }
-        for (let i in player.cb.pointTimers) {
-            usedAutomationShards = usedAutomationShards.add(player.cb.pointTimers[i].autoAllocate)
-        }
-        player.cb.totalAutomationShards = player.cb.automationShards.add(usedAutomationShards)
 
         // PITY
         player.cb.pityMax = new Decimal(200).sub(buyableEffect("cb", 16))
@@ -551,12 +423,22 @@ addLayer("cb", {
         player.cb.xp = player.cb.xp.add(leftover)
     },
     instantProduction(time) {
+        if (player.ev2.doubleCurrent.gt(0)) {
+            if (time.gte(player.ev2.doubleCurrent)) {
+                time = time.add(player.ev2.doubleCurrent)
+                player.ev2.doubleCurrent = new Decimal(0)
+            } else {
+                player.ev2.doubleCurrent = player.ev2.doubleCurrent.sub(time)
+                time = time.mul(2)
+            }
+        }
         layers.cb.update(time)
         layers.pet.update(time)
         layers.ep0.update(time)
         layers.ep1.update(time)
         layers.ep2.update(time)
         layers.ev0.update(time)
+        layers.ev1.update(time)
         layers.ev2.update(time)
         layers.ev8.update(time)
     },
@@ -566,7 +448,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[0].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[0].current) + "." : "<h3>+" + format(player.cb.xpTimers[0].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[0].current.lt(0) && this.unlocked() },
             unlocked() { return true },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[0].esc) + "%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[0].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[0].base.mul(player.cb.xpMult))
@@ -578,14 +460,16 @@ addLayer("cb", {
                 }
 
                 if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(200)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    let guarantee = player.cb.xpTimers[0].esc.div(100).floor()
+                    let chance = player.cb.xpTimers[0].esc.sub(guarantee.mul(100))
+                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (guarantee.gt(0)) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (0.5%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                        doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(0.5);
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][0].mul(player.ca.canteEnergyMult))
@@ -601,7 +485,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[1].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[1].current) + "." : "<h3>+" + format(player.cb.xpTimers[1].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[1].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(3) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 1%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[1].esc) + "%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[1].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[1].base.mul(player.cb.xpMult))
@@ -613,14 +497,16 @@ addLayer("cb", {
                 }
 
                 if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(100)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    let guarantee = player.cb.xpTimers[1].esc.div(100).floor()
+                    let chance = player.cb.xpTimers[1].esc.sub(guarantee.mul(100))
+                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (guarantee.gt(0)) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (1%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                        doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(1);
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][1].mul(player.ca.canteEnergyMult))
@@ -636,7 +522,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[2].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[2].current) + "." : "<h3>+" + format(player.cb.xpTimers[2].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[2].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(6) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 2%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[2].esc) + "%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[2].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[2].base.mul(player.cb.xpMult))
@@ -648,14 +534,16 @@ addLayer("cb", {
                 }
 
                 if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(50)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    let guarantee = player.cb.xpTimers[2].esc.div(100).floor()
+                    let chance = player.cb.xpTimers[2].esc.sub(guarantee.mul(100))
+                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (guarantee.gt(0)) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (2%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                        doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(2);
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][2].mul(player.ca.canteEnergyMult))
@@ -671,7 +559,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[3].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[3].current) + "." : "<h3>+" + format(player.cb.xpTimers[3].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[3].current.lt(0) && this.unlocked() },
             unlocked() { return (hasMilestone("r", 17) || hasMilestone("s", 14)) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 0.2%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[3].esc) + "%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[3].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[3].base.mul(player.cb.xpMult))
@@ -683,14 +571,16 @@ addLayer("cb", {
                 }
 
                 if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(500)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    let guarantee = player.cb.xpTimers[3].esc.div(100).floor()
+                    let chance = player.cb.xpTimers[3].esc.sub(guarantee.mul(100))
+                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (guarantee.gt(0)) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (0.2%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                        doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(0.2);
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][3].mul(player.ca.canteEnergyMult))
@@ -706,7 +596,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[4].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[4].current) + "." : "<h3>+" + format(player.cb.xpTimers[4].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[4].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(15) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 5%" : ""},
+            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[4].esc) + "%" : ""},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[4].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[4].base.mul(player.cb.xpMult))
@@ -718,14 +608,16 @@ addLayer("cb", {
                 }
 
                 if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(20)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
+                    let guarantee = player.cb.xpTimers[4].esc.div(100).floor()
+                    let chance = player.cb.xpTimers[4].esc.sub(guarantee.mul(100))
+                    if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                    if (guarantee.gt(0)) {
+                        player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
                         player.cb.pityEvoCurrent = new Decimal(0);
                         if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (5%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                        doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
                     } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(5);
+                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                     }
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][4].mul(player.ca.canteEnergyMult))
@@ -741,7 +633,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[5].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[5].current) + "." : "<h3>+" + format(player.cb.xpTimers[5].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[5].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(50) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 20%" : ""},
+            tooltip() { return "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[5].esc) + "%"},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[5].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[5].base.mul(player.cb.xpMult))
@@ -752,16 +644,17 @@ addLayer("cb", {
                     }
                 }
 
-                if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(5)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        player.cb.pityEvoCurrent = new Decimal(0);
-                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (20%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(20);
-                    }
+                
+                let guarantee = player.cb.xpTimers[5].esc.div(100).floor()
+                let chance = player.cb.xpTimers[5].esc.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (guarantee.gt(0)) {
+                    player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
+                    player.cb.pityEvoCurrent = new Decimal(0);
+                    if (inChallenge("ip", 17)) player.cb.IC7shardCount++
+                    doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                } else {
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][5].mul(player.ca.canteEnergyMult))
             },
@@ -776,7 +669,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[6].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[6].current) + "." : "<h3>+" + format(player.cb.xpTimers[6].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[6].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(65) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 50%" : ""},
+            tooltip() { return "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[6].esc) + "%"},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[6].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[6].base.mul(player.cb.xpMult))
@@ -787,16 +680,16 @@ addLayer("cb", {
                     }
                 }
 
-                if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(2)
-                    if (random == 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        player.cb.pityEvoCurrent = new Decimal(0);
-                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (50%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(50);
-                    }
+                let guarantee = player.cb.xpTimers[6].esc.div(100).floor()
+                let chance = player.cb.xpTimers[6].esc.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (guarantee.gt(0)) {
+                    player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
+                    player.cb.pityEvoCurrent = new Decimal(0);
+                    if (inChallenge("ip", 17)) player.cb.IC7shardCount++
+                    doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                } else {
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][6].mul(player.ca.canteEnergyMult))
             },
@@ -811,7 +704,7 @@ addLayer("cb", {
             title() { return player.cb.xpTimers[7].current.gt(0) ? "<h3>Check back in <br>" + formatTime(player.cb.xpTimers[7].current) + "." : "<h3>+" + format(player.cb.xpTimers[7].base.mul(player.cb.xpMult)) + " XP."},
             canClick() { return player.cb.xpTimers[7].current.lt(0) && this.unlocked() },
             unlocked() { return player.cb.highestLevel.gte(150) },
-            tooltip() { return player.cb.highestLevel.gte(35) ? "Evo Shard Rarity: 98%" : ""},
+            tooltip() { return "Evo Shard Rarity: " + formatSimple(player.cb.xpTimers[7].esc) + "%"},
             onClick() {
                 player.cb.xp = player.cb.xp.add(player.cb.xpTimers[7].base.mul(player.cb.xpMult))
                 player.cb.totalxp = player.cb.totalxp.add(player.cb.xpTimers[7].base.mul(player.cb.xpMult))
@@ -822,17 +715,17 @@ addLayer("cb", {
                     }
                 }
 
-                if (player.cb.highestLevel.gt(35)) {
-                    let random = getRandomInt(50)
-                    if (random != 1) {
-                        player.cb.evolutionShards = player.cb.evolutionShards.add(1);
-                        player.cb.pityEvoCurrent = new Decimal(0)
-                        if (inChallenge("ip", 17)) player.cb.IC7shardCount++
-                        doPopup("none", "+1 Evolution Shard! (98%)", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
-                    } else {
-                        player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(98)
-                        doPopup("none", "", "Damn bro you didn't gain an evo shard. Take a screenshot, send to the discord, and ping the dev. I think ur still cool.", 60, "#d487fd", "resources/evoShardDenied.png")
-                    }
+                let guarantee = player.cb.xpTimers[7].esc.div(100).floor()
+                let chance = player.cb.xpTimers[7].esc.sub(guarantee.mul(100))
+                if (chance.gte(Math.random()*100)) guarantee = guarantee.add(1)
+                if (guarantee.gt(0)) {
+                    player.cb.evolutionShards = player.cb.evolutionShards.add(guarantee);
+                    player.cb.pityEvoCurrent = new Decimal(0);
+                    if (inChallenge("ip", 17)) player.cb.IC7shardCount++
+                    doPopup("none", "+" + formatWhole(guarantee) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
+                } else {
+                    player.cb.pityEvoCurrent = player.cb.pityEvoCurrent.add(chance);
+                    doPopup("none", "", "Damn bro you didn't gain an evo shard. Take a screenshot, send to the discord, and ping the dev. I think ur still cool.", 60, "#d487fd", "resources/evoShardDenied.png")
                 }
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[0][7].mul(player.ca.canteEnergyMult))
             },
@@ -876,7 +769,7 @@ addLayer("cb", {
             onClick() {
                 if (!hasAchievement("achievements", 21)) completeAchievement("achievements", 21)
                 player.cb.crateTimers[0].current = player.cb.crateTimers[0].max
-                layers.cb.petButton1();
+                layers.cb.petButton1(player.cb.crateTimers[0].base);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][0].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -894,7 +787,7 @@ addLayer("cb", {
             onClick() {
                 if (!hasAchievement("achievements", 21)) completeAchievement("achievements", 21)
                 player.cb.crateTimers[1].current = player.cb.crateTimers[1].max
-                layers.cb.petButton2();
+                layers.cb.petButton2(player.cb.crateTimers[1].base);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][1].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -911,7 +804,7 @@ addLayer("cb", {
             tooltip() { return "16% - Teste<br>16% - Star<br>16% - Normal Face<br>16% - Shark<br>16% - THE WATCHING EYE<br>12% - Goofy Ahh Thing<br>8% - Evo Shard"},
             onClick() {
                 player.cb.crateTimers[2].current = player.cb.crateTimers[2].max
-                layers.cb.petButton3();
+                layers.cb.petButton3(player.cb.crateTimers[2].base);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][2].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -928,7 +821,7 @@ addLayer("cb", {
             tooltip() { return "COSTS 0.04 XPBOOST<br>25% - Spider<br>25% - Blob<br>15% - Clock<br>15% - Trollface<br>15% - Antimatter<br>5% - Evo Shards"},
             onClick() {
                 player.cb.crateTimers[3].current = player.cb.crateTimers[3].max
-                layers.cb.petButton4();
+                layers.cb.petButton4(player.cb.crateTimers[3].base);
 
                 player.cb.XPBoost = player.cb.XPBoost.sub(0.04)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][3].mul(player.ca.canteEnergyMult))
@@ -947,7 +840,7 @@ addLayer("cb", {
             tooltip() { return "COSTS 0.2 XPBOOST<br>25% - Replicator<br>25% - Smoke<br>15% - Infinity Breaker<br>15% - John<br>10% - Hex Shadow<br>10% - Grass Square"},
             onClick() {
                 player.cb.crateTimers[4].current = player.cb.crateTimers[4].max
-                layers.cb.petButton5();
+                layers.cb.petButton5(player.cb.crateTimers[4].base);
 
                 player.cb.XPBoost = player.cb.XPBoost.sub(0.2)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][4].mul(player.ca.canteEnergyMult))
@@ -966,7 +859,7 @@ addLayer("cb", {
             tooltip() { return "COSTS 2 XPBOOST<br>10% - Nova<br>10% - Dice<br>10% - Drippy Ufo<br>10% - Goofy Ahh Thing<br>10% - Antimatter<br>10% - Hex Shadow<br>10% - Grass Square<br>30% - Epic Pet Fragment"},
             onClick() {
                 player.cb.crateTimers[5].current = player.cb.crateTimers[5].max
-                layers.cb.petButton6();
+                layers.cb.petButton6(player.cb.crateTimers[5].base);
 
                 player.cb.XPBoost = player.cb.XPBoost.sub(2)
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][5].mul(player.ca.canteEnergyMult))
@@ -985,7 +878,7 @@ addLayer("cb", {
             tooltip() { return "30% - Impossible Triangle<br>30% - Forbidden Core<br>10% - Paragon Shard<br>25% - Singularity Fragment<br>5% - Legendary Gems"},
             onClick() {
                 player.cb.crateTimers[6].current = player.cb.crateTimers[6].max
-                layers.cb.petButton7();
+                layers.cb.petButton7(player.cb.crateTimers[6].base);
                 if (player.ca.unlockedCante) player.ca.canteEnergy = player.ca.canteEnergy.add(CANTE_BASES[1][6].mul(player.ca.canteEnergyMult))
             },
             onHold() { clickClickable(this.layer, this.id) },
@@ -1029,7 +922,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[0].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[301].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 301).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 301).gte(1) || getLevelableTier("pet", 301).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[301].pointClick()
 
@@ -1054,7 +947,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[1].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[302].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 302).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 302).gte(1) || getLevelableTier("pet", 302).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[302].pointClick()
 
@@ -1079,7 +972,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[2].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[303].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 303).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 303).gte(1) || getLevelableTier("pet", 303).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[303].pointClick()
 
@@ -1104,7 +997,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[3].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[304].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 304).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 304).gte(1) || getLevelableTier("pet", 304).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[304].pointClick()
 
@@ -1129,7 +1022,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[4].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[305].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 305).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 305).gte(1) || getLevelableTier("pet", 305).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[305].pointClick()
 
@@ -1154,7 +1047,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[5].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[306].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 306).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 306).gte(1) || getLevelableTier("pet", 306).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[306].pointClick()
 
@@ -1179,7 +1072,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[6].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[307].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 307).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 307).gte(1) || getLevelableTier("pet", 307).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[307].pointClick()
 
@@ -1204,7 +1097,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[7].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[308].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 308).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 308).gte(1) || getLevelableTier("pet", 308).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[308].pointClick()
 
@@ -1229,7 +1122,7 @@ addLayer("cb", {
             },
             canClick() { return player.pet.petTimers[8].lte(0) && this.unlocked() },
             tooltip() { return tmp.pet.levelables[309].pointTooltip },
-            unlocked() { return getLevelableAmount("pet", 309).gte(1) },
+            unlocked() { return getLevelableAmount("pet", 309).gte(1) || getLevelableTier("pet", 309).gte(1) },
             onClick() {
                 let pval = layers.pet.levelables[309].pointClick()
 
@@ -1326,675 +1219,12 @@ addLayer("cb", {
                 return look
             },
         },
-
-        // AUTOMATION
-        401: {
-            title() { return "1" },
-            canClick() { return player.cb.autoAllocateAmt.neq(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate only 1 shard" },
-            onClick() {
-                player.cb.autoAllocateAmt = new Decimal(1)
-            },
-            style() {
-                let look = {color: "white", width: "115px", minHeight: "47px", borderRadius: "0px", fontSize: "14px"}
-                this.canClick() ? look.backgroundColor = "#888888" : look.backgroundColor = "#222222"
-                return look
-            }, 
-        },
-        402: {
-            title() { return "10" },
-            canClick() { return player.cb.autoAllocateAmt.neq(10) },
-            unlocked() { return true },
-            tooltip() { return "Allocate up to 10 shards" },
-            onClick() {
-                player.cb.autoAllocateAmt = new Decimal(10)
-            },
-            style() {
-                let look = {color: "white", width: "114px", minHeight: "47px", borderRadius: "0px", fontSize: "14px"}
-                this.canClick() ? look.backgroundColor = "#888888" : look.backgroundColor = "#222222"
-                return look
-            }, 
-        },
-        403: {
-            title() { return "100" },
-            canClick() { return player.cb.autoAllocateAmt.neq(100) },
-            unlocked() { return true },
-            tooltip() { return "Allocate up to 100 shards" },
-            onClick() {
-                player.cb.autoAllocateAmt = new Decimal(100)
-            },
-            style() {
-                let look = {color: "white", width: "115px", minHeight: "47px", borderRadius: "0px", fontSize: "14px"}
-                this.canClick() ? look.backgroundColor = "#888888" : look.backgroundColor = "#222222"
-                return look
-            }, 
-        },
-
-        1001: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[0].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[0].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    return player.cb.boostTimers[0].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[0].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[0].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[0].autoAllocate
-                    player.cb.xpTimers[0].autoAllocate = player.cb.xpTimers[0].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[0].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[0].autoAllocate
-                    player.cb.crateTimers[0].autoAllocate = player.cb.crateTimers[0].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[0].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[0].autoAllocate
-                    player.cb.boostTimers[0].autoAllocate = player.cb.boostTimers[0].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[0].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[0].autoAllocate
-                    player.cb.pointTimers[0].autoAllocate = player.cb.pointTimers[0].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1002: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[1].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[1].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    return player.cb.boostTimers[1].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[1].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[1].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[1].autoAllocate
-                    player.cb.xpTimers[1].autoAllocate = player.cb.xpTimers[1].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[1].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[1].autoAllocate
-                    player.cb.crateTimers[1].autoAllocate = player.cb.crateTimers[1].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[1].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[1].autoAllocate
-                    player.cb.boostTimers[1].autoAllocate = player.cb.boostTimers[1].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[1].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[1].autoAllocate
-                    player.cb.pointTimers[1].autoAllocate = player.cb.pointTimers[1].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1003: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[2].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[2].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[2].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[2].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[2].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[2].autoAllocate
-                    player.cb.xpTimers[2].autoAllocate = player.cb.xpTimers[2].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[2].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[2].autoAllocate
-                    player.cb.crateTimers[2].autoAllocate = player.cb.crateTimers[2].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[2].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[2].autoAllocate
-                    player.cb.boostTimers[2].autoAllocate = player.cb.boostTimers[2].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[2].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[2].autoAllocate
-                    player.cb.pointTimers[2].autoAllocate = player.cb.pointTimers[2].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1004: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[3].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[3].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[3].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[3].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[3].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[3].autoAllocate
-                    player.cb.xpTimers[3].autoAllocate = player.cb.xpTimers[3].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[3].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[3].autoAllocate
-                    player.cb.crateTimers[3].autoAllocate = player.cb.crateTimers[3].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[3].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[3].autoAllocate
-                    player.cb.boostTimers[3].autoAllocate = player.cb.boostTimers[3].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[3].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[3].autoAllocate
-                    player.cb.pointTimers[3].autoAllocate = player.cb.pointTimers[3].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1005: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[4].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[4].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[4].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[4].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[4].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[4].autoAllocate
-                    player.cb.xpTimers[4].autoAllocate = player.cb.xpTimers[4].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[4].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[4].autoAllocate
-                    player.cb.crateTimers[4].autoAllocate = player.cb.crateTimers[4].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[4].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[4].autoAllocate
-                    player.cb.boostTimers[4].autoAllocate = player.cb.boostTimers[4].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[4].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[4].autoAllocate
-                    player.cb.pointTimers[4].autoAllocate = player.cb.pointTimers[4].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1006: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[5].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[5].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[5].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[5].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[5].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[5].autoAllocate
-                    player.cb.xpTimers[5].autoAllocate = player.cb.xpTimers[5].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[5].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[5].autoAllocate
-                    player.cb.crateTimers[5].autoAllocate = player.cb.crateTimers[5].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[5].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[5].autoAllocate
-                    player.cb.boostTimers[5].autoAllocate = player.cb.boostTimers[5].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[5].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[5].autoAllocate
-                    player.cb.pointTimers[5].autoAllocate = player.cb.pointTimers[5].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1007: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[6].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    return player.cb.crateTimers[6].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[6].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[6].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return an automation shard" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[6].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[6].autoAllocate
-                    player.cb.xpTimers[6].autoAllocate = player.cb.xpTimers[6].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[6].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[6].autoAllocate
-                    player.cb.crateTimers[6].autoAllocate = player.cb.crateTimers[6].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[6].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[6].autoAllocate
-                    player.cb.boostTimers[6].autoAllocate = player.cb.boostTimers[6].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[6].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[6].autoAllocate
-                    player.cb.pointTimers[6].autoAllocate = player.cb.pointTimers[6].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1008: {
-            title() { return "–" },
-            canClick() {
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    return player.cb.xpTimers[7].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                //     return player.cb.crateTimers[7].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[7].autoAllocate.gte(1)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[7].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[7].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[7].autoAllocate
-                    player.cb.xpTimers[7].autoAllocate = player.cb.xpTimers[7].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[7].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[7].autoAllocate
-                    player.cb.crateTimers[7].autoAllocate = player.cb.crateTimers[7].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[7].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[7].autoAllocate
-                    player.cb.boostTimers[7].autoAllocate = player.cb.boostTimers[7].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[7].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[7].autoAllocate
-                    player.cb.pointTimers[7].autoAllocate = player.cb.pointTimers[7].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-        1009: {
-            title() { return "–" },
-            canClick() {
-                // if (player.subtabs["cb"]['buttons'] == 'XP') {
-                //     return player.cb.xpTimers[8].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                //     return player.cb.crateTimers[8].autoAllocate.gte(1)
-                // } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                //     return player.cb.boostTimers[8].autoAllocate.gte(1)
-                /*} else */if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    return player.cb.pointTimers[8].autoAllocate.gte(1)
-                } else {
-                    return false
-                }
-            },
-            unlocked() { return true },
-            tooltip() { return "Return automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    if (player.cb.xpTimers[8].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.xpTimers[8].autoAllocate
-                    player.cb.xpTimers[8].autoAllocate = player.cb.xpTimers[8].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    if (player.cb.crateTimers[8].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.crateTimers[8].autoAllocate
-                    player.cb.crateTimers[8].autoAllocate = player.cb.crateTimers[8].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    if (player.cb.boostTimers[8].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.boostTimers[8].autoAllocate
-                    player.cb.boostTimers[8].autoAllocate = player.cb.boostTimers[8].autoAllocate.sub(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    if (player.cb.pointTimers[8].autoAllocate.lt(player.cb.autoAllocateAmt)) amt = player.cb.pointTimers[8].autoAllocate
-                    player.cb.pointTimers[8].autoAllocate = player.cb.pointTimers[8].autoAllocate.sub(amt)
-                }
-                player.cb.automationShards = player.cb.automationShards.add(amt)
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#7F2626" : look.backgroundColor = "#190707"
-                return look
-            },
-        },
-
-        1101: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[0].autoAllocate = player.cb.xpTimers[0].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[0].autoAllocate = player.cb.crateTimers[0].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[0].autoAllocate = player.cb.boostTimers[0].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[0].autoAllocate = player.cb.pointTimers[0].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1102: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[1].autoAllocate = player.cb.xpTimers[1].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[1].autoAllocate = player.cb.crateTimers[1].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[1].autoAllocate = player.cb.boostTimers[1].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[1].autoAllocate = player.cb.pointTimers[1].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1103: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[2].autoAllocate = player.cb.xpTimers[2].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[2].autoAllocate = player.cb.crateTimers[2].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[2].autoAllocate = player.cb.boostTimers[2].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[2].autoAllocate = player.cb.pointTimers[2].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1104: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[3].autoAllocate = player.cb.xpTimers[3].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[3].autoAllocate = player.cb.crateTimers[3].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[3].autoAllocate = player.cb.boostTimers[3].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[3].autoAllocate = player.cb.pointTimers[3].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1105: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[4].autoAllocate = player.cb.xpTimers[4].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[4].autoAllocate = player.cb.crateTimers[4].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[4].autoAllocate = player.cb.boostTimers[4].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[4].autoAllocate = player.cb.pointTimers[4].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1106: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[5].autoAllocate = player.cb.xpTimers[5].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[5].autoAllocate = player.cb.crateTimers[5].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[5].autoAllocate = player.cb.boostTimers[5].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[5].autoAllocate = player.cb.pointTimers[5].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1107: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[6].autoAllocate = player.cb.xpTimers[6].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[6].autoAllocate = player.cb.crateTimers[6].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[6].autoAllocate = player.cb.boostTimers[6].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[6].autoAllocate = player.cb.pointTimers[6].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1108: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[7].autoAllocate = player.cb.xpTimers[7].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[7].autoAllocate = player.cb.crateTimers[7].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[7].autoAllocate = player.cb.boostTimers[7].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[7].autoAllocate = player.cb.pointTimers[7].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
-        1109: {
-            title() { return "+" },
-            canClick() { return player.cb.automationShards.gte(1) },
-            unlocked() { return true },
-            tooltip() { return "Allocate automation shards" },
-            onClick() {
-                let amt = player.cb.autoAllocateAmt.min(player.cb.automationShards)
-                
-                player.cb.automationShards = player.cb.automationShards.sub(amt)
-                if (player.subtabs["cb"]['buttons'] == 'XP') {
-                    player.cb.xpTimers[8].autoAllocate = player.cb.xpTimers[8].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Crates') {
-                    player.cb.crateTimers[8].autoAllocate = player.cb.crateTimers[8].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'XPBoost') {
-                    player.cb.boostTimers[8].autoAllocate = player.cb.boostTimers[8].autoAllocate.add(amt)
-                } else if (player.subtabs["cb"]['buttons'] == 'Pet Points') {
-                    player.cb.pointTimers[8].autoAllocate = player.cb.pointTimers[8].autoAllocate.add(amt)
-                }
-            },
-            onHold() { clickClickable(this.layer, this.id) },
-            style() {
-                let look = {width: "43px", minHeight: "43px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", fontSize: "20px", border: "2px solid black", borderRadius: "5px"}
-                this.canClick() ? look.color = "white" : look.color = "gray"
-                this.canClick() ? look.backgroundColor = "#267F26" : look.backgroundColor = "#071907"
-                return look
-            },
-        },
     },
     petButton1(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(50)) {
@@ -2046,6 +1276,10 @@ addLayer("cb", {
         if (reward[5].gt(0)) doPopup("none", "+" + formatWhole(reward[5]) + " Gwa!", "Pet Obtained!", 5, "#9bedff", "resources/Pets/gwaCommonPet.png")
     },
     petButton2(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+            
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(50)) {
@@ -2127,6 +1361,10 @@ addLayer("cb", {
         if (reward[10].gt(0)) doPopup("none", "+" + formatWhole(reward[10]) + " Nova!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/novaRarePet.png")
     },
     petButton3(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+            
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(25)) {
@@ -2199,6 +1437,10 @@ addLayer("cb", {
         if (reward[6].gt(0)) doPopup("none", "+" + formatWhole(reward[6]) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
     },
     petButton4(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+            
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(20)) {
@@ -2268,6 +1510,10 @@ addLayer("cb", {
         if (reward[5].gt(0)) doPopup("none", "+" + formatWhole(reward[5]) + " Evolution Shard!", "Shard Obtained!", 5, "#d487fd", "resources/evoShard.png")
     },
     petButton5(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+            
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(20)) {
@@ -2330,6 +1576,10 @@ addLayer("cb", {
         if (reward[5].gt(0)) doPopup("none", "+" + formatWhole(reward[5]) + " Grass Square!", "Pet Obtained!", 5, "#4e7cff", "resources/Pets/grassSquareRarePet.png")
     },
     petButton6(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+            
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(10)) {
@@ -2437,22 +1687,26 @@ addLayer("cb", {
         }
     },
     petButton7(amt = new Decimal(1)) {
+        let chance = amt.sub(amt.floor())
+        amt = amt.floor()
+        if (chance.gte(Math.random())) amt = amt.add(1)
+            
         let reward = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)]
         let guarantee = new Decimal(0)
         if (amt.gte(20)) {
             guarantee = amt.div(20).floor()
-            addLevelableXP("pet", 308, guarantee.mul(27))
-            addLevelableXP("pet", 309, guarantee.mul(27))
+            addLevelableXP("pet", 308, guarantee.mul(18))
+            addLevelableXP("pet", 309, guarantee.mul(18))
             player.cb.paragonShards = player.cb.paragonShards.add(guarantee.mul(3))
-            player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(32))
-            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(guarantee.mul(12));
-            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(guarantee.mul(12));
-            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(guarantee.mul(12));
-            reward[0] = reward[0].add(guarantee.mul(27))
-            reward[1] = reward[1].add(guarantee.mul(27))
+            player.pet.singularityFragments = player.pet.singularityFragments.add(guarantee.mul(25))
+            player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(guarantee.mul(8));
+            player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(guarantee.mul(8));
+            player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(guarantee.mul(8));
+            reward[0] = reward[0].add(guarantee.mul(18))
+            reward[1] = reward[1].add(guarantee.mul(18))
             reward[2] = reward[2].add(guarantee.mul(3))
-            reward[3] = reward[3].add(guarantee.mul(32))
-            reward[4] = reward[4].add(guarantee.mul(12))
+            reward[3] = reward[3].add(guarantee.mul(25))
+            reward[4] = reward[4].add(guarantee.mul(8))
             amt = amt.sub(guarantee.mul(20))
         }
         if (amt.lt(20)) {
@@ -2460,7 +1714,7 @@ addLayer("cb", {
                 let rng = Math.random();
                 if (rng > 0.4) {
                     let random =  getRandomInt(2)
-                    let gainedPets = getRandomInt(3) + 3
+                    let gainedPets = getRandomInt(2) + 2
                     if (random == 0) {
                         addLevelableXP("pet", 308, gainedPets);
                         reward[0] = reward[0].add(gainedPets)
@@ -2475,13 +1729,13 @@ addLayer("cb", {
                     player.cb.paragonShards = player.cb.paragonShards.add(gainedShards);
                     reward[2] = reward[2].add(gainedShards)
                 } else if (rng < 0.3 && rng > 0.05) {
-                    let gainedFragments = getRandomInt(3) + 5
+                    let gainedFragments = getRandomInt(2) + 4
                     player.pet.singularityFragments = player.pet.singularityFragments.add(gainedFragments);
                     reward[3] = reward[3].add(gainedFragments)
                     player.cb.pityParaCurrent = player.cb.pityParaCurrent.add(10)
                 } else if (rng < 0.05) {
                     //the legendary stuff
-                    let gainedGems = getRandomInt(5) + 10
+                    let gainedGems = getRandomInt(4) + 8
                     player.cb.legendaryPetGems[0] = player.cb.legendaryPetGems[0].add(gainedGems);
                     player.cb.legendaryPetGems[1] = player.cb.legendaryPetGems[1].add(gainedGems);
                     player.cb.legendaryPetGems[2] = player.cb.legendaryPetGems[2].add(gainedGems);
@@ -2751,11 +2005,11 @@ addLayer("cb", {
             },
             display() {
                 if (tmp[this.layer].buyables[this.id].cost.gte(player.cb.totalxp)) {
-                    return "which are reducing the pity requirement by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    return "which are reducing the pity requirement by -" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                         Cost: " + formatWhole(layers.cb.xpToLevel(tmp[this.layer].buyables[this.id].cost)) + " Check Back Levels."
                 } else {
                     let postCost = player.cb.totalxp.sub(tmp[this.layer].buyables[this.id].cost)
-                    return "which are reducing the pity requirement by x" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
+                    return "which are reducing the pity requirement by -" + format(tmp[this.layer].buyables[this.id].effect) + ".\n\
                         Cost: " + formatWhole(player.cb.level.sub(layers.cb.xpToLevel(postCost))) + " Check Back Levels."
                 }
             },
@@ -2778,118 +2032,7 @@ addLayer("cb", {
             },
             style: { width: '275px', height: '150px', backgroundColor: '#0951a6'}
         },
-
-        21: {
-            costBase() { return new Decimal(6) },
-            costGrowth() { return new Decimal(1.1) },
-            purchaseLimit() {
-                if (!(player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23))) {
-                    return new Decimal(6)
-                } else {
-                    return new Decimal(7)
-                }
-            },
-            currency() { return player.cb.paragonShards},
-            pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id)},
-            unlocked() { return player.ev.evolutionsUnlocked[9] },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Pet Automation Unlocker."
-            },
-            display() {
-                return "which unlocking automation for " + formatWhole(tmp[this.layer].buyables[this.id].effect) + " pet crates.\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards."
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: '#4C64FF'}
-        },
-        22: {
-            costBase() { return new Decimal(25) },
-            costGrowth() { return new Decimal(4) },
-            purchaseLimit() { return new Decimal(2) },
-            currency() { return player.cb.paragonShards},
-            pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id)},
-            unlocked() { return false },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "XPBoost Automation Unlocker."
-            },
-            display() {
-                return "which unlocking automation for " + formatWhole(tmp[this.layer].buyables[this.id].effect) + " XPBoost Buttons.\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards."
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: '#4C64FF'}
-        },
-        23: {
-            costBase() { return new Decimal(10) },
-            costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(9) },
-            currency() { return player.cb.paragonShards},
-            pay(amt) { player.cb.paragonShards = this.currency().sub(amt) },
-            effect(x) { return getBuyableAmount(this.layer, this.id)},
-            unlocked() { return false },
-            cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()).floor() },
-            canAfford() { return this.currency().gte(this.cost()) },
-            title() {
-                return "Pet Point Automation Unlocker."
-            },
-            display() {
-                return "which unlocking automation for " + formatWhole(tmp[this.layer].buyables[this.id].effect) + " pet point buttons.\n\
-                    Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " Paragon Shards."
-            },
-            buy(mult) {
-                if (mult != true) {
-                    let buyonecost = new Decimal(this.costGrowth()).pow(getBuyableAmount(this.layer, this.id)).mul(this.costBase())
-                    this.pay(buyonecost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
-                } else {
-                    let max = Decimal.affordGeometricSeries(this.currency(), this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    if (max.gt(this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)))) { max = this.purchaseLimit().sub(getBuyableAmount(this.layer, this.id)) }
-                    let cost = Decimal.sumGeometricSeries(max, this.costBase(), this.costGrowth(), getBuyableAmount(this.layer, this.id))
-                    this.pay(cost)
-
-                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max))
-                }
-            },
-            style: { width: '275px', height: '150px', backgroundColor: '#4C64FF'}
-        },
     },
-    milestones: {},
-    challenges: {},
     infoboxes: {
         1: {
             title: "Check Back",
@@ -2950,129 +2093,10 @@ addLayer("cb", {
                 unlocked() { return true },
                 content: [
                     ["blank", "10px"],
-                    ["row", [
-                        ["column", [
-                            ["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14],
-                            ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18],
-                            ["clickable", 99],
-                        ]],
-                        ["style-column", [
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1001]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[0].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[0].autoCurrent) + "/" +  format(player.cb.xpTimers[0].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1101]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], {width: "344px", height: "47px", borderBottom: "3px solid black"}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1002]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[1].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[1].autoCurrent) + "/" +  format(player.cb.xpTimers[1].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1102]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !player.cb.highestLevel.gte(3) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1003]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[2].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[2].autoCurrent) + "/" +  format(player.cb.xpTimers[2].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1103]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !player.cb.highestLevel.gte(6) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1004]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[3].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[3].autoCurrent) + "/" +  format(player.cb.xpTimers[3].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1104]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(hasMilestone("r", 17) || hasMilestone("s", 14)) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1005]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[4].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[4].autoCurrent) + "/" +  format(player.cb.xpTimers[4].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1105]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !player.cb.highestLevel.gte(15) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1006]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[5].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[5].autoCurrent) + "/" +  format(player.cb.xpTimers[5].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1106]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !player.cb.highestLevel.gte(50) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1007]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[6].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[6].autoCurrent) + "/" +  format(player.cb.xpTimers[6].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1107]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !player.cb.highestLevel.gte(65) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1008]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.xpTimers[7].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.xpTimers[7].autoCurrent) + "/" +  format(player.cb.xpTimers[7].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1108]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !player.cb.highestLevel.gte(150) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"}}],
-                            ["style-row", [
-                                ["clickable", 401], ["clickable", 402], ["clickable", 403]
-                            ], {width: "344px", height: "47px", backgroundColor: "#666666"}],
-                        ], () => {return player.ev.evolutionsUnlocked[4] ? {border: "3px solid black", marginLeft: "10px"} : {display: "none !important"}}],
+                    ["column", [
+                        ["clickable", 11], ["clickable", 12], ["clickable", 13], ["clickable", 14],
+                        ["clickable", 15], ["clickable", 16], ["clickable", 17], ["clickable", 18],
+                        ["clickable", 99],
                     ]],
                 ]
             },
@@ -3081,115 +2105,10 @@ addLayer("cb", {
                 unlocked() { return player.cb.highestLevel.gte(10) },
                 content: [
                     ["blank", "10px"],
-                    ["row", [
-                        ["column", [
-                            ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
-                            ["bt-clickable", 105], ["bt-clickable", 106], ["bt-clickable", 107],
-                            ["clickable", 199],
-                        ]],
-                        ["style-column", [
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1001]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[0].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[0].autoCurrent) + "/" +  format(player.cb.crateTimers[0].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1101]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(10)) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"} }],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1002]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[1].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[1].autoCurrent) + "/" +  format(player.cb.crateTimers[1].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1102]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(25)) ? {display: "none !important"} : getBuyableAmount("cb", 21).gte(2) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1003]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[2].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[2].autoCurrent) + "/" +  format(player.cb.crateTimers[2].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1103]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(75)) ? {display: "none !important"} : getBuyableAmount("cb", 21).gte(3) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1004]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[3].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[3].autoCurrent) + "/" +  format(player.cb.crateTimers[3].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1104]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(125)) ? {display: "none !important"} : getBuyableAmount("cb", 21).gte(4) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1005]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[4].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[4].autoCurrent) + "/" +  format(player.cb.crateTimers[4].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1105]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(1500) && player.ca.unlockedCante) ? {display: "none !important"} : getBuyableAmount("cb", 21).gte(5) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1006]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[5].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[5].autoCurrent) + "/" +  format(player.cb.crateTimers[5].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1106]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(1500) && player.ca.unlockedCante) ? {display: "none !important"} : getBuyableAmount("cb", 21).gte(6) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1007]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.crateTimers[6].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.crateTimers[6].autoCurrent) + "/" +  format(player.cb.crateTimers[6].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1107]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(25000) && hasUpgrade("s", 23)) ? {display: "none !important"} : getBuyableAmount("cb", 21).gte(7) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["clickable", 401], ["clickable", 402], ["clickable", 403]
-                            ], {width: "344px", height: "47px", backgroundColor: "#666666"}],
-                        ], () => {return getBuyableAmount("cb", 21).gte(1) ? {border: "3px solid black", backgroundColor: "black", marginLeft: "10px"} : {display: "none !important"}}],
+                    ["column", [
+                        ["bt-clickable", 101], ["bt-clickable", 102], ["bt-clickable", 103], ["bt-clickable", 104],
+                        ["bt-clickable", 105], ["bt-clickable", 106], ["bt-clickable", 107],
+                        ["clickable", 199],
                     ]],
                 ]
             },
@@ -3206,44 +2125,8 @@ addLayer("cb", {
                         ["raw-html", "Reset Levels and XP to gain XPBoost,<br>which boosts XP gain.", {color: "white", fontSize: "20px", fontFamily: "monospace"}],
                     ], {width: "400px", padding: "10px", border: "3px solid white", borderRadius: "15px", backgroundColor: "#001903"}],
                     ["blank", "10px"],
-                    ["row", [
-                        ["column", [
-                            ["clickable", 301], ["clickable", 302],
-                            ["style-row", [], {width: "200px", height: "50px"}],
-                        ]],
-                        ["style-column", [
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1001]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.boostTimers[0].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.boostTimers[0].autoCurrent) + "/" +  format(player.cb.boostTimers[0].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1101]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(100)) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"} }],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1002]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.boostTimers[1].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.boostTimers[1].autoCurrent) + "/" +  format(player.cb.boostTimers[1].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1102]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(player.cb.highestLevel.gte(666)) ? {display: "none !important"} : getBuyableAmount("cb", 22).gte(2) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["clickable", 401], ["clickable", 402], ["clickable", 403]
-                            ], {width: "344px", height: "47px", backgroundColor: "#666666"}],
-                        ], () => {return getBuyableAmount("cb", 22).gte(1) ? {border: "3px solid black", backgroundColor: "black", marginLeft: "10px"} : {display: "none !important"}}],
+                    ["column", [
+                        ["clickable", 301], ["clickable", 302],
                     ]],
                 ]
             },
@@ -3259,137 +2142,6 @@ addLayer("cb", {
                             ["clickable", 209],
                             ["clickable", 299],
                         ]],
-                        ["style-column", [
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1001]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[0].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[0].autoCurrent) + "/" +  format(player.cb.pointTimers[0].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1101]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 301).gte(1)) ? {display: "none !important"} : {width: "344px", height: "47px", borderBottom: "3px solid black"} }],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1002]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[1].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[1].autoCurrent) + "/" +  format(player.cb.pointTimers[1].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1102]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 302).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(2) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1003]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[2].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[2].autoCurrent) + "/" +  format(player.cb.pointTimers[2].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1103]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 303).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(3) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1004]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[3].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[3].autoCurrent) + "/" +  format(player.cb.pointTimers[3].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1104]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 304).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(4) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1005]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[4].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[4].autoCurrent) + "/" +  format(player.cb.pointTimers[4].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1105]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 305).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(5) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1006]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[5].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[5].autoCurrent) + "/" +  format(player.cb.pointTimers[5].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1106]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 306).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(6) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1007]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[6].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[6].autoCurrent) + "/" +  format(player.cb.pointTimers[6].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1107]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 307).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(7) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1008]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[7].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[7].autoCurrent) + "/" +  format(player.cb.pointTimers[7].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1108]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 308).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(8) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["style-row", [
-                                    ["style-row", [["clickable", 1009]], {width: "47px", height: "47px"}],
-                                    ["style-row", [
-                                        ["raw-html", () => { return formatWhole(player.cb.pointTimers[8].autoAllocate)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                                    ], {width: "47px", height: "47px"}],
-                                ], {width: "94px", height: "47px", borderRight: "3px solid black", userSelect: "none", backgroundColor: "#222222"}],
-                                ["style-row", [
-                                    ["style-row", [
-                                        ["raw-html", () => { return format(player.cb.pointTimers[8].autoCurrent) + "/" +  format(player.cb.pointTimers[8].autoMax)}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
-                                    ], {width: "200px", height: "47px"}],
-                                    ["style-row", [["clickable", 1109]], {width: "47px", height: "47px"}],
-                                ], {width: "247px", height: "47px", userSelect: "none", background: "linear-gradient(90deg, #444444, #666666)"}],
-                            ], () => { return !(getLevelableAmount("pet", 309).gte(1)) ? {display: "none !important"} : getBuyableAmount("cb", 23).gte(9) ? {width: "344px", height: "47px", borderBottom: "3px solid black"} : {width: "344px", height: "47px", borderBottom: "3px solid black", opacity: "0.3", pointerEvents: "none", userSelect: "none"}}],
-                            ["style-row", [
-                                ["clickable", 401], ["clickable", 402], ["clickable", 403]
-                            ], {width: "344px", height: "47px", backgroundColor: "#666666"}],
-                        ], () => {return getBuyableAmount("cb", 23).gte(1) ? {border: "3px solid black", backgroundColor: "black", marginLeft: "10px"} : {display: "none !important"}}],
                     ]],
                 ]
             },
@@ -3437,12 +2189,12 @@ addLayer("cb", {
                 ["raw-html", "<div class='bottomTooltip'>Paragon Shards<hr><small>(Gained from XPBoost buttons)</small></div>"],
             ], () => { return player.cb.highestLevel.gte(250) ? {width: "123px", height: "50px", borderRight: "2px solid white"} : {display: "none !important"}}],
             ["tooltip-row", [
-                ["raw-html", "<img src='resources/automationShard.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
-                ["raw-html", () => { return formatShortWhole(player.cb.automationShards)}, {width: "70px", height: "50px", color: "grey", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
+                ["raw-html", "<img src='resources/cbTickspeed.png'style='width:40px;height:40px;margin:5px'></img>", {width: "50px", height: "50px", display: "block"}],
+                ["raw-html", () => { return "x" + formatSimple(player.cb.cbTickspeed, 2)}, {width: "70px", height: "50px", color: "#0098E5", display: "inline-flex", alignItems: "center", paddingLeft: "5px"}],
                 ["raw-html", () => {
-                    return "<div class='bottomTooltip'>Automation Shards<hr><small>(Gained from sacrifices)<br>(Total Shards: " + formatShortWhole(player.cb.totalAutomationShards) + ")<br>[While offline, automation<br>only triggers once]</small></div>"
+                    return "<div class='bottomTooltip'>Checkback Tickspeed<hr><small>Multiplies the speed of<br>most checkback content.</small></div>"
                 }],
-            ], () => { return player.ev.evolutionsUnlocked[4] ? {width: "125px", height: "50px"} : {display: "none !important"}}],
+            ], () => { return player.cb.cbTickspeed.gt(1) ? {width: "125px", height: "50px"} : {display: "none !important"}}],
         ], {width: "825px", height: "50px", backgroundColor: "black", border: "2px solid white", borderRadius: "10px 10px 0px 0px", userSelect: "none"}],
         ["row", [["bar", "xpbar"]]],
         ["blank", "10px"],

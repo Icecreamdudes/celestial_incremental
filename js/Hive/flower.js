@@ -141,22 +141,27 @@ addLayer("fl", {
 
         player.fl.timers.red.max = new Decimal(20)
         player.fl.timers.red.max = player.fl.timers.red.max.div(buyableEffect("bee", 21))
+        if (player.al.cocoonLevel >= 8) player.fl.timers.red.max = player.fl.timers.red.max.div(2)
         if (player.bee.totalResearch.gte(1) && !player.fl.timers.red.pause) player.fl.timers.red.current = player.fl.timers.red.current.sub(delta)
 
         player.fl.timers.blue.max = new Decimal(40)
         if (hasUpgrade("bpl", 18)) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
+        if (player.al.cocoonLevel >= 8) player.fl.timers.blue.max = player.fl.timers.blue.max.div(2)
         if (hasUpgrade("bpl", 14) && !player.fl.timers.blue.pause) player.fl.timers.blue.current = player.fl.timers.blue.current.sub(delta)
 
         player.fl.timers.green.max = new Decimal(40)
         if (hasUpgrade("ne", 402)) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
+        if (player.al.cocoonLevel >= 8) player.fl.timers.green.max = player.fl.timers.green.max.div(2)
         if (hasUpgrade("ne", 201) && !player.fl.timers.green.pause) player.fl.timers.green.current = player.fl.timers.green.current.sub(delta)
 
         player.fl.timers.pink.max = new Decimal(60)
         if (player.bb.breadMilestone >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(player.bb.breadEffects[7])
+        if (player.al.cocoonLevel >= 8) player.fl.timers.pink.max = player.fl.timers.pink.max.div(2)
         if (buyableEffect("bee", 53).gte(1) && !player.fl.timers.pink.pause) player.fl.timers.pink.current = player.fl.timers.pink.current.sub(delta)
 
         player.fl.timers.yellow.max = new Decimal(60)
         if (player.ho.cell.gte(100)) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
+        if (player.al.cocoonLevel >= 8) player.fl.timers.yellow.max = player.fl.timers.yellow.max.div(2)
         if (player.ho.cell.gte(15) && !player.fl.timers.yellow.paused) player.fl.timers.yellow.current = player.fl.timers.yellow.current.sub(delta)
 
         for (let thing in player.fl.timers) {
@@ -178,6 +183,8 @@ addLayer("fl", {
         player.fl.flowerGain = player.fl.flowerGain.mul(player.ne.beta.effect)
         if (hasUpgrade("ho", 5)) player.fl.flowerGain = player.fl.flowerGain.mul(upgradeEffect("ho", 5))
         if (hasUpgrade("al", 101)) player.fl.flowerGain = player.fl.flowerGain.mul(2)
+        if (hasUpgrade("al", 110)) player.fl.flowerGain = player.fl.flowerGain.mul(3)
+        if (hasUpgrade("al", 213)) player.fl.flowerGain = player.fl.flowerGain.mul(player.ho.effects.flower.effect2)
 
         // GLOSSARY ADDITIVE BASE
         player.fl.glossaryBase = new Decimal(1)
@@ -188,6 +195,8 @@ addLayer("fl", {
 
         // GLOSSARY MULTIPLIERS
         if (hasUpgrade("al", 201)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.2)
+        if (hasUpgrade("al", 210)) player.fl.glossaryBase = player.fl.glossaryBase.mul(1.1)
+        player.fl.glossaryBase = player.fl.glossaryBase.mul(buyableEffect("bee", 14))
 
         player.fl.glossaryEffects.bee = new Decimal(1)
         for (let i = 101; i < 126; ) {
@@ -492,6 +501,11 @@ addLayer("fl", {
                 }
                 break;
         }
+    },
+    generateMult(layer, data) {
+        let str = run(layers[layer].glossary[data].getTitle, layers[layer].glossary[data])
+        str = str.substring(0, str.indexOf(' '))
+        return str
     },
     glossary: {
         0: {
@@ -1523,6 +1537,10 @@ addLayer("fl", {
         onClick(data, id) {
             if (getGridData("fl", id)[1].gt(0)) {
                 setGridData("fl", id, [getGridData("fl", id)[0], getGridData("fl", id)[1].sub(player.fl.pickingPower)])
+                if (player.al.cocoonLevel >= 6 && getGridData("fl", id)[1].lte(0)) {
+                    player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
+                    setGridData("fl", id, [0, new Decimal(1)])
+                }
             } else {
                 player.fl.glossary[getGridData("fl", id)[0]] = player.fl.glossary[getGridData("fl", id)[0]].add(player.fl.flowerGain)
                 setGridData("fl", id, [0, new Decimal(1)])

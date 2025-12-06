@@ -1,4 +1,4 @@
-﻿addLayer("rg", {
+addLayer("rg", {
     name: "Repli-Grass", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "RG", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "A1",
@@ -7,24 +7,19 @@
     startData() { return {
         unlocked: true,
 
-        inRepliGrassTab: false,
         repliGrass: new Decimal(1),
-        savedRepliGrass: 0,
         repliGrassEffect: new Decimal(1),
         repliGrassEffect2: new Decimal(1),
         repliGrassCap: new Decimal(50),
-        repliGrassCount: 0,
-        repliGrassMult: new Decimal(1.01),
+        repliGrassMult: new Decimal(1.02),
         repliGrassReq: new Decimal(8),
         repliGrassTimer: new Decimal(0),
 
         repliGrassSoftcapEffect: new Decimal(1),
         repliGrassSoftcapStart: new Decimal(1000),
-    }
-    },
+    }},
     automate() {
-        if (hasMilestone("s", 16) && !inChallenge("fu", 11))
-        {
+        if (hasMilestone("s", 16) && !inChallenge("fu", 11)) {
             buyBuyable('rg', 11)
             buyBuyable('rg', 12)
             buyBuyable('rg', 13)
@@ -35,124 +30,105 @@
             buyBuyable('rg', 18)
         }
     },
-    nodeStyle() {
-    },
+    nodeStyle() {},
     tooltip: "Repli-Grass",
     branches: ["rt"],
     color: "#67cc3b",
     update(delta) {
-        let onepersec = new Decimal(1)
-
-        if (player.subtabs["rg"]['stuff'] == 'Main' && player.tab == "rg" && player.rg.inRepliGrassTab == false)
-        {
-           layers.rg.loadRepliGrass();
-        }
-        if (!(player.subtabs["rg"]['stuff'] == 'Main') && !(player.tab == "rg") && player.rg.inRepliGrassTab == true)
-        {
-           layers.rg.unloadRepliGrass();
-        }
-        if (player.subtabs["rg"]['stuff'] == 'Main' && player.tab == "rg")
-        {
-            player.rg.inRepliGrassTab = true
-            if (player.rg.repliGrassCount < player.rg.repliGrassCap) player.rg.repliGrassTimer = player.rg.repliGrassTimer.add(onepersec.mul(delta))
-            if (player.rg.repliGrassTimer.gt(player.rg.repliGrassReq))
-            {
-                if (player.rg.repliGrassCount < player.rg.repliGrassCap)
-                {
-                    createRepliGrass(1);
-                    player.rg.savedRepliGrass++;
-                }
-                player.rg.repliGrassTimer = new Decimal(0)
-                if (!inChallenge("fu", 11)) player.rg.repliGrass = player.rg.repliGrass.mul(Decimal.add(player.rg.repliGrassMult.sub(1).mul(buyableEffect("fa", 203)), 1))
-            }
-        } else if (!(player.tab == "rg"))
-        {
-            player.rg.inRepliGrassTab = false
-            if (player.rg.repliGrassCount < player.rg.repliGrassCap) player.rg.repliGrassTimer = player.rg.repliGrassTimer.add(onepersec.mul(delta))
-            if (player.rg.repliGrassTimer.gt(player.rg.repliGrassReq) && player.rg.savedRepliGrass < player.rg.repliGrassCap)
-            {
-                player.rg.savedRepliGrass++;
-                player.rg.repliGrassTimer = new Decimal(0)
-                if (!inChallenge("fu", 11)) player.rg.repliGrass = player.rg.repliGrass.mul(Decimal.add(player.rg.repliGrassMult.sub(1).mul(buyableEffect("fa", 203)), 1))
-            } else if (player.rg.savedRepliGrass > player.rg.repliGrassCap) {
-                player.rg.savedRepliGrass = player.rg.repliGrassCap
-            }
-        } else
-        {
-            player.rg.inRepliGrassTab = false
-            if (player.rg.repliGrassCount < player.rg.repliGrassCap) player.rg.repliGrassTimer = player.rg.repliGrassTimer.add(onepersec.mul(delta))
-        }
-        if (player.rg.savedRepliGrass < 0) player.rg.savedRepliGrass = 0
-        if (player.rg.repliGrassCount < 0) player.rg.repliGrassCount = 0
-
-        player.rg.repliGrassCap = new Decimal(50)
+        // REPLI-GRASS CAP
+        player.rg.repliGrassCap = new Decimal(1)
         player.rg.repliGrassCap = player.rg.repliGrassCap.add(buyableEffect("rg", 13))
 
+        // REPLI-GRASS SOFTCAP START
         player.rg.repliGrassSoftcapStart = new Decimal(1000)
         player.rg.repliGrassSoftcapStart = player.rg.repliGrassSoftcapStart.mul(buyableEffect("rg", 14))
         player.rg.repliGrassSoftcapStart = player.rg.repliGrassSoftcapStart.mul(buyableEffect("fu", 56))
 
+        // MULTIPLIERS START
         let multAdd = new Decimal(0.02)
         multAdd = multAdd.add(buyableEffect("rg", 11))
+        multAdd = multAdd.add(buyableEffect("fu", 23))
         multAdd = multAdd.mul(buyableEffect("gs", 18))
         multAdd = multAdd.mul(player.oi.linkingPowerEffect[4])
         multAdd = multAdd.mul(levelableEffect("pet", 307)[1])
-        multAdd = multAdd.add(buyableEffect("fu", 23))
-        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
-        if (!hasMilestone("gs", 21)) {
-            player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
-        } else {
-            player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.2)
-        }
-        if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart)) {
-            multAdd = multAdd.div(player.rg.repliGrassSoftcapEffect)
-        }
+        if (inChallenge("fu", 11)) multAdd = multAdd.pow(0.2)
 
         player.rg.repliGrassMult = multAdd.add(1)
 
+        layers.rg.updateSoftcap()
+
+        // REPLI-GRASS EFFECTS
         if (player.rg.repliGrass.lte(1)) player.rg.repliGrassEffect = new Decimal(1)
         if (player.rg.repliGrass.gt(1)) player.rg.repliGrassEffect = player.rg.repliGrass.pow(0.15)
 
         if (player.rg.repliGrass.lte(1)) player.rg.repliGrassEffect2 = new Decimal(1)
         if (player.rg.repliGrass.gt(1)) player.rg.repliGrassEffect2 = player.rg.repliGrass.pow(0.25)
 
+        // REPLI-GRASS REQUIREMENT
         player.rg.repliGrassReq = new Decimal(8)
         player.rg.repliGrassReq = player.rg.repliGrassReq.div(buyableEffect("rg", 12))
+
+        // REPLI-GRASS GENERATION
+        if (hasUpgrade("cp", 16)) player.rg.repliGrassTimer = player.rg.repliGrassTimer.sub(delta)
+        if (player.rg.repliGrassTimer.lt(0)) {
+            player.rg.repliGrassTimer = player.rg.repliGrassReq
+            let row = getRandomInt(5) + 1
+            let column = getRandomInt(8) + 1
+            let val = row + "0" + column
+            if (getGridData("rg", val).lte(1)) {
+                setGridData("rg", val, player.rg.repliGrassMult)
+            } else if (getGridData("rg", val).lt(player.rg.repliGrassMult.mul(player.rg.repliGrassCap))) {
+                setGridData("rg", val, getGridData("rg", val).add(player.rg.repliGrassMult).min(player.rg.repliGrassMult.mul(player.rg.repliGrassCap)))
+            }
+            if (!inChallenge("fu", 11)) {
+                let mult = player.rg.repliGrassMult.sub(1)
+                if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart)) {
+                    mult = mult.div(player.rg.repliGrassSoftcapEffect)
+                }
+                player.rg.repliGrass = player.rg.repliGrass.mul(mult.mul(buyableEffect("fa", 203)).add(1))
+            }
+        }
     },
-    unloadRepliGrass()
-    {
-        player.rg.grassTimer = new Decimal(0)
-        player.rg.grassCount = new Decimal(0)
+    updateSoftcap() {
+        if (!hasMilestone("gs", 21)) {
+            player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.225)
+        } else {
+            player.rg.repliGrassSoftcapEffect = player.rg.repliGrass.sub(player.rg.repliGrassSoftcapStart).pow(0.2)
+        }
     },
-    loadRepliGrass()
-    {
-        removeAllRepliGrass();
-        createRepliGrass(player.rg.savedRepliGrass);
-        player.rg.repliGrassCount = player.rg.savedRepliGrass
-    },
-    clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.buyMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
+    grid: {
+        rows: 5,
+        cols: 8,
+        getStartData(id) {
+            return new Decimal(1) // Mult
         },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.buyMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.buyMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
+        getTitle(data, id) {
+            if (getGridData("rg", id).lte(1)) return ""
+            return "x" + formatShorterWhole(getGridData("rg", id))
         },
+        getCanClick(data, id) {return false},
+        onHover(data, id) {
+            if (getGridData("rg", id).gt(1)) {
+                let mult = getGridData("rg", id)
+                layers.rg.updateSoftcap()
+                if (player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart)) {
+                    mult = mult.sub(1).div(player.rg.repliGrassSoftcapEffect).add(1)
+                }
+                player.rg.repliGrass = player.rg.repliGrass.mul(mult)
+                setGridData("rg", id, new Decimal(1))
+            }
+        },
+        getStyle(data, id) {
+            let look = {width: "80px", height: "80px", fontSize: "9px", lineHeight: "0.8", backgroundColor: "#074317", border: "5px solid rgba(0,0,0,0.3)", borderRadius: "0", padding: "0", margin: "0", cursor: "default"}
+            if (getGridData("rg", id).lte(1)) {
+                look.background = "#33661d"
+            } else {
+                look.background = "#18e34e"
+            }
+            return look
+        }
     },
-    bars: {},
-    upgrades: {},
     buyables: {
         11: {
             costBase() { return new Decimal(1.5) },
@@ -223,12 +199,12 @@
             style: { width: '275px', height: '150px'},
         },
         13: {
-            costBase() { return new Decimal(4) },
-            costGrowth() { return new Decimal(2) },
-            purchaseLimit() { return new Decimal(100) },
+            costBase() { return new Decimal(1000) },
+            costGrowth() { return new Decimal(1000) },
+            purchaseLimit() { return new Decimal(4) },
             currency() { return player.rg.repliGrass},
             pay(amt) { player.rg.repliGrass = this.currency().sub(amt) },
-            effect(x) { return new getBuyableAmount(this.layer, this.id) },
+            effect(x) { return new getBuyableAmount(this.layer, this.id).min(4) },
             unlocked: true,
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
@@ -236,7 +212,7 @@
                 return "Repli-Grass Capacity"
             },
             display() {
-                return "which are adding +" + format(tmp[this.layer].buyables[this.id].effect) + " to the repli-grass capacity.\n\
+                return "which are adding +" + formatWhole(tmp[this.layer].buyables[this.id].effect) + " to repli-grass mult capacity.\n\
                     Cost: " + format(tmp[this.layer].buyables[this.id].cost) + " Repli-Grass"
             },
             buy(mult) {
@@ -427,21 +403,41 @@
             style: { width: '275px', height: '150px'},
         },
     },
-    milestones: {},
-    challenges: {},
-    infoboxes: {},
+    bars: {
+        grass: {
+            unlocked: true,
+            direction: RIGHT,
+            width: 640,
+            height: 20,
+            progress() {
+                return player.rg.repliGrassTimer.div(player.rg.repliGrassReq)
+            },
+            baseStyle: {backgroundColor: "black"},
+            fillStyle: {backgroundColor: "#0c7127"},
+            borderStyle: {
+                border: "0px",
+                borderRadius: "0",
+            },
+            display() {
+                return formatTime(player.rg.repliGrassTimer) + "/" + formatTime(player.rg.repliGrassReq)
+            },
+        },
+    },
     microtabs: {
         stuff: {
             "Main": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
-                    ["raw-html", () => { return "<h3>" + formatWhole(player.rg.repliGrassCount) + "/" + formatWhole(player.rg.repliGrassCap) + " Repli-Grass (Hover over the grass)" }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "<h3>" + format(player.rg.repliGrassTimer) + "/" + format(player.rg.repliGrassReq) + " Seconds to spawn repli-grass." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return "Repli-Grass mult: x" + format(player.rg.repliGrassMult) + "." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                    ["raw-html", () => { return player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart) ? "After " + formatWhole(player.rg.repliGrassSoftcapStart) + " repli-grass, repli-grass mult is divided by " + format(player.rg.repliGrassSoftcapEffect) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Repli-Grass mult: x" + formatSimple(player.rg.repliGrassMult) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return "Repli-Grass mult cap: x" + formatSimple(player.rg.repliGrassMult.mul(player.rg.repliGrassCap)) + "." }, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ["raw-html", () => { return player.rg.repliGrass.gte(player.rg.repliGrassSoftcapStart) ? "After " + formatSimple(player.rg.repliGrassSoftcapStart) + " repli-grass, multiplier effectiveness is divided by /" + formatSimple(player.rg.repliGrassSoftcapEffect) + "." : "" }, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
                     ["blank", "25px"],
-                    ["raw-html", "<div id=repli-spawn-area class=menu-spawn-area></div>", {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["style-column", [
+                        ["bar", "grass"],
+                        ["style-row", [], {width: "640px", height: "5px", background: "#3e3117"}],
+                        "grid"
+                    ], {width: "640px", border: "5px solid #3e3117"}],
                 ]
             },
             "Buyables": {
@@ -462,139 +458,5 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && hasUpgrade("cp", 16) }
+    layerShown() { return player.startedGame && hasUpgrade("cp", 16) }
 })
-function createRepliGrass(quantity) {
-    const spawnArea = document.getElementById('repli-spawn-area');
-    const spawnAreaRect = spawnArea?.getBoundingClientRect();
-
-    if (!spawnAreaRect) return; // Exit if spawnAreaRect is null or undefined
-
-    // Function to calculate the distance between two points
-    function getDistance(x1, y1, x2, y2) {
-        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    }
-
-    // Create repli circles based on quantity
-    for (let i = 0; i < quantity; i++) {
-        let randomX, randomY;
-        do {
-            randomX = Math.floor(Math.random() * (spawnAreaRect.width - 22.5)); // Adjusted for circle width
-            randomY = Math.floor(Math.random() * (spawnAreaRect.height - 22.5)); // Adjusted for circle height
-        } while (isCollision(randomX, randomY));
-
-        const repliCircle = document.createElement('div');
-        repliCircle.style.borderRadius = '100%';
-        repliCircle.style.width = '22.5px';
-        repliCircle.style.height = '22.5px';
-        repliCircle.style.backgroundColor = '#18e34e';
-        repliCircle.style.position = 'absolute';
-        repliCircle.style.left = `${randomX}px`;
-        repliCircle.style.top = `${randomY}px`;
-        repliCircle.style.border = '2px solid black'; // Add a black border
-        repliCircle.classList.add('repli-circle');
-
-        spawnArea.appendChild(repliCircle); // Append to spawnArea instead of document.body
-
-        // Function to check if cursor is within 100px radius of the repliCircle
-        function checkCursorDistance(event) {
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
-
-            const repliCircleRect = repliCircle.getBoundingClientRect();
-            const circleCenterX = repliCircleRect.left + repliCircleRect.width / 2;
-            const circleCenterY = repliCircleRect.top + repliCircleRect.height / 2;
-
-            const distance = getDistance(cursorX, cursorY, circleCenterX, circleCenterY);
-
-            // If the cursor is within 100 pixels, remove the repliCircle
-            if (distance <= 100) {
-                removeRepliGrass(repliCircle);
-                player.rg.repliGrassCount--; // Decrease grass count
-                player.rg.savedRepliGrass--; // Decrease saved repli grass count
-                player.rg.repliGrass = player.rg.repliGrass.mul(player.rg.repliGrassMult);
-
-                // Remove the mousemove listener once the repliCircle is collected
-                document.removeEventListener('mousemove', checkCursorDistance);
-            }
-        }
-
-        // Add the mousemove event listener to check the distance from the cursor
-        document.addEventListener('mousemove', checkCursorDistance);
-
-        player.rg.repliGrassCount++; // Increase repli grass count
-
-        // Start moving the repliCircle
-        moveRepliCircle(repliCircle, spawnAreaRect);
-    }
-}
-
-function isCollision(x, y) {
-    const existingRepliCircles = document.querySelectorAll('.repli-circle');
-    for (let i = 0; i < existingRepliCircles.length; i++) {
-        const squareRect = existingRepliCircles[i].getBoundingClientRect();
-        if (x >= squareRect.left && x <= squareRect.right && y >= squareRect.top && y <= squareRect.bottom) {
-            return true; // Collision detected
-        }
-    }
-    return false; // No collision detected
-}
-
-function moveRepliCircle(circle, spawnAreaRect) {
-    const moveInterval = 16; // Interval in milliseconds (approx. 60 FPS)
-    const moveSpeed = 5; // Movement speed in pixels per frame
-    const gridSize = 250; // Size of each grid cell
-
-    function getRandomPositionInGrid() {
-        const x = Math.random() * (spawnAreaRect.width - 22.5); // Random x in the entire area
-        const y = Math.random() * (spawnAreaRect.height - 22.5); // Random y in the entire area
-        return { x, y };
-    }
-
-    let { x: targetX, y: targetY } = getRandomPositionInGrid();
-
-    function move() {
-        let currentX = parseFloat(circle.style.left);
-        let currentY = parseFloat(circle.style.top);
-
-        let dx = targetX - currentX;
-        let dy = targetY - currentY;
-
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance > moveSpeed) {
-            dx = (dx / distance) * moveSpeed;
-            dy = (dy / distance) * moveSpeed;
-        }
-
-        currentX += dx;
-        currentY += dy;
-
-        // Ensure the circle stays within bounds
-        circle.style.left = `${Math.max(0, Math.min(spawnAreaRect.width - 22.5, currentX))}px`;
-        circle.style.top = `${Math.max(0, Math.min(spawnAreaRect.height - 22.5, currentY))}px`;
-
-        // Set a new target position after reaching the current target
-        if (Math.abs(targetX - currentX) < moveSpeed && Math.abs(targetY - currentY) < moveSpeed) {
-            ({ x: targetX, y: targetY } = getRandomPositionInGrid());
-        }
-
-        requestAnimationFrame(move);
-    }
-
-    requestAnimationFrame(move);
-}
-
-function removeRepliGrass(circle) {
-    circle.parentNode.removeChild(circle);
-}
-
-function removeAllRepliGrass() {
-    const circles = document.querySelectorAll('.repli-circle');
-    circles.forEach(circle => circle.parentNode.removeChild(circle));
-}
-
-window.addEventListener('load', function() {
-    // This function will be executed after the page is reloaded
-    // You can perform any necessary tasks here
-    layers.rg.loadRepliGrass();
-});

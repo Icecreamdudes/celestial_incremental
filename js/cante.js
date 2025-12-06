@@ -236,13 +236,13 @@
             style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
         },
         15: {
-            title() { return "<h3>CONVERT A CANTE CORE INTO A REMEMBERANCE CORE" },
+            title() { return "<h3>Convert a cante core into a rememberance core</h3><br>Cost: " + format(player.ca.rememberanceCoreCost) + " Proto Memories" },
             canClick() { return player.ca.canteCores.gte(1) && player.oi.protoMemories.gte(player.ca.rememberanceCoreCost) },
-            unlocked() { return true },
+            unlocked: true,
             onClick() {
                 layers.ca.convertRememberanceCore();
             },
-            style: { width: '400px', "min-height": '100px', borderRadius: '15px' },
+            style: {width: "300px", minHeight: "100px", borderRadius: "15px"},
         },
         16: {
             title() { return "<h3>REMEMBER THE PROTO OVERWORLD. DESTROY CANTE. END THE SUFFERING. (REQ: 10 Rememberance Cores)" },
@@ -258,15 +258,16 @@
     },
     bars: {
         bar: {
-            unlocked() { return true },
+            unlocked: true,
             direction: RIGHT,
-            width: 800,
+            width: 700,
             height: 50,
             progress() {
                 return player.ca.canteEnergy.div(player.ca.canteEnergyReq)
             },
+            borderStyle: {border: "3px solid white", borderBottom: "0px", borderRadius: "20px 20px 0 0"},
             baseStyle: {backgroundColor: "rgba(0,0,0,0.5)"},
-            fillStyle: {backgroundColor: "#193ceb"},
+            fillStyle: {backgroundColor: "#05415c"},
             display() {
                 return "<h5>" + format(player.ca.canteEnergy) + "/" + formatWhole(player.ca.canteEnergyReq) + "<h5> Cante energy to gain a cante core.</h5>";
             },
@@ -805,43 +806,37 @@
                     ["row", [["clickable", 13]]],
                 ]
             },
-            "CELESTIAL": {
+            "Cante Energy": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.ca.unlockedCante },
                 content: [
                     ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante cores." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["bar", "bar"]]],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Energy multiplier: <h3>" + format(player.ca.canteEnergyMult) + "</h3>x" }, { "color": "white", "font-size": "20px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Cante energy is gained by clicking on check back buttons." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Cante cores will have many uses in the future." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
+                    ["bar", "bar"],
+                    ["style-row", [
+                        ["style-column", [
+                            ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> Cante cores."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Energy multiplier: <h3>" + format(player.ca.canteEnergyMult) + "</h3>x"}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["blank", "20px"],
+                            ["raw-html", "Cante energy is gained by clicking on check back buttons.", {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                            ["blank", "10px"],
+                        ], () => {return hasUpgrade("cp", 18) ? {width: "347px", height: "220px", borderRight: "3px solid white"} : {width: "700px", height: "220px"}}],
+                        ["style-column", [
+                            ["raw-html", () => {return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> remembrance cores."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Boosts cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>."}, {color: "white", fontSize: "16px", fontFamily: "monospace"}],
+                            ["blank", "10px"],
+                            ["raw-html", () => {return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories."}, {color: "white", fontSize: "12px", fontFamily: "monospace"}],
+                            ["blank", "20px"],
+                            ["clickable", 15],
+                        ], () => {return hasUpgrade("cp", 18) ? {width: "350px", height: "220px"} : {display: "none !important"}}],
+                    ], {width: "700px", background: "#086894", border: "3px solid white", borderRadius: "0 0 20px 20px"}],
                     ["blank", "25px"],
                     ["row", [["clickable", 14]]],
-                ]
-            },
-            "REMEMBERANCE CORES": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("cp", 18) },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.rememberanceCores) + "</h3> rememberance cores." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Your rememberance cores boost cante energy gain by x<h3>" + format(player.ca.rememberanceCoresEffect) + "</h3>." }, { "color": "white", "font-size": "26px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + formatWhole(player.ca.canteCores) + "</h3> cante cores." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.oi.protoMemories) + "</h3> proto memories." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 15]]],
-                    ["raw-html", function () { return "Cost: <h3>" + format(player.ca.rememberanceCoreCost) + "</h3> proto memories." }, { "color": "white", "font-size": "22px", "font-family": "monospace" }],
                 ]
             },
             "THE BARRIER": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasUpgrade("cp", 18) && !player.ca.defeatedCante },
-                content:
-                [
+                content: [
                     ["blank", "25px"],
                     ["row", [["clickable", 16]]],
                 ]

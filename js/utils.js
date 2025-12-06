@@ -153,6 +153,13 @@ function clickGrid(layer, id) {
 	gridRun(layer, 'onClick', player[layer].grid[id], id)
 }
 
+function hoverGrid(layer, id) {
+	if (!player[layer].unlocked  || tmp[layer].deactivated) return
+	if (!run(layers[layer].grid.getUnlocked, layers[layer].grid, id)) return
+
+	gridRun(layer, 'onHover', player[layer].grid[id], id)
+}
+
 // Function to determine if the player is in a challenge
 function inChallenge(layer, id) {
 	let challenge = player[layer].activeChallenge

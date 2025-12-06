@@ -37,6 +37,7 @@
         //display
         petTitle: "",
         petLevel: new Decimal(0),
+        petAscension: new Decimal(0),
         spacePetXPToGet: new Decimal(0),
         passengerText: "",
 
@@ -92,23 +93,32 @@
 
 
         //passenger selection
-        if (player.ro.rarityIndex.eq(0)) player.ro.petTitle = run(layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))])
-        if (player.ro.rarityIndex.eq(1)) player.ro.petTitle = run(layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))])
+        if (player.ro.rarityIndex.eq(0)) {
+            player.ro.petTitle = run(layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))])
+            player.ro.petLevel = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][0]
+            player.ro.petAscension = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][2]
+        }
+        if (player.ro.rarityIndex.eq(1)) {
+            player.ro.petTitle = run(layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))].title, layers.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))])
+            player.ro.petLevel = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][0]
+            player.ro.petAscension = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][2]
+        }
 
-        if (player.ro.rarityIndex.eq(0)) player.ro.petLevel = player.pet.levelables[Decimal.add(100, player.ro.commonPassengerIndex.add(1))][0]
-        if (player.ro.rarityIndex.eq(1)) player.ro.petLevel = player.pet.levelables[Decimal.add(200, player.ro.uncommonPassengerIndex.add(1))][0]
-
-        player.ro.spacePetXPToGet = Decimal.pow(player.ro.petLevel, 1.2).floor()
+        player.ro.spacePetXPToGet = player.ro.petLevel.mul(player.ro.petAscension.add(1)).pow(player.ro.petAscension.div(10).add(1.2)).floor()
         if (hasUpgrade("sma", 203)) player.ro.spacePetXPToGet = player.ro.spacePetXPToGet.mul(1.2).floor()
 
         player.ro.evoCost = Decimal.mul(player.ro.selectedPassengersCommon.length, Decimal.add(7, player.ro.selectedPassengersCommon.length))
         player.ro.paragonCost = Decimal.mul(player.ro.selectedPassengersUncommon.length, Decimal.add(2, player.ro.selectedPassengersUncommon.length))
 
         for (let i = 0; i < player.ro.selectedPassengersCommon.length; i++) {
-            player.ro.commonXPToGet[i] = Decimal.pow(player.pet.levelables[Decimal.add(100, Decimal.add(1, player.ro.selectedPassengersCommon[i]))][0], 1.2).add(1)
+            let lvl = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][0]
+            let tier = player.pet.levelables[Decimal.add(101, player.ro.selectedPassengersCommon[i])][2]
+            player.ro.commonXPToGet[i] = lvl.mul(tier.add(1)).pow(tier.div(10).add(1.2)).floor()
         }
         for (let i = 0; i < player.ro.selectedPassengersUncommon.length; i++) {
-            player.ro.uncommonXPToGet[i] = Decimal.pow(player.pet.levelables[Decimal.add(200, Decimal.add(1, player.ro.selectedPassengersUncommon[i]))][0], 1.2).add(1)
+            let lvl = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][0]
+            let tier = player.pet.levelables[Decimal.add(201, player.ro.selectedPassengersUncommon[i])][2]
+            player.ro.uncommonXPToGet[i] = lvl.mul(tier.add(1)).pow(tier.div(10).add(1.2)).floor()
         }
 
         player.ro.rocketImages = [
@@ -744,8 +754,15 @@
                     ["style-row", [
                         ["style-column", [
                     ["blank", "25px"],
-                    ["raw-html", function () { return player.ro.petTitle }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
-                    ["raw-html", function () { return "Level: " + formatWhole(player.ro.petLevel) + " -> " + formatWhole(player.ro.spacePetXPToGet) + " Space Pet XP." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
+                    ["raw-html", () => { return player.ro.petTitle }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                    ["row", [
+                        ["column", [
+                            ["raw-html", () => {return "Level: " + formatWhole(player.ro.petLevel)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                            ["raw-html", () => {return "Ascension: " + formatWhole(player.ro.petAscension)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                        ]],
+                        ["raw-html", "→", {color: "white", fontSize: "24px", fontFamily: "monospace", marginRight: "20px", marginLeft: "20px"}],
+                        ["raw-html", () => {return formatWhole(player.ro.spacePetXPToGet) + " Space Pet XP."}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
+                    ]],
                     ["blank", "25px"],
                     ["style-row", [["clickable", 13],["clickable", 14],]],
                     ["blank", "25px"],

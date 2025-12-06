@@ -1496,7 +1496,7 @@
             },
             "Power": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("i", 15) && !hasUpgrade("cs", 201) },
+                unlocked() { return (hasUpgrade("i", 15) || hasMilestone("ip", 26)) && !hasUpgrade("cs", 201) },
                 content: [
                     ["blank", "25px"],
                     ["row", [
@@ -1527,7 +1527,7 @@
             },
             "Tree": {
                 buttonStyle() { return { borderColor: "#0B6623", color: "white", borderRadius: "5px" } },
-                unlocked() { return hasMilestone("r", 11) && !hasUpgrade("cs", 201) },
+                unlocked() { return (hasMilestone("r", 11) || hasMilestone("ip", 26)) && !hasUpgrade("cs", 201) },
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.g.grass) + " grass." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
@@ -1545,7 +1545,7 @@
             },
             "Grass": {
                 buttonStyle() { return { borderColor: "#119B35", color: "white", borderRadius: "5px" } },
-                unlocked() { return player.gh.buyables[15].gt(0) && !hasUpgrade("cs", 201) },
+                unlocked() { return (player.gh.buyables[15].gt(0) || hasMilestone("ip", 26)) && !hasUpgrade("cs", 201) },
                 content: [
                     ["blank", "25px"],
                     ["raw-html", function () { return "<h3>You have " + format(player.gh.fertilizer) + " fertilizer." }, { "color": "white", "font-size": "16px", "font-family": "monospace" }],
